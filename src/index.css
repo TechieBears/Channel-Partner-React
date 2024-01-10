@@ -1,0 +1,88 @@
+/* ===============table css==================== */
+.p-datatable .p-datatable-thead>tr>th {
+    background-color: #5f92ff !important;
+    color: #fff !important;
+}
+
+.p-datatable .p-datatable-tbody>tr {
+    border-left: 1px solid #eee !important;
+    border-right: 1px solid #eee !important;
+    border-bottom: 1px solid #eee !important;
+    transition: all 0.2s;
+}
+
+.p-datatable .p-datatable-tbody>tr:hover {
+    transition: all 0.2s;
+    background-color: rgb(238, 238, 238) !important
+}
+
+.p-datatable .p-datatable-tbody>tr>td {
+    border: none !important;
+}
+
+.p-datatable .p-sortable-column:focus {
+    box-shadow: none !important;
+}
+
+.p-datatable.p-datatable-gridlines .p-datatable-thead>tr>th {
+    border: none !important;
+}
+
+.p-column-header-content svg {
+    color: #fff !important
+}
+
+.p-paginator {
+    border: none !important;
+    justify-content: end !important;
+    padding: .8rem 0px !important;
+
+}
+
+.p-paginator-first,
+.p-paginator-pages,
+.p-paginator-last {
+    display: none !important;
+}
+
+.p-paginator-prev,
+.p-paginator-next {
+    background-color: #2563EB !important;
+    min-width: 2rem !important;
+    height: 2rem !important;
+    border-radius: .4rem !important;
+    color: #fff !important;
+    border: none !important;
+    outline: none !important;
+    margin: 0rem 1rem !important;
+}
+
+.p-paginator .p-dropdown {
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.p-column-title {
+    font-family: 'Plus Jakarta Sans';
+}
+
+.p-datatable-wrapper {
+    border-top-left-radius: .6rem;
+    border-top-right-radius: .6rem;
+}
+
+.p-datatable .p-component {
+    border-bottom-left-radius: .6rem;
+    border-bottom-right-radius: .6rem;
+}
+
+.p-some-component {
+    border: none !important;
+}
+
+.p-datatable-tbody {
+    font-family: 'Plus Jakarta Sans';
+    font-weight: 600;
+    font-size: 0.9rem;
+}

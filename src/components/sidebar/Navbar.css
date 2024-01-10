@@ -1,0 +1,35 @@
+.navbar-section {
+    position: absolute;
+    width: calc(100% - 17rem);
+    top: 0;
+    right: 0;
+}
+
+.navbar-section-active {
+    position: absolute;
+    width: calc(100% - 6rem);
+    top: 0;
+    right: 0;
+}
+
+@media screen and (max-width: 425px) {
+    .navbar-section {
+        position: absolute;
+        width: 100%;
+        top: 0;
+        right: 0;
+    }
+}
+
+@media screen and (max-width: 767px) {}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    .navbar-section {
+        position: absolute;
+        width: 100%;
+        top: 0;
+        right: 0;
+    }
+}
+
+@media screen and (min-width: 1025px) and (max-width: 1600px) {}
