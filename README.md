@@ -1,9 +1,35 @@
-# React + Vite
+## Refeeron admin dashboard
+### Description 
+Refeeron is a Admin dashbaord.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## language are used to
 
-Currently, two official plugins are available:
+- React js
+- Python
+- Django
+- Postgresql
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-"# Channel-Partner-React" 
+### Team Members
+- Vijay
+- Shubham
+- Ronil
+- Mayur
+
+### Installation
+
+- Clone the repo
+- `cd` into the directory
+- Install dependencies using `npm install`
+- Run the app using `npm start`
+
+### Usage
+
+- Sign up and sign in to the app
+
+
+### Tests
+
+- Run `npm test` to run the test suite
+
+### Node version
+- node version 18.16.0

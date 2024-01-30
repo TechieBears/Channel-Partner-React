@@ -1,7 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-    list: {},
+    list: [],
+    availabalStorage: [],
+    visitBooking: []
 }
 
 export const storageSlice = createSlice({
@@ -10,11 +12,17 @@ export const storageSlice = createSlice({
     reducers: {
         setStorageList: (state, action) => {
             state.list = action.payload
-        }
+        },
+        setAvailabalStorage: (state, action) => {
+            state.availabalStorage = action.payload
+        },
+        setVisitBooking: (state, action) => {
+            state.visitBooking = action.payload
+        },
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { setStorageList } = storageSlice.actions
+export const { setStorageList, setAvailabalStorage, setVisitBooking } = storageSlice.actions
 
 export default storageSlice.reducer

@@ -9,6 +9,8 @@ module.exports = {
       },
       fontFamily: {
         tb: ["Plus Jakarta Sans", "sans-serif"],
+        tbPop: ["Poppins", "sans-serif"],
+        tbMon: ["Montserrat", "sans-serif"],
       },
       backgroundColor: {
         'base-bg': '#F4F7FE',

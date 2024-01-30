@@ -5,9 +5,17 @@ import thunk from "redux-thunk";
 import { combineReducers, applyMiddleware } from "redux";
 import { composeWithDevTools } from "@redux-devtools/extension";
 import storageSlice from "./slices/storageSlice";
+import masterSlice from "./Slices/masterSlice";
+import loginSlice from "./Slices/loginSlice";
+import userSlice from "./Slices/userSlice";
+import VendorSlices from "./VendorSlices";
 
 const reducers = combineReducers({
+  user: loginSlice,
   storage: storageSlice,
+  master: masterSlice,
+  users: userSlice,
+  vendor: VendorSlices,
 });
 
 const persistConfig = {
