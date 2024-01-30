@@ -154,7 +154,7 @@ const Dashboard = () => {
                         </div>
                         <div className="space-y-1">
                             <h6 className='text-sm text-gray-500 font-tb'>Delivered Orders</h6>
-                            <h6 className='text-base font-semibold text-sky-400 font-tb'>1.237k</h6>
+                            <h6 className='text-base font-semibold text-sky-400 font-tb'>980</h6>
                         </div>
                     </div>
                     <div className="flex items-center mr-8 space-x-3 border-r-0 sm:border-r border-gray-200/70">
@@ -163,7 +163,7 @@ const Dashboard = () => {
                         </div>
                         <div className="space-y-1">
                             <h6 className='text-sm text-gray-500 font-tb'>Pending Orders</h6>
-                            <h6 className='text-base font-semibold text-orange-400 font-tb'>1.237k</h6>
+                            <h6 className='text-base font-semibold text-orange-400 font-tb'>15</h6>
                         </div>
                     </div>
                     <div className="flex items-center mr-8 space-x-3 border-r-0 lg:border-r border-gray-200/70">
@@ -172,7 +172,7 @@ const Dashboard = () => {
                         </div>
                         <div className="space-y-1">
                             <h6 className='text-sm text-gray-500 font-tb'>Active Orders</h6>
-                            <h6 className='text-base font-semibold text-purple-600 font-tb'>12.37k</h6>
+                            <h6 className='text-base font-semibold text-purple-600 font-tb'>120</h6>
                         </div>
                     </div>
                     <div className="flex items-center mr-8 space-x-3 border-r-0 border-gray-200/70">
@@ -181,7 +181,7 @@ const Dashboard = () => {
                         </div>
                         <div className="space-y-1">
                             <h6 className='text-sm text-gray-500 font-tb'>Customer Cancelled Orders</h6>
-                            <h6 className='text-base font-semibold text-red-500 font-tb'>1.237k</h6>
+                            <h6 className='text-base font-semibold text-red-500 font-tb'>70</h6>
                         </div>
                     </div>
                     <div className="flex items-center mr-8 space-x-3 border-r-0 sm:border-r border-gray-200/70">
@@ -190,7 +190,7 @@ const Dashboard = () => {
                         </div>
                         <div className="space-y-1">
                             <h6 className='text-sm text-gray-500 font-tb'>Vendors</h6>
-                            <h6 className='text-base font-semibold text-sky-400 font-tb'>1.237k</h6>
+                            <h6 className='text-base font-semibold text-sky-400 font-tb'>55</h6>
                         </div>
                     </div>
                     <div className="flex items-center mr-8 space-x-3 border-r-0 sm:border-r border-gray-200/70">
@@ -199,7 +199,7 @@ const Dashboard = () => {
                         </div>
                         <div className="space-y-1">
                             <h6 className='text-sm text-gray-500 font-tb'>Categories</h6>
-                            <h6 className='text-base font-semibold text-orange-400 font-tb'>1.237k</h6>
+                            <h6 className='text-base font-semibold text-orange-400 font-tb'>25</h6>
                         </div>
                     </div>
                     <div className="flex items-center mr-8 space-x-3 border-r-0 md:border-r border-gray-200/70">
@@ -208,7 +208,7 @@ const Dashboard = () => {
                         </div>
                         <div className="space-y-1">
                             <h6 className='text-sm text-gray-500 font-tb'>Products</h6>
-                            <h6 className='text-base font-semibold text-purple-600 font-tb'>1.237k</h6>
+                            <h6 className='text-base font-semibold text-purple-600 font-tb'>1507</h6>
                         </div>
                     </div>
                     <div className="flex items-center space-x-3 ">
@@ -217,7 +217,7 @@ const Dashboard = () => {
                         </div>
                         <div className="space-y-1">
                             <h6 className='text-sm text-gray-500 font-tb'>Promotions</h6>
-                            <h6 className='text-base font-semibold text-red-500 font-tb'>1.237k</h6>
+                            <h6 className='text-base font-semibold text-red-500 font-tb'>19</h6>
                         </div>
                     </div>
                 </div>
@@ -248,6 +248,62 @@ const Dashboard = () => {
                         {/* {activeTab === 1 && <p>Content for Tab 1</p>}
                         {activeTab === 2 && <p>Content for Tab 2</p>} */}
                         <div className='grid gap-6 mt-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2'>
+                            <div className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:border-gray-700 " previewlistener="true">
+                                <div className="items-center gap-x-3">
+                                    <div className='flex flex-wrap justify-between p-4'>
+                                        <p className='text-sm'>Order Id -  <span className='text-sky-400'>753</span></p>
+                                        <p className='text-sm'>Order Date - <span className='text-base font-semibold text-center text-gray-800'>Jan 1, 2024 , 05:56 PM</span> </p>
+                                    </div>
+                                    <div className="flex-1 p-4 my-2">
+                                        <div className="flex items-center justify-between">
+                                            <div className='flex items-center justify-between'>
+                                                <img className='w-16' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU" alt="" />
+                                                <div>
+                                                <h2 className="text-sm font-semibold tracking-wide text-gray-800 dark:text-white">Butter Milk x 7 more</h2>
+                                                <p>Lorem ipsum dolor, sit amet </p>
+                                                </div>
+                                            </div>
+                                             <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 dark:text-gray-400">Payment - Cash</p>
+                                        </div> 
+                                    </div>
+                                    <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
+                                        <p className='text-base font-medium'>Order Price - $ 1,000</p>
+                                        <div class="flex items-center gap-x-2">
+                                            <button type="button" class="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-gray-800 rounded-lg bg-gray-200 hover:text-black hover:bg-gray-300 capitalize w-full">Reject</button>
+                                            <button type="submit" class="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize w-full">Confirm</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:border-gray-700 " previewlistener="true">
+                                <div className="items-center gap-x-3">
+                                    <div className='flex flex-wrap justify-between p-4'>
+                                        <p className='text-sm'>Order Id -  <span className='text-sky-400'>753</span></p>
+                                        <p className='text-sm'>Order Date - <span className='text-base font-semibold text-center text-gray-800'>Jan 1, 2024 , 05:56 PM</span> </p>
+                                    </div>
+                                    <div className="flex-1 p-4 my-2">
+                                        <div className="flex items-center justify-between">
+                                            <div className='flex items-center justify-between'>
+                                                <img className='w-16' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU" alt="" />
+                                                <div>
+                                                <h2 className="text-sm font-semibold tracking-wide text-gray-800 dark:text-white">Butter Milk x 7 more</h2>
+                                                <p>Lorem ipsum dolor, sit amet </p>
+                                                </div>
+                                            </div>
+                                             <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 dark:text-gray-400">Payment - Cash</p>
+                                        </div> 
+                                    </div>
+                                    <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
+                                        <p className='text-base font-medium'>Order Price - $ 1,000</p>
+                                        <div class="flex items-center gap-x-2">
+                                            <button type="button" class="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-gray-800 rounded-lg bg-gray-200 hover:text-black hover:bg-gray-300 capitalize w-full">Reject</button>
+                                            <button type="submit" class="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize w-full">Confirm</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:border-gray-700 " previewlistener="true">
                                 <div className="items-center gap-x-3">
                                     <div className='flex flex-wrap justify-between p-4'>
