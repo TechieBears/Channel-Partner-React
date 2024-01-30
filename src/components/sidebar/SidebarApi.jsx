@@ -1,10 +1,65 @@
-import { Element4, ElementPlus, Trade, Truck, User } from "iconsax-react";
+import { Element4, ElementPlus, Trade, Truck, User, Settings, Menu, Shop, SecurityUser } from "iconsax-react";
 
 export const SidebarAdminApi = [
     {
         title: 'Dashboard',
         icon: <Element4 size="24" />,
         link: '/',
+    },
+    {
+        title: 'Menu',
+        icon: <Menu size="24" />,
+        link: '/menu',
+    },
+    {
+        title: 'Vendors',
+        icon: <Shop size="24" />,
+        link: '/vendors',
+    },
+    {
+        title: 'Drivers',
+        icon: <Element4 size="24" />,
+        link: '/drivers',
+    },
+    {
+        title: 'Orders',
+        icon: <Element4 size="24" />,
+        link: '/orders',
+    },
+    {
+        title: 'Banners',
+        icon: <Element4 size="24" />,
+        link: '/banners',
+    },
+    {
+        title: 'Promotions',
+        icon: <Element4 size="24" />,
+        link: '/promotions',
+    },
+    {
+        title: 'User Data',
+        icon: <Element4 size="24" />,
+        link: '/userdata',
+    },
+    {
+        title: 'SubAdmin',
+        icon: <SecurityUser size="24" />,
+        link: '/subadmin',
+    },
+    {
+        title: 'Reports',
+        icon: <Element4 size="24" />,
+        link: '/reports',
+    },
+    {
+        title: 'Account Statement',
+        icon: <Element4 size="24" />,
+        link: '/accountStatement',
+    },
+    {
+        title: 'Settings',
+        icon: <Settings size="24" />,
+        link: '/settings',
     },
     // {
     //     title: 'Storages',

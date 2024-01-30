@@ -16,6 +16,7 @@ import { useSelector } from 'react-redux';
 import VendorDashbaord from '../src/pages/Vendor/VendorDashbaord/VendorDashbaord';
 import VendorProduct from '../src/pages/Vendor/VendorProduct/VendorProduct';
 import VendorOrders from '../src/pages/Vendor/VendorOrders/VendorOrders';
+import Menu from '../src/pages/Admin/Menu/Menu';
 
 
 
@@ -45,6 +46,7 @@ const ProjectRoutes = () => {
                             <Routes>
                                 {/* ============ Admin Routes ============ */}
                                 <Route path="/" element={<Dashboard />} />
+                                <Route path="/menu" element={<Menu/>} />
                                 <Route path="/dashboard/:id" element={<DashboardView />} />
                                 <Route path="/DashboardAssets" element={<DashboardAssets />} />
                                 <Route path="/user" element={<User />} />

@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Table from '../../../components/Table/Table';
-import { ArrowSwapVertical, Box, Eye, NotificationBing, ShoppingCart, Trash } from 'iconsax-react';
+import { ArrowSwapVertical, Box, Eye, NotificationBing, ShoppingCart, Trash, Category, UserTick, UserRemove, Timer } from 'iconsax-react';
 import { deleteStorage, getPartnerStorage, getStorages } from '../../../api';
 import { formBtn2, inputClass } from '../../../utils/CustomClass';
 import { formBtn1 } from '../../../utils/CustomClass';
@@ -130,6 +130,13 @@ const Dashboard = () => {
         StorageList()
     }, [])
 
+
+    const [activeTab, setActiveTab] = useState(1);
+
+    const changeTab = (tabNumber) => {
+      setActiveTab(tabNumber);
+    };
+
     return (
         <>
             <DeleteModal
@@ -138,34 +145,70 @@ const Dashboard = () => {
                 toggleModalBtn={toggleModalBtn}
                 description={"Are you sure you want to delete this Stroage"} open={open}
             />
-            <section className='h-full w-full'>
+            <section className='w-full h-full'>
                 {/* =====================Dashboard header===================== */}
-                <div className="bg-white p-8 m-4 sm:m-5 rounded-xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-y-10 ">
-                    <div className="flex items-center space-x-3 border-r-0 sm:border-r mr-8 border-gray-200/70">
-                        <div className="p-3.5 rounded-xl bg-orange-50">
-                            <ShoppingCart size={26} className="text-orange-400" />
+                <div className="grid grid-cols-1 p-8 m-4 bg-white sm:m-5 rounded-xl sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-y-10 ">
+                    <div className="flex items-center mr-8 space-x-3 border-r-0 sm:border-r border-gray-200/70 ">
+                        <div className="p-3.5 rounded-xl bg-sky-50">
+                            <ShoppingCart size={26} className="text-sky-400" />
                         </div>
                         <div className="space-y-1">
-                            <h6 className='text-gray-500 font-tb text-sm'>Order Completed</h6>
-                            <h6 className='text-orange-400 font-tb font-semibold text-base'>1.237k</h6>
+                            <h6 className='text-sm text-gray-500 font-tb'>Delivered Orders</h6>
+                            <h6 className='text-base font-semibold text-sky-400 font-tb'>1.237k</h6>
                         </div>
                     </div>
-                    <div className="flex items-center space-x-3 border-r-0 lg:border-r  mr-8 border-gray-200/70">
+                    <div className="flex items-center mr-8 space-x-3 border-r-0 sm:border-r border-gray-200/70">
+                        <div className="p-3.5 rounded-xl bg-orange-50">
+                            <Timer size={26} className="text-orange-400" />
+                        </div>
+                        <div className="space-y-1">
+                            <h6 className='text-sm text-gray-500 font-tb'>Pending Orders</h6>
+                            <h6 className='text-base font-semibold text-orange-400 font-tb'>1.237k</h6>
+                        </div>
+                    </div>
+                    <div className="flex items-center mr-8 space-x-3 border-r-0 lg:border-r border-gray-200/70">
                         <div className="p-3.5 rounded-xl bg-purple-50">
                             <ArrowSwapVertical size={26} className="text-purple-600" />
                         </div>
                         <div className="space-y-1">
-                            <h6 className='text-gray-500 font-tb text-sm'>Total Number</h6>
-                            <h6 className='text-purple-600 font-tb font-semibold text-base'>12.37k</h6>
+                            <h6 className='text-sm text-gray-500 font-tb'>Active Orders</h6>
+                            <h6 className='text-base font-semibold text-purple-600 font-tb'>12.37k</h6>
                         </div>
                     </div>
-                    <div className="flex items-center space-x-3 border-r-0 md:border-r mr-8 border-gray-200/70">
-                        <div className="p-3.5 rounded-xl bg-sky-50">
-                            <Box size={26} className="text-sky-400" />
+                    <div className="flex items-center mr-8 space-x-3 border-r-0 border-gray-200/70">
+                        <div className="p-3.5 rounded-xl bg-orange-50">
+                            <UserRemove size={26} className="text-red-500" />
                         </div>
                         <div className="space-y-1">
-                            <h6 className='text-gray-500 font-tb text-sm'>Order Completed</h6>
-                            <h6 className='text-sky-400 font-tb font-semibold text-base'>1.237k</h6>
+                            <h6 className='text-sm text-gray-500 font-tb'>Customer Cancelled Orders</h6>
+                            <h6 className='text-base font-semibold text-red-500 font-tb'>1.237k</h6>
+                        </div>
+                    </div>
+                    <div className="flex items-center mr-8 space-x-3 border-r-0 sm:border-r border-gray-200/70">
+                        <div className="p-3.5 rounded-xl bg-sky-50">
+                            <UserTick size={26} className="text-sky-600" />
+                        </div>
+                        <div className="space-y-1">
+                            <h6 className='text-sm text-gray-500 font-tb'>Vendors</h6>
+                            <h6 className='text-base font-semibold text-sky-400 font-tb'>1.237k</h6>
+                        </div>
+                    </div>
+                    <div className="flex items-center mr-8 space-x-3 border-r-0 sm:border-r border-gray-200/70">
+                        <div className="p-3.5 rounded-xl bg-orange-50">
+                            <Category size={26} className="text-orange-400" />
+                        </div>
+                        <div className="space-y-1">
+                            <h6 className='text-sm text-gray-500 font-tb'>Categories</h6>
+                            <h6 className='text-base font-semibold text-orange-400 font-tb'>1.237k</h6>
+                        </div>
+                    </div>
+                    <div className="flex items-center mr-8 space-x-3 border-r-0 md:border-r border-gray-200/70">
+                        <div className="p-3.5 rounded-xl bg-sky-50">
+                            <Box size={26} className="text-purple-600" />
+                        </div>
+                        <div className="space-y-1">
+                            <h6 className='text-sm text-gray-500 font-tb'>Products</h6>
+                            <h6 className='text-base font-semibold text-purple-600 font-tb'>1.237k</h6>
                         </div>
                     </div>
                     <div className="flex items-center space-x-3 ">
@@ -173,16 +216,102 @@ const Dashboard = () => {
                             <NotificationBing size={26} className="text-red-500" />
                         </div>
                         <div className="space-y-1">
-                            <h6 className='text-gray-500 font-tb text-sm'>Total Notification's</h6>
-                            <h6 className='text-red-500 font-tb font-semibold text-base'>1.237k</h6>
+                            <h6 className='text-sm text-gray-500 font-tb'>Promotions</h6>
+                            <h6 className='text-base font-semibold text-red-500 font-tb'>1.237k</h6>
                         </div>
                     </div>
                 </div>
 
+
+
+                <div className="mx-auto mt-8 sm:m-5">
+                    <div className="flex">
+                        <button
+                        onClick={() => changeTab(1)}
+                        className={`py-2 px-0 ${
+                            activeTab === 1 ? 'border-b-2 border-blue-400 text-black' : 'bg-transparent'
+                        }`}
+                        >
+                        Pending
+                        </button>
+                        <button
+                        onClick={() => changeTab(2)}
+                        className={`py-2 px-0 ml-4 ${
+                            activeTab === 2 ? 'border-b-2 border-blue-400 text-black' : 'bg-transparent'
+                        }`}
+                        >
+                        Active
+                        </button>
+                    </div>
+
+                    <div className="mt-8">
+                        {/* {activeTab === 1 && <p>Content for Tab 1</p>}
+                        {activeTab === 2 && <p>Content for Tab 2</p>} */}
+                        <div className='grid gap-6 mt-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2'>
+                            <div className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:border-gray-700 " previewlistener="true">
+                                <div className="items-center gap-x-3">
+                                    <div className='flex flex-wrap justify-between p-4'>
+                                        <p className='text-sm'>Order Id -  <span className='text-sky-400'>753</span></p>
+                                        <p className='text-sm'>Order Date - <span className='text-base font-semibold text-center text-gray-800'>Jan 1, 2024 , 05:56 PM</span> </p>
+                                    </div>
+                                    <div className="flex-1 p-4 my-2">
+                                        <div className="flex items-center justify-between">
+                                            <div className='flex items-center justify-between'>
+                                                <img className='w-16' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU" alt="" />
+                                                <div>
+                                                <h2 className="text-sm font-semibold tracking-wide text-gray-800 dark:text-white">Butter Milk x 7 more</h2>
+                                                <p>Lorem ipsum dolor, sit amet </p>
+                                                </div>
+                                            </div>
+                                             <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 dark:text-gray-400">Payment - Cash</p>
+                                        </div> 
+                                    </div>
+                                    <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
+                                        <p className='text-base font-medium'>Order Price - $ 1,000</p>
+                                        <div class="flex items-center gap-x-2">
+                                            <button type="button" class="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-gray-800 rounded-lg bg-gray-200 hover:text-black hover:bg-gray-300 capitalize w-full">Reject</button>
+                                            <button type="submit" class="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize w-full">Confirm</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:border-gray-700 " previewlistener="true">
+                                <div className="items-center gap-x-3">
+                                    <div className='flex flex-wrap justify-between p-4'>
+                                        <p className='text-sm'>Order Id -  <span className='text-sky-400'>753</span></p>
+                                        <p className='text-sm'>Order Date - <span className='text-base font-semibold text-center text-gray-800'>Jan 1, 2024 , 05:56 PM</span> </p>
+                                    </div>
+                                    <div className="flex-1 p-4 my-2">
+                                        <div className="flex items-center justify-between">
+                                            <div className='flex items-center justify-between'>
+                                                <img className='w-16' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU" alt="" />
+                                                <div>
+                                                <h2 className="text-sm font-semibold tracking-wide text-gray-800 dark:text-white">Butter Milk x 7 more</h2>
+                                                <p>Lorem ipsum dolor, sit amet </p>
+                                                </div>
+                                            </div>
+                                             <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 dark:text-gray-400">Payment - Cash</p>
+                                        </div> 
+                                    </div>
+                                    <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
+                                        <p className='text-base font-medium'>Order Price - $ 1,000</p>
+                                        <div class="flex items-center gap-x-2">
+                                            <button type="button" class="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-gray-800 rounded-lg bg-gray-200 hover:text-black hover:bg-gray-300 capitalize w-full">Reject</button>
+                                            <button type="submit" class="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize w-full">Confirm</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
                 {/* =====================Dashboard filters===================== */}
-                <div className="bg-white p-4 m-4 sm:m-5 rounded-xl">
-                    <form onSubmit={handleSubmit(onSubmit)} className='flex md:items-center flex-col lg:flex-row  gap-2'>
-                        <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2  gap-y-3 gap-x-2 ">
+                <div className="p-4 m-4 bg-white sm:m-5 rounded-xl">
+                    <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2 md:items-center lg:flex-row'>
+                        <div className="grid w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-y-3 gap-x-2 ">
                             <div className="">
                                 <Controller
                                     control={control}
@@ -252,19 +381,23 @@ const Dashboard = () => {
                             </div> */}
 
                         </div>
-                        <div className="flex gap-x-2 items-center">
+                        <div className="flex items-center gap-x-2">
                             <button type='submit' className={`${formBtn1} w-full text-center`}>Filter</button>
                             <button type='button' className={`${formBtn2} w-full text-center`} onClick={filterReset}>Clear</button>
                         </div>
                     </form>
                 </div >
 
+
+
+
+
                 {/* =====================Dashboard table===================== */}
-                {/* <div className="bg-white rounded-xl m-4 sm:m-5 shadow-sm  p-5 sm:p-7 " >
-                    <div className="flex justify-between flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 mb-6">
+                {/* <div className="p-5 m-4 bg-white shadow-sm rounded-xl sm:m-5 sm:p-7 " >
+                    <div className="flex flex-col items-start justify-between mb-6 space-y-4 sm:flex-row sm:items-center sm:space-y-0">
                         <div className="">
-                            <h1 className='font-tbPop text-xl font-semibold text-gray-900 '>Storages</h1>
-                            <h6 className='text-gray-400 font-tb font-medium text-base'>Storages in different locations</h6>
+                            <h1 className='text-xl font-semibold text-gray-900 font-tbPop '>Storages</h1>
+                            <h6 className='text-base font-medium text-gray-400 font-tb'>Storages in different locations</h6>
                         </div>
                         <DashboardForm title='Add Stroage' />
                     </div>
