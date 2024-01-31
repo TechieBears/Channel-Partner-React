@@ -17,6 +17,8 @@ import VendorDashbaord from '../src/pages/Vendor/VendorDashbaord/VendorDashbaord
 import VendorProduct from '../src/pages/Vendor/VendorProduct/VendorProduct';
 import VendorOrders from '../src/pages/Vendor/VendorOrders/VendorOrders';
 import Menu from '../src/pages/Admin/Menu/Menu';
+import Vendors from '../src/pages/Admin/Vendors/Vendors';
+import RestaurantDetail from '../src/pages/Restaurants/RestaurantDetail/RestaurantDetail';
 
 
 
@@ -46,7 +48,9 @@ const ProjectRoutes = () => {
                             <Routes>
                                 {/* ============ Admin Routes ============ */}
                                 <Route path="/" element={<Dashboard />} />
-                                <Route path="/menu" element={<Menu/>} />
+                                <Route path="/menu" element={<Menu />} />
+                                <Route path="/vendors" element={<Vendors />} />
+                                <Route path="/vendors/restaurant-detail/:id" element={<RestaurantDetail />} />
                                 <Route path="/dashboard/:id" element={<DashboardView />} />
                                 <Route path="/DashboardAssets" element={<DashboardAssets />} />
                                 <Route path="/user" element={<User />} />

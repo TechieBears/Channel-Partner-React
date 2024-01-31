@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
-import userImg from '../../../assets/user.webp';
+import userImg from '../../../assets/user.jpg';
 import { ArrowLeft, Building3, CallCalling, Edit, Profile2User, SmsNotification } from 'iconsax-react';
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 import { useState } from 'react'

@@ -20,7 +20,7 @@ function Table({ data, columns }) {
             sortMode="multiple"
         >
             {columns.map((col) => (
-                <Column key={col.field} field={col.field} header={col.header} body={col.body} style={col.style ? "" : { width: '100%' }} sortable={!col.sortable} />
+                <Column key={col.field} field={col.field} header={col.header} body={col.body} style={col.style ? "" : { width: '100%' }} sortable={col.sortable} />
             ))}
         </DataTable>
     )
