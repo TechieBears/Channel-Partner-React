@@ -136,34 +136,34 @@
 
 
 //     return (
-//         <section className='h-full w-full'>
+//         <section className='w-full h-full'>
 //             {/* =====================Dashboard header===================== */}
-//             <div className="bg-white p-8 m-4 sm:m-5 rounded-xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-y-10 ">
-//                 <div className="flex items-center space-x-3 border-r-0 sm:border-r mr-8 border-gray-200/70">
+//             <div className="grid grid-cols-1 p-8 m-4 bg-white sm:m-5 rounded-xl sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-y-10 ">
+//                 <div className="flex items-center mr-8 space-x-3 border-r-0 sm:border-r border-gray-200/70">
 //                     <div className="p-3.5 rounded-xl bg-sky-50">
 //                         <ShoppingCart size={26} className="text-sky-400" />
 //                     </div>
 //                     <div className="space-y-1">
-//                         <h6 className='text-gray-500 font-tb text-sm'>Order Completed</h6>
-//                         <h6 className='text-sky-400 font-tb font-semibold text-base'>1.237k</h6>
+//                         <h6 className='text-sm text-gray-500 font-tb'>Order Completed</h6>
+//                         <h6 className='text-base font-semibold text-sky-400 font-tb'>1.237k</h6>
 //                     </div>
 //                 </div>
-//                 <div className="flex items-center space-x-3 border-r-0 lg:border-r  mr-8 border-gray-200/70">
+//                 <div className="flex items-center mr-8 space-x-3 border-r-0 lg:border-r border-gray-200/70">
 //                     <div className="p-3.5 rounded-xl bg-purple-50">
 //                         <ArrowSwapVertical size={26} className="text-purple-600" />
 //                     </div>
 //                     <div className="space-y-1">
-//                         <h6 className='text-gray-500 font-tb text-sm'>Total Number</h6>
-//                         <h6 className='text-purple-600 font-tb font-semibold text-base'>12.37k</h6>
+//                         <h6 className='text-sm text-gray-500 font-tb'>Total Number</h6>
+//                         <h6 className='text-base font-semibold text-purple-600 font-tb'>12.37k</h6>
 //                     </div>
 //                 </div>
-//                 <div className="flex items-center space-x-3 border-r-0 md:border-r mr-8 border-gray-200/70">
+//                 <div className="flex items-center mr-8 space-x-3 border-r-0 md:border-r border-gray-200/70">
 //                     <div className="p-3.5 rounded-xl bg-sky-50">
 //                         <Box size={26} className="text-sky-400" />
 //                     </div>
 //                     <div className="space-y-1">
-//                         <h6 className='text-gray-500 font-tb text-sm'>Order Completed</h6>
-//                         <h6 className='text-sky-400 font-tb font-semibold text-base'>1.237k</h6>
+//                         <h6 className='text-sm text-gray-500 font-tb'>Order Completed</h6>
+//                         <h6 className='text-base font-semibold text-sky-400 font-tb'>1.237k</h6>
 //                     </div>
 //                 </div>
 //                 <div className="flex items-center space-x-3 ">
@@ -171,16 +171,16 @@
 //                         <NotificationBing size={26} className="text-red-500" />
 //                     </div>
 //                     <div className="space-y-1">
-//                         <h6 className='text-gray-500 font-tb text-sm'>Total Notification's</h6>
-//                         <h6 className='text-red-500 font-tb font-semibold text-base'>1.237k</h6>
+//                         <h6 className='text-sm text-gray-500 font-tb'>Total Notification's</h6>
+//                         <h6 className='text-base font-semibold text-red-500 font-tb'>1.237k</h6>
 //                     </div>
 //                 </div>
 //             </div>
 //             {/* ===================== Availability filters ===================== */}
 
-//             <div className="bg-white p-4 m-4 sm:m-5 rounded-xl">
-//                 <form onSubmit={handleSubmit(onSubmit)} className='flex md:items-center flex-col lg:flex-row  gap-2'>
-//                     <div className="w-full grid grid-cols-1 gap-y-3 gap-x-2">
+//             <div className="p-4 m-4 bg-white sm:m-5 rounded-xl">
+//                 <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2 md:items-center lg:flex-row'>
+//                     <div className="grid w-full grid-cols-1 gap-y-3 gap-x-2">
 //                         <div className="">
 //                             <Controller
 //                                 control={control}
@@ -197,7 +197,7 @@
 //                             />
 //                         </div>
 //                     </div>
-//                     <div className="flex gap-x-2 items-center">
+//                     <div className="flex items-center gap-x-2">
 //                         <button type='submit' className={`${formBtn1} w-full text-center`}>Filter</button>
 //                         <button type='button' onClick={filterReset} className={`${formBtn2} w-full text-center`} >Clear</button>
 //                     </div>
@@ -206,11 +206,11 @@
 
 //             {/* ===================== Movable Table ===================== */}
 
-//             <div className="bg-white rounded-xl m-4 sm:m-5 shadow-sm  p-5 sm:p-7" >
-//                 <div className="flex justify-between flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 mb-6">
+//             <div className="p-5 m-4 bg-white shadow-sm rounded-xl sm:m-5 sm:p-7" >
+//                 <div className="flex flex-col items-start justify-between mb-6 space-y-4 sm:flex-row sm:items-center sm:space-y-0">
 //                     <div className="">
-//                         <h1 className='font-tbPop text-xl font-semibold text-gray-900 '>Top Selling Products</h1>
-//                         <h6 className='text-gray-500 font-tb text-base'>List of all top selling products</h6>
+//                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop '>Top Selling Products</h1>
+//                         <h6 className='text-base text-gray-500 font-tb'>List of all top selling products</h6>
 //                     </div>
 //                 </div>
 //                 <Table data={productList} columns={columns} />

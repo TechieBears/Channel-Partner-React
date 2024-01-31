@@ -7,7 +7,9 @@ const initialState = {
     temperatureRange: [],
     product: [],
     storeCategory: [],
-    movableCategory: [],
+    Category: [],
+    SubCategory: [],
+    Product: [],
 }
 export const masterSlice = createSlice({
     name: 'master',
@@ -31,11 +33,17 @@ export const masterSlice = createSlice({
         setStoreCategory: (state, action) => {
             state.storeCategory = action.payload;
         },
-        setMovableCategory: (state, action) => {
-            state.movableCategory = action.payload;
+        setCategory: (state, action) => {
+            state.Category = action.payload;
+        },
+        setSubCategory: (state, action) => {
+            state.SubCategory = action.payload;
+        },
+        setProduct: (state, action) => {
+            state.Product = action.payload;
         },
     }
 })
 
-export const { setCityNames, setDesignation, setTempRange, setProductNames, setStoreCategory, setMovableCategory, setBanner } = masterSlice.actions;
+export const { setCityNames, setDesignation, setTempRange, setProductNames, setStoreCategory, setCategory, setSubCategory, setProduct, setBanner } = masterSlice.actions;
 export default masterSlice.reducer;

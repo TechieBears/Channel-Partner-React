@@ -31,7 +31,8 @@ const Sidebar = ({ children }) => {
                             <NavLink className="flex items-center space-x-2" to="/">
                                 {/* <Trade size={isActiveLink ? "36" : "30"} className="text-sky-400 " variant='Bulk' /> */}
                                 <img src={logoImg} className='object-contain w-11 h-11' />
-                                <h2 className={isActiveLink ? 'hidden ' : 'font-tb font-extrabold text-3xl text-black transition-all duration-700 delay-200'}>Refeer<span className='text-sky-400'>ON</span></h2>
+                                {/* <h2 className={isActiveLink ? 'hidden ' : 'font-tb font-extrabold text-3xl text-black transition-all duration-700 delay-200'}>Refeer<span className='text-sky-400'>ON</span></h2> */}
+                                <h2 className={isActiveLink ? 'hidden ' : 'font-tb font-extrabold text-3xl text-black transition-all duration-700 delay-200'}>Channel <span className='text-sky-400'>Partner</span></h2>
                             </NavLink>
                         </div>
                         {user?.role == 'admin' ?

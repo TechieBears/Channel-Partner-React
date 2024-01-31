@@ -2,6 +2,7 @@ import axios from "axios";
 import { environment } from "../env";
 
 
+
 // ====================Login Api===================
 
 export const login = async (data) => {
@@ -14,6 +15,62 @@ export const login = async (data) => {
         console.log(err);
     }
 };
+
+
+/* ================== Menu Category Api =========== */
+export const getCategory = async () => {
+    const url = `${environment.baseUrl}app/category-list`;
+    try {
+        const response = await axios.get(url)
+        console.log('data == ', response.data.data);
+        return response.data.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+/* ================== Menu SubCategory Api =========== */
+export const getSubCategory = async () => {
+    const url = `${environment.baseUrl}app/get-subcategory`;
+    try {
+        const response = await axios.get(url)
+        console.log('data == ', response.data.data);
+        return response.data.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+
+/* ================== Menu SubCategory Api =========== */
+export const getProducts = async () => {
+    const url = `${environment.baseUrl}app/product-list`;
+    try {
+        const response = await axios.get(url)
+        console.log('data == ', response.data);
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ====================Storage Api===================
 
@@ -910,16 +967,16 @@ export const deleteMovablePrice = async (id) => {
 }
 
 /* ================== Movable Category Api =========== */
-export const getMovableCategory = async () => {
-    const url = `${environment.baseUrl}movable-category`;
-    try {
-        const response = await axios.get(url)
-        return response.data
-    }
-    catch (err) {
-        console.log(err);
-    }
-};
+// export const getMovableCategory = async () => {
+//     const url = `${environment.baseUrl}movable-category`;
+//     try {
+//         const response = await axios.get(url)
+//         return response.data
+//     }
+//     catch (err) {
+//         console.log(err);
+//     }
+// };
 
 export const createMovableCategory = async (data) => {
     const url = `${environment.baseUrl}movable-category`;
