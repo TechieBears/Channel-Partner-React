@@ -3,7 +3,7 @@ import { useState } from 'react';
 import PathName from '../../../components/PathName/PathName'
 import { useLocation } from 'react-router-dom'
 import { Tab, TabList, Tabs, TabPanel } from 'react-tabs'
-import userImg from '../../../assets/user.webp';
+import userImg from '../../../assets/user.jpg';
 import ImageGallery from '../../../components/Modals/LightBox/ImageGallery'
 
 

@@ -1,7 +1,7 @@
 import moment from 'moment/moment'
 import "../../css/Navbar.css"
 import greetingTime from 'greeting-time'
-import userImg from '../../assets/user.webp';
+import userImg from '../../assets/user.jpg';
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { ArrowDown2, HambergerMenu, LogoutCurve, NotificationBing, Setting2, User } from 'iconsax-react';
 import { useSelector } from 'react-redux';
