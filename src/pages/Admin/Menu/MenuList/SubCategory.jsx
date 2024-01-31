@@ -60,7 +60,7 @@ const SubCategory = () => {
                   </div>
                   <SubCategoryForm title='Add SubCategory' />
               </div>
-              {subcategory.length > 0 && <Table data={subcategory} columns={columns} />}
+              {subcategory?.length > 0 && <Table data={subcategory} columns={columns} />}
           </div>
       </>
   )

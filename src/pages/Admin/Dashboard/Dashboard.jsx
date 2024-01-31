@@ -268,9 +268,9 @@ const Dashboard = () => {
                                     </div>
                                     <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
                                         <p className='text-base font-medium'>Order Price - $ 1,000</p>
-                                        <div class="flex items-center gap-x-2">
-                                            <button type="button" class="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-gray-800 rounded-lg bg-gray-200 hover:text-black hover:bg-gray-300 capitalize w-full">Reject</button>
-                                            <button type="submit" class="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize w-full">Confirm</button>
+                                        <div className="flex items-center gap-x-2">
+                                            <button type="button" className="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-gray-800 rounded-lg bg-gray-200 hover:text-black hover:bg-gray-300 capitalize w-full">Reject</button>
+                                            <button type="submit" className="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize w-full">Confirm</button>
                                         </div>
                                     </div>
                                 </div>
@@ -296,9 +296,9 @@ const Dashboard = () => {
                                     </div>
                                     <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
                                         <p className='text-base font-medium'>Order Price - $ 1,000</p>
-                                        <div class="flex items-center gap-x-2">
-                                            <button type="button" class="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-gray-800 rounded-lg bg-gray-200 hover:text-black hover:bg-gray-300 capitalize w-full">Reject</button>
-                                            <button type="submit" class="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize w-full">Confirm</button>
+                                        <div className="flex items-center gap-x-2">
+                                            <button type="button" className="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-gray-800 rounded-lg bg-gray-200 hover:text-black hover:bg-gray-300 capitalize w-full">Reject</button>
+                                            <button type="submit" className="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize w-full">Confirm</button>
                                         </div>
                                     </div>
                                 </div>
@@ -324,9 +324,9 @@ const Dashboard = () => {
                                     </div>
                                     <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
                                         <p className='text-base font-medium'>Order Price - $ 1,000</p>
-                                        <div class="flex items-center gap-x-2">
-                                            <button type="button" class="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-gray-800 rounded-lg bg-gray-200 hover:text-black hover:bg-gray-300 capitalize w-full">Reject</button>
-                                            <button type="submit" class="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize w-full">Confirm</button>
+                                        <div className="flex items-center gap-x-2">
+                                            <button type="button" className="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-gray-800 rounded-lg bg-gray-200 hover:text-black hover:bg-gray-300 capitalize w-full">Reject</button>
+                                            <button type="submit" className="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize w-full">Confirm</button>
                                         </div>
                                     </div>
                                 </div>
@@ -352,9 +352,9 @@ const Dashboard = () => {
                                     </div>
                                     <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
                                         <p className='text-base font-medium'>Order Price - $ 1,000</p>
-                                        <div class="flex items-center gap-x-2">
-                                            <button type="button" class="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-gray-800 rounded-lg bg-gray-200 hover:text-black hover:bg-gray-300 capitalize w-full">Reject</button>
-                                            <button type="submit" class="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize w-full">Confirm</button>
+                                        <div className="flex items-center gap-x-2">
+                                            <button type="button" className="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-gray-800 rounded-lg bg-gray-200 hover:text-black hover:bg-gray-300 capitalize w-full">Reject</button>
+                                            <button type="submit" className="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize w-full">Confirm</button>
                                         </div>
                                     </div>
                                 </div>

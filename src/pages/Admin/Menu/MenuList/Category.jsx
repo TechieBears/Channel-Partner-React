@@ -61,7 +61,7 @@ const Category = () => {
                     </div>
                     <CategoryForm title='Add Category' />
                 </div>
-                {category.length > 0 && <Table data={category} columns={columns} />}
+                {category?.length > 0 && <Table data={category} columns={columns} />}
             </div>
         </>
     )

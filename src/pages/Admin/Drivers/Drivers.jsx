@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { Eye, Trash } from 'iconsax-react';
 // import CreateUserForm from '../../../components/Modals/UserModals/CreateUserForm';
 import { delUser, editUser, getUser } from '../../../api';
-import userImg from '../../../assets/user.webp';
+// import userImg from '../../../assets/user.webp';
 import Switch from 'react-js-switch';
 import axios from 'axios';
 import { toast } from 'react-toastify';

@@ -66,7 +66,7 @@ const Product = () => {
                   </div>
                   <ProductForm title='Add Product' />
               </div>
-              {product.length > 0 && <Table data={product} columns={columns} />}
+              {product?.length > 0 && <Table data={product} columns={columns} />}
           </div>
       </>
   )
