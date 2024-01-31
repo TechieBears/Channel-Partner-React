@@ -19,6 +19,9 @@ import VendorOrders from '../src/pages/Vendor/VendorOrders/VendorOrders';
 import Menu from '../src/pages/Admin/Menu/Menu';
 import Vendors from '../src/pages/Admin/Vendors/Vendors';
 import RestaurantDetail from '../src/pages/Restaurants/RestaurantDetail/RestaurantDetail';
+import Drivers from '../src/pages/Admin/Drivers/Drivers';
+import Order from '../src/pages/Admin/Order/Order';
+import Banner from '../src/pages/Admin/Banner/Banner';
 
 
 
@@ -53,6 +56,9 @@ const ProjectRoutes = () => {
                                 <Route path="/vendors/restaurant-detail/:id" element={<RestaurantDetail />} />
                                 <Route path="/dashboard/:id" element={<DashboardView />} />
                                 <Route path="/DashboardAssets" element={<DashboardAssets />} />
+                                <Route path="/drivers" element={<Drivers />} />
+                                <Route path="/orders" element={<Order />} />
+                                <Route path="/banners" element={<Banner />} />
                                 <Route path="/user" element={<User />} />
                                 <Route path="/user/:id" element={<UserView />} />
                                 <Route path="/profile" element={<UserProfile />} />
