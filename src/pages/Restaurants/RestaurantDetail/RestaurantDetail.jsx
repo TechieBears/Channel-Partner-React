@@ -72,20 +72,20 @@ export default function RestaurantDetail() {
                     <ArrowLeft className='text-white' /> Back
                 </button>
                 <img src={CoverPic} className='h-60 w-full' alt='cover-pic' />
-                <img src={ProfilePic} alt='profile-pic' className='absolute w-1/12 border-4 border-[#F97316] left-14 bottom-1 top-44 rounded-full' />
+                <img src={ProfilePic} alt='profile-pic' className='absolute w-1/12 border-4 border-sky-400 left-14 bottom-1 top-44 rounded-full' />
             </div>
             <div className='p-4 space-y-4'>
                 <div className=' mt-14 grid grid-cols-5 gap-5'>
-                    <div onClick={() => setTab(0)} className={`${tab == 0 ? 'bg-[#F97316] text-white' : 'border-[#F97316] border-2 text-[#F97316]'} p-2 text-center cursor-pointer`}>
+                    <div onClick={() => setTab(0)} className={`${tab == 0 ? 'bg-sky-400 text-white' : 'border-sky-400 border-2 text-sky-400'} p-2 text-center cursor-pointer`}>
                         Restaurant Detail
                     </div>
-                    <div onClick={() => setTab(1)} className={`${tab == 1 ? 'bg-[#F97316] text-white' : 'border-[#F97316] border-2 text-[#F97316]'} p-2 text-center cursor-pointer`}>
+                    <div onClick={() => setTab(1)} className={`${tab == 1 ? 'bg-sky-400 text-white' : 'border-sky-400 border-2 text-sky-400'} p-2 text-center cursor-pointer`}>
                         Food Items
                     </div>
-                    <div onClick={() => setTab(2)} className={`${tab == 2 ? 'bg-[#F97316] text-white' : 'border-[#F97316] border-2 text-[#F97316]'} p-2 text-center cursor-pointer`}>
+                    <div onClick={() => setTab(2)} className={`${tab == 2 ? 'bg-sky-400 text-white' : 'border-sky-400 border-2 text-sky-400'} p-2 text-center cursor-pointer`}>
                         Ratings and Reviews
                     </div>
-                    <div onClick={() => setTab(3)} className={`${tab == 3 ? 'bg-[#F97316] text-white' : 'border-[#F97316] border-2 text-[#F97316]'} p-2 text-center cursor-pointer`}>
+                    <div onClick={() => setTab(3)} className={`${tab == 3 ? 'bg-sky-400 text-white' : 'border-sky-400 border-2 text-sky-400'} p-2 text-center cursor-pointer`}>
                         Configuration
                     </div>
                 </div>
@@ -279,7 +279,7 @@ export default function RestaurantDetail() {
                                         <div>
                                             <p className='text-lg font-semibold'>{rating?.name}</p>
                                             <p className='text-sm font-light'>{rating?.date}</p>
-                                            <p className='text-sm font-light flex gap-2'><Star1 className='text-sm ' size={18} variant='Bold' color='#F97316' />{rating?.rating}</p>
+                                            <p className='text-sm font-light flex gap-2'><Star1 className='text-sm ' size={18} variant='Bold' color='#38bdf8' />{rating?.rating}</p>
                                         </div>
                                     </div>
                                 ))
@@ -352,7 +352,7 @@ export default function RestaurantDetail() {
                                                     className={`${inputClass} w-10`}
                                                     {...register('monday_out_time', { required: true })}
                                                 />
-                                                <Switch checked={mondayOn} onColor='#F97316' onChange={() => setMondayOn(!mondayOn)} />
+                                                <Switch checked={mondayOn} onColor='#38bdf8' onChange={() => setMondayOn(!mondayOn)} />
                                             </div>
                                             <div className='grid grid-cols-5 items-center gap-10'>
                                                 <label className={labelClass}>
@@ -371,7 +371,7 @@ export default function RestaurantDetail() {
                                                     className={`${inputClass} w-10`}
                                                     {...register('tuesday_out_time', { required: true })}
                                                 />
-                                                <Switch checked={tuesdayOn} onColor='#F97316' onChange={() => setTuesdayOn(!tuesdayOn)} />
+                                                <Switch checked={tuesdayOn} onColor='#38bdf8' onChange={() => setTuesdayOn(!tuesdayOn)} />
                                             </div>
                                             <div className='grid grid-cols-5 items-center gap-10'>
                                                 <label className={labelClass}>
@@ -390,7 +390,7 @@ export default function RestaurantDetail() {
                                                     className={`${inputClass} w-10`}
                                                     {...register('wed_out_time', { required: true })}
                                                 />
-                                                <Switch checked={wedenesdayOn} onColor='#F97316' onChange={() => setWedenesdayOn(!wedenesdayOn)} />
+                                                <Switch checked={wedenesdayOn} onColor='#38bdf8' onChange={() => setWedenesdayOn(!wedenesdayOn)} />
                                             </div>
                                             <div className='grid grid-cols-5 items-center gap-10'>
                                                 <label className={labelClass}>
@@ -409,7 +409,7 @@ export default function RestaurantDetail() {
                                                     className={`${inputClass} w-10`}
                                                     {...register('thrs_out_time', { required: true })}
                                                 />
-                                                <Switch checked={thursdayOn} onColor='#F97316' onChange={() => setThursdayOn(!thursdayOn)} />
+                                                <Switch checked={thursdayOn} onColor='#38bdf8' onChange={() => setThursdayOn(!thursdayOn)} />
                                             </div>
                                             <div className='grid grid-cols-5 items-center gap-10'>
                                                 <label className={labelClass}>
@@ -428,7 +428,7 @@ export default function RestaurantDetail() {
                                                     className={`${inputClass} w-10`}
                                                     {...register('friday_out_time', { required: true })}
                                                 />
-                                                <Switch checked={fridayOn} onColor='#F97316' onChange={() => setFridayOn(!fridayOn)} />
+                                                <Switch checked={fridayOn} onColor='#38bdf8' onChange={() => setFridayOn(!fridayOn)} />
                                             </div>
                                             <div className='grid grid-cols-5 items-center gap-10'>
                                                 <label className={labelClass}>
@@ -447,7 +447,7 @@ export default function RestaurantDetail() {
                                                     className={`${inputClass} w-10`}
                                                     {...register('saturday_out_time', { required: true })}
                                                 />
-                                                <Switch checked={saturdyaOn} onColor='#F97316' onChange={() => setSaturdyaOn(!saturdyaOn)} />
+                                                <Switch checked={saturdyaOn} onColor='#38bdf8' onChange={() => setSaturdyaOn(!saturdyaOn)} />
                                             </div>
                                             <div className='grid grid-cols-5 items-center gap-10'>
                                                 <label className={labelClass}>
@@ -466,7 +466,7 @@ export default function RestaurantDetail() {
                                                     className={`${inputClass} w-10`}
                                                     {...register('sunday_out_time', { required: true })}
                                                 />
-                                                <Switch checked={sundayOn} onColor='#F97316' onChange={() => setSaturdyaOn(!saturdyaOn)} />
+                                                <Switch checked={sundayOn} onColor='#38bdf8' onChange={() => setSaturdyaOn(!saturdyaOn)} />
                                             </div>
                                         </div>
                                     </div>

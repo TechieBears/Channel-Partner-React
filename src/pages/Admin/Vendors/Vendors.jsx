@@ -51,7 +51,7 @@ export default function Vendors() {
     </button>
     const columns = [
         { field: 'id', header: 'ID', body: (row) => <h6>{row?.id}</h6>, sortable: false },
-        { field: 'name', header: 'Restaurants Name', body: (row) => <NavLink to={`/vendors/restaurant-detail/${row?.id}`}><h6 className='text-[#F97316] underline'>{row?.name}</h6> </NavLink>, sortable: false },
+        { field: 'name', header: 'Restaurants Name', body: (row) => <NavLink to={`/vendors/restaurant-detail/${row?.id}`}><h6 className='text-sky-400 underline'>{row?.name}</h6> </NavLink>, sortable: false },
         { field: 'address', header: 'Address', body: (row) => <h6>{row?.address}</h6>, sortable: false },
         { field: 'email', header: 'Email', body: (row) => <h6>{row?.email}</h6>, sortable: false },
         { field: 'dl_commission', header: 'Delivery Commission', body: (row) => <h6>{row?.dl_commission}</h6>, sortable: false },
