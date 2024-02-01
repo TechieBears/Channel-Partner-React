@@ -23,7 +23,7 @@ const Sidebar = ({ children }) => {
                     <div className={`${isActiveLink ? "w-[5rem]" : "w-[15rem]"}  bg-white h-full  duration-700 xl:block  transition-all ease-in-out top-0 left-0 fixed ${mobileSidebar ? "block z-[90]" : "hidden"}`}>
 
                         {!mobileSidebar && <div className="absolute z-10 top-14 -right-4">
-                            <button onClick={() => setIsActiveLink(!isActiveLink)} className='bg-[#f3f3f3] hover:bg-sky-400 group p-2 rounded-full shadow-md transition-all duration-300'>
+                            <button onClick={() => setIsActiveLink(!isActiveLink)} className='bg-[#f3f3f3] hover:bg-[#F97316] group p-2 rounded-full shadow-md transition-all duration-300'>
                                 <DirectLeft className={`text-sky-400 group-hover:text-white transition-all duration-500 ${isActiveLink && "rotate-180"}`} size={22} />
                             </button>
                         </div>}

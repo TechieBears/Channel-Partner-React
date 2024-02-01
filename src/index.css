@@ -8,7 +8,7 @@
 }
 
 :root {
-    --primaryColor: #38bdf8;
+    --primaryColor: #F97316;
     --font-name: 'Plus Jakarta Sans';
     --font-name-pop: 'Poppins';
     --font-name-mon: 'Montserrat';
@@ -73,16 +73,16 @@ body::-webkit-scrollbar-thumb {
 /* ================== active class ================= */
 
 .active .left-border {
-    background-color: #38bdf8;
+    background-color: #F97316;
     opacity: 1;
 }
 
 .active .icon-wrapper {
-    color: #38bdf8 !important;
+    color: #F97316 !important;
 }
 
 .active .text-title {
-    color: #38bdf8 !important;
+    color: #F97316 !important;
 }
 
 /* =============== Loader css==================== */
@@ -397,7 +397,7 @@ body::-webkit-scrollbar-thumb {
     border-width: 1px !important;
     box-shadow: none !important;
     transition: all .6 ease-in-out !important;
-    border: 1px solid #38bdf8 !important;
+    border: 1px solid #F97316 !important;
 
 }
 

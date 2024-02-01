@@ -1,9 +1,10 @@
 import { Add, Refresh, SearchNormal } from 'iconsax-react';
 import React, { useState } from 'react'
 import Table from '../../../components/Table/Table';
-import { formBtn1, inputClass } from '../../../utils/CustomClass';
+import { formBtn1, inputClass, tableBtn } from '../../../utils/CustomClass';
 import AddRestaurant from '../../../components/Modals/Vendors/AddRestaurant/AddRestaurant';
 import { NavLink } from 'react-router-dom';
+import Switch from 'react-switch'
 
 export default function Vendors() {
     const data = [
@@ -36,32 +37,21 @@ export default function Vendors() {
         }
     ]
 
-    const [activeTab, setActiveTab] = useState(1);
+    const [activeTab, setActiveTab] = useState(true);
+    const [rstatus, setStatus] = useState(false);
 
     const changeTab = (tabNumber) => {
         setActiveTab(tabNumber);
     };
     /*================================     column    ========================= */
 
-    const status = (row) => <div className="flex items-center justify-center w-full mb-12">
-        <label htmlFor="toogleA" className="flex items-center cursor-pointer" >
-            {/* <!-- toggle --> */}
-            <div className="relative">
-                {/* <!-- input --> */}
-                <input id="toogleA" type="checkbox" className="sr-only" />
-                {/* <!-- line --> */}
-                <div className="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
-                {/* <!-- dot --> */}
-                <div className="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
-            </div>
-        </label>
-    </div>
-    const action = (row) => <button className={`${formBtn1}`} >
+    const status = (row) => <Switch checked={rstatus} onChange={() => setStatus(!rstatus)} />
+    const action = (row) => <button className={`${tableBtn}`} >
         View Analysis
     </button>
     const columns = [
         { field: 'id', header: 'ID', body: (row) => <h6>{row?.id}</h6>, sortable: false },
-        { field: 'name', header: 'Restaurants Name', body: (row) => <NavLink to={`/vendors/restaurant-detail/${row?.id}`}><h6 className='text-blue-400 underline'>{row?.name}</h6> </NavLink>, sortable: false },
+        { field: 'name', header: 'Restaurants Name', body: (row) => <NavLink to={`/vendors/restaurant-detail/${row?.id}`}><h6 className='text-[#F97316] underline'>{row?.name}</h6> </NavLink>, sortable: false },
         { field: 'address', header: 'Address', body: (row) => <h6>{row?.address}</h6>, sortable: false },
         { field: 'email', header: 'Email', body: (row) => <h6>{row?.email}</h6>, sortable: false },
         { field: 'dl_commission', header: 'Delivery Commission', body: (row) => <h6>{row?.dl_commission}</h6>, sortable: false },
