@@ -22,6 +22,16 @@ export const SidebarAdminApi = [
         link: '/drivers',
     },
     {
+        title: 'User',
+        icon: <User size="24" />,
+        link: '/user',
+    },
+    {
+        title: 'SubAdmin',
+        icon: <SecurityUser size="24" />,
+        link: '/subadmin',
+    },
+    {
         title: 'Orders',
         icon: <Element4 size="24" />,
         link: '/orders',
@@ -41,16 +51,13 @@ export const SidebarAdminApi = [
         icon: <Element4 size="24" />,
         link: '/promotions',
     },
-    {
-        title: 'User Data',
-        icon: <Element4 size="24" />,
-        link: '/userdata',
-    },
-    {
-        title: 'SubAdmin',
-        icon: <SecurityUser size="24" />,
-        link: '/subadmin',
-    },
+    // {
+    //     title: 'User Data',
+    //     icon: <Element4 size="24" />,
+    //     link: '/userdata',
+    // },
+  
+    
     {
         title: 'Reports',
         icon: <Element4 size="24" />,
@@ -100,11 +107,7 @@ export const SidebarAdminApi = [
     //     ]
     // },
 
-    {
-        title: 'User',
-        icon: <User size="24" />,
-        link: '/user',
-    }
+  
 ]
 
 export const VendorSidebarApi = [

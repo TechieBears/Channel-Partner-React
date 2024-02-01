@@ -5,17 +5,21 @@ import Table from '../../../../components/Table/Table';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCategory } from '../../../../redux/Slices/masterSlice';
 import { delMovableCategory, getCategory } from '../../../../api';
+import { NavLink } from 'react-router-dom';
 
 
 const Category = () => {
     const category = useSelector((state) => state?.master?.Category)
     const dispatch = useDispatch()
+    const data = []
 
     // ============== fetch data from api ================
     const fetchData = () => {
         try {
             getCategory().then((res) => {
                 dispatch(setCategory(res))
+                data.push(res)
+                console.log(data)
             })
         } catch (error) {
             console.log(error)
@@ -48,7 +52,7 @@ const Category = () => {
     // ================= columns of the table ===============
     const columns = [
         { field: 'category_image', header: 'Image', body: imageBodyTemp, style: true },
-        { field: 'category_name', header: 'Name' },
+        { field: 'category_name', header: 'Name', body: (row) => <NavLink to={`/menu/category-detail/${row?.id}`}><h6 className='hover:underline hover:text-sky-400'>{row?.category_name}</h6> </NavLink> },
         { field: 'id', header: 'Action', body: actionBodyTemplate, sortable: true },
     ];
 

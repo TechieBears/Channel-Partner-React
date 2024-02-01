@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import CoverPic from '../../../assets/RestaurantImages/CoverPic.jpg'
-import ProfilePic from '../../../assets/user.jpg'
+import CoverPic from '../../../../assets/RestaurantImages/CoverPic.jpg'
+import ProfilePic from '../../../../assets/user.jpg'
 import { useForm } from 'react-hook-form';
-import LoadBox from '../../../components/Loader/LoadBox';
-import { formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
-import Error from '../../../components/Errors/Error';
+import LoadBox from '../../../../components/Loader/LoadBox';
+import { formBtn1, formBtn2, inputClass, labelClass } from '../../../../utils/CustomClass';
+import Error from '../../../../components/Errors/Error';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Star, Star1 } from 'iconsax-react';
 import { MultiSelect } from 'primereact/multiselect';
 import Switch from 'react-switch'
 
-export default function RestaurantDetail() {
+export default function CategoryDetail() {
     const [tab, setTab] = useState(0);
     const [loader, setLoader] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState('');

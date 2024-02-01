@@ -79,12 +79,12 @@ export default function Vendors() {
                 </button>
             </div>
             <div className='grid grid-cols-6 mt-4'>
-                <div className=' col-span-4 flex bg-white p-3 gap-2 rounded-lg w-1/4 border-2 border-gray-300 '>
+                <div className='flex w-1/4 col-span-4 gap-2 p-3 bg-white border-2 border-gray-300 rounded-lg '>
                     <SearchNormal className='text-gray-400' />
-                    <input placeholder='Search..' className='h-full w-4/5' />
+                    <input placeholder='Search..' className='w-4/5 h-full' />
                 </div>
-                <div className='col-span-2 grid grid-cols-3 gap-2'>
-                    <button className=' flex gap-2 bg-white p-3 rounded-lg border-2'>
+                <div className='grid grid-cols-3 col-span-2 gap-2'>
+                    <button className='flex gap-2 p-3 bg-white border-2 rounded-lg '>
                         <Refresh className='text-gray-400' />
                         <p>Refresh</p>
                     </button>

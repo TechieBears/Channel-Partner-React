@@ -23,6 +23,7 @@ import Drivers from '../src/pages/Admin/Drivers/Drivers';
 import Order from '../src/pages/Admin/Order/Order';
 import Banner from '../src/pages/Admin/Banner/Banner';
 import Reports from '../src/pages/Admin/Reports/Reports';
+import CategoryDetail from '../src/pages/Admin/Menu/CategoryDetail/CategoryDetail';
 
 
 
@@ -55,6 +56,7 @@ const ProjectRoutes = () => {
                                 <Route path="/menu" element={<Menu />} />
                                 <Route path="/vendors" element={<Vendors />} />
                                 <Route path="/vendors/restaurant-detail/:id" element={<RestaurantDetail />} />
+                                <Route path="/menu/category-detail/:id" element={<CategoryDetail />} />
                                 <Route path="/dashboard/:id" element={<DashboardView />} />
                                 <Route path="/DashboardAssets" element={<DashboardAssets />} />
                                 <Route path="/drivers" element={<Drivers />} />

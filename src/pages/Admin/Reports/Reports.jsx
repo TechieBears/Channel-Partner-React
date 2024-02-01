@@ -97,7 +97,7 @@ function Reports() {
   // =================== table user profile column ========================
   const representativeBodyTemplate = (row) => {
     return (
-      <div className="w-11 h-11 rounded-full">
+      <div className="rounded-full w-11 h-11">
         <img
           src={
             row?.profile == null ||
@@ -106,7 +106,7 @@ function Reports() {
               ? userImg
               : row?.profile
           }
-          className="w-full h-full rounded-full object-cover"
+          className="object-cover w-full h-full rounded-full"
           alt={row.first_name}
         />
       </div>
@@ -164,7 +164,7 @@ function Reports() {
   // =============================== verify user switch =============================
   const switchVerify = (row) => {
     return (
-      <div className="flex justify-center items-center gap-2 ">
+      <div className="flex items-center justify-center gap-2 ">
         <Switch
           value={row?.isverify}
           onChange={() => verifyActions(row)}
@@ -178,7 +178,7 @@ function Reports() {
   // =============================== active user switch =============================
   const switchActive = (row) => {
     return (
-      <div className="flex justify-center items-center gap-2 ">
+      <div className="flex items-center justify-center gap-2 ">
         <Switch
           value={row?.isactive}
           onChange={() => activeActions(row)}
@@ -205,7 +205,7 @@ function Reports() {
         <img
           src={row.image}
           alt={row.name}
-          className="w-11 h-11 rounded-full"
+          className="rounded-full w-11 h-11"
         />
       ),
       sortable: true,
@@ -321,12 +321,12 @@ function Reports() {
         open={open}
       />
       {/* ========================= user fileter ======================= */}
-      <div className="bg-white p-4 sm:m-5 rounded-xl">
+      <div className="p-4 bg-white sm:m-5 rounded-xl">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex w-full justify-between md:items-center flex-col lg:flex-row gap-2"
+          className="flex flex-col justify-between w-full gap-2 md:items-center lg:flex-row"
         >
-          <div className="grid grid-cols-1 w-8/12 sm:grid-cols-3 gap-y-3 gap-x-2">
+          <div className="grid w-8/12 grid-cols-1 sm:grid-cols-3 gap-y-3 gap-x-2">
             <div className="">
               <input
                 type="text"
@@ -346,7 +346,7 @@ function Reports() {
               />
             </div>
           </div>
-          <div className="flex w-4/12 gap-x-2 items-center">
+          <div className="flex items-center w-4/12 gap-x-2">
             <button type="submit" className={`${formBtn1} w-full text-center`}>
               Download CSV
             </button>
@@ -368,10 +368,10 @@ function Reports() {
         </form>
       </div>
       {/*====================== User Table ================================*/}
-      <div className="bg-white p-4 sm:m-5 rounded-xl">
-        <div className="flex justify-between flex-col sm:flex-row items-start sm:items-center sm:space-y-0 mb-6">
+      <div className="p-4 bg-white sm:m-5 rounded-xl">
+        <div className="flex flex-col items-start justify-between mb-6 sm:flex-row sm:items-center sm:space-y-0">
           <div className="">
-            <h1 className="font-tbPop text-xl font-semibold text-gray-900">
+            <h1 className="text-xl font-semibold text-gray-900 font-tbPop">
               Reports
             </h1>
           </div>
