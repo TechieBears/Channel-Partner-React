@@ -5,10 +5,58 @@ import { useForm } from 'react-hook-form';
 import LoadBox from '../../../components/Loader/LoadBox';
 import { formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
 import Error from '../../../components/Errors/Error';
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeft, Star, Star1 } from 'iconsax-react';
+import { MultiSelect } from 'primereact/multiselect';
+import Switch from 'react-switch'
 
 export default function RestaurantDetail() {
     const [tab, setTab] = useState(0);
     const [loader, setLoader] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [selectedSubCategory, setSelectedSubCategory] = useState([]);
+    const [mondayOn, setMondayOn] = useState(true);
+    const [tuesdayOn, setTuesdayOn] = useState(true);
+    const [wedenesdayOn, setWedenesdayOn] = useState(true);
+    const [thursdayOn, setThursdayOn] = useState(true);
+    const [fridayOn, setFridayOn] = useState(true);
+    const [saturdyaOn, setSaturdyaOn] = useState(true);
+    const [sundayOn, setSundayOn] = useState(true);
+    const [isRecommanded, setIsRecommanded] = useState(true);
+    const categories = ['Asian', 'Mexican', 'Italian', 'Russian cussion', 'Spanish', 'Comfort', 'American', 'North Indian', 'South Indian']
+    const ratings = [
+        {
+            'id': 1,
+            'name': 'Naveen',
+            'date': 'Jan, 11, 2024',
+            'rating': '3'
+        },
+        {
+            'id': 2,
+            'name': 'Vijay',
+            'date': 'Jan, 10, 2024',
+            'rating': '3.5'
+        },
+        {
+            'id': 3,
+            'name': 'Shubham',
+            'date': 'Jan, 11, 2024',
+            'rating': '2.3'
+        },
+        {
+            'id': 4,
+            'name': 'Vishal',
+            'date': 'Jan, 11, 2024',
+            'rating': '1'
+        },
+        {
+            'id': 5,
+            'name': 'Sai',
+            'date': 'Jan, 11, 2024',
+            'rating': '4.2'
+        },
+    ]
+    const navigate = useNavigate()
     const { register, handleSubmit, control, watch, reset, formState: { errors } } = useForm();
     const closeBtn = () => {
         toggle();
@@ -20,21 +68,24 @@ export default function RestaurantDetail() {
     return (
         <>
             <div className='relative'>
+                <button className=' absolute flex text-white mt-4 left-3 border-2 rounded-full ' onClick={() => navigate(-1)}>
+                    <ArrowLeft className='text-white' /> Back
+                </button>
                 <img src={CoverPic} className='h-60 w-full' alt='cover-pic' />
-                <img src={ProfilePic} alt='profile-pic' className='absolute w-1/12 border-4 border-sky-400 left-14 bottom-1 top-44 rounded-full' />
+                <img src={ProfilePic} alt='profile-pic' className='absolute w-1/12 border-4 border-[#F97316] left-14 bottom-1 top-44 rounded-full' />
             </div>
             <div className='p-4 space-y-4'>
                 <div className=' mt-14 grid grid-cols-5 gap-5'>
-                    <div onClick={() => setTab(0)} className={`${tab == 0 ? 'bg-sky-400 text-white' : 'border-sky-400 border-2 text-sky-400'} p-2 text-center cursor-pointer`}>
+                    <div onClick={() => setTab(0)} className={`${tab == 0 ? 'bg-[#F97316] text-white' : 'border-[#F97316] border-2 text-[#F97316]'} p-2 text-center cursor-pointer`}>
                         Restaurant Detail
                     </div>
-                    <div onClick={() => setTab(1)} className={`${tab == 1 ? 'bg-sky-400 text-white' : 'border-sky-400 border-2 text-sky-400'} p-2 text-center cursor-pointer`}>
+                    <div onClick={() => setTab(1)} className={`${tab == 1 ? 'bg-[#F97316] text-white' : 'border-[#F97316] border-2 text-[#F97316]'} p-2 text-center cursor-pointer`}>
                         Food Items
                     </div>
-                    <div onClick={() => setTab(2)} className={`${tab == 2 ? 'bg-sky-400 text-white' : 'border-sky-400 border-2 text-sky-400'} p-2 text-center cursor-pointer`}>
+                    <div onClick={() => setTab(2)} className={`${tab == 2 ? 'bg-[#F97316] text-white' : 'border-[#F97316] border-2 text-[#F97316]'} p-2 text-center cursor-pointer`}>
                         Ratings and Reviews
                     </div>
-                    <div onClick={() => setTab(3)} className={`${tab == 3 ? 'bg-sky-400 text-white' : 'border-sky-400 border-2 text-sky-400'} p-2 text-center cursor-pointer`}>
+                    <div onClick={() => setTab(3)} className={`${tab == 3 ? 'bg-[#F97316] text-white' : 'border-[#F97316] border-2 text-[#F97316]'} p-2 text-center cursor-pointer`}>
                         Configuration
                     </div>
                 </div>
@@ -44,18 +95,9 @@ export default function RestaurantDetail() {
                             <div className='border-2 border-gray-200 p-2'>
                                 <div className='flex justify-between mx-2'>
                                     <h4 className='font-semibold text-xl'>Personal Info.</h4>
-                                    <div className="flex space-x-4">
+                                    <div className="flex space-x-4 items-center">
                                         <h6>Is Recommanded</h6>
-                                        <label htmlFor="toogleA" className="flex items-center cursor-pointer" >
-                                            <div className="relative">
-                                                {/* <!-- input --> */}
-                                                <input id="toogleA" type="checkbox" className="sr-only" />
-                                                {/* <!-- line --> */}
-                                                <div className="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
-                                                {/* <!-- dot --> */}
-                                                <div className="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
-                                            </div>
-                                        </label>
+                                        <Switch checked={isRecommanded} onChange={() => setIsRecommanded(!isRecommanded)} />
                                     </div>
                                 </div>
 
@@ -166,16 +208,16 @@ export default function RestaurantDetail() {
                             <div className='border-2 border-gray-200 p-4'>
                                 <h4 className='text-xl font-semibold'>Delivery Area</h4>
                                 <p className='text-sm'>Enter a Radius from store's central location in which you want to deliver. </p>
-                                <div className='bg-sky-100 p-4 space-y-2 '>
+                                <div className='bg-orange-100 p-4 space-y-2 '>
                                     <div className='grid grid-cols-6'>
-                                        <div className=" col-span-5 flex items-center gap-10">
+                                        <div className=" col-span-5 grid grid-cols-5 items-center gap-10">
                                             <label className='text-lg font-bold'>
                                                 Enter Delivery Radius(KM)
                                             </label>
                                             <input
                                                 type="text"
                                                 placeholder='Enter Delivery Radius(KM)'
-                                                className={`${inputClass} w-1/4`}
+                                                className={`${inputClass} colsp`}
                                                 {...register('radius',)}
                                             />
                                         </div>
@@ -189,6 +231,248 @@ export default function RestaurantDetail() {
                                 {/* <button type='button' className={formBtn2} onClick={closeBtn}>close</button> */}
                             </footer>
                         </form>
+                    </>
+                }
+                {
+                    tab == 1 && <>
+                        <button className={`${formBtn1}`} >Assign Categories</button>
+                        <div className='grid grid-cols-2 gap-10'>
+                            <div>
+                                <label className={labelClass}>
+                                    Categories
+                                </label>
+                                <select
+                                    className={`${inputClass}`}
+                                    onChange={(e) => setSelectedCategory(e.target.value)}
+                                >
+                                    <option value=''>Select</option>
+                                    <option value='Asian'>Asian</option>
+                                    <option value='Mexican'>Mexican</option>
+                                    <option value='Italian'>Italian</option>
+                                    <option value='Russian Cuisine'>Russian Cuisine</option>
+                                    <option value='Sushi'>Sushi</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className={labelClass}>
+                                    {selectedCategory != '' ? selectedCategory : 'Sub-category'}
+                                </label>
+                                <MultiSelect
+                                    value={selectedSubCategory}
+                                    onChange={(e) => setSelectedSubCategory(e.target.value)}
+                                    options={categories}
+                                    placeholder='Select Category'
+                                    maxSelectedLabels={3}
+                                    className={`w-full`}
+                                />
+                            </div>
+                        </div>
+                    </>
+                }
+                {
+                    tab == 2 && <>
+                        <div className='bg-white p-2 rounded-lg overflow-hidden '>
+                            {
+                                ratings.map((rating) => (
+                                    <div key={rating?.id} className='flex p-4 space-x-3 items-center border-2 border-gray-200 rounded-xl my-4'>
+                                        <img src={ProfilePic} alt='user-img' className='w-16 h-16 rounded-full' />
+                                        <div>
+                                            <p className='text-lg font-semibold'>{rating?.name}</p>
+                                            <p className='text-sm font-light'>{rating?.date}</p>
+                                            <p className='text-sm font-light flex gap-2'><Star1 className='text-sm ' size={18} variant='Bold' color='#F97316' />{rating?.rating}</p>
+                                        </div>
+                                    </div>
+                                ))
+                            }
+
+                        </div>
+                    </>
+                }
+                {
+                    tab == 3 && <>
+                        <div className='bg-white p-2 rounded-lg overflow-hidden '>
+                            <div className='border-2 border-gray-300 rounded-lg p-2'>
+                                <form>
+                                    <div className='grid grid-cols-4 gap-5'>
+                                        <div className="col-span-3">
+                                            <label className={labelClass}>
+                                                Preparation Time*
+                                            </label>
+                                            <input
+                                                type="time"
+                                                placeholder='Preparation Time'
+                                                className={`${inputClass} w-10`}
+                                                {...register('preparation_time', { required: true })}
+                                            />
+                                            {errors.preparation_time && <Error title='Preparation Time is Required*' />}
+                                        </div>
+                                        <div className="col-span-2">
+                                            <label className={labelClass}>
+                                                Minimum Delivery Time*
+                                            </label>
+                                            <input
+                                                type="time"
+                                                placeholder='Preparation Time'
+                                                className={`${inputClass} w-10`}
+
+                                                {...register('preparation_time', { required: true })}
+                                            />
+                                            {errors.preparation_time && <Error title='Preparation Time is Required*' />}
+                                        </div>
+                                        <div className="col-span-2">
+                                            <label className={labelClass}>
+                                                Maximum Delivery Time*
+                                            </label>
+                                            <input
+                                                type="time"
+                                                placeholder='Preparation Time'
+                                                className={`${inputClass} w-10`}
+                                                {...register('preparation_time', { required: true })}
+                                            />
+                                            {errors.preparation_time && <Error title='Preparation Time is Required*' />}
+                                        </div>
+                                    </div>
+                                    <div className=' mt-5 '>
+                                        <p>Set Time Slot</p>
+                                        <div className=' p-4 border-2 rounded-lg border-gray-300 space-y-5'>
+                                            <div className='grid grid-cols-5 items-center gap-10 '>
+                                                <label className={labelClass}>
+                                                    Monday
+                                                </label>
+                                                <input
+                                                    type="time"
+                                                    placeholder='Preparation Time'
+                                                    className={`${inputClass} w-10`}
+                                                    {...register('monday_in_time', { required: true })}
+                                                />
+                                                <p>to</p>
+                                                <input
+                                                    type="time"
+                                                    placeholder='Preparation Time'
+                                                    className={`${inputClass} w-10`}
+                                                    {...register('monday_out_time', { required: true })}
+                                                />
+                                                <Switch checked={mondayOn} onColor='#F97316' onChange={() => setMondayOn(!mondayOn)} />
+                                            </div>
+                                            <div className='grid grid-cols-5 items-center gap-10'>
+                                                <label className={labelClass}>
+                                                    Tuesday
+                                                </label>
+                                                <input
+                                                    type="time"
+                                                    placeholder='Preparation Time'
+                                                    className={`${inputClass} w-10`}
+                                                    {...register('tuesday_in_time', { required: true })}
+                                                />
+                                                <p>to</p>
+                                                <input
+                                                    type="time"
+                                                    placeholder='Preparation Time'
+                                                    className={`${inputClass} w-10`}
+                                                    {...register('tuesday_out_time', { required: true })}
+                                                />
+                                                <Switch checked={tuesdayOn} onColor='#F97316' onChange={() => setTuesdayOn(!tuesdayOn)} />
+                                            </div>
+                                            <div className='grid grid-cols-5 items-center gap-10'>
+                                                <label className={labelClass}>
+                                                    Wedenesday
+                                                </label>
+                                                <input
+                                                    type="time"
+                                                    placeholder='Preparation Time'
+                                                    className={`${inputClass} w-10`}
+                                                    {...register('wed_in_time', { required: true })}
+                                                />
+                                                <p>to</p>
+                                                <input
+                                                    type="time"
+                                                    placeholder='Preparation Time'
+                                                    className={`${inputClass} w-10`}
+                                                    {...register('wed_out_time', { required: true })}
+                                                />
+                                                <Switch checked={wedenesdayOn} onColor='#F97316' onChange={() => setWedenesdayOn(!wedenesdayOn)} />
+                                            </div>
+                                            <div className='grid grid-cols-5 items-center gap-10'>
+                                                <label className={labelClass}>
+                                                    Thursday
+                                                </label>
+                                                <input
+                                                    type="time"
+                                                    placeholder='Preparation Time'
+                                                    className={`${inputClass} w-10`}
+                                                    {...register('thrs_in_time', { required: true })}
+                                                />
+                                                <p>to</p>
+                                                <input
+                                                    type="time"
+                                                    placeholder='Preparation Time'
+                                                    className={`${inputClass} w-10`}
+                                                    {...register('thrs_out_time', { required: true })}
+                                                />
+                                                <Switch checked={thursdayOn} onColor='#F97316' onChange={() => setThursdayOn(!thursdayOn)} />
+                                            </div>
+                                            <div className='grid grid-cols-5 items-center gap-10'>
+                                                <label className={labelClass}>
+                                                    Friday
+                                                </label>
+                                                <input
+                                                    type="time"
+                                                    placeholder='Preparation Time'
+                                                    className={`${inputClass} w-10`}
+                                                    {...register('friday_in_time', { required: true })}
+                                                />
+                                                <p>to</p>
+                                                <input
+                                                    type="time"
+                                                    placeholder='Preparation Time'
+                                                    className={`${inputClass} w-10`}
+                                                    {...register('friday_out_time', { required: true })}
+                                                />
+                                                <Switch checked={fridayOn} onColor='#F97316' onChange={() => setFridayOn(!fridayOn)} />
+                                            </div>
+                                            <div className='grid grid-cols-5 items-center gap-10'>
+                                                <label className={labelClass}>
+                                                    Saturday
+                                                </label>
+                                                <input
+                                                    type="time"
+                                                    placeholder='Preparation Time'
+                                                    className={`${inputClass} w-10`}
+                                                    {...register('saturday_in_time', { required: true })}
+                                                />
+                                                <p>to</p>
+                                                <input
+                                                    type="time"
+                                                    placeholder='Preparation Time'
+                                                    className={`${inputClass} w-10`}
+                                                    {...register('saturday_out_time', { required: true })}
+                                                />
+                                                <Switch checked={saturdyaOn} onColor='#F97316' onChange={() => setSaturdyaOn(!saturdyaOn)} />
+                                            </div>
+                                            <div className='grid grid-cols-5 items-center gap-10'>
+                                                <label className={labelClass}>
+                                                    Sunday
+                                                </label>
+                                                <input
+                                                    type="time"
+                                                    placeholder='Preparation Time'
+                                                    className={`${inputClass} w-10`}
+                                                    {...register('sunday_in_time', { required: true })}
+                                                />
+                                                <p>to</p>
+                                                <input
+                                                    type="time"
+                                                    placeholder='Preparation Time'
+                                                    className={`${inputClass} w-10`}
+                                                    {...register('sunday_out_time', { required: true })}
+                                                />
+                                                <Switch checked={sundayOn} onColor='#F97316' onChange={() => setSaturdyaOn(!saturdyaOn)} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </>
                 }
             </div>
