@@ -50,11 +50,11 @@ export const profileUpload = async (data, name) => {
 
 
 // == LINK == 
-export const link = 'https://reeferon-media.s3.ap-south-1.amazonaws.com/storage/'
+// export const link = 'https://reeferon-media.s3.ap-south-1.amazonaws.com/storage/'
 // == LINK == 
-export const profileLink = 'https://reeferon-media.s3.ap-south-1.amazonaws.com/profile/'
-export const demovideoLink = 'https://reeferon-media.s3.ap-south-1.amazonaws.com/demovideo/'
-export const storeproductLink = 'https://reeferon-media.s3.ap-south-1.amazonaws.com/storeproduct/'
-export const bannerLink = 'https://reeferon-media.s3.ap-south-1.amazonaws.com/banner/'
-export const movableCatLink = 'https://reeferon-media.s3.ap-south-1.amazonaws.com/movablecategory/'
-export const movableproductLink = 'https://reeferon-media.s3.ap-south-1.amazonaws.com/movableproduct/'
+// export const profileLink = 'https://reeferon-media.s3.ap-south-1.amazonaws.com/profile/'
+// export const demovideoLink = 'https://reeferon-media.s3.ap-south-1.amazonaws.com/demovideo/'
+// export const storeproductLink = 'https://reeferon-media.s3.ap-south-1.amazonaws.com/storeproduct/'
+// export const bannerLink = 'https://reeferon-media.s3.ap-south-1.amazonaws.com/banner/'
+// export const movableCatLink = 'https://reeferon-media.s3.ap-south-1.amazonaws.com/movablecategory/'
+// export const movableproductLink = 'https://reeferon-media.s3.ap-south-1.amazonaws.com/movableproduct/'

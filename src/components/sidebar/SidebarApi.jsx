@@ -29,8 +29,13 @@ export const SidebarAdminApi = [
     {
         title: 'Banners',
         icon: <Element4 size="24" />,
-        link: '/banners',
+        link: '/DashboardAssets',
     },
+    // {
+    //     title: 'App Assets',
+    //     icon: <ElementPlus size="24" />,
+    //     link: '/DashboardAssets',
+    // },
     {
         title: 'Promotions',
         icon: <Element4 size="24" />,
@@ -94,11 +99,7 @@ export const SidebarAdminApi = [
 
     //     ]
     // },
-    {
-        title: 'App Assets',
-        icon: <ElementPlus size="24" />,
-        link: '/DashboardAssets',
-    },
+
     {
         title: 'User',
         icon: <User size="24" />,
