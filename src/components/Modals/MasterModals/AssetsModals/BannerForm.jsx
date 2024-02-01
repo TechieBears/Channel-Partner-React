@@ -9,7 +9,7 @@ import { setBanner } from '../../../../redux/Slices/masterSlice';
 import { toast } from 'react-toastify';
 import LoadBox from '../../../Loader/LoadBox';
 import Error from '../../../Errors/Error';
-import { ImageUpload, bannerLink } from '../../../../env';
+// import { ImageUpload, bannerLink } from '../../../../env';
 
 
 export default function BannerForm(props) {
@@ -38,58 +38,58 @@ export default function BannerForm(props) {
 
     // ============================ submit data  =====================================
     const onSubmit = async (data) => {
-        if (props?.button !== 'edit') {
-            try {
-                if (data.image.length != 0) {
-                    await ImageUpload(data.image[0], "banner", "banner", data.image[0].name)
-                    data.image = `${bannerLink}${data.image[0].name}_banner_${data.image[0].name}`
-                } else {
-                    data.image = ''
-                }
-                setLoader(true)
-                addHomeBanners(data).then((res) => {
-                    if (res?.message === "Data added successfully") {
-                        setTimeout(() => {
-                            dispatch(setBanner(res));
-                            reset();
-                            toggle(),
-                                setLoader(false),
-                                getAllBannerList()
-                            toast.success(res.message);
-                        }, 1000)
-                    }
-                })
-            } catch (error) {
-                setLoader(false);
-                console.log('error', error);
-            }
-        } else {
-            try {
-                if (data.image.length != 0) {
-                    await ImageUpload(data.image[0], "banner", "banner", data.image[0].name)
-                    data.image = `${bannerLink}${data.image[0].name}_banner_${data.image[0].name}`
-                } else {
-                    data.image = props.data.image
-                }
-                setLoader(true);
-                editHomeBanners(props?.data?.id, data).then((res) => {
-                    if (res?.message === "Data edited successfully") {
-                        setTimeout(() => {
-                            dispatch(setBanner(res));
-                            reset();
-                            toggle(),
-                                setLoader(false),
-                                getAllBannerList()
-                            toast.success(res.message);
-                        }, 1000)
+        // if (props?.button !== 'edit') {
+        //     try {
+        //         if (data.image.length != 0) {
+        //             await ImageUpload(data.image[0], "banner", "banner", data.image[0].name)
+        //             data.image = `${bannerLink}${data.image[0].name}_banner_${data.image[0].name}`
+        //         } else {
+        //             data.image = ''
+        //         }
+        //         setLoader(true)
+        //         addHomeBanners(data).then((res) => {
+        //             if (res?.message === "Data added successfully") {
+        //                 setTimeout(() => {
+        //                     dispatch(setBanner(res));
+        //                     reset();
+        //                     toggle(),
+        //                         setLoader(false),
+        //                         getAllBannerList()
+        //                     toast.success(res.message);
+        //                 }, 1000)
+        //             }
+        //         })
+        //     } catch (error) {
+        //         setLoader(false);
+        //         console.log('error', error);
+        //     }
+        // } else {
+        //     try {
+        //         if (data.image.length != 0) {
+        //             await ImageUpload(data.image[0], "banner", "banner", data.image[0].name)
+        //             data.image = `${bannerLink}${data.image[0].name}_banner_${data.image[0].name}`
+        //         } else {
+        //             data.image = props.data.image
+        //         }
+        //         setLoader(true);
+        //         editHomeBanners(props?.data?.id, data).then((res) => {
+        //             if (res?.message === "Data edited successfully") {
+        //                 setTimeout(() => {
+        //                     dispatch(setBanner(res));
+        //                     reset();
+        //                     toggle(),
+        //                         setLoader(false),
+        //                         getAllBannerList()
+        //                     toast.success(res.message);
+        //                 }, 1000)
 
-                    }
-                })
-            } catch (error) {
-                setLoader(false);
-                console.log('error', error);
-            }
-        }
+        //             }
+        //         })
+        //     } catch (error) {
+        //         setLoader(false);
+        //         console.log('error', error);
+        //     }
+        // }
 
     }
 

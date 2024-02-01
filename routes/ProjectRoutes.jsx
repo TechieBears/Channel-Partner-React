@@ -22,6 +22,7 @@ import RestaurantDetail from '../src/pages/Restaurants/RestaurantDetail/Restaura
 import Drivers from '../src/pages/Admin/Drivers/Drivers';
 import Order from '../src/pages/Admin/Order/Order';
 import Banner from '../src/pages/Admin/Banner/Banner';
+import Reports from '../src/pages/Admin/Reports/Reports';
 
 
 
@@ -62,6 +63,7 @@ const ProjectRoutes = () => {
                                 <Route path="/user" element={<User />} />
                                 <Route path="/user/:id" element={<UserView />} />
                                 <Route path="/profile" element={<UserProfile />} />
+                                <Route path="/reports" element={<Reports />} />
 
                                 {/* ============================================================================== Partner Flexi store Routes =========================================== */}
                                 <Route path="/vendorDashbaord" element={<VendorDashbaord />} />

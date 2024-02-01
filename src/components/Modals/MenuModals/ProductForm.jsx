@@ -20,7 +20,7 @@ import {
 import { setCategory } from "../../../redux/Slices/masterSlice";
 import LoadBox from "../../Loader/LoadBox";
 import Error from "../../Errors/Error";
-import { ImageUpload, movableCatLink } from "../../../env";
+// import { ImageUpload, movableCatLink } from "../../../env";
 
 export default function CategoryForm(props) {
   const [isOpen, setIsOpen] = useState(false);

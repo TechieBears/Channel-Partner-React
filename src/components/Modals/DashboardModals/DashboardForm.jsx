@@ -7,7 +7,7 @@ import { Edit } from 'iconsax-react';
 import { createStorage, getPartnerStorage, getStorages, updateStorage } from '../../../api';
 import { setStorageList } from '../../../redux/slices/storageSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { ImageUpload, link, demovideoLink } from '../../../env';
+// import { ImageUpload, link, demovideoLink } from '../../../env';
 import { toast } from 'react-toastify';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';

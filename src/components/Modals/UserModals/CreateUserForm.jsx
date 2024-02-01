@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import { setUserList } from '../../../redux/Slices/userSlice';
 import Error from '../../Errors/Error';
 import LoadBox from '../../Loader/LoadBox';
-import { ImageUpload, link } from '../../../env';
+// import { ImageUpload, link } from '../../../env';
 import { toast } from 'react-toastify';
 import query from 'india-pincode-search';
 
