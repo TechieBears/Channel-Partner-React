@@ -22,6 +22,8 @@ import RestaurantDetail from '../src/pages/Restaurants/RestaurantDetail/Restaura
 import Drivers from '../src/pages/Admin/Drivers/Drivers';
 import Order from '../src/pages/Admin/Order/Order';
 import Banner from '../src/pages/Admin/Banner/Banner';
+import Promotions from '../src/pages/Admin/Promotions/Promotions';
+import DriversView from '../src/pages/Admin/Drivers/DriversView';
 
 
 
@@ -57,8 +59,10 @@ const ProjectRoutes = () => {
                                 <Route path="/dashboard/:id" element={<DashboardView />} />
                                 <Route path="/DashboardAssets" element={<DashboardAssets />} />
                                 <Route path="/drivers" element={<Drivers />} />
+                                <Route path="/drivers/driversview/:id" element={<DriversView />} />
                                 <Route path="/orders" element={<Order />} />
                                 <Route path="/banners" element={<Banner />} />
+                                <Route path="/promotions" element={<Promotions />} />
                                 <Route path="/user" element={<User />} />
                                 <Route path="/user/:id" element={<UserView />} />
                                 <Route path="/profile" element={<UserProfile />} />

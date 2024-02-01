@@ -2,11 +2,10 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 import Table from '../../../components/Table/Table';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { Eye, Trash } from 'iconsax-react';
-// import CreateUserForm from '../../../components/Modals/UserModals/CreateUserForm';
 import { delUser, editUser, getUser } from '../../../api';
-// import userImg from '../../../assets/user.webp';
+import userImg from '../../../assets/user.jpg';
 import Switch from 'react-js-switch';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -16,8 +15,45 @@ import { setUserList } from '../../../redux/Slices/userSlice';
 import DeleteModal from '../../../components/Modals/DeleteModal/DeleteModal';
 import AddDriverFrom from '../../../components/Modals/DriverModals/AddDriverForm';
 import DriverTipForm from '../../../components/Modals/DriverModals/DriverTipForm';
+import CreateUserForm from '../../../components/Modals/UserModals/CreateUserForm';
 
 function Drivers() {
+    const data = [
+        {
+            "id": 1,
+            "name": "Naveen",
+            "address": "123 Main Street, Cityville",
+            "email": "info@deliciousbites.com",
+            "phone":"999999999",
+            "occupation":"NA",
+            "restaurant":"Delicious Bites",
+            "restaurantCommission": 0.15,
+            "revenue": 50000,
+        },
+        {
+            "id": 2,
+            "name": "Shubham",
+            "address": "456 Oak Avenue, Townsville",
+            "email": "hello@tastytreats.net",
+            "phone":"999999999",
+            "occupation":"NA",
+            "restaurant":"Tasty Treats",
+            "restaurantCommission": 0.12,
+            "revenue": 75000,
+        },
+        {
+            "id": 3,
+            "name": "Vishal",
+            "address": "789 Pine Road, Villageland",
+            "email": "contact@gourmethaven.org",
+            "phone":"999999999",
+            "occupation":"NA",
+            "restaurant":"Gourmet Haven",
+            "restaurantCommission": 0.18,
+            "revenue": 60000,
+
+        }
+    ]
     const dispatch = useDispatch()
     const userList = useSelector(state => state.users.list)
     const {
@@ -159,8 +195,8 @@ function Drivers() {
     }
     // ======================= Table Column Definitions =========================
     const columns = [
-        { field: 'id', header: 'ID', body: representativeBodyTemplate, sortable: true, style: true },
-        { field: 'image', header: 'IMAGE', body: (row) => <img src={row.image} alt={row.name} className="w-11 h-11 rounded-full" />,  sortable: true},
+        { field: 'id', header: 'ID', body: (row) => <NavLink to={`/drivers/driversview/${row?.id}`}><h6 className='text-blue-400 underline'>{row?.id}</h6> </NavLink>, sortable: true, style: true },
+        { field: 'profile', header: 'PROFILE', body: representativeBodyTemplate,  sortable: true},
         { field: 'name', header: 'NAME', body: (row) => <div className="uppercase">{row.name}</div> },
         { field: 'email', header: 'EMAIL', sortable: true },
         { field: 'phone', header: 'PHONE', body: (row) => row.phone , sortable: true},
@@ -168,7 +204,7 @@ function Drivers() {
         { field: 'restaurant', header: 'RESTAURANT', body: (row) => row.restaurant , sortable: true },
         { field: 'Commission', header: 'COMMISSION', body: (row) => row.restaurantCommission },
         { field: 'revenue', header: 'REVENUE', body: (row) => row.revenue },
-        { field: 'status', header: 'STATUS', sortable: true},
+        { field: 'status', header: 'STATUS', body:switchActive ,sortable: true},
         { field: 'action', header: 'ACTION', body: actionBodyTemplate, sortable: true },
     ];
 
@@ -240,7 +276,7 @@ function Drivers() {
                         <AddDriverFrom title='Add Driver'/>
                     </div>
                 </div>
-                <Table data={userList} columns={columns} />
+                <Table data={data} columns={columns} />
             </div>
         </>
     )

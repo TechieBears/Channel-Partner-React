@@ -309,7 +309,7 @@ function AddDriverFrom(props) {
                                                     <div className="relative inline-block">
                                                         <img
                                                             className="h-24 w-24 rounded-full border object-cover mx-auto"
-                                                            src="/src/assets/user.webp"
+                                                            src="/src/assets/user.jpg"
                                                             alt="User_Profile"
                                                         />
                                                         <label
