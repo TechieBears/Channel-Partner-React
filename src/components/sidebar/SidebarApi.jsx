@@ -1,4 +1,5 @@
-import { Element4, ElementPlus, Trade, Truck, User, Settings, Menu, Shop, SecurityUser } from "iconsax-react";
+import { Element4, ElementPlus, Trade, Truck, User, Settings, Menu, Shop, SecurityUser, Book, TicketExpired, TicketDiscount, Profile2User, ClipboardTick, Bank, Setting2 } from "iconsax-react";
+import { Bike, Megaphone, User2 } from "lucide-react";
 
 export const SidebarAdminApi = [
     {
@@ -18,7 +19,7 @@ export const SidebarAdminApi = [
     },
     {
         title: 'Drivers',
-        icon: <Element4 size="24" />,
+        icon: <Bike size="24" />,
         link: '/drivers',
     },
     {
@@ -33,12 +34,12 @@ export const SidebarAdminApi = [
     },
     {
         title: 'Orders',
-        icon: <Element4 size="24" />,
+        icon: <Book size="24" />,
         link: '/orders',
     },
     {
         title: 'Banners',
-        icon: <Element4 size="24" />,
+        icon: <TicketDiscount size="24" />,
         link: '/DashboardAssets',
     },
     // {
@@ -48,7 +49,7 @@ export const SidebarAdminApi = [
     // },
     {
         title: 'Promotions',
-        icon: <Element4 size="24" />,
+        icon: <Megaphone size="24" />,
         link: '/promotions',
     },
     // {
@@ -60,17 +61,17 @@ export const SidebarAdminApi = [
     
     {
         title: 'Reports',
-        icon: <Element4 size="24" />,
+        icon: <ClipboardTick size="24" />,
         link: '/reports',
     },
     {
         title: 'Account Statement',
-        icon: <Element4 size="24" />,
+        icon: <Bank size="24" />,
         link: '/accountStatement',
     },
     {
         title: 'Settings',
-        icon: <Settings size="24" />,
+        icon: <Setting2 size="24" />,
         link: '/settings',
     },
     // {
