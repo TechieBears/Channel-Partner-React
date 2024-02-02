@@ -6,40 +6,30 @@ import { inputClass, labelClass } from "../../../../utils/CustomClass";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Star, Star1 } from "iconsax-react";
 import { MultiSelect } from "primereact/multiselect";
-import { getSubCategory, getProduct } from '../../../../api';
-
+import { getSubCategorybyCatId } from "../../../../api";
+import { NavLink } from "react-router-dom";
 
 export default function CategoryDetail() {
   const { id } = useParams();
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedSubCategory, setSelectedSubCategory] = useState([]);
-  const categories = [
-    "Asian",
-    "Mexican",
-    "Italian",
-    "Russian cussion",
-    "Spanish",
-    "Comfort",
-    "American",
-    "North Indian",
-    "South Indian",
-  ];
+  const [Subcategories, setSubcategories] = useState([]);
+  //   const subcategories = [];
 
   const fetchData = () => {
     try {
-        getCategory().then((res) => {
-            dispatch(setCategory(res))
-            data.push(res)
-            console.log(data)
-        })
+      getSubCategorybyCatId(id).then((res) => {
+        // dispatch(setCategory(res))
+        // subcategories.push(res);
+        setSubcategories(res);
+        console.log("Subcategories == ", Subcategories);
+      });
     } catch (error) {
-        console.log(error)
+      console.log(error);
     }
-}
+  };
 
   useEffect(() => {
     console.log("Category ID:", id);
-    fetchData()
+    fetchData();
   }, [id]);
 
   const navigate = useNavigate();
@@ -69,37 +59,66 @@ export default function CategoryDetail() {
         </button>
         <img src={CoverPic} className="w-full h-60" alt="cover-pic" />
       </div>
-      <div className="p-4 space-y-4">
-        <div className="grid grid-cols-2 gap-10">
-          <div>
-            <label className={labelClass}>Sub Categories</label>
-            <select
-              className={`${inputClass}`}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-            >
-              <option value="">Select</option>
-              <option value="Asian">Asian</option>
-              <option value="Mexican">Mexican</option>
-              <option value="Italian">Italian</option>
-              <option value="Russian Cuisine">Russian Cuisine</option>
-              <option value="Sushi">Sushi</option>
-            </select>
-          </div>
-          <div>
-            <label className={labelClass}>
-              {selectedCategory != "" ? selectedCategory : "Sub-category"}
-            </label>
-            <MultiSelect
-              value={selectedSubCategory}
-              onChange={(e) => setSelectedSubCategory(e.target.value)}
-              options={categories}
-              placeholder="Select Category"
-              maxSelectedLabels={3}
-              className={`w-full`}
-            />
+      {!Subcategories && (
+          <h1>No data Found</h1> 
+      )}
+      {Subcategories.length > 0 && (
+        <div className="p-4 space-y-4">
+          <div className="grid grid-cols-3 gap-10">
+            <div>
+              <h5>Sub Categories</h5>
+              <div className="gap-4 mt-5">
+                <ul className="border border-gray-400">
+                  {Subcategories.map((item) => (
+                    <li
+                      key={item.subcat_id}
+                      className="p-4 border-b border-gray-400"
+                    >
+                      <NavLink
+                        to={`/menu/category-detail/${item.subcat_id}`}
+                        className="hover:underline hover:text-sky-400"
+                      >
+                        <h3>{item.subcat_name}</h3>
+                      </NavLink>
+                      {/* <img
+                      src={item.subcat_image}
+                      alt={item.subcat_name}
+                      className="w-full h-40"
+                    /> */}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div>
+              <h5>Products</h5>
+              <div className="gap-4 mt-5">
+                <ul className="border border-gray-400">
+                  {Subcategories.map((item) => (
+                    <li
+                      key={item.subcat_id}
+                      className="p-4 border-b border-gray-400"
+                    >
+                      <NavLink
+                        to={`/menu/category-detail/${item.subcat_id}`}
+                        className="hover:underline hover:text-sky-400"
+                      >
+                        <h3>{item.subcat_name}</h3>
+                      </NavLink>
+                      {/* <img
+                      src={item.subcat_image}
+                      alt={item.subcat_name}
+                      className="w-full h-40"
+                    /> */}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 }
