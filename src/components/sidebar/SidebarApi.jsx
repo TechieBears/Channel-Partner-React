@@ -28,7 +28,7 @@ export const SidebarAdminApi = [
         link: '/user',
     },
     {
-        title: 'SubAdmin',
+        title: 'Role',
         icon: <SecurityUser size="24" />,
         link: '/subadmin',
     },
@@ -57,8 +57,8 @@ export const SidebarAdminApi = [
     //     icon: <Element4 size="24" />,
     //     link: '/userdata',
     // },
-  
-    
+
+
     {
         title: 'Reports',
         icon: <ClipboardTick size="24" />,
@@ -108,7 +108,7 @@ export const SidebarAdminApi = [
     //     ]
     // },
 
-  
+
 ]
 
 export const VendorSidebarApi = [

@@ -24,6 +24,8 @@ import Order from '../src/pages/Admin/Order/Order';
 import Banner from '../src/pages/Admin/Banner/Banner';
 import Reports from '../src/pages/Admin/Reports/Reports';
 import CategoryDetail from '../src/pages/Admin/Menu/CategoryDetail/CategoryDetail';
+import Shops from '../src/pages/Admin/Vendors/Shops';
+import SubAdmin from '../src/pages/Admin/SubAdmin/SubAdmin';
 
 
 
@@ -54,8 +56,9 @@ const ProjectRoutes = () => {
                                 {/* ============ Admin Routes ============ */}
                                 <Route path="/" element={<Dashboard />} />
                                 <Route path="/menu" element={<Menu />} />
-                                <Route path="/vendors" element={<Vendors />} />
-                                <Route path="/vendors/restaurant-detail/:id" element={<RestaurantDetail />} />
+                                <Route path="/resturants" element={<Vendors />} />
+                                <Route path="/resturants/restaurant-detail/:id" element={<RestaurantDetail />} />
+                                <Route path="/shops" element={<Shops />} />
                                 <Route path="/menu/category-detail/:id" element={<CategoryDetail />} />
                                 <Route path="/dashboard/:id" element={<DashboardView />} />
                                 <Route path="/DashboardAssets" element={<DashboardAssets />} />
@@ -66,6 +69,7 @@ const ProjectRoutes = () => {
                                 <Route path="/user/:id" element={<UserView />} />
                                 <Route path="/profile" element={<UserProfile />} />
                                 <Route path="/reports" element={<Reports />} />
+                                <Route path="/subadmin" element={<SubAdmin />} />
 
                                 {/* ============================================================================== Partner Flexi store Routes =========================================== */}
                                 <Route path="/vendorDashbaord" element={<VendorDashbaord />} />
