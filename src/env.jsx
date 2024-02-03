@@ -1,11 +1,11 @@
 export const environment = {
     // --------------------Local Server Api URL--------------------
-    // baseUrl: 'http://192.168.0.171:8001/',
+    baseUrl: 'http://192.168.0.171:8001/',
     // baseUrl: 'http://127.0.0.1:8000/',
 
 
     // --------------------Live Server Api URL--------------------
-    baseUrl: 'https://ref.techiebears.com/',
+    // baseUrl: 'https://ref.techiebears.com/',
 }
 
 // ====================== AWS S3 Image/File Upload =========================
@@ -16,13 +16,14 @@ const client = new S3Client({
     region: 'ap-south-1',
     credentials: {
         accessKeyId: 'AKIAYS2NVFY7SU7M2KHX',
-        secretAccessKey: 'EI9DUE5s+nCdNkm1rDpQr8SkUOO|cu1StI6FuTXm'
+        secretAccessKey: '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'
     }
 });
 
+
 export const ImageUpload = async (data, folder, imgname, name) => {
     const command = new PutObjectCommand({
-        Bucket: "reeferon-media",
+        Bucket: "channel-partner-media",
         Key: `${folder}/${name}_${imgname}_${data.name}`,
         Body: data,
     });
@@ -33,10 +34,26 @@ export const ImageUpload = async (data, folder, imgname, name) => {
         console.error(err);
     }
 };
+
+// export const ImageUpload = async (data, folder, imgname, name) => {
+//     const command = new PutObjectCommand({
+//         Bucket: "channel-partner-media",
+//         // Key: `${folder}/${name}_${imgname}_${data.name}`,
+//         Key: `${folder}/${name}_${imgname}_${data.name}`,
+//         Body: data,
+//     });
+//     try {
+//         const response = await client.send(command);
+//         console.log(response);
+//     } catch (err) {
+//         console.error(err);
+//     }
+// };
+
 export const profileUpload = async (data, name) => {
     const timestamp = Date.now();
     const command = new PutObjectCommand({
-        Bucket: "reeferon-media",
+        Bucket: "channel-partner-media",
         Key: `profile/${name}_${data?.name}`,
         Body: data,
     });
@@ -58,3 +75,4 @@ export const profileUpload = async (data, name) => {
 // export const bannerLink = 'https://reeferon-media.s3.ap-south-1.amazonaws.com/banner/'
 // export const movableCatLink = 'https://reeferon-media.s3.ap-south-1.amazonaws.com/movablecategory/'
 // export const movableproductLink = 'https://reeferon-media.s3.ap-south-1.amazonaws.com/movableproduct/'
+export const categoryLink = 'https://channelpartner-media.s3.ap-south-1.amazonaws.com/category/'

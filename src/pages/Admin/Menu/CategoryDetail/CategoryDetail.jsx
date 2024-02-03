@@ -6,13 +6,34 @@ import { inputClass, labelClass } from "../../../../utils/CustomClass";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Star, Star1 } from "iconsax-react";
 import { MultiSelect } from "primereact/multiselect";
-import { getSubCategorybyCatId } from "../../../../api";
+import { getSubCategorybyCatId, getProductsbySubCat } from "../../../../api";
 import { NavLink } from "react-router-dom";
 
 export default function CategoryDetail() {
   const { id } = useParams();
   const [Subcategories, setSubcategories] = useState([]);
+  const [Products, setProducts] = useState([]);
+  const [selectedSubcategoryId, setSelectedSubcategoryId] = useState(null);
   //   const subcategories = [];
+
+  const fetchProducts = async (subcatId) => {
+    try {
+      getProductsbySubCat(subcatId).then((res) => {
+        // dispatch(setCategory(res))
+        // subcategories.push(res);
+        setProducts(res);
+        console.log("Subcategories == ", Subcategories);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    // Make an API call to get Products based on subcatId
+    // For example:
+    // const response = await fetch(`/api/products?subcatId=${subcatId}`);
+    // const data = await response.json();
+    // setProducts(data);
+    // setSelectedSubcategoryId(subcatId);
+  };
 
   const fetchData = () => {
     try {
@@ -59,9 +80,7 @@ export default function CategoryDetail() {
         </button>
         <img src={CoverPic} className="w-full h-60" alt="cover-pic" />
       </div>
-      {!Subcategories && (
-          <h1>No data Found</h1> 
-      )}
+      {!Subcategories && <h1>No data Found</h1>}
       {Subcategories.length > 0 && (
         <div className="p-4 space-y-4">
           <div className="grid grid-cols-3 gap-10">
@@ -73,18 +92,11 @@ export default function CategoryDetail() {
                     <li
                       key={item.subcat_id}
                       className="p-4 border-b border-gray-400"
+                      onClick={() => fetchProducts(item.subcat_id)}
                     >
-                      <NavLink
-                        to={`/menu/category-detail/${item.subcat_id}`}
-                        className="hover:underline hover:text-sky-400"
-                      >
-                        <h3>{item.subcat_name}</h3>
-                      </NavLink>
-                      {/* <img
-                      src={item.subcat_image}
-                      alt={item.subcat_name}
-                      className="w-full h-40"
-                    /> */}
+                      <h3 className="cursor-pointer hover:underline hover:text-sky-400">
+                        {item.subcat_name}
+                      </h3>
                     </li>
                   ))}
                 </ul>
@@ -95,22 +107,14 @@ export default function CategoryDetail() {
               <h5>Products</h5>
               <div className="gap-4 mt-5">
                 <ul className="border border-gray-400">
-                  {Subcategories.map((item) => (
+                  {Products.map((product) => (
                     <li
-                      key={item.subcat_id}
+                      key={product.product_id}
                       className="p-4 border-b border-gray-400"
                     >
-                      <NavLink
-                        to={`/menu/category-detail/${item.subcat_id}`}
-                        className="hover:underline hover:text-sky-400"
-                      >
-                        <h3>{item.subcat_name}</h3>
-                      </NavLink>
-                      {/* <img
-                      src={item.subcat_image}
-                      alt={item.subcat_name}
-                      className="w-full h-40"
-                    /> */}
+                      <h3 className="cursor-pointer hover:underline hover:text-sky-400">
+                        {product.product_name}
+                      </h3>
                     </li>
                   ))}
                 </ul>
