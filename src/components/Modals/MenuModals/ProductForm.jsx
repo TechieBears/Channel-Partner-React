@@ -4,19 +4,8 @@ import { useForm } from "react-hook-form";
 import { Edit } from "iconsax-react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import {
-  fileinput,
-  formBtn1,
-  formBtn2,
-  inputClass,
-  labelClass,
-  tableBtn,
-} from "../../../utils/CustomClass";
-import {
-  createMovableCategory,
-  editMovableCategory,
-  getCategory,
-} from "../../../api";
+import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn} from "../../../utils/CustomClass";
+import { getCategory} from "../../../api";
 import { setCategory } from "../../../redux/Slices/masterSlice";
 import LoadBox from "../../Loader/LoadBox";
 import Error from "../../Errors/Error";
@@ -162,7 +151,7 @@ export default function CategoryForm(props) {
                     {/* React Hook Form */}
 
                     <form onSubmit={handleSubmit(onSubmit)}>
-                      <div className="py-4 mx-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4  gap-x-3 gap-y-3 ">
+                      <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-x-3 gap-y-3 ">
                         <div className="">
                           <label className={labelClass}>Product Name*</label>
                           <input

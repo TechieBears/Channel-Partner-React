@@ -72,6 +72,32 @@ export const getSubCategorybyCatId = async (id) => {
 };
 
 
+/* ================== Menu SubCategory by CatId Api =========== */
+export const getProductsbySubCat = async (id) => {
+    const url = `${environment.baseUrl}app/get-products/${id}`;
+    try {
+        const response = await axios.get(url)
+        // console.log('data == ', response.data.data);
+        return response.data.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+
+/* ================== Menu SubCategory by CatId Api =========== */
+export const createCategory = async (data) => {
+    // const url = `${environment.baseUrl}movable-category`;
+    const url = `${environment.baseUrl}category-list`;
+    try {
+        const response = await axios.post(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
 
 
 

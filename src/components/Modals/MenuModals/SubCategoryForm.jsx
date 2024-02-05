@@ -5,7 +5,7 @@ import { Edit } from 'iconsax-react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../utils/CustomClass';
-import { createMovableCategory, editMovableCategory, getCategory } from '../../../api';
+import { getCategory } from '../../../api';
 import { setCategory } from '../../../redux/Slices/masterSlice';
 import LoadBox from '../../Loader/LoadBox';
 import Error from '../../Errors/Error';
