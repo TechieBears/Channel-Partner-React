@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
 import { Add, Refresh, SearchNormal } from 'iconsax-react';
+import React, { useState } from 'react'
 import Table from '../../../components/Table/Table';
 import { formBtn1, inputClass, tableBtn } from '../../../utils/CustomClass';
-import AddRestaurant from '../../../components/Modals/Vendors/AddRestaurant/AddRestaurant';
+import AddRestaurant from '../../../components/Modals/Resturant/AddRestaurant';
 import { NavLink } from 'react-router-dom';
 import Switch from 'react-switch'
 
-function Shops() {
+export default function Restaurant() {
     const data = [
         {
             "id": 1,
@@ -38,21 +38,20 @@ function Shops() {
     ]
 
     const [activeTab, setActiveTab] = useState(true);
-    const [rstatus, setStatus] = useState();
+    const [rstatus, setStatus] = useState(false);
 
     const changeTab = (tabNumber) => {
         setActiveTab(tabNumber);
     };
     /*================================     column    ========================= */
 
-    // const status = (row) => <Switch checked={row?.id == rstatus ? true : false} onChange={() => setStatus(row?.id)} />
-    const status = (row) => <Switch checked={row?.id == rstatus ? true : false} onChange={() => setStatus(row?.id)} />
+    const status = (row) => <Switch checked={rstatus} onChange={() => setStatus(!rstatus)} />
     const action = (row) => <button className={`${tableBtn}`} >
         View Analysis
     </button>
     const columns = [
         { field: 'id', header: 'ID', body: (row) => <h6>{row?.id}</h6>, sortable: false },
-        { field: 'name', header: 'Shop Name', body: (row) => <NavLink to={`/vendors/restaurant-detail/${row?.id}`}><h6 className='text-sky-400 underline'>{row?.name}</h6> </NavLink>, sortable: false },
+        { field: 'name', header: 'Restaurants Name', body: (row) => <NavLink to={`/resturants/restaurant-detail/${row?.id}`}><h6 className='text-sky-400 underline'>{row?.name}</h6> </NavLink>, sortable: false },
         { field: 'address', header: 'Address', body: (row) => <h6>{row?.address}</h6>, sortable: false },
         { field: 'email', header: 'Email', body: (row) => <h6>{row?.email}</h6>, sortable: false },
         { field: 'dl_commission', header: 'Delivery Commission', body: (row) => <h6>{row?.dl_commission}</h6>, sortable: false },
@@ -69,14 +68,14 @@ function Shops() {
                     className={`py-2 px-0 ${activeTab === 1 ? 'border-b-2 border-blue-400 text-black' : 'bg-transparent'
                         }`}
                 >
-                    Registered Shops
+                    Registered Restaurants
                 </button>
                 <button
                     onClick={() => changeTab(2)}
                     className={`py-2 px-0 ml-4 ${activeTab === 2 ? 'border-b-2 border-blue-400 text-black' : 'bg-transparent'
                         }`}
                 >
-                    Blocked Shops
+                    Blocked Restaurants
                 </button>
             </div>
             <div className='grid grid-cols-6 mt-4'>
@@ -90,14 +89,11 @@ function Shops() {
                         <p>Refresh</p>
                     </button>
                     <div className='col-span-2'>
-                        <AddRestaurant title='Add Shops' />
+                        <AddRestaurant title='Add Restaurant' />
                     </div>
                 </div>
             </div>
-            {activeTab == 1 && <Table columns={columns} data={data} />}
-            {activeTab == 2 && <></>}
+            <Table columns={columns} data={data} />
         </div>
     )
 }
-
-export default Shops

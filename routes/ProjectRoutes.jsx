@@ -17,15 +17,18 @@ import VendorDashbaord from '../src/pages/Vendor/VendorDashbaord/VendorDashbaord
 import VendorProduct from '../src/pages/Vendor/VendorProduct/VendorProduct';
 import VendorOrders from '../src/pages/Vendor/VendorOrders/VendorOrders';
 import Menu from '../src/pages/Admin/Menu/Menu';
-import Vendors from '../src/pages/Admin/Vendors/Vendors';
 import RestaurantDetail from '../src/pages/Restaurants/RestaurantDetail/RestaurantDetail';
 import Drivers from '../src/pages/Admin/Drivers/Drivers';
 import Order from '../src/pages/Admin/Order/Order';
 import Banner from '../src/pages/Admin/Banner/Banner';
 import Reports from '../src/pages/Admin/Reports/Reports';
 import CategoryDetail from '../src/pages/Admin/Menu/CategoryDetail/CategoryDetail';
-import Shops from '../src/pages/Admin/Vendors/Shops';
 import SubAdmin from '../src/pages/Admin/SubAdmin/SubAdmin';
+import Restaurant from '../src/pages/Admin/Resturants/Resturant';
+import Vendors from '../src/pages/Admin/Vendors/Vendors';
+import VendorDetails from '../src/components/Modals/Vendors/VendorDetails';
+import Promotions from '../src/pages/Admin/Promotion/Promotions';
+import Settings from '../src/pages/Settings/Settings';
 
 
 
@@ -56,12 +59,14 @@ const ProjectRoutes = () => {
                                 {/* ============ Admin Routes ============ */}
                                 <Route path="/" element={<Dashboard />} />
                                 <Route path="/menu" element={<Menu />} />
-                                <Route path="/resturants" element={<Vendors />} />
+                                <Route path="/resturants" element={<Restaurant />} />
                                 <Route path="/resturants/restaurant-detail/:id" element={<RestaurantDetail />} />
-                                <Route path="/shops" element={<Shops />} />
+                                <Route path="/vendors" element={<Vendors />} />
+                                <Route path="/vendors/vendors-detail/:id" element={<VendorDetails />} />
                                 <Route path="/menu/category-detail/:id" element={<CategoryDetail />} />
                                 <Route path="/dashboard/:id" element={<DashboardView />} />
                                 <Route path="/DashboardAssets" element={<DashboardAssets />} />
+                                <Route path="/promotions" element={<Promotions />} />
                                 <Route path="/drivers" element={<Drivers />} />
                                 <Route path="/orders" element={<Order />} />
                                 <Route path="/banners" element={<Banner />} />
@@ -70,6 +75,7 @@ const ProjectRoutes = () => {
                                 <Route path="/profile" element={<UserProfile />} />
                                 <Route path="/reports" element={<Reports />} />
                                 <Route path="/subadmin" element={<SubAdmin />} />
+                                <Route path="/settings" element={<Settings />} />
 
                                 {/* ============================================================================== Partner Flexi store Routes =========================================== */}
                                 <Route path="/vendorDashbaord" element={<VendorDashbaord />} />
