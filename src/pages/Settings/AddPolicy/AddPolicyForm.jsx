@@ -21,7 +21,7 @@ export default function AddPolicyForm(props) {
     } = useForm();
     const onSubmit = (data) => {
         console.log('data', data);
-        addPolicy(data).then((res) => {
+        addPolicy([data]).then((res) => {
             console.log('res', res);
         })
     }
@@ -78,17 +78,19 @@ export default function AddPolicyForm(props) {
                                         <form onSubmit={handleSubmit(onSubmit)} >
                                             <div className="py-4 mx-4 customBox">
                                                 <div className="">
-                                                    <label className={labelClass}>Policy Name*</label>
+                                                    <label className={labelClass}>Policy Title*</label>
                                                     <input className={inputClass}
                                                         type='text'
-                                                        placeholder='Policy Name'
+                                                        placeholder='Policy Title'
                                                         {...register("title", { required: true })} />
-                                                    {errors.title && <Error title='Policy Name is required*' />}
+                                                    {errors.title && <Error title='Policy Title is required*' />}
                                                 </div>
                                                 <div className="">
                                                     <label className={labelClass} >Policy Description*</label>
-                                                    <textarea className={`${inputClass}`}
+                                                    <textarea className={`${inputClass} h-10`}
                                                         type='text'
+                                                        cols={4}
+                                                        rows={10}
                                                         placeholder='Policy Description'
                                                         {...register("description", { required: true })} />
                                                     {errors.description && <Error title='Policy Description is required*' />}
