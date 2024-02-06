@@ -13,6 +13,7 @@ export default function CategoryDetail() {
   const { id } = useParams();
   const [Subcategories, setSubcategories] = useState([]);
   const [Products, setProducts] = useState([]);
+  const [activeTab, setActiveTab] = useState([]);
   const [selectedSubcategoryId, setSelectedSubcategoryId] = useState(null);
   //   const subcategories = [];
 
@@ -22,7 +23,7 @@ export default function CategoryDetail() {
         // dispatch(setCategory(res))
         // subcategories.push(res);
         setProducts(res);
-        console.log("Subcategories == ", Subcategories);
+        console.log("products data  == ", res);
       });
     } catch (error) {
       console.log(error);
@@ -33,15 +34,19 @@ export default function CategoryDetail() {
     // const data = await response.json();
     // setProducts(data);
     // setSelectedSubcategoryId(subcatId);
+    // setActiveTab(subcatId);
+    // setActiveTab(Subcategories[0].subcat_id);
   };
 
-  const fetchData = () => {
+  const fetchData = async () => {
     try {
       getSubCategorybyCatId(id).then((res) => {
         // dispatch(setCategory(res))
         // subcategories.push(res);
         setSubcategories(res);
-        console.log("Subcategories == ", Subcategories);
+        console.log("Subcategories data== ", res);
+        setActiveTab(res[0].subcat_id);
+        // fetchProducts()
       });
     } catch (error) {
       console.log(error);
@@ -49,9 +54,8 @@ export default function CategoryDetail() {
   };
 
   useEffect(() => {
-    console.log("Category ID:", id);
     fetchData();
-  }, [id]);
+  }, []);
 
   const navigate = useNavigate();
   const {
@@ -87,11 +91,11 @@ export default function CategoryDetail() {
             <div>
               <h5>Sub Categories</h5>
               <div className="gap-4 mt-5">
-                <ul className="border border-gray-400">
+                <ul className="border border-gray-400 rounded-lg">
                   {Subcategories.map((item) => (
                     <li
                       key={item.subcat_id}
-                      className="p-4 border-b border-gray-400"
+                      className={`p-4 border-b border-gray-400 active ${activeTab === item.subcat_id ? 'bg-sky-400' : ''}`}
                       onClick={() => fetchProducts(item.subcat_id)}
                     >
                       <h3 className="cursor-pointer hover:underline hover:text-sky-400">
@@ -106,7 +110,7 @@ export default function CategoryDetail() {
             <div>
               <h5>Products</h5>
               <div className="gap-4 mt-5">
-                <ul className="border border-gray-400">
+                <ul className="border border-gray-400 rounded-lg">
                   {Products.map((product) => (
                     <li
                       key={product.product_id}

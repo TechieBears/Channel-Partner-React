@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Trash } from 'iconsax-react';
 import Table from '../../../../../components/Table/Table';
 import { delHomeBanners, getHomeBanners } from '../../../../../api';
@@ -10,18 +10,25 @@ import BannerForm from '../../../../../components/Modals/MasterModals/AssetsModa
 
 const DashboardBannerPanel = () => {
     const homeBanners = useSelector((state) => state?.master?.banner)
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
+    const [bannerList, setBannerList] = useState([]);
 
     // ============== fetch data from api ================
     const getAllBannerList = () => {
         try {
             getHomeBanners().then((res) => {
-                dispatch(setBanner(res))
+                console.log(res.data)
+                setBannerList(res.data);
+                // dispatch(setBanner(res))
             })
         } catch (error) {
             console.log(error)
         }
     }
+
+    useEffect(() =>{
+        getAllBannerList()
+    }, []);
 
     // ============== delete data from api ================
     const deleteData = (data) => {
@@ -43,7 +50,7 @@ const DashboardBannerPanel = () => {
     </div>
 
     const imageBodyTemp = (row) => <div className='w-52 h-24 rounded'>
-        <img src={row?.image} alt="image" className='w-full h-full object-cover rounded' />
+        <img src={row?.slide_url} alt="image" className='w-full h-full object-cover rounded' />
     </div>
 
     // ================= columns of the table ===============
@@ -61,7 +68,7 @@ const DashboardBannerPanel = () => {
                     </div>
                     <BannerForm title='Add New Banner' />
                 </div>
-                {homeBanners?.length > 0 && <Table data={homeBanners} columns={columns} />}
+                {bannerList?.length > 0 && <Table data={bannerList} columns={columns} />}
             </div>
         </>
     )

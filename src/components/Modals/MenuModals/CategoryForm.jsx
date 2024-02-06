@@ -16,11 +16,9 @@ import { setCategory } from "../../../redux/Slices/masterSlice";
 import LoadBox from "../../Loader/LoadBox";
 import Error from "../../Errors/Error";
 
-import { createCategory, editMovableCategory } from '../../../api';
-import { ImageUpload, categoryLink } from '../../../env';
+import { createCategory, editCategory, getCategory } from "../../../api";
+import { ImageUpload, categoryLink } from "../../../env";
 
-// import { createCategory, editMovableCategory, getCategory } from "../../../api";
-// import { ImageUpload, categoryLink } from '../../../env';
 
 export default function CategoryForm(props) {
   const [isOpen, setIsOpen] = useState(false);
@@ -49,65 +47,71 @@ export default function CategoryForm(props) {
 
   // ============================ submit data  =====================================
   const onSubmit = async (data) => {
-    if (props?.button !== 'edit') {
-        try {
-            if (data.category_image.length != 0) {
-                await ImageUpload(data.category_image[0], "category", "category", data.category_name)
-                data.category_image = `${categoryLink}${data.category_name}_category_${data.category_image[0].name}`
-            } else {
-                data.category_image = ''
-            }
-            setLoader(true)
-            createCategory(data).then((res) => {
-                if (res?.message === "Data added successfully") {
-                    setTimeout(() => {
-                        dispatch(setCategory(res));
-                        reset();
-                        toggle(),
-                            setLoader(false),
-                            MovableCategoryList()
-                        toast.success(res.message);
-                    }, 1000)
-                }
-            }).catch(err => {
-                setLoader(false)
-                console.error('Error', err);
-            })
-        } catch (error) {
-            setLoader(false);
-            console.log('error', error);
+    if (props?.button !== "edit") {
+      try {
+        if (data.category_image.length != 0) {
+          await ImageUpload(
+            data.category_image[0],
+            "category",
+            "category",
+            data.category_name
+          );
+          data.category_image = `${categoryLink}${data.category_name}_category_${data.category_image[0].name}`;
+        } else {
+          data.category_image = "";
         }
+        setLoader(true);
+        createCategory(data)
+          .then((res) => {
+            if (res?.message === "Data added successfully") {
+              setTimeout(() => {
+                dispatch(setCategory(res));
+                reset();
+                toggle(),
+                  setLoader(false),
+                  categoryList();
+                toast.success(res.message);
+              }, 1000);
+            }
+          })
+          .catch((err) => {
+            setLoader(false);
+            console.error("Error", err);
+          });
+      } catch (error) {
+        setLoader(false);
+        console.log("error", error);
+      }
     } else {
-        try {
-            if (data.category_image.length != 0) {
-                await ImageUpload(data.category_image[0], "category", "category", data.category_name)
-                data.category_image = `${categoryLink}${data.category_name}_category_${data.category_image[0].name}`
-            } else {
-                data.category_image = props.data.category_image
-            }
-            setLoader(true);
-            editMovableCategory(props?.data?.id, data).then((res) => {
-                if (res?.message === "Data edited successfully") {
-                    setTimeout(() => {
-                        dispatch(setCategory(res));
-                        reset();
-                        toggle(),
-                            setLoader(false),
-                            MovableCategoryList()
-                        toast.success(res.message);
-                    }, 1000)
-
-                }
-            })
-        } catch (error) {
-            setLoader(false);
-            console.log('error', error);
+      try {
+        if (data.category_image.length != 0) {
+          await ImageUpload(
+            data.category_image[0],
+            "category",
+            "category",
+            data.category_name
+          );
+          data.category_image = `${categoryLink}${data.category_name}_category_${data.category_image[0].name}`;
+        } else {
+          data.category_image = props.data.category_image;
         }
+        setLoader(true);
+        editCategory(props?.data?.id, data).then((res) => {
+          if (res?.message === "Data edited successfully") {
+            setTimeout(() => {
+              dispatch(setCategory(res));
+              reset();
+              toggle(), setLoader(false), categoryList();
+              toast.success(res.message);
+            }, 1000);
+          }
+        });
+      } catch (error) {
+        setLoader(false);
+        console.log("error", error);
+      }
     }
-
-}
-
-
+  };
 
   // ======================= close modals ===============================
   const closeBtn = () => {
@@ -169,42 +173,66 @@ export default function CategoryForm(props) {
                   </Dialog.Title>
                   <div className=" bg-gray-200/70">
                     {/* React Hook Form */}
-                    <form onSubmit={handleSubmit(onSubmit)} >
-                                            <div className="grid grid-cols-2 py-4 mx-4 gap-x-3 gap-y-3 customBox">
-                                                <div className="">
-                                                    <label className={labelClass}>
-                                                        Name*
-                                                    </label>
-                                                    <input
-                                                        type="text"
-                                                        placeholder='Name'
-                                                        autoComplete='off'
-                                                        className={inputClass}
-                                                        {...register('category_name', { required: true })}
-                                                    />
-                                                    {errors.category_name && <Error title='Name is required*' />}
-                                                </div>
-                                                <div className="">
-                                                    <label className={labelClass} htmlFor="main_input">Image*</label>
-                                                    <input className={fileinput}
-                                                        id="main_input"
-                                                        type='file'
-                                                        multiple
-                                                        accept='image/jpeg,image/jpg,image/png'
-                                                        placeholder='Upload Images...'
-                                                        {...register("category_image", { required: props.button == 'edit' ? false : true })} />
-                                                    {props?.button == 'edit' && props?.data.category_image != '' && props?.data.category_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                        {props?.data?.category_image?.split('/').pop()}
-                                                    </label>}
-                                                    {errors.category_image && <Error title='Main Image is required*' />}
-                                                </div>
-                                            </div>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                      <div className="grid grid-cols-2 py-4 mx-4 gap-x-3 gap-y-3 customBox">
+                        <div className="">
+                          <label className={labelClass}>Category Name*</label>
+                          <input
+                            type="text"
+                            placeholder="Name"
+                            autoComplete="off"
+                            className={inputClass}
+                            {...register("category_name", { required: true })}
+                          />
+                          {errors.category_name && (
+                            <Error title="category Name is required*" />
+                          )}
+                        </div>
+                        <div className="">
+                          <label className={labelClass} htmlFor="main_input">
+                            Category Image*
+                          </label>
+                          <input
+                            className={fileinput}
+                            id="main_input"
+                            type="file"
+                            multiple
+                            accept="image/jpeg,image/jpg,image/png"
+                            placeholder="Upload Images..."
+                            {...register("category_image", {
+                              required: props.button == "edit" ? false : true,
+                            })}
+                          />
+                          {props?.button == "edit" &&
+                            props?.data.category_image != "" &&
+                            props?.data.category_image != undefined && (
+                              <label className="block mb-1 font-medium text-blue-800 text-md font-tb">
+                                {props?.data?.category_image?.split("/").pop()}
+                              </label>
+                            )}
+                          {errors.category_image && (
+                            <Error title="Main Image is required*" />
+                          )}
+                        </div>
+                      </div>
 
-                                            <footer className="flex justify-end px-4 py-2 space-x-3 bg-white">
-                                                {loader ? <LoadBox className="relative block w-auto px-5 transition-colors font-tb tracking-wide duration-200 py-2.5 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize" /> : <button type='submit' className={formBtn1}>submit</button>}
-                                                <button type='button' className={formBtn2} onClick={closeBtn}>close</button>
-                                            </footer>
-                                        </form>
+                      <footer className="flex justify-end px-4 py-2 space-x-3 bg-white">
+                        {loader ? (
+                          <LoadBox className="relative block w-auto px-5 transition-colors font-tb tracking-wide duration-200 py-2.5 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize" />
+                        ) : (
+                          <button type="submit" className={formBtn1}>
+                            submit
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          className={formBtn2}
+                          onClick={closeBtn}
+                        >
+                          close
+                        </button>
+                      </footer>
+                    </form>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

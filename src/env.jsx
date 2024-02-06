@@ -1,11 +1,12 @@
 export const environment = {
     // --------------------Local Server Api URL--------------------
-    baseUrl: 'http://192.168.0.171:8001/',
+    // baseUrl: 'http://192.168.0.171:8001/',
     // baseUrl: 'http://127.0.0.1:8000/',
 
 
     // --------------------Live Server Api URL--------------------
     // baseUrl: 'https://ref.techiebears.com/',
+    baseUrl: 'https://cpapi.techiebears.com/',
 }
 
 // ====================== AWS S3 Image/File Upload =========================
@@ -75,4 +76,8 @@ export const profileUpload = async (data, name) => {
 // export const bannerLink = 'https://reeferon-media.s3.ap-south-1.amazonaws.com/banner/'
 // export const movableCatLink = 'https://reeferon-media.s3.ap-south-1.amazonaws.com/movablecategory/'
 // export const movableproductLink = 'https://reeferon-media.s3.ap-south-1.amazonaws.com/movableproduct/'
-export const categoryLink = 'https://channelpartner-media.s3.ap-south-1.amazonaws.com/category/'
+
+// export const categoryLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/category/'
+export const categoryLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/category/'
+export const subcategoryLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/subcategory/'
+// export const categoryLink = 's3://channel-partner-media/category/'
