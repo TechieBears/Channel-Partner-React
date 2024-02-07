@@ -8,6 +8,8 @@ import { ArrowLeft, Star, Star1 } from "iconsax-react";
 import { MultiSelect } from "primereact/multiselect";
 import { getSubCategorybyCatId, getProductsbySubCat } from "../../../../api";
 import { NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+
 
 export default function CategoryDetail() {
   const { id } = useParams();
@@ -15,6 +17,9 @@ export default function CategoryDetail() {
   const [Products, setProducts] = useState([]);
   const [activeTab, setActiveTab] = useState([]);
   const [selectedSubcategoryId, setSelectedSubcategoryId] = useState(null);
+  const Subcategory = useSelector((state) => state?.master?.SubCategory)
+  // console.log('Subcategories = ', Subcategories)
+
   //   const subcategories = [];
 
   const fetchProducts = async (subcatId) => {
@@ -44,8 +49,8 @@ export default function CategoryDetail() {
         // dispatch(setCategory(res))
         // subcategories.push(res);
         setSubcategories(res);
-        console.log("Subcategories data== ", res);
-        setActiveTab(res[0].subcat_id);
+        console.log("Subcategories = ", res);
+        setActiveTab(res?.subcat_id);
         // fetchProducts()
       });
     } catch (error) {
@@ -85,7 +90,7 @@ export default function CategoryDetail() {
         <img src={CoverPic} className="w-full h-60" alt="cover-pic" />
       </div>
       {!Subcategories && <h1>No data Found</h1>}
-      {Subcategories.length > 0 && (
+      {Subcategories && (
         <div className="p-4 space-y-4">
           <div className="grid grid-cols-3 gap-10">
             <div>
