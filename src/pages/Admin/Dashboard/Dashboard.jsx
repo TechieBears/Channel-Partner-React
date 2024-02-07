@@ -134,7 +134,7 @@ const Dashboard = () => {
     const [activeTab, setActiveTab] = useState(1);
 
     const changeTab = (tabNumber) => {
-      setActiveTab(tabNumber);
+        setActiveTab(tabNumber);
     };
 
     return (
@@ -227,20 +227,18 @@ const Dashboard = () => {
                 <div className="mx-auto mt-8 sm:m-5">
                     <div className="flex">
                         <button
-                        onClick={() => changeTab(1)}
-                        className={`py-2 px-0 ${
-                            activeTab === 1 ? 'border-b-2 border-blue-400 text-black' : 'bg-transparent'
-                        }`}
+                            onClick={() => changeTab(1)}
+                            className={`py-2 px-0 ${activeTab === 1 ? 'border-b-2 border-blue-400 text-black' : 'bg-transparent'
+                                }`}
                         >
-                        Pending
+                            Pending
                         </button>
                         <button
-                        onClick={() => changeTab(2)}
-                        className={`py-2 px-0 ml-4 ${
-                            activeTab === 2 ? 'border-b-2 border-blue-400 text-black' : 'bg-transparent'
-                        }`}
+                            onClick={() => changeTab(2)}
+                            className={`py-2 px-0 ml-4 ${activeTab === 2 ? 'border-b-2 border-blue-400 text-black' : 'bg-transparent'
+                                }`}
                         >
-                        Active
+                            Active
                         </button>
                     </div>
 
@@ -259,12 +257,12 @@ const Dashboard = () => {
                                             <div className='flex items-center justify-between'>
                                                 <img className='w-16' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU" alt="" />
                                                 <div>
-                                                <h2 className="text-sm font-semibold tracking-wide text-gray-800 dark:text-white">Butter Milk x 7 more</h2>
-                                                <p>Lorem ipsum dolor, sit amet </p>
+                                                    <h2 className="text-sm font-semibold tracking-wide text-gray-800 dark:text-white">Butter Milk x 7 more</h2>
+                                                    <p>Lorem ipsum dolor, sit amet </p>
                                                 </div>
                                             </div>
-                                             <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 dark:text-gray-400">Payment - Cash</p>
-                                        </div> 
+                                            <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 dark:text-gray-400">Payment - Cash</p>
+                                        </div>
                                     </div>
                                     <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
                                         <p className='text-base font-medium'>Order Price - $ 1,000</p>
@@ -287,12 +285,12 @@ const Dashboard = () => {
                                             <div className='flex items-center justify-between'>
                                                 <img className='w-16' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU" alt="" />
                                                 <div>
-                                                <h2 className="text-sm font-semibold tracking-wide text-gray-800 dark:text-white">Butter Milk x 7 more</h2>
-                                                <p>Lorem ipsum dolor, sit amet </p>
+                                                    <h2 className="text-sm font-semibold tracking-wide text-gray-800 dark:text-white">Butter Milk x 7 more</h2>
+                                                    <p>Lorem ipsum dolor, sit amet </p>
                                                 </div>
                                             </div>
-                                             <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 dark:text-gray-400">Payment - Cash</p>
-                                        </div> 
+                                            <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 dark:text-gray-400">Payment - Cash</p>
+                                        </div>
                                     </div>
                                     <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
                                         <p className='text-base font-medium'>Order Price - $ 1,000</p>
@@ -315,12 +313,12 @@ const Dashboard = () => {
                                             <div className='flex items-center justify-between'>
                                                 <img className='w-16' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU" alt="" />
                                                 <div>
-                                                <h2 className="text-sm font-semibold tracking-wide text-gray-800 dark:text-white">Butter Milk x 7 more</h2>
-                                                <p>Lorem ipsum dolor, sit amet </p>
+                                                    <h2 className="text-sm font-semibold tracking-wide text-gray-800 dark:text-white">Butter Milk x 7 more</h2>
+                                                    <p>Lorem ipsum dolor, sit amet </p>
                                                 </div>
                                             </div>
-                                             <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 dark:text-gray-400">Payment - Cash</p>
-                                        </div> 
+                                            <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 dark:text-gray-400">Payment - Cash</p>
+                                        </div>
                                     </div>
                                     <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
                                         <p className='text-base font-medium'>Order Price - $ 1,000</p>
@@ -343,12 +341,12 @@ const Dashboard = () => {
                                             <div className='flex items-center justify-between'>
                                                 <img className='w-16' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU" alt="" />
                                                 <div>
-                                                <h2 className="text-sm font-semibold tracking-wide text-gray-800 dark:text-white">Butter Milk x 7 more</h2>
-                                                <p>Lorem ipsum dolor, sit amet </p>
+                                                    <h2 className="text-sm font-semibold tracking-wide text-gray-800 dark:text-white">Butter Milk x 7 more</h2>
+                                                    <p>Lorem ipsum dolor, sit amet </p>
                                                 </div>
                                             </div>
-                                             <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 dark:text-gray-400">Payment - Cash</p>
-                                        </div> 
+                                            <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 dark:text-gray-400">Payment - Cash</p>
+                                        </div>
                                     </div>
                                     <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
                                         <p className='text-base font-medium'>Order Price - $ 1,000</p>

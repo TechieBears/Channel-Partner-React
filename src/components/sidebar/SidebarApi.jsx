@@ -1,5 +1,5 @@
 import { Element4, ElementPlus, Trade, Truck, User, Settings, Menu, Shop, SecurityUser, Book, TicketExpired, TicketDiscount, Profile2User, ClipboardTick, Bank, Setting2 } from "iconsax-react";
-import { Bike, Megaphone, User2 } from "lucide-react";
+import { Bike, ChefHat, Megaphone, User2 } from "lucide-react";
 
 export const SidebarAdminApi = [
     {
@@ -18,6 +18,11 @@ export const SidebarAdminApi = [
         link: '/vendors',
     },
     {
+        title: 'Resturants',
+        icon: <ChefHat />,
+        link: '/resturants',
+    },
+    {
         title: 'Drivers',
         icon: <Bike size="24" />,
         link: '/drivers',
@@ -28,7 +33,7 @@ export const SidebarAdminApi = [
         link: '/user',
     },
     {
-        title: 'SubAdmin',
+        title: 'Role',
         icon: <SecurityUser size="24" />,
         link: '/subadmin',
     },
@@ -42,23 +47,11 @@ export const SidebarAdminApi = [
         icon: <TicketDiscount size="24" />,
         link: '/DashboardAssets',
     },
-    // {
-    //     title: 'App Assets',
-    //     icon: <ElementPlus size="24" />,
-    //     link: '/DashboardAssets',
-    // },
     {
         title: 'Promotions',
         icon: <Megaphone size="24" />,
         link: '/promotions',
     },
-    // {
-    //     title: 'User Data',
-    //     icon: <Element4 size="24" />,
-    //     link: '/userdata',
-    // },
-  
-    
     {
         title: 'Reports',
         icon: <ClipboardTick size="24" />,
@@ -74,41 +67,6 @@ export const SidebarAdminApi = [
         icon: <Setting2 size="24" />,
         link: '/settings',
     },
-    // {
-    //     title: 'Storages',
-    //     icon: <Trade size="24" />,
-    //     link: '/storages',
-    //     subMenu: [
-    //         {
-    //             title: 'All Storages',
-    //             icon: <Cup size="24" />,
-    //             link: '/storages',
-    //         },
-    //         {
-    //             title: 'Availability',
-    //             icon: <Cup size="24" />,
-    //             link: '/storage-availability',
-    //         },
-    //         // {
-    //         //     title: 'Bookings',
-    //         //     icon: <MenuBoard size="24" />,
-    //         //     link: '/storage-bookings',
-    //         // },
-    //         {
-    //             title: 'Visiting',
-    //             icon: <MessageFavorite size="24" />,
-    //             link: '/storage-visit',
-    //         },
-    //         {
-    //             title: 'Master',
-    //             icon: <Cup size="24" />,
-    //             link: '/storageMaster',
-    //         },
-
-    //     ]
-    // },
-
-  
 ]
 
 export const VendorSidebarApi = [

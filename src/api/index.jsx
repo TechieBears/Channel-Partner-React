@@ -1129,3 +1129,25 @@ export const delHomeBanners = async (id) => {
         console.log(err);
     }
 };
+
+export const addPolicy = async (data) => {
+    const url = `${environment.baseUrl}app/privacy-policy`
+    try {
+        const response = await axios.post(url, data);
+        return response.data
+    }
+    catch (error) {
+        console.log(error)
+    }
+}
+
+export const getPolicy = async () => {
+    const url = `${environment.baseUrl}app/privacy-policy`
+    try {
+        const response = await axios.get(url);
+        return response.data
+    }
+    catch (error) {
+        console.log(error)
+    }
+}

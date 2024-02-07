@@ -103,7 +103,7 @@ export default function BannerForm(props) {
         <>
             {props.button !== "edit" ? (
                 <button onClick={toggle} className={tableBtn}>
-                    Add New Banner
+                    {props?.title}
                 </button>
             ) : (
                 <button
