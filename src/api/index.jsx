@@ -74,11 +74,11 @@ export const getSubCategorybyCatId = async (id) => {
 
 /* ================== Menu SubCategory by CatId Api =========== */
 export const getProductsbySubCat = async (id) => {
-    const url = `${environment.baseUrl}app/get-products/${id}`;
+    const url = `${environment.baseUrl}app/get-subcategoryproducts/${id}`;
     try {
         const response = await axios.get(url)
-        // console.log('data == ', response.data.data);
-        return response.data.data
+        console.log('products = ', response.data);
+        return response.data
     }
     catch (err) {
         console.log(err);
