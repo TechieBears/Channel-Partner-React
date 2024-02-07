@@ -33,7 +33,7 @@ export const SidebarAdminApi = [
         link: '/user',
     },
     {
-        title: 'Role',
+        title: 'Sub-Admin',
         icon: <SecurityUser size="24" />,
         link: '/subadmin',
     },
