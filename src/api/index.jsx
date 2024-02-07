@@ -22,7 +22,7 @@ export const getCategory = async () => {
     const url = `${environment.baseUrl}app/category-list`;
     try {
         const response = await axios.get(url)
-        console.log('data == ', response.data.data);
+        console.log('category data == ', response.data.data);
         return response.data.data
     }
     catch (err) {
@@ -35,7 +35,7 @@ export const getSubCategory = async () => {
     const url = `${environment.baseUrl}app/get-subcategory`;
     try {
         const response = await axios.get(url)
-        console.log('data == ', response.data.data);
+        console.log('subcategory data == ', response.data.data);
         return response.data.data
     }
     catch (err) {
@@ -49,7 +49,7 @@ export const getProducts = async () => {
     const url = `${environment.baseUrl}app/product-list`;
     try {
         const response = await axios.get(url)
-        console.log('data == ', response.data);
+        console.log('products data == ', response.data);
         return response.data
     }
     catch (err) {
@@ -63,8 +63,8 @@ export const getSubCategorybyCatId = async (id) => {
     const url = `${environment.baseUrl}app/get-subcategory/${id}`;
     try {
         const response = await axios.get(url)
-        // console.log('data == ', response.data.data);
-        return response.data.data
+        console.log('data == ', response.data);
+        return response.data
     }
     catch (err) {
         console.log(err);
@@ -74,11 +74,11 @@ export const getSubCategorybyCatId = async (id) => {
 
 /* ================== Menu SubCategory by CatId Api =========== */
 export const getProductsbySubCat = async (id) => {
-    const url = `${environment.baseUrl}app/get-products/${id}`;
+    const url = `${environment.baseUrl}app/get-subcategoryproducts/${id}`;
     try {
         const response = await axios.get(url)
-        // console.log('data == ', response.data.data);
-        return response.data.data
+        console.log('products = ', response.data);
+        return response.data
     }
     catch (err) {
         console.log(err);
@@ -89,7 +89,7 @@ export const getProductsbySubCat = async (id) => {
 /* ================== Menu SubCategory by CatId Api =========== */
 export const createCategory = async (data) => {
     // const url = `${environment.baseUrl}movable-category`;
-    const url = `${environment.baseUrl}/app/category-list`;
+    const url = `${environment.baseUrl}app/category-list`;
     try {
         const response = await axios.post(url, data)
         return response.data
@@ -98,6 +98,51 @@ export const createCategory = async (data) => {
         console.log(err);
     }
 };
+
+
+export const createSubCategory = async (data) => {
+    // const url = `${environment.baseUrl}movable-category`;
+    const url = `${environment.baseUrl}app/get-subcategory`;
+    try {
+        const response = await axios.post(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+export const createProduct = async (data) => {
+    const url = `${environment.baseUrl}app/product-list`;
+    try {
+        const response = await axios.post(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+export const editProduct = async (id, data) => {
+    const url = `${environment.baseUrl}app/edit-product-list/${id}`;
+    try {
+        const response = await axios.put(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+export const deleteProduct = async (id) => {
+    const url = `${environment.baseUrl}app/edit-product-list/${id}`;
+    try {
+        const response = await axios.delete(url)
+        return response.data
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 
 
@@ -313,37 +358,6 @@ export const getProduct = async () => {
     }
 };
 
-export const createProduct = async (data) => {
-    const url = `${environment.baseUrl}product`;
-    try {
-        const response = await axios.post(url, data)
-        return response.data
-    }
-    catch (err) {
-        console.log(err);
-    }
-};
-
-export const editProduct = async (id, data) => {
-    const url = `${environment.baseUrl}edit-product/${id}`;
-    try {
-        const response = await axios.put(url, data)
-        return response.data
-    }
-    catch (err) {
-        console.log(err);
-    }
-};
-
-export const deleteProductName = async (id) => {
-    const url = `${environment.baseUrl}edit-product/${id}`;
-    try {
-        const response = await axios.delete(url)
-        return response.data
-    } catch (err) {
-        console.log(err);
-    }
-}
 
 
 /* =============== User API ================= */
@@ -1025,8 +1039,8 @@ export const createMovableCategory = async (data) => {
         console.log(err);
     }
 };
-export const editMovableCategory = async (id, data) => {
-    const url = `${environment.baseUrl}edit-movable-category/${id}`;
+export const editCategory = async (id, data) => {
+    const url = `${environment.baseUrl}app/edit-category/${id}`;
     try {
         const response = await axios.put(url, data)
         return response.data
@@ -1036,8 +1050,30 @@ export const editMovableCategory = async (id, data) => {
     }
 };
 
-export const delMovableCategory = async (id) => {
-    const url = `${environment.baseUrl}edit-movable-category/${id}`;
+export const editSubCategory = async (id, data) => {
+    const url = `${environment.baseUrl}app/edit-subcategory/${id}`;
+    try {
+        const response = await axios.put(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+export const delCategory = async (id) => {
+    const url = `${environment.baseUrl}app/edit-category/${id}`;
+    try {
+        const response = await axios.delete(url)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+export const deleteSubCategory = async (id) => {
+    const url = `${environment.baseUrl}app/edit-subcategory/${id}`;
     try {
         const response = await axios.delete(url)
         return response.data
@@ -1048,12 +1084,11 @@ export const delMovableCategory = async (id) => {
 };
 
 
-
 /* ================== Banner Api =========== */
 
 
 export const getHomeBanners = async () => {
-    const url = `${environment.baseUrl}banner`;
+    const url = `${environment.baseUrl}app/get-banners`;
     try {
         const response = await axios.get(url)
         return response.data
@@ -1064,7 +1099,7 @@ export const getHomeBanners = async () => {
 };
 
 export const addHomeBanners = async (data) => {
-    const url = `${environment.baseUrl}banner`;
+    const url = `${environment.baseUrl}app/get-banners`;
     try {
         const response = await axios.post(url, data)
         return response.data
@@ -1074,7 +1109,7 @@ export const addHomeBanners = async (data) => {
     }
 };
 export const editHomeBanners = async (id, data) => {
-    const url = `${environment.baseUrl}edit-banner/${id}`;
+    const url = `${environment.baseUrl}app/edithome-slides/${id}`;
     try {
         const response = await axios.put(url, data)
         return response.data

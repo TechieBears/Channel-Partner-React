@@ -68,7 +68,6 @@ const Banner = () => {
         <>
             <div className="bg-white rounded-xl m-4 sm:m-5 shadow-sm  p-5  " >
                 <div className="flex justify-between flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 mb-6">
-                   
                     <div className="">
                                     <input
                                         type="text"

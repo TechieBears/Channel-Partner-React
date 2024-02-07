@@ -55,7 +55,7 @@ export default function AddPolicyForm(props) {
                         <div className="fixed inset-0 bg-black bg-opacity-25" />
                     </Transition.Child>
                     <div className="fixed inset-0 overflow-y-auto scrollbars">
-                        <div className="flex min-h-full items-center justify-center p-4 text-center">
+                        <div className="flex items-center justify-center min-h-full p-4 text-center">
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-out duration-300"
@@ -65,11 +65,11 @@ export default function AddPolicyForm(props) {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-xl transform overflow-hidden rounded-lg bg-white  text-left align-middle shadow-xl transition-all">
+                                <Dialog.Panel className="w-full max-w-xl overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl">
 
                                     <Dialog.Title
                                         as="h2"
-                                        className="text-lg text-white w-full bg-sky-400 font-tb leading-6 font-semibold py-4 px-3"
+                                        className="w-full px-3 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
                                     >
                                         {props?.title}
                                     </Dialog.Title>
@@ -87,17 +87,15 @@ export default function AddPolicyForm(props) {
                                                 </div>
                                                 <div className="">
                                                     <label className={labelClass} >Policy Description*</label>
-                                                    <textarea className={`${inputClass} h-10`}
+                                                    <textarea className={`${inputClass} h-36`}
                                                         type='text'
-                                                        cols={4}
-                                                        rows={10}
                                                         placeholder='Policy Description'
                                                         {...register("description", { required: true })} />
                                                     {errors.description && <Error title='Policy Description is required*' />}
                                                 </div>
                                             </div>
 
-                                            <footer className="py-2 flex bg-white justify-end px-4 space-x-3">
+                                            <footer className="flex justify-end px-4 py-2 space-x-3 bg-white">
                                                 {loader ? <LoadBox className="relative block w-auto px-5 transition-colors font-tb tracking-wide duration-200 py-2.5 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize" /> : <button type='submit' className={formBtn1}>submit</button>}
                                                 <button type='button' className={formBtn2} onClick={closeBtn}>close</button>
                                             </footer>

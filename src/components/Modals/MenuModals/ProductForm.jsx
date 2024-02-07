@@ -5,13 +5,14 @@ import { Edit } from "iconsax-react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn} from "../../../utils/CustomClass";
-import { getCategory} from "../../../api";
+import { getCategory, createProduct, editProduct} from "../../../api";
 import { setCategory } from "../../../redux/Slices/masterSlice";
 import LoadBox from "../../Loader/LoadBox";
 import Error from "../../Errors/Error";
 // import { ImageUpload, movableCatLink } from "../../../env";
 
-export default function CategoryForm(props) {
+export default function ProductForm(props) {
+  console.log('props = ', props);
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const { register, handleSubmit, control, watch, reset, formState: { errors },} = useForm();
@@ -30,63 +31,63 @@ export default function CategoryForm(props) {
   };
 
   // ============================ submit data  =====================================
-  const onSubmit = (data) => {
-    console.log("data", data);
-    // if (props?.button !== 'edit') {
-    //     try {
-    //         if (data.image.length != 0) {
-    //             await ImageUpload(data.image[0], "movablecategory", "category", data.name)
-    //             data.image = `${movableCatLink}${data.name}_category_${data.image[0].name}`
-    //         } else {
-    //             data.image = ''
-    //         }
-    //         setLoader(true)
-    //         createMovableCategory(data).then((res) => {
-    //             if (res?.message === "Data added successfully") {
-    //                 setTimeout(() => {
-    //                     dispatch(setCategory(res));
-    //                     reset();
-    //                     toggle(),
-    //                         setLoader(false),
-    //                         categoryList()
-    //                     toast.success(res.message);
-    //                 }, 1000)
-    //             }
-    //         }).catch(err => {
-    //             setLoader(false)
-    //             console.error('Error', err);
-    //         })
-    //     } catch (error) {
-    //         setLoader(false);
-    //         console.log('error', error);
-    //     }
-    // } else {
-    //     try {
-    //         if (data.image.length != 0) {
-    //             await ImageUpload(data.image[0], "movablecategory", "category", data.name)
-    //             data.image = `${movableCatLink}${data.name}_category_${data.image[0].name}`
-    //         } else {
-    //             data.image = props.data.image
-    //         }
-    //         setLoader(true);
-    //         editMovableCategory(props?.data?.id, data).then((res) => {
-    //             if (res?.message === "Data edited successfully") {
-    //                 setTimeout(() => {
-    //                     dispatch(setCategory(res));
-    //                     reset();
-    //                     toggle(),
-    //                         setLoader(false),
-    //                         categoryList()
-    //                     toast.success(res.message);
-    //                 }, 1000)
+  const onSubmit = async (data) => {
+    // console.log("data", data);
+    if (props?.button !== 'edit') {
+        try {
+            if (data.main_image.length != 0) {
+                await ImageUpload(data.main_image[0], "products", "products", data.name)
+                data.main_image = `${movableCatLink}${data.name}_product_${data.main_image[0].name}`
+            } else {
+                data.main_image = ''
+            }
+            setLoader(true)
+            createProduct(data).then((res) => {
+                if (res?.message === "Data added successfully") {
+                    setTimeout(() => {
+                        dispatch(setCategory(res));
+                        reset();
+                        toggle(),
+                            setLoader(false),
+                            categoryList()
+                        toast.success(res.message);
+                    }, 1000)
+                }
+            }).catch(err => {
+                setLoader(false)
+                console.error('Error', err);
+            })
+        } catch (error) {
+            setLoader(false);
+            console.log('error', error);
+        }
+    } else {
+        try {
+            if (data.main_image.length != 0) {
+                await ImageUpload(data.main_image[0], "movablecategory", "category", data.name)
+                data.main_image = `${movableCatLink}${data.name}_category_${data.main_image[0].name}`
+            } else {
+                data.main_image = props.data.main_image
+            }
+            setLoader(true);
+            editProduct(props?.data?.id, data).then((res) => {
+                if (res?.message === "Data edited successfully") {
+                    setTimeout(() => {
+                        dispatch(setCategory(res));
+                        reset();
+                        toggle(),
+                            setLoader(false),
+                            categoryList()
+                        toast.success(res.message);
+                    }, 1000)
 
-    //             }
-    //         })
-    //     } catch (error) {
-    //         setLoader(false);
-    //         console.log('error', error);
-    //     }
-    // }
+                }
+            })
+        } catch (error) {
+            setLoader(false);
+            console.log('error', error);
+        }
+    }
   };
 
   // ======================= close modals ===============================
@@ -98,7 +99,16 @@ export default function CategoryForm(props) {
   // ======================== Reset data into the form  =======================
   useMemo(() => {
     reset({
-      name: props?.data?.name,
+      product_name: props?.data?.product_name,
+      actual_price: props?.data?.actual_price,
+      avilable_qty: props?.data?.avilable_qty,
+      brand: props?.data?.brand,
+      description: props?.data?.description,
+      discounted_price: props?.data?.discounted_price,
+      unit_of_measurement: props?.data?.unit_of_measurement,
+      margin: props?.data?.margin,
+      rating: props?.data?.rating,
+      offers: props?.data?.offers,
     });
   }, [props.data]);
 
@@ -181,10 +191,10 @@ export default function CategoryForm(props) {
                             })}
                           />
                           {props?.button == "edit" &&
-                            props?.data.image != "" &&
-                            props?.data.image != undefined && (
+                            props?.data.main_image != "" &&
+                            props?.data.main_image != undefined && (
                               <label className="block mb-1 font-medium text-blue-800 text-md font-tb">
-                                {props?.data?.image?.split("/").pop()}
+                                {props?.data?.main_image?.split("/").pop()}
                               </label>
                             )}
                           {errors.main_image && (

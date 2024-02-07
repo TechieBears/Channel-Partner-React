@@ -5,7 +5,7 @@ import SidebarLink from './SidebarLink';
 import Navbar from './Navbar';
 import { useDispatch, useSelector } from 'react-redux';
 import { SidebarAdminApi, VendorSidebarApi } from './SidebarApi';
-import logoImg from '../../assets/circle-logo.png';
+import logoImg from '../../assets/logo.jpeg';
 
 const Sidebar = ({ children }) => {
     const user = useSelector(state => state?.user?.loggedUserDetails)
@@ -30,7 +30,7 @@ const Sidebar = ({ children }) => {
                         <div className="flex items-center justify-center px-5 py-4">
                             <NavLink className="flex items-center space-x-2" to="/">
                                 {/* <Trade size={isActiveLink ? "36" : "30"} className="text-sky-400 " variant='Bulk' /> */}
-                                <img src={logoImg} className='object-contain w-11 h-11' />
+                                <img src={logoImg} className='object-contain w-16 h-16' />
                                 {/* <h2 className={isActiveLink ? 'hidden ' : 'font-tb font-extrabold text-3xl text-black transition-all duration-700 delay-200'}>Refeer<span className='text-sky-400'>ON</span></h2> */}
                                 <h2 className={isActiveLink ? 'hidden ' : 'font-tb font-extrabold text-3xl text-black transition-all duration-700 delay-200'}>Channel <span className='text-sky-400'>Partner</span></h2>
                             </NavLink>

@@ -4,7 +4,8 @@ import ProductForm from '../../../../components/Modals/MenuModals/ProductForm';
 import Table from '../../../../components/Table/Table';
 import { useDispatch, useSelector } from 'react-redux';
 import { setProduct } from '../../../../redux/Slices/masterSlice';
-import { delMovableCategory, getProducts } from '../../../../api';
+import { getProducts, deleteProduct } from "../../../../api";
+import { setSubCategory, setCategory } from "../../../../redux/Slices/masterSlice";
 
 const Product = () => {
   const product = useSelector((state) => state?.master?.Product)
@@ -23,7 +24,7 @@ const Product = () => {
 
   // ============== delete data from api ================
   const deleteData = (data) => {
-      delMovableCategory(data).then((res) => {
+    deleteProduct(data).then((res) => {
           if (res?.message === 'Data deleted successfully') {
               fetchData();
               toast.success(res?.message);
@@ -36,7 +37,7 @@ const Product = () => {
 
   // ================= action of the table ===============
   const actionBodyTemplate = (row) => <div className="flex items-center gap-2">
-      <ProductForm button='edit' title='Edit Movable Product' data={row} />
+      <ProductForm button='edit' title='Edit Product' data={row} />
       <button onClick={() => deleteData(row.id)} className="bg-red-100  px-1.5 py-2 rounded-sm"><Trash size="20" className='text-red-500' /></button>
   </div>
 
