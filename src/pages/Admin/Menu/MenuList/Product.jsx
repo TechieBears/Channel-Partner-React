@@ -8,6 +8,8 @@ import { getProducts, deleteProduct } from "../../../../api";
 import { setSubCategory, setCategory } from "../../../../redux/Slices/masterSlice";
 
 const Product = () => {
+  const subcategory = useSelector((state) => state?.master?.SubCategory);
+  const category = useSelector((state) => state?.master?.Category);
   const product = useSelector((state) => state?.master?.Product)
   const dispatch = useDispatch()
 

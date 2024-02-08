@@ -4,11 +4,12 @@ import { DirectLeft } from 'iconsax-react';
 import SidebarLink from './SidebarLink';
 import Navbar from './Navbar';
 import { useDispatch, useSelector } from 'react-redux';
-import { SidebarAdminApi, VendorSidebarApi } from './SidebarApi';
+import { SidebarAdminApi, Franchise_Management, BackOffice } from './SidebarApi';
 import logoImg from '../../assets/logo.jpeg';
 
 const Sidebar = ({ children }) => {
     const user = useSelector(state => state?.user?.loggedUserDetails)
+    console.log('user = ', user)
 
     const [isActiveLink, setIsActiveLink] = useState(false);
     const [mobileSidebar, setMobileSidebar] = useState(false);
@@ -45,16 +46,25 @@ const Sidebar = ({ children }) => {
                                         isActiveLink={isActiveLink}
                                     />
                                 )}
-                            </ul> : user?.service == 'vendor' &&
+                            </ul> : user?.role == 'Franchise_Management' ?
                             <ul className='flex flex-col items-center h-full mt-4 space-y-1 overflow-y-scroll scroll-hide'>
-                                {VendorSidebarApi?.map((item, i) =>
+                                {Franchise_Management?.map((item, i) =>
                                     <SidebarLink
                                         i={i}
                                         key={i}
                                         item={item}
                                         isActiveLink={isActiveLink} />
                                 )}
-                            </ul>
+                            </ul> : user?.role == 'Back Office' &&
+                            <ul className='flex flex-col items-center h-full mt-4 space-y-1 overflow-y-scroll scroll-hide'>
+                                {BackOffice?.map((item, i) =>
+                                    <SidebarLink
+                                        i={i}
+                                        key={i}
+                                        item={item}
+                                        isActiveLink={isActiveLink} />
+                                )}
+                            </ul> 
                         }
                     </div>
                 </aside>

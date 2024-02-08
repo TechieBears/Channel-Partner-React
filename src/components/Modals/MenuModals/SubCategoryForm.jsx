@@ -76,12 +76,7 @@ export default function SubCategoryForm(props) {
     } else {
       try {
         if (data.subcat_image.length != 0) {
-          await ImageUpload(
-            data.subcat_image[0],
-            "subcategory",
-            "subcategory",
-            data.subcat_name
-          );
+          await ImageUpload( data.subcat_image[0], "subcategory", "subcategory", data.subcat_name);
           data.subcat_image = `${subcategoryLink}${data.subcat_name}_subcategory_${data.subcat_image[0].name}`;
         } else {
           data.subcat_image = props.data.subcat_image;

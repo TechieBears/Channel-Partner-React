@@ -69,7 +69,26 @@ export const SidebarAdminApi = [
     },
 ]
 
-export const VendorSidebarApi = [
+export const Franchise_Management = [
+    {
+        title: 'Dashboard',
+        icon: <Element4 size={24} />,
+        link: '/flexiDashboard',
+    },
+    {
+        title: 'My Orders',
+        icon: <Truck size="24" />,
+        link: '/flexiStoreOrders',
+    },
+    {
+        title: 'Products',
+        icon: <Trade size="24" />,
+        link: '/flexiProduct',
+    },
+]
+
+
+export const BackOffice = [
     {
         title: 'Dashboard',
         icon: <Element4 size={24} />,
