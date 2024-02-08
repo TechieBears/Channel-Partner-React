@@ -12,7 +12,7 @@ const PendingOrders = () => {
   const fetchData = () => {
     try {
       getAllOrders().then((res) => {
-        console.log('orders = ', res)
+        // console.log('orders = ', res)
         dispatch(setOrders(res));
       });
     } catch (error) {

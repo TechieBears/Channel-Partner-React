@@ -42,7 +42,7 @@ export default function AddSubadminForm(props) {
                         <div className="fixed inset-0 bg-black bg-opacity-25" />
                     </Transition.Child>
                     <div className="fixed inset-0 overflow-y-scroll ">
-                        <div className="flex min-h-full items-center justify-center p-4 text-center">
+                        <div className="flex items-center justify-center min-h-full p-4 text-center">
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-out duration-300"
@@ -52,19 +52,19 @@ export default function AddSubadminForm(props) {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-5xl transform overflow-hidden rounded-lg bg-white  text-left align-middle shadow-xl transition-all">
+                                <Dialog.Panel className="w-full max-w-5xl overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl">
 
                                     <Dialog.Title
                                         as="h2"
-                                        className="text-lg text-white w-full bg-sky-400 font-tb leading-6 font-semibold py-4 px-3"
+                                        className="w-full px-3 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
                                     >
                                         Add Restaurant
                                     </Dialog.Title>
-                                    <div className=" bg-gray-200/70 ">
+                                    <div className=" bg-gray-200/70">
                                         {/* React Hook Form */}
                                         <form onSubmit={handleSubmit(onSubmit)} >
                                             <div className="p-4 overflow-y-scroll scrollbars " >
-                                                <div className="py-4 mx-4 grid md:grid-cols-1 lg:grid-cols-2 gap-x-3 gap-y-3 customBox">
+                                                <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-2 gap-x-3 gap-y-3 customBox">
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             First Name*
@@ -127,21 +127,6 @@ export default function AddSubadminForm(props) {
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Department *
-                                                        </label>
-                                                        <select
-                                                            className={inputClass}
-                                                            {...register('department', { required: true })}
-                                                        >
-                                                            <option value=''>Select</option>
-                                                            <option value='Front End'>Front End</option>
-                                                            <option value='Back End'>Back End</option>
-                                                            <option value='Full Stack'>Full Stack</option>
-                                                        </select>
-                                                        {errors.department && <Error title='Department is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
                                                             Address*
                                                         </label>
                                                         <input
@@ -171,8 +156,10 @@ export default function AddSubadminForm(props) {
                                                         <Switch checked={isSubAdmin} onChange={() => setIsSubAdmin(!isSubAdmin)} />
                                                     </div>
                                                 </div>
+                                                <h1 className='mx-4 text-xl font-semibold text-gray-900 font-tbPop '>Permissions:</h1>
+
                                             </div>
-                                            <footer className="py-2 flex bg-white justify-end px-4 space-x-3">
+                                            <footer className="flex justify-end px-4 py-2 space-x-3 bg-white">
                                                 {loader ? <LoadBox className="relative block w-auto px-5 transition-colors font-tb tracking-wide duration-200 py-2.5 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize" /> : <button type='submit' className={formBtn1}>Submit</button>}
                                                 <button type='button' className={formBtn2} onClick={closeBtn}>close</button>
                                             </footer>

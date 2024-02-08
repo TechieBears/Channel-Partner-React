@@ -9,7 +9,7 @@ import logoImg from '../../assets/logo.jpeg';
 
 const Sidebar = ({ children }) => {
     const user = useSelector(state => state?.user?.loggedUserDetails)
-    console.log('user = ', user)
+    // console.log('user = ', user)
 
     const [isActiveLink, setIsActiveLink] = useState(false);
     const [mobileSidebar, setMobileSidebar] = useState(false);
