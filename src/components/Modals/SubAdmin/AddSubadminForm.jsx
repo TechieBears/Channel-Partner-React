@@ -11,7 +11,7 @@ import Switch from 'react-switch'
 import { addSubAdmin } from '../../../api';
 import { toast } from 'react-toastify';
 
-export default function AddSubadminForm(props) {
+export default function AddSubadminForm({ getSubAdminFunc, title }) {
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
     const [isSubAdmin, setIsSubAdmin] = useState(false)
@@ -22,12 +22,19 @@ export default function AddSubadminForm(props) {
         reset()
     }
     const onSubmit = (data) => {
-        addSubAdmin(data).then(res => {
-            if (res == 'success') {
+        const updatedData = {
+            ...data,
+            'is_subadmin': isSubAdmin,
+            'isactive': true,
+        }
+        addSubAdmin(updatedData).then(res => {
+
+            if (res?.code === 2002) {
                 toast.success('Sub-Admin Screated Successfully')
+                getSubAdminFunc()
                 toggle()
             } else {
-                toast.error('Failed To Create Sub-Admin')
+                toast.error(res.message)
             }
         })
     }
@@ -35,7 +42,7 @@ export default function AddSubadminForm(props) {
         <>
             <button className={`${formBtn1} flex`} onClick={() => setOpen(true)}>
                 <Add className='text-white' />
-                {props?.title}
+                {title}
             </button>
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-[100]" onClose={() => toggle}>
@@ -176,7 +183,8 @@ export default function AddSubadminForm(props) {
                                                             Pincode*
                                                         </label>
                                                         <input
-                                                            type="text"
+                                                            type="number"
+                                                            maxLength={6}
                                                             placeholder='Pincode'
                                                             className={inputClass}
                                                             {...register('pincode', { required: true })}

@@ -1153,10 +1153,10 @@ export const getPolicy = async () => {
 }
 
 export const addSubAdmin = async (data) => {
-    const url = `${environment.baseUrl}app/subadmin`
+    const url = `${environment.baseUrl}app/registration`
     try {
         const response = await axios.post(url, data);
-        return response.status
+        return response.data
     }
     catch (error) {
         console.log(error)
@@ -1164,7 +1164,7 @@ export const addSubAdmin = async (data) => {
 }
 
 export const getSubAdmin = async () => {
-    const url = `${environment.baseUrl}app/subadmin`
+    const url = `${environment.baseUrl}app/subadmin-details`
     try {
         const response = await axios.get(url);
         return response.data.data

@@ -7,10 +7,9 @@ import { getSubAdmin } from '../../../api'
 
 export default function SubAdmin() {
     const [subAdmin, setSubAdmin] = useState();
-    console.log('subadmin', subAdmin);
     const columns = [
         { field: 'id', header: 'ID', body: (row) => <h6>{row?.subadmin_id}</h6>, sortable: false },
-        { field: 'name', header: 'Name', body: (row) => <NavLink to={`/vendors/restaurant-detail/${row?.id}`}><h6 className='text-sky-400 underline'>{row?.first_name} {row?.last_name}</h6> </NavLink>, sortable: false },
+        { field: 'name', header: 'Name', body: (row) => <NavLink to={`/subadmin/subadmin-detail/${row?.id}`}><h6 className='text-sky-400 underline'>{row?.first_name} {row?.last_name}</h6> </NavLink>, sortable: false },
         { field: 'email', header: 'Email', body: (row) => <h6>{row?.email}</h6>, sortable: false },
         { field: 'phNumber', header: 'Ph. Number', body: (row) => <h6>{row?.phone_no}</h6>, sortable: true },
         { field: 'role', header: 'Role Type', body: (row) => <h6 >{row?.role}</h6>, sortable: false },
@@ -21,10 +20,14 @@ export default function SubAdmin() {
         { field: 'subAdmin', header: 'Sub Admin', body: (row) => <Switch checked={row?.isactive} />, sortable: false },
     ]
 
-    useEffect(() => {
+    const getSubAdminFunc = () => {
         getSubAdmin().then(res => {
             setSubAdmin(res)
         })
+    }
+
+    useEffect(() => {
+        getSubAdminFunc()
     }, [])
 
     return (
@@ -34,7 +37,7 @@ export default function SubAdmin() {
                     <div className="">
                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop '>Sub-Admin List</h1>
                     </div>
-                    <AddSubadminForm title='Add Sub-Admin' />
+                    <AddSubadminForm getSubAdminFunc={getSubAdminFunc} title='Add Sub-Admin' />
                 </div>
                 {subAdmin?.length > 0 && <Table data={subAdmin} columns={columns} />}
             </div>

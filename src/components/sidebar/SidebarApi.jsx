@@ -69,7 +69,7 @@ export const SidebarAdminApi = [
     },
 ]
 
-export const VendorSidebarApi = [
+export const SubadminSidebarApi = [
     {
         title: 'Dashboard',
         icon: <Element4 size={24} />,

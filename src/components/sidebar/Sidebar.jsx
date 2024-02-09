@@ -4,12 +4,12 @@ import { DirectLeft } from 'iconsax-react';
 import SidebarLink from './SidebarLink';
 import Navbar from './Navbar';
 import { useDispatch, useSelector } from 'react-redux';
-import { SidebarAdminApi, VendorSidebarApi } from './SidebarApi';
+import { SidebarAdminApi, SubadminSidebarApi } from './SidebarApi';
 import logoImg from '../../assets/logo.jpeg';
 
 const Sidebar = ({ children }) => {
     const user = useSelector(state => state?.user?.loggedUserDetails)
-
+    console.log('user', user)
     const [isActiveLink, setIsActiveLink] = useState(false);
     const [mobileSidebar, setMobileSidebar] = useState(false);
     const dispatch = useDispatch()
@@ -45,9 +45,9 @@ const Sidebar = ({ children }) => {
                                         isActiveLink={isActiveLink}
                                     />
                                 )}
-                            </ul> : user?.service == 'vendor' &&
+                            </ul> : user?.is_subadmin == true &&
                             <ul className='flex flex-col items-center h-full mt-4 space-y-1 overflow-y-scroll scroll-hide'>
-                                {VendorSidebarApi?.map((item, i) =>
+                                {SubadminSidebarApi?.map((item, i) =>
                                     <SidebarLink
                                         i={i}
                                         key={i}
