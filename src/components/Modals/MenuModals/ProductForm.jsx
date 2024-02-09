@@ -2,17 +2,21 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Edit } from "iconsax-react";
-import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn} from "../../../utils/CustomClass";
-import { getCategory, createProduct, editProduct} from "../../../api";
-import { setCategory } from "../../../redux/Slices/masterSlice";
+import { getCategory, createProduct, editProduct, getProducts} from "../../../api";
+import { setProduct } from "../../../redux/Slices/masterSlice";
+import { useDispatch, useSelector } from "react-redux";
 import LoadBox from "../../Loader/LoadBox";
 import Error from "../../Errors/Error";
+import { productLink } from "../../../env";
 // import { ImageUpload, movableCatLink } from "../../../env";
 
 export default function ProductForm(props) {
-  console.log('props = ', props);
+  // console.log('props = ', props);
+  const Category = useSelector((state) => state?.master?.Category);
+  const SubCategory = useSelector((state) => state?.master?.SubCategory);
+
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const { register, handleSubmit, control, watch, reset, formState: { errors },} = useForm();
@@ -20,10 +24,10 @@ export default function ProductForm(props) {
   const toggle = () => setIsOpen(!isOpen);
 
   // ========================= fetch data from api ==============================
-  const categoryList = () => {
-    getCategory()
+  const productList = () => {
+    getProducts()
       .then((res) => {
-        dispatch(setCategory(res));
+        dispatch(setProduct(res));
       })
       .catch((err) => {
         console.error("Error", err);
@@ -37,7 +41,7 @@ export default function ProductForm(props) {
         try {
             if (data.main_image.length != 0) {
                 await ImageUpload(data.main_image[0], "products", "products", data.name)
-                data.main_image = `${movableCatLink}${data.name}_product_${data.main_image[0].name}`
+                data.main_image = `${productLink}${data.name}_product_${data.main_image[0].name}`
             } else {
                 data.main_image = ''
             }
@@ -45,11 +49,12 @@ export default function ProductForm(props) {
             createProduct(data).then((res) => {
                 if (res?.message === "Data added successfully") {
                     setTimeout(() => {
-                        dispatch(setCategory(res));
+                      setProduct(res)
+                        dispatch(setProduct(res));
                         reset();
+                        productList();
                         toggle(),
-                            setLoader(false),
-                            categoryList()
+                        setLoader(false),
                         toast.success(res.message);
                     }, 1000)
                 }
@@ -64,20 +69,20 @@ export default function ProductForm(props) {
     } else {
         try {
             if (data.main_image.length != 0) {
-                await ImageUpload(data.main_image[0], "movablecategory", "category", data.name)
-                data.main_image = `${movableCatLink}${data.name}_category_${data.main_image[0].name}`
+                await ImageUpload(data.main_image[0], "product", "product", data.name)
+                data.main_image = `${productLink}${data.name}_product_${data.main_image[0].name}`
             } else {
                 data.main_image = props.data.main_image
             }
             setLoader(true);
             editProduct(props?.data?.id, data).then((res) => {
-                if (res?.message === "Data edited successfully") {
+                if (res?.message === "product edited successfully") {
                     setTimeout(() => {
-                        dispatch(setCategory(res));
+                        dispatch(setProduct(res));
                         reset();
+                        productList();
                         toggle(),
                             setLoader(false),
-                            categoryList()
                         toast.success(res.message);
                     }, 1000)
 
@@ -202,60 +207,36 @@ export default function ProductForm(props) {
                           )}
                         </div>
                         <div className="">
-                          <label className={labelClass}>
-                            SubCategory Type*
-                          </label>
-                          <select
-                            name="subcategory"
-                            className={inputClass}
-                            {...register("subcategory", { required: true })}
-                          >
-                            <option value="">Select Type</option>
-                            <option value="Sole Proprietorship">
-                              Sole Proprietorship
-                            </option>
-                            <option value="General Partnerships">
-                              General Partnerships
-                            </option>
-                            <option value="Limited Liability Partnerships (LLP)">
-                              Limited Liability Partnerships (LLP)
-                            </option>
-                            <option value="C Corporation">C Corporation</option>
-                            <option value="B Corporation">B Corporation</option>
-                            <option value="S Corporation">S Corporation</option>
-                            <option value="Non-Profit Corporation">
-                              Non-Profit Corporation
-                            </option>
-                            <option value="Other">Other</option>
-                          </select>
-                          {errors.subcategory && (
-                            <Error title="SubCategory Type is required*" />
-                          )}
-                        </div>
-                        <div className="">
                           <label className={labelClass}>Category Type*</label>
                           <select
-                            name="category"
+                            name="category Type"
                             className={inputClass}
                             {...register("category", { required: true })}
                           >
-                            <option value="">Select Type</option>
-                            <option value="Sole Proprietorship">
-                              Sole Proprietorship
-                            </option>
-                            <option value="General Partnerships">
-                              General Partnerships
-                            </option>
-                            <option value="Limited Liability Partnerships (LLP)">
-                              Limited Liability Partnerships (LLP)
-                            </option>
-                            <option value="C Corporation">C Corporation</option>
-                            <option value="B Corporation">B Corporation</option>
-                            <option value="S Corporation">S Corporation</option>
-                            <option value="Non-Profit Corporation">
-                              Non-Profit Corporation
-                            </option>
-                            <option value="Other">Other</option>
+                            <option value="" disabled>Select Type</option>
+                            {Category.map((category) => (
+                              <option key={category.id} value={category.id}  selected={props?.data?.category === category.id}>
+                                {category.category_name}
+                              </option>
+                            ))}
+                          </select>
+                          {errors.category && (
+                            <Error title="Category Type is required*" />
+                          )}
+                        </div>
+                        <div className="">
+                          <label className={labelClass}>SubCategory Type*</label>
+                          <select
+                            name="Subcategory Type"
+                            className={inputClass}
+                            {...register("subcategory", { required: true })}
+                          >
+                            <option value="" disabled>Select Type</option>
+                            {Category.map((category) => (
+                              <option key={category.id} value={category.id}  selected={props?.data?.category === category.id}>
+                                {category.category_name}
+                              </option>
+                            ))}
                           </select>
                           {errors.category && (
                             <Error title="Category Type is required*" />
@@ -340,6 +321,20 @@ export default function ProductForm(props) {
                             placeholder="100 Grams"
                             className={inputClass}
                             {...register('unit_of_measurement', { required: true })}
+                          />
+                          {errors.unit_of_measurement && (
+                            <Error title="Unit of Measurement is required*" />
+                          )}
+                        </div>
+                        <div className="">
+                          <label className={labelClass}>
+                            Brand*
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="Aditya Sun Pharma"
+                            className={inputClass}
+                            {...register('brand', { required: true })}
                           />
                           {errors.unit_of_measurement && (
                             <Error title="Unit of Measurement is required*" />

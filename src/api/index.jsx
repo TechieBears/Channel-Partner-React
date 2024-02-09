@@ -144,6 +144,27 @@ export const deleteProduct = async (id) => {
     }
 }
 
+/* ================== Menu SubCategory by CatId Api =========== */
+export const getAllOrders = async (id) => {
+    const url = `${environment.baseUrl}app/get_orderedetails`;
+    try {
+        const response = await axios.get(url)
+        console.log('orders = ', response.data.data);
+        return response.data.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+
+
+
+
+
+
+
+
 
 
 

@@ -10,6 +10,7 @@ const initialState = {
     Category: [],
     SubCategory: [],
     Product: [],
+    Orders: [],
 }
 export const masterSlice = createSlice({
     name: 'master',
@@ -42,8 +43,11 @@ export const masterSlice = createSlice({
         setProduct: (state, action) => {
             state.Product = action.payload;
         },
+        setOrders: (state, action) => {
+            state.Orders = action.payload;
+        },
     }
 })
 
-export const { setCityNames, setDesignation, setTempRange, setProductNames, setStoreCategory, setCategory, setSubCategory, setProduct, setBanner } = masterSlice.actions;
+export const { setCityNames, setDesignation, setTempRange, setProductNames, setStoreCategory, setCategory, setSubCategory, setProduct, setBanner, setOrders } = masterSlice.actions;
 export default masterSlice.reducer;

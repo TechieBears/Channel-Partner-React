@@ -1,7 +1,7 @@
 export const environment = {
     // --------------------Local Server Api URL--------------------
-    // baseUrl: 'http://192.168.0.171:8001/',
-    baseUrl: 'http://127.0.0.1:8000/',
+    baseUrl: 'http://192.168.0.171:8001/',
+    // baseUrl: 'http://127.0.0.1:8000/',
 
 
     // --------------------Live Server Api URL--------------------
@@ -80,4 +80,5 @@ export const profileUpload = async (data, name) => {
 // export const categoryLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/category/'
 export const categoryLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/category/'
 export const subcategoryLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/subcategory/'
+export const productLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/product/'
 // export const categoryLink = 's3://channel-partner-media/category/'

@@ -97,7 +97,7 @@ export default function CategoryForm(props) {
         }
         setLoader(true);
         editCategory(props?.data?.id, data).then((res) => {
-          if (res?.message === "Data edited successfully") {
+          if (res?.message === "category edited successfully") {
             setTimeout(() => {
               dispatch(setCategory(res));
               reset();
