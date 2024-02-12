@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setOrders } from "../../../../redux/Slices/masterSlice";
 import { getAllOrders } from "../../../../api";
@@ -19,17 +19,17 @@ const PendingOrders = () => {
       console.log(error);
     }
   };
-  
+
   useEffect(() => {
     fetchData();
   }, []);
 
 
-  
+
   return (
     <div className="grid gap-6 mt-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2">
       <div
-        className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:border-gray-700 "
+        className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg  "
         previewlistener="true"
       >
         <div className="items-center gap-x-3">
@@ -53,13 +53,13 @@ const PendingOrders = () => {
                   alt=""
                 />
                 <div>
-                  <h2 className="text-sm font-semibold tracking-wide text-gray-800 dark:text-white">
+                  <h2 className="text-sm font-semibold tracking-wide text-gray-800 ">
                     Butter Milk x 7 more
                   </h2>
                   <p>Lorem ipsum dolor, sit amet </p>
                 </div>
               </div>
-              <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 dark:text-gray-400">
+              <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 ">
                 Payment - Cash
               </p>
             </div>

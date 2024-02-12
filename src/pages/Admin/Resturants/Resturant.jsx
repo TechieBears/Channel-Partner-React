@@ -78,12 +78,13 @@ export default function Restaurant() {
                     Blocked Restaurants
                 </button>
             </div>
-            <div className='grid grid-cols-6 mt-4'>
-                <div className='flex w-1/4 col-span-4 gap-2 p-3 bg-white border-2 border-gray-300 rounded-lg '>
+            <div className='grid gap-10 grid-cols-3 mt-4'>
+                <div className='flex gap-2 p-3 bg-white border-2 border-gray-300 rounded-lg '>
                     <SearchNormal className='text-gray-400' />
                     <input placeholder='Search..' className='w-4/5 h-full' />
                 </div>
-                <div className='grid grid-cols-3 col-span-2 gap-2'>
+                <input className={inputClass} placeholder='Filter By Pincode' />
+                <div className='grid grid-cols-3 gap-2'>
                     <button className='flex gap-2 p-3 bg-white border-2 rounded-lg '>
                         <Refresh className='text-gray-400' />
                         <p>Refresh</p>

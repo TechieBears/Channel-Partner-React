@@ -41,39 +41,54 @@ export default function AddSubadminForm({ getSubAdminFunc, title }) {
 
     const [departments, setDepartments] = useState([
         {
-            id: 1, name: "Back Office", permissions: [
+            id: 1,
+            name: "Back Office",
+            permissions: [
                 { permission_id: 1, permission_name: "Application Process" },
                 { permission_id: 2, permission_name: "Registration Process" },
                 { permission_id: 3, permission_name: "Approval Process" },
-            ]
+            ],
         },
         {
             id: 2, name: "Verification", permissions: [
                 { permission_id: 1, permission_name: "Delivery Application Process" },
                 { permission_id: 2, permission_name: "Vendor Registration Process" },
                 { permission_id: 3, permission_name: "User Documents" },
-            ]
+            ],
+
         },
         {
             id: 3, name: "Franchise Management", permissions: [
                 { permission_id: 1, permission_name: "Seller Management" },
                 { permission_id: 2, permission_name: "User Management" },
                 { permission_id: 3, permission_name: "Delivery Management" },
-            ]
+            ],
         },
         {
             id: 4, name: "Customer Care", permissions: [
                 { permission_id: 1, permission_name: "Chat Process" },
                 { permission_id: 2, permission_name: "Inbound Process" },
                 { permission_id: 3, permission_name: "Outbound Process" },
-            ]
+            ],
         },
         {
             id: 5, name: "Budget Management", permissions: [
                 { permission_id: 1, permission_name: "Marketing Budget Pincode wise" },
                 { permission_id: 2, permission_name: "Franchisee expenses & Reimbursement" },
                 { permission_id: 3, permission_name: "Category Budget" },
-            ]
+            ],
+        },
+        {
+            id: 6, name: "MIS", permissions: [
+                { permission_id: 1, permission_name: "Data" },
+                { permission_id: 2, permission_name: "Data Analysis" },
+            ],
+        },
+        {
+            id: 7, name: "HR", permissions: [
+                { permission_id: 1, permission_name: "Recruitment" },
+                { permission_id: 2, permission_name: "compensation" },
+            ],
         },
     ]);
     const [selectedDepartment, setSelectedDepartment] = useState(null);
@@ -209,18 +224,6 @@ export default function AddSubadminForm({ getSubAdminFunc, title }) {
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Role*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Role'
-                                                            className={inputClass}
-                                                            {...register('role', { required: true })}
-                                                        />
-                                                        {errors.role && <Error title='Role is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
                                                             Address*
                                                         </label>
                                                         <input
@@ -300,7 +303,7 @@ export default function AddSubadminForm({ getSubAdminFunc, title }) {
                                                         <select
                                                             value={selectedDepartment}
                                                             onChange={(e) => handleDepartmentChange(parseInt(e.target.value))}
-                                                            className="p-2 mb-4 border border-gray-300 rounded-lg"
+                                                            className={`p-2 mb-4 border border-gray-300 rounded-lg ${inputClass}`}
                                                         >
                                                             <option value={null}>Select Department</option>
                                                             {departments.map((department) => (
@@ -311,23 +314,25 @@ export default function AddSubadminForm({ getSubAdminFunc, title }) {
                                                         </select>
                                                     </div>
 
-                                                    <div className='ms-10'>
+                                                    <div className='ms-10 w-full '>
                                                         {selectedDepartment && (
-                                                            <div className="p-4 border border-gray-300 rounded-lg">
-                                                                <h2 className="mb-4 text-lg font-bold">Permissions for {departments[selectedDepartment - 1].name}</h2>
-                                                                <ul>
-                                                                    {departments[selectedDepartment - 1].permissions.map((permission) => (
-                                                                        <li key={permission.permission_id} className="flex items-center mb-2">
-                                                                            <input
-                                                                                type="checkbox"
-                                                                                id={`permission-${permission.permission_id}`}
-                                                                                checked={permission.selected}
-                                                                                onChange={() => handlePermissionChange(permission.permission_id)}
-                                                                            />
-                                                                            <label htmlFor={`permission-${permission.permission_id}`} className="ml-2">{permission.permission_name}</label>
-                                                                        </li>
-                                                                    ))}
-                                                                </ul>
+                                                            <div className="p-4 border bg-white border-gray-300 rounded-lg grid grid-cols-2 gap-4">
+                                                                <div>
+                                                                    <h2 className="mb-4 text-lg font-bold">Permissions for {departments[selectedDepartment - 1].name}</h2>
+                                                                    <ul>
+                                                                        {departments[selectedDepartment - 1].permissions.map((permission) => (
+                                                                            <li key={permission.permission_id} className="flex items-center mb-2">
+                                                                                <input
+                                                                                    type="checkbox"
+                                                                                    id={`permission-${permission.permission_id}`}
+                                                                                    checked={permission.selected}
+                                                                                    onChange={() => handlePermissionChange(permission.permission_id)}
+                                                                                />
+                                                                                <label htmlFor={`permission-${permission.permission_id}`} className="ml-2">{permission.permission_name}</label>
+                                                                            </li>
+                                                                        ))}
+                                                                    </ul>
+                                                                </div>
                                                             </div>
                                                         )}
                                                     </div>

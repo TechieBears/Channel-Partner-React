@@ -221,7 +221,7 @@ const Order = () => {
                         {/* {activeTab === 1 && <p>Content for Tab 1</p>}
                         {activeTab === 2 && <p>Content for Tab 2</p>} */}
                         <div className='grid gap-6 mt-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2'>
-                            <div className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:border-gray-700 " previewlistener="true">
+                            <div className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg " previewlistener="true">
                                 <div className="items-center gap-x-3">
                                     <div className='flex flex-wrap justify-between p-4'>
                                         <p className='text-sm'>Order Id -  <span className='text-sky-400'>753</span></p>
@@ -232,11 +232,11 @@ const Order = () => {
                                             <div className='flex items-center justify-between'>
                                                 <img className='w-16' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU" alt="" />
                                                 <div>
-                                                    <h2 className="text-sm font-semibold tracking-wide text-gray-800 dark:text-white">Butter Milk x 7 more</h2>
+                                                    <h2 className="text-sm font-semibold tracking-wide text-gray-800 ">Butter Milk x 7 more</h2>
                                                     <p>Lorem ipsum dolor, sit amet </p>
                                                 </div>
                                             </div>
-                                            <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 dark:text-gray-400">Payment - Cash</p>
+                                            <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 ">Payment - Cash</p>
                                         </div>
                                     </div>
                                     <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
@@ -249,7 +249,7 @@ const Order = () => {
                                 </div>
                             </div>
 
-                            <div className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:border-gray-700 " previewlistener="true">
+                            <div className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg " previewlistener="true">
                                 <div className="items-center gap-x-3">
                                     <div className='flex flex-wrap justify-between p-4'>
                                         <p className='text-sm'>Order Id -  <span className='text-sky-400'>753</span></p>
@@ -260,11 +260,11 @@ const Order = () => {
                                             <div className='flex items-center justify-between'>
                                                 <img className='w-16' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU" alt="" />
                                                 <div>
-                                                    <h2 className="text-sm font-semibold tracking-wide text-gray-800 dark:text-white">Butter Milk x 7 more</h2>
+                                                    <h2 className="text-sm font-semibold tracking-wide text-gray-800 ">Butter Milk x 7 more</h2>
                                                     <p>Lorem ipsum dolor, sit amet </p>
                                                 </div>
                                             </div>
-                                            <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 dark:text-gray-400">Payment - Cash</p>
+                                            <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 ">Payment - Cash</p>
                                         </div>
                                     </div>
                                     <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
@@ -277,7 +277,7 @@ const Order = () => {
                                 </div>
                             </div>
 
-                            <div className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:border-gray-700 " previewlistener="true">
+                            <div className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg " previewlistener="true">
                                 <div className="items-center gap-x-3">
                                     <div className='flex flex-wrap justify-between p-4'>
                                         <p className='text-sm'>Order Id -  <span className='text-sky-400'>753</span></p>
@@ -288,11 +288,11 @@ const Order = () => {
                                             <div className='flex items-center justify-between'>
                                                 <img className='w-16' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU" alt="" />
                                                 <div>
-                                                    <h2 className="text-sm font-semibold tracking-wide text-gray-800 dark:text-white">Butter Milk x 7 more</h2>
+                                                    <h2 className="text-sm font-semibold tracking-wide text-gray-800 ">Butter Milk x 7 more</h2>
                                                     <p>Lorem ipsum dolor, sit amet </p>
                                                 </div>
                                             </div>
-                                            <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 dark:text-gray-400">Payment - Cash</p>
+                                            <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 ">Payment - Cash</p>
                                         </div>
                                     </div>
                                     <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
@@ -305,7 +305,7 @@ const Order = () => {
                                 </div>
                             </div>
 
-                            <div className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:border-gray-700 " previewlistener="true">
+                            <div className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg " previewlistener="true">
                                 <div className="items-center gap-x-3">
                                     <div className='flex flex-wrap justify-between p-4'>
                                         <p className='text-sm'>Order Id -  <span className='text-sky-400'>753</span></p>
@@ -316,11 +316,11 @@ const Order = () => {
                                             <div className='flex items-center justify-between'>
                                                 <img className='w-16' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU" alt="" />
                                                 <div>
-                                                    <h2 className="text-sm font-semibold tracking-wide text-gray-800 dark:text-white">Butter Milk x 7 more</h2>
+                                                    <h2 className="text-sm font-semibold tracking-wide text-gray-800 ">Butter Milk x 7 more</h2>
                                                     <p>Lorem ipsum dolor, sit amet </p>
                                                 </div>
                                             </div>
-                                            <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 dark:text-gray-400">Payment - Cash</p>
+                                            <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 ">Payment - Cash</p>
                                         </div>
                                     </div>
                                     <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
