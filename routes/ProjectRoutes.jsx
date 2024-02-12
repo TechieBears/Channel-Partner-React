@@ -87,9 +87,26 @@ const ProjectRoutes = () => {
                                 {/* <Route path="/vendorDashbaord" element={<VendorDashbaord />} />
                                 <Route path="/vendorProduct" element={<VendorProduct />} />
                                 <Route path="/vendorOrders" element={<VendorOrders />} /> */}
+
+
+
+                                {/* ================== Vendor Routes ======================== */}
                                 <Route path='/' element={<VendorDashbaord />} />
                                 <Route path='/orders' element={<VendorOrders />} />
                                 <Route path='/product-list' element={<VendorProduct />} />
+                                {/* ================== Vendor Routes ======================== */}
+
+
+
+                                {/* ================== Franchisee Routes ======================== */}
+                                <Route path='/' element={<VendorDashbaord />} />
+                                <Route path='/orders' element={<VendorOrders />} />
+                                <Route path='/product-list' element={<VendorProduct />} />
+                                {/* ================== Franchisee Routes ======================== */}
+
+
+
+
                             </Routes>
                         </Sidebar>
                     }
