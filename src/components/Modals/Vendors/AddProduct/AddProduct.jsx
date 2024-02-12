@@ -10,7 +10,7 @@ import { MultiSelect } from 'primereact/multiselect';
 import { Add } from 'iconsax-react';
 import { formBtn1, formBtn2, inputClass, labelClass } from '../../../../utils/CustomClass';
 
-export default function AddVendors(props) {
+function AddProduct(props) {
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
     const [selectedCategory, setSelectedCategory] = useState([])
@@ -71,149 +71,217 @@ export default function AddVendors(props) {
                                                 <div className="py-4 mx-4 grid md:grid-cols-1 lg:grid-cols-2 gap-x-3 gap-y-3 customBox">
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            First Name*
+                                                            Product Name*
                                                         </label>
                                                         <input
                                                             type="text"
-                                                            placeholder='First Name'
+                                                            placeholder='Product Name'
                                                             className={inputClass}
-                                                            {...register('first_name', { required: true })}
+                                                            {...register('product_name', { required: true })}
                                                         />
-                                                        {errors.first_name && <Error title='First Name is Required*' />}
+                                                        {errors.product_name && <Error title='Product Name is Required*' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Last Name*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Last Name'
-                                                            className={inputClass}
-                                                            {...register('last_name', { required: true })}
-                                                        />
-                                                        {errors.last_name && <Error title='Last Name is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Date Of Birth(DOB)*
-                                                        </label>
-                                                        <input
-                                                            type="date"
-                                                            // placeholder='Last Name'
-                                                            className={inputClass}
-                                                            {...register('date_of_birth', { required: true })}
-                                                        />
-                                                        {errors.date_of_birth && <Error title='Date of birth is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Gender*
+                                                            Product Category*
                                                         </label>
                                                         <select
                                                             className={inputClass}
-                                                            {...register('gender', { required: true })}
+                                                            {...register('product_category', { required: true })}
                                                         >
-                                                            <option value='Male'>Male</option>
-                                                            <option value='Female'>Female</option>
+                                                            <option value='grocery'>Grocery</option>
+                                                            <option value='Dairy'>Dairy</option>
                                                             <option value='Other'>Other</option>
                                                         </select>
-                                                        {errors.gender && <Error title='Gender is Required*' />}
+                                                        {errors.product_category && <Error title='Category is Required*' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Email*
+                                                            Product Category*
+                                                        </label>
+                                                        <select
+                                                            className={inputClass}
+                                                            {...register('sub_category', { required: true })}
+                                                        >
+                                                            <option value='Milk'>Milk</option>
+                                                            <option value='Curd'>Curd</option>
+                                                            <option value='Other'>Other</option>
+                                                        </select>
+                                                        {errors.sub_category && <Error title='Sub Category is Required*' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Product MRP*
                                                         </label>
                                                         <input
-                                                            type="email"
-                                                            placeholder='Email'
+                                                            type="text"
+                                                            placeholder='Product MRP'
                                                             className={inputClass}
-                                                            {...register('email', { required: true })}
+                                                            {...register('mrp', { required: true })}
                                                         />
-                                                        {errors.email && <Error title='Email is Required*' />}
+                                                        {errors.mrp && <Error title='MRP is Required*' />}
                                                     </div>
 
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Phone*
-                                                        </label>
-                                                        <input
-                                                            type="tel"
-                                                            placeholder='Phone'
-                                                            className={inputClass}
-                                                            {...register('Vendor_phone', { required: true })}
-                                                        />
-                                                        {errors.Vendor_phone && <Error title='Phone is Required*' />}
-                                                    </div>
-
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Login ID
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Login ID'
-                                                            className={inputClass}
-                                                            {...register('login_id',)}
-                                                        />
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Password
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Password'
-                                                            className={inputClass}
-                                                            {...register('password',)}
-                                                        />
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            PINCODE*
+                                                            SKU*
                                                         </label>
                                                         <input
                                                             type="number"
+                                                            placeholder='SKU'
+                                                            className={inputClass}
+                                                            {...register('sku', { required: true })}
+                                                        />
+                                                        {errors.sku && <Error title='SKU is Required*' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Variations
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='Variations'
+                                                            className={inputClass}
+                                                            {...register('variations', { required: true })}
+                                                        />
+                                                        {errors?.variations && <Error title='Varitation is Required' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Weight (gm)
+                                                        </label>
+                                                        <input
+                                                            type="number"
+                                                            placeholder='Weight (gm)'
+                                                            className={inputClass}
+                                                            {...register('weight', { required: true })}
+                                                        />
+                                                        {errors?.weight && <Error title='Weight is Required' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Dimensions
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='Dimensions'
+                                                            className={inputClass}
+                                                            {...register('dimenisons', { required: true })}
+                                                        />
+                                                        {errors?.dimenisons && <Error title='Dimensions is Required' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            GST (%)
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='GST (%)'
+                                                            className={inputClass}
+                                                            {...register('gst_per', { required: true })}
+                                                        />
+                                                        {errors?.gst_per && <Error title='GST is Required' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Product Status*
+                                                        </label>
+                                                        <select
+                                                            className={inputClass}
+                                                            {...register('product_status', { required: true })}
+                                                        >
+                                                            <option value='Available'>Avilable</option>
+                                                            <option value='Out Of Stock'>Out Of Stock</option>
+                                                            <option value='Other'>Other</option>
+                                                        </select>
+                                                        {errors.product_status && <Error title='Status is Required*' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Availability Date
+                                                        </label>
+                                                        <input
+                                                            type="date"
+                                                            placeholder=''
+                                                            className={inputClass}
+                                                            {...register('availability_date',)}
+                                                        />
+                                                        {errors.availability_date && <Error title='Availability Date is Required*' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Brand*
+                                                        </label>
+                                                        <input
+                                                            type="text"
                                                             maxLength={6}
-                                                            placeholder='PINCODE'
+                                                            placeholder='Brand'
                                                             className={inputClass}
-                                                            {...register('pincode', { required: true })}
+                                                            {...register('brand', { required: true })}
                                                         />
-                                                        {errors.pincode && <Error title='PINCODE is Required*' />}
+                                                        {errors.brand && <Error title='Brand is Required*' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Address*
+                                                            Warranty / Guaranty *
                                                         </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Address'
+                                                        <select
                                                             className={inputClass}
-                                                            {...register('address', { required: true })}
-                                                        />
-                                                        {errors.address && <Error title='Address is Required*' />}
+                                                            {...register('warranty',)}
+                                                        >
+                                                            <option value='Yes'>Yes</option>
+                                                            <option value='No'>No</option>
+                                                        </select>
+                                                        {/* {errors.warranty && <Error title='War is Required*' />} */}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            City*
+                                                            Special Offer*
                                                         </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='City'
+                                                        <select
                                                             className={inputClass}
-                                                            {...register('address', { required: true })}
-                                                        />
-                                                        {errors.address && <Error title='City is Required*' />}
+                                                            {...register('speacial_offer',)}
+                                                        >
+                                                            <option value='Yes'>Yes</option>
+                                                            <option value='No'>No</option>
+                                                        </select>
+                                                        {/* {errors.warranty && <Error title='War is Required*' />} */}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            State
+                                                            Tags*
                                                         </label>
                                                         <input
                                                             type="text"
-                                                            placeholder='Password'
+                                                            placeholder='Tags'
                                                             className={inputClass}
-                                                            {...register('password',)}
+                                                            {...register('tags',)}
                                                         />
+                                                        {/* {errors.tags && <Error title='Tags is Required*' />} */}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Discount Price
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='Discount Price'
+                                                            className={inputClass}
+                                                            {...register('discount_price',)}
+                                                        />
+                                                        {/* {errors.tags && <Error title='Tags is Required*' />} */}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Description*
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='Description'
+                                                            className={inputClass}
+                                                            {...register('product_description', { required: true })}
+                                                        />
+                                                        {errors.product_description && <Error title='Description is Required*' />}
                                                     </div>
                                                 </div>
                                             </div>
@@ -232,3 +300,5 @@ export default function AddVendors(props) {
         </>
     )
 }
+
+export default AddProduct

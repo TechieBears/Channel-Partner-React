@@ -4,7 +4,7 @@ import { DirectLeft } from 'iconsax-react';
 import SidebarLink from './SidebarLink';
 import Navbar from './Navbar';
 import { useDispatch, useSelector } from 'react-redux';
-import { SidebarAdminApi, Franchise_Management, BackOffice } from './SidebarApi';
+import { VendorApi, Franchise_Management, BackOffice } from './SidebarApi';
 import logoImg from '../../assets/logo.jpeg';
 
 const Sidebar = ({ children }) => {
@@ -38,7 +38,7 @@ const Sidebar = ({ children }) => {
                         </div>
                         {user?.role == 'admin' ?
                             <ul className='flex flex-col items-center h-full my-4 mb-20 space-y-1 overflow-y-scroll scroll-hide'>
-                                {SidebarAdminApi?.map((item, i) =>
+                                {VendorApi?.map((item, i) =>
                                     <SidebarLink
                                         i={i}
                                         key={i}
@@ -47,24 +47,24 @@ const Sidebar = ({ children }) => {
                                     />
                                 )}
                             </ul> : user?.role == 'Franchise_Management' ?
-                            <ul className='flex flex-col items-center h-full mt-4 space-y-1 overflow-y-scroll scroll-hide'>
-                                {Franchise_Management?.map((item, i) =>
-                                    <SidebarLink
-                                        i={i}
-                                        key={i}
-                                        item={item}
-                                        isActiveLink={isActiveLink} />
-                                )}
-                            </ul> : user?.role == 'Back Office' &&
-                            <ul className='flex flex-col items-center h-full mt-4 space-y-1 overflow-y-scroll scroll-hide'>
-                                {BackOffice?.map((item, i) =>
-                                    <SidebarLink
-                                        i={i}
-                                        key={i}
-                                        item={item}
-                                        isActiveLink={isActiveLink} />
-                                )}
-                            </ul> 
+                                <ul className='flex flex-col items-center h-full mt-4 space-y-1 overflow-y-scroll scroll-hide'>
+                                    {Franchise_Management?.map((item, i) =>
+                                        <SidebarLink
+                                            i={i}
+                                            key={i}
+                                            item={item}
+                                            isActiveLink={isActiveLink} />
+                                    )}
+                                </ul> : user?.role == 'Back Office' &&
+                                <ul className='flex flex-col items-center h-full mt-4 space-y-1 overflow-y-scroll scroll-hide'>
+                                    {BackOffice?.map((item, i) =>
+                                        <SidebarLink
+                                            i={i}
+                                            key={i}
+                                            item={item}
+                                            isActiveLink={isActiveLink} />
+                                    )}
+                                </ul>
                         }
                     </div>
                 </aside>

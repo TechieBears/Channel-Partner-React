@@ -1,7 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react';
 import { useForm } from "react-hook-form";
-import { fileinput, formBtn1, formBtn2, labelClass, tableBtn } from '../../../../utils/CustomClass';
+import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../../utils/CustomClass';
 import { Edit } from 'iconsax-react';
 import { addHomeBanners, editHomeBanners, getHomeBanners } from '../../../../api';
 import { useDispatch } from 'react-redux';
@@ -147,6 +147,19 @@ export default function BannerForm(props) {
                                         {/* React Hook Form */}
                                         <form onSubmit={handleSubmit(onSubmit)} >
                                             <div className="py-4 mx-4 customBox">
+                                                <div className="">
+                                                    <label className={labelClass} >Type*</label>
+                                                    <select
+                                                        className={inputClass}
+                                                        {...register('promo_type', { required: true })}
+                                                    >
+                                                        <option value=''>Select</option>
+                                                        <option value='run_ads'>Run Ads for your products</option>
+                                                        <option value='run_7_days'>Get your product on top for 7 days</option>
+                                                        <option value='search_panel'>Show in search tab</option>
+                                                    </select>
+                                                    {errors.promo_type && <Error title='Promo Type is required*' />}
+                                                </div>
                                                 <div className="">
                                                     <label className={labelClass} htmlFor="main_input">Image*</label>
                                                     <input className={fileinput}

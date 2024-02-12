@@ -1174,3 +1174,25 @@ export const getPolicy = async () => {
         console.log(error)
     }
 }
+
+export const addSubAdmin = async (data) => {
+    const url = `${environment.baseUrl}app/registration`
+    try {
+        const response = await axios.post(url, data);
+        return response.data
+    }
+    catch (error) {
+        console.log(error)
+    }
+}
+
+export const getSubAdmin = async () => {
+    const url = `${environment.baseUrl}app/subadmin-details`
+    try {
+        const response = await axios.get(url);
+        return response.data.data
+    }
+    catch (error) {
+        console.log(error)
+    }
+}

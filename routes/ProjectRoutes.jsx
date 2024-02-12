@@ -33,6 +33,7 @@ import Vendors from '../src/pages/Admin/Vendors/Vendors';
 import VendorDetails from '../src/components/Modals/Vendors/VendorDetails';
 import Promotions from '../src/pages/Admin/Promotion/Promotions';
 import Settings from '../src/pages/Settings/Settings';
+import SubAdminDetail from '../src/pages/Admin/SubAdmin/SubAdminDetail';
 
 
 
@@ -61,7 +62,7 @@ const ProjectRoutes = () => {
                         <Sidebar>
                             <Routes>
                                 {/* ============ Admin Routes ============ */}
-                                <Route path="/" element={<Dashboard />} />
+                                {/* <Route path="/" element={<Dashboard />} />
                                 <Route path="/menu" element={<Menu />} />
                                 <Route path="/resturants" element={<Restaurant />} />
                                 <Route path="/resturants/restaurant-detail/:id" element={<RestaurantDetail />} />
@@ -79,12 +80,33 @@ const ProjectRoutes = () => {
                                 <Route path="/profile" element={<UserProfile />} />
                                 <Route path="/reports" element={<Reports />} />
                                 <Route path="/subadmin" element={<SubAdmin />} />
-                                <Route path="/settings" element={<Settings />} />
+                                <Route path="/subadmin/subadmin-detail/:id" element={<SubAdminDetail />} />
+                                <Route path="/settings" element={<Settings />} /> */}
 
                                 {/* ============================================================================== Partner Flexi store Routes =========================================== */}
-                                <Route path="/vendorDashbaord" element={<VendorDashbaord />} />
+                                {/* <Route path="/vendorDashbaord" element={<VendorDashbaord />} />
                                 <Route path="/vendorProduct" element={<VendorProduct />} />
-                                <Route path="/vendorOrders" element={<VendorOrders />} />
+                                <Route path="/vendorOrders" element={<VendorOrders />} /> */}
+
+
+
+                                {/* ================== Vendor Routes ======================== */}
+                                <Route path='/' element={<VendorDashbaord />} />
+                                <Route path='/orders' element={<VendorOrders />} />
+                                <Route path='/product-list' element={<VendorProduct />} />
+                                {/* ================== Vendor Routes ======================== */}
+
+
+
+                                {/* ================== Franchisee Routes ======================== */}
+                                <Route path='/' element={<VendorDashbaord />} />
+                                <Route path='/orders' element={<VendorOrders />} />
+                                <Route path='/product-list' element={<VendorProduct />} />
+                                {/* ================== Franchisee Routes ======================== */}
+
+
+
+
                             </Routes>
                         </Sidebar>
                     }
