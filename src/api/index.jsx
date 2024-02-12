@@ -6,9 +6,11 @@ import { environment } from "../env";
 // ====================Login Api===================
 
 export const login = async (data) => {
+    console.log("🚀 ~ file: index.jsx:9 ~ login ~ data:", data)
     const url = `${environment.baseUrl}app/admin-login`;
     try {
         const response = await axios.post(url, data)
+        console.log("🚀 ~ file: index.jsx:12 ~ login ~ response:", response)
         return response.data
     }
     catch (err) {
