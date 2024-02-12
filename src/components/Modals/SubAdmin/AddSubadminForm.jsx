@@ -8,8 +8,10 @@ import { formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/Custo
 import LoadBox from '../../Loader/LoadBox';
 import Error from '../../Errors/Error';
 import Switch from 'react-switch'
+import { addSubAdmin } from '../../../api';
+import { toast } from 'react-toastify';
 
-export default function AddSubadminForm(props) {
+export default function AddSubadminForm({ getSubAdminFunc, title }) {
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
     const [isSubAdmin, setIsSubAdmin] = useState(false)
@@ -20,69 +22,92 @@ export default function AddSubadminForm(props) {
         reset()
     }
     const onSubmit = (data) => {
-        console.log('data', data)
+        const updatedData = {
+            ...data,
+            'is_subadmin': isSubAdmin,
+            'isactive': true,
+        }
+        addSubAdmin(updatedData).then(res => {
+
+            if (res?.code === 2002) {
+                toast.success('Sub-Admin Screated Successfully')
+                getSubAdminFunc()
+                toggle()
+            } else {
+                toast.error(res.message)
+            }
+        })
     }
 
     const [departments, setDepartments] = useState([
-        { id: 1, name: "Back Office", permissions: [
-            { permission_id: 1, permission_name: "Application Process"},
-            { permission_id: 2, permission_name: "Registration Process"},
-            { permission_id: 3, permission_name: "Approval Process"},
+        {
+            id: 1, name: "Back Office", permissions: [
+                { permission_id: 1, permission_name: "Application Process" },
+                { permission_id: 2, permission_name: "Registration Process" },
+                { permission_id: 3, permission_name: "Approval Process" },
             ]
         },
-        { id: 2, name: "Verification", permissions: [
-            { permission_id: 1, permission_name: "Delivery Application Process"},
-            { permission_id: 2, permission_name: "Vendor Registration Process"},
-            { permission_id: 3, permission_name: "User Documents"},
-        ] },
-        { id: 3, name: "Franchise Management", permissions: [
-            { permission_id: 1, permission_name: "Seller Management"},
-            { permission_id: 2, permission_name: "User Management"},
-            { permission_id: 3, permission_name: "Delivery Management"},
-        ] },
-        { id: 4, name: "Customer Care", permissions: [
-            { permission_id: 1, permission_name: "Chat Process"},
-            { permission_id: 2, permission_name: "Inbound Process"},
-            { permission_id: 3, permission_name: "Outbound Process"},
-        ] },
-        { id: 5, name: "Budget Management", permissions: [
-            { permission_id: 1, permission_name: "Marketing Budget Pincode wise"},
-            { permission_id: 2, permission_name: "Franchisee expenses & Reimbursement"},
-            { permission_id: 3, permission_name: "Category Budget"},
-        ] },
-      ]);
-      const [selectedDepartment, setSelectedDepartment] = useState(null);
+        {
+            id: 2, name: "Verification", permissions: [
+                { permission_id: 1, permission_name: "Delivery Application Process" },
+                { permission_id: 2, permission_name: "Vendor Registration Process" },
+                { permission_id: 3, permission_name: "User Documents" },
+            ]
+        },
+        {
+            id: 3, name: "Franchise Management", permissions: [
+                { permission_id: 1, permission_name: "Seller Management" },
+                { permission_id: 2, permission_name: "User Management" },
+                { permission_id: 3, permission_name: "Delivery Management" },
+            ]
+        },
+        {
+            id: 4, name: "Customer Care", permissions: [
+                { permission_id: 1, permission_name: "Chat Process" },
+                { permission_id: 2, permission_name: "Inbound Process" },
+                { permission_id: 3, permission_name: "Outbound Process" },
+            ]
+        },
+        {
+            id: 5, name: "Budget Management", permissions: [
+                { permission_id: 1, permission_name: "Marketing Budget Pincode wise" },
+                { permission_id: 2, permission_name: "Franchisee expenses & Reimbursement" },
+                { permission_id: 3, permission_name: "Category Budget" },
+            ]
+        },
+    ]);
+    const [selectedDepartment, setSelectedDepartment] = useState(null);
 
-      const handleDepartmentChange = (departmentId) => {
+    const handleDepartmentChange = (departmentId) => {
         if (selectedDepartment === departmentId) {
-          setSelectedDepartment(null); // Deselect if already selected
+            setSelectedDepartment(null); // Deselect if already selected
         } else {
-          setSelectedDepartment(departmentId);
+            setSelectedDepartment(departmentId);
         }
-      };
-    
-      const handlePermissionChange = (permissionId) => {
+    };
+
+    const handlePermissionChange = (permissionId) => {
         const updatedDepartments = departments.map((dept) => {
-          if (dept.id === selectedDepartment) {
-            const updatedPermissions = dept.permissions.map((perm) => {
-              if (perm.permission_id === permissionId) {
-                perm.selected = !perm.selected;
-              }
-              return perm;
-            });
-            dept.permissions = updatedPermissions;
-          }
-          return dept;
+            if (dept.id === selectedDepartment) {
+                const updatedPermissions = dept.permissions.map((perm) => {
+                    if (perm.permission_id === permissionId) {
+                        perm.selected = !perm.selected;
+                    }
+                    return perm;
+                });
+                dept.permissions = updatedPermissions;
+            }
+            return dept;
         });
         setDepartments(updatedDepartments);
-      };
-    
+    };
+
 
     return (
         <>
             <button className={`${formBtn1} flex`} onClick={() => setOpen(true)}>
                 <Add className='text-white' />
-                {props?.title}
+                {title}
             </button>
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-[100]" onClose={() => toggle}>
@@ -159,13 +184,26 @@ export default function AddSubadminForm(props) {
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
+                                                            Password*
+                                                        </label>
+                                                        <input
+                                                            type="password"
+                                                            placeholder='Password'
+                                                            className={inputClass}
+                                                            {...register('password', { required: true })}
+                                                        />
+                                                        {errors.password && <Error title='Email is Required*' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
                                                             Phone*
                                                         </label>
                                                         <input
                                                             type="tel"
                                                             placeholder='Phone'
                                                             className={inputClass}
-                                                            {...register('phNumber', { required: true })}
+                                                            maxLength={10}
+                                                            {...register('phone_no', { required: true })}
                                                         />
                                                         {errors.phNumber && <Error title='Phone is Required*' />}
                                                     </div>
@@ -191,19 +229,61 @@ export default function AddSubadminForm(props) {
                                                             className={inputClass}
                                                             {...register('address', { required: true })}
                                                         />
-                                                        {errors.address && <Error title='Address is Required*' />}
+                                                        {errors.address && <Error title='Addresss is Required*' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Project*
+                                                            State*
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='State'
+                                                            className={inputClass}
+                                                            {...register('state', { required: true })}
+                                                        />
+                                                        {errors.state && <Error title='State is Required*' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            City*
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='City'
+                                                            className={inputClass}
+                                                            {...register('city', { required: true })}
+                                                        />
+                                                        {errors.city && <Error title='City is Required*' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Pincode*
                                                         </label>
                                                         <input
                                                             type="number"
-                                                            placeholder='Project'
+                                                            maxLength={6}
+                                                            placeholder='Pincode'
                                                             className={inputClass}
-                                                            {...register('project', { required: true })}
+                                                            {...register('pincode', { required: true })}
                                                         />
-                                                        {errors.project && <Error title='Project is Required*' />}
+                                                        {errors.pincode && <Error title='Pincode is Required*' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Role*
+                                                        </label>
+                                                        <select
+                                                            className={inputClass}
+                                                            {...register('role', { required: true })}
+                                                        >
+                                                            <option value=''>Select</option>
+                                                            <option value='AC'>AC</option>
+                                                            <option value='MIS'>MIS</option>
+                                                            <option value='Back Office'>Back Office</option>
+                                                            <option value='Admin (Access Option)'>Admin (Access Option)</option>
+                                                            <option value='Customer Care'>Customer Care</option>
+                                                        </select>
+                                                        {errors.role && <Error title='Role is Required*' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -212,7 +292,7 @@ export default function AddSubadminForm(props) {
                                                         <Switch checked={isSubAdmin} onChange={() => setIsSubAdmin(!isSubAdmin)} />
                                                     </div>
                                                 </div>
-                                                
+
                                                 <h1 className='mx-4 mt-8 text-xl font-semibold text-gray-900 font-tbPop'>Permissions:</h1>
                                                 <div className="!flex !justify-start ">
                                                     <div className='!grid w-1/3 !gap-3'>
@@ -224,9 +304,9 @@ export default function AddSubadminForm(props) {
                                                         >
                                                             <option value={null}>Select Department</option>
                                                             {departments.map((department) => (
-                                                            <option key={department.id} value={department.id}>
-                                                                {department.name}
-                                                            </option>
+                                                                <option key={department.id} value={department.id}>
+                                                                    {department.name}
+                                                                </option>
                                                             ))}
                                                         </select>
                                                     </div>
@@ -234,20 +314,20 @@ export default function AddSubadminForm(props) {
                                                     <div className='ms-10'>
                                                         {selectedDepartment && (
                                                             <div className="p-4 border border-gray-300 rounded-lg">
-                                                            <h2 className="mb-4 text-lg font-bold">Permissions for {departments[selectedDepartment - 1].name}</h2>
-                                                            <ul>
-                                                                {departments[selectedDepartment - 1].permissions.map((permission) => (
-                                                                <li key={permission.permission_id} className="flex items-center mb-2">
-                                                                    <input
-                                                                    type="checkbox"
-                                                                    id={`permission-${permission.permission_id}`}
-                                                                    checked={permission.selected}
-                                                                    onChange={() => handlePermissionChange(permission.permission_id)}
-                                                                    />
-                                                                    <label htmlFor={`permission-${permission.permission_id}`} className="ml-2">{permission.permission_name}</label>
-                                                                </li>
-                                                                ))}
-                                                            </ul>
+                                                                <h2 className="mb-4 text-lg font-bold">Permissions for {departments[selectedDepartment - 1].name}</h2>
+                                                                <ul>
+                                                                    {departments[selectedDepartment - 1].permissions.map((permission) => (
+                                                                        <li key={permission.permission_id} className="flex items-center mb-2">
+                                                                            <input
+                                                                                type="checkbox"
+                                                                                id={`permission-${permission.permission_id}`}
+                                                                                checked={permission.selected}
+                                                                                onChange={() => handlePermissionChange(permission.permission_id)}
+                                                                            />
+                                                                            <label htmlFor={`permission-${permission.permission_id}`} className="ml-2">{permission.permission_name}</label>
+                                                                        </li>
+                                                                    ))}
+                                                                </ul>
                                                             </div>
                                                         )}
                                                     </div>

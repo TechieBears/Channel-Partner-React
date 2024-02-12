@@ -33,6 +33,7 @@ import Vendors from '../src/pages/Admin/Vendors/Vendors';
 import VendorDetails from '../src/components/Modals/Vendors/VendorDetails';
 import Promotions from '../src/pages/Admin/Promotion/Promotions';
 import Settings from '../src/pages/Settings/Settings';
+import SubAdminDetail from '../src/pages/Admin/SubAdmin/SubAdminDetail';
 
 
 
@@ -79,6 +80,7 @@ const ProjectRoutes = () => {
                                 <Route path="/profile" element={<UserProfile />} />
                                 <Route path="/reports" element={<Reports />} />
                                 <Route path="/subadmin" element={<SubAdmin />} />
+                                <Route path="/subadmin/subadmin-detail/:id" element={<SubAdminDetail />} />
                                 <Route path="/settings" element={<Settings />} />
 
                                 {/* ============================================================================== Partner Flexi store Routes =========================================== */}

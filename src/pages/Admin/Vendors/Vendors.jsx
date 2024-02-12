@@ -6,6 +6,7 @@ import AddRestaurant from '../../../components/Modals/Resturant/AddRestaurant';
 import { NavLink } from 'react-router-dom';
 import Switch from 'react-switch'
 import AddVendors from '../../../components/Modals/Vendors/AddVendors/AddVendors';
+import AddVendorShops from '../../../components/Modals/Vendors/AddVendors/AddVendorShops';
 
 function Vendors() {
     const data = [
@@ -112,28 +113,32 @@ function Vendors() {
                     className={`py-2 px-0 ${activeTab === 1 ? 'border-b-2 border-blue-400 text-black' : 'bg-transparent'
                         }`}
                 >
-                    Registered Vendors
+                    Vendors
                 </button>
                 <button
                     onClick={() => changeTab(2)}
                     className={`py-2 px-0 ml-4 ${activeTab === 2 ? 'border-b-2 border-blue-400 text-black' : 'bg-transparent'
                         }`}
                 >
-                    Blocked Vendors
+                    Vendor Shops
                 </button>
             </div>
-            <div className='grid grid-cols-6 mt-4'>
-                <div className='flex w-1/4 col-span-4 gap-2 p-3 bg-white border-2 border-gray-300 rounded-lg '>
+            <div className='grid grid-cols-3 gap-10 mt-4'>
+                <div className='flex gap-2 p-3 bg-white border-2 border-gray-300 rounded-lg '>
                     <SearchNormal className='text-gray-400' />
-                    <input placeholder='Search..' className='w-4/5 h-full' />
+                    <input placeholder='Search..' className='w-full h-full' />
                 </div>
-                <div className='grid grid-cols-3 col-span-2 gap-2 items-center'>
+                <input className={inputClass} placeholder='Filter By Pincode' />
+                <div className='grid grid-cols-3 gap-2 items-center'>
                     <button className='flex gap-2 p-3 bg-white border-2 rounded-lg '>
                         <Refresh className='text-gray-400' />
                         <p>Refresh</p>
                     </button>
                     {activeTab == 1 && <div className='col-span-2'>
                         <AddVendors title='Add Vendors' />
+                    </div>}
+                    {activeTab == 2 && <div className='col-span-2'>
+                        <AddVendorShops title='Add Shops' />
                     </div>}
                 </div>
             </div>

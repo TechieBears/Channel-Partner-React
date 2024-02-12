@@ -47,24 +47,24 @@ const Sidebar = ({ children }) => {
                                     />
                                 )}
                             </ul> : user?.role == 'Franchise_Management' ?
-                            <ul className='flex flex-col items-center h-full mt-4 space-y-1 overflow-y-scroll scroll-hide'>
-                                {Franchise_Management?.map((item, i) =>
-                                    <SidebarLink
-                                        i={i}
-                                        key={i}
-                                        item={item}
-                                        isActiveLink={isActiveLink} />
-                                )}
-                            </ul> : user?.role == 'Back Office' &&
-                            <ul className='flex flex-col items-center h-full mt-4 space-y-1 overflow-y-scroll scroll-hide'>
-                                {BackOffice?.map((item, i) =>
-                                    <SidebarLink
-                                        i={i}
-                                        key={i}
-                                        item={item}
-                                        isActiveLink={isActiveLink} />
-                                )}
-                            </ul> 
+                                <ul className='flex flex-col items-center h-full mt-4 space-y-1 overflow-y-scroll scroll-hide'>
+                                    {Franchise_Management?.map((item, i) =>
+                                        <SidebarLink
+                                            i={i}
+                                            key={i}
+                                            item={item}
+                                            isActiveLink={isActiveLink} />
+                                    )}
+                                </ul> : user?.role == 'Back Office' &&
+                                <ul className='flex flex-col items-center h-full mt-4 space-y-1 overflow-y-scroll scroll-hide'>
+                                    {BackOffice?.map((item, i) =>
+                                        <SidebarLink
+                                            i={i}
+                                            key={i}
+                                            item={item}
+                                            isActiveLink={isActiveLink} />
+                                    )}
+                                </ul>
                         }
                     </div>
                 </aside>

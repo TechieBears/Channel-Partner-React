@@ -37,7 +37,7 @@ const Login = () => {
                 if (res.message == "Successfully logged in") {
                     document.title = `Insta Smart Bazzar Admin Dashbaord | ${res?.role?.charAt(0)?.toUpperCase() + res?.role?.slice(1)}`
                     dispatch(setLoggedUserDetails(res))
-                    dispatch(setRoleIs(res.role))
+                    dispatch(setRoleIs(res?.is_subadmin))
                     setLoader(false)
                     dispatch(setLoggedUser(true))
                 } else {
