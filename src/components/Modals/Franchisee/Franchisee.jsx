@@ -216,7 +216,7 @@ export default function AddVendors(props) {
                             <label className={labelClass}>State</label>
                             <input
                               type="text"
-                              placeholder="Password"
+                              placeholder="Enter State"
                               className={inputClass}
                               {...register("password")}
                             />
