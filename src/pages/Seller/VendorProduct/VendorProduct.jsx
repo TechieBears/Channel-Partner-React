@@ -80,7 +80,7 @@ const VendorProduct = () => {
 
     const coulmn = [
         { field: 'productId', header: 'ID', sortable: false },
-        { field: 'name', header: 'Product Name', body: (row) => <NavLink to={`/vendors/vendors-detail/${row?.id}`}><h6 className='text-sky-400 underline'>{row?.name}</h6> </NavLink>, sortable: false },
+        { field: 'name', header: 'Product Name', body: (row) => <NavLink to={`/vendors/vendors-detail/${row?.id}`}><h6 className='underline text-sky-400'>{row?.name}</h6> </NavLink>, sortable: false },
         { field: 'description', header: 'Description', sortable: false },
         { field: 'category', header: 'Category', sortable: false },
         { field: 'createdDate', header: 'Create Date', sortable: true },
@@ -148,8 +148,8 @@ const VendorProduct = () => {
                 </form>
             </div>
             <div className='p-4 m-4 bg-white sm:m-5 rounded-xl'>
-                <div className='grid grid-cols-6 items-center'>
-                    <h2 className='col-span-5 font-semibold text-xl'>Product List</h2>
+                <div className='grid items-center grid-cols-6'>
+                    <h2 className='col-span-5 text-xl font-semibold'>Product List</h2>
                     <AddProduct title='Add Title' />
                 </div>
                 <div className='mt-4'>
