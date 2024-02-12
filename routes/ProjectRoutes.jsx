@@ -34,6 +34,7 @@ import VendorDetails from '../src/components/Modals/Vendors/VendorDetails';
 import Promotions from '../src/pages/Admin/Promotion/Promotions';
 import Settings from '../src/pages/Settings/Settings';
 import SubAdminDetail from '../src/pages/Admin/SubAdmin/SubAdminDetail';
+import FranchiseeDashboard from '../src/pages/Franchisee/Dashboard/MainDashboard'
 
 
 
@@ -91,17 +92,20 @@ const ProjectRoutes = () => {
 
 
                                 {/* ================== Vendor Routes ======================== */}
-                                <Route path='/' element={<VendorDashbaord />} />
+                                {/* <Route path='/' element={<VendorDashbaord />} />
                                 <Route path='/orders' element={<VendorOrders />} />
-                                <Route path='/product-list' element={<VendorProduct />} />
+                                <Route path='/product-list' element={<VendorProduct />} /> */}
                                 {/* ================== Vendor Routes ======================== */}
 
 
 
                                 {/* ================== Franchisee Routes ======================== */}
-                                <Route path='/' element={<VendorDashbaord />} />
-                                <Route path='/orders' element={<VendorOrders />} />
-                                <Route path='/product-list' element={<VendorProduct />} />
+                                <Route path='/' element={<FranchiseeDashboard />} />
+                                <Route path='/analytics' element={<FranchiseeDashboard />} />
+                                <Route path='/orders' element={<FranchiseeDashboard />} />
+                                <Route path='/vendors' element={<FranchiseeDashboard />} />
+                                <Route path='/delivery' element={<FranchiseeDashboard />} />
+                                <Route path='/settings' element={<VendorOrders />} />
                                 {/* ================== Franchisee Routes ======================== */}
 
 
