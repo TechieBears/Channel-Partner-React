@@ -136,3 +136,37 @@ export const BackOffice = [
     },
 ]
 
+
+
+export const FranchiseeDashboard = [
+    {
+        title: 'Dashboard',
+        icon: <Element4 size="24" />,
+        link: '/',
+    },
+    {
+        title: 'Analytics',
+        icon: <Soup size="24" />,
+        link: '/analytics',
+    },
+    {
+        title: 'Orders',
+        icon: <LayoutList size="24" />,
+        link: '/orders',
+    },
+    {
+        title: 'Vendors',
+        icon: <Notebook size="24" />,
+        link: '/vendors',
+    },
+    {
+        title: 'Delivery Boys',
+        icon: <Wallet size="24" />,
+        link: '/delivery',
+    },
+    {
+        title: 'Settings',
+        icon: <Wallet size="24" />,
+        link: '/settings',
+    },
+]
