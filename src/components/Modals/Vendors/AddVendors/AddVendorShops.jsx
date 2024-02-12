@@ -8,14 +8,11 @@ import { useForm } from 'react-hook-form';
 import Error from '../../../Errors/Error';
 import { MultiSelect } from 'primereact/multiselect';
 import { Add } from 'iconsax-react';
-import { formBtn1, formBtn2, inputClass, labelClass } from '../../../../utils/CustomClass';
+import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../../utils/CustomClass';
 
-export default function AddVendors(props) {
+export default function AddVendorShops(props) {
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
-    const [selectedCategory, setSelectedCategory] = useState([])
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
     const cancelButtonRef = useRef(null)
     const { register, handleSubmit, control, watch, reset, formState: { errors } } = useForm();
     const toggle = () => setOpen(!isOpen)
@@ -71,67 +68,117 @@ export default function AddVendors(props) {
                                                 <div className="py-4 mx-4 grid md:grid-cols-1 lg:grid-cols-2 gap-x-3 gap-y-3 customBox">
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            First Name*
+                                                            Shop Name*
                                                         </label>
                                                         <input
                                                             type="text"
-                                                            placeholder='First Name'
+                                                            placeholder='Shop Name'
                                                             className={inputClass}
-                                                            {...register('first_name', { required: true })}
+                                                            {...register('shop_name', { required: true })}
                                                         />
-                                                        {errors.first_name && <Error title='First Name is Required*' />}
+                                                        {errors.shop_name && <Error title='Shop Name is Required*' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Last Name*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Last Name'
-                                                            className={inputClass}
-                                                            {...register('last_name', { required: true })}
-                                                        />
-                                                        {errors.last_name && <Error title='Last Name is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Date Of Birth(DOB)*
-                                                        </label>
-                                                        <input
-                                                            type="date"
-                                                            // placeholder='Last Name'
-                                                            className={inputClass}
-                                                            {...register('date_of_birth', { required: true })}
-                                                        />
-                                                        {errors.date_of_birth && <Error title='Date of birth is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Gender*
+                                                            Vendor Type*
                                                         </label>
                                                         <select
                                                             className={inputClass}
-                                                            {...register('gender', { required: true })}
+                                                            {...register('vendor_type', { required: true })}
                                                         >
-                                                            <option value='Male'>Male</option>
-                                                            <option value='Female'>Female</option>
+                                                            <option value=''>Select</option>
+                                                            <option value='Product Suppliers'>Product Suppliers</option>
+                                                            <option value='Service Providers'>Service Providers</option>
+                                                            <option value='Contractors'>Contractors</option>
+                                                            <option value='Subcontractors'>Subcontractors</option>
                                                             <option value='Other'>Other</option>
                                                         </select>
-                                                        {errors.gender && <Error title='Gender is Required*' />}
+                                                        {errors.vendor_type && <Error title='Vendor Type is Required*' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Email*
+                                                            GST Number*
                                                         </label>
                                                         <input
-                                                            type="email"
-                                                            placeholder='Email'
+                                                            type="text"
+                                                            placeholder='GST Number'
                                                             className={inputClass}
-                                                            {...register('email', { required: true })}
+                                                            {...register('gst_number', { required: true })}
                                                         />
-                                                        {errors.email && <Error title='Email is Required*' />}
+                                                        {errors.gst_number && <Error title='GST Number is Required*' />}
                                                     </div>
-
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Bank Name*
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='Bank Name'
+                                                            className={inputClass}
+                                                            {...register('bank_name', { required: true })}
+                                                        />
+                                                        {errors.bank_name && <Error title='Bank Name is Required*' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Bank Account Number*
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='Bank Account Number'
+                                                            className={inputClass}
+                                                            {...register('bank_account', { required: true })}
+                                                        />
+                                                        {errors.bank_account && <Error title='Bank Account Number is Required*' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            IFSC Code*
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='IFSC Code'
+                                                            className={inputClass}
+                                                            {...register('ifsc_code', { required: true })}
+                                                        />
+                                                        {errors.ifsc_code && <Error title='IFSC Code is Required*' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Aadhar Card*
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='Aadhar Card'
+                                                            className={inputClass}
+                                                            {...register('adhar_card', { required: true })}
+                                                        />
+                                                        {errors.adhar_card && <Error title='Aadhar Card is Required*' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            PAN Card*
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='PAN Card'
+                                                            className={inputClass}
+                                                            {...register('pan_card', { required: true })}
+                                                        />
+                                                        {errors.pan_card && <Error title='PAN Card is Required*' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            PAN Card*
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='PAN Card'
+                                                            className={inputClass}
+                                                            {...register('pan_card', { required: true })}
+                                                        />
+                                                        {errors.pan_card && <Error title='PAN Card is Required*' />}
+                                                    </div>
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             Phone*
@@ -143,29 +190,6 @@ export default function AddVendors(props) {
                                                             {...register('Vendor_phone', { required: true })}
                                                         />
                                                         {errors.Vendor_phone && <Error title='Phone is Required*' />}
-                                                    </div>
-
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Login ID
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Login ID'
-                                                            className={inputClass}
-                                                            {...register('login_id',)}
-                                                        />
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Password
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Password'
-                                                            className={inputClass}
-                                                            {...register('password',)}
-                                                        />
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -213,6 +237,70 @@ export default function AddVendors(props) {
                                                             placeholder='Password'
                                                             className={inputClass}
                                                             {...register('password',)}
+                                                        />
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass} htmlFor="address_proof">Address Proof*</label>
+                                                        <input className={fileinput}
+                                                            id="address_proof"
+                                                            type='file'
+                                                            multiple
+                                                            accept='image/jpeg,image/jpg,image/png'
+                                                            placeholder='Upload Images...'
+                                                            {...register("address_proof", { required: props.button == 'edit' ? false : true })} />
+                                                        {props?.button == 'edit' && props?.data.address_proof != '' && props?.data.address_proof != undefined && <label className='block mb-1 text-md font-tb font-medium text-blue-800'>
+                                                            {props?.data?.address_proof?.split('/').pop()}
+                                                        </label>}
+                                                        {errors.address_proof && <Error title='Address Proof is required*' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass} htmlFor="bank_passbook">Bank Passbook*</label>
+                                                        <input className={fileinput}
+                                                            id="bank_passbook"
+                                                            type='file'
+                                                            multiple
+                                                            accept='image/jpeg,image/jpg,image/png'
+                                                            placeholder='Upload Images...'
+                                                            {...register("bank_passbook", { required: props.button == 'edit' ? false : true })} />
+                                                        {props?.button == 'edit' && props?.data.bank_passbook != '' && props?.data.bank_passbook != undefined && <label className='block mb-1 text-md font-tb font-medium text-blue-800'>
+                                                            {props?.data?.bank_passbook?.split('/').pop()}
+                                                        </label>}
+                                                        {errors.bank_passbook && <Error title='Bank Passbook is required*' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass} htmlFor="hawkers_shop_photo">Shop Photo*</label>
+                                                        <input className={fileinput}
+                                                            id="hawkers_shop_photo"
+                                                            type='file'
+                                                            multiple
+                                                            accept='image/jpeg,image/jpg,image/png'
+                                                            placeholder='Upload Images...'
+                                                            {...register("hawkers_shop_photo", { required: props.button == 'edit' ? false : true })} />
+                                                        {props?.button == 'edit' && props?.data.hawkers_shop_photo != '' && props?.data.hawkers_shop_photo != undefined && <label className='block mb-1 text-md font-tb font-medium text-blue-800'>
+                                                            {props?.data?.hawkers_shop_photo?.split('/').pop()}
+                                                        </label>}
+                                                        {errors.bank_passbook && <Error title='Shop Photo is required*' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Shop Opening Time
+                                                        </label>
+                                                        <input
+                                                            type="time"
+                                                            placeholder='Password'
+                                                            className={inputClass}
+                                                            {...register('shop_start_time',)}
+                                                        />
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Shop Closing Time
+                                                        </label>
+                                                        <input
+                                                            type="time"
+                                                            placeholder='Password'
+                                                            className={inputClass}
+                                                            {...register('shop_end_time',)}
                                                         />
                                                     </div>
                                                 </div>
