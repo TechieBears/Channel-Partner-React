@@ -62,7 +62,7 @@ const ProjectRoutes = () => {
                         <Sidebar>
                             <Routes>
                                 {/* ============ Admin Routes ============ */}
-                                <Route path="/" element={<Dashboard />} />
+                                {/* <Route path="/" element={<Dashboard />} />
                                 <Route path="/menu" element={<Menu />} />
                                 <Route path="/resturants" element={<Restaurant />} />
                                 <Route path="/resturants/restaurant-detail/:id" element={<RestaurantDetail />} />
@@ -81,12 +81,15 @@ const ProjectRoutes = () => {
                                 <Route path="/reports" element={<Reports />} />
                                 <Route path="/subadmin" element={<SubAdmin />} />
                                 <Route path="/subadmin/subadmin-detail/:id" element={<SubAdminDetail />} />
-                                <Route path="/settings" element={<Settings />} />
+                                <Route path="/settings" element={<Settings />} /> */}
 
                                 {/* ============================================================================== Partner Flexi store Routes =========================================== */}
-                                <Route path="/vendorDashbaord" element={<VendorDashbaord />} />
+                                {/* <Route path="/vendorDashbaord" element={<VendorDashbaord />} />
                                 <Route path="/vendorProduct" element={<VendorProduct />} />
-                                <Route path="/vendorOrders" element={<VendorOrders />} />
+                                <Route path="/vendorOrders" element={<VendorOrders />} /> */}
+                                <Route path='/' element={<VendorDashbaord />} />
+                                <Route path='/orders' element={<VendorOrders />} />
+                                <Route path='/product-list' element={<VendorProduct />} />
                             </Routes>
                         </Sidebar>
                     }
