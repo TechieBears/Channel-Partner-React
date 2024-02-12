@@ -1,180 +1,317 @@
-// import React, { useEffect } from 'react';
-// import { Controller, useForm } from 'react-hook-form';
-// import AsyncSelect from 'react-select/async';
-// import { formBtn1, formBtn2 } from '../../../utils/CustomClass';
-// import Table from '../../../components/Table/Table';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { Trash } from 'iconsax-react';
-// import { toast } from 'react-toastify';
-// import ItemDots from '../../../utils/ItemDots';
-// import PriceFormater from '../../../utils/PriceFormater';
-// import DeleteModal from '../../../components/Modals/DeleteModal/DeleteModal';
-
-
-// const VendorOrders = () => {
-//     const { register, handleSubmit, control, reset, formState: { errors } } = useForm();
-//     const user = useSelector((state) => state.user.loggedUserDetails)
-//     const priceList = useSelector((state) => state?.movable?.price)
-//     const dispatch = useDispatch()
-//     const [open, setOpen] = React.useState(false);
-//     const [delId, setDelId] = React.useState(0);
-
-
-//     // ================================ Fetch Store Product List =========================
-//     const movablePriceList = () => {
-//         getAllMovablePrice().then(res => {
-//             dispatch(setMovablePrice(res))
-//         }).catch(err => {
-//             console.error('Error', err);
-//         })
-//     }
-
-//     // ================================ Dropdown List =========================
-
-//     const loadOptions = (_, callback) => {
-//         const uniqueNames = new Set();
-//         const uniqueProducts = priceList?.filter(res => res.product_name && !uniqueNames.has(res.product_name) && uniqueNames.add(res.product_name))
-//             .map(res => ({ label: res.product_name, value: res.product_name }));
-//         callback(uniqueProducts || []);
-//     }
-
-
-//     // =============================== submit data  =====================================
-//     const onSubmit = (data) => {
-//         let payload = {
-//             name: data?.search?.value == undefined ? '' : data?.search?.value,
-//         }
-//         if (user?.role != 'admin') {
-//             payload.user = user?.userid
-//         } else {
-//             payload.user = ''
-//         }
-//         if (data?.search?.value != undefined) {
-//             try {
-//                 filStoreProduct(payload).then((res) => {
-//                     dispatch(setMovablePrice(res));
-//                     toast.success("Filters applied successfully")
-//                 })
-//             } catch (error) {
-//                 console.log(error)
-//             }
-//         } else {
-//             toast.warn("No Selected Value !!!")
-//         }
-
-//     }
-
-//     // ================================ filter reset ============================
-//     const filterReset = () => {
-//         reset()
-//         movablePriceList()
-//         toast.success("Filters clear")
-//     }
-
-//     // ============================= delete Availability data ==========================
-
-//     const toggleModalBtn = (id) => {
-//         setOpen(!open)
-//         setDelId(id)
-//     }
-//     const deleteData = () => {
-//         deleteMovablePrice(delId).then((res) => {
-//             if (res?.message === 'Data deleted successfully') {
-//                 movablePriceList()
-//                 toast.success(res?.message);
-//                 setOpen(!open)
-//             }
-//         })
-//     }
-
-//     // ============================ Availability table action ===========================
-//     const actionBodyTemplate = (row) => <div className="flex items-center gap-2">
-//         <MovablePriceForm button='edit' title='Edit Movable Price' data={row} />
-//         <button onClick={() => toggleModalBtn(row?.id)} id={row?.id} className="bg-red-100  px-1.5 py-2 rounded-sm"><Trash size="20" className='text-red-500' /></button>
-//     </div>
-//     const categoryTemplate = (row) => <h6><ItemDots len={10} name={row?.capacity + " Ltr"} /></h6>
-
-//     // ====================================== table columns =========================================
-//     const columns = [
-//         { field: 'product_name', header: 'Name' },
-//         { field: 'capacity', header: 'Category', body: categoryTemplate },
-//         { field: 'empty_weight', header: 'Empty Weight' },
-//         { field: 'length', header: 'Length' },
-//         { field: 'width', header: 'Width' },
-//         { field: 'height', header: 'Height' },
-//         { field: 'price', header: 'Price', body: (row) => <PriceFormater price={row?.price} /> },
-//         { field: 'id', header: 'Action', body: actionBodyTemplate, sortable: true },
-//     ];
-
-//     useEffect(() => {
-//         movablePriceList();
-//         reset({
-//             'search': null,
-//         })
-//     }, [])
-
-
-
-//     return (
-//         <section className='h-full w-full'>
-
-//             {/* ===================== Availability filters ===================== */}
-
-//             <div className="bg-white p-4 m-4 sm:m-5 rounded-xl">
-//                 <form onSubmit={handleSubmit(onSubmit)} className='flex md:items-center flex-col lg:flex-row  gap-2'>
-//                     <div className="w-full gap-y-3 gap-x-2">
-//                         <div className="">
-//                             <Controller
-//                                 control={control}
-//                                 name="search"
-//                                 render={({ field }) => (
-//                                     <AsyncSelect
-//                                         placeholder="Search By Name"
-//                                         cacheOptions
-//                                         defaultOptions
-//                                         value={field.value}
-//                                         defaultValue={field.value ? { label: field.value, value: field.value } : null}
-//                                         loadOptions={loadOptions} onChange={field.onChange} />
-//                                 )}
-//                             />
-//                         </div>
-//                     </div>
-//                     <div className="flex gap-x-2 items-center">
-//                         <button type='submit' className={`${formBtn1} w-full text-center`}>Filter</button>
-//                         <button type='button' onClick={filterReset} className={`${formBtn2} w-full text-center`} >Clear</button>
-//                     </div>
-//                 </form>
-//             </div >
-
-//             {/* ===================== Availability table ===================== */}
-
-//             <div className="bg-white rounded-xl m-4 sm:m-5 shadow-sm  p-5 sm:p-7" >
-//                 <div className="flex justify-between flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 mb-6">
-//                     <div className="">
-//                         <h1 className='font-tbPop text-xl font-semibold text-gray-900 '> My Orders</h1>
-//                         <h6 className='text-gray-400 font-tb font-medium text-base'>List of all store and move my orders</h6>
-//                     </div>
-//                 </div>
-//                 <Table data={priceList} columns={columns} />
-//             </div>
-//             <DeleteModal
-//                 title='Delete Order'
-//                 deleteBtn={deleteData}
-//                 toggleModalBtn={toggleModalBtn}
-//                 description={"Are you sure you want to delete this Order"} open={open}
-//             />
-//         </section >
-//     )
-// }
-
-// export default VendorOrders
-
-
-import React from 'react'
+import React, { useState } from 'react'
+import { Controller, useForm } from 'react-hook-form';
+import AsyncSelect from "react-select/async";
+import { toast } from 'react-toastify';
+import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
+import { useSelector } from 'react-redux';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import Table from '../../../components/Table/Table';
+import { NavLink } from 'react-router-dom';
+import { ClipboardTick, Eye, Trash } from 'iconsax-react';
+import moment from 'moment';
 
 const VendorOrders = () => {
+    const [selectedTab, setSelectedTab] = useState(0);
+    const storages = useSelector((state) => state?.storage?.list);
+    const {
+        register,
+        handleSubmit,
+        control,
+        formState: { errors },
+        reset,
+    } = useForm();
+    const filterReset = () => {
+        reset({
+            name: null,
+            location: "",
+        });
+        toast.success("Filters clear");
+    };
+
+    const loadOptions = (_, callback) => {
+        const uniqueNames = new Set();
+        const uniqueProducts = storages
+            ?.filter(
+                (res) =>
+                    res.name && !uniqueNames.has(res.name) && uniqueNames.add(res.name)
+            )
+            .map((res) => ({ label: res.name, value: res.name }));
+        callback(uniqueProducts || []);
+    };
+
+    const onSubmit = (data) => {
+        console.log('data', data)
+    }
+
+    // ====================== table columns ======================
+    // ====================== Accepted Order =====================
+    const AcceptedOrderData = [
+        {
+            "orderId": 753,
+            "orderDate": "Jan 1, 2024 , 05:56 PM",
+            "items": [
+                {
+                    "itemName": "Butter Milk",
+                    "itemDescription": "Lorem ipsum dolor, sit amet",
+                    "imageSrc": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU",
+                    "quantity": 2,
+                    'price': 50,
+                    'category': 'dairy'
+                }
+            ],
+            "orderPrice": "$1,000",
+            "paymentMethod": "Cash",
+            "location": 'Parel',
+            "status": "Accepted"
+
+        },
+        {
+            "orderId": 754,
+            "orderDate": "Jan 2, 2024 , 10:30 AM",
+            "items": [
+                {
+                    "itemName": "Coffee",
+                    "itemDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+                    "imageSrc": "https://example.com/coffee.jpg",
+                    "quantity": 2,
+                    'price': 20,
+                    'category': 'grocery'
+                },
+                {
+                    "itemName": "Croissant",
+                    "itemDescription": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+                    "imageSrc": "https://example.com/croissant.jpg",
+                    "quantity": 2,
+                    'price': 200,
+                    'category': 'food'
+                }
+            ],
+            "orderPrice": "$25",
+            "paymentMethod": "UPI",
+            "location": 'Thane',
+            "status": "Accepted"
+        }
+    ]
+
+
+    const AcceptedName = (row) => row?.items?.map(item => <h6 key={item?.itemName}>{item?.itemName}</h6>);
+    const AcceptedQuantity = (row) => row?.items?.map(item => <h6 key={item?.itemQuantity}>{item?.quantity}</h6>)
+    const AcceptedDescription = (row) => row?.items?.map(item => <h6 className="w-52" key={item?.itemDescription}>{item?.itemDescription}</h6>)
+    const AcceptedItemPrice = (row) => row?.items?.map(item => <h6 key={item?.price}>{item?.price}</h6>)
+    const AcceptedCategory = (row) => row?.items?.map(item => <h6 key={item?.category}>{item?.category}</h6>)
+    const AcceptedAction = (row) => <div className="flex space-x-1 items-center">
+        <NavLink className='bg-sky-100 p-1 rounded-xl'>
+            <Eye size={20} className="text-sky-400" />
+        </NavLink>
+    </div>
+
+    const AcceptedOrderColumn = [
+        { field: "orderId", header: "Order ID" },
+        { field: "OrderDate", header: "Order Date", body: (row) => <h6>{moment(row?.orderDate).format('MMM Do YY')}</h6>, sortable: true },
+        { field: "name", header: "Name", body: AcceptedName, sortable: true },
+        { field: "quantity", header: "Quantity", body: AcceptedQuantity, sortable: true },
+        { field: "description", header: "Description", body: AcceptedDescription, sortable: true },
+        { field: "paymentMethod", header: "Payment Method", sortable: true },
+        { field: "price", header: "Price", body: AcceptedItemPrice, sortable: true },
+        { field: "category", header: "Category", body: AcceptedCategory, sortable: true },
+        { field: "location", header: "Location", sortable: true },
+        { field: "orderPrice", header: "Total Price", sortable: true },
+        { field: "action", header: "Action", body: AcceptedAction, sortable: true },
+        { field: "status", header: "Status", sortable: true },
+    ];
+
+
+    // ===================== New Order ======================
+
+    const NewOrderData = [
+        {
+            "orderId": 753,
+            "orderDate": "Jan 1, 2024 , 05:56 PM",
+            "items": [
+                {
+                    "itemName": "Butter Milk",
+                    "itemDescription": "Lorem ipsum dolor, sit amet",
+                    "imageSrc": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU",
+                    "quantity": 2,
+                    'price': 50,
+                    'category': 'dairy'
+                }
+            ],
+            "orderPrice": "$1,000",
+            "paymentMethod": "Cash",
+            "location": 'Parel',
+
+        },
+        {
+            "orderId": 754,
+            "orderDate": "Jan 2, 2024 , 10:30 AM",
+            "items": [
+                {
+                    "itemName": "Coffee",
+                    "itemDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+                    "imageSrc": "https://example.com/coffee.jpg",
+                    "quantity": 2,
+                    'price': 20,
+                    'category': 'grocery'
+                },
+                {
+                    "itemName": "Croissant",
+                    "itemDescription": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+                    "imageSrc": "https://example.com/croissant.jpg",
+                    "quantity": 2,
+                    'price': 200,
+                    'category': 'food'
+                }
+            ],
+            "orderPrice": "$25",
+            "paymentMethod": "UPI",
+            "location": 'Thane',
+        }
+    ]
+
+    const name = (row) => row?.items?.map(item => <h6 key={item?.itemName}>{item?.itemName}</h6>);
+    const quantity = (row) => row?.items?.map(item => <h6 key={item?.itemQuantity}>{item?.quantity}</h6>)
+    const description = (row) => row?.items?.map(item => <h6 className="w-52" key={item?.itemDescription}>{item?.itemDescription}</h6>)
+    const itemPrice = (row) => row?.items?.map(item => <h6 key={item?.price}>{item?.price}</h6>)
+    const category = (row) => row?.items?.map(item => <h6 key={item?.category}>{item?.category}</h6>)
+    const action = (row) => <div className="flex space-x-1 items-center">
+        <NavLink className='bg-sky-100 p-1 rounded-xl'>
+            <Eye size={20} className="text-sky-400" />
+        </NavLink>
+        <div className="bg-green-50 p-1 rounded-xl cursor-pointer">
+            <ClipboardTick size={20} color="green" />
+        </div>
+        <div className="bg-red-50 p-1 rounded-xl cursor-pointer">
+            <Trash size={20} color="red" />
+        </div>
+    </div>
+
+
+    const NewOrdercolumns = [
+        { field: "orderId", header: "Order ID" },
+        { field: "OrderDate", header: "Order Date", body: (row) => <h6>{moment(row?.orderDate).format('MMM Do YY')}</h6>, sortable: true },
+        { field: "name", header: "Name", body: name, sortable: true },
+        { field: "quantity", header: "Quantity", body: quantity, sortable: true },
+        { field: "description", header: "Description", body: description, sortable: true },
+        { field: "paymentMethod", header: "Payment Method", sortable: true },
+        { field: "price", header: "Price", body: itemPrice, sortable: true },
+        { field: "category", header: "Category", body: category, sortable: true },
+        { field: "location", header: "Location", sortable: true },
+        { field: "orderPrice", header: "Total Price", sortable: true },
+        { field: "action", header: "Action", body: action, sortable: true },
+    ];
+
     return (
-        <div>VendorOrders</div>
+        <>
+            <div className="p-4 m-4 bg-white sm:m-5 rounded-xl">
+                <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="flex flex-col gap-2 md:items-center lg:flex-row"
+                >
+                    <div className="grid w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-y-3 gap-x-2 ">
+                        <div className="">
+                            <Controller
+                                control={control}
+                                name="name"
+                                render={({ field }) => (
+                                    <AsyncSelect
+                                        placeholder="Search By Name"
+                                        cacheOptions
+                                        defaultOptions
+                                        value={field.value}
+                                        defaultValue={
+                                            field.value
+                                                ? { label: field.value, value: field.value }
+                                                : null
+                                        }
+                                        loadOptions={loadOptions}
+                                        onChange={field.onChange}
+                                    />
+                                )}
+                            />
+                        </div>
+                        <div className="">
+                            <select
+                                name="City"
+                                className={`${inputClass} !bg-slate-100`}
+                                {...register("location")}
+                            >
+                                <option value="">City</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-x-2">
+                        <button
+                            type="submit"
+                            className={`${formBtn1} w-full text-center`}
+                        >
+                            Filter
+                        </button>
+                        <button
+                            type="button"
+                            className={`${formBtn2} w-full text-center`}
+                            onClick={filterReset}
+                        >
+                            Clear
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div className="mx-auto mt-8 sm:m-5">
+                <Tabs
+                    selectedIndex={selectedTab}
+                    onSelect={(index) => setSelectedTab(index)}
+                >
+                    <TabList className="flex mx-6 space-x-4 border-b">
+                        <Tab
+                            className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 0
+                                ? "text-sky-500  border-b-2 border-sky-400 outline-0"
+                                : "text-gray-500 border-b"
+                                }`}
+                        >
+                            New Order's
+                        </Tab>
+                        <Tab
+                            className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 1
+                                ? "text-sky-500  border-b-2 border-sky-400 outline-0"
+                                : "text-gray-500 border-b"
+                                }`}
+                        >
+                            Accepted
+                        </Tab>
+                        <Tab
+                            className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 2
+                                ? "text-sky-500  border-b-2 border-sky-400 outline-0"
+                                : "text-gray-500 border-b"
+                                }`}
+                        >
+                            Rejected
+                        </Tab>
+                        <Tab
+                            className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 3
+                                ? "text-sky-500  border-b-2 border-sky-400 outline-0"
+                                : "text-gray-500 border-b"
+                                }`}
+                        >
+                            History
+                        </Tab>
+                    </TabList>
+                    {/* ================= NewPending Orders component ============== */}
+                    <TabPanel className='mt-5 bg-white'>
+                        <Table data={NewOrderData} columns={NewOrdercolumns} />
+                    </TabPanel>
+                    <TabPanel className='mt-5 bg-white'>
+                        <Table data={AcceptedOrderData} columns={AcceptedOrderColumn} />
+                    </TabPanel>
+                    <TabPanel className='mt-5 bg-white'>
+                        {/* <Table data={AcceptedOrderData} columns={AcceptedOrderColumn} /> */}
+                    </TabPanel>
+                    <TabPanel className='mt-5 bg-white'>
+                        {/* <Table data={AcceptedOrderData} columns={AcceptedOrderColumn} /> */}
+                    </TabPanel>
+                </Tabs>
+            </div>
+        </>
     )
 }
 
