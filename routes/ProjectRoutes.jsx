@@ -13,9 +13,13 @@ import UserView from '../src/pages/Admin/User/UserView';
 import UserProfile from '../src/pages/Admin/UserProfile/UserProfile';
 import Login from '../src/pages/Auth/Login';
 import { useSelector } from 'react-redux';
-import VendorDashbaord from '../src/pages/Vendor/VendorDashbaord/VendorDashbaord';
-import VendorProduct from '../src/pages/Vendor/VendorProduct/VendorProduct';
-import VendorOrders from '../src/pages/Vendor/VendorOrders/VendorOrders';
+// import VendorDashbaord from '/src/pages/Vendor/VendorDashbaord/VendorDashbaord';
+// import VendorProduct from '../src/pages/Vendor/VendorProduct/VendorProduct';
+
+import VendorDashbaord from '../src/pages/Seller/VendorDashbaord/VendorDashbaord';
+import VendorProduct from '../src/pages/Seller/VendorProduct/VendorProduct';
+import VendorOrders from '../src/pages/Seller/VendorOrders/VendorOrders';
+
 import Menu from '../src/pages/Admin/Menu/Menu';
 import RestaurantDetail from '../src/pages/Restaurants/RestaurantDetail/RestaurantDetail';
 import Drivers from '../src/pages/Admin/Drivers/Drivers';
