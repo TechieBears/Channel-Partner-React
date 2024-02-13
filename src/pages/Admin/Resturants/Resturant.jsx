@@ -51,7 +51,7 @@ export default function Restaurant() {
     </button>
     const columns = [
         { field: 'id', header: 'ID', body: (row) => <h6>{row?.id}</h6>, sortable: false },
-        { field: 'name', header: 'Restaurants Name', body: (row) => <NavLink to={`/resturants/restaurant-detail/${row?.id}`}><h6 className='text-sky-400 underline'>{row?.name}</h6> </NavLink>, sortable: false },
+        { field: 'name', header: 'Restaurants Name', body: (row) => <NavLink to={`/resturants/restaurant-detail/${row?.id}`}><h6 className='underline text-sky-400'>{row?.name}</h6> </NavLink>, sortable: false },
         { field: 'address', header: 'Address', body: (row) => <h6>{row?.address}</h6>, sortable: false },
         { field: 'email', header: 'Email', body: (row) => <h6>{row?.email}</h6>, sortable: false },
         { field: 'dl_commission', header: 'Delivery Commission', body: (row) => <h6>{row?.dl_commission}</h6>, sortable: false },
@@ -78,7 +78,7 @@ export default function Restaurant() {
                     Blocked Restaurants
                 </button>
             </div>
-            <div className='grid gap-10 grid-cols-3 mt-4'>
+            <div className='grid grid-cols-3 gap-10 mt-4'>
                 <div className='flex gap-2 p-3 bg-white border-2 border-gray-300 rounded-lg '>
                     <SearchNormal className='text-gray-400' />
                     <input placeholder='Search..' className='w-4/5 h-full' />

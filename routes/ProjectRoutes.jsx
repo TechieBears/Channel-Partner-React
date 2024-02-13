@@ -94,9 +94,9 @@ const ProjectRoutes = () => {
 
 
                                 {/* ================== Vendor Routes ======================== */}
-                                {/* <Route path='/' element={<VendorDashbaord />} />
+                                <Route path='/' element={<VendorDashbaord />} />
                                 <Route path='/vendor-orders' element={<VendorOrders />} />
-                                <Route path='/product-list' element={<VendorProduct />} /> */}
+                                <Route path='/product-list' element={<VendorProduct />} />
 
 
 
