@@ -37,6 +37,7 @@ import Franchisee from '../src/pages/Admin/Franchisees/Franchisees'
 import FranchiseeDashboard from '../src/pages/Franchisee/FranchiseeDashboard';
 import FranchiseeOrder from '../src/pages/Franchisee/FranchiseeOrder';
 import FranchiseeVendors from '../src/pages/Franchisee/Vendors/FranchiseeVendors';
+import DeliveryBoy from '../src/pages/Franchisee/DeliveryBoy';
 
 
 
@@ -106,8 +107,8 @@ const ProjectRoutes = () => {
                                 {/* <Route path='/analytics' element={<FranchiseeDashboard />} /> */}
                                 <Route path='/franchiesee-orders' element={<FranchiseeOrder />} />
                                 <Route path='/franchise-vendors' element={<FranchiseeVendors />} />
-                                {/* <Route path='/delivery' element={<FranchiseeDashboard />} />
-                                <Route path='/settings' element={<VendorOrders />} /> */}
+                                <Route path='/delivery' element={<DeliveryBoy />} />
+                                {/* <Route path='/settings' element={<VendorOrders />} /> */}
                                 {/* ================== Franchisee Routes ======================== */}
 
 

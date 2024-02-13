@@ -72,10 +72,10 @@ function FranchiseeVendors() {
                         <Refresh className='text-gray-400' />
                         <p>Refresh</p>
                     </button>
-                    {activeTab == 1 && <div className='col-span-2'>
+                    {activeTab == 0 && <div className='col-span-2'>
                         <AddVendors title='Add Vendors' />
                     </div>}
-                    {activeTab == 2 && <div className='col-span-2'>
+                    {activeTab == 1 && <div className='col-span-2'>
                         <AddVendorShops title='Add Shops' />
                     </div>}
                 </div>
@@ -91,7 +91,7 @@ function FranchiseeVendors() {
                             : "text-gray-500 border-b"
                             }`}
                     >
-                        Vedors
+                        Registered
                     </Tab>
                     <Tab
                         className={`p-3 cursor-pointer font-tbPop font-medium   ${activeTab === 1
@@ -104,7 +104,13 @@ function FranchiseeVendors() {
                 </TabList>
                 {/* ================= Vendor Details component ============== */}
                 <TabPanel className='mt-5'>
-                    <Table columns={columns} data={FranchiseVendors} />
+                    <div className='bg-white p-2 rounded-xl space-y-4'>
+                        <div className='flex items-center justify-between p-2'>
+                            <p className='font-semibold ml-2 text-xl '>Vendors List</p>
+                            {/* <AddVendors title='Add Vendor' /> */}
+                        </div>
+                        <Table columns={columns} data={FranchiseVendors} />
+                    </div>
                 </TabPanel>
                 <TabPanel>
                 </TabPanel>
