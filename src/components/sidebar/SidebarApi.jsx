@@ -135,12 +135,12 @@ export const Franchise = [
     {
         title: 'Orders',
         icon: <LayoutList size="24" />,
-        link: '/orders',
+        link: '/franchiesee-orders',
     },
     {
         title: 'Vendors',
         icon: <Notebook size="24" />,
-        link: '/franchisevendors',
+        link: '/franchise-vendors',
     },
     {
         title: 'Delivery Boys',

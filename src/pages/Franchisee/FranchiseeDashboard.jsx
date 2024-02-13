@@ -1,9 +1,14 @@
-import { ArrowSwapVertical, ClipboardTick, ShoppingCart, UserRemove } from 'iconsax-react'
+import { ArrowSwapVertical, ClipboardTick, ShoppingCart, Trash, UserRemove } from 'iconsax-react'
 import { Line } from 'rc-progress'
-import React from 'react'
+import React, { useState } from 'react'
 import { ResponsiveBar } from '@nivo/bar'
+import Table from '../../components/Table/Table'
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
+import moment from 'moment'
+import ViewProduct from '../../components/Modals/Vendors/ViewProduct'
 
 function FranchiseeDashboard() {
+    const [selectedTab, setSelectedTab] = useState(0);
     const barData = [
         {
             "year": "24",
@@ -34,6 +39,87 @@ function FranchiseeDashboard() {
             "hot dog": 102,
         }
     ]
+
+
+    // ====================== table columns ======================
+
+    const data = [
+        {
+            "orderId": 753,
+            "orderDate": "Jan 1, 2024 , 05:56 PM",
+            "items": [
+                {
+                    "itemName": "Butter Milk",
+                    "itemDescription": "Lorem ipsum dolor, sit amet",
+                    "imageSrc": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU",
+                    "quantity": 2,
+                    'price': 50,
+                    'category': 'dairy'
+                }
+            ],
+            "orderPrice": "$1,000",
+            "paymentMethod": "Cash",
+            "location": 'Parel',
+
+        },
+        {
+            "orderId": 754,
+            "orderDate": "Jan 2, 2024 , 10:30 AM",
+            "items": [
+                {
+                    "itemName": "Coffee",
+                    "itemDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+                    "imageSrc": "https://example.com/coffee.jpg",
+                    "quantity": 2,
+                    'price': 20,
+                    'category': 'grocery'
+                },
+                {
+                    "itemName": "Croissant",
+                    "itemDescription": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+                    "imageSrc": "https://example.com/croissant.jpg",
+                    "quantity": 2,
+                    'price': 200,
+                    'category': 'food'
+                }
+            ],
+            "orderPrice": "$25",
+            "paymentMethod": "UPI",
+            "location": 'Thane',
+        }
+    ]
+
+    const name = (row) => row?.items?.map(item => <h6 key={item?.itemName}>{item?.itemName}</h6>);
+    const quantity = (row) => row?.items?.map(item => <h6 key={item?.itemQuantity}>{item?.quantity}</h6>)
+    const description = (row) => row?.items?.map(item => <h6 className="w-52" key={item?.itemDescription}>{item?.itemDescription}</h6>)
+    const itemPrice = (row) => row?.items?.map(item => <h6 key={item?.price}>{item?.price}</h6>)
+    const category = (row) => row?.items?.map(item => <h6 key={item?.category}>{item?.category}</h6>)
+    const action = (row) => <div className="flex space-x-1 items-center">
+        <ViewProduct product={row} title='Order Details' />
+        <div className="bg-green-50 p-1 rounded-xl cursor-pointer">
+            <ClipboardTick size={20} color="green" />
+        </div>
+        <div className="bg-red-50 p-1 rounded-xl cursor-pointer">
+            <Trash size={20} color="red" />
+        </div>
+    </div>
+
+
+    const columns = [
+        { field: "orderId", header: "Order ID" },
+        { field: "OrderDate", header: "Order Date", body: (row) => <h6>{moment(row?.orderDate).format('MMM Do YY')}</h6>, sortable: true },
+        { field: "name", header: "Name", body: name, sortable: true },
+        { field: "quantity", header: "Quantity", body: quantity, sortable: true },
+        { field: "description", header: "Description", body: description, sortable: true },
+        { field: "paymentMethod", header: "Payment Method", sortable: true },
+        { field: "price", header: "Price", body: itemPrice, sortable: true },
+        { field: "category", header: "Category", body: category, sortable: true },
+        { field: "location", header: "Location", sortable: true },
+        { field: "orderPrice", header: "Total Price", sortable: true },
+        { field: "action", header: "Action", body: action, sortable: true },
+    ];
+
+
     return (
         <>
             <div className='bg-white m-4 rounded-xl'>
@@ -89,7 +175,7 @@ function FranchiseeDashboard() {
                     </div>
                 </div>
             </div>
-            <div className='bg-white m-4 rounded-xl items-center p-4 grid grid-cols-3 gap-2'>
+            <div className='bg-white m-4 rounded-xl p-4 grid grid-cols-3 gap-2'>
                 <div className='col-span-2 grid grid-cols-3 gap-2'>
                     <p className='col-span-3 text-xl font-semibold'>Sales Report</p>
                     <div className='space-y-1 border-2 border-slate-200 p-4 rounded-xl'>
@@ -108,106 +194,56 @@ function FranchiseeDashboard() {
                         <Line percent={60} strokeWidth={4} trailWidth={4} trailColor='#D3D3D3' strokeColor='rgb(74 222 128)' />
                     </div>
                 </div>
-            </div>
-            <div className=''>
-                <p className='col-span-3 text-xl font-semibold'>Sales Statistics</p>
-                <div className='w-96 border-2'>
-                    <ResponsiveBar
-                        data={barData}
-                        keys={[
-                            'hot dog',
-                            'burger',
-                            'sandwich',
-                            'kebab',
-                            'fries',
-                            'donut'
-                        ]}
-                        indexBy="year"
-                        margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
-                        padding={0.3}
-                        valueScale={{ type: 'linear' }}
-                        indexScale={{ type: 'band', round: true }}
-                        valueFormat=">-"
-                        colors={{ scheme: 'nivo' }}
-                        defs={[
-                            {
-                                id: 'dots',
-                                type: 'patternDots',
-                                background: 'inherit',
-                                color: '#38bcb2',
-                                size: 4,
-                                padding: 1,
-                                stagger: true
-                            },
-                            {
-                                id: 'lines',
-                                type: 'patternLines',
-                                background: 'inherit',
-                                color: '#eed312',
-                                rotation: -45,
-                                lineWidth: 6,
-                                spacing: 10
-                            }
-                        ]}
-                        fill={[
-                            {
-                                match: {
-                                    id: 'fries'
-                                },
-                                id: 'dots'
-                            },
-                            {
-                                match: {
-                                    id: 'sandwich'
-                                },
-                                id: 'lines'
-                            }
-                        ]}
-                        borderColor={{
-                            from: 'color',
-                            modifiers: [
-                                [
-                                    'darker',
-                                    1.6
-                                ]
-                            ]
-                        }}
-                        axisTop={null}
-                        axisRight={null}
-                        axisBottom={{
-                            tickSize: 5,
-                            tickPadding: 5,
-                            tickRotation: 0,
-                            legend: 'year',
-                            legendPosition: 'middle',
-                            legendOffset: 32,
-                            truncateTickAt: 0
-                        }}
-                        axisLeft={{
-                            tickSize: 5,
-                            tickPadding: 5,
-                            tickRotation: 0,
-                            legend: 'revenue',
-                            legendPosition: 'middle',
-                            legendOffset: -40,
-                            truncateTickAt: 0
-                        }}
-                        labelSkipWidth={12}
-                        labelSkipHeight={12}
-                        labelTextColor={{
-                            from: 'color',
-                            modifiers: [
-                                [
-                                    'darker',
-                                    1.6
-                                ]
-                            ]
-                        }}
-                        role="application"
-                        ariaLabel="Nivo bar chart demo"
-                        barAriaLabel={e => e.id + ": " + e.formattedValue + " in country: " + e.indexValue}
-                    />
+                <div className=''>
+                    <p className='col-span-3 text-xl font-semibold'>Sales Statistics</p>
+                    <div className=' w-full h-60'>
+                        <ResponsiveBar
+                            data={barData}
+                            keys={[
+                                'hot dog',
+                            ]}
+                            indexBy="year"
+                            margin={{ top: 20, right: 10, bottom: 50, left: 50 }}
+                            padding={0.5}
+                            axisTop={null}
+                            axisRight={null}
+                            axisBottom={{
+                                legend: 'year',
+                                legendPosition: 'middle',
+                                legendOffset: 32,
+                            }}
+                            axisLeft={{
+                                legend: 'revenue',
+                                legendPosition: 'middle',
+                                legendOffset: -40,
+                            }}
+                            // role="application"
+                            ariaLabel=""
+                            barAriaLabel={e => e.id + ": " + e.formattedValue + " in country: " + e.indexValue}
+                        />
+                    </div>
                 </div>
+            </div>
+            <div className='bg-white m-4 rounded-xl p-4'>
+                <Tabs
+                    selectedIndex={selectedTab}
+                    onSelect={(index) => setSelectedTab(index)}
+                >
+                    <TabList className="flex mx-6 space-x-4 border-b">
+                        <Tab
+                            className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 0
+                                ? "text-sky-500  border-b-2 border-sky-400 outline-0"
+                                : "text-gray-500 border-b"
+                                }`}
+                        >
+                            New Order's
+                        </Tab>
+                    </TabList>
+                    {/* ================= NewPending Orders component ============== */}
+                    <TabPanel className='mt-5'>
+                        <Table data={data} columns={columns} />
+                    </TabPanel>
+                </Tabs>
             </div>
         </>
     )
