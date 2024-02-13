@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Table from '../../../components/Table/Table';
 import { ArrowSwapVertical, Box, Eye, NotificationBing, ShoppingCart, Trash, Category, UserTick, UserRemove, Timer } from 'iconsax-react';
-import { deleteStorage, getPartnerStorage, getStorages } from '../../../api';
+// import { deleteStorage, getPartnerStorage, getStorages } from '../../../api';
 import { formBtn2, inputClass } from '../../../utils/CustomClass';
 import { formBtn1 } from '../../../utils/CustomClass';
 import { Controller, useForm } from 'react-hook-form';

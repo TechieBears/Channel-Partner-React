@@ -35,6 +35,7 @@ import SubAdminDetail from '../src/pages/Admin/SubAdmin/SubAdminDetail';
 import Franchisee from '../src/pages/Admin/Franchisees/Franchisees'
 // ==================== Franchisee Imports ====================
 import FranchiseeDashboard from '../src/pages/Franchisee/FranchiseeDashboard';
+import FranchiseeVendors from '../src/pages/Franchisee/Vendors/FranchiseeVendors';
 
 
 

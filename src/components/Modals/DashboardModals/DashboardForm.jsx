@@ -4,7 +4,7 @@ import { useForm, Controller, FormProvider, useFormContext } from "react-hook-fo
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../utils/CustomClass';
 import Switch from 'react-switch'
 import { Edit } from 'iconsax-react';
-import { createStorage, getPartnerStorage, getStorages, updateStorage } from '../../../api';
+import { createStorage } from '../../../api';
 import { setStorageList } from '../../../redux/slices/storageSlice';
 import { useDispatch, useSelector } from 'react-redux';
 // import { ImageUpload, link, demovideoLink } from '../../../env';
@@ -23,7 +23,7 @@ const Step1 = () => {
     const cityNames = useSelector((state) => state?.master?.city)
     const tempretureRangeList = useSelector(state => state?.master?.temperatureRange)
     return (
-        <div className="py-4 mx-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
+        <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
             <div className="">
                 <label className={labelClass}>
                     Name*
@@ -290,7 +290,7 @@ const Step2 = () => {
     const { register, formState: { errors }, } = useFormContext()
     const designationList = useSelector(state => state?.master?.designation)
     return (
-        <div className="py-4 mx-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
+        <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
             <div className="">
                 <label className={labelClass}>
                     Contact person name*
@@ -356,7 +356,7 @@ const Step3 = () => {
     const { register, formState: { errors }, } = useFormContext()
     const designationList = useSelector(state => state?.master?.designation)
     return (
-        <div className="py-4 mx-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
+        <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
             <div className="">
                 <label className={labelClass}>
                     Contact Person Name*
@@ -430,7 +430,7 @@ const Step4 = (props) => {
         }
     };
     return (
-        <div className="py-4 mx-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
+        <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
             <div className="">
                 <label className={labelClass} htmlFor="main_input">Main Image*</label>
                 <input className={fileinput}
@@ -440,7 +440,7 @@ const Step4 = (props) => {
                     accept='image/jpeg,image/jpg,image/png,application/pdf'
                     placeholder='Upload Images...'
                     {...register("image", { required: props.button == 'edit' ? false : true })} />
-                {props?.button == 'edit' && props?.data.image != '' && props?.data.image != undefined && <label className='block mb-1 text-md font-tb font-medium text-blue-800 capitalize'>
+                {props?.button == 'edit' && props?.data.image != '' && props?.data.image != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
                     {props?.data.image.split('storage')[1].split('/')[1].split('_')[2]}
                 </label>}
                 {errors.image && <Error title='Main Image is required*' />}
@@ -454,7 +454,7 @@ const Step4 = (props) => {
                     accept='image/jpeg,image/jpg,image/png,application/pdf'
                     placeholder='Upload Images...'
                     {...register("outside_img", { required: props.button == 'edit' ? false : true })} />
-                {props?.button == 'edit' && props?.data.outside_img != '' && props?.data.outside_img != undefined && <label className='block mb-1 text-md font-tb font-medium text-blue-800 capitalize'>
+                {props?.button == 'edit' && props?.data.outside_img != '' && props?.data.outside_img != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
                     {props?.data.outside_img.split('storage')[1].split('/')[1].split('_')[2]}
                 </label>}
                 {errors.outside_img && <Error title=' Outside Image is required*' />}
@@ -468,7 +468,7 @@ const Step4 = (props) => {
                     accept='image/jpeg,image/jpg,image/png,application/pdf'
                     placeholder='Upload Images...'
                     {...register("other_img")} />
-                {props?.button == 'edit' && props?.data.other_img != '' && props?.data.other_img != undefined && <label className='block mb-1 text-md font-tb font-medium text-blue-800 capitalize'>
+                {props?.button == 'edit' && props?.data.other_img != '' && props?.data.other_img != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
                     {props?.data.other_img.split('storage')[1].split('/')[1].split('_')[2]}
                 </label>}
             </div>
@@ -483,7 +483,7 @@ const Step4 = (props) => {
                     {...register("loading_img")} />
                 {props?.button == 'edit' && props?.data.loading_img != '' && props?.data.loading_img != undefined &&
                     <>
-                        <label className='block mb-1 text-md font-tb font-medium text-blue-800 capitalize'>
+                        <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
                             {props?.data.loading_img.split('storage')[1].split('/')[1].split('_')[2]}
                         </label>
                     </>
@@ -500,7 +500,7 @@ const Step4 = (props) => {
                     {...register("staging_img")} />
                 {props?.button == 'edit' && props?.data.staging_img != '' && props?.data.staging_img != undefined &&
                     <>
-                        <label className='block mb-1 text-md font-tb font-medium text-blue-800 capitalize'>
+                        <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
                             {props?.data.staging_img.split('storage')[1].split('/')[1].split('_')[2]}
                         </label>
                     </>
@@ -517,7 +517,7 @@ const Step4 = (props) => {
                     {...register("storage_img")} />
                 {props?.button == 'edit' && props?.data.storage_img != '' && props?.data.storage_img != undefined &&
                     <>
-                        <label className='block mb-1 text-md font-tb font-medium text-blue-800 capitalize'>
+                        <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
                             {props?.data.storage_img.split('storage')[1].split('/')[1].split('_')[2]}
                         </label>
                     </>
@@ -539,7 +539,7 @@ const Step4 = (props) => {
                     })} />
                 {props?.button == 'edit' && props?.data.video_url != '' && props?.data.video_url != undefined &&
                     <>
-                        <label className='block mb-1 text-md font-tb font-medium text-blue-800 capitalize'>
+                        <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
                             {props?.data.video_url.split('demovideo')[1].split('/')[1].split('_')[2]}
                         </label>
                     </>
@@ -554,7 +554,7 @@ const Step4 = (props) => {
 const Step5 = (props) => {
     const { register, formState: { errors }, } = useFormContext()
     return (
-        <div className="py-4 mx-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
+        <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
             <div className="">
                 <label className={labelClass}>
                     Fassai license*
@@ -599,7 +599,7 @@ const Step5 = (props) => {
                     accept='image/jpeg,image/jpg,image/png,application/pdf'
                     placeholder='Upload Images...'
                     {...register("fassai_doc", { required: props.button == 'edit' ? false : true })} />
-                {props?.button == 'edit' && props?.data?.fassai_doc != '' && props?.data?.fassai_doc != undefined && <label className='block mb-1 text-md font-tb font-medium text-blue-800 capitalize'>
+                {props?.button == 'edit' && props?.data?.fassai_doc != '' && props?.data?.fassai_doc != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
                     {props?.data?.fassai_doc.split('storage')[1].split('/')[1].split('_')[2]}
                 </label>}
                 {errors.fassai_doc && <Error title='Fassai license Docx*' />}
@@ -613,7 +613,7 @@ const Step5 = (props) => {
                     accept='image/jpeg,image/jpg,image/png,application/pdf'
                     placeholder='Upload Images...'
                     {...register("gst_doc", { required: props.button == 'edit' ? false : true })} />
-                {props?.button == 'edit' && props?.data?.gst_doc != '' && props?.data?.gst_doc != undefined && <label className='block mb-1 text-md font-tb font-medium text-blue-800 capitalize'>
+                {props?.button == 'edit' && props?.data?.gst_doc != '' && props?.data?.gst_doc != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
                     {props?.data?.gst_doc.split('storage')[1].split('/')[1].split('_')[2]}
                 </label>}
                 {errors.gst_doc && <Error title='Gst Image docx is required*' />}
@@ -627,7 +627,7 @@ const Step5 = (props) => {
                     accept='image/jpeg,image/jpg,image/png,application/pdf'
                     placeholder='Upload Images...'
                     {...register("other_lic_doc")} />
-                {props?.button == 'edit' && props?.data?.other_lic_doc != '' && props?.data?.other_lic_doc != undefined && <label className='block mb-1 text-md font-tb font-medium text-blue-800 capitalize'>
+                {props?.button == 'edit' && props?.data?.other_lic_doc != '' && props?.data?.other_lic_doc != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
                     {props?.data?.other_lic_doc.split('storage')[1].split('/')[1].split('_')[2]}
                 </label>}
                 {errors.other_lic_doc && <Error title='Other licenses Docx is required*' />}
@@ -643,7 +643,7 @@ const Step5 = (props) => {
                     {...register("electricity_url")} />
                 {props?.button == 'edit' && props?.data.electricity_url != '' && props?.data.electricity_url != undefined &&
                     <>
-                        <label className='block mb-1 text-md font-tb font-medium text-blue-800 capitalize'>
+                        <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
                             {props?.data.electricity_url.split('storage')[1].split('/')[1].split('_')[2]}
                         </label>
                     </>
@@ -660,7 +660,7 @@ const Step5 = (props) => {
                     {...register("noc_url")} />
                 {props?.button == 'edit' && props?.data.noc_url != '' && props?.data.noc_url != undefined &&
                     <>
-                        <label className='block mb-1 text-md font-tb font-medium text-blue-800 capitalize'>
+                        <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
                             {props?.data.noc_url.split('storage')[1].split('/')[1].split('_')[2]}
                         </label>
                     </>
@@ -1024,7 +1024,7 @@ export default function DashboardForm(props) {
                         <div className="fixed inset-0 bg-black bg-opacity-25" />
                     </Transition.Child>
                     <div className="fixed inset-0 ">
-                        <div className="flex min-h-full items-center justify-center p-4 text-center">
+                        <div className="flex items-center justify-center min-h-full p-4 text-center">
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-out duration-300"
@@ -1034,15 +1034,15 @@ export default function DashboardForm(props) {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-5xl transform overflow-hidden rounded-lg bg-white  text-left align-middle shadow-xl transition-all">
+                                <Dialog.Panel className="w-full max-w-5xl overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl">
 
                                     <Dialog.Title
                                         as="h2"
-                                        className="text-lg text-white w-full bg-sky-400 font-tb leading-6 font-semibold py-4 px-3"
+                                        className="w-full px-3 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
                                     >
                                         {props?.title}
                                     </Dialog.Title>
-                                    <div className=" bg-gray-200/70 ">
+                                    <div className=" bg-gray-200/70">
                                         {/* React Hook Form */}
                                         <FormProvider {...methods}>
                                             <form onSubmit={methods.handleSubmit(onSubmit)} >
@@ -1064,7 +1064,7 @@ export default function DashboardForm(props) {
                                                     </Stepper>
                                                     {getStepContent(activeStep)}
                                                 </div>
-                                                <footer className="py-2 flex bg-white justify-end px-4 space-x-3">
+                                                <footer className="flex justify-end px-4 py-2 space-x-3 bg-white">
                                                     <button type='button' className={formBtn1} disabled={activeStep == 0} onClick={handleBack}>Back</button>
                                                     {/* <button type='submit' className={formBtn1}>{activeStep == 4 ? "Submit" : "Next"}</button> */}
                                                     {loader ? <LoadBox className="relative block w-auto px-5 transition-colors font-tb tracking-wide duration-200 py-2.5 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize" /> : <button type='submit' className={formBtn1}>{activeStep == 4 ? "Submit" : "Next"}</button>}

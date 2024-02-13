@@ -10,7 +10,7 @@ import {
     ClipboardTick,
     Edit,
 } from "iconsax-react";
-import { deleteStorage, getPartnerStorage, getStorages } from "../../../api";
+// import { deleteStorage, getPartnerStorage, getStorages } from "../../../api";
 import { formBtn2, inputClass } from "../../../utils/CustomClass";
 import { formBtn1 } from "../../../utils/CustomClass";
 import { Controller, useForm } from "react-hook-form";
@@ -175,12 +175,12 @@ const Dashboard = () => {
     const description = (row) => row?.items?.map(item => <h6 className="w-52" key={item?.itemDescription}>{item?.itemDescription}</h6>)
     const itemPrice = (row) => row?.items?.map(item => <h6 key={item?.price}>{item?.price}</h6>)
     const category = (row) => row?.items?.map(item => <h6 key={item?.category}>{item?.category}</h6>)
-    const action = (row) => <div className="flex space-x-1 items-center">
+    const action = (row) => <div className="flex items-center space-x-1">
         <ViewProduct product={row} title='Order Details' />
-        <div className="bg-green-50 p-1 rounded-xl cursor-pointer">
+        <div className="p-1 cursor-pointer bg-green-50 rounded-xl">
             <ClipboardTick size={20} color="green" />
         </div>
-        <div className="bg-red-50 p-1 rounded-xl cursor-pointer">
+        <div className="p-1 cursor-pointer bg-red-50 rounded-xl">
             <Trash size={20} color="red" />
         </div>
     </div>

@@ -8,7 +8,7 @@ import Error from '../../../Errors/Error';
 import { MultiSelect } from 'primereact/multiselect';
 import { Add } from 'iconsax-react';
 import { formBtn1, formBtn2, inputClass, labelClass } from '../../../../utils/CustomClass';
-import { CreateFranchisee, GetFranchisee , CreateFranchiseeVendors} from "../../../../api";
+import { GetFranchiseeVendors , CreateFranchiseeVendors} from "../../../../api";
 import { setFranchiseVendors } from "../../../../redux/Slices/masterSlice";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -26,6 +26,19 @@ export default function AddVendors(props) {
     }
 
 
+    const FranchiseeVendors = () => {
+        try {
+            GetFranchiseeVendors().then((res) => {
+            console.log('vendors data = ',res);
+            dispatch(setFranchiseVendors(res));
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+ 
+
     // ============================ submit data  =====================================
     const onSubmit = async (data) => {
         console.log("data", data);
@@ -40,7 +53,7 @@ export default function AddVendors(props) {
                 setTimeout(() => {
                     dispatch(setFranchiseVendors(res));
                     reset();
-                    toggle(), setLoader(false), FranchiseeDetails();
+                    toggle(), setLoader(false), FranchiseeVendors();
                     toast.success(res.message);
                 }, 1000);
                 }
@@ -61,7 +74,7 @@ export default function AddVendors(props) {
                 setTimeout(() => {
                 dispatch(setFranchiseVendors(res));
                 reset();
-                toggle(), setLoader(false), FranchiseeDetails();
+                toggle(), setLoader(false), FranchiseeVendors();
                 toast.success(res.message);
                 }, 1000);
             }

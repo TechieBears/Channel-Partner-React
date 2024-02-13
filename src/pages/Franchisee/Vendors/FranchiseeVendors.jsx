@@ -7,13 +7,14 @@ import { NavLink } from 'react-router-dom';
 import Switch from 'react-switch'
 import AddVendors from '../../../components/Modals/Vendors/AddVendors/AddVendors';
 import AddVendorShops from '../../../components/Modals/Vendors/AddVendors/AddVendorShops';
-import { CreateFranchisee, GetFranchisee } from "../../../api";
+import { GetFranchiseeVendors } from "../../../api";
 import { setFranchiseVendors } from "../../../redux/Slices/masterSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 function FranchiseeVendors() {
     
     const FranchiseVendors = useSelector((state) => state?.master?.FranchiseVendors);
+    console.log('FranchiseVendors = ', FranchiseVendors)
     const [activeTab, setActiveTab] = useState(true);
     const [rstatus, setStatus] = useState();
     const dispatch = useDispatch()
@@ -24,12 +25,12 @@ function FranchiseeVendors() {
     };
 
 
-     // // ========================= fetch data from api ==============================
+     // ========================= fetch data from api ==============================
     const FranchiseeVendors = () => {
         try {
-          GetFranchisee().then((res) => {
-            console.log(res);
-            dispatch(setFranchiseVendors(res));
+            GetFranchiseeVendors().then((res) => {
+            console.log('vendors data = ', res.data);
+            dispatch(setFranchiseVendors(res.data));
           });
         } catch (error) {
           console.log(error);
@@ -47,14 +48,16 @@ function FranchiseeVendors() {
     </button>
     const columns = [
         { field: 'id', header: 'ID', body: (row) => <h6>{row?.id}</h6>, sortable: false },
-        { field: 'name', header: 'Vendor Name', sortable: false },
+        { field: 'first_name', header: 'Vendor Name', sortable: false },
         // body: (row) => <NavLink to={`/vendors/vendors-detail/${row?.id}`}><h6 className='underline text-sky-400'>{row?.name}</h6> </NavLink>, sortable: false },
 
         { field: 'address', header: 'Address', body: (row) => <h6>{row?.address}</h6>, sortable: false },
+        { field: 'pincode', header: 'Pincode', body: (row) => <h6>{row?.pincode}</h6>, sortable: false },
+        { field: 'phone_no', header: 'Phone No', body: (row) => <h6>{row?.phone_no}</h6>, sortable: false },
         { field: 'email', header: 'Email', body: (row) => <h6>{row?.email}</h6>, sortable: false },
-        { field: 'revenue', header: 'Renevue', body: (row) => <h6>{row?.revenue}</h6>, sortable: true },
-        { field: 'total_product', header: 'Total Product', body: (row) => <h6>{row?.total_product}</h6>, sortable: true },
-        { field: 'login_id', header: 'Login ID', body: (row) => <h6>{row?.login_id}</h6>, sortable: true },
+        // { field: 'revenue', header: 'Renevue', body: (row) => <h6>{row?.revenue}</h6>, sortable: true },
+        // { field: 'total_product', header: 'Total Product', body: (row) => <h6>{row?.total_product}</h6>, sortable: true },
+        // { field: 'login_id', header: 'Login ID', body: (row) => <h6>{row?.login_id}</h6>, sortable: true },
         { field: 'status', header: 'Status', body: status, sortable: false },
         { field: 'action', header: 'Action', body: action, sortable: false },
     ]
