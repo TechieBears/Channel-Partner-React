@@ -36,6 +36,7 @@ import Settings from '../src/pages/Settings/Settings';
 import SubAdminDetail from '../src/pages/Admin/SubAdmin/SubAdminDetail';
 import FranchiseeDashboard from '../src/pages/Franchisee/Dashboard/MainDashboard'
 import Franchisee from '../src/pages/Admin/Franchisees/Franchisees'
+import FranchiseeVendors from '../src/pages/Franchisee/Vendors/FranchiseeVendors';
 
 
 
@@ -64,7 +65,7 @@ const ProjectRoutes = () => {
                         <Sidebar>
                             <Routes>
                                 {/* ============ Admin Routes ============ */}
-                                <Route path="/" element={<Dashboard />} />
+                                {/* <Route path="/" element={<Dashboard />} />
                                 <Route path="/menu" element={<Menu />} />
                                 <Route path="/resturants" element={<Restaurant />} />
                                 <Route path="/resturants/restaurant-detail/:id" element={<RestaurantDetail />} />
@@ -84,7 +85,7 @@ const ProjectRoutes = () => {
                                 <Route path="/reports" element={<Reports />} />
                                 <Route path="/subadmin" element={<SubAdmin />} />
                                 <Route path="/subadmin/subadmin-detail/:id" element={<SubAdminDetail />} />
-                                <Route path="/settings" element={<Settings />} />
+                                <Route path="/settings" element={<Settings />} /> */}
 
                                 {/* ============================================================================== Partner Flexi store Routes =========================================== */}
                                 {/* <Route path="/vendorDashbaord" element={<VendorDashbaord />} />
@@ -102,12 +103,12 @@ const ProjectRoutes = () => {
 
 
                                 {/* ================== Franchisee Routes ======================== */}
-                                {/* <Route path='/' element={<FranchiseeDashboard />} />
+                                <Route path='/' element={<FranchiseeDashboard />} />
                                 <Route path='/analytics' element={<FranchiseeDashboard />} />
                                 <Route path='/orders' element={<FranchiseeDashboard />} />
-                                <Route path='/vendors' element={<FranchiseeDashboard />} />
+                                <Route path='/franchisevendors' element={<FranchiseeVendors />} />
                                 <Route path='/delivery' element={<FranchiseeDashboard />} />
-                                <Route path='/settings' element={<VendorOrders />} /> */}
+                                <Route path='/settings' element={<VendorOrders />} />
                                 {/* ================== Franchisee Routes ======================== */}
 
 

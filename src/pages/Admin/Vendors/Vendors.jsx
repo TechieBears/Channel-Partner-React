@@ -96,7 +96,7 @@ function Vendors() {
     </button>
     const columns = [
         { field: 'id', header: 'ID', body: (row) => <h6>{row?.id}</h6>, sortable: false },
-        { field: 'name', header: 'Vendor Name', body: (row) => <NavLink to={`/vendors/vendors-detail/${row?.id}`}><h6 className='text-sky-400 underline'>{row?.name}</h6> </NavLink>, sortable: false },
+        { field: 'name', header: 'Vendor Name', body: (row) => <NavLink to={`/vendors/vendors-detail/${row?.id}`}><h6 className='underline text-sky-400'>{row?.name}</h6> </NavLink>, sortable: false },
         { field: 'address', header: 'Address', body: (row) => <h6>{row?.address}</h6>, sortable: false },
         { field: 'email', header: 'Email', body: (row) => <h6>{row?.email}</h6>, sortable: false },
         { field: 'revenue', header: 'Renevue', body: (row) => <h6>{row?.revenue}</h6>, sortable: true },
@@ -129,7 +129,7 @@ function Vendors() {
                     <input placeholder='Search..' className='w-full h-full' />
                 </div>
                 <input className={inputClass} placeholder='Filter By Pincode' />
-                <div className='grid grid-cols-3 gap-2 items-center'>
+                <div className='grid items-center grid-cols-3 gap-2'>
                     <button className='flex gap-2 p-3 bg-white border-2 rounded-lg '>
                         <Refresh className='text-gray-400' />
                         <p>Refresh</p>

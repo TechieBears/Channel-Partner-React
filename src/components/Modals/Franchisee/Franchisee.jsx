@@ -1,54 +1,107 @@
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useRef, useState, useMemo, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import LoadBox from "../../Loader/LoadBox";
 import { useForm } from "react-hook-form";
 import Error from "../../Errors/Error";
-import { MultiSelect } from "primereact/multiselect";
 import { Add } from "iconsax-react";
-import {
-  formBtn1,
-  formBtn2,
-  inputClass,
-  labelClass,
-} from "../../../utils/CustomClass";
+import { formBtn1, formBtn2, inputClass, labelClass } from "../../../utils/CustomClass";
+import { CreateFranchisee, GetFranchisee } from "../../../api";
+import { setFranchise } from "../../../redux/Slices/masterSlice";
+import { useDispatch, useSelector } from "react-redux";
 
-export default function AddVendors(props) {
-  const [isOpen, setOpen] = useState(false);
+
+
+
+export default function AddFranchise(props) {
+  const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState([]);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const cancelButtonRef = useRef(null);
-  const {
-    register,
-    handleSubmit,
-    control,
-    watch,
-    reset,
-    formState: { errors },
-  } = useForm();
-  const toggle = () => setOpen(!isOpen);
+  const dispatch = useDispatch()
+  
+  const { register, handleSubmit, control, watch, reset, formState: { errors },} = useForm();
+
+
+   // ============================ submit data  =====================================
+   const onSubmit = async (data) => {
+    console.log("data", data);
+    
+    if (props?.button !== "edit") {
+      try {
+        setLoader(true);
+        
+        CreateFranchisee(data)
+          .then((res) => {
+            if (res?.message == 'franchise added successfully') {
+              setTimeout(() => {
+                dispatch(setFranchise(res));
+                reset();
+                toggle(), setLoader(false), FranchiseeDetails();
+                toast.success(res.message);
+              }, 1000);
+            }
+          })
+          .catch((err) => {
+            setLoader(false);
+            console.error("Error", err);
+          });
+      } catch (error) {
+        setLoader(false);
+        console.log("error", error);
+      }
+    } else {
+      try {
+        setLoader(true);
+        editSubCategory(props?.data?.subcat_id, data).then((res) => {
+          if (res?.message === "franchise edited successfully") {
+            setTimeout(() => {
+              dispatch(setFranchise(res));
+              reset();
+              toggle(), setLoader(false), FranchiseeDetails();
+              toast.success(res.message);
+            }, 1000);
+          }
+        });
+      } catch (error) {
+        setLoader(false);
+        console.log("error", error);
+      }
+    }
+  };
+
+  // ======================= close modals ===============================
   const closeBtn = () => {
     toggle();
-    reset();
+    setLoader(false);
   };
 
 
-  
-  const onSubmit = (data) => {
-    console.log("data", data);
+  const toggle = async () => {
+    setIsOpen(!isOpen);
   };
 
 
+    // // ========================= fetch data from api ==============================
+    const FranchiseeDetails = () => {
+      try {
+        GetFranchisee().then((res) => {
+          dispatch(setFranchise(res));
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
+
+  // ======================== Reset data into the form  =======================
+  useMemo(() => {
+    reset({
+      subcat_name: props?.data?.subcat_name,
+    });
+  }, [props.data]);  
 
   
   return (
     <>
-      <button className={`${formBtn1} flex`} onClick={() => setOpen(true)}>
+      <button className={`${formBtn1} flex`} onClick={() => setIsOpen(true)}>
         <Add className="text-white" />
         {props?.title}
       </button>
@@ -130,26 +183,15 @@ export default function AddVendors(props) {
                               type="tel"
                               placeholder="Phone"
                               className={inputClass}
-                              {...register("Vendor_phone", { required: true })}
+                              {...register("phone_no", { required: true })}
                             />
-                            {errors.Vendor_phone && (
+                            {errors.phone_no && (
                               <Error title="Phone is Required*" />
                             )}
                           </div>
                           <div className="">
                             <label className={labelClass}>
                               Create Password
-                            </label>
-                            <input
-                              type="text"
-                              placeholder="Password"
-                              className={inputClass}
-                              {...register("password")}
-                            />
-                          </div>
-                          <div className="">
-                            <label className={labelClass}>
-                              Confirm Password
                             </label>
                             <input
                               type="text"
@@ -218,7 +260,7 @@ export default function AddVendors(props) {
                               type="text"
                               placeholder="Enter State"
                               className={inputClass}
-                              {...register("password")}
+                              {...register("state")}
                             />
                           </div>
                           <div className="">
@@ -227,7 +269,7 @@ export default function AddVendors(props) {
                               type="text"
                               placeholder="City"
                               className={inputClass}
-                              {...register("address", { required: true })}
+                              {...register("city", { required: true })}
                             />
                             {errors.address && (
                               <Error title="City is Required*" />
