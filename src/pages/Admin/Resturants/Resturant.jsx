@@ -5,6 +5,7 @@ import { formBtn1, inputClass, tableBtn } from '../../../utils/CustomClass';
 import AddRestaurant from '../../../components/Modals/Resturant/AddRestaurant';
 import { NavLink } from 'react-router-dom';
 import Switch from 'react-switch'
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 
 export default function Restaurant() {
     const data = [
@@ -62,22 +63,34 @@ export default function Restaurant() {
     ]
     return (
         <div className='p-4 space-y-4'>
-            <div className="flex">
-                <button
-                    onClick={() => changeTab(1)}
-                    className={`py-2 px-0 ${activeTab === 1 ? 'border-b-2 border-blue-400 text-black' : 'bg-transparent'
-                        }`}
-                >
-                    Registered Restaurants
-                </button>
-                <button
-                    onClick={() => changeTab(2)}
-                    className={`py-2 px-0 ml-4 ${activeTab === 2 ? 'border-b-2 border-blue-400 text-black' : 'bg-transparent'
-                        }`}
-                >
-                    Blocked Restaurants
-                </button>
-            </div>
+            <Tabs
+                selectedIndex={activeTab}
+                onSelect={(index) => changeTab(index)}
+            >
+                <TabList className="flex mx-6 space-x-4 border-b">
+                    <Tab
+                        className={`p-3 cursor-pointer font-tbPop font-medium   ${activeTab === 0
+                            ? "text-sky-500  border-b-2 border-sky-400 outline-0"
+                            : "text-gray-500 border-b"
+                            }`}
+                    >
+                        Registered Restaurants
+                    </Tab>
+                    <Tab
+                        className={`p-3 cursor-pointer font-tbPop font-medium   ${activeTab === 1
+                            ? "text-sky-500  border-b-2 border-sky-400 outline-0"
+                            : "text-gray-500 border-b"
+                            }`}
+                    >
+                        Blocked Restaurants
+                    </Tab>
+                </TabList>
+                {/* ================= Vendor Details component ============== */}
+                <TabPanel>
+                </TabPanel>
+                <TabPanel>
+                </TabPanel>
+            </Tabs>
             <div className='grid grid-cols-3 gap-10 mt-4'>
                 <div className='flex gap-2 p-3 bg-white border-2 border-gray-300 rounded-lg '>
                     <SearchNormal className='text-gray-400' />
