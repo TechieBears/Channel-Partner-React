@@ -85,7 +85,7 @@ export const Seller = [
     {
         title: 'Orders',
         icon: <Soup size="24" />,
-        link: '/orders',
+        link: '/vendor-orders',
     },
     {
         title: 'Product List',

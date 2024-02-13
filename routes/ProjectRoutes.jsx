@@ -13,8 +13,6 @@ import UserView from '../src/pages/Admin/User/UserView';
 import UserProfile from '../src/pages/Admin/UserProfile/UserProfile';
 import Login from '../src/pages/Auth/Login';
 import { useSelector } from 'react-redux';
-// import VendorDashbaord from '/src/pages/Vendor/VendorDashbaord/VendorDashbaord';
-// import VendorProduct from '../src/pages/Vendor/VendorProduct/VendorProduct';
 
 import VendorDashbaord from '../src/pages/Seller/VendorDashbaord/VendorDashbaord';
 import VendorProduct from '../src/pages/Seller/VendorProduct/VendorProduct';
@@ -34,8 +32,9 @@ import VendorDetails from '../src/components/Modals/Vendors/VendorDetails';
 import Promotions from '../src/pages/Admin/Promotion/Promotions';
 import Settings from '../src/pages/Settings/Settings';
 import SubAdminDetail from '../src/pages/Admin/SubAdmin/SubAdminDetail';
-import FranchiseeDashboard from '../src/pages/Franchisee/Dashboard/MainDashboard'
 import Franchisee from '../src/pages/Admin/Franchisees/Franchisees'
+// ==================== Franchisee Imports ====================
+import FranchiseeDashboard from '../src/pages/Franchisee/FranchiseeDashboard';
 
 
 
@@ -64,11 +63,11 @@ const ProjectRoutes = () => {
                         <Sidebar>
                             <Routes>
                                 {/* ============ Admin Routes ============ */}
-                                <Route path="/" element={<Dashboard />} />
+                                {/* <Route path="/" element={<Dashboard />} />
                                 <Route path="/menu" element={<Menu />} />
                                 <Route path="/resturants" element={<Restaurant />} />
                                 <Route path="/resturants/restaurant-detail/:id" element={<RestaurantDetail />} />
-                                <Route path="/franchisee" element={< Franchisee/>} />
+                                <Route path="/franchisee" element={< Franchisee />} />
                                 <Route path="/vendors" element={<Vendors />} />
                                 <Route path="/vendors/vendors-detail/:id" element={<VendorDetails />} />
                                 <Route path="/menu/category-detail/:id" element={<CategoryDetail />} />
@@ -84,30 +83,20 @@ const ProjectRoutes = () => {
                                 <Route path="/reports" element={<Reports />} />
                                 <Route path="/subadmin" element={<SubAdmin />} />
                                 <Route path="/subadmin/subadmin-detail/:id" element={<SubAdminDetail />} />
-                                <Route path="/settings" element={<Settings />} />
-
-                                {/* ============================================================================== Partner Flexi store Routes =========================================== */}
-                                {/* <Route path="/vendorDashbaord" element={<VendorDashbaord />} />
-                                <Route path="/vendorProduct" element={<VendorProduct />} />
-                                <Route path="/vendorOrders" element={<VendorOrders />} /> */}
-
-
+                                <Route path="/settings" element={<Settings />} /> */}
 
                                 {/* ================== Vendor Routes ======================== */}
                                 {/* <Route path='/' element={<VendorDashbaord />} />
-                                <Route path='/orders' element={<VendorOrders />} />
+                                <Route path='/vendor-orders' element={<VendorOrders />} />
                                 <Route path='/product-list' element={<VendorProduct />} /> */}
-                                {/* ================== Vendor Routes ======================== */}
 
-
-
-                                {/* ================== Franchisee Routes ======================== */}
-                                {/* <Route path='/' element={<FranchiseeDashboard />} />
-                                <Route path='/analytics' element={<FranchiseeDashboard />} />
-                                <Route path='/orders' element={<FranchiseeDashboard />} />
-                                <Route path='/vendors' element={<FranchiseeDashboard />} />
-                                <Route path='/delivery' element={<FranchiseeDashboard />} />
-                                <Route path='/settings' element={<VendorOrders />} /> */}
+                                { /* ================== Franchisee Routes ======================== */}
+                                <Route path='/' element={<FranchiseeDashboard />} />
+                                {/* <Route path='/analytics' element={<FranchiseeDashboard />} /> */}
+                                {/* <Route path='/orders' element={<FranchiseeDashboard />} /> */}
+                                {/* <Route path='/vendors' element={<FranchiseeDashboard />} /> */}
+                                {/* <Route path='/delivery' element={<FranchiseeDashboard />} /> */}
+                                {/* <Route path='/settings' element={<VendorOrders />} /> */}
                                 {/* ================== Franchisee Routes ======================== */}
 
 
