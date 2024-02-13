@@ -19,7 +19,6 @@ export default function SubCategoryForm(props) {
   const { register, handleSubmit, control, watch, reset, formState: { errors }} = useForm();
 
   const dispatch = useDispatch();
-  // const toggle = () => setIsOpen(!isOpen);
 
   const toggle = async () => {
     setIsOpen(!isOpen);

@@ -4,7 +4,7 @@ import { DirectLeft } from 'iconsax-react';
 import SidebarLink from './SidebarLink';
 import Navbar from './Navbar';
 import { useDispatch, useSelector } from 'react-redux';
-import { Admin, Seller, Franchisee } from './SidebarApi';
+import { Admin, Seller, Franchise } from './SidebarApi';
 import logoImg from '../../assets/logo.jpeg';
 
 const Sidebar = ({ children }) => {
@@ -46,9 +46,9 @@ const Sidebar = ({ children }) => {
                                         isActiveLink={isActiveLink}
                                     />
                                 )}
-                            </ul> : user?.role == 'franchisee' ?
+                            </ul> : user?.role == 'franchise' ?
                                 <ul className='flex flex-col items-center h-full mt-4 space-y-1 overflow-y-scroll scroll-hide'>
-                                    {Franchisee?.map((item, i) =>
+                                    {Franchise?.map((item, i) =>
                                         <SidebarLink
                                             i={i}
                                             key={i}

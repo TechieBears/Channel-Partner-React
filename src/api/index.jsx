@@ -157,8 +157,29 @@ export const getAllOrders = async (id) => {
     }
 };
 
+/* ================== Create Franchisee Api =========== */
+export const CreateFranchisee = async (data) => {
+    const url = `${environment.baseUrl}franchise/create-franchise`;
+    try {
+        const response = await axios.post(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
 
-
+/* ================== Create Franchisee Api =========== */
+export const GetFranchisee = async (data) => {
+    const url = `${environment.baseUrl}franchise/create-franchise`;
+    try {
+        const response = await axios.get(url, data)
+        return response.data.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
 
 
 

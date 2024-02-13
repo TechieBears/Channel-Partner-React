@@ -23,9 +23,56 @@ export default function AddVendors(props) {
         toggle();
         reset()
     }
-    const onSubmit = (data) => {
-        console.log('data', data)
+
+
+    // ============================ submit data  =====================================
+    const onSubmit = async (data) => {
+    console.log("data", data);
+    
+    if (props?.button !== "edit") {
+      try {
+        setLoader(true);
+        
+        CreateFranchiseeVendors(data)
+          .then((res) => {
+            if (res?.message == 'franchise added successfully') {
+              setTimeout(() => {
+                dispatch(setFranchise(res));
+                reset();
+                toggle(), setLoader(false), FranchiseeDetails();
+                toast.success(res.message);
+              }, 1000);
+            }
+          })
+          .catch((err) => {
+            setLoader(false);
+            console.error("Error", err);
+          });
+      } catch (error) {
+        setLoader(false);
+        console.log("error", error);
+      }
+    } else {
+      try {
+        setLoader(true);
+        editSubCategory(props?.data?.subcat_id, data).then((res) => {
+          if (res?.message === "franchise edited successfully") {
+            setTimeout(() => {
+              dispatch(setFranchise(res));
+              reset();
+              toggle(), setLoader(false), FranchiseeDetails();
+              toast.success(res.message);
+            }, 1000);
+          }
+        });
+      } catch (error) {
+        setLoader(false);
+        console.log("error", error);
+      }
     }
+  };
+
+    
     return (
         <>
             <button className={`${formBtn1} flex`} onClick={() => setOpen(true)}>
@@ -68,7 +115,7 @@ export default function AddVendors(props) {
                                         {/* React Hook Form */}
                                         <form onSubmit={handleSubmit(onSubmit)} >
                                             <div className="p-4 overflow-y-scroll scrollbars " >
-                                                <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-2 gap-x-3 gap-y-3 customBox">
+                                                <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-4 gap-x-3 gap-y-3 customBox">
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             First Name*

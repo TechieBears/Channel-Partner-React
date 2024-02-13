@@ -121,7 +121,7 @@ export const Seller = [
 
 
 
-export const Franchisee = [
+export const Franchise = [
     {
         title: 'Dashboard',
         icon: <Element4 size="24" />,
@@ -140,7 +140,7 @@ export const Franchisee = [
     {
         title: 'Vendors',
         icon: <Notebook size="24" />,
-        link: '/vendors',
+        link: '/franchisevendors',
     },
     {
         title: 'Delivery Boys',

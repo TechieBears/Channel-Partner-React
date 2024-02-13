@@ -85,18 +85,27 @@ const ProjectRoutes = () => {
                                 <Route path="/subadmin/subadmin-detail/:id" element={<SubAdminDetail />} />
                                 <Route path="/settings" element={<Settings />} /> */}
 
+                                {/* ============================================================================== Partner Flexi store Routes =========================================== */}
+                                {/* <Route path="/vendorDashbaord" element={<VendorDashbaord />} />
+                                <Route path="/vendorProduct" element={<VendorProduct />} />
+                                <Route path="/vendorOrders" element={<VendorOrders />} /> */}
+
+
+
                                 {/* ================== Vendor Routes ======================== */}
                                 {/* <Route path='/' element={<VendorDashbaord />} />
                                 <Route path='/vendor-orders' element={<VendorOrders />} />
                                 <Route path='/product-list' element={<VendorProduct />} /> */}
 
-                                { /* ================== Franchisee Routes ======================== */}
+
+
+                                {/* ================== Franchisee Routes ======================== */}
                                 <Route path='/' element={<FranchiseeDashboard />} />
-                                {/* <Route path='/analytics' element={<FranchiseeDashboard />} /> */}
-                                {/* <Route path='/orders' element={<FranchiseeDashboard />} /> */}
-                                {/* <Route path='/vendors' element={<FranchiseeDashboard />} /> */}
-                                {/* <Route path='/delivery' element={<FranchiseeDashboard />} /> */}
-                                {/* <Route path='/settings' element={<VendorOrders />} /> */}
+                                <Route path='/analytics' element={<FranchiseeDashboard />} />
+                                <Route path='/orders' element={<FranchiseeDashboard />} />
+                                <Route path='/franchisevendors' element={<FranchiseeVendors />} />
+                                <Route path='/delivery' element={<FranchiseeDashboard />} />
+                                <Route path='/settings' element={<VendorOrders />} />
                                 {/* ================== Franchisee Routes ======================== */}
 
 
