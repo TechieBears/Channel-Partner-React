@@ -53,7 +53,8 @@ const Navbar = ({ mobileSidebar, setMobileSidebar }) => {
                                 {user?.loggedUserDetails?.first_name + " " + (user?.loggedUserDetails?.last_name?.length > 5 ? user?.loggedUserDetails?.last_name?.slice(0, 5) + "..." : user?.loggedUserDetails?.last_name)}
                             </h4>
                             <h4 className="text-[12px] font-medium leading-none capitalize text-gray-500 pt-0.5 ">
-                                <span className='lowercase'>{user?.loggedUserDetails?.role !== "admin" && (`(${user?.loggedUserDetails?.service})`)}</span> {user?.loggedUserDetails?.role}
+                                {/* <span className='lowercase'>{user?.loggedUserDetails?.role !== "admin" && (`(${user?.loggedUserDetails?.service})`)}</span>  */}
+                                {user?.loggedUserDetails?.role}
                             </h4>
                         </div>
 
