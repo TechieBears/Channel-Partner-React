@@ -1,6 +1,6 @@
 import { Notebook } from "@phosphor-icons/react";
-import { Element4, ElementPlus, Trade, Truck, User, Settings, Menu, Shop, SecurityUser, Book, TicketExpired, TicketDiscount, Profile2User, ClipboardTick, Bank, Setting2, Wallet } from "iconsax-react";
-import { Bike, ChefHat, LayoutList, Megaphone, Soup, User2 } from "lucide-react";
+import { Element4, ElementPlus, Trade, Truck, User, Settings, Menu, Shop, SecurityUser, Book, TicketExpired, TicketDiscount, Profile2User, ClipboardTick, Bank, Setting2, Wallet, ShoppingCart, Headphone } from "iconsax-react";
+import { Bike, ChefHat, LayoutList, Megaphone, Settings2, Soup, User2 } from "lucide-react";
 
 export const Admin = [
     {
@@ -85,7 +85,7 @@ export const Seller = [
     {
         title: 'Orders',
         icon: <Soup size="24" />,
-        link: '/orders',
+        link: '/vendor-orders',
     },
     {
         title: 'Product List',
@@ -101,6 +101,21 @@ export const Seller = [
         title: 'Wallet',
         icon: <Wallet size="24" />,
         link: '/wallet',
+    },
+    {
+        title: 'Market Place',
+        icon: <ShoppingCart size="24" />,
+        link: '/market-place',
+    },
+    {
+        title: 'Support',
+        icon: <Headphone size="24" />,
+        link: '/support',
+    },
+    {
+        title: 'Settings',
+        icon: <Settings2 size="24" />,
+        link: '/settings',
     },
 ]
 

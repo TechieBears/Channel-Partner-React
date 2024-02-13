@@ -13,8 +13,6 @@ import UserView from '../src/pages/Admin/User/UserView';
 import UserProfile from '../src/pages/Admin/UserProfile/UserProfile';
 import Login from '../src/pages/Auth/Login';
 import { useSelector } from 'react-redux';
-// import VendorDashbaord from '/src/pages/Vendor/VendorDashbaord/VendorDashbaord';
-// import VendorProduct from '../src/pages/Vendor/VendorProduct/VendorProduct';
 
 import VendorDashbaord from '../src/pages/Seller/VendorDashbaord/VendorDashbaord';
 import VendorProduct from '../src/pages/Seller/VendorProduct/VendorProduct';
@@ -34,9 +32,9 @@ import VendorDetails from '../src/components/Modals/Vendors/VendorDetails';
 import Promotions from '../src/pages/Admin/Promotion/Promotions';
 import Settings from '../src/pages/Settings/Settings';
 import SubAdminDetail from '../src/pages/Admin/SubAdmin/SubAdminDetail';
-import FranchiseeDashboard from '../src/pages/Franchisee/Dashboard/MainDashboard'
 import Franchisee from '../src/pages/Admin/Franchisees/Franchisees'
-import FranchiseeVendors from '../src/pages/Franchisee/Vendors/FranchiseeVendors';
+// ==================== Franchisee Imports ====================
+import FranchiseeDashboard from '../src/pages/Franchisee/FranchiseeDashboard';
 
 
 
@@ -69,7 +67,7 @@ const ProjectRoutes = () => {
                                 <Route path="/menu" element={<Menu />} />
                                 <Route path="/resturants" element={<Restaurant />} />
                                 <Route path="/resturants/restaurant-detail/:id" element={<RestaurantDetail />} />
-                                <Route path="/franchisee" element={< Franchisee/>} />
+                                <Route path="/franchisee" element={< Franchisee />} />
                                 <Route path="/vendors" element={<Vendors />} />
                                 <Route path="/vendors/vendors-detail/:id" element={<VendorDetails />} />
                                 <Route path="/menu/category-detail/:id" element={<CategoryDetail />} />
@@ -96,9 +94,8 @@ const ProjectRoutes = () => {
 
                                 {/* ================== Vendor Routes ======================== */}
                                 {/* <Route path='/' element={<VendorDashbaord />} />
-                                <Route path='/orders' element={<VendorOrders />} />
+                                <Route path='/vendor-orders' element={<VendorOrders />} />
                                 <Route path='/product-list' element={<VendorProduct />} /> */}
-                                {/* ================== Vendor Routes ======================== */}
 
 
 

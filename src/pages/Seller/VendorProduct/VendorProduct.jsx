@@ -6,8 +6,7 @@ import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 import { toast } from 'react-toastify';
 import Table from '../../../components/Table/Table';
 import { NavLink } from 'react-router-dom';
-import AddProduct from '../../../components/Modals/Vendors/AddProduct/AddProduct';
-
+import AddProduct from '../../../components/Modals/Vendors/AddProduct';
 
 const VendorProduct = () => {
     const storages = useSelector((state) => state?.storage?.list);

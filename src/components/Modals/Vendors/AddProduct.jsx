@@ -3,12 +3,12 @@ import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import LoadBox from '../../../Loader/LoadBox';
+import LoadBox from '../../Loader/LoadBox';
 import { useForm } from 'react-hook-form';
-import Error from '../../../Errors/Error';
+import Error from '../../Errors/Error';
 import { MultiSelect } from 'primereact/multiselect';
 import { Add } from 'iconsax-react';
-import { formBtn1, formBtn2, inputClass, labelClass } from '../../../../utils/CustomClass';
+import { formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
 
 function AddProduct(props) {
     const [isOpen, setOpen] = useState(false);
@@ -56,19 +56,19 @@ function AddProduct(props) {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-5xl transform overflow-hidden rounded-lg bg-white  text-left align-middle shadow-xl transition-all">
+                                <Dialog.Panel className="w-full max-w-6xl transform overflow-hidden rounded-lg bg-white  text-left align-middle shadow-xl transition-all">
 
                                     <Dialog.Title
                                         as="h2"
                                         className="text-lg text-white w-full bg-sky-400 font-tb leading-6 font-semibold py-4 px-3"
                                     >
-                                        Add
+                                        {props?.title}
                                     </Dialog.Title>
                                     <div className=" bg-gray-200/70 ">
                                         {/* React Hook Form */}
                                         <form onSubmit={handleSubmit(onSubmit)} >
                                             <div className="p-4 overflow-y-scroll scrollbars " >
-                                                <div className="py-4 mx-4 grid md:grid-cols-1 lg:grid-cols-2 gap-x-3 gap-y-3 customBox">
+                                                <div className="py-4 mx-4 grid md:grid-cols-1 lg:grid-cols-4 gap-x-3 gap-y-3 customBox">
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             Product Name*
