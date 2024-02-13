@@ -173,9 +173,9 @@ const Order = () => {
                     </div>
 
                     {/* =========================  fileter ======================= */}
-                    <div className="bg-white p-4 sm:m-5 rounded-xl" >
-                        <form onSubmit={handleSubmit(onSubmit)} className='flex md:items-center flex-col lg:flex-row gap-2'>
-                            <div className="grid grid-cols-1 sm:grid-cols-4 w-full  gap-y-3 gap-x-2">
+                    <div className="p-4 bg-white sm:m-5 rounded-xl" >
+                        <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2 md:items-center lg:flex-row'>
+                            <div className="grid w-full grid-cols-1 sm:grid-cols-4 gap-y-3 gap-x-2">
                                 <div className="">
                                     <input
                                         type="text"
@@ -210,7 +210,7 @@ const Order = () => {
                                     </select>
                                 </div>
                             </div>
-                            <div className="flex gap-x-2 items-center">
+                            <div className="flex items-center gap-x-2">
                                 <button type='submit' className={`${formBtn1} w-full text-center`}>Filter</button>
                                 <button type='button' className={`${formBtn2} w-full text-center`} onClick={() => { reset(), toast.success("Filters clear successfully"), fetchData() }}>Clear</button>
                             </div>
@@ -242,8 +242,8 @@ const Order = () => {
                                     <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
                                         <p className='text-base font-medium'>Order Price - $ 1,000</p>
                                         <div className="flex items-center gap-x-2">
-                                            <button type="button" className="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-gray-800 rounded-lg bg-gray-200 hover:text-black hover:bg-gray-300 capitalize w-full">Reject</button>
-                                            <button type="submit" className="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize w-full">Confirm</button>
+                                            <button type="button" className="relative block w-full px-4 py-2 overflow-hidden text-base font-semibold tracking-wide text-center text-gray-800 capitalize transition-colors duration-200 bg-gray-200 rounded-lg font-tb hover:text-black hover:bg-gray-300">Reject</button>
+                                            <button type="submit" className="relative block w-full px-4 py-2 overflow-hidden text-base font-semibold tracking-wide text-center text-white capitalize transition-colors duration-200 rounded-lg font-tb bg-sky-400 hover:bg-sky-400">Confirm</button>
                                         </div>
                                     </div>
                                 </div>
@@ -270,8 +270,8 @@ const Order = () => {
                                     <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
                                         <p className='text-base font-medium'>Order Price - $ 1,000</p>
                                         <div className="flex items-center gap-x-2">
-                                            <button type="button" className="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-gray-800 rounded-lg bg-gray-200 hover:text-black hover:bg-gray-300 capitalize w-full">Reject</button>
-                                            <button type="submit" className="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize w-full">Confirm</button>
+                                            <button type="button" className="relative block w-full px-4 py-2 overflow-hidden text-base font-semibold tracking-wide text-center text-gray-800 capitalize transition-colors duration-200 bg-gray-200 rounded-lg font-tb hover:text-black hover:bg-gray-300">Reject</button>
+                                            <button type="submit" className="relative block w-full px-4 py-2 overflow-hidden text-base font-semibold tracking-wide text-center text-white capitalize transition-colors duration-200 rounded-lg font-tb bg-sky-400 hover:bg-sky-400">Confirm</button>
                                         </div>
                                     </div>
                                 </div>
@@ -298,8 +298,8 @@ const Order = () => {
                                     <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
                                         <p className='text-base font-medium'>Order Price - $ 1,000</p>
                                         <div className="flex items-center gap-x-2">
-                                            <button type="button" className="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-gray-800 rounded-lg bg-gray-200 hover:text-black hover:bg-gray-300 capitalize w-full">Reject</button>
-                                            <button type="submit" className="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize w-full">Confirm</button>
+                                            <button type="button" className="relative block w-full px-4 py-2 overflow-hidden text-base font-semibold tracking-wide text-center text-gray-800 capitalize transition-colors duration-200 bg-gray-200 rounded-lg font-tb hover:text-black hover:bg-gray-300">Reject</button>
+                                            <button type="submit" className="relative block w-full px-4 py-2 overflow-hidden text-base font-semibold tracking-wide text-center text-white capitalize transition-colors duration-200 rounded-lg font-tb bg-sky-400 hover:bg-sky-400">Confirm</button>
                                         </div>
                                     </div>
                                 </div>
@@ -326,8 +326,8 @@ const Order = () => {
                                     <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
                                         <p className='text-base font-medium'>Order Price - $ 1,000</p>
                                         <div className="flex items-center gap-x-2">
-                                            <button type="button" className="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-gray-800 rounded-lg bg-gray-200 hover:text-black hover:bg-gray-300 capitalize w-full">Reject</button>
-                                            <button type="submit" className="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize w-full">Confirm</button>
+                                            <button type="button" className="relative block w-full px-4 py-2 overflow-hidden text-base font-semibold tracking-wide text-center text-gray-800 capitalize transition-colors duration-200 bg-gray-200 rounded-lg font-tb hover:text-black hover:bg-gray-300">Reject</button>
+                                            <button type="submit" className="relative block w-full px-4 py-2 overflow-hidden text-base font-semibold tracking-wide text-center text-white capitalize transition-colors duration-200 rounded-lg font-tb bg-sky-400 hover:bg-sky-400">Confirm</button>
                                         </div>
                                     </div>
                                 </div>

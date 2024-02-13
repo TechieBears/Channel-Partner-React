@@ -4,7 +4,7 @@ import { DirectLeft } from 'iconsax-react';
 import SidebarLink from './SidebarLink';
 import Navbar from './Navbar';
 import { useDispatch, useSelector } from 'react-redux';
-import { VendorApi, Franchise_Management, BackOffice } from './SidebarApi';
+import { Admin, Seller, Franchisee } from './SidebarApi';
 import logoImg from '../../assets/logo.jpeg';
 
 const Sidebar = ({ children }) => {
@@ -38,7 +38,7 @@ const Sidebar = ({ children }) => {
                         </div>
                         {user?.role == 'admin' ?
                             <ul className='flex flex-col items-center h-full my-4 mb-20 space-y-1 overflow-y-scroll scroll-hide'>
-                                {VendorApi?.map((item, i) =>
+                                {Admin?.map((item, i) =>
                                     <SidebarLink
                                         i={i}
                                         key={i}
@@ -46,18 +46,18 @@ const Sidebar = ({ children }) => {
                                         isActiveLink={isActiveLink}
                                     />
                                 )}
-                            </ul> : user?.role == 'Franchise_Management' ?
+                            </ul> : user?.role == 'franchisee' ?
                                 <ul className='flex flex-col items-center h-full mt-4 space-y-1 overflow-y-scroll scroll-hide'>
-                                    {Franchise_Management?.map((item, i) =>
+                                    {Franchisee?.map((item, i) =>
                                         <SidebarLink
                                             i={i}
                                             key={i}
                                             item={item}
                                             isActiveLink={isActiveLink} />
                                     )}
-                                </ul> : user?.role == 'Back Office' &&
+                                </ul> : user?.role == 'seller' &&
                                 <ul className='flex flex-col items-center h-full mt-4 space-y-1 overflow-y-scroll scroll-hide'>
-                                    {BackOffice?.map((item, i) =>
+                                    {Seller?.map((item, i) =>
                                         <SidebarLink
                                             i={i}
                                             key={i}
