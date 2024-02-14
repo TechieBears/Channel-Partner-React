@@ -3,6 +3,7 @@ import React from 'react'
 import { formBtn1, inputClass } from '../../utils/CustomClass'
 import Table from '../../components/Table/Table'
 import ReactSwitch from 'react-switch'
+import AddDriverFrom from '../../components/Modals/DriverModals/AddDriverForm'
 
 function DeliveryBoy() {
     const data = [
@@ -77,7 +78,7 @@ function DeliveryBoy() {
             <div className='m-4'>
                 <div className='flex justify-between p-2'>
                     <p className='text-xl font-semibold'>Delivery Partner List</p>
-                    <button className={formBtn1}>Add Delivery Partner</button>
+                    <AddDriverFrom />
                 </div>
                 <div className='p-2 bg-white rounded-xl'>
                     <Table data={data} columns={columns} />
