@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
 import Aos from "aos";
 import { Route, Routes } from "react-router-dom";
-import Sidebar from '../src/components/Sidebar/Sidebar';
+import Sidebar from '../src/components/sidebar/Sidebar';
 import Preloader from '../src/components/Loader/PreLoader';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -66,7 +66,7 @@ const ProjectRoutes = () => {
                         <Sidebar>
                             <Routes>
                                 {/* ============ Admin Routes ============ */}
-                                {/* <Route path="/" element={<Dashboard />} />
+                                <Route path="/" element={<Dashboard />} />
                                 <Route path="/menu" element={<Menu />} />
                                 <Route path="/resturants" element={<Restaurant />} />
                                 <Route path="/resturants/restaurant-detail/:id" element={<RestaurantDetail />} />
@@ -86,7 +86,7 @@ const ProjectRoutes = () => {
                                 <Route path="/reports" element={<Reports />} />
                                 <Route path="/subadmin" element={<SubAdmin />} />
                                 <Route path="/subadmin/subadmin-detail/:id" element={<SubAdminDetail />} />
-                                <Route path="/settings" element={<Settings />} /> */}
+                                <Route path="/settings" element={<Settings />} />
 
                                 {/* ============================================================================== Partner Flexi store Routes =========================================== */}
                                 {/* <Route path="/vendorDashbaord" element={<VendorDashbaord />} />
@@ -96,9 +96,9 @@ const ProjectRoutes = () => {
 
 
                                 {/* ================== Vendor Routes ======================== */}
-                                {/* <Route path='/' element={<VendorDashbaord />} />
+                                <Route path='/' element={<VendorDashbaord />} />
                                 <Route path='/vendor-orders' element={<VendorOrders />} />
-                                <Route path='/product-list' element={<VendorProduct />} /> */}
+                                <Route path='/product-list' element={<VendorProduct />} />
 
 
 

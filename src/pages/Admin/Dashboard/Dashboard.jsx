@@ -13,7 +13,7 @@ import {
   UserRemove,
   Timer,
 } from "iconsax-react";
-import { deleteStorage, getPartnerStorage, getStorages } from "../../../api";
+// import { deleteStorage, getPartnerStorage, getStorages } from "../../../api";
 import { formBtn2, inputClass } from "../../../utils/CustomClass";
 import { formBtn1 } from "../../../utils/CustomClass";
 import { Controller, useForm } from "react-hook-form";
@@ -67,26 +67,26 @@ const Dashboard = () => {
 
   // ====================== fetch data api ==================================
 
-  const StorageList = () => {
-    if (user.role == "admin") {
-      getStorages()
-        .then((res) => {
-          console.log(res);
-          dispatch(setStorageList(res));
-        })
-        .catch((err) => {
-          console.error("Error", err);
-        });
-    } else {
-      getPartnerStorage(user?.userid)
-        .then((res) => {
-          dispatch(setStorageList(res));
-        })
-        .catch((err) => {
-          console.error("Error", err);
-        });
-    }
-  };
+  // const StorageList = () => {
+  //   if (user.role == "admin") {
+  //     getStorages()
+  //       .then((res) => {
+  //         console.log(res);
+  //         dispatch(setStorageList(res));
+  //       })
+  //       .catch((err) => {
+  //         console.error("Error", err);
+  //       });
+  //   } else {
+  //     getPartnerStorage(user?.userid)
+  //       .then((res) => {
+  //         dispatch(setStorageList(res));
+  //       })
+  //       .catch((err) => {
+  //         console.error("Error", err);
+  //       });
+  //   }
+  // };
 
   // ================================ Dropdown List =========================
 
@@ -113,7 +113,7 @@ const Dashboard = () => {
       name: null,
       location: "",
     });
-    StorageList();
+    // StorageList();
     toast.success("Filters clear");
   };
 
@@ -167,9 +167,6 @@ const Dashboard = () => {
     { field: "id", header: "Action", body: actionBodyTemplate, sortable: true },
   ];
 
-  useEffect(() => {
-    StorageList();
-  }, []);
 
   const [activeTab, setActiveTab] = useState(1);
 

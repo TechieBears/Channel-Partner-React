@@ -169,12 +169,36 @@ export const CreateFranchisee = async (data) => {
     }
 };
 
-/* ================== Create Franchisee Api =========== */
+/* ================== Get Franchisee Api =========== */
 export const GetFranchisee = async (data) => {
     const url = `${environment.baseUrl}franchise/create-franchise`;
     try {
         const response = await axios.get(url, data)
         return response.data.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+/* ================== Create Franchisee Vendors Api =========== */
+export const CreateFranchiseeVendors = async (data) => {
+    const url = `${environment.baseUrl}vendor/create_vendor`;
+    try {
+        const response = await axios.post(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+/* ================== Get Franchisee Vendors Api =========== */
+export const GetFranchiseeVendors = async (data) => {
+    const url = `${environment.baseUrl}vendor/create_vendor`;
+    try {
+        const response = await axios.get(url, data)
+        return response.data
     }
     catch (err) {
         console.log(err);
@@ -520,16 +544,16 @@ export const filAvailabelStorage = async (data) => {
 
 // =================================== Partner Storage ===============================
 
-export const getPartnerStorage = async id => {
-    const url = `${environment.baseUrl}user-storage/${id}`;
-    try {
-        const response = await axios.get(url)
-        return response.data
-    }
-    catch (err) {
-        console.log(err);
-    }
-};
+// export const getPartnerStorage = async id => {
+//     const url = `${environment.baseUrl}user-storage/${id}`;
+//     try {
+//         const response = await axios.get(url)
+//         return response.data
+//     }
+//     catch (err) {
+//         console.log(err);
+//     }
+// };
 
 export const getSingleAvailabel = async (id) => {
     const url = `${environment.baseUrl}user-storage-available/${id}`;

@@ -94,12 +94,12 @@ function FranchiseeDashboard() {
     const description = (row) => row?.items?.map(item => <h6 className="w-52" key={item?.itemDescription}>{item?.itemDescription}</h6>)
     const itemPrice = (row) => row?.items?.map(item => <h6 key={item?.price}>{item?.price}</h6>)
     const category = (row) => row?.items?.map(item => <h6 key={item?.category}>{item?.category}</h6>)
-    const action = (row) => <div className="flex space-x-1 items-center">
+    const action = (row) => <div className="flex items-center space-x-1">
         <ViewProduct product={row} title='Order Details' />
-        <div className="bg-green-50 p-1 rounded-xl cursor-pointer">
+        <div className="p-1 cursor-pointer bg-green-50 rounded-xl">
             <ClipboardTick size={20} color="green" />
         </div>
-        <div className="bg-red-50 p-1 rounded-xl cursor-pointer">
+        <div className="p-1 cursor-pointer bg-red-50 rounded-xl">
             <Trash size={20} color="red" />
         </div>
     </div>
@@ -122,7 +122,7 @@ function FranchiseeDashboard() {
 
     return (
         <>
-            <div className='bg-white m-4 rounded-xl'>
+            <div className='m-4 bg-white rounded-xl'>
                 {/* ======================= Headers =========================== */}
                 <div className="grid grid-cols-1 p-4 sm:m-5 rounded-xl sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-y-4 ">
                     <div className="flex items-center p-4 mr-4 space-x-3 bg-white border-r-0 rounded-xl sm:border-r border-gray-200/70 ">
@@ -175,20 +175,20 @@ function FranchiseeDashboard() {
                     </div>
                 </div>
             </div>
-            <div className='bg-white m-4 rounded-xl p-4 grid grid-cols-3 gap-2'>
-                <div className='col-span-2 grid grid-cols-3 gap-2'>
+            <div className='grid grid-cols-3 gap-2 p-4 m-4 bg-white rounded-xl'>
+                <div className='grid grid-cols-3 col-span-2 gap-2'>
                     <p className='col-span-3 text-xl font-semibold'>Sales Report</p>
-                    <div className='space-y-1 border-2 border-slate-200 p-4 rounded-xl'>
+                    <div className='p-4 space-y-1 border-2 border-slate-200 rounded-xl'>
                         <h4 className='text-sm font-medium'>Today</h4>
                         <h3 className='text-xl font-semibold'>$ 2,000</h3>
                         <Line percent={10} strokeWidth={4} trailWidth={4} trailColor='#D3D3D3' strokeColor='rgb(239 68 68)' />
                     </div>
-                    <div className='space-y-1 border-2 border-slate-200 p-4 rounded-xl'>
+                    <div className='p-4 space-y-1 border-2 border-slate-200 rounded-xl'>
                         <h4 className='text-sm font-medium'>This Week</h4>
                         <h3 className='text-xl font-semibold'>$ 10,000</h3>
                         <Line percent={40} strokeWidth={4} trailWidth={4} trailColor='#D3D3D3' strokeColor='rgb(56 189 248)' />
                     </div>
-                    <div className='space-y-1 border-2 border-slate-200 p-4 rounded-xl'>
+                    <div className='p-4 space-y-1 border-2 border-slate-200 rounded-xl'>
                         <h4 className='text-sm font-medium'>This Month</h4>
                         <h3 className='text-xl font-semibold'>$ 12,0000</h3>
                         <Line percent={60} strokeWidth={4} trailWidth={4} trailColor='#D3D3D3' strokeColor='rgb(74 222 128)' />
@@ -196,7 +196,7 @@ function FranchiseeDashboard() {
                 </div>
                 <div className=''>
                     <p className='col-span-3 text-xl font-semibold'>Sales Statistics</p>
-                    <div className=' w-full h-60'>
+                    <div className='w-full h-60'>
                         <ResponsiveBar
                             data={barData}
                             keys={[
@@ -224,7 +224,7 @@ function FranchiseeDashboard() {
                     </div>
                 </div>
             </div>
-            <div className='bg-white m-4 rounded-xl p-4'>
+            <div className='p-4 m-4 bg-white rounded-xl'>
                 <Tabs
                     selectedIndex={selectedTab}
                     onSelect={(index) => setSelectedTab(index)}

@@ -38,7 +38,7 @@ const Sidebar = ({ children }) => {
                         </div>
                         {user?.role == 'admin' ?
                             <ul className='flex flex-col items-center h-full my-4 mb-20 space-y-1 overflow-y-scroll scroll-hide'>
-                                {Franchise?.map((item, i) =>
+                                {Admin?.map((item, i) =>
                                     <SidebarLink
                                         i={i}
                                         key={i}
