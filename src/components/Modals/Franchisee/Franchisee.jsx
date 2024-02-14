@@ -10,7 +10,7 @@ import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from 
 import { CreateFranchisee, GetFranchisee } from "../../../api";
 import { setFranchise } from "../../../redux/Slices/masterSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { ImageUpload } from '../../../env';
+import { ImageUpload, franchiselink } from '../../../env';
 
 
 
@@ -74,40 +74,40 @@ export default function AddFranchise(props) {
     const onSubmit = async (data) => {
       if (props.button != 'edit') {    // for create
           if (data?.bank_passbook.length != 0) {
-              await ImageUpload(data?.bank_passbook[0], "doc", "BankPassbook", data?.name)
-              data.bank_passbook = `${link}${data?.name}_BankPassbook_${data?.bank_passbook[0].name}`
+              await ImageUpload(data?.bank_passbook[0], "franchisee", "BankPassbook", data?.first_name)
+              data.bank_passbook = `${franchiselink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
           } else {
               data.bank_passbook = ''
           }
           if (data?.address_proof.length != 0) {
-              await ImageUpload(data?.address_proof[0], "doc", "AddressProof", data?.name)
-              data.address_proof = `${link}${data?.name}_AddressProof_${data?.address_proof[0].name}`
+              await ImageUpload(data?.address_proof[0], "franchisee", "AddressProof", data?.first_name)
+              data.address_proof = `${franchiselink}${data?.first_name}_AddressProof_${data?.address_proof[0].name}`
           } else {
               data.address_proof = ''
           }
           if (data?.profile_pic.length != 0) {
-              await ImageUpload(data?.profile_pic[0], "doc", "ProfileImage", data?.name)
-              data.profile_pic = `${link}${data?.name}_ProfileImage_${data?.profile_pic[0].name}`
+              await ImageUpload(data?.profile_pic[0], "franchisee", "ProfileImage", data?.first_name)
+              data.profile_pic = `${franchiselink}${data?.first_name}_ProfileImage_${data?.profile_pic[0].name}`
           } else {
               data.profile_pic = ''
           }
       }
       else {          // for edit
         if (data?.bank_passbook.length != 0) {
-          await ImageUpload(data?.bank_passbook[0], "doc", "BankPassbook", data?.name)
-          data.bank_passbook = `${link}${data?.name}_BankPassbook_${data?.bank_passbook[0].name}`
+          await ImageUpload(data?.bank_passbook[0], "franchisee", "BankPassbook", data?.first_name)
+          data.bank_passbook = `${franchiselink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
       } else {
           data.bank_passbook = ''
       }
       if (data?.address_proof.length != 0) {
-          await ImageUpload(data?.address_proof[0], "doc", "AddressProof", data?.name)
-          data.address_proof = `${link}${data?.name}_AddressProof_${data?.address_proof[0].name}`
+          await ImageUpload(data?.address_proof[0], "franchisee", "AddressProof", data?.first_name)
+          data.address_proof = `${franchiselink}${data?.first_name}_AddressProof_${data?.address_proof[0].name}`
       } else {
           data.address_proof = ''
       }
       if (data?.profile_pic.length != 0) {
-          await ImageUpload(data?.profile_pic[0], "doc", "ProfileImage", data?.name)
-          data.profile_pic = `${link}${data?.name}_ProfileImage_${data?.profile_pic[0].name}`
+          await ImageUpload(data?.profile_pic[0], "franchisee", "ProfileImage", data?.first_name)
+          data.profile_pic = `${franchiselink}${data?.first_name}_ProfileImage_${data?.profile_pic[0].name}`
       } else {
           data.profile_pic = ''
       }
@@ -121,7 +121,7 @@ export default function AddFranchise(props) {
                       reset();
                       setLoader(false)
                       toggle();
-                      fetchData()
+                      // fetchData()
                       toast.success(response?.Message);
                   }, 1000);
               } else {
@@ -171,6 +171,43 @@ export default function AddFranchise(props) {
         console.log(error);
       }
     };
+
+
+    // ============================== Reseting data ======================================
+  //   const fillData = () => {
+  //     reset({
+  //         "address": props?.data?.address,
+  //         "address2": props?.data?.address2,
+  //         "alt_phone": props?.data?.alt_phone,
+  //         "bus_card": props?.data?.bus_card,
+  //         "bus_type": props?.data?.bus_type,
+  //         "service": props?.data?.service,
+  //         "cheque": props?.data?.cheque,
+  //         "city": props?.data?.city,
+  //         "comp_name": props?.data?.comp_name,
+  //         "comp_type": props?.data?.comp_type,
+  //         "designation": props?.data?.designation,
+  //         "email": props?.data?.email,
+  //         "first_name": props?.data?.first_name,
+  //         "fssai": props?.data?.fssai,
+  //         "gst": props?.data?.gst,
+  //         "landmark": props?.data?.landmark,
+  //         "last_name": props?.data?.last_name,
+  //         "odoc": props?.data?.odoc,
+  //         "pan": props?.data?.pan,
+  //         "phone_no": props?.data?.phone_no,
+  //         "pincode": props?.data?.pincode,
+  //         "role": props?.data?.role,
+  //         "state": props?.data?.state
+  //     })
+  // }
+
+
+  // useEffect(() => {
+  //   if (props.button == "edit") {
+  //       fillData()
+  //   }
+  // }, [])
 
 
   // ======================== Reset data into the form  =======================
@@ -411,7 +448,7 @@ export default function AddFranchise(props) {
                                         placeholder='GST Number'
                                         className={inputClass}
                                         {...register('gst_number', {
-                                            required: 'GST is required*',
+                                            // required: 'GST is required',
                                             // validate: validateGST
                                         })}
                                     />
@@ -479,10 +516,10 @@ export default function AddFranchise(props) {
                                   accept='image/jpeg,image/jpg,image/png'
                                   placeholder='Upload Images...'
                                   {...register("address_proof", { required: props.button == 'edit' ? false : true })} />
-                              {props?.button == 'edit' && props?.data.address_proof != '' && props?.data.address_proof != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                              {props?.button == 'edit' && props?.data?.address_proof != '' && props?.data?.address_proof != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                                   {props?.data?.address_proof?.split('/').pop()}
                               </label>}
-                              {errors.address_proof && <Error title='Main Image is required*' />}
+                              {/* {errors.address_proof && <Error title='Address Proof Image is required*' />} */}
                           </div>
                         </div>
                       </div>

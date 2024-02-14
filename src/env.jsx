@@ -82,3 +82,8 @@ export const categoryLink = 'https://channel-partner-media.s3.ap-south-1.amazona
 export const subcategoryLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/subcategory/'
 export const productLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/product/'
 // export const categoryLink = 's3://channel-partner-media/category/'
+
+
+
+// ---- Franchisee Links ----
+export const franchiselink  = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/franchisee/'
