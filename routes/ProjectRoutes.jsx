@@ -96,15 +96,15 @@ const ProjectRoutes = () => {
 
 
                                 {/* ================== Vendor Routes ======================== */}
-                                <Route path='/' element={<VendorDashbaord />} />
+                                <Route path='/seller-dashboard' element={<VendorDashbaord />} />
                                 <Route path='/vendor-orders' element={<VendorOrders />} />
                                 <Route path='/product-list' element={<VendorProduct />} />
 
 
 
                                 {/* ================== Franchisee Routes ======================== */}
-                                <Route path='/' element={<FranchiseeDashboard />} />
-                                {/* <Route path='/analytics' element={<FranchiseeDashboard />} /> */}
+                                <Route path='/franchise-dashboard' element={<FranchiseeDashboard />} />
+                                <Route path='/analytics' element={<FranchiseeDashboard />} />
                                 <Route path='/franchiesee-orders' element={<FranchiseeOrder />} />
                                 <Route path='/franchise-vendors' element={<FranchiseeVendors />} />
                                 <Route path='/delivery' element={<DeliveryBoy />} />

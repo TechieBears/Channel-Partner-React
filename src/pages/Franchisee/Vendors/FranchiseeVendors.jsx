@@ -20,7 +20,37 @@ function FranchiseeVendors() {
         formState: { errors },
         reset
     } = useForm();
-    const FranchiseVendors = useSelector((state) => state?.master?.FranchiseVendors);
+    // const FranchiseVendors = useSelector((state) => state?.master?.FranchiseVendors);
+    const FranchiseVendors = [
+        {
+            id: 1,
+            first_name: "John Doe",
+            address: "123 Main St",
+            pincode: "12345",
+            phone_no: "555-123-4567",
+            email: "john@example.com",
+            status: true,
+        },
+        {
+            id: 2,
+            first_name: "Jane Smith",
+            address: "456 Elm St",
+            pincode: "67890",
+            phone_no: "555-987-6543",
+            email: "jane@example.com",
+            status: false,
+        },
+        {
+            id: 3,
+            first_name: "Alice Johnson",
+            address: "789 Oak St",
+            pincode: "54321",
+            phone_no: "555-555-5555",
+            email: "alice@example.com",
+            status: true,
+        }
+        // Add more fake data objects as needed
+    ];
     const [activeTab, setActiveTab] = useState(0);
     const [rstatus, setStatus] = useState();
     const dispatch = useDispatch()
@@ -60,23 +90,19 @@ function FranchiseeVendors() {
         FranchiseeVendors()
     }, [])
 
+    //=============== Table Columns =============================
     // const status = (row) => <Switch checked={row?.id == rstatus ? true : false} onChange={() => setStatus(row?.id)} />
-    const status = (row) => <Switch checked={row?.id == rstatus ? true : false} onChange={() => setStatus(row?.id)} />
+    const status = (row) => <Switch checked={row?.status} onChange={() => setStatus(row?.id)} />
     const action = (row) => <button className={`${tableBtn}`} >
         View Analysis
     </button>
     const columns = [
-        { field: 'id', header: 'ID', body: (row) => <h6>{row?.id}</h6>, sortable: false },
+        { field: 'id', header: 'ID', sortable: false },
         { field: 'first_name', header: 'Vendor Name', sortable: false },
-        // body: (row) => <NavLink to={`/vendors/vendors-detail/${row?.id}`}><h6 className='underline text-sky-400'>{row?.name}</h6> </NavLink>, sortable: false },
-
-        { field: 'address', header: 'Address', body: (row) => <h6>{row?.address}</h6>, sortable: false },
-        { field: 'pincode', header: 'Pincode', body: (row) => <h6>{row?.pincode}</h6>, sortable: false },
-        { field: 'phone_no', header: 'Phone No', body: (row) => <h6>{row?.phone_no}</h6>, sortable: false },
-        { field: 'email', header: 'Email', body: (row) => <h6>{row?.email}</h6>, sortable: false },
-        // { field: 'revenue', header: 'Renevue', body: (row) => <h6>{row?.revenue}</h6>, sortable: true },
-        // { field: 'total_product', header: 'Total Product', body: (row) => <h6>{row?.total_product}</h6>, sortable: true },
-        // { field: 'login_id', header: 'Login ID', body: (row) => <h6>{row?.login_id}</h6>, sortable: true },
+        { field: 'address', header: 'Address', sortable: false },
+        { field: 'pincode', header: 'Pincode', sortable: false },
+        { field: 'phone_no', header: 'Phone No', sortable: false },
+        { field: 'email', header: 'Email', sortable: false },
         { field: 'status', header: 'Status', body: status, sortable: false },
         { field: 'action', header: 'Action', body: action, sortable: false },
     ]
