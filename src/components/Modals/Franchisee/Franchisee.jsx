@@ -259,7 +259,7 @@ export default function AddFranchise(props) {
                     {/* React Hook Form */}
                     <form onSubmit={handleSubmit(onSubmit)}>
                       <div className="">
-                      <h1 className='pt-4 mx-4 text-xl font-semibold text-gray-900 font-tbPop '>Basic Details:</h1>
+                        <h1 className='pt-4 mx-4 text-xl font-semibold text-gray-900 font-tbPop '>Basic Details:</h1>
                         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-x-3 gap-y-3 ">
                           <div className="">
                             <label className={labelClass}>First Name*</label>

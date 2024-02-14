@@ -3,17 +3,19 @@ import { inputClass } from '../../utils/CustomClass'
 import leftImage from '../../assets/leftImage.png'
 import { useState } from 'react';
 import { Eye, EyeSlash } from 'iconsax-react';
-import { useDispatch } from 'react-redux';
-import { setLoggedUser, setLoggedUserDetails, setRoleIs } from '../../redux/Slices/loginSlice';
+import { setLoggedUser, setLoggedUserDetails, setRoleIs, setFranchiseeDetails } from '../../redux/Slices/loginSlice';
 import LoadBox from '../../components/Loader/LoadBox';
 import { toast } from 'react-toastify';
 import Error from '../../components/Errors/Error';
-import { login } from '../../api/index';
+import { login , getFranchiseDetails} from '../../api/index';
+import { useDispatch, useSelector } from "react-redux";
+
 
 const Login = () => {
     const [eyeIcon, setEyeIcon] = useState(false)
     const [loader, setLoader] = useState(false)
     const dispatch = useDispatch()
+
     const {
         register,
         handleSubmit,
@@ -40,11 +42,35 @@ const Login = () => {
                     dispatch(setRoleIs(res?.is_subadmin))
                     setLoader(false)
                     dispatch(setLoggedUser(true))
+                    if(res?.userid && res?.role == 'franchise'){
+                        getFranchiseDetailsById(res?.userid);
+                    }
+                    } else {
+                        setLoader(false)
+                        toast.error(res?.message)
+                    }
+            })
+        } catch (error) {
+            setLoader(false)
+            toast.error(error?.message)
+            console.log(error)
+        }
+    }
+
+
+    const getFranchiseDetailsById = async (id) => {
+        try {
+            setLoader(true)
+            await getFranchiseDetails(id).then((res) => {
+                console.log(" Franchisee Additional data ", res)
+                if (res) {
+                    console.log(" ..", res[0])
+                    dispatch(setFranchiseeDetails(res[0]))
+                    setLoader(false)
                 } else {
                     setLoader(false)
                     toast.error(res?.message)
                 }
-
             })
         } catch (error) {
             setLoader(false)
