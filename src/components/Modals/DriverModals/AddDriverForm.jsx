@@ -9,7 +9,6 @@ import { setUserList } from '../../../redux/Slices/userSlice';
 import Error from '../../Errors/Error';
 import LoadBox from '../../Loader/LoadBox';
 import { toast } from 'react-toastify';
-import query from 'india-pincode-search';
 
 function AddDriverFrom(props) {
     const [isOpen, setIsOpen] = useState(false);
@@ -525,15 +524,16 @@ function AddDriverFrom(props) {
                                                         {errors.bank_passbook && <Error title='Bank PassBook Image is required*' />}
                                                     </div>
                                                     <div>
-                                                        <label className={labelClass}>Is Activated</label>
+                                                        <label className={labelClass}>Status</label>
                                                         <select
                                                             {...register('is_activated', { required: true })}
                                                             className={inputClass}
                                                         >
-                                                            <option value={true}>Yes</option>
-                                                            <option value={false}>no</option>
+                                                            <option value=''>Select</option>
+                                                            <option value={true}>Active</option>
+                                                            <option value={false}>Not Active</option>
                                                         </select>
-                                                        {errors?.is_activated && <Errors title='Acitvated Status is required' />}
+                                                        {errors?.is_activated && <Error title='Acitvated Status is required' />}
                                                     </div>
                                                     <div>
                                                         <label className={labelClass}>Driver Rating's</label>
