@@ -205,6 +205,17 @@ export const GetFranchiseeVendors = async (data) => {
     }
 };
 
+/* ================== Get Franchisee Deatails Api =========== */
+export const getFranchiseDetails = async (id) => {
+    const url = `${environment.baseUrl}franchise/get_franchise_details_by_userId/${id}`;
+    try {
+        const response = await axios.get(url, id)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
 
 
 
