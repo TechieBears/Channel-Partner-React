@@ -1250,3 +1250,13 @@ export const getSubAdmin = async () => {
         console.log(error)
     }
 }
+
+export const addDeliveryBoy = async (data) => {
+    const url = `${environment.baseUrl}delivery/create_deliveryboy`
+    try {
+        const response = await axios.get(url, data);
+        return response.data;
+    } catch (error) {
+        console.log(error)
+    }
+}

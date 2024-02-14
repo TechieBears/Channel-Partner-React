@@ -1,14 +1,13 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useEffect, useMemo, useState } from 'react';
-import { formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../utils/CustomClass';
+import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../utils/CustomClass';
 import { useForm } from 'react-hook-form';
-import { createUser, editUser, getUser } from '../../../api';
+import { addDeliveryBoy, createUser, editUser, getUser } from '../../../api';
 import { Edit } from 'iconsax-react';
 import { useDispatch } from 'react-redux';
 import { setUserList } from '../../../redux/Slices/userSlice';
 import Error from '../../Errors/Error';
 import LoadBox from '../../Loader/LoadBox';
-// import { ImageUpload, link } from '../../../env';
 import { toast } from 'react-toastify';
 import query from 'india-pincode-search';
 
@@ -27,8 +26,6 @@ function AddDriverFrom(props) {
         formState: { errors },
     } = useForm();
     // ============================ file uplaod watch ===============================
-    // const buscard_watch = watch('bus_card_url')
-    // const cheque_watch = watch('cheque_url')
     const role = watch('role')
     const fssai_watch = watch('fssai_url')
     const gst_watch = watch('gst_url')
@@ -85,98 +82,52 @@ function AddDriverFrom(props) {
     // ============================= form submiting ======================================
     const onSubmit = async (data) => {
         if (props.button != 'edit') {                 // for create
-            if (data?.pan_url.length != 0) {
-                await ImageUpload(data?.pan_url[0], "doc", "panImage", data?.name)
-                data.pan_url = `${link}${data?.name}_panImage_${data?.pan_url[0].name}`
+            if (data?.bank_passbook.length != 0) {
+                await ImageUpload(data?.bank_passbook[0], "doc", "passbookImage", data?.name)
+                data.bank_passbook = `${link}${data?.name}_passbookImage_${data?.bank_passbook[0].name}`
             } else {
-                data.pan_url = ''
+                data.bank_passbook = ''
             }
-            // if (data?.cheque_url.length != 0) {
-            //     await ImageUpload(data?.cheque_url[0], "doc", "chequeImage", data?.name)
-            //     data.cheque_url = `${link}${data?.name}_chequeImage_${data?.cheque_url[0].name}`
-            // } else {
-            //     data.cheque_url = ''
-            // }
-            if (data?.gst_url.length != 0) {
-                await ImageUpload(data?.gst_url[0], "doc", "gstImage", data?.name)
-                data.gst_url = `${link}${data?.name}_gstImage_${data?.gst_url[0].name}`
+            if (data?.address_proof.length != 0) {
+                await ImageUpload(data?.address_proof[0], "doc", "addressproofImage", data?.name)
+                data.address_proof = `${link}${data?.name}_addressproofImage_${data?.address_proof[0].name}`
             } else {
-                data.gst_url = ''
-            }
-            if (data?.fssai_url.length != 0) {
-                await ImageUpload(data?.fssai_url[0], "doc", "fssaiImage", data?.name)
-                data.fssai_url = `${link}${data?.name}_fssaiImage_${data?.fssai_url[0].name}`
-            } else {
-                data.fssai_url = ''
-            }
-            // if (data?.bus_card_url.length != 0) {
-            //     await ImageUpload(data?.bus_card_url[0], "doc", "businessImage", data?.name)
-            //     data.bus_card_url = `${link}${data?.name}_businessImage_${data?.bus_card_url[0].name}`
-            // } else {
-            //     data.bus_card_url = ''
-            // }
-            if (data?.odoc_url.length != 0) {
-                await ImageUpload(data?.odoc_url[0], "doc", "otherImage", data?.name)
-                data.odoc_url = `${link}${data?.name}_otherImage_${data?.odoc_url[0].name}`
-            } else {
-                data.odoc_url = ''
+                data.address_proof = ''
             }
         }
         else {                                        // for edit
-            if (data?.pan_url.length != 0) {
-                ImageUpload(data?.pan_url[0], "doc", "panImage", data?.name)
-                data.pan_url = `${link}${data?.name}_panImage_${data?.pan_url[0].name}`
+            if (data?.bank_passbook.length != 0) {
+                ImageUpload(data?.bank_passbook[0], "doc", "passBookImage", data?.name)
+                data.bank_passbook = `${link}${data?.name}_passBookImage_${data?.bank_passbook[0].name}`
             } else {
-                data.pan_url = props?.data?.pan_url
+                data.bank_passbook = props?.data?.bank_passbook
             }
-            // if (data?.cheque_url.length != 0) {
-            //     await ImageUpload(data?.cheque_url[0], "doc", "chequeImage", data?.name)
-            //     data.cheque_url = `${link}${data?.name}_chequeImage_${data?.cheque_url[0].name}`
-            // } else {
-            //     data.cheque_url = props?.data?.cheque_url
-            // }
-            if (data?.gst_url.length != 0) {
-                await ImageUpload(data?.gst_url[0], "doc", "gstImage", data?.name)
-                data.gst_url = `${link}${data?.name}_gstImage_${data?.gst_url[0].name}`
+            if (data?.address_proof.length != 0) {
+                await ImageUpload(data?.address_proof[0], "doc", "addressproofImage", data?.name)
+                data.address_proof = `${link}${data?.name}_addressproofImage_${data?.address_proof[0].name}`
             } else {
-                data.gst_url = props?.data?.gst_url
-            }
-            if (data?.fssai_url.length != 0) {
-                await ImageUpload(data?.fssai_url[0], "doc", "fssaiImage", data?.name)
-                data.fssai_url = `${link}${data?.name}_fssaiImage_${data?.fssai_url[0].name}`
-            } else {
-                data.fssai_url = props?.data?.fssai_url
-            }
-            // if (data?.bus_card_url.length != 0) {
-            //     await ImageUpload(data?.bus_card_url[0], "doc", "businessImage", data?.name)
-            //     data.bus_card_url = `${link}${data?.name}_businessImage_${data?.bus_card_url[0].name}`
-            // } else {
-            //     data.bus_card_url = props?.data?.bus_card_url
-            // }
-            if (data?.odoc_url.length != 0) {
-                await ImageUpload(data?.odoc_url[0], "doc", "otherImage", data?.name)
-                data.odoc_url = `${link}${data?.name}_otherImage_${data?.odoc_url[0].name}`
-            } else {
-                data.odoc_url = props?.data?.odoc_url
+                data.address_proof = props?.data?.address_proof
             }
         }
         if (props.button !== 'edit') {   // for create
             try {
                 setLoader(true)
-                const response = await createUser(data);
-                if (response?.code == 2002) {
-                    setTimeout(() => {
-                        reset();
+                // const response = await createUser(data);
+                addDeliveryBoy(data).then((res) => {
+                    if (res?.code == 2002) {
+                        setTimeout(() => {
+                            reset();
+                            setLoader(false)
+                            toggle();
+                            fetchData()
+                            toast.success(res?.Message);
+                        }, 1000);
+                    } else {
                         setLoader(false)
-                        toggle();
-                        fetchData()
-                        toast.success(response?.Message);
-                    }, 1000);
-                } else {
-                    setLoader(false)
-                    toast.error(response?.Message);
-                    console.log('failed to create user')
-                }
+                        toast.error(res?.Message);
+                        console.log('failed to create delivery partner')
+                    }
+                })
             } catch (error) {
                 setLoader(false)
                 console.log('error', error);
@@ -192,7 +143,7 @@ function AddDriverFrom(props) {
                     toast.success(response?.message);
                 }, 1000);
             } else {
-                console.log('failed to update user')
+                console.log('failed to update delivery partner')
             }
         }
     }
@@ -206,61 +157,56 @@ function AddDriverFrom(props) {
     // ============================== Reseting data ======================================
     const fillData = () => {
         reset({
-            "address": props?.data?.address,
-            "address2": props?.data?.address2,
-            "alt_phone": props?.data?.alt_phone,
-            "bus_card": props?.data?.bus_card,
-            "bus_type": props?.data?.bus_type,
-            "service": props?.data?.service,
-            "cheque": props?.data?.cheque,
-            "city": props?.data?.city,
-            "comp_name": props?.data?.comp_name,
-            "comp_type": props?.data?.comp_type,
-            "designation": props?.data?.designation,
-            "email": props?.data?.email,
             "first_name": props?.data?.first_name,
-            "fssai": props?.data?.fssai,
-            "gst": props?.data?.gst,
-            "landmark": props?.data?.landmark,
             "last_name": props?.data?.last_name,
-            "odoc": props?.data?.odoc,
-            "pan": props?.data?.pan,
-            "phone_no": props?.data?.phone_no,
+            "email": props?.data?.email,
             "pincode": props?.data?.pincode,
-            "role": props?.data?.role,
-            "state": props?.data?.state
+            "phone_no": props?.data?.phone_no,
+            "address": props?.data?.address,
+            "state": props?.data?.state,
+            "city": props?.data?.city,
+            "date_of_birth": props?.data?.date_of_birth,
+            "gender": props?.data?.gender,
+            "vehicle_type": props?.data?.vehicle_type,
+            "driver_license": props?.data?.driver_license,
+            "vehicle_rc": props?.data?.vehicle_rc,
+            "bank_name": props?.data?.bank_name,
+            "accounr_number": props?.data?.accounr_number,
+            "ifsc_code": props?.data?.ifsc_code,
+            "adhar_card": props?.data?.adhar_card,
+            "pan_card": props?.data?.pan_card,
         })
     }
 
-    useMemo(() => {
-        if (pincodeWatch != undefined && pincodeWatch?.length == 6) {
-            const pincode = query?.search(pincodeWatch);
-            if (pincode.length > 0) {
-                setValue('city', pincode[0]?.city)
-                setValue('state', pincode[0]?.state)
-            } else {
-                setValue('city', '')
-                setValue('state', '');
-            }
+    // useMemo(() => {
+    //     if (pincodeWatch != undefined && pincodeWatch?.length == 6) {
+    //         const pincode = query?.search(pincodeWatch);
+    //         if (pincode.length > 0) {
+    //             setValue('city', pincode[0]?.city)
+    //             setValue('state', pincode[0]?.state)
+    //         } else {
+    //             setValue('city', '')
+    //             setValue('state', '');
+    //         }
 
-        } else (
-            setValue('city', ''),
-            setValue('state', '')
-        )
-    }, [pincodeWatch])
+    //     } else (
+    //         setValue('city', ''),
+    //         setValue('state', '')
+    //     )
+    // }, [pincodeWatch])
 
-    useEffect(() => {
-        if (props.button == "edit") {
-            fillData()
-        }
-    }, [])
+    // useEffect(() => {
+    //     if (props.button == "edit") {
+    //         fillData()
+    //     }
+    // }, [])
 
     return (
         <>
 
             {props.button !== "edit" ? (
                 <button onClick={toggle} className={tableBtn}>
-                    Add Driver
+                    Add Delivery Partner
                 </button>
             ) : (
                 <button
@@ -341,18 +287,6 @@ function AddDriverFrom(props) {
                                                     </div>
                                                 </div>
                                                 <div className="py-4 mx-4 grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4  gap-x-3 gap-y-3 ">
-
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            ID Number
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder="ID Number"
-                                                            className={inputClass}
-                                                            {...register('id_number')}
-                                                        />
-                                                    </div>
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             First Name*
@@ -379,30 +313,6 @@ function AddDriverFrom(props) {
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Phone Number*
-                                                        </label>
-                                                        <input
-                                                            type="number"
-                                                            placeholder='Enter Phone Number'
-                                                            className={inputClass}
-                                                            {...register('phone_no', { required: true, validate: validatePhoneNumber })}
-                                                        />
-                                                        {errors.phone_no && <Error title={errors?.phone_no?.message} />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Alternate Phone Number
-                                                        </label>
-                                                        <input
-                                                            type="number"
-                                                            placeholder='Enter Alternate Number'
-                                                            className={inputClass}
-                                                            {...register('alt_phone', { required: true, validate: validatePhoneNumber })}
-                                                        />
-                                                        {errors.alt_phone && <Error title={errors?.alt_phone?.message} />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
                                                             Email*
                                                         </label>
                                                         <input
@@ -411,64 +321,32 @@ function AddDriverFrom(props) {
                                                             className={inputClass}
                                                             {...register('email', { required: true, validate: validateEmail })}
                                                         />
-                                                        {errors.email && <Error title={errors?.email?.message} />}
+                                                        {errors.email && <Error title="Email is required*" />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Occupation
+                                                            Password*
                                                         </label>
                                                         <input
                                                             type="text"
-                                                            placeholder="Occupation"
+                                                            placeholder='Password'
                                                             className={inputClass}
-                                                            {...register('occupation')}
+                                                            {...register('password', { required: true, })}
                                                         />
+                                                        {errors.password && <Error title="Email is required*" />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Address*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Address'
-                                                            className={inputClass}
-                                                            {...register('address', { required: true })}
-                                                        />
-                                                        {errors.address && <Error title="Address is required*" />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Address 2
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Alternate Address'
-                                                            className={inputClass}
-                                                            {...register('address2')}
-                                                        />
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Landmark
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='landmark'
-                                                            className={inputClass}
-                                                            {...register('landmark')}
-                                                        />
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Pin Code*
+                                                            Pincode*
                                                         </label>
                                                         <input
                                                             type="number"
-                                                            placeholder='Pin Code'
+                                                            maxLength={6}
+                                                            placeholder='Pincode'
                                                             className={inputClass}
-                                                            {...register('pincode', { required: true, validate: validatePIN })}
+                                                            {...register('pincode', { required: true, })}
                                                         />
-                                                        {errors.pincode && <Error title={errors?.pincode?.message} />}
+                                                        {errors.pincode && <Error title="Pincode is required*" />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -476,9 +354,10 @@ function AddDriverFrom(props) {
                                                         </label>
                                                         <input
                                                             type="text"
+                                                            maxLength={6}
                                                             placeholder='City'
                                                             className={inputClass}
-                                                            {...register('city', { required: true })}
+                                                            {...register('city', { required: true, })}
                                                         />
                                                         {errors.city && <Error title="City is required*" />}
                                                     </div>
@@ -488,29 +367,189 @@ function AddDriverFrom(props) {
                                                         </label>
                                                         <input
                                                             type="text"
+                                                            maxLength={6}
                                                             placeholder='State'
                                                             className={inputClass}
-                                                            {...register('state', { required: true })}
+                                                            {...register('state', { required: true, })}
                                                         />
-                                                        {errors.state && <Error title="State is required*" />}
+                                                        {errors.state && <Error title="state is required*" />}
                                                     </div>
-
-                                                    {/* <div className="">
+                                                    <div className="">
                                                         <label className={labelClass}>
-                                                            Commission
+                                                            Date Of Birth*
+                                                        </label>
+                                                        <input
+                                                            type="date"
+                                                            placeholder='Date Of Birth'
+                                                            className={inputClass}
+                                                            {...register('date_of_birth', { required: true, })}
+                                                        />
+                                                        {errors.date_of_birth && <Error title="Date Of Birth is required*" />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Gender*
+                                                        </label>
+
+                                                        <select
+                                                            className={inputClass}
+                                                            {...register('date_of_birth', { required: true, })}
+                                                        >
+                                                            <option value=''>Select</option>
+                                                            <option value='Male'>Male</option>
+                                                            <option value='Female'>Female</option>
+                                                        </select>
+                                                        {errors.date_of_birth && <Error title="Date Of Birth is required*" />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Driving License Number
                                                         </label>
                                                         <input
                                                             type="text"
-                                                            placeholder="Commission"
+                                                            placeholder='Driving License Number'
                                                             className={inputClass}
-                                                            {...register('commission')}
+                                                            {...register('driver_license', { required: true })}
                                                         />
-                                                    </div> */}
-
-                                                    {/* --------------- kyc details ------------ */}
-
+                                                        {errors.driver_license && <Error title='Driving License Number is required' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Vehicle Type*
+                                                        </label>
+                                                        <input
+                                                            type="number"
+                                                            placeholder='Vehicle Type'
+                                                            className={inputClass}
+                                                            {...register('vehicle_type', { required: true, })}
+                                                        />
+                                                        {errors.vehicle_type && <Error title='Vehicle Type is required*' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Vehicle RC*
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='Vehicle RC'
+                                                            className={inputClass}
+                                                            {...register('vehicle_rc', { required: true, })}
+                                                        />
+                                                        {errors.vehicle_rc && <Error title='Vehicle RC is required' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Bank Name
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Bank Name"
+                                                            className={inputClass}
+                                                            {...register('bank_name', { required: true })}
+                                                        />
+                                                        {errors.bank_name && <Error title='Bank Name is required' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Account Number*
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='Account Number'
+                                                            className={inputClass}
+                                                            {...register('account_number', { required: true })}
+                                                        />
+                                                        {errors.account_number && <Error title="Account Number is required*" />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            IFSC Code
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='IFSC Code'
+                                                            className={inputClass}
+                                                            {...register('ifsc_code', { required: true })}
+                                                        />
+                                                        {errors?.ifsc_code && <Error title='IFSC Code is required' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Aadhar Card Number
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='Aadhar Card Number'
+                                                            className={inputClass}
+                                                            {...register('adhar_card', { required: true })}
+                                                        />
+                                                        {errors?.adhar_card && <Error title='Aadhar Card Number is required' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            PAN Card Number*
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='PAN Card Number'
+                                                            className={inputClass}
+                                                            {...register('pan_card', { required: true })}
+                                                        />
+                                                        {errors.pan_card && <Error title='PAN Card Number is required' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass} htmlFor="main_input">Address Proof Image*</label>
+                                                        <input className={fileinput}
+                                                            id="main_input"
+                                                            type='file'
+                                                            multiple
+                                                            accept='image/jpeg,image/jpg,image/png'
+                                                            placeholder='Upload Images...'
+                                                            {...register("address_proof", { required: props.button == 'edit' ? false : true })} />
+                                                        {props?.button == 'edit' && props?.data.address_proof != '' && props?.data.address_proof != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.data?.address_proof?.split('/').pop()}
+                                                        </label>}
+                                                        {errors.bank_passbook && <Error title='Address Proof Image is required*' />}
+                                                    </div>                                                    <div className="">
+                                                        <label className={labelClass} htmlFor="main_input">Bank PassBook Image*</label>
+                                                        <input className={fileinput}
+                                                            id="main_input"
+                                                            type='file'
+                                                            multiple
+                                                            accept='image/jpeg,image/jpg,image/png'
+                                                            placeholder='Upload Images...'
+                                                            {...register("bank_passbook", { required: props.button == 'edit' ? false : true })} />
+                                                        {props?.button == 'edit' && props?.data.bank_passbook != '' && props?.data.bank_passbook != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.data?.bank_passbook?.split('/').pop()}
+                                                        </label>}
+                                                        {errors.bank_passbook && <Error title='Bank PassBook Image is required*' />}
+                                                    </div>
+                                                    <div>
+                                                        <label className={labelClass}>Is Activated</label>
+                                                        <select
+                                                            {...register('is_activated', { required: true })}
+                                                            className={inputClass}
+                                                        >
+                                                            <option value={true}>Yes</option>
+                                                            <option value={false}>no</option>
+                                                        </select>
+                                                        {errors?.is_activated && <Errors title='Acitvated Status is required' />}
+                                                    </div>
+                                                    <div>
+                                                        <label className={labelClass}>Driver Rating's</label>
+                                                        <select
+                                                            {...register('driver_rating', { required: true })}
+                                                            className={inputClass}
+                                                        >
+                                                            <option value={1}>1</option>
+                                                            <option value={2}>2</option>
+                                                            <option value={3}>3</option>
+                                                            <option value={4}>4</option>
+                                                            <option value={5}>5</option>
+                                                        </select>
+                                                        {errors?.driver_rating && <Errors title='Acitvated Status is required' />}
+                                                    </div>
                                                 </div>
-
                                             </div>
                                             {/* =============== footer section ==================== */}
                                             <footer className="py-2 flex bg-white justify-end px-4 space-x-3">
@@ -519,8 +558,6 @@ function AddDriverFrom(props) {
                                             </footer>
                                         </form>
                                     </div>
-
-
                                 </Dialog.Panel>
                             </Transition.Child>
                         </div>
