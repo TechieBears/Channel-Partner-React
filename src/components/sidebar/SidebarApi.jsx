@@ -80,7 +80,7 @@ export const Seller = [
     {
         title: 'Dashboard',
         icon: <Element4 size="24" />,
-        link: '/seller-dashboard',
+        link: '/',
     },
     {
         title: 'Orders',
@@ -125,7 +125,7 @@ export const Franchise = [
     {
         title: 'Dashboard',
         icon: <Element4 size="24" />,
-        link: '/franchise-dashboard',
+        link: '/',
     },
     {
         title: 'Analytics',
