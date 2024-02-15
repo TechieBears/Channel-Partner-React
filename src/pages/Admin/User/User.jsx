@@ -5,19 +5,21 @@ import Table from '../../../components/Table/Table';
 import { Link } from 'react-router-dom';
 import { Eye, Trash } from 'iconsax-react';
 import CreateUserForm from '../../../components/Modals/UserModals/CreateUserForm';
-import { delUser, editUser, getUser } from '../../../api';
+import { delUser, editUser, getAllCustomers } from '../../../api';
 import userImg from '../../../assets/user.jpg';
 import Switch from 'react-js-switch';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { environment } from '../../../env';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUserList } from '../../../redux/Slices/userSlice';
+import { setCustomersData } from '../../../redux/Slices/userSlice';
 import DeleteModal from '../../../components/Modals/DeleteModal/DeleteModal';
 
 function User() {
     const dispatch = useDispatch()
-    const userList = useSelector(state => state.users.list)
+    const customersData = useSelector(state => state.users.customers)
+    console.log('customersData = ', customersData);
+
     const {
         register,
         handleSubmit,
@@ -27,28 +29,35 @@ function User() {
     const [open, setOpen] = React.useState(false);
     const [delId, setDelId] = React.useState(0);
 
+
+
     // =================== filter data ========================
     const onSubmit = async (data) => {
         if (data?.name != '' || data?.email != '' || data?.city != '' || data?.role != '') {
             let url = `${environment.baseUrl}user-filter/?first_name=${data?.name}&email=${data?.email}&city=${data?.city}&role=${data?.role}`
             await axios.get(url).then((res) => {
-                dispatch(setUserList(res.data))
+                dispatch(setCustomersData(res.data))
                 toast.success("Filters applied successfully")
             })
         } else {
             toast.warn("No Selected Value !")
         }
     }
+
+
+
     // =================== fetching data ========================
     const fetchData = () => {
         try {
-            getUser().then((res) => {
-                dispatch(setUserList(res))
+            getAllCustomers().then((res) => {
+                dispatch(setCustomersData(res))
             })
         } catch (err) {
             console.log('error', err);
         }
     }
+
+
 
     // =================== delete the user data ========================
     const toggleModalBtn = (id) => {
@@ -68,6 +77,8 @@ function User() {
         })
     }
 
+    
+
     // =================== table action ========================
     const actionBodyTemplate = (row) => (
         <div className="flex items-center gap-2">
@@ -84,13 +95,17 @@ function User() {
     const representativeBodyTemplate = (row) => {
         return (
             <div className="rounded-full w-11 h-11">
-                <img src={row?.profile == null || row?.profile == '' || row?.profile == undefined ? userImg : row?.profile} className="object-cover w-full h-full rounded-full" alt={row.first_name} />
+                <img src={row?.profile_pic == null || row?.profile_pic == '' || row?.profile_pic == undefined ? userImg : row?.profile_pic} className="object-cover w-full h-full rounded-full" alt={row.first_name} />
             </div>
         );
     };
 
     // =================== table user verify column  ========================
-    const activeActionsRole = (rowData) => <h6 className={`${rowData?.role == 'admin' ? "bg-orange-100 text-sky-400" : rowData?.role !== "user" ? "bg-red-100 text-red-500" : "bg-green-100 text-green-500"} py-2 px-5 text-center capitalize rounded-full`}>{rowData?.role}</h6>
+    const activeActionsRole = (rowData) => <h6 className={`${ rowData?.isactive == true ? "bg-green-100 text-green-500": "bg-red-100 text-red-500"} py-2 px-5 text-center capitalize rounded-full`}>
+         {rowData?.isactive == true ? "Active" : "Inactive"}
+        {/* {rowData?.role} */}
+        </h6>
+    
     const verifyActions = (row) => {
         const payload = { isverify: !row.isverify, email: row?.email }
         try {
@@ -160,9 +175,12 @@ function User() {
         { field: 'profile', header: 'Profile', body: representativeBodyTemplate, sortable: true, style: true },
         { field: 'first_name', body: (row) => <div className="capitalize">{row.first_name + " " + row.last_name}</div>, header: 'Name' },
         { field: 'email', header: 'Email', body: (row) => row.email.slice(0, 15) + "..." },
-        { field: 'phone_no', header: 'Number' },
-        { field: 'comp_name', header: 'Company Name', body: (row) => row?.comp_name?.length == 0 ? "---------------" : row.comp_name },
-        { field: 'service', header: 'Service', body: (row) => row?.service?.length == 0 ? "---------------" : row.service },
+        { field: 'phone_no', header: 'Phone Number' },
+        { field: 'registration_date', header: 'Registered Date' },
+        { field: 'city', header: 'City' },
+        { field: 'state', header: 'State' },
+        // { field: 'comp_name', header: 'Company Name', body: (row) => row?.comp_name?.length == 0 ? "---------------" : row.comp_name },
+        // { field: 'service', header: 'Service', body: (row) => row?.service?.length == 0 ? "---------------" : row.service },
         { field: 'role', header: 'Role', body: activeActionsRole },
         { field: 'id', header: 'Action', body: actionBodyTemplate, sortable: true },
         { field: 'isactive', header: 'Active', body: switchActive, sortable: true },
@@ -242,11 +260,11 @@ function User() {
             <div className="p-4 bg-white sm:m-5 rounded-xl" >
                 <div className="flex flex-col items-start justify-between mb-6 sm:flex-row sm:items-center sm:space-y-0">
                     <div className="">
-                        <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>Registration Users</h1>
+                        <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>Registered Users</h1>
                     </div>
                     <CreateUserForm title='Add User' />
                 </div>
-                <Table data={userList} columns={columns} />
+                <Table data={customersData} columns={columns} />
             </div>
         </>
     )

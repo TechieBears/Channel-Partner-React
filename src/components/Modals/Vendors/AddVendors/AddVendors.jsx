@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState } from 'react';
+import { Fragment, useRef, useState, useMemo } from 'react';
 import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom';
@@ -6,8 +6,8 @@ import LoadBox from '../../../Loader/LoadBox';
 import { useForm } from 'react-hook-form';
 import Error from '../../../Errors/Error';
 import { MultiSelect } from 'primereact/multiselect';
-import { Add } from 'iconsax-react';
-import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../../utils/CustomClass';
+import { Add , Edit} from 'iconsax-react';
+import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../../utils/CustomClass';
 import { GetFranchiseeVendors, CreateFranchiseeVendors } from "../../../../api";
 import { setFranchiseVendors } from "../../../../redux/Slices/masterSlice";
 import { setLoggedUser, setLoggedUserDetails, setRoleIs, setFranchiseeDetails } from '../../../../redux/Slices/loginSlice';
@@ -16,13 +16,13 @@ import { ImageUpload, vendorlink } from "../../../../env";
 
 
 export default function AddVendors(props) {
-
+  console.log('props = ', props)
     const categories = useSelector((state) => state?.master?.Category);  
     const user = useSelector((state) => state?.user?.FranchiseeDetails);  
 
 
-    console.log('Franchisee details = ', user);
-    console.log('Categories details = ', categories);
+    // console.log('Franchisee details = ', user);
+    // console.log('Categories details = ', categories);
 
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
@@ -143,12 +143,64 @@ export default function AddVendors(props) {
         }
 
 
+        // ======================== Reset data into the form  =======================
+        useMemo(() => {
+            reset({
+              first_name: props?.data?.user?.first_name,
+              last_name: props?.data?.user?.last_name,
+              phone_no: props?.data?.user?.phone_no,
+              profile_pic: props?.data?.user?.profile_pic,
+              date_of_birth: props?.data?.user?.date_of_birth,
+              email: props?.data?.user?.email,
+              pincode: props?.data?.user?.pincode,
+              state: props?.data?.user?.state,
+              city: props?.data?.user?.city,
+              address: props?.data?.user?.address,
+              adhar_card: props?.data?.adhar_card,
+              pan_card: props?.data?.pan_card,
+              gst_number: props?.data?.gst_number,
+              bank_name: props?.data?.bank_name,
+              account_number: props?.data?.account_number,
+              bank_passbook: props?.data?.bank_passbook,
+              ifsc_code: props?.data?.ifsc_code,
+              address_proof: props?.data?.address_proof,
+              gender: props?.data?.user?.gender,
+              // password: props?.data?.password,
+
+              shop_name: props?.data?.shop_name,
+              hawker_shop_photo: props?.data?.hawker_shop_photo,
+              shop_start_time: props?.data?.shop_start_time,
+              shop_end_time: props?.data?.shop_end_time,
+              vendor_type: props?.data?.vendor_type,
+            });
+          }, [props.data]);
+      
+        // useEffect(() => {
+        //   if (props.button == "edit") {
+        //       fillData()
+        //   }
+        // }, [])
+      
+
+
     return (
         <>
-            <button className={`${formBtn1} flex`} onClick={() => setOpen(true)}>
+          {props.button !== "edit" ? (
+            <button onClick={toggle} className={tableBtn}>
+                Add Vendors
+            </button>
+        ) : (
+            <button
+                onClick={toggle}
+                className="bg-yellow-100 px-1.5 py-2 rounded-sm"><Edit size="20" className='text-yellow-500' />
+            </button>
+        )}
+
+        
+            {/* <button className={`${formBtn1} flex`} onClick={() => setOpen(true)}>
                 <Add className='text-white' />
                 {props?.title}
-            </button>
+            </button> */}
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-[100]" onClose={() => toggle}>
                     <Transition.Child
@@ -223,7 +275,7 @@ export default function AddVendors(props) {
                                                         {props?.button == 'edit' && props?.data.profile_pic != '' && props?.data.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                                                             {props?.data?.profile_pic?.split('/').pop()}
                                                         </label>}
-                                                        {errors.image && <Error title='Main Image is required*' />}
+                                                        {errors.profile_pic && <Error title='Profile Image is required*' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>Email*</label>
@@ -249,7 +301,8 @@ export default function AddVendors(props) {
                                                             <Error title="Phone is Required*" />
                                                         )}
                                                     </div>
-                                                    <div className="">
+                                                    {props.button != 'edit' && 
+                                                        <div className="">
                                                         <label className={labelClass}>
                                                             Create Password
                                                         </label>
@@ -259,7 +312,8 @@ export default function AddVendors(props) {
                                                             className={inputClass}
                                                             {...register("password")}
                                                         />
-                                                    </div>
+                                                    </div>}
+                                            
 
                                                     <div className="">
                                                         <label className={labelClass}>

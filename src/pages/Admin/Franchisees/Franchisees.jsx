@@ -3,8 +3,8 @@ import { Eye  } from 'iconsax-react';
 import Table from '../../../components/Table/Table';
 import { Link } from 'react-router-dom';
 import Switch from 'react-switch'
-import AddFranchisee from '../../../components/Modals/Franchisee/Franchisee';
-import CreateUserForm from '../../../components/Modals/UserModals/CreateUserForm';
+import AddFranchisee from '../../../components/Modals/Franchisee/AddFranchiseForm';
+import AddFranchiseForm from '../../../components/Modals/Franchisee/AddFranchiseForm';
 import { useDispatch, useSelector } from "react-redux";
 import { GetFranchisee } from "../../../api";
 import { setFranchise } from "../../../redux/Slices/masterSlice";
@@ -13,12 +13,11 @@ import { useForm } from 'react-hook-form';
 import userImg from '../../../assets/user.jpg';
 import { formBtn1, formBtn2, inputClass ,tableBtn } from '../../../utils/CustomClass';
 
-
-
-
 function Franchisees() {
   const dispatch = useDispatch()
   const Franchisee = useSelector((state) => state?.master?.Franchise);
+  console.log('franchisee Table data = ', Franchisee);
+
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
   const [open, setOpen] = React.useState(false);
@@ -36,7 +35,6 @@ function Franchisees() {
     const FranchiseeDetails = () => {
         try {
           GetFranchisee().then((res) => {
-            console.log(res);
             dispatch(setFranchise(res));
           });
         } catch (error) {
@@ -113,7 +111,7 @@ function Franchisees() {
             <Link to={`/user/${row.id}`} state={row} className="bg-green-100 px-1.5 py-2 rounded-sm">
                 <Eye size="20" className='text-green-500' />
             </Link>
-            <CreateUserForm button='edit' title='Edit User' data={row} />
+            <AddFranchiseForm button='edit' title='Edit User' data={row} />
         </div>
     );
 
@@ -122,7 +120,7 @@ function Franchisees() {
     const representativeBodyTemplate = (row) => {
         return (
             <div className="rounded-full w-11 h-11">
-                <img src={row?.profile_pic == null || row?.profile_pic == '' || row?.profile_pic == undefined ? userImg : row?.profile_pic} className="object-cover w-full h-full rounded-full" alt={row.first_name} />
+                <img src={row?.user?.profile_pic == null || row?.user?.profile_pic == '' || row?.user?.profile_pic == undefined ? userImg : row?.user?.profile_pic} className="object-cover w-full h-full rounded-full" alt={row.user?.first_name} />
             </div>
         );
     };
@@ -130,8 +128,8 @@ function Franchisees() {
 
     // =================== table user verify column  ========================
     const activeActionsRole = (rowData) => (
-    <h6 className={`${rowData?.isactive !== "false" ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"} py-2 px-5 text-center capitalize rounded-full`}>
-        {rowData?.isactive !== "false" ? "Active" : "Inactive"}
+    <h6 className={`${rowData?.user?.isactive !== "false" ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"} py-2 px-5 text-center capitalize rounded-full`}>
+        {rowData?.user?.isactive !== "false" ? "Active" : "Inactive"}
     </h6>
     );
  
@@ -143,13 +141,15 @@ function Franchisees() {
     const columns = [
         // { field: 'id', header: 'ID', sortable: false },
         { field: 'profile_pic', header: 'Profile', body: representativeBodyTemplate, sortable: false, style: true },
-        { field: 'first_name', body: (row) => <div className="capitalize">{row.first_name + " " + row.last_name}</div>, header: 'Name' },
-        { field: 'email', header: 'Email', body: (row) => <h6>{row?.email}</h6>, sortable: false },
-        { field: 'phone_no', header: 'Phone No' },
-        { field: 'pincode', header: 'Pincode', sortable: false },
-        { field: 'address', header: 'Address', sortable: false },
-        { field: 'state', header: 'state', sortable: false },
-        { field: 'registration_date', header: 'Registration Date', sortable: false },
+        { field: 'first_name', body: (row) => <div className="capitalize">{row?.user?.first_name + " " + row?.user?.last_name}</div>, header: 'Name' },
+        { field: 'email', header: 'Email', body: (row) => <h6>{row?.user?.email}</h6>, sortable: false },
+        { field: 'gender', header: 'Gender', body: (row) => <h6>{row?.user?.gender}</h6>, sortable: false },
+        { field: 'phone_no', header: 'Phone No', body: (row) => <h6>{row?.user?.phone_no}</h6>, sortable: false },
+        { field: 'pincode', header: 'Pincode', body: (row) => <h6>{row?.user?.pincode}</h6>, sortable: false },
+        { field: 'address', header: 'Address', body: (row) => <h6>{row?.user?.address}</h6>, sortable: false },
+        { field: 'state', header: 'state', body: (row) => <h6>{row?.user?.state}</h6>, sortable: false },
+        { field: 'city', header: 'city', body: (row) => <h6>{row?.user?.city}</h6>, sortable: false },
+        { field: 'registration_date', header: 'Registration Date', body: (row) => <h6>{row?.user?.registration_date}</h6>, sortable: false },
         { field: 'status', header: 'Status', body: activeActionsRole, sortable: false },
         { field: 'id', header: 'Action', body: actionBodyTemplate, sortable: true },
         {  header: 'Analyse', body: action, sortable: false },
@@ -214,47 +214,18 @@ function Franchisees() {
                     </div>
                 </form>
             </div>
+            
             {/*====================== User Table ================================*/}
             <div className="p-4 bg-white sm:m-5 rounded-xl" >
                 <div className="flex flex-col items-start justify-between mb-6 sm:flex-row sm:items-center sm:space-y-0">
                     <div className="">
                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>  Franchisee Details</h1>
                     </div>
-                    <AddFranchisee title='Add Franchisee' />
+                    {/* <AddFranchisee title='Add Franchisee' /> */}
                 </div>
                 <Table data={Franchisee} columns={columns} />
             </div>
         </>
-
-        // <div className='p-4 space-y-4'>
-        //     <div className="flex">
-        //         <button
-        //             onClick={() => changeTab(1)}
-        //             className={`py-2 px-0 ${activeTab === 1 ? 'border-b-2 border-blue-400 text-black' : 'bg-transparent'
-        //                 }`}
-        //         >
-        //             Franchisee Details
-        //         </button>
-           
-        //     </div>
-        //     <div className='grid grid-cols-3 gap-10 mt-4'>
-        //         <div className='flex gap-2 p-3 bg-white border-2 border-gray-300 rounded-lg '>
-        //             <SearchNormal className='text-gray-400' />
-        //             <input placeholder='Search by Name / email' className='w-full h-full' />
-        //         </div>
-        //         <input className={inputClass} placeholder='Search By Pincode' />
-        //         <div className='grid items-center grid-cols-3 gap-2'>
-        //             <button className='flex gap-2 p-3 bg-white border-2 rounded-lg '>
-        //                 <Refresh className='text-gray-400' />
-        //                 <p>Refresh</p>
-        //             </button>
-        //             {activeTab == 1 && <div className='col-span-2'>
-        //                 <AddFranchisee title='Add Franchisee' />
-        //             </div>}
-        //         </div>
-        //     </div>
-        //     { Franchisee?.length > 0 && <Table data={Franchisee} columns={columns} />}
-        // </div>
     )
 }
 

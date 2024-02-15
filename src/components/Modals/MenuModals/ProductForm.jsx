@@ -160,7 +160,7 @@ export default function ProductForm(props) {
                     as="h2"
                     className="w-full px-3 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
                   >
-                    {props?.title}
+                  {props?.title}
                   </Dialog.Title>
                   <div className=" bg-gray-200/70">
                     {/* React Hook Form */}
