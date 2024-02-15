@@ -92,31 +92,31 @@ export const Seller = [
         icon: <LayoutList size="24" />,
         link: '/product-list',
     },
-    {
-        title: 'Paid Plans',
-        icon: <Notebook size="24" />,
-        link: '/paid-plans',
-    },
+    // {
+    //     title: 'Paid Plans',
+    //     icon: <Notebook size="24" />,
+    //     link: '/paid-plans',
+    // },
     {
         title: 'Wallet',
         icon: <Wallet size="24" />,
         link: '/wallet',
     },
-    {
-        title: 'Market Place',
-        icon: <ShoppingCart size="24" />,
-        link: '/market-place',
-    },
+    // {
+    //     title: 'Market Place',
+    //     icon: <ShoppingCart size="24" />,
+    //     link: '/market-place',
+    // },
     {
         title: 'Support',
         icon: <Headphone size="24" />,
         link: '/support',
     },
-    {
-        title: 'Settings',
-        icon: <Settings2 size="24" />,
-        link: '/settings',
-    },
+    // {
+    //     title: 'Settings',
+    //     icon: <Settings2 size="24" />,
+    //     link: '/settings',
+    // },
 ]
 
 

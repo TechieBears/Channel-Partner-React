@@ -56,26 +56,26 @@ const Dashboard = () => {
 
     // ====================== fetch data api ==================================
 
-    const StorageList = () => {
-        if (user.role == "admin") {
-            getStorages()
-                .then((res) => {
-                    console.log(res);
-                    dispatch(setStorageList(res));
-                })
-                .catch((err) => {
-                    console.error("Error", err);
-                });
-        } else {
-            getPartnerStorage(user?.userid)
-                .then((res) => {
-                    dispatch(setStorageList(res));
-                })
-                .catch((err) => {
-                    console.error("Error", err);
-                });
-        }
-    };
+    // const StorageList = () => {
+    //     if (user.role == "admin") {
+    //         getStorages()
+    //             .then((res) => {
+    //                 console.log(res);
+    //                 dispatch(setStorageList(res));
+    //             })
+    //             .catch((err) => {
+    //                 console.error("Error", err);
+    //             });
+    //     } else {
+    //         getPartnerStorage(user?.userid)
+    //             .then((res) => {
+    //                 dispatch(setStorageList(res));
+    //             })
+    //             .catch((err) => {
+    //                 console.error("Error", err);
+    //             });
+    //     }
+    // };
 
     // ================================ Dropdown List =========================
 
@@ -102,7 +102,7 @@ const Dashboard = () => {
             name: null,
             location: "",
         });
-        StorageList();
+        // StorageList();
         toast.success("Filters clear");
     };
 
@@ -114,7 +114,7 @@ const Dashboard = () => {
     const deleteData = () => {
         deleteStorage(delId).then((form) => {
             if (form?.message === "Data deleted successfully") {
-                StorageList();
+                // StorageList();
                 toast.success(form?.message);
                 setOpen(!open);
             }
@@ -130,85 +130,56 @@ const Dashboard = () => {
             "orderDate": "Jan 1, 2024 , 05:56 PM",
             "items": [
                 {
-                    "itemName": "Butter Milk",
-                    "itemDescription": "Lorem ipsum dolor, sit amet",
-                    "imageSrc": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU",
-                    "quantity": 2,
-                    'price': 50,
-                    'category': 'dairy'
+                    "name": "Butter Milk",
+                    "quantity": 7,
+                    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU",
+                    "description": "Lorem ipsum dolor, sit amet"
                 }
             ],
-            "orderPrice": "$1,000",
             "paymentMethod": "Cash",
-            "location": 'Parel',
-
+            "orderPrice": 1000
         },
         {
             "orderId": 754,
-            "orderDate": "Jan 2, 2024 , 10:30 AM",
+            "orderDate": "Jan 2, 2024 , 10:12 AM",
             "items": [
                 {
-                    "itemName": "Coffee",
-                    "itemDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-                    "imageSrc": "https://example.com/coffee.jpg",
+                    "name": "Chocolate Cake",
                     "quantity": 2,
-                    'price': 20,
-                    'category': 'grocery'
+                    "image": "https://example.com/cake.jpg",
+                    "description": "Delicious chocolate cake"
                 },
                 {
-                    "itemName": "Croissant",
-                    "itemDescription": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
-                    "imageSrc": "https://example.com/croissant.jpg",
-                    "quantity": 2,
-                    'price': 200,
-                    'category': 'food'
+                    "name": "Vanilla Ice Cream",
+                    "quantity": 3,
+                    "image": "https://example.com/icecream.jpg",
+                    "description": "Creamy vanilla goodness"
                 }
             ],
-            "orderPrice": "$25",
-            "paymentMethod": "UPI",
-            "location": 'Thane',
+            "paymentMethod": "Credit Card",
+            "orderPrice": 350
+        },
+        {
+            "orderId": 755,
+            "orderDate": "Jan 3, 2024 , 03:45 PM",
+            "items": [
+                {
+                    "name": "Cheese Pizza",
+                    "quantity": 1,
+                    "image": "https://example.com/pizza.jpg",
+                    "description": "Delicious cheesy pizza"
+                },
+                {
+                    "name": "Garlic Bread",
+                    "quantity": 2,
+                    "image": "https://example.com/garlicbread.jpg",
+                    "description": "Garlicky goodness"
+                }
+            ],
+            "paymentMethod": "PayPal",
+            "orderPrice": 25
         }
     ]
-
-    const name = (row) => row?.items?.map(item => <h6 key={item?.itemName}>{item?.itemName}</h6>);
-    const quantity = (row) => row?.items?.map(item => <h6 key={item?.itemQuantity}>{item?.quantity}</h6>)
-    const description = (row) => row?.items?.map(item => <h6 className="w-52" key={item?.itemDescription}>{item?.itemDescription}</h6>)
-    const itemPrice = (row) => row?.items?.map(item => <h6 key={item?.price}>{item?.price}</h6>)
-    const category = (row) => row?.items?.map(item => <h6 key={item?.category}>{item?.category}</h6>)
-    const action = (row) => <div className="flex items-center space-x-1">
-        <ViewProduct product={row} title='Order Details' />
-        <div className="p-1 cursor-pointer bg-green-50 rounded-xl">
-            <ClipboardTick size={20} color="green" />
-        </div>
-        <div className="p-1 cursor-pointer bg-red-50 rounded-xl">
-            <Trash size={20} color="red" />
-        </div>
-    </div>
-
-
-    const columns = [
-        { field: "orderId", header: "Order ID" },
-        { field: "OrderDate", header: "Order Date", body: (row) => <h6>{moment(row?.orderDate).format('MMM Do YY')}</h6>, sortable: true },
-        { field: "name", header: "Name", body: name, sortable: true },
-        { field: "quantity", header: "Quantity", body: quantity, sortable: true },
-        { field: "description", header: "Description", body: description, sortable: true },
-        { field: "paymentMethod", header: "Payment Method", sortable: true },
-        { field: "price", header: "Price", body: itemPrice, sortable: true },
-        { field: "category", header: "Category", body: category, sortable: true },
-        { field: "location", header: "Location", sortable: true },
-        { field: "orderPrice", header: "Total Price", sortable: true },
-        { field: "action", header: "Action", body: action, sortable: true },
-    ];
-
-    useEffect(() => {
-        StorageList();
-    }, []);
-
-    const [activeTab, setActiveTab] = useState(1);
-
-    const changeTab = (tabNumber) => {
-        setActiveTab(tabNumber);
-    };
 
     return (
         <>
@@ -331,7 +302,7 @@ const Dashboard = () => {
                         </div>
                     </form>
                 </div>
-                <div className="mx-auto mt-8 sm:m-5">
+                {/* <div className="mx-auto mt-8 sm:m-5">
                     <Tabs
                         selectedIndex={selectedTab}
                         onSelect={(index) => setSelectedTab(index)}
@@ -346,11 +317,77 @@ const Dashboard = () => {
                                 New Order's
                             </Tab>
                         </TabList>
-                        {/* ================= NewPending Orders component ============== */}
                         <TabPanel className='mt-5'>
                             <Table data={data} columns={columns} />
                         </TabPanel>
                     </Tabs>
+                </div> */}
+                {/* ===================== New Order Section ===================== */}
+                <div className="grid gap-6 m-4 bg-white p-4 rounded-xl md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2">
+                    {data.map(product => (
+                        <NavLink
+                            to={`/vendor-orders/order-detail/:${product?.id}`}
+                            className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg hover:shadow-xl"
+                            previewlistener="true" key={product?.id}
+                        >
+                            <div className="items-center gap-x-3">
+                                <div className="flex flex-wrap justify-between p-4">
+                                    <p className="text-sm">
+                                        Order Id - <span className="text-sky-400">{product?.orderId}</span>
+                                    </p>
+                                    <p className="text-sm">
+                                        Order Date -{" "}
+                                        <span className="text-base font-semibold text-center text-gray-800">
+                                            {product?.orderDate}
+                                        </span>{" "}
+                                    </p>
+                                </div>
+                                <div className="flex-1 p-4 my-2">
+                                    <div className="grid grid-cols-2 items-center">
+                                        <div className="grid grid-cols-2">
+                                            {product?.items?.map(item => (
+                                                <div key={item?.name} className="">
+                                                    <img
+                                                        className="w-16 border-2 p-1 rounded-xl"
+                                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU"
+                                                        alt=""
+                                                    />
+                                                    <div>
+                                                        <h2 className="text-sm font-semibold tracking-wide text-gray-800 ">
+                                                            Butter Milk x {item?.quantity} more
+                                                        </h2>
+                                                        {/* <p>Lorem ipsum dolor, sit amet </p> */}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        <p className=" col-span-1 mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 ">
+                                            Payment - {product?.paymentMethod}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
+                                    <p className="text-base font-medium">Order Price - $ {product?.orderPrice}</p>
+                                    <div className="flex items-center gap-x-2">
+                                        <button
+                                            type="button"
+                                            className={formBtn2}
+                                        >
+                                            Reject
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            className={formBtn1}
+                                        >
+                                            Confirm
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </NavLink>
+                    ))}
+
                 </div>
             </section>
         </>

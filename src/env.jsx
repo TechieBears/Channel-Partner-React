@@ -1,11 +1,10 @@
 export const environment = {
     // --------------------Local Server Api URL--------------------
-    baseUrl: 'http://192.168.0.151:8005/',
-    // baseUrl: 'http://127.0.0.1:8000/',
+    // baseUrl: 'http://192.168.0.151:8005/',
+    baseUrl: 'http://127.0.0.1:8000/',
 
 
     // --------------------Live Server Api URL--------------------
-    // baseUrl: 'https://ref.techiebears.com/',
     // baseUrl: 'https://cpapi.techiebears.com/',
 }
 
@@ -86,5 +85,5 @@ export const productLink = 'https://channel-partner-media.s3.ap-south-1.amazonaw
 
 
 // ---- Franchisee Links ----
-export const franchiselink  = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/franchisee/'
-export const vendorlink  = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/vendor/'
+export const franchiselink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/franchisee/'
+export const vendorlink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/vendor/'

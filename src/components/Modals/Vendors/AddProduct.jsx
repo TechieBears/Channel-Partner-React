@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { useDispatch } from 'react-redux';
@@ -9,10 +9,13 @@ import Error from '../../Errors/Error';
 import { MultiSelect } from 'primereact/multiselect';
 import { Add } from 'iconsax-react';
 import { formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
+import { getCategory, getSubCategory } from '../../../api';
 
 function AddProduct(props) {
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
+    const [category, setCategory] = useState([]);
+    const [subCategory, setsubCategory] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState([])
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -26,6 +29,16 @@ function AddProduct(props) {
     const onSubmit = (data) => {
         console.log('data', data)
     }
+
+    useEffect(() => {
+        getCategory().then(res => {
+            // console.log('res', res)
+            setCategory(res)
+        })
+        getSubCategory().then(res => {
+            setSubCategory(res)
+        })
+    }, [])
     return (
         <>
             <button className={`${formBtn1} flex`} onClick={() => setOpen(true)}>
@@ -89,9 +102,10 @@ function AddProduct(props) {
                                                             className={inputClass}
                                                             {...register('product_category', { required: true })}
                                                         >
-                                                            <option value='grocery'>Grocery</option>
-                                                            <option value='Dairy'>Dairy</option>
-                                                            <option value='Other'>Other</option>
+                                                            <option value=''>Select</option>
+                                                            {category.map(item => (
+                                                                <option key={item?.id} value={item?.id}>{item?.category_name}</option>
+                                                            ))}
                                                         </select>
                                                         {errors.product_category && <Error title='Category is Required*' />}
                                                     </div>
@@ -103,9 +117,12 @@ function AddProduct(props) {
                                                             className={inputClass}
                                                             {...register('sub_category', { required: true })}
                                                         >
-                                                            <option value='Milk'>Milk</option>
-                                                            <option value='Curd'>Curd</option>
-                                                            <option value='Other'>Other</option>
+                                                            <option value=''>Select</option>
+                                                            {
+                                                                subCategory.map(item => (
+                                                                    <option key={item?.subcat_id} value={item?.subcat_id} >{item?.subcat_name}</option>
+                                                                ))
+                                                            }
                                                         </select>
                                                         {errors.sub_category && <Error title='Sub Category is Required*' />}
                                                     </div>
@@ -271,6 +288,7 @@ function AddProduct(props) {
                                                         />
                                                         {/* {errors.tags && <Error title='Tags is Required*' />} */}
                                                     </div>
+                                                    <p className='col-span-4 text-xl font-semibold'>Additional Information</p>
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             Description*
@@ -279,9 +297,69 @@ function AddProduct(props) {
                                                             type="text"
                                                             placeholder='Description'
                                                             className={inputClass}
-                                                            {...register('product_description', { required: true })}
+                                                            {...register('product_details', { required: true })}
                                                         />
-                                                        {errors.product_description && <Error title='Description is Required*' />}
+                                                        {errors.product_details && <Error title='Description is Required*' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Country of Origin*
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='Country of Origin'
+                                                            className={inputClass}
+                                                            {...register('country_of_origin', { required: true })}
+                                                        />
+                                                        {errors.country_of_origin && <Error title='Country of Origin is Required*' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Shell Life*
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='Shell Life'
+                                                            className={inputClass}
+                                                            {...register('shell_life', { required: true })}
+                                                        />
+                                                        {errors.shell_life && <Error title='Shell Life is Required*' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            FSSAI License*
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='FSSAI License'
+                                                            className={inputClass}
+                                                            {...register('fssai_lic', { required: true })}
+                                                        />
+                                                        {errors.fssai_lic && <Error title='FSSAI License is Required*' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Manufacturer Name*
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='Manufacturer Name'
+                                                            className={inputClass}
+                                                            {...register('manufac_name', { required: true })}
+                                                        />
+                                                        {errors.manufac_name && <Error title='Manufacturer Name is Required*' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Nutritional Info*
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='Nutritional Info'
+                                                            className={inputClass}
+                                                            {...register('nutri_info', { required: true })}
+                                                        />
+                                                        {errors.nutri_info && <Error title='Nutritional Info is Required*' />}
                                                     </div>
                                                 </div>
                                             </div>
