@@ -4,7 +4,7 @@ import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from 
 import { useForm } from 'react-hook-form';
 import { addDeliveryBoy, createUser, editUser, getUser } from '../../../api';
 import { Edit } from 'iconsax-react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setUserList } from '../../../redux/Slices/userSlice';
 import Error from '../../Errors/Error';
 import LoadBox from '../../Loader/LoadBox';
@@ -13,6 +13,8 @@ import { toast } from 'react-toastify';
 function AddDriverFrom(props) {
     const [isOpen, setIsOpen] = useState(false);
     const [loader, setLoader] = useState(false);
+    const getFranchiseDetail = useSelector((state) => state?.user?.FranchiseeDetails)
+    console.log('getFranchiseDetail', getFranchiseDetail)
     const toggle = () => setIsOpen(!isOpen);
 
     const dispatch = useDispatch()

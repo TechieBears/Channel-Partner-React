@@ -44,6 +44,7 @@ import DeliveryBoy from '../src/pages/Franchisee/DeliveryBoy';
 const ProjectRoutes = () => {
     const [loading, setLoading] = useState(true);
     const login = useSelector(state => state.user.isLogged)
+    const user = useSelector(state => state?.user?.loggedUserDetails);
 
     // ================ loading ================
     useEffect(() => {
@@ -66,50 +67,44 @@ const ProjectRoutes = () => {
                         <Sidebar>
                             <Routes>
                                 {/* ============ Admin Routes ============ */}
-                                <Route path="/" element={<Dashboard />} />
-                                <Route path="/menu" element={<Menu />} />
-                                <Route path="/resturants" element={<Restaurant />} />
-                                <Route path="/resturants/restaurant-detail/:id" element={<RestaurantDetail />} />
-                                <Route path="/franchisee" element={< Franchisee />} />
-                                <Route path="/vendors" element={<Vendors />} />
-                                <Route path="/vendors/vendors-detail/:id" element={<VendorDetails />} />
-                                <Route path="/menu/category-detail/:id" element={<CategoryDetail />} />
-                                <Route path="/dashboard/:id" element={<DashboardView />} />
-                                <Route path="/DashboardAssets" element={<DashboardAssets />} />
-                                <Route path="/promotions" element={<Promotions />} />
-                                <Route path="/drivers" element={<Drivers />} />
-                                <Route path="/orders" element={<Order />} />
-                                <Route path="/banners" element={<Banner />} />
-                                <Route path="/user" element={<User />} />
-                                <Route path="/user/:id" element={<UserView />} />
-                                <Route path="/profile" element={<UserProfile />} />
-                                <Route path="/reports" element={<Reports />} />
-                                <Route path="/subadmin" element={<SubAdmin />} />
-                                <Route path="/subadmin/subadmin-detail/:id" element={<SubAdminDetail />} />
-                                <Route path="/settings" element={<Settings />} />
-
-                                {/* ============================================================================== Partner Flexi store Routes =========================================== */}
-                                {/* <Route path="/vendorDashbaord" element={<VendorDashbaord />} />
-                                <Route path="/vendorProduct" element={<VendorProduct />} />
-                                <Route path="/vendorOrders" element={<VendorOrders />} /> */}
-
-
-
-                                {/* ================== Vendor Routes ======================== */}
-                                <Route path='/seller-dashboard' element={<VendorDashbaord />} />
-                                <Route path='/vendor-orders' element={<VendorOrders />} />
-                                <Route path='/product-list' element={<VendorProduct />} />
-
-
-
-                                {/* ================== Franchisee Routes ======================== */}
-                                <Route path='/franchise-dashboard' element={<FranchiseeDashboard />} />
-                                <Route path='/analytics' element={<FranchiseeDashboard />} />
-                                <Route path='/franchiesee-orders' element={<FranchiseeOrder />} />
-                                <Route path='/franchise-vendors' element={<FranchiseeVendors />} />
-                                <Route path='/delivery' element={<DeliveryBoy />} />
-                                {/* <Route path='/settings' element={<VendorOrders />} /> */}
-                                {/* ================== Franchisee Routes ======================== */}
+                                {user?.role == 'admin' ?
+                                    <>
+                                        <Route path="/" element={<Dashboard />} />
+                                        <Route path="/menu" element={<Menu />} />
+                                        <Route path="/resturants" element={<Restaurant />} />
+                                        <Route path="/resturants/restaurant-detail/:id" element={<RestaurantDetail />} />
+                                        <Route path="/franchisee" element={< Franchisee />} />
+                                        <Route path="/vendors" element={<Vendors />} />
+                                        <Route path="/vendors/vendors-detail/:id" element={<VendorDetails />} />
+                                        <Route path="/menu/category-detail/:id" element={<CategoryDetail />} />
+                                        <Route path="/dashboard/:id" element={<DashboardView />} />
+                                        <Route path="/DashboardAssets" element={<DashboardAssets />} />
+                                        <Route path="/promotions" element={<Promotions />} />
+                                        <Route path="/drivers" element={<Drivers />} />
+                                        <Route path="/orders" element={<Order />} />
+                                        <Route path="/banners" element={<Banner />} />
+                                        <Route path="/user" element={<User />} />
+                                        <Route path="/user/:id" element={<UserView />} />
+                                        <Route path="/profile" element={<UserProfile />} />
+                                        <Route path="/reports" element={<Reports />} />
+                                        <Route path="/subadmin" element={<SubAdmin />} />
+                                        <Route path="/subadmin/subadmin-detail/:id" element={<SubAdminDetail />} />
+                                        <Route path="/settings" element={<Settings />} />
+                                    </> :
+                                    user?.role == 'seller' ?
+                                        <>
+                                            <Route path='/' element={<VendorDashbaord />} />
+                                            <Route path='/vendor-orders' element={<VendorOrders />} />
+                                            <Route path='/product-list' element={<VendorProduct />} />
+                                        </> :
+                                        user?.role == 'franchise' ? <>
+                                            <Route path='/' element={<FranchiseeDashboard />} />
+                                            <Route path='/analytics' element={<FranchiseeDashboard />} />
+                                            <Route path='/franchiesee-orders' element={<FranchiseeOrder />} />
+                                            <Route path='/franchise-vendors' element={<FranchiseeVendors />} />
+                                            <Route path='/delivery' element={<DeliveryBoy />} />
+                                        </>
+                                            : ''}
 
 
 

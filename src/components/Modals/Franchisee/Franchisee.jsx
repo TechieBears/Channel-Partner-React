@@ -18,7 +18,7 @@ export default function AddFranchise(props) {
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const dispatch = useDispatch()
-  const { register, handleSubmit, reset, watch, control, setValue, formState: { errors },} = useForm();
+  const { register, handleSubmit, reset, watch, control, setValue, formState: { errors }, } = useForm();
 
 
   // ============================ file uplaod watch ===============================
@@ -32,127 +32,128 @@ export default function AddFranchise(props) {
   const pincodeWatch = watch('pincode')
 
 
-    // ===================== Custom validation function for a 6-digit PIN code ================
-    const validatePIN = (value) => {
-      const pattern = /^[0-9]{6}$/;
-      if (pattern.test(value)) {
-          return true;
-      }
-      return 'Pincode must be 6-digit';
+  // ===================== Custom validation function for a 6-digit PIN code ================
+  const validatePIN = (value) => {
+    const pattern = /^[0-9]{6}$/;
+    if (pattern.test(value)) {
+      return true;
+    }
+    return 'Pincode must be 6-digit';
   };
 
   // =================== Custom validation function for a 10-digit US phone number ============
   const validatePhoneNumber = (value) => {
-      const pattern = /^\d{10}$/;
-      if (pattern.test(value)) {
-          return true;
-      }
-      return 'Phone Number must be 10-digit';
+    const pattern = /^\d{10}$/;
+    if (pattern.test(value)) {
+      return true;
+    }
+    return 'Phone Number must be 10-digit';
   };
   // ==================== Custom validation function for email ========================
   const validateEmail = (value) => {
-      const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-      if (emailPattern.test(value)) {
-          return true;
-      }
-      return 'Invalid email address';
+    const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+    if (emailPattern.test(value)) {
+      return true;
+    }
+    return 'Invalid email address';
   };
   const validateGST = (value) => {
-      // GST pattern for India
-      const gstPattern = /^\d{2}[A-Z]{5}\d{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$/;
+    // GST pattern for India
+    const gstPattern = /^\d{2}[A-Z]{5}\d{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$/;
 
-      if (gstPattern.test(value)) {
-          return true;
-      }
+    if (gstPattern.test(value)) {
+      return true;
+    }
 
-      return 'Invalid GST number*';
+    return 'Invalid GST number*';
   };
 
 
-  
-    // ============================= form submiting ======================================
-    const onSubmit = async (data) => {
-      if (props.button != 'edit') {    // for create
-          if (data?.bank_passbook.length != 0) {
-              await ImageUpload(data?.bank_passbook[0], "franchisee", "BankPassbook", data?.first_name)
-              data.bank_passbook = `${franchiselink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
-          } else {
-              data.bank_passbook = ''
-          }
-          if (data?.address_proof.length != 0) {
-              await ImageUpload(data?.address_proof[0], "franchisee", "AddressProof", data?.first_name)
-              data.address_proof = `${franchiselink}${data?.first_name}_AddressProof_${data?.address_proof[0].name}`
-          } else {
-              data.address_proof = ''
-          }
-          if (data?.profile_pic.length != 0) {
-              await ImageUpload(data?.profile_pic[0], "franchisee", "ProfileImage", data?.first_name)
-              data.profile_pic = `${franchiselink}${data?.first_name}_ProfileImage_${data?.profile_pic[0].name}`
-          } else {
-              data.profile_pic = ''
-          }
-      }
-      else {          // for edit
-        if (data?.bank_passbook.length != 0) {
-          await ImageUpload(data?.bank_passbook[0], "franchisee", "BankPassbook", data?.first_name)
-          data.bank_passbook = `${franchiselink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
+
+  // ============================= form submiting ======================================
+  const onSubmit = async (data) => {
+    if (props.button != 'edit') {    // for create
+      if (data?.bank_passbook.length != 0) {
+        await ImageUpload(data?.bank_passbook[0], "franchisee", "BankPassbook", data?.first_name)
+        data.bank_passbook = `${franchiselink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
       } else {
-          data.bank_passbook = ''
+        data.bank_passbook = ''
       }
       if (data?.address_proof.length != 0) {
-          await ImageUpload(data?.address_proof[0], "franchisee", "AddressProof", data?.first_name)
-          data.address_proof = `${franchiselink}${data?.first_name}_AddressProof_${data?.address_proof[0].name}`
+        await ImageUpload(data?.address_proof[0], "franchisee", "AddressProof", data?.first_name)
+        data.address_proof = `${franchiselink}${data?.first_name}_AddressProof_${data?.address_proof[0].name}`
       } else {
-          data.address_proof = ''
+        data.address_proof = ''
       }
       if (data?.profile_pic.length != 0) {
-          await ImageUpload(data?.profile_pic[0], "franchisee", "ProfileImage", data?.first_name)
-          data.profile_pic = `${franchiselink}${data?.first_name}_ProfileImage_${data?.profile_pic[0].name}`
+        await ImageUpload(data?.profile_pic[0], "franchisee", "ProfileImage", data?.first_name)
+        data.profile_pic = `${franchiselink}${data?.first_name}_ProfileImage_${data?.profile_pic[0].name}`
       } else {
-          data.profile_pic = ''
+        data.profile_pic = ''
       }
+    }
+    else {          // for edit
+      if (data?.bank_passbook.length != 0) {
+        await ImageUpload(data?.bank_passbook[0], "franchisee", "BankPassbook", data?.first_name)
+        data.bank_passbook = `${franchiselink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
+      } else {
+        data.bank_passbook = ''
       }
-      if (props.button !== 'edit') {   // for create
-          try {
-              setLoader(true)
-              const response = await CreateFranchisee(data);
-              if (response?.code == 2002) {
-                  setTimeout(() => {
-                      reset();
-                      setLoader(false)
-                      toggle();
-                      // fetchData()
-                      toast.success(response?.Message);
-                  }, 1000);
-              } else {
-                  setLoader(false)
-                  toast.error(response?.Message);
-                  console.log('failed to create user')
-              }
-          } catch (error) {
-              setLoader(false)
-              console.log('error', error);
-          }
-      } else {                         // for edit
-          setLoader(true)
-          // const response = await editUser(props?.data?.id, data)
-          if (response) {
-              setTimeout(() => {
-                  toggle();
-                  setLoader(false)
-                  fetchData()
-                  toast.success(response?.message);
-              }, 1000);
-          } else {
-              console.log('failed to update user')
-          }
+      if (data?.address_proof.length != 0) {
+        await ImageUpload(data?.address_proof[0], "franchisee", "AddressProof", data?.first_name)
+        data.address_proof = `${franchiselink}${data?.first_name}_AddressProof_${data?.address_proof[0].name}`
+      } else {
+        data.address_proof = ''
       }
+      if (data?.profile_pic.length != 0) {
+        await ImageUpload(data?.profile_pic[0], "franchisee", "ProfileImage", data?.first_name)
+        data.profile_pic = `${franchiselink}${data?.first_name}_ProfileImage_${data?.profile_pic[0].name}`
+      } else {
+        data.profile_pic = ''
+      }
+    }
+    if (props.button !== 'edit') {   // for create
+      try {
+        setLoader(true)
+        const response = await CreateFranchisee(data);
+        if (response?.code == 2002) {
+          setTimeout(() => {
+            reset();
+            setLoader(false)
+            toggle();
+            // fetchData()
+            toast.success(response?.Message);
+          }, 1000);
+        } else {
+          setLoader(false)
+          toast.error(response?.Message);
+          console.log('failed to create user')
+        }
+      } catch (error) {
+        setLoader(false)
+        console.log('error', error);
+      }
+    } else {                         // for edit
+      setLoader(true)
+      // const response = await editUser(props?.data?.id, data)
+      if (response) {
+        setTimeout(() => {
+          toggle();
+          setLoader(false)
+          fetchData()
+          toast.success(response?.message);
+        }, 1000);
+      } else {
+        console.log('failed to update user')
+      }
+    }
   }
 
   // ======================= close modals ===============================
   const closeBtn = () => {
     toggle();
     setLoader(false);
+    resetData();
   };
 
 
@@ -161,46 +162,39 @@ export default function AddFranchise(props) {
   };
 
 
-    // // ========================= fetch data from api ==============================
-    const FranchiseeDetails = () => {
-      try {
-        GetFranchisee().then((res) => {
-          dispatch(setFranchise(res));
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  // // ========================= fetch data from api ==============================
+  const FranchiseeDetails = () => {
+    try {
+      GetFranchisee().then((res) => {
+        dispatch(setFranchise(res));
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
 
-    // ============================== Reseting data ======================================
-  //   const fillData = () => {
-  //     reset({
-  //         "address": props?.data?.address,
-  //         "address2": props?.data?.address2,
-  //         "alt_phone": props?.data?.alt_phone,
-  //         "bus_card": props?.data?.bus_card,
-  //         "bus_type": props?.data?.bus_type,
-  //         "service": props?.data?.service,
-  //         "cheque": props?.data?.cheque,
-  //         "city": props?.data?.city,
-  //         "comp_name": props?.data?.comp_name,
-  //         "comp_type": props?.data?.comp_type,
-  //         "designation": props?.data?.designation,
-  //         "email": props?.data?.email,
-  //         "first_name": props?.data?.first_name,
-  //         "fssai": props?.data?.fssai,
-  //         "gst": props?.data?.gst,
-  //         "landmark": props?.data?.landmark,
-  //         "last_name": props?.data?.last_name,
-  //         "odoc": props?.data?.odoc,
-  //         "pan": props?.data?.pan,
-  //         "phone_no": props?.data?.phone_no,
-  //         "pincode": props?.data?.pincode,
-  //         "role": props?.data?.role,
-  //         "state": props?.data?.state
-  //     })
-  // }
+  // ============================== Reseting data ======================================
+  const resetData = () => {
+    reset({
+      "city": '',
+      "address": '',
+      "email": '',
+      "first_name": '',
+      "last_name": '',
+      'date_of_birth': '',
+      'gender': '',
+      'pincode': '',
+      "phone_no": '',
+      "state": '',
+      'pan_card': '',
+      'adhar_card': '',
+      'gst_number': '',
+      'bank_name': '',
+      'account_number': '',
+      'ifsc_code': '',
+    })
+  }
 
 
   // useEffect(() => {
@@ -215,9 +209,9 @@ export default function AddFranchise(props) {
     reset({
       subcat_name: props?.data?.subcat_name,
     });
-  }, [props.data]);  
+  }, [props.data]);
 
-  
+
   return (
     <>
       <button className={`${formBtn1} flex`} onClick={() => setIsOpen(true)}>
@@ -249,10 +243,10 @@ export default function AddFranchise(props) {
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel className="w-full max-w-6xl overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl">
-                <Dialog.Title
+                  <Dialog.Title
                     as="h2"
                     className="w-full px-3 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
-                >
+                  >
                     Add Franchisee
                   </Dialog.Title>
                   <div className=" bg-gray-200/70">
@@ -286,18 +280,18 @@ export default function AddFranchise(props) {
                             )}
                           </div>
                           <div className="">
-                                <label className={labelClass} htmlFor="main_input">Profile Image*</label>
-                                <input className={fileinput}
-                                    id="main_input"
-                                    type='file'
-                                    multiple
-                                  accept='image/jpeg,image/jpg,image/png'
-                                  placeholder='Upload Images...'
-                                  {...register("profile_pic", { required: props.button == 'edit' ? false : true })} />
-                              {props?.button == 'edit' && props?.data.profile_pic != '' && props?.data.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                  {props?.data?.profile_pic?.split('/').pop()}
-                              </label>}
-                              {errors.image && <Error title='Main Image is required*' />}
+                            <label className={labelClass} htmlFor="main_input">Profile Image*</label>
+                            <input className={fileinput}
+                              id="main_input"
+                              type='file'
+                              multiple
+                              accept='image/jpeg,image/jpg,image/png'
+                              placeholder='Upload Images...'
+                              {...register("profile_pic", { required: props.button == 'edit' ? false : true })} />
+                            {props?.button == 'edit' && props?.data.profile_pic != '' && props?.data.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                              {props?.data?.profile_pic?.split('/').pop()}
+                            </label>}
+                            {errors.image && <Error title='Main Image is required*' />}
                           </div>
                           <div className="">
                             <label className={labelClass}>Email*</label>
@@ -412,114 +406,114 @@ export default function AddFranchise(props) {
                         </div>
                         <h1 className='pt-4 mx-4 text-xl font-semibold text-gray-900 font-tbPop '>Additional Details:</h1>
                         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-x-3 gap-y-3">
-                            <div className="">
-                                <label className={labelClass}>
-                                    Pan Card
-                                </label>
-                                <div className="flex items-center space-x-2">
-                                    <input
-                                        type="text"
-                                        placeholder='PAN  No'
-                                        className={inputClass}
-                                        {...register('pan_card')}
-                                    />
-                                </div>
-                            </div>
-                            <div className="">
-                                <label className={labelClass}>
-                                    Aadhar Card
-                                </label>
-                                <div className="flex items-center space-x-2">
-                                    <input
-                                        type="text"
-                                        placeholder='Aadhar No'
-                                        className={inputClass}
-                                        {...register('adhar_card')}
-                                    />
-                                </div>
-                            </div>
-                            <div className="">
-                                <label className={labelClass}>
-                                    GST Number*
-                                </label>
-                                <div className="flex items-center space-x-2">
-                                    <input
-                                        type="text"
-                                        placeholder='GST Number'
-                                        className={inputClass}
-                                        {...register('gst_number', {
-                                            // required: 'GST is required',
-                                            // validate: validateGST
-                                        })}
-                                    />
-                                </div>
-                                {/* {errors?.gst && <Error title={errors?.gst?.message} />} */}
-                            </div>
-                            <div className="">
-                                <label className={labelClass}>
-                                    Bank Name
-                                </label>
-                                <div className="flex items-center space-x-2">
-                                    <input
-                                        type="text"
-                                        placeholder='Bank Name'
-                                        className={inputClass}
-                                        {...register('bank_name')}
-                                    />
-                                </div>
-                            </div>
-                            <div className="">
-                                <label className={labelClass}>
-                                    Bank Account Number
-                                </label>
-                                <div className="flex items-center space-x-2">
-                                    <input
-                                        type="text"
-                                        placeholder='Account Number'
-                                        className={inputClass}
-                                        {...register('account_number')}
-                                    />
-                                </div>
-                            </div>
-                            <div className="">
-                                <label className={labelClass} htmlFor="main_input">Bank PassBook Image*</label>
-                                <input className={fileinput}
-                                    id="main_input"
-                                    type='file'
-                                    multiple
-                                    accept='image/jpeg,image/jpg,image/png'
-                                    placeholder='Upload Images...'
-                                    {...register("bank_passbook", { required: props.button == 'edit' ? false : true })} />
-                                {props?.button == 'edit' && props?.data.bank_passbook != '' && props?.data.bank_passbook != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                    {props?.data?.bank_passbook?.split('/').pop()}
-                                </label>}
-                                {errors.bank_passbook && <Error title='Bank PassBook Image is required*' />}
-                            </div>
-                            <div className="">
-                              <label className={labelClass}>IFSC Code*</label>
+                          <div className="">
+                            <label className={labelClass}>
+                              Pan Card
+                            </label>
+                            <div className="flex items-center space-x-2">
                               <input
                                 type="text"
-                                placeholder="IFSC Code"
+                                placeholder='PAN  No'
                                 className={inputClass}
-                                {...register("ifsc_code", { required: true })}
+                                {...register('pan_card')}
                               />
-                              {errors.ifsc_code && (
-                                <Error title="Ifsc code is Required*" />
-                              )}
+                            </div>
                           </div>
                           <div className="">
-                                <label className={labelClass} htmlFor="main_input">Address Proof*</label>
-                                <input className={fileinput}
-                                    id="main_input"
-                                    type='file'
-                                    multiple
-                                  accept='image/jpeg,image/jpg,image/png'
-                                  placeholder='Upload Images...'
-                                  {...register("address_proof", { required: props.button == 'edit' ? false : true })} />
-                              {props?.button == 'edit' && props?.data?.address_proof != '' && props?.data?.address_proof != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                  {props?.data?.address_proof?.split('/').pop()}
-                              </label>}
-                              {/* {errors.address_proof && <Error title='Address Proof Image is required*' />} */}
+                            <label className={labelClass}>
+                              Aadhar Card
+                            </label>
+                            <div className="flex items-center space-x-2">
+                              <input
+                                type="text"
+                                placeholder='Aadhar No'
+                                className={inputClass}
+                                {...register('adhar_card')}
+                              />
+                            </div>
+                          </div>
+                          <div className="">
+                            <label className={labelClass}>
+                              GST Number*
+                            </label>
+                            <div className="flex items-center space-x-2">
+                              <input
+                                type="text"
+                                placeholder='GST Number'
+                                className={inputClass}
+                                {...register('gst_number', {
+                                  // required: 'GST is required',
+                                  // validate: validateGST
+                                })}
+                              />
+                            </div>
+                            {/* {errors?.gst && <Error title={errors?.gst?.message} />} */}
+                          </div>
+                          <div className="">
+                            <label className={labelClass}>
+                              Bank Name
+                            </label>
+                            <div className="flex items-center space-x-2">
+                              <input
+                                type="text"
+                                placeholder='Bank Name'
+                                className={inputClass}
+                                {...register('bank_name')}
+                              />
+                            </div>
+                          </div>
+                          <div className="">
+                            <label className={labelClass}>
+                              Bank Account Number
+                            </label>
+                            <div className="flex items-center space-x-2">
+                              <input
+                                type="text"
+                                placeholder='Account Number'
+                                className={inputClass}
+                                {...register('account_number')}
+                              />
+                            </div>
+                          </div>
+                          <div className="">
+                            <label className={labelClass} htmlFor="main_input">Bank PassBook Image*</label>
+                            <input className={fileinput}
+                              id="main_input"
+                              type='file'
+                              multiple
+                              accept='image/jpeg,image/jpg,image/png'
+                              placeholder='Upload Images...'
+                              {...register("bank_passbook", { required: props.button == 'edit' ? false : true })} />
+                            {props?.button == 'edit' && props?.data.bank_passbook != '' && props?.data.bank_passbook != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                              {props?.data?.bank_passbook?.split('/').pop()}
+                            </label>}
+                            {errors.bank_passbook && <Error title='Bank PassBook Image is required*' />}
+                          </div>
+                          <div className="">
+                            <label className={labelClass}>IFSC Code*</label>
+                            <input
+                              type="text"
+                              placeholder="IFSC Code"
+                              className={inputClass}
+                              {...register("ifsc_code", { required: true })}
+                            />
+                            {errors.ifsc_code && (
+                              <Error title="Ifsc code is Required*" />
+                            )}
+                          </div>
+                          <div className="">
+                            <label className={labelClass} htmlFor="main_input">Address Proof*</label>
+                            <input className={fileinput}
+                              id="main_input"
+                              type='file'
+                              multiple
+                              accept='image/jpeg,image/jpg,image/png'
+                              placeholder='Upload Images...'
+                              {...register("address_proof", { required: props.button == 'edit' ? false : true })} />
+                            {props?.button == 'edit' && props?.data?.address_proof != '' && props?.data?.address_proof != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                              {props?.data?.address_proof?.split('/').pop()}
+                            </label>}
+                            {/* {errors.address_proof && <Error title='Address Proof Image is required*' />} */}
                           </div>
                         </div>
                       </div>
