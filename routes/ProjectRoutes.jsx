@@ -40,6 +40,7 @@ import FranchiseeVendors from '../src/pages/Franchisee/Vendors/FranchiseeVendors
 import DeliveryBoy from '../src/pages/Franchisee/DeliveryBoy';
 import ViewOrder from '../src/components/Modals/Vendors/ViewOrder';
 import ViewProduct from '../src/components/Modals/Vendors/ViewProduct';
+import Complaints from '../src/components/Modals/Complaints/Complaints';
 
 
 
@@ -100,6 +101,7 @@ const ProjectRoutes = () => {
                                             <Route path='/vendor-orders/order-detail/:id' element={<ViewOrder />} />
                                             <Route path='/product-list' element={<VendorProduct />} />
                                             <Route path='/product-list/product-details/:id' element={<ViewProduct />} />
+                                            <Route path='/complaints' element={<Complaints />} />
                                         </> :
                                         user?.role == 'franchise' ? <>
                                             <Route path='/' element={<FranchiseeDashboard />} />

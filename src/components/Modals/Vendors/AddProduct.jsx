@@ -36,7 +36,7 @@ function AddProduct(props) {
             setCategory(res)
         })
         getSubCategory().then(res => {
-            setSubCategory(res)
+            setsubCategory(res)
         })
     }, [])
     return (
@@ -103,7 +103,7 @@ function AddProduct(props) {
                                                             {...register('product_category', { required: true })}
                                                         >
                                                             <option value=''>Select</option>
-                                                            {category.map(item => (
+                                                            {category?.map(item => (
                                                                 <option key={item?.id} value={item?.id}>{item?.category_name}</option>
                                                             ))}
                                                         </select>
@@ -119,7 +119,7 @@ function AddProduct(props) {
                                                         >
                                                             <option value=''>Select</option>
                                                             {
-                                                                subCategory.map(item => (
+                                                                subCategory?.map(item => (
                                                                     <option key={item?.subcat_id} value={item?.subcat_id} >{item?.subcat_name}</option>
                                                                 ))
                                                             }

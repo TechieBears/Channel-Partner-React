@@ -1,6 +1,6 @@
 import { Notebook } from "@phosphor-icons/react";
 import { Element4, ElementPlus, Trade, Truck, User, Settings, Menu, Shop, SecurityUser, Book, TicketExpired, TicketDiscount, Profile2User, ClipboardTick, Bank, Setting2, Wallet, ShoppingCart, Headphone } from "iconsax-react";
-import { Bike, ChefHat, LayoutList, Megaphone, Settings2, Soup, User2 } from "lucide-react";
+import { AlertTriangle, Bike, ChefHat, LayoutList, Megaphone, Settings2, Soup, User2 } from "lucide-react";
 
 export const Admin = [
     {
@@ -97,11 +97,11 @@ export const Seller = [
     //     icon: <Notebook size="24" />,
     //     link: '/paid-plans',
     // },
-    {
-        title: 'Wallet',
-        icon: <Wallet size="24" />,
-        link: '/wallet',
-    },
+    // {
+    //     title: 'Wallet',
+    //     icon: <Wallet size="24" />,
+    //     link: '/wallet',
+    // },
     // {
     //     title: 'Market Place',
     //     icon: <ShoppingCart size="24" />,
@@ -112,11 +112,11 @@ export const Seller = [
         icon: <Headphone size="24" />,
         link: '/support',
     },
-    // {
-    //     title: 'Settings',
-    //     icon: <Settings2 size="24" />,
-    //     link: '/settings',
-    // },
+    {
+        title: 'Complaints',
+        icon: <AlertTriangle size="24" />,
+        link: '/complaints',
+    },
 ]
 
 
