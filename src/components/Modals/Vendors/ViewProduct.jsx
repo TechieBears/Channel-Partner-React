@@ -1,8 +1,8 @@
-import { Fragment, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import LoadBox from '../../Loader/LoadBox';
 import { useForm } from 'react-hook-form';
 import Error from '../../Errors/Error';
@@ -12,20 +12,17 @@ import { formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/Custo
 import moment from 'moment';
 import ProfilePic from '../../../assets/user.jpg'
 import SimpleGallery from '../../Gallary/SimpleGallery';
+import { getProductById } from '../../../api';
+import { setProduct } from '../../../redux/Slices/masterSlice';
+import Product from '../../../pages/Admin/Menu/MenuList/Product';
 
 function ViewProduct(props) {
-    const [isOpen, setOpen] = useState(false);
-    const [loader, setLoader] = useState(false)
-    const [selectedCategory, setSelectedCategory] = useState([])
-    const dispatch = useDispatch();
+    const { id } = useParams();
+    console.log('id', id)
+    const [product, setProduct] = useState();
+    console.log('product', product)
     const navigate = useNavigate();
-    const cancelButtonRef = useRef(null)
     const { register, handleSubmit, control, watch, reset, formState: { errors } } = useForm();
-    const toggle = () => setOpen(!isOpen)
-    const closeBtn = () => {
-        toggle();
-        reset()
-    }
     const onSubmit = (data) => {
         console.log('data', data)
     }
@@ -48,6 +45,12 @@ function ViewProduct(props) {
         },
     ].filter(image => image.URL !== '');
 
+    useEffect(() => {
+        getProductById(id).then(res => {
+            setProduct(res);
+        })
+    }, [])
+
     return (
         <div className='m-4 space-y-2'>
             <button onClick={() => navigate(-1)}>
@@ -55,15 +58,15 @@ function ViewProduct(props) {
             </button>
             <div className='p-4 bg-white rounded-xl grid grid-cols-3'>
                 <div className='col-span-2 mt-4 space-y-4 '>
-                    <p className='font-semibold text-2xl'>Amul Taza Toned Butter Milk</p>
+                    <p className='font-semibold text-2xl'>{product?.product_name}</p>
                     <div className='flex gap-5 items-center border-b p-2'>
                         <img src='https://www.thisday.app/uploads/Amul_bc2a81aa60.png' className='w-24 border p-2 rounded-xl' />
-                        <p className='font-semibold'>Amul</p>
+                        <p className='font-semibold'>{ }</p>
                     </div>
-                    <p className='text-sm border-b p-2'>Buttermilk is a refreshing dairy beverage made from the liquid left behind after churning butter. It has a tangy flavor and a slightly creamy texture, often enjoyed on its own or used in cooking and baking for added moisture and acidity.</p>
+                    <p className='text-sm border-b p-2'>{product?.product_description}</p>
                     <div className='text-sm items-center border-b p-2'>
                         <p>175 ml</p>
-                        <p className='text-lg font-semibold'>₹ 15</p>
+                        <p className='text-lg font-semibold'>₹ {product?.product_actual_price}</p>
                     </div>
                 </div>
                 <div className='w-96'>
@@ -87,15 +90,15 @@ function ViewProduct(props) {
                 </div>
                 <div>
                     <p className='text-lg font-semibold'>Disclaimer</p>
-                    <p className='text-sm text-gray-600'>"The description provided for buttermilk is for informational purposes only. While efforts have been made to ensure accuracy, variations may occur due to factors such as regional recipes or manufacturing processes. Always consult product labels or trusted sources for precise information."</p>
+                    <p className='text-sm text-gray-600'>{product?.product_description}</p>
                 </div>
                 <div>
                     <p className='text-lg font-semibold'>Self Life</p>
-                    <p className='text-sm text-gray-600'>2-3 weeks</p>
+                    <p className='text-sm text-gray-600'>{product?.product_shelflife}</p>
                 </div>
                 <div>
                     <p className='text-lg font-semibold'>Country of Origin</p>
-                    <p className='text-sm text-gray-600'>India</p>
+                    <p className='text-sm text-gray-600'>{product?.product_country_of_origin}</p>
                 </div>
                 <div>
                     <p className='text-lg font-semibold'>FSSAI License</p>

@@ -463,21 +463,6 @@ export const deleteTempRange = async (id) => {
     }
 }
 
-/* ================ Product Api ============== */
-
-export const getProduct = async () => {
-    const url = `${environment.baseUrl}product`;
-    try {
-        const response = await axios.get(url)
-        return response.data
-    }
-    catch (err) {
-        console.log(err);
-    }
-};
-
-
-
 /* =============== User API ================= */
 
 export const createUser = async (data) => {
@@ -981,172 +966,6 @@ export const deleteMovableTempName = async (id) => {
     }
 }
 
-
-/* ================== Movable Capacity Api =========== */
-export const getMovableCapacity = async () => {
-    const url = `${environment.baseUrl}movable-capacity`;
-    try {
-        const response = await axios.get(url)
-        return response.data
-    }
-    catch (err) {
-        console.log(err);
-    }
-};
-
-export const createMovableCapacity = async (data) => {
-    const url = `${environment.baseUrl}movable-capacity`;
-    try {
-        const response = await axios.post(url, data)
-        return response.data
-    }
-    catch (err) {
-        console.log(err);
-    }
-};
-
-export const editMovableCapacity = async (id, data) => {
-    const url = `${environment.baseUrl}edit-movable-capacity/${id}`;
-    try {
-        const response = await axios.put(url, data)
-        return response.data
-    }
-    catch (err) {
-        console.log(err);
-    }
-};
-
-export const deleteMovableCapacity = async (id) => {
-    const url = `${environment.baseUrl}edit-movable-capacity/${id}`;
-    try {
-        const response = await axios.delete(url)
-        return response.data
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-/* ================ MovableCustomized Api ============== */
-
-export const getMovableCustomized = async () => {
-    const url = `${environment.baseUrl}movable-customized`;
-    try {
-        const response = await axios.get(url)
-        return response.data
-    }
-    catch (err) {
-        console.log(err);
-    }
-};
-
-export const createMovableCustomized = async (data) => {
-    const url = `${environment.baseUrl}movable-customized`;
-    try {
-        const response = await axios.post(url, data)
-        return response.data
-    }
-    catch (err) {
-        console.log(err);
-    }
-};
-
-export const getSingleMovableCustomized = async (id) => {
-    const url = `${environment.baseUrl}edit-movable-customized/${id}`;
-    try {
-        const response = await axios.get(url)
-        return response.data
-    }
-    catch (err) {
-        console.log(err);
-    }
-};
-export const editMovableCustomized = async (id, data) => {
-    const url = `${environment.baseUrl}edit-movable-customized/${id}`;
-    try {
-        const response = await axios.put(url, data)
-        return response.data
-    }
-    catch (err) {
-        console.log(err);
-    }
-};
-export const deleteMovableCustomized = async (id) => {
-    const url = `${environment.baseUrl}edit-movable-customized/${id}`;
-    try {
-        const response = await axios.delete(url)
-        return response.data
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-/* ================== Movable Price Api =========== */
-export const getAllMovablePrice = async () => {
-    const url = `${environment.baseUrl}movable-price`;
-    try {
-        const response = await axios.get(url)
-        return response.data
-    }
-    catch (err) {
-        console.log(err);
-    }
-};
-
-export const getSingleMovablePrice = async (id) => {
-    const url = `${environment.baseUrl}edit-movable-price/${id}`;
-    try {
-        const response = await axios.get(url)
-        return response.data
-    }
-    catch (err) {
-        console.log(err);
-    }
-};
-
-export const createMovablePrice = async (data) => {
-    const url = `${environment.baseUrl}movable-price`;
-    try {
-        const response = await axios.post(url, data)
-        return response.data
-    }
-    catch (err) {
-        console.log(err);
-    }
-};
-
-export const editMovablePrice = async (id, data) => {
-    const url = `${environment.baseUrl}edit-movable-price/${id}`;
-    try {
-        const response = await axios.put(url, data)
-        return response.data
-    }
-    catch (err) {
-        console.log(err);
-    }
-};
-
-export const deleteMovablePrice = async (id) => {
-    const url = `${environment.baseUrl}edit-movable-price/${id}`;
-    try {
-        const response = await axios.delete(url)
-        return response.data
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-/* ================== Movable Category Api =========== */
-// export const getMovableCategory = async () => {
-//     const url = `${environment.baseUrl}movable-category`;
-//     try {
-//         const response = await axios.get(url)
-//         return response.data
-//     }
-//     catch (err) {
-//         console.log(err);
-//     }
-// };
-
 export const createMovableCategory = async (data) => {
     const url = `${environment.baseUrl}movable-category`;
     try {
@@ -1203,7 +1022,6 @@ export const deleteSubCategory = async (id) => {
 
 
 /* ================== Banner Api =========== */
-
 
 export const getHomeBanners = async () => {
     const url = `${environment.baseUrl}app/get-banners`;
@@ -1299,5 +1117,64 @@ export const addDeliveryBoy = async (data) => {
         return response.data;
     } catch (error) {
         console.log(error)
+    }
+}
+
+
+
+// ======================= Product ====================
+export const addProduct = async (data) => {
+    const url = `${environment.baseUrl}vendor/add_shop_product`
+    try {
+        const response = await axios.post(url, data);
+        return response.data;
+    } catch (error) {
+        console.log('error creating product', error)
+    }
+}
+
+// ======================== Get All Product ===============
+
+export const getAllShopProduct = async () => {
+    const url = `${environment.baseUrl}vendor/add_shop_product`
+    try {
+        const response = await axios.get(url);
+        return response.data;
+    } catch (error) {
+        console.log('error getting product', error)
+    }
+}
+
+// ============== get All Seller ================
+
+export const getAllSeller = async () => {
+    const url = `${environment.baseUrl}vendor/create_vendor`
+    try {
+        const response = await axios.get(url);
+        return response.data
+    } catch (err) {
+        console.log('error while getting vendor', err)
+    }
+}
+
+export const getProductById = async (id) => {
+    const url = `${environment.baseUrl}vendor/edit_product/${id}`;
+    try {
+        const response = await axios.get(url, id);
+        // console.log('response', response)
+        return response.data
+    } catch (err) {
+        console.log('error while getting vendor by id', err)
+    }
+}
+
+export const editVendorProduct = async (id, data) => {
+    const url = `${environment.baseUrl}vendor/edit_product/${id}`;
+    try {
+        const response = await axios.put(url, data);
+        console.log('response', response)
+        // return response.data
+    } catch (err) {
+        console.log('error while getting vendor by id', err)
     }
 }
