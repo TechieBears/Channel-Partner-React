@@ -85,8 +85,8 @@ function Drivers() {
     // =================== table user profile column ========================
     const representativeBodyTemplate = (row) => {
         return (
-            <div className="w-11 h-11 rounded-full">
-                <img src={row?.profile == null || row?.profile == '' || row?.profile == undefined ? userImg : row?.profile} className="w-full h-full rounded-full object-cover" alt={row.first_name} />
+            <div className="rounded-full w-11 h-11">
+                <img src={row?.profile == null || row?.profile == '' || row?.profile == undefined ? userImg : row?.profile} className="object-cover w-full h-full rounded-full" alt={row.first_name} />
             </div>
         );
     };
@@ -134,7 +134,7 @@ function Drivers() {
     // =============================== verify user switch =============================
     const switchVerify = (row) => {
         return (
-            <div className="flex justify-center items-center gap-2 ">
+            <div className="flex items-center justify-center gap-2 ">
                 <Switch
                     value={row?.isverify}
                     onChange={() => verifyActions(row)}
@@ -147,7 +147,7 @@ function Drivers() {
     // =============================== active user switch =============================
     const switchActive = (row) => {
         return (
-            <div className="flex justify-center items-center gap-2 ">
+            <div className="flex items-center justify-center gap-2 ">
                 <Switch
                     value={row?.isactive}
                     onChange={() => activeActions(row)}
@@ -160,7 +160,7 @@ function Drivers() {
     // ======================= Table Column Definitions =========================
     const columns = [
         { field: 'id', header: 'ID', body: representativeBodyTemplate, sortable: true, style: true },
-        { field: 'image', header: 'IMAGE', body: (row) => <img src={row.image} alt={row.name} className="w-11 h-11 rounded-full" />,  sortable: true},
+        { field: 'image', header: 'IMAGE', body: (row) => <img src={row.image} alt={row.name} className="rounded-full w-11 h-11" />,  sortable: true},
         { field: 'name', header: 'NAME', body: (row) => <div className="uppercase">{row.name}</div> },
         { field: 'email', header: 'EMAIL', sortable: true },
         { field: 'phone', header: 'PHONE', body: (row) => row.phone , sortable: true},
@@ -186,9 +186,9 @@ function Drivers() {
                 description="Are you sure you want to delete this User" open={open}
             />
             {/* ========================= user fileter ======================= */}
-            <div className="bg-white p-4 sm:m-5 rounded-xl" >
-                <form onSubmit={handleSubmit(onSubmit)} className='flex md:items-center flex-col lg:flex-row gap-2'>
-                    <div className="grid grid-cols-1 sm:grid-cols-4 w-full  gap-y-3 gap-x-2">
+            <div className="p-4 bg-white sm:m-5 rounded-xl" >
+                <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2 md:items-center lg:flex-row'>
+                    <div className="grid w-full grid-cols-1 sm:grid-cols-4 gap-y-3 gap-x-2">
                         <div className="">
                             <input
                                 type="text"
@@ -223,20 +223,20 @@ function Drivers() {
                             </select>
                         </div>
                     </div>
-                    <div className="flex gap-x-2 items-center">
+                    <div className="flex items-center gap-x-2">
                         <button type='submit' className={`${formBtn1} w-full text-center`}>Filter</button>
                         <button type='button' className={`${formBtn2} w-full text-center`} onClick={() => { reset(), toast.success("Filters clear successfully"), fetchData() }}>Clear</button>
                     </div>
                 </form>
             </div>
             {/*====================== User Table ================================*/}
-            <div className="bg-white p-4 sm:m-5 rounded-xl" >
-                <div className="flex justify-between flex-col sm:flex-row items-start sm:items-center sm:space-y-0 mb-6">
+            <div className="p-4 bg-white sm:m-5 rounded-xl" >
+                <div className="flex flex-col items-start justify-between mb-6 sm:flex-row sm:items-center sm:space-y-0">
                     <div className="">
-                        <h1 className='font-tbPop text-xl font-semibold text-gray-900'>Drivers</h1>
+                        <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>Drivers</h1>
                     </div>
                     <div className='flex gap-4'>
-                        <DriverTipForm title='Driver Tip'/>
+                        {/* <DriverTipForm title='Driver Tip'/> */}
                         <AddDriverFrom title='Add Driver'/>
                     </div>
                 </div>

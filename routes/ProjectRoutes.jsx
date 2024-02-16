@@ -38,6 +38,7 @@ import FranchiseeDashboard from '../src/pages/Franchisee/FranchiseeDashboard';
 import FranchiseeOrder from '../src/pages/Franchisee/FranchiseeOrder';
 import FranchiseeVendors from '../src/pages/Franchisee/Vendors/FranchiseeVendors';
 import DeliveryBoy from '../src/pages/Franchisee/DeliveryBoy';
+import SellerLogin from '../src/pages/Auth/SellerLogin';
 
 
 
@@ -105,10 +106,6 @@ const ProjectRoutes = () => {
                                             <Route path='/delivery' element={<DeliveryBoy />} />
                                         </>
                                             : ''}
-
-
-
-
                             </Routes>
                         </Sidebar>
                     }
@@ -116,6 +113,7 @@ const ProjectRoutes = () => {
                 :
                 <Routes>
                     <Route path="/" element={<Login />} />
+                    <Route path="/seller" element={<SellerLogin />} />
                 </Routes>
             }
             <ToastContainer position="top-right"

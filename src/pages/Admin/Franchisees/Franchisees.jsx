@@ -221,7 +221,7 @@ function Franchisees() {
                     <div className="">
                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>  Franchisee Details</h1>
                     </div>
-                    {/* <AddFranchisee title='Add Franchisee' /> */}
+                    <AddFranchisee title='Add Franchisee' />
                 </div>
                 <Table data={Franchisee} columns={columns} />
             </div>

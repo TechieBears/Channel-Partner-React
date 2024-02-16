@@ -229,7 +229,7 @@ function AddDriverFrom(props) {
                         <div className="fixed inset-0 bg-black bg-opacity-25" />
                     </Transition.Child>
                     <div className="fixed inset-0 overflow-y-auto scrollbars">
-                        <div className="flex min-h-full items-center justify-center p-4 text-center">
+                        <div className="flex items-center justify-center min-h-full p-4 text-center">
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-out duration-300"
@@ -239,11 +239,11 @@ function AddDriverFrom(props) {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-6xl transform overflow-hidden rounded-lg bg-white  text-left align-middle shadow-xl transition-all">
+                                <Dialog.Panel className="w-full max-w-6xl overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl">
 
                                     <Dialog.Title
                                         as="h2"
-                                        className="text-lg text-white w-full bg-sky-400 font-tb leading-6 font-semibold py-4 px-3"
+                                        className="w-full px-3 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
                                     >
                                         {props?.title}
                                     </Dialog.Title>
@@ -252,42 +252,21 @@ function AddDriverFrom(props) {
                                         {/* React Hook Form */}
                                         <form onSubmit={handleSubmit(onSubmit)} >
                                             <div className="">
-                                                <div className="text-center mt-8">
-                                                    <div className="relative inline-block">
-                                                        <img
-                                                            className="h-24 w-24 rounded-full border object-cover mx-auto"
-                                                            src="/src/assets/user.webp"
-                                                            alt="User_Profile"
-                                                        />
-                                                        <label
-                                                            htmlFor="profilePicture"
-                                                            className="absolute bottom-0 right-0 bg-white p-2 rounded-full cursor-pointer"
-                                                        >
-                                                            <svg
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                className="h-4 w-4 text-gray-600"
-                                                                fill="none"
-                                                                viewBox="0 0 24 24"
-                                                                stroke="currentColor"
-                                                            >
-                                                                <path
-                                                                    strokeLinecap="round"
-                                                                    strokeLinejoin="round"
-                                                                    strokeWidth="2"
-                                                                    d="M12 4v16m8-8H4"
-                                                                />
-                                                            </svg>
-                                                        </label>
-                                                        <input
-                                                            id="profilePicture"
-                                                            type="file"
-                                                            accept="image/jpeg,image/jpg,image/png"
-                                                            className="hidden"
-                                                            {...register('profile_picture')}
-                                                        />
+                                                <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-x-3 gap-y-3 ">
+                                                <div className="">
+                                                        <label className={labelClass} htmlFor="main_input">Profile Image*</label>
+                                                        <input className={fileinput}
+                                                            id="main_input"
+                                                            type='file'
+                                                            multiple
+                                                            accept='image/jpeg,image/jpg,image/png'
+                                                            placeholder='Upload Images...'
+                                                            {...register("profile_pic", { required: props.button == 'edit' ? false : true })} />
+                                                        {props?.button == 'edit' && props?.data.profile_pic != '' && props?.data.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.data?.profile_pic?.split('/').pop()}
+                                                        </label>}
+                                                        {errors.profile_pic && <Error title='Profile Image is required*' />}
                                                     </div>
-                                                </div>
-                                                <div className="py-4 mx-4 grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4  gap-x-3 gap-y-3 ">
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             First Name*
@@ -334,7 +313,7 @@ function AddDriverFrom(props) {
                                                             className={inputClass}
                                                             {...register('password', { required: true, })}
                                                         />
-                                                        {errors.password && <Error title="Email is required*" />}
+                                                        {errors.password && <Error title="Password is required*" />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -511,7 +490,8 @@ function AddDriverFrom(props) {
                                                             {props?.data?.address_proof?.split('/').pop()}
                                                         </label>}
                                                         {errors.bank_passbook && <Error title='Address Proof Image is required*' />}
-                                                    </div>                                                    <div className="">
+                                                    </div>     
+                                                    <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Bank PassBook Image*</label>
                                                         <input className={fileinput}
                                                             id="main_input"
@@ -554,7 +534,7 @@ function AddDriverFrom(props) {
                                                 </div>
                                             </div>
                                             {/* =============== footer section ==================== */}
-                                            <footer className="py-2 flex bg-white justify-end px-4 space-x-3">
+                                            <footer className="flex justify-end px-4 py-2 space-x-3 bg-white">
                                                 {loader ? <LoadBox className="relative block w-auto px-5 transition-colors font-tb tracking-wide duration-200 py-2.5 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize" /> : <button type='submit' className={formBtn1}>submit</button>}
                                                 <button type='button' className={formBtn2} onClick={closeBtn}>close</button>
                                             </footer>
