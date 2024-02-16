@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
+import PhotoSwipe from 'photoswipe';
 import 'photoswipe/style.css';
 
 export default function SimpleGallery(props) {
@@ -14,6 +15,7 @@ export default function SimpleGallery(props) {
             counter: false,
             arrowPrevSVG: leftArrowSVGString,
             arrowNextSVG: rightArrowSVGString,
+            showHideAnimationType: 'none'
         });
         lightbox.init();
 
@@ -34,7 +36,7 @@ export default function SimpleGallery(props) {
                     target="_blank"
                     style={{ objectFit: 'contain' }}
                     rel="noreferrer"
-                    className={props.images.length > 3 ? index == 0 || index == 3 ? 'w-full' : 'w-1/2' : 'w-full'}
+                    className={props.images.length > 1 ? index == 0 || index == 3 ? 'w-full' : 'w-1/2' : 'w-full'}
                 >
                     <img src={image.URL} alt={`image-${index}`} className='w-full h-full p-1 rounded-md object-contain' />
                 </a>

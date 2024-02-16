@@ -175,7 +175,7 @@ const VendorOrders = () => {
     const itemPrice = (row) => row?.items?.map(item => <h6 key={item?.price}>{item?.price}</h6>)
     const category = (row) => row?.items?.map(item => <h6 key={item?.category}>{item?.category}</h6>)
     const action = (row) => <div className="flex space-x-1 items-center">
-        <NavLink className='bg-sky-100 p-1 rounded-xl'>
+        <NavLink to={`/vendor-orders/order-detail/:${row?.id}`} className='bg-sky-100 p-1 rounded-xl'>
             <Eye size={20} className="text-sky-400" />
         </NavLink>
         <div className="bg-green-50 p-1 rounded-xl cursor-pointer">
@@ -269,7 +269,7 @@ const VendorOrders = () => {
                                 : "text-gray-500 border-b"
                                 }`}
                         >
-                            New Order's
+                            All Order's
                         </Tab>
                         <Tab
                             className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 1
@@ -293,7 +293,7 @@ const VendorOrders = () => {
                                 : "text-gray-500 border-b"
                                 }`}
                         >
-                            History
+                            Pending
                         </Tab>
                     </TabList>
                     {/* ================= NewPending Orders component ============== */}

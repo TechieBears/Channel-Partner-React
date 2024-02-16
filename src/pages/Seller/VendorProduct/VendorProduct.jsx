@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux';
 import AsyncSelect from "react-select/async";
@@ -7,9 +7,20 @@ import { toast } from 'react-toastify';
 import Table from '../../../components/Table/Table';
 import { NavLink } from 'react-router-dom';
 import AddProduct from '../../../components/Modals/Vendors/AddProduct';
+import { Edit, Eye, Trash } from 'iconsax-react';
+import ViewProduct from '../../../components/Modals/Vendors/ViewProduct';
+import { getAllSeller, getAllShopProduct } from '../../../api';
 
 const VendorProduct = () => {
+    const [sellers, setSellers] = useState([]);
+    const [shopProducts, setShopProducts] = useState([])
+    console.log('shopProducts', shopProducts)
+    const userid = useSelector((state) => state?.user?.loggedUserDetails?.userid);
+    const matchedSeller = sellers.find(seller => seller?.user?.id === userid);
     const storages = useSelector((state) => state?.storage?.list);
+    const user = {
+        isShop: true,
+    }
     const {
         register,
         handleSubmit,
@@ -40,55 +51,95 @@ const VendorProduct = () => {
     };
 
     //======================= Table =======================
-    const data = [
+
+    const restaurantData = [
         {
             "productId": "001",
             "name": "Product A",
             "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-            "category": "Electronics",
+            "category": "Breakfast",
+            "subcategory": "South Indian",
             "createdDate": "2024-02-12",
             "MRP": 50,
-            "markupPrice": 60,
-            "commission": 5,
             "quantity": 100
         },
         {
             "productId": "002",
             "name": "Product B",
             "description": "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-            "category": "Clothing",
+            "category": "Lunch",
+            "subcategory": "Thali",
             "createdDate": "2024-02-10",
             "MRP": 100,
-            "markupPrice": 120,
-            "commission": 7,
             "quantity": 80
         },
         {
             "productId": "003",
             "name": "Product C",
             "description": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-            "category": "Home & Garden",
+            "category": "Drinks",
+            "subcategory": "Soft Drink",
             "createdDate": "2024-02-08",
             "MRP": 75,
-            "markupPrice": 90,
-            "commission": 6,
             "quantity": 120
         }
+    ];
+
+
+    const action = (row) => <div className='space-x-2 flex'>
+        <NavLink to={`/product-list/product-details/${row?.product_id}`} className=' bg-sky-100 items-center p-1 rounded-xl hover:bg-sky-200'>
+            <Eye size={24} className='text-sky-400' />
+        </NavLink>
+        {/* <ViewProduct /> */}
+        <AddProduct title='Edit Product' row={row} />
+        <button className='items-center p-1 rounded-xl bg-red-100 hover:bg-red-200'>
+            <Trash size={24} className='text-red-400' />
+        </button>
+    </div>
+
+
+    const shopColumns = [
+        { field: 'product_id', header: 'ID', sortable: false },
+        { field: 'product_name', header: 'Product Name', sortable: true },
+        { field: 'product_actual_price', header: 'MRP', sortable: true },
+        { field: 'product_category', header: 'Category', sortable: true },
+        { field: 'product_subcategory', header: 'Sub-Category', body: (row) => <h6>{row?.product_subcategory == '' ? '---' : row?.product_subcategory}</h6>, sortable: true },
+        { field: 'product_available_qty', header: 'Quantity', sortable: true },
+        { field: 'product_brand', header: 'Brand', sortable: true },
+        { field: 'product_shelflife', header: 'Self Life', sortable: true },
+        { field: 'product_description', header: 'Description', sortable: true },
+        { field: 'product_Manufacturer_Name', header: 'Manufacturer Name', sortable: true },
+        { field: 'product_country_of_origin', header: 'Country Of Origin', sortable: true },
+        { filed: 'action', header: 'Action', body: action, sortable: true }
+        // { field: 'createdDate', header: 'Create Date', sortable: true },
+        // { field: 'MRP', header: 'MRP', sortable: true },
+        // { filed: 'action', header: 'Action', body: action, sortable: true }
     ]
 
-
-    const coulmn = [
+    const restaurantColumns = [
         { field: 'productId', header: 'ID', sortable: false },
-        { field: 'name', header: 'Product Name', body: (row) => <NavLink to={`/vendors/vendors-detail/${row?.id}`}><h6 className='underline text-sky-400'>{row?.name}</h6> </NavLink>, sortable: false },
+        { field: 'name', header: 'Product Name', sortable: false },
         { field: 'description', header: 'Description', sortable: false },
         { field: 'category', header: 'Category', sortable: false },
+        { field: 'subcategory', header: 'Sub-Category', sortable: false },
         { field: 'createdDate', header: 'Create Date', sortable: true },
         { field: 'MRP', header: 'MRP', sortable: true },
-        { field: 'markupPrice', header: 'Markup Price', sortable: true },
-        { field: 'commission', header: 'Commission', sortable: false },
         { field: 'quantity', header: 'Quantity', sortable: false },
+        { filed: 'action', header: 'Action', body: action, sortable: true }
     ]
 
+    const getProducts = () => {
+        getAllShopProduct().then(res => {
+            setShopProducts(res)
+        })
+    }
+
+    useEffect(() => {
+        getAllSeller().then(res => {
+            setSellers(res)
+        })
+        getProducts()
+    }, [])
 
     return (
         <>
@@ -149,10 +200,13 @@ const VendorProduct = () => {
             <div className='p-4 m-4 bg-white sm:m-5 rounded-xl'>
                 <div className='grid items-center grid-cols-6'>
                     <h2 className='col-span-5 text-xl font-semibold'>Product List</h2>
-                    <AddProduct title='Add Title' />
+                    <AddProduct title='Add Product' getProducts={getProducts} sellerId={matchedSeller?.vendor_id} />
                 </div>
                 <div className='mt-4'>
-                    <Table data={data} columns={coulmn} />
+                    {user?.isShop == true ?
+                        <Table data={shopProducts} columns={shopColumns} /> :
+                        <Table data={restaurantData} columns={restaurantColumns} />
+                    }
                 </div>
             </div>
         </>

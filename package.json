@@ -32,7 +32,7 @@
     "lightbox.js-react": "^0.8.9",
     "lucide-react": "^0.279.0",
     "moment": "^2.29.4",
-    "photoswipe": "^5.3.8",
+    "photoswipe": "^5.4.3",
     "primereact": "^9.6.2",
     "rc-progress": "^3.5.1",
     "react": "^18.2.0",
