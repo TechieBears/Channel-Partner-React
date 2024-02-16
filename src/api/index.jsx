@@ -174,7 +174,7 @@ export const GetFranchisee = async (data) => {
     const url = `${environment.baseUrl}franchise/create-franchise`;
     try {
         const response = await axios.get(url, data)
-        return response.data.data
+        return response.data
     }
     catch (err) {
         console.log(err);
@@ -216,6 +216,47 @@ export const getFranchiseDetails = async (id) => {
         console.log(err);
     }
 };
+
+/* ================== Edit Franchisee Deatails Api =========== */
+export const editfranchise = async (id, data) => {
+    const url = `${environment.baseUrl}franchise/edit-franchise/${id}`;
+    try {
+        const response = await axios.put(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+
+/* ================== Get all Customers Api =========== */
+export const getAllCustomers = async () => {
+    const url = `${environment.baseUrl}app/all_customers`;
+    try {
+        const response = await axios.get(url)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

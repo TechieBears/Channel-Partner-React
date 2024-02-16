@@ -1,20 +1,19 @@
-import { Fragment, useRef, useState, useMemo, useEffect } from "react";
+import { Fragment, useState, useMemo } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import LoadBox from "../../Loader/LoadBox";
 import { useForm } from "react-hook-form";
 import Error from "../../Errors/Error";
-import { Add } from "iconsax-react";
-// import { formBtn1, formBtn2, inputClass, labelClass } from "../../../utils/CustomClass";
+import { Edit } from 'iconsax-react';
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../utils/CustomClass';
-
-import { CreateFranchisee, GetFranchisee } from "../../../api";
+import { CreateFranchisee, GetFranchisee, editfranchise } from "../../../api";
 import { setFranchise } from "../../../redux/Slices/masterSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { ImageUpload, franchiselink } from '../../../env';
 
 
 
-export default function AddFranchise(props) {
+export default function AddFranchiseForm(props) {
+  // console.log('props = ', props)
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const dispatch = useDispatch()
@@ -72,6 +71,7 @@ export default function AddFranchise(props) {
 
   // ============================= form submiting ======================================
   const onSubmit = async (data) => {
+    console.log(data)
     if (props.button != 'edit') {    // for create
       if (data?.bank_passbook.length != 0) {
         await ImageUpload(data?.bank_passbook[0], "franchisee", "BankPassbook", data?.first_name)
@@ -133,10 +133,10 @@ export default function AddFranchise(props) {
         setLoader(false)
         console.log('error', error);
       }
-    } else {                         // for edit
+    } else {            // for edit
       setLoader(true)
-      // const response = await editUser(props?.data?.id, data)
-      if (response) {
+      const response = await editfranchise(props?.data?.user?.id, data)
+      if (response?.message == "franchise edited successfully") {
         setTimeout(() => {
           toggle();
           setLoader(false)
@@ -153,7 +153,7 @@ export default function AddFranchise(props) {
   const closeBtn = () => {
     toggle();
     setLoader(false);
-    resetData();
+    // resetData();
   };
 
 
@@ -173,29 +173,31 @@ export default function AddFranchise(props) {
     }
   };
 
-
-  // ============================== Reseting data ======================================
-  const resetData = () => {
-    reset({
-      "city": '',
-      "address": '',
-      "email": '',
-      "first_name": '',
-      "last_name": '',
-      'date_of_birth': '',
-      'gender': '',
-      'pincode': '',
-      "phone_no": '',
-      "state": '',
-      'pan_card': '',
-      'adhar_card': '',
-      'gst_number': '',
-      'bank_name': '',
-      'account_number': '',
-      'ifsc_code': '',
-    })
-  }
-
+    // ======================== Reset data into the form  =======================
+    useMemo(() => {
+      reset({
+        first_name: props?.data?.user?.first_name,
+        last_name: props?.data?.user?.last_name,
+        phone_no: props?.data?.user?.phone_no,
+        profile_pic: props?.data?.user?.profile_pic,
+        date_of_birth: props?.data?.user?.date_of_birth,
+        email: props?.data?.user?.email,
+        pincode: props?.data?.user?.pincode,
+        state: props?.data?.user?.state,
+        city: props?.data?.user?.city,
+        address: props?.data?.user?.address,
+        adhar_card: props?.data?.adhar_card,
+        pan_card: props?.data?.pan_card,
+        gst_number: props?.data?.gst_number,
+        bank_name: props?.data?.bank_name,
+        account_number: props?.data?.account_number,
+        bank_passbook: props?.data?.bank_passbook,
+        ifsc_code: props?.data?.ifsc_code,
+        address_proof: props?.data?.address_proof,
+        gender: props?.data?.user?.gender,
+        // password: props?.data?.password,
+      });
+    }, [props.data]);
 
   // useEffect(() => {
   //   if (props.button == "edit") {
@@ -204,20 +206,18 @@ export default function AddFranchise(props) {
   // }, [])
 
 
-  // ======================== Reset data into the form  =======================
-  useMemo(() => {
-    reset({
-      subcat_name: props?.data?.subcat_name,
-    });
-  }, [props.data]);
-
-
   return (
     <>
-      <button className={`${formBtn1} flex`} onClick={() => setIsOpen(true)}>
-        <Add className="text-white" />
-        {props?.title}
-      </button>
+      {props.button !== "edit" ? (
+            <button onClick={toggle} className={tableBtn}>
+                Add Franchisee
+            </button>
+        ) : (
+            <button
+                onClick={toggle}
+                className="bg-yellow-100 px-1.5 py-2 rounded-sm"><Edit size="20" className='text-yellow-500' />
+            </button>
+        )}
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-[100]" onClose={() => toggle}>
           <Transition.Child
@@ -291,7 +291,7 @@ export default function AddFranchise(props) {
                             {props?.button == 'edit' && props?.data.profile_pic != '' && props?.data.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                               {props?.data?.profile_pic?.split('/').pop()}
                             </label>}
-                            {errors.image && <Error title='Main Image is required*' />}
+                            {errors.profile_pic && <Error title='Profile Image is required*' />}
                           </div>
                           <div className="">
                             <label className={labelClass}>Email*</label>
@@ -317,17 +317,23 @@ export default function AddFranchise(props) {
                               <Error title="Phone is Required*" />
                             )}
                           </div>
-                          <div className="">
-                            <label className={labelClass}>
-                              Create Password
-                            </label>
-                            <input
-                              type="text"
-                              placeholder="Password"
-                              className={inputClass}
-                              {...register("password")}
-                            />
-                          </div>
+                          {
+                            props.button != 'edit' &&
+                            <div className="">
+                              <label className={labelClass}>
+                                Create Password*
+                              </label>
+                              <input
+                                type="text"
+                                placeholder="Password"
+                                className={inputClass}
+                                {...register("password", { required: true })}
+                              />
+                                 {errors.password && (
+                              <Error title="Password is Required*" />
+                            )}
+                            </div>
+                          }
 
                           <div className="">
                             <label className={labelClass}>
@@ -349,11 +355,12 @@ export default function AddFranchise(props) {
                               className={inputClass}
                               {...register("gender", { required: true })}
                             >
+                              <option value="" selected>--Select Type--</option>
                               <option value="Male">Male</option>
                               <option value="Female">Female</option>
                               <option value="Other">Other</option>
                             </select>
-                            {errors.gender && (
+                              {errors.gender && (
                               <Error title="Gender is Required*" />
                             )}
                           </div>
@@ -383,13 +390,16 @@ export default function AddFranchise(props) {
                             )}
                           </div>
                           <div className="">
-                            <label className={labelClass}>State</label>
+                            <label className={labelClass}>State*</label>
                             <input
                               type="text"
                               placeholder="Enter State"
                               className={inputClass}
-                              {...register("state")}
+                              {...register("state",  { required: true })}
                             />
+                               {errors.state && (
+                              <Error title="State is Required*" />
+                            )}
                           </div>
                           <div className="">
                             <label className={labelClass}>City*</label>
@@ -441,13 +451,14 @@ export default function AddFranchise(props) {
                                 type="text"
                                 placeholder='GST Number'
                                 className={inputClass}
-                                {...register('gst_number', {
-                                  // required: 'GST is required',
+                                {...register('gst', {
+                                  required: 'GST is required',
                                   // validate: validateGST
                                 })}
                               />
                             </div>
-                            {/* {errors?.gst && <Error title={errors?.gst?.message} />} */}
+                            {/* {errors.profile_pic && <Error title='Profile Image is required*' />} */}
+                            {errors?.gst && <Error title={errors?.gst?.message} />}
                           </div>
                           <div className="">
                             <label className={labelClass}>
@@ -513,7 +524,7 @@ export default function AddFranchise(props) {
                             {props?.button == 'edit' && props?.data?.address_proof != '' && props?.data?.address_proof != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                               {props?.data?.address_proof?.split('/').pop()}
                             </label>}
-                            {/* {errors.address_proof && <Error title='Address Proof Image is required*' />} */}
+                            {errors.address_proof && <Error title='Address Proof Image is required*' />}
                           </div>
                         </div>
                       </div>

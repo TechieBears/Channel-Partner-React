@@ -90,6 +90,16 @@ function FranchiseeVendors() {
         FranchiseeVendors()
     }, [])
 
+
+    // =================== table user profile column ========================
+    // const representativeBodyTemplate = (row) => {
+    //     return (
+    //         <div className="rounded-full w-11 h-11">
+    //             <img src={row?.profile == null || row?.profile == '' || row?.profile == undefined ? userImg : row?.profile} className="object-cover w-full h-full rounded-full" alt={row.first_name} />
+    //         </div>
+    //     );
+    // };
+
     //=============== Table Columns =============================
     // const status = (row) => <Switch checked={row?.id == rstatus ? true : false} onChange={() => setStatus(row?.id)} />
     const status = (row) => <Switch checked={row?.status} onChange={() => setStatus(row?.id)} />
@@ -98,11 +108,13 @@ function FranchiseeVendors() {
     </button>
     const columns = [
         { field: 'id', header: 'ID', sortable: false },
-        { field: 'first_name', header: 'Vendor Name', sortable: false },
-        { field: 'address', header: 'Address', sortable: false },
-        { field: 'pincode', header: 'Pincode', sortable: false },
-        { field: 'phone_no', header: 'Phone No', sortable: false },
+        // { field: 'profile', header: 'Profile', body: representativeBodyTemplate, sortable: true, style: true },
+        { field: 'profile_pic', header: 'Image', sortable: false },
+        { field: 'first_name', body: (row) => <div className="capitalize">{row.first_name + " " + row.last_name}</div>, header: 'Name' },
         { field: 'email', header: 'Email', sortable: false },
+        { field: 'phone_no', header: 'Phone No', sortable: false },
+        { field: 'pincode', header: 'Pincode', sortable: false },
+        { field: 'address', header: 'Address', sortable: false },
         { field: 'status', header: 'Status', body: status, sortable: false },
         { field: 'action', header: 'Action', body: action, sortable: false },
     ]
