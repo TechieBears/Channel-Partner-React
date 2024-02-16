@@ -2,13 +2,16 @@ import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../utils/CustomClass';
 import { useForm } from 'react-hook-form';
-import { addDeliveryBoy, createUser, editUser, getUser } from '../../../api';
+import { addDeliveryBoy, createUser, editUser, getDeliveryBoys, createDeliveryBoy } from '../../../api';
 import { Edit } from 'iconsax-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUserList } from '../../../redux/Slices/userSlice';
 import Error from '../../Errors/Error';
 import LoadBox from '../../Loader/LoadBox';
 import { toast } from 'react-toastify';
+import { ImageUpload, deliveryBoylink } from '../../../env';
+import { setDeliveryList } from '../../../redux/Slices/deliverySlice';
+
+
 
 function AddDriverFrom(props) {
     const [isOpen, setIsOpen] = useState(false);
@@ -16,6 +19,18 @@ function AddDriverFrom(props) {
     const getFranchiseDetail = useSelector((state) => state?.user?.FranchiseeDetails)
     console.log('getFranchiseDetail', getFranchiseDetail)
     const toggle = () => setIsOpen(!isOpen);
+
+    const user = useSelector((state) => state?.user?.FranchiseeDetails);  
+
+    const handleFileChange = (event) => {
+        console.log("file", event.target.files[0]);
+        const file = event.target.files[0];
+        if (file.size > 100 * 1024 * 1024) {
+          event.target.value = null;
+          alert("File size exceeds 100MB limit");
+          return;
+        }
+      };
 
     const dispatch = useDispatch()
     const {
@@ -72,82 +87,124 @@ function AddDriverFrom(props) {
     // ============================= fetching data api ==================================
     const fetchData = () => {
         try {
-            getUser().then((res) => {
-                dispatch(setUserList(res))
+            getDeliveryBoys().then((res) => {
+                dispatch(setDeliveryList(res))
             })
         } catch (err) {
             console.log('error', err);
         }
     }
 
-    // ============================= form submiting ======================================
+
+      // ============================= form submiting ======================================
     const onSubmit = async (data) => {
-        if (props.button != 'edit') {                 // for create
-            if (data?.bank_passbook.length != 0) {
-                await ImageUpload(data?.bank_passbook[0], "doc", "passbookImage", data?.name)
-                data.bank_passbook = `${link}${data?.name}_passbookImage_${data?.bank_passbook[0].name}`
-            } else {
-                data.bank_passbook = ''
-            }
-            if (data?.address_proof.length != 0) {
-                await ImageUpload(data?.address_proof[0], "doc", "addressproofImage", data?.name)
-                data.address_proof = `${link}${data?.name}_addressproofImage_${data?.address_proof[0].name}`
-            } else {
-                data.address_proof = ''
-            }
+        setLoader(true)
+
+        console.log(data)
+        if (props.button != 'edit') {    // for create
+        if (data?.bank_passbook.length != 0) {
+            await ImageUpload(data?.bank_passbook[0], "deliveryboy", "BankPassbook", data?.first_name)
+            data.bank_passbook = `${deliveryBoylink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
+        } else {
+            data.bank_passbook = ''
         }
-        else {                                        // for edit
-            if (data?.bank_passbook.length != 0) {
-                ImageUpload(data?.bank_passbook[0], "doc", "passBookImage", data?.name)
-                data.bank_passbook = `${link}${data?.name}_passBookImage_${data?.bank_passbook[0].name}`
-            } else {
-                data.bank_passbook = props?.data?.bank_passbook
-            }
-            if (data?.address_proof.length != 0) {
-                await ImageUpload(data?.address_proof[0], "doc", "addressproofImage", data?.name)
-                data.address_proof = `${link}${data?.name}_addressproofImage_${data?.address_proof[0].name}`
-            } else {
-                data.address_proof = props?.data?.address_proof
-            }
+        if (data?.video_url.length != 0) {
+            await ImageUpload(data?.video_url[0], "deliveryboy", "AddressProof", data?.first_name)
+            data.video_url = `${deliveryBoylink}${data?.first_name}_AddressProof_${data?.video_url[0].name}`
+        } else {
+            data.video_url = ''
+        }
+        if (data?.profile_pic.length != 0) {
+            await ImageUpload(data?.profile_pic[0], "deliveryboy", "ProfileImage", data?.first_name)
+            data.profile_pic = `${deliveryBoylink}${data?.first_name}_ProfileImage_${data?.profile_pic[0].name}`
+        } else {
+            data.profile_pic = ''
+        }
+        }
+        else {          // for edit
+        if (data?.bank_passbook.length != 0) {
+            await ImageUpload(data?.bank_passbook[0], "deliveryboy", "BankPassbook", data?.first_name)
+            data.bank_passbook = `${deliveryBoylink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
+        } else {
+            data.bank_passbook = ''
+        }
+        if (data?.video_url.length != 0) {
+            await ImageUpload(data?.video_url[0], "deliveryboy", "AddressProof", data?.first_name)
+            data.video_url = `${deliveryBoylink}${data?.first_name}_AddressProof_${data?.video_url[0].name}`
+        } else {
+            data.video_url = ''
+        }
+        if (data?.profile_pic.length != 0) {
+            await ImageUpload(data?.profile_pic[0], "deliveryboy", "ProfileImage", data?.first_name)
+            data.profile_pic = `${deliveryBoylink}${data?.first_name}_ProfileImage_${data?.profile_pic[0].name}`
+        } else {
+            data.profile_pic = ''
+        }
         }
         if (props.button !== 'edit') {   // for create
             try {
-                setLoader(true)
-                // const response = await createUser(data);
-                addDeliveryBoy(data).then((res) => {
-                    if (res?.code == 2002) {
-                        setTimeout(() => {
-                            reset();
-                            setLoader(false)
-                            toggle();
-                            fetchData()
-                            toast.success(res?.Message);
-                        }, 1000);
-                    } else {
+                // setLoader(true)
+                if (data.job_type === "Part Time (4-5 Hours/Day)") {
+                    data.job_type = {
+                      subTitle: "4-5 hours per day",
+                      title: "Part Time"
+                    };
+                  } else if (data.job_type === "Full Time (9 Hours/Day)") {
+                    data.job_type = {
+                      subTitle: "9 hours per day",
+                      title: "Full Time"
+                    };
+                }
+                if (data.shift === "Morning 9AM to Afternoon 1PM 4 Hours") {
+                    data.shift = {
+                        "subTitle":"4 hours",
+                        "title":"Morning 9AM to Afternoon 1PM"
+                     };
+                    } else if (data.shift === "Afternoon 4PM to Evening 8PM 4 Hours") {
+                    data.shift = {
+                        "subTitle":"4 hours",
+                        "title":"Afternoon 4PM to Evening 8PM"
+                    };
+                }
+
+                const additionalPayload = { created_by: user?.user?.id };
+                const requestData = { ...data, ...additionalPayload };
+
+                const response = await createDeliveryBoy(requestData);
+                if (response?.message == "delivery boy added successfully") {
+                    setTimeout(() => {
+                        reset();
                         setLoader(false)
-                        toast.error(res?.Message);
-                        console.log('failed to create delivery partner')
-                    }
-                })
+                        toggle();
+                        fetchData()
+                        toast.success(response?.message);
+                    }, 1000);
+                } else {
+                setLoader(false)
+                toast.error(response?.message);
+                // console.log('failed to create Delivery boy')
+                }
             } catch (error) {
                 setLoader(false)
                 console.log('error', error);
             }
-        } else {                         // for edit
+            } else {            // for edit
             setLoader(true)
-            const response = await editUser(props?.data?.id, data)
-            if (response) {
+            const response = await editUser(props?.data?.user?.id, data)
+            if (response?.message == "franchise edited successfully") {
                 setTimeout(() => {
-                    toggle();
-                    setLoader(false)
-                    fetchData()
-                    toast.success(response?.message);
+                toggle();
+                setLoader(false)
+                fetchData()
+                toast.success(response?.message);
                 }, 1000);
             } else {
-                console.log('failed to update delivery partner')
+                console.log('failed to update user')
             }
         }
     }
+
+
 
     // ============================== close modals ======================================
     const closeBtn = () => {
@@ -245,28 +302,16 @@ function AddDriverFrom(props) {
                                         as="h2"
                                         className="w-full px-3 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
                                     >
-                                        {props?.title}
+                                        Add Delivery Boy
                                     </Dialog.Title>
 
                                     <div className=" bg-gray-200/70">
                                         {/* React Hook Form */}
                                         <form onSubmit={handleSubmit(onSubmit)} >
                                             <div className="">
+                                                <h1 className='pt-4 mx-4 text-xl font-semibold text-gray-900 font-tbPop '>Basic Details:</h1>
                                                 <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-x-3 gap-y-3 ">
-                                                <div className="">
-                                                        <label className={labelClass} htmlFor="main_input">Profile Image*</label>
-                                                        <input className={fileinput}
-                                                            id="main_input"
-                                                            type='file'
-                                                            multiple
-                                                            accept='image/jpeg,image/jpg,image/png'
-                                                            placeholder='Upload Images...'
-                                                            {...register("profile_pic", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data.profile_pic != '' && props?.data.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.data?.profile_pic?.split('/').pop()}
-                                                        </label>}
-                                                        {errors.profile_pic && <Error title='Profile Image is required*' />}
-                                                    </div>
+                                              
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             First Name*
@@ -290,6 +335,20 @@ function AddDriverFrom(props) {
                                                             {...register('last_name', { required: true })}
                                                         />
                                                         {errors.last_name && <Error title="Last Name is required*" />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass} htmlFor="main_input">Profile Image*</label>
+                                                        <input className={fileinput}
+                                                            id="main_input"
+                                                            type='file'
+                                                            multiple
+                                                            accept='image/jpeg,image/jpg,image/png'
+                                                            placeholder='Upload Images...'
+                                                            {...register("profile_pic", { required: props.button == 'edit' ? false : true })} />
+                                                        {props?.button == 'edit' && props?.data.profile_pic != '' && props?.data.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.data?.profile_pic?.split('/').pop()}
+                                                        </label>}
+                                                        {errors.profile_pic && <Error title='Profile Image is required*' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -316,11 +375,23 @@ function AddDriverFrom(props) {
                                                         {errors.password && <Error title="Password is required*" />}
                                                     </div>
                                                     <div className="">
+                                                        <label className={labelClass}>Address*</label>
+                                                        <input
+                                                        type="text"
+                                                        placeholder="Address"
+                                                        className={inputClass}
+                                                        {...register("address", { required: true })}
+                                                        />
+                                                        {errors.address && (
+                                                        <Error title="Address is Required*" />
+                                                        )}
+                                                    </div>
+                                                    <div className="">
                                                         <label className={labelClass}>
                                                             Pincode*
                                                         </label>
                                                         <input
-                                                            type="number"
+                                                            type='number'
                                                             maxLength={6}
                                                             placeholder='Pincode'
                                                             className={inputClass}
@@ -334,7 +405,7 @@ function AddDriverFrom(props) {
                                                         </label>
                                                         <input
                                                             type="text"
-                                                            maxLength={6}
+                                                            // maxLength={6}
                                                             placeholder='City'
                                                             className={inputClass}
                                                             {...register('city', { required: true, })}
@@ -347,12 +418,25 @@ function AddDriverFrom(props) {
                                                         </label>
                                                         <input
                                                             type="text"
-                                                            maxLength={6}
+                                                            // maxLength={6}
                                                             placeholder='State'
                                                             className={inputClass}
                                                             {...register('state', { required: true, })}
                                                         />
-                                                        {errors.state && <Error title="state is required*" />}
+                                                        {errors.state && <Error title="State is required*" />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                        Phone Number*
+                                                        </label>
+                                                        <input
+                                                            type="number"
+                                                            maxLength={10}
+                                                            placeholder='+91'
+                                                            className={inputClass}
+                                                            {...register('phone_no', { required: true, })}
+                                                        />
+                                                        {errors.phone_no && <Error title="Phone number is required*" />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -373,17 +457,37 @@ function AddDriverFrom(props) {
 
                                                         <select
                                                             className={inputClass}
-                                                            {...register('date_of_birth', { required: true, })}
+                                                            {...register('gender', { required: true, })}
                                                         >
-                                                            <option value=''>Select</option>
+                                                            <option value=''>--Select--</option>
                                                             <option value='Male'>Male</option>
                                                             <option value='Female'>Female</option>
+                                                            <option value='Other'>Other</option>
                                                         </select>
-                                                        {errors.date_of_birth && <Error title="Date Of Birth is required*" />}
+                                                        {errors.gender && <Error title="Gender is required*" />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Driving License Number
+                                                        Marital Status*
+                                                        </label>
+
+                                                        <select
+                                                            className={inputClass}
+                                                            {...register('marital_status', { required: true, })}
+                                                        >
+                                                            <option value=''>--Select--</option>
+                                                            <option value='Single'>Single</option>
+                                                            <option value='Married'>Married</option>
+                                                        </select>
+                                                        {errors.marital_status && <Error title="Marital Status is required*" />}
+                                                    </div>
+                                                </div>
+                                                
+                                                <h1 className='pt-4 mx-4 text-xl font-semibold text-gray-900 font-tbPop '>Additional Details:</h1>
+                                                <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-x-3 gap-y-3">
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Driving License Number*
                                                         </label>
                                                         <input
                                                             type="text"
@@ -394,16 +498,20 @@ function AddDriverFrom(props) {
                                                         {errors.driver_license && <Error title='Driving License Number is required' />}
                                                     </div>
                                                     <div className="">
-                                                        <label className={labelClass}>
-                                                            Vehicle Type*
-                                                        </label>
-                                                        <input
-                                                            type="number"
-                                                            placeholder='Vehicle Type'
-                                                            className={inputClass}
-                                                            {...register('vehicle_type', { required: true, })}
-                                                        />
-                                                        {errors.vehicle_type && <Error title='Vehicle Type is required*' />}
+                                                        <label className={labelClass}>  Vehicle Type*</label>
+                                                        <select
+                                                        className={inputClass}
+                                                        {...register("vehicle_type", { required: true })}
+                                                        >
+                                                        <option value="" selected>--Select Type--</option>
+                                                        <option value="Cycle">Cycle</option>
+                                                        <option value="Bike">Bike</option>
+                                                        <option value="Electric Bike">Electric Bike</option>
+                                                        <option value="I don't own a vehicle">I don't own a vehicle</option>
+                                                        </select>
+                                                        {errors.vehicle_type && (
+                                                        <Error title="Vehicle Type is Required*" />
+                                                        )}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -418,53 +526,74 @@ function AddDriverFrom(props) {
                                                         {errors.vehicle_rc && <Error title='Vehicle RC is required' />}
                                                     </div>
                                                     <div className="">
-                                                        <label className={labelClass}>
-                                                            Bank Name
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder="Bank Name"
-                                                            className={inputClass}
-                                                            {...register('bank_name', { required: true })}
-                                                        />
-                                                        {errors.bank_name && <Error title='Bank Name is required' />}
+                                                        <label className={labelClass}>Job Type*</label>
+                                                        <select
+                                                        className={inputClass}
+                                                        {...register("job_type", { required: true })}
+                                                        >
+                                                            <option value="" selected>--Select Type--</option>
+                                                            <option value="Part Time (4-5 Hours/Day)">Part Time (4-5 Hours/Day)</option>
+                                                            <option value="Full Time (9 Hours/Day)">Full Time (9 Hours/Day)</option>
+                                                        </select>
+                                                        {errors.job_type && (
+                                                        <Error title="Job Type is Required*" />
+                                                        )}
                                                     </div>
                                                     <div className="">
-                                                        <label className={labelClass}>
-                                                            Account Number*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Account Number'
-                                                            className={inputClass}
-                                                            {...register('account_number', { required: true })}
-                                                        />
-                                                        {errors.account_number && <Error title="Account Number is required*" />}
+                                                        <label className={labelClass}>Select Shift*</label>
+                                                        <select
+                                                        className={inputClass}
+                                                        {...register("shift", { required: true })}
+                                                        >
+                                                            <option value="" selected>--Select Type--</option>
+                                                            <option value="Morning 9AM to Afternoon 1PM 4 Hours">Morning 9AM to Afternoon 1PM (4 Hours)</option>
+                                                            <option value="Afternoon 4PM to Evening 8PM 4 Hours">Afternoon 4PM to Evening 8PM (4 Hours)</option>
+                                                        </select>
+                                                        {errors.shift && (
+                                                        <Error title="Shift Type is Required*" />
+                                                        )}
                                                     </div>
                                                     <div className="">
-                                                        <label className={labelClass}>
-                                                            IFSC Code
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='IFSC Code'
-                                                            className={inputClass}
-                                                            {...register('ifsc_code', { required: true })}
-                                                        />
-                                                        {errors?.ifsc_code && <Error title='IFSC Code is required' />}
+                                                        <label className={labelClass}>Select WeekOff*</label>
+                                                        <select
+                                                        className={inputClass}
+                                                        {...register("week_off", { required: true })}
+                                                        >
+                                                            <option value="" selected>--Select Type--</option>
+                                                            <option value="Monday">Monday</option>
+                                                            <option value="Tuesday">Tuesday</option>
+                                                            <option value="Wednesday">Wednesday</option>
+                                                            <option value="Thursday">Thursday</option>
+                                                            <option value="Friday">Friday</option>
+                                                            <option value="Saturday">Saturday</option>
+                                                            <option value="Sunday">Sunday</option>
+                                                        </select>
+                                                        {errors.shift && (
+                                                        <Error title="WeekOff is Required*" />
+                                                        )}
                                                     </div>
                                                     <div className="">
-                                                        <label className={labelClass}>
-                                                            Aadhar Card Number
-                                                        </label>
+                                                        <label className={labelClass} htmlFor="video_input">Upload Video*</label>
                                                         <input
-                                                            type="text"
-                                                            placeholder='Aadhar Card Number'
-                                                            className={inputClass}
-                                                            {...register('adhar_card', { required: true })}
+                                                            className={fileinput}
+                                                            id="video_input"
+                                                            type='file'
+                                                            accept='video/mp4,video/x-m4v,video/*'
+                                                            placeholder='Upload Video...'
+                                                            {...register("video_url", { required: props.button === 'edit' ? false : true })}
+                                                            onChange={handleFileChange}
                                                         />
-                                                        {errors?.adhar_card && <Error title='Aadhar Card Number is required' />}
+                                                        {props?.button === 'edit' && props?.data.video_url && (
+                                                            <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.data?.video_url?.name}
+                                                            </label>
+                                                        )}
+                                                        {errors.video_url && <Error title='Video file is required*' />}
                                                     </div>
+                                                </div>
+                                                
+                                                <h1 className='pt-4 mx-4 text-xl font-semibold text-gray-900 font-tbPop '>Bank Details:</h1>
+                                                <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-x-3 gap-y-3">
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             PAN Card Number*
@@ -478,19 +607,53 @@ function AddDriverFrom(props) {
                                                         {errors.pan_card && <Error title='PAN Card Number is required' />}
                                                     </div>
                                                     <div className="">
-                                                        <label className={labelClass} htmlFor="main_input">Address Proof Image*</label>
-                                                        <input className={fileinput}
-                                                            id="main_input"
-                                                            type='file'
-                                                            multiple
-                                                            accept='image/jpeg,image/jpg,image/png'
-                                                            placeholder='Upload Images...'
-                                                            {...register("address_proof", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data.address_proof != '' && props?.data.address_proof != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.data?.address_proof?.split('/').pop()}
-                                                        </label>}
-                                                        {errors.bank_passbook && <Error title='Address Proof Image is required*' />}
-                                                    </div>     
+                                                        <label className={labelClass}>
+                                                            Aadhar Card Number*
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='Aadhar Card Number'
+                                                            className={inputClass}
+                                                            {...register('adhar_card', { required: true })}
+                                                        />
+                                                        {errors?.adhar_card && <Error title='Aadhar Card Number is required' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Bank Name*
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Bank Name"
+                                                            className={inputClass}
+                                                            {...register('bank_name', { required: true })}
+                                                        />
+                                                        {errors.bank_name && <Error title='Bank Name is required' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                           Bank Account Number*
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='Account Number'
+                                                            className={inputClass}
+                                                            {...register('account_number', { required: true })}
+                                                        />
+                                                        {errors.account_number && <Error title="Bank Account Number is required*" />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            IFSC Code*
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='IFSC Code'
+                                                            className={inputClass}
+                                                            {...register('ifsc_code', { required: true })}
+                                                        />
+                                                        {errors?.ifsc_code && <Error title='IFSC Code is required' />}
+                                                    </div>   
                                                     <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Bank PassBook Image*</label>
                                                         <input className={fileinput}
@@ -504,32 +667,6 @@ function AddDriverFrom(props) {
                                                             {props?.data?.bank_passbook?.split('/').pop()}
                                                         </label>}
                                                         {errors.bank_passbook && <Error title='Bank PassBook Image is required*' />}
-                                                    </div>
-                                                    <div>
-                                                        <label className={labelClass}>Status</label>
-                                                        <select
-                                                            {...register('is_activated', { required: true })}
-                                                            className={inputClass}
-                                                        >
-                                                            <option value=''>Select</option>
-                                                            <option value={true}>Active</option>
-                                                            <option value={false}>Not Active</option>
-                                                        </select>
-                                                        {errors?.is_activated && <Error title='Acitvated Status is required' />}
-                                                    </div>
-                                                    <div>
-                                                        <label className={labelClass}>Driver Rating's</label>
-                                                        <select
-                                                            {...register('driver_rating', { required: true })}
-                                                            className={inputClass}
-                                                        >
-                                                            <option value={1}>1</option>
-                                                            <option value={2}>2</option>
-                                                            <option value={3}>3</option>
-                                                            <option value={4}>4</option>
-                                                            <option value={5}>5</option>
-                                                        </select>
-                                                        {errors?.driver_rating && <Errors title='Acitvated Status is required' />}
                                                     </div>
                                                 </div>
                                             </div>

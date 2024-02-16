@@ -414,6 +414,7 @@ export default function AddFranchiseForm(props) {
                             )}
                           </div>
                         </div>
+                        
                         <h1 className='pt-4 mx-4 text-xl font-semibold text-gray-900 font-tbPop '>Additional Details:</h1>
                         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-x-3 gap-y-3">
                           <div className="">

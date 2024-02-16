@@ -16,7 +16,7 @@ import { formBtn1, formBtn2, inputClass ,tableBtn } from '../../../utils/CustomC
 function Franchisees() {
   const dispatch = useDispatch()
   const Franchisee = useSelector((state) => state?.master?.Franchise);
-  console.log('franchisee Table data = ', Franchisee);
+//   console.log('franchisee Table data = ', Franchisee);
 
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
@@ -138,6 +138,7 @@ function Franchisees() {
     const action = (row) => <button className={`${tableBtn}`} >
         View Analysis
     </button>
+
     const columns = [
         // { field: 'id', header: 'ID', sortable: false },
         { field: 'profile_pic', header: 'Profile', body: representativeBodyTemplate, sortable: false, style: true },

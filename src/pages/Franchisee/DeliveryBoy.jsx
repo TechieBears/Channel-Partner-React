@@ -1,56 +1,114 @@
 import { Refresh, SearchNormal } from 'iconsax-react'
-import React from 'react'
-import { formBtn1, inputClass } from '../../utils/CustomClass'
+import React, {useEffect} from 'react'
+import { Eye  } from 'iconsax-react';
+import { Link } from 'react-router-dom';
 import Table from '../../components/Table/Table'
-import ReactSwitch from 'react-switch'
 import AddDriverFrom from '../../components/Modals/DriverModals/AddDriverForm'
+import { getDeliveryBoys } from '../../api';
+import { setDeliveryList } from '../../redux/Slices/deliverySlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { formBtn1, formBtn2, inputClass ,tableBtn } from '../../utils/CustomClass';
+
+
+
 
 function DeliveryBoy() {
-    const data = [
-        {
-            "emp_id": "IN001",
-            "first_name": "Rahul",
-            "email": "rahul@example.com",
-            "mobile_number": "+91 9876543210",
-            "DOB": "1985-07-15",
-            "gender": "Male",
-            "pincode": "560001",
-            "address": "123, ABC Street, Bangalore",
-            "active_status": true
-        },
-        {
-            "emp_id": "IN002",
-            "first_name": "Priya",
-            "email": "priya@example.com",
-            "mobile_number": "+91 8765432109",
-            "DOB": "1990-03-25",
-            "gender": "Female",
-            "pincode": "110001",
-            "address": "456, XYZ Road, New Delhi",
-            "active_status": false
-        },
-        {
-            "emp_id": "IN003",
-            "first_name": "Amit",
-            "email": "amit@example.com",
-            "mobile_number": "+91 7654321098",
-            "DOB": "1988-11-02",
-            "gender": "Male",
-            "pincode": "400001",
-            "address": "789, PQR Lane, Mumbai",
-            "active_status": true
+    const dispatch = useDispatch()
+    const deliveryList = useSelector((state) => state?.delivery?.deliveryList)
+    // console.log('delivery Tablle data = ', deliveryList?.data)
+
+
+    // ============================= fetching data api ==================================
+    const fetchData = () => {
+        try {
+            getDeliveryBoys().then((res) => {
+                dispatch(setDeliveryList(res));
+            })
+        } catch (err) {
+            console.log('error', err);
         }
-    ]
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+
+      // =============================== verify user switch =============================
+      const switchVerify = (row) => {
+        return (
+            <div className="flex items-center justify-center gap-2 ">
+                <Switch
+                    value={row?.isverify}
+                    onChange={() => verifyActions(row)}
+                    size={50}
+                    backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
+                    borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
+            </div>
+        )
+    }
+
+
+    // =============================== active user switch =============================
+    const switchActive = (row) => {
+        return (
+            <div className="flex items-center justify-center gap-2 ">
+                <Switch
+                    value={row?.isactive}
+                    onChange={() => activeActions(row)}
+                    size={50}
+                    backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
+                    borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
+            </div>
+        )
+    }
+
+    // =================== table action ========================
+    const actionBodyTemplate = (row) => (
+        <div className="flex items-center gap-2">
+            <Link to={`/user/${row.id}`} state={row} className="bg-green-100 px-1.5 py-2 rounded-sm">
+                <Eye size="20" className='text-green-500' />
+            </Link>
+            <AddDriverFrom button='edit' title='Edit User' data={row} />
+        </div>
+    );
+
+
+    // =================== table user profile column ========================
+    const representativeBodyTemplate = (row) => {
+        return (
+            <div className="rounded-full w-11 h-11">
+                <img src={row?.user?.profile_pic == null || row?.user?.profile_pic == '' || row?.user?.profile_pic == undefined ? userImg : row?.user?.profile_pic} className="object-cover w-full h-full rounded-full" alt={row.user?.first_name} />
+            </div>
+        );
+    };
+
+
+    // =================== table user verify column  ========================
+    const activeActionsRole = (rowData) => (
+    <h6 className={`${rowData?.user?.isactive !== "false" ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"} py-2 px-5 text-center capitalize rounded-full`}>
+        {rowData?.user?.isactive !== "false" ? "Active" : "Inactive"}
+    </h6>
+    );
+    
+    const action = (row) => <button className={`${tableBtn}`} >
+    View Analysis
+    </button>
 
     const columns = [
-        { field: 'emp_id', header: 'ID', sortable: false },
-        { field: 'first_name', header: 'Name', sortable: false },
-        { field: 'email', header: 'Email', sortable: false },
-        { field: 'mobile_number', header: 'Mobile No', sortable: false },
-        { field: 'DOB', header: 'DOB', sortable: false },
-        { field: 'gender', header: 'Gender', sortable: false },
-        { field: 'address', header: 'Address', sortable: false },
-        { field: 'active_status', header: 'status', sortable: false, body: (row) => (<ReactSwitch checked={row?.active_status} onChange={() => { console.log('changed') }} />) },
+        // { field: 'id', header: 'ID', sortable: false },
+        { field: 'profile_pic', header: 'Profile', body: representativeBodyTemplate, sortable: false, style: true },
+        { field: 'first_name', body: (row) => <div className="capitalize">{row?.user?.first_name + " " + row?.user?.last_name}</div>, header: 'Name' },
+        { field: 'email', header: 'Email', body: (row) => <h6>{row?.user?.email}</h6>, sortable: false },
+        { field: 'gender', header: 'Gender', body: (row) => <h6>{row?.user?.gender}</h6>, sortable: false },
+        { field: 'phone_no', header: 'Phone No', body: (row) => <h6>{row?.user?.phone_no}</h6>, sortable: false },
+        { field: 'pincode', header: 'Pincode', body: (row) => <h6>{row?.user?.pincode}</h6>, sortable: false },
+        { field: 'address', header: 'Address', body: (row) => <h6>{row?.user?.address}</h6>, sortable: false },
+        { field: 'state', header: 'state', body: (row) => <h6>{row?.user?.state}</h6>, sortable: false },
+        { field: 'city', header: 'city', body: (row) => <h6>{row?.user?.city}</h6>, sortable: false },
+        { field: 'registration_date', header: 'Registration Date', body: (row) => <h6>{row?.user?.registration_date}</h6>, sortable: false },
+        { field: 'status', header: 'Status', body: activeActionsRole, sortable: false },
+        { field: 'id', header: 'Action', body: actionBodyTemplate, sortable: true },
+        {  header: 'Analyse', body: action, sortable: false },
     ]
 
     return (
@@ -81,7 +139,7 @@ function DeliveryBoy() {
                     <AddDriverFrom />
                 </div>
                 <div className='p-2 bg-white rounded-xl'>
-                    <Table data={data} columns={columns} />
+                    <Table data={deliveryList?.data} columns={columns} />
                 </div>
             </div>
         </>

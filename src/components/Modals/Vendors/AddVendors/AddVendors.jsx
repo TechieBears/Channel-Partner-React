@@ -106,7 +106,7 @@ export default function AddVendors(props) {
             if (props.button !== 'edit') {   // for create
                 try {
                     setLoader(true)
-                    const additionalPayload = { franchise: user?.franch_id };
+                    const additionalPayload = { created_by: user?.user?.id };
                     const requestData = { ...data, ...additionalPayload };
 
                     const response = await CreateFranchiseeVendors(requestData)

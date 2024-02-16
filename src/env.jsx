@@ -87,4 +87,5 @@ export const productLink = 'https://channel-partner-media.s3.ap-south-1.amazonaw
 
 // ---- Franchisee Links ----
 export const franchiselink  = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/franchisee/'
+export const deliveryBoylink  = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/deliveryboy/'
 export const vendorlink  = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/vendor/'

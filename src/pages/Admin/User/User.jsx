@@ -5,7 +5,7 @@ import Table from '../../../components/Table/Table';
 import { Link } from 'react-router-dom';
 import { Eye, Trash } from 'iconsax-react';
 import CreateUserForm from '../../../components/Modals/UserModals/CreateUserForm';
-import { delUser, editUser, getAllCustomers } from '../../../api';
+import { deactivateUser, getAllCustomers } from '../../../api';
 import userImg from '../../../assets/user.jpg';
 import Switch from 'react-js-switch';
 import axios from 'axios';
@@ -127,10 +127,11 @@ function User() {
     // =================== table user active column ========================
 
     const activeActions = (row) => {
-        const payload = { isactive: !row.isactive, email: row?.email }
+        // const payload = { isactive: !row.isactive, email: row?.email }
+        const payload = { action: !row.isactive , user_id: row?.id}
         try {
-            editUser(row?.id, payload).then((form) => {
-                if (form.code == 2002) {
+            deactivateUser(payload).then((form) => {
+                if (form.status == "success") {
                     toast.success('User Active Changed !');
                     fetchData()
                 }

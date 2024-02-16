@@ -243,6 +243,19 @@ export const getAllCustomers = async () => {
 };
 
 
+//  ===================  Activate/Deactivate User by Toggle Api ===============
+export const deactivateUser = async (data) => {
+    const url = `${environment.baseUrl}app/deactivate_user`;
+    try {
+        const response = await axios.post(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+
 
 
 
@@ -1293,6 +1306,25 @@ export const getSubAdmin = async () => {
 }
 
 export const addDeliveryBoy = async (data) => {
+    const url = `${environment.baseUrl}delivery/create_deliveryboy`
+    try {
+        const response = await axios.get(url, data);
+        return response.data;
+    } catch (error) {
+        console.log(error)
+    }
+}
+export const createDeliveryBoy = async (data) => {
+    const url = `${environment.baseUrl}delivery/create_deliveryboy`
+    try {
+        const response = await axios.post(url, data);
+        return response.data;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const getDeliveryBoys = async (data) => {
     const url = `${environment.baseUrl}delivery/create_deliveryboy`
     try {
         const response = await axios.get(url, data);
