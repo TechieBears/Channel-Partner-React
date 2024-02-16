@@ -13,12 +13,24 @@ import { ImageUpload, franchiselink } from '../../../env';
 
 
 export default function AddFranchiseForm(props) {
-  // console.log('props = ', props)
+  console.log('props = ', props)
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const dispatch = useDispatch()
   const { register, handleSubmit, reset, watch, control, setValue, formState: { errors }, } = useForm();
 
+
+    // // ========================= fetch data from api ==============================
+    const FranchiseeDetails = () => {
+      try {
+        GetFranchisee().then((res) => {
+          dispatch(setFranchise(res));
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
 
   // ============================ file uplaod watch ===============================
   // const buscard_watch = watch('bus_card_url')
@@ -122,6 +134,8 @@ export default function AddFranchiseForm(props) {
             setLoader(false)
             toggle();
             // fetchData()
+          props?.fetchData()
+          GetFranchisee()
             toast.success(response?.Message);
           }, 1000);
         } else {
@@ -140,7 +154,8 @@ export default function AddFranchiseForm(props) {
         setTimeout(() => {
           toggle();
           setLoader(false)
-          fetchData()
+          props?.fetchData()
+          GetFranchisee()
           toast.success(response?.message);
         }, 1000);
       } else {
@@ -162,16 +177,6 @@ export default function AddFranchiseForm(props) {
   };
 
 
-  // // ========================= fetch data from api ==============================
-  const FranchiseeDetails = () => {
-    try {
-      GetFranchisee().then((res) => {
-        dispatch(setFranchise(res));
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
     // ======================== Reset data into the form  =======================
     useMemo(() => {
@@ -288,8 +293,8 @@ export default function AddFranchiseForm(props) {
                               accept='image/jpeg,image/jpg,image/png'
                               placeholder='Upload Images...'
                               {...register("profile_pic", { required: props.button == 'edit' ? false : true })} />
-                            {props?.button == 'edit' && props?.data.profile_pic != '' && props?.data.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                              {props?.data?.profile_pic?.split('/').pop()}
+                            {props?.button == 'edit' && props?.data?.user?.profile_pic != '' && props?.data?.user?.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                              {props?.data?.user?.profile_pic?.split('/').pop()}
                             </label>}
                             {errors.profile_pic && <Error title='Profile Image is required*' />}
                           </div>
@@ -452,14 +457,14 @@ export default function AddFranchiseForm(props) {
                                 type="text"
                                 placeholder='GST Number'
                                 className={inputClass}
-                                {...register('gst', {
+                                {...register('gst_number', {
                                   required: 'GST is required',
                                   // validate: validateGST
                                 })}
                               />
                             </div>
                             {/* {errors.profile_pic && <Error title='Profile Image is required*' />} */}
-                            {errors?.gst && <Error title={errors?.gst?.message} />}
+                            {errors?.gst_number && <Error title={errors?.gst?.message} />}
                           </div>
                           <div className="">
                             <label className={labelClass}>
