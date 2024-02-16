@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Eye  } from 'iconsax-react';
+import { Eye } from 'iconsax-react';
 import { Add, Refresh, SearchNormal } from 'iconsax-react';
 import Table from '../../../components/Table/Table';
 import AddRestaurant from '../../../components/Modals/Resturant/AddRestaurant';
@@ -8,11 +8,12 @@ import Switch from 'react-switch'
 import AddVendors from '../../../components/Modals/Vendors/AddVendors/AddVendors';
 import AddVendorShops from '../../../components/Modals/Vendors/AddVendors/AddVendorShops';
 import { useForm } from 'react-hook-form';
-import { formBtn1, formBtn2, inputClass ,tableBtn } from '../../../utils/CustomClass';
+import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
 import { useDispatch, useSelector } from "react-redux";
 import userImg from '../../../assets/user.jpg';
 import { setFranchiseVendors } from "../../../redux/Slices/masterSlice";
 import { GetFranchiseeVendors } from "../../../api";
+import axios from 'axios';
 
 
 
@@ -26,10 +27,10 @@ function Vendors() {
     const dispatch = useDispatch()
     const Vendors = useSelector((state) => state?.master?.FranchiseVendors);
     console.log('Admin Vendors = ', Vendors);
-  
-    
 
-    
+
+
+
     // // ========================= fetch data from api ==============================
     const FranchiseeVendors = () => {
         try {
@@ -65,7 +66,7 @@ function Vendors() {
     }
 
 
-    
+
     // =============================== verify user switch =============================
     const switchVerify = (row) => {
         return (
@@ -118,9 +119,9 @@ function Vendors() {
 
     // =================== table user verify column  ========================
     const activeActionsRole = (rowData) => (
-    <h6 className={`${rowData?.isactive !== "false" ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"} py-2 px-5 text-center capitalize rounded-full`}>
-        {rowData?.isactive !== "false" ? "Active" : "Inactive"}
-    </h6>
+        <h6 className={`${rowData?.isactive !== "false" ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"} py-2 px-5 text-center capitalize rounded-full`}>
+            {rowData?.isactive !== "false" ? "Active" : "Inactive"}
+        </h6>
     );
 
 
@@ -146,15 +147,15 @@ function Vendors() {
         { field: 'registration_date', header: 'Registration Date', body: (row) => <h6>{row?.user?.registration_date}</h6>, sortable: false },
         { field: 'status', header: 'Status', body: activeActionsRole, sortable: false },
         { field: 'id', header: 'Action', body: actionBodyTemplate, sortable: true },
-        {  header: 'Analyse', body: action, sortable: false },
+        { header: 'Analyse', body: action, sortable: false },
     ]
 
 
-    
+
     return (
         <>
-          {/* ========================= user filter ======================= */}
-          <div className="p-4 bg-white sm:m-5 rounded-xl" >
+            {/* ========================= user filter ======================= */}
+            <div className="p-4 bg-white sm:m-5 rounded-xl" >
                 <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2 md:items-center lg:flex-row'>
                     <div className="grid w-full grid-cols-1 sm:grid-cols-4 gap-y-3 gap-x-2">
                         <div className="">
@@ -210,8 +211,8 @@ function Vendors() {
                     </div>
                 </form>
             </div>
-          {/* ========================= user filter ======================= */}
-            
+            {/* ========================= user filter ======================= */}
+
 
             {/*====================== User Table ================================*/}
             <div className="p-4 bg-white sm:m-5 rounded-xl" >
@@ -221,13 +222,15 @@ function Vendors() {
                     </div>
                     <AddVendors title='Add Vendors' />
                 </div>
+                {
+                    Vendors?.legth > 0 && <Table data={Vendors} columns={columns} />
+                }
 
-                <Table data={Vendors} columns={columns} />
             </div>
 
-        
+
             {/*====================== User Table ================================*/}
-        </>  
+        </>
     )
 }
 

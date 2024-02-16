@@ -16,7 +16,7 @@ const VendorProduct = () => {
     const [shopProducts, setShopProducts] = useState([])
     console.log('shopProducts', shopProducts)
     const userid = useSelector((state) => state?.user?.loggedUserDetails?.userid);
-    const matchedSeller = sellers.find(seller => seller?.user?.id === userid);
+    const matchedSeller = sellers?.find(seller => seller?.user?.id === userid);
     const storages = useSelector((state) => state?.storage?.list);
     const user = {
         isShop: true,
@@ -91,7 +91,7 @@ const VendorProduct = () => {
             <Eye size={24} className='text-sky-400' />
         </NavLink>
         {/* <ViewProduct /> */}
-        <AddProduct title='Edit Product' row={row} />
+        <AddProduct title='Edit Product' row={row} getProducts={getProducts} />
         <button className='items-center p-1 rounded-xl bg-red-100 hover:bg-red-200'>
             <Trash size={24} className='text-red-400' />
         </button>

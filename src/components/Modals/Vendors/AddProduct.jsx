@@ -14,6 +14,7 @@ import { toast } from 'react-toastify';
 import { ImageUpload, franchiselink } from '../../../env';
 
 function AddProduct(props) {
+    console.log('props?.row', props?.row)
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
     const [category, setCategory] = useState([]);
@@ -88,17 +89,18 @@ function AddProduct(props) {
                 data.product_image_5 = ''
             }
         }
-        const updatedData = { ...data, vendor: props?.sellerId }
         if (props?.title == 'Edit Product') {
+            var updatedData = { ...data, vendor: props?.row?.vendor }
             console.log('called')
-            editVendorProduct(updatedData).then(res => {
-                if (res.status == 'success') {
+            editVendorProduct(props?.row?.product_id, updatedData).then(res => {
+                if (res?.status == 'success') {
                     props?.getProducts()
                     toast.success('Product updated successfully')
                     toggle();
                 }
             })
         } else {
+            var updatedData = { ...data, vendor: props?.sellerId }
             addProduct(updatedData).then((res) => {
                 if (res?.status == 'success') {
                     props?.getProducts()
@@ -451,9 +453,9 @@ function AddProduct(props) {
                                                             multiple
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            {...register("product_image_1", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data.product_image_1 != '' && props?.data.product_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.data?.product_image_1?.split('/').pop()}
+                                                            {...register("product_image_1", { required: props.title == 'Edit Product' ? false : true })} />
+                                                        {props?.title == 'Edit Product' && props?.row?.product_image_1 != '' && props?.row?.product_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.row?.product_image_1?.split('/').pop()}
                                                         </label>}
                                                         {errors.product_image_1 && <Error title='Profile Image is required*' />}
                                                     </div>
@@ -465,9 +467,9 @@ function AddProduct(props) {
                                                             multiple
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            {...register("product_image_2", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data.product_image_2 != '' && props?.data.product_image_2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.data?.product_image_2?.split('/').pop()}
+                                                            {...register("product_image_2", { required: props.title == 'Edit Product' ? false : true })} />
+                                                        {props?.title == 'Edit Product' && props?.row?.product_image_2 != '' && props?.row?.product_image_2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.row?.product_image_2?.split('/').pop()}
                                                         </label>}
                                                         {errors.product_image_2 && <Error title='Profile Image is required*' />}
                                                     </div>
@@ -479,9 +481,9 @@ function AddProduct(props) {
                                                             multiple
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            {...register("product_image_3", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data.product_image_3 != '' && props?.data.product_image_3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.data?.product_image_3?.split('/').pop()}
+                                                            {...register("product_image_3", { required: props.title == 'Edit Product' ? false : true })} />
+                                                        {props?.title == 'edit' && props?.row?.product_image_3 != '' && props?.row?.product_image_3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.row?.product_image_3?.split('/').pop()}
                                                         </label>}
                                                         {errors.product_image_3 && <Error title='Profile Image is required*' />}
                                                     </div>
@@ -493,23 +495,23 @@ function AddProduct(props) {
                                                             multiple
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            {...register("product_image_4", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data.product_image_4 != '' && props?.data.product_image_4 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.data?.product_image_4?.split('/').pop()}
+                                                            {...register("product_image_4", { required: props.title == 'Edit Product' ? false : true })} />
+                                                        {props?.title == 'Edit Product' && props?.row?.product_image_4 != '' && props?.row?.product_image_4 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.row?.product_image_4?.split('/').pop()}
                                                         </label>}
                                                         {errors.product_image_4 && <Error title='Profile Image is required*' />}
                                                     </div>
                                                     <div className="">
-                                                        <label className={labelClass} htmlFor="main_input">Image 4*</label>
+                                                        <label className={labelClass} htmlFor="main_input">Image 5*</label>
                                                         <input className={fileinput}
                                                             id="main_input"
                                                             type='file'
                                                             multiple
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            {...register("product_image_5", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data.product_image_5 != '' && props?.data.product_image_5 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.data?.product_image_5?.split('/').pop()}
+                                                            {...register("product_image_5", { required: props.title == 'Edit Product' ? false : true })} />
+                                                        {props?.title == 'Edit Product' && props?.row?.product_image_5 != '' && props?.row?.product_image_5 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.row?.product_image_5?.split('/').pop()}
                                                         </label>}
                                                         {errors.product_image_5 && <Error title='Profile Image is required*' />}
                                                     </div>

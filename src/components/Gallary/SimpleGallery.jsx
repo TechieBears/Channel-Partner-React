@@ -38,7 +38,7 @@ export default function SimpleGallery(props) {
                     rel="noreferrer"
                     className={props.images.length > 1 ? index == 0 || index == 3 ? 'w-full' : 'w-1/2' : 'w-full'}
                 >
-                    <img src={image.URL} alt={`image-${index}`} className='w-full h-full p-1 rounded-md object-contain' />
+                    <img src={image.URL} width={image?.width} height={image?.height} alt={`image-${index}`} className='w-full h-full p-1 rounded-md object-contain' />
                 </a>
             ))}
         </div>
