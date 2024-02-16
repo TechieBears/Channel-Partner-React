@@ -1,45 +1,126 @@
-import { ArrowSwapVertical, ClipboardTick, ShoppingCart, Trash, UserRemove } from 'iconsax-react'
-import { Line } from 'rc-progress'
-import React, { useState } from 'react'
-import { ResponsiveBar } from '@nivo/bar'
-import Table from '../../components/Table/Table'
-import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
-import moment from 'moment'
-import ViewProduct from '../../components/Modals/Vendors/ViewProduct'
+import React, { useEffect, useState } from "react";
+import { Tab, TabList, Tabs, TabPanel } from "react-tabs";
+import Table from "../../components/Table/Table";
+import {
+    ArrowSwapVertical,
+    Eye,
+    ShoppingCart,
+    Trash,
+    UserRemove,
+    ClipboardTick,
+    Edit,
+} from "iconsax-react";
+// import { deleteStorage, getPartnerStorage, getStorages } from "../../../api";
+import { formBtn2, inputClass } from "../../utils/CustomClass";
+import { formBtn1 } from "../../utils/CustomClass";
+import { Controller, useForm } from "react-hook-form";
+import axios from "axios";
+import { NavLink } from "react-router-dom";
+import { environment } from "../../env";
+import { useDispatch, useSelector } from "react-redux";
+import { setStorageList } from "../../redux/slices/storageSlice";
+import { toast } from "react-toastify";
+import AsyncSelect from "react-select/async";
+import DashboardForm from "../../components/modals/DashboardModals/DashboardForm";
+import DeleteModal from "../../components/Modals/DeleteModal/DeleteModal";
+import ActiveOrders from "../Admin/Dashboard/OrderList/ActiveOrders";
+import PendingOrders from "../Admin/Dashboard/OrderList/PendingOrders";
+import moment from "moment";
+import ViewProduct from "../../components/Modals/Vendors/ViewProduct";
 
-function FranchiseeDashboard() {
+
+
+
+const FranchiseeDashboard = () => {
     const [selectedTab, setSelectedTab] = useState(0);
-    const barData = [
-        {
-            "year": "24",
-            "hot dog": 44,
-        },
-        {
-            "year": "23",
-            "hot dog": 170,
-        },
-        {
-            "year": "22",
-            "hot dog": 41,
-        },
-        {
-            "year": "21",
-            "hot dog": 113,
-        },
-        {
-            "year": "20",
-            "hot dog": 144,
-        },
-        {
-            "year": "19",
-            "hot dog": 157,
-        },
-        {
-            "year": "18",
-            "hot dog": 102,
-        }
-    ]
 
+    const user = useSelector((state) => state.user.loggedUserDetails);
+    const storages = useSelector((state) => state?.storage?.list);
+    const cityNames = useSelector((state) => state?.master?.city);
+    const dispatch = useDispatch();
+    const [open, setOpen] = React.useState(false);
+    const [delId, setDelId] = React.useState(0);
+
+    const {
+        register,
+        handleSubmit,
+        control,
+        formState: { errors },
+        reset,
+    } = useForm();
+
+    // ======================== Data submit ===================================
+    const onSubmit = async (data) => {
+        console.log('data', data);
+    };
+
+    // ====================== fetch data api ==================================
+
+    // const StorageList = () => {
+    //     if (user.role == "admin") {
+    //         getStorages()
+    //             .then((res) => {
+    //                 console.log(res);
+    //                 dispatch(setStorageList(res));
+    //             })
+    //             .catch((err) => {
+    //                 console.error("Error", err);
+    //             });
+    //     } else {
+    //         getPartnerStorage(user?.userid)
+    //             .then((res) => {
+    //                 dispatch(setStorageList(res));
+    //             })
+    //             .catch((err) => {
+    //                 console.error("Error", err);
+    //             });
+    //     }
+    // };
+
+    // ================================ Dropdown List =========================
+
+    const filterOptions = (options, inputValue) => {
+        return options.filter((i) =>
+            i.label.toLowerCase().includes(inputValue.toLowerCase())
+        );
+    };
+
+    const loadOptions = (_, callback) => {
+        const uniqueNames = new Set();
+        const uniqueProducts = storages
+            ?.filter(
+                (res) =>
+                    res.name && !uniqueNames.has(res.name) && uniqueNames.add(res.name)
+            )
+            .map((res) => ({ label: res.name, value: res.name }));
+        callback(uniqueProducts || []);
+    };
+
+    // ================================ filter reset ============================
+    const filterReset = () => {
+        reset({
+            name: null,
+            location: "",
+        });
+        // StorageList();
+        toast.success("Filters clear");
+    };
+
+    // ================= delete storage data ===============
+    const toggleModalBtn = (id) => {
+        setOpen(!open);
+        setDelId(id);
+    };
+    const deleteData = () => {
+        deleteStorage(delId).then((form) => {
+            if (form?.message === "Data deleted successfully") {
+                // StorageList();
+                toast.success(form?.message);
+                setOpen(!open);
+            }
+        });
+    };
+    // ======================== table action =========================
 
     // ====================== table columns ======================
 
@@ -49,81 +130,68 @@ function FranchiseeDashboard() {
             "orderDate": "Jan 1, 2024 , 05:56 PM",
             "items": [
                 {
-                    "itemName": "Butter Milk",
-                    "itemDescription": "Lorem ipsum dolor, sit amet",
-                    "imageSrc": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU",
-                    "quantity": 2,
-                    'price': 50,
-                    'category': 'dairy'
+                    "name": "Butter Milk",
+                    "quantity": 7,
+                    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU",
+                    "description": "Lorem ipsum dolor, sit amet"
                 }
             ],
-            "orderPrice": "$1,000",
             "paymentMethod": "Cash",
-            "location": 'Parel',
-
+            "orderPrice": 1000
         },
         {
             "orderId": 754,
-            "orderDate": "Jan 2, 2024 , 10:30 AM",
+            "orderDate": "Jan 2, 2024 , 10:12 AM",
             "items": [
                 {
-                    "itemName": "Coffee",
-                    "itemDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-                    "imageSrc": "https://example.com/coffee.jpg",
+                    "name": "Chocolate Cake",
                     "quantity": 2,
-                    'price': 20,
-                    'category': 'grocery'
+                    "image": "https://example.com/cake.jpg",
+                    "description": "Delicious chocolate cake"
                 },
                 {
-                    "itemName": "Croissant",
-                    "itemDescription": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
-                    "imageSrc": "https://example.com/croissant.jpg",
-                    "quantity": 2,
-                    'price': 200,
-                    'category': 'food'
+                    "name": "Vanilla Ice Cream",
+                    "quantity": 3,
+                    "image": "https://example.com/icecream.jpg",
+                    "description": "Creamy vanilla goodness"
                 }
             ],
-            "orderPrice": "$25",
-            "paymentMethod": "UPI",
-            "location": 'Thane',
+            "paymentMethod": "Credit Card",
+            "orderPrice": 350
+        },
+        {
+            "orderId": 755,
+            "orderDate": "Jan 3, 2024 , 03:45 PM",
+            "items": [
+                {
+                    "name": "Cheese Pizza",
+                    "quantity": 1,
+                    "image": "https://example.com/pizza.jpg",
+                    "description": "Delicious cheesy pizza"
+                },
+                {
+                    "name": "Garlic Bread",
+                    "quantity": 2,
+                    "image": "https://example.com/garlicbread.jpg",
+                    "description": "Garlicky goodness"
+                }
+            ],
+            "paymentMethod": "PayPal",
+            "orderPrice": 25
         }
     ]
 
-    const name = (row) => row?.items?.map(item => <h6 key={item?.itemName}>{item?.itemName}</h6>);
-    const quantity = (row) => row?.items?.map(item => <h6 key={item?.itemQuantity}>{item?.quantity}</h6>)
-    const description = (row) => row?.items?.map(item => <h6 className="w-52" key={item?.itemDescription}>{item?.itemDescription}</h6>)
-    const itemPrice = (row) => row?.items?.map(item => <h6 key={item?.price}>{item?.price}</h6>)
-    const category = (row) => row?.items?.map(item => <h6 key={item?.category}>{item?.category}</h6>)
-    const action = (row) => <div className="flex items-center space-x-1">
-        <ViewProduct product={row} title='Order Details' />
-        <div className="p-1 cursor-pointer bg-green-50 rounded-xl">
-            <ClipboardTick size={20} color="green" />
-        </div>
-        <div className="p-1 cursor-pointer bg-red-50 rounded-xl">
-            <Trash size={20} color="red" />
-        </div>
-    </div>
-
-
-    const columns = [
-        { field: "orderId", header: "Order ID" },
-        { field: "OrderDate", header: "Order Date", body: (row) => <h6>{moment(row?.orderDate).format('MMM Do YY')}</h6>, sortable: true },
-        { field: "name", header: "Name", body: name, sortable: true },
-        { field: "quantity", header: "Quantity", body: quantity, sortable: true },
-        { field: "description", header: "Description", body: description, sortable: true },
-        { field: "paymentMethod", header: "Payment Method", sortable: true },
-        { field: "price", header: "Price", body: itemPrice, sortable: true },
-        { field: "category", header: "Category", body: category, sortable: true },
-        { field: "location", header: "Location", sortable: true },
-        { field: "orderPrice", header: "Total Price", sortable: true },
-        { field: "action", header: "Action", body: action, sortable: true },
-    ];
-
-
     return (
         <>
-            <div className='m-4 bg-white rounded-xl'>
-                {/* ======================= Headers =========================== */}
+            <DeleteModal
+                title="Delete Stroage"
+                deleteBtn={deleteData}
+                toggleModalBtn={toggleModalBtn}
+                description={"Are you sure you want to delete this Stroage"}
+                open={open}
+            />
+            <section className="w-full h-full">
+                {/* =====================Dashboard header===================== */}
                 <div className="grid grid-cols-1 p-4 sm:m-5 rounded-xl sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-y-4 ">
                     <div className="flex items-center p-4 mr-4 space-x-3 bg-white border-r-0 rounded-xl sm:border-r border-gray-200/70 ">
                         <div className="p-3.5 rounded-xl bg-sky-50">
@@ -174,79 +242,156 @@ function FranchiseeDashboard() {
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className='grid grid-cols-3 gap-2 p-4 m-4 bg-white rounded-xl'>
-                <div className='grid grid-cols-3 col-span-2 gap-2'>
-                    <p className='col-span-3 text-xl font-semibold'>Sales Report</p>
-                    <div className='p-4 space-y-1 border-2 border-slate-200 rounded-xl'>
-                        <h4 className='text-sm font-medium'>Today</h4>
-                        <h3 className='text-xl font-semibold'>$ 2,000</h3>
-                        <Line percent={10} strokeWidth={4} trailWidth={4} trailColor='#D3D3D3' strokeColor='rgb(239 68 68)' />
-                    </div>
-                    <div className='p-4 space-y-1 border-2 border-slate-200 rounded-xl'>
-                        <h4 className='text-sm font-medium'>This Week</h4>
-                        <h3 className='text-xl font-semibold'>$ 10,000</h3>
-                        <Line percent={40} strokeWidth={4} trailWidth={4} trailColor='#D3D3D3' strokeColor='rgb(56 189 248)' />
-                    </div>
-                    <div className='p-4 space-y-1 border-2 border-slate-200 rounded-xl'>
-                        <h4 className='text-sm font-medium'>This Month</h4>
-                        <h3 className='text-xl font-semibold'>$ 12,0000</h3>
-                        <Line percent={60} strokeWidth={4} trailWidth={4} trailColor='#D3D3D3' strokeColor='rgb(74 222 128)' />
-                    </div>
+                {/* =====================Dashboard filters===================== */}
+                <div className="p-4 m-4 bg-white sm:m-5 rounded-xl">
+                    <form
+                        onSubmit={handleSubmit(onSubmit)}
+                        className="flex flex-col gap-2 md:items-center lg:flex-row"
+                    >
+                        <div className="grid w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-y-3 gap-x-2 ">
+                            <div className="">
+                                <Controller
+                                    control={control}
+                                    name="name"
+                                    render={({ field }) => (
+                                        <AsyncSelect
+                                            placeholder="Search By Name"
+                                            cacheOptions
+                                            defaultOptions
+                                            value={field.value}
+                                            defaultValue={
+                                                field.value
+                                                    ? { label: field.value, value: field.value }
+                                                    : null
+                                            }
+                                            loadOptions={loadOptions}
+                                            onChange={field.onChange}
+                                        />
+                                    )}
+                                />
+                            </div>
+                            <div className="">
+                                <select
+                                    name="City"
+                                    className={`${inputClass} !bg-slate-100`}
+                                    {...register("location")}
+                                >
+                                    <option value="">City</option>
+                                    {cityNames?.map((city) => (
+                                        <option value={city?.name} key={city?.name}>
+                                            {city?.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-x-2">
+                            <button
+                                type="submit"
+                                className={`${formBtn1} w-full text-center`}
+                            >
+                                Filter
+                            </button>
+                            <button
+                                type="button"
+                                className={`${formBtn2} w-full text-center`}
+                                onClick={filterReset}
+                            >
+                                Clear
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <div className=''>
-                    <p className='col-span-3 text-xl font-semibold'>Sales Statistics</p>
-                    <div className='w-full h-60'>
-                        <ResponsiveBar
-                            data={barData}
-                            keys={[
-                                'hot dog',
-                            ]}
-                            indexBy="year"
-                            margin={{ top: 20, right: 10, bottom: 50, left: 50 }}
-                            padding={0.5}
-                            axisTop={null}
-                            axisRight={null}
-                            axisBottom={{
-                                legend: 'year',
-                                legendPosition: 'middle',
-                                legendOffset: 32,
-                            }}
-                            axisLeft={{
-                                legend: 'revenue',
-                                legendPosition: 'middle',
-                                legendOffset: -40,
-                            }}
-                            // role="application"
-                            ariaLabel=""
-                            barAriaLabel={e => e.id + ": " + e.formattedValue + " in country: " + e.indexValue}
-                        />
-                    </div>
-                </div>
-            </div>
-            <div className='p-4 m-4 bg-white rounded-xl'>
-                <Tabs
-                    selectedIndex={selectedTab}
-                    onSelect={(index) => setSelectedTab(index)}
-                >
-                    <TabList className="flex mx-6 space-x-4 border-b">
-                        <Tab
-                            className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 0
-                                ? "text-sky-500  border-b-2 border-sky-400 outline-0"
-                                : "text-gray-500 border-b"
-                                }`}
+                {/* <div className="mx-auto mt-8 sm:m-5">
+                    <Tabs
+                        selectedIndex={selectedTab}
+                        onSelect={(index) => setSelectedTab(index)}
+                    >
+                        <TabList className="flex mx-6 space-x-4 border-b">
+                            <Tab
+                                className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 0
+                                    ? "text-sky-500  border-b-2 border-sky-400 outline-0"
+                                    : "text-gray-500 border-b"
+                                    }`}
+                            >
+                                New Order's
+                            </Tab>
+                        </TabList>
+                        <TabPanel className='mt-5'>
+                            <Table data={data} columns={columns} />
+                        </TabPanel>
+                    </Tabs>
+                </div> */}
+                {/* ===================== New Order Section ===================== */}
+                <div className="grid gap-6 m-4 bg-white p-4 rounded-xl md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2">
+                    {data.map(product => (
+                        <NavLink
+                            to={`/vendor-orders/order-detail/:${product?.id}`}
+                            className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg hover:shadow-xl"
+                            previewlistener="true" key={product?.id}
                         >
-                            New Order's
-                        </Tab>
-                    </TabList>
-                    {/* ================= NewPending Orders component ============== */}
-                    <TabPanel className='mt-5'>
-                        <Table data={data} columns={columns} />
-                    </TabPanel>
-                </Tabs>
-            </div>
-        </>
-    )
-}
+                            <div className="items-center gap-x-3">
+                                <div className="flex flex-wrap justify-between p-4">
+                                    <p className="text-sm">
+                                        Order Id - <span className="text-sky-400">{product?.orderId}</span>
+                                    </p>
+                                    <p className="text-sm">
+                                        Order Date -{" "}
+                                        <span className="text-base font-semibold text-center text-gray-800">
+                                            {product?.orderDate}
+                                        </span>{" "}
+                                    </p>
+                                </div>
+                                <div className="flex-1 p-4 my-2">
+                                    <div className="grid grid-cols-2 items-center">
+                                        <div className="grid grid-cols-2">
+                                            {product?.items?.map(item => (
+                                                <div key={item?.name} className="">
+                                                    <img
+                                                        className="w-16 border-2 p-1 rounded-xl"
+                                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU"
+                                                        alt=""
+                                                    />
+                                                    <div>
+                                                        <h2 className="text-sm font-semibold tracking-wide text-gray-800 ">
+                                                            Butter Milk x {item?.quantity} more
+                                                        </h2>
+                                                        {/* <p>Lorem ipsum dolor, sit amet </p> */}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
 
-export default FranchiseeDashboard
+                                        <p className=" col-span-1 mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 ">
+                                            Payment - {product?.paymentMethod}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
+                                    <p className="text-base font-medium">Order Price - $ {product?.orderPrice}</p>
+                                    <div className="flex items-center gap-x-2">
+                                        <button
+                                            type="button"
+                                            className={formBtn2}
+                                        >
+                                            Reject
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            className={formBtn1}
+                                        >
+                                            Confirm
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </NavLink>
+                    ))}
+
+                </div>
+            </section>
+        </>
+    );
+};
+
+export default FranchiseeDashboard;

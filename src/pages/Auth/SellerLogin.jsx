@@ -143,7 +143,7 @@ const SellerLogin = () => {
                                     {errors.password && <p className='text-xs text-red-500'>Password is required*</p>}
                                 </div>
                             </div>
-                            <div>
+                            {/* <div>
                                 <label htmlFor="email" className="block text-base font-medium leading-6 text-gray-500 font-tbPop">
                                     ISB*
                                 </label>
@@ -160,7 +160,7 @@ const SellerLogin = () => {
                                     />
                                     {errors.isb && <Error title={'ISB code is required*'} />}
                                 </div>
-                            </div>
+                            </div> */}
                             <div className='pt-3'>
                                 {loader ? <LoadBox /> : <button
                                     type="submit"

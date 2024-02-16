@@ -16,7 +16,7 @@ import { formBtn1, formBtn2, inputClass ,tableBtn } from '../../../utils/CustomC
 function Franchisees() {
   const dispatch = useDispatch()
   const Franchisee = useSelector((state) => state?.master?.Franchise);
-//   console.log('franchisee Table data = ', Franchisee);a
+  console.log('franchisee Table data = ', Franchisee);
 
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
@@ -65,15 +65,15 @@ function Franchisees() {
 
 
     // =================== fetching data ========================
-    const fetchData = () => {
-        try {
-            getUser().then((res) => {
-                dispatch(setUserList(res))
-            })
-        } catch (err) {
-            console.log('error', err);
-        }
-    }
+    // const fetchData = () => {
+    //     try {
+    //         getUser().then((res) => {
+    //             dispatch(setUserList(res))
+    //         })
+    //     } catch (err) {
+    //         console.log('error', err);
+    //     }
+    // }
     
 
     // =============================== verify user switch =============================
@@ -111,7 +111,7 @@ function Franchisees() {
             <Link to={`/user/${row.id}`} state={row} className="bg-green-100 px-1.5 py-2 rounded-sm">
                 <Eye size="20" className='text-green-500' />
             </Link>
-            <AddFranchiseForm button='edit' title='Edit User' data={row} fetchData={fetchData} />
+            <AddFranchiseForm button='edit' title='Edit User' data={row} FranchiseeDetails={FranchiseeDetails} />
         </div>
     );
 
@@ -222,7 +222,7 @@ function Franchisees() {
                     <div className="">
                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>  Franchisee Details</h1>
                     </div>
-                    <AddFranchisee title='Add Franchisee' fetchData={FranchiseeDetails} />
+                    <AddFranchisee title='Add Franchisee' FranchiseeDetails={FranchiseeDetails} />
                 </div>
                 <Table data={Franchisee} columns={columns} />
             </div>

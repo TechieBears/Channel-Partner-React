@@ -134,7 +134,7 @@ export default function AddFranchiseForm(props) {
             setLoader(false)
             toggle();
             // fetchData()
-          props?.fetchData()
+          props?.FranchiseeDetails()
           GetFranchisee()
             toast.success(response?.Message);
           }, 1000);
@@ -154,7 +154,7 @@ export default function AddFranchiseForm(props) {
         setTimeout(() => {
           toggle();
           setLoader(false)
-          props?.fetchData()
+          props?.FranchiseeDetails()
           GetFranchisee()
           toast.success(response?.message);
         }, 1000);

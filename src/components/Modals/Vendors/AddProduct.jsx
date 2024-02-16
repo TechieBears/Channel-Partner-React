@@ -9,7 +9,7 @@ import Error from '../../Errors/Error';
 import { MultiSelect } from 'primereact/multiselect';
 import { Add, Edit } from 'iconsax-react';
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
-import { addProduct, editVendorProduct, getAllSeller, getCategory, getSubCategory } from '../../../api';
+// import { addProduct, editVendorProduct, getAllSeller, getCategory, getSubCategory } from '../../../api';
 import { toast } from 'react-toastify';
 import { ImageUpload, franchiselink } from '../../../env';
 
@@ -99,15 +99,15 @@ function AddProduct(props) {
                 }
             })
         } else {
-            addProduct(updatedData).then((res) => {
-                if (res?.status == 'success') {
-                    props?.getProducts()
-                    toast.success('Product Added Successfully')
-                    toggle();
-                } else {
-                    toast.error('Error while creating product')
-                }
-            })
+            // addProduct(updatedData).then((res) => {
+            //     if (res?.status == 'success') {
+            //         props?.getProducts()
+            //         toast.success('Product Added Successfully')
+            //         toggle();
+            //     } else {
+            //         toast.error('Error while creating product')
+            //     }
+            // })
         }
     }
 
