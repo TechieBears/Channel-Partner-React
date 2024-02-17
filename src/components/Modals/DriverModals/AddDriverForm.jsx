@@ -18,13 +18,15 @@ import { GetFranchisee } from "../../../api";
 
 
 function AddDriverFrom(props) {
+    // console.log('props = ', props);
+
     const [isOpen, setIsOpen] = useState(false);
     const [loader, setLoader] = useState(false);
     const getFranchiseDetail = useSelector((state) => state?.user?.FranchiseeDetails);
-    console.log('getFranchiseDetail', getFranchiseDetail)
+    // console.log('getFranchiseDetail', getFranchiseDetail)
 
     const Franchisee = useSelector((state) => state?.master?.Franchise);
-    console.log('franchisee Table data = ', Franchisee);
+    // console.log('franchisee Table data = ', Franchisee);
 
     // const RoleIs = useSelector((state) => state?.user?.roleIs);
     // console.log('RoleIs = ', RoleIs);
@@ -132,46 +134,46 @@ function AddDriverFrom(props) {
 
         console.log(data)
         if (props.button != 'edit') {    // for create
-        if (data?.bank_passbook.length != 0) {
-            await ImageUpload(data?.bank_passbook[0], "deliveryboy", "BankPassbook", data?.first_name)
-            data.bank_passbook = `${deliveryBoylink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
-        } else {
-            data.bank_passbook = ''
-        }
-        if (data?.video_url.length != 0) {
-            await ImageUpload(data?.video_url[0], "deliveryboy", "AddressProof", data?.first_name)
-            data.video_url = `${deliveryBoylink}${data?.first_name}_AddressProof_${data?.video_url[0].name}`
-        } else {
-            data.video_url = ''
-        }
-        if (data?.profile_pic.length != 0) {
-            await ImageUpload(data?.profile_pic[0], "deliveryboy", "ProfileImage", data?.first_name)
-            data.profile_pic = `${deliveryBoylink}${data?.first_name}_ProfileImage_${data?.profile_pic[0].name}`
-        } else {
-            data.profile_pic = ''
-        }
+            if (data?.bank_passbook.length != 0) {
+                await ImageUpload(data?.bank_passbook[0], "deliveryboy", "BankPassbook", data?.first_name)
+                data.bank_passbook = `${deliveryBoylink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
+            } else {
+                data.bank_passbook = ''
+            }
+            if (data?.video_url.length != 0) {
+                await ImageUpload(data?.video_url[0], "deliveryboy", "AddressProof", data?.first_name)
+                data.video_url = `${deliveryBoylink}${data?.first_name}_AddressProof_${data?.video_url[0].name}`
+            } else {
+                data.video_url = ''
+            }
+            if (data?.profile_pic.length != 0) {
+                await ImageUpload(data?.profile_pic[0], "deliveryboy", "ProfileImage", data?.first_name)
+                data.profile_pic = `${deliveryBoylink}${data?.first_name}_ProfileImage_${data?.profile_pic[0].name}`
+            } else {
+                data.profile_pic = ''
+            }
         }
         else {          // for edit
-        if (data?.bank_passbook.length != 0) {
-            await ImageUpload(data?.bank_passbook[0], "deliveryboy", "BankPassbook", data?.first_name)
-            data.bank_passbook = `${deliveryBoylink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
-        } else {
-            data.bank_passbook = ''
+            if (data?.bank_passbook.length != 0) {
+                await ImageUpload(data?.bank_passbook[0], "deliveryboy", "BankPassbook", data?.first_name)
+                data.bank_passbook = `${deliveryBoylink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
+            } else {
+                data.bank_passbook = ''
+            }
+            if (data?.video_url.length != 0) {
+                await ImageUpload(data?.video_url[0], "deliveryboy", "AddressProof", data?.first_name)
+                data.video_url = `${deliveryBoylink}${data?.first_name}_AddressProof_${data?.video_url[0].name}`
+            } else {
+                data.video_url = ''
+            }
+            if (data?.profile_pic.length != 0) {
+                await ImageUpload(data?.profile_pic[0], "deliveryboy", "ProfileImage", data?.first_name)
+                data.profile_pic = `${deliveryBoylink}${data?.first_name}_ProfileImage_${data?.profile_pic[0].name}`
+            } else {
+                data.profile_pic = ''
+            }
         }
-        if (data?.video_url.length != 0) {
-            await ImageUpload(data?.video_url[0], "deliveryboy", "AddressProof", data?.first_name)
-            data.video_url = `${deliveryBoylink}${data?.first_name}_AddressProof_${data?.video_url[0].name}`
-        } else {
-            data.video_url = ''
-        }
-        if (data?.profile_pic.length != 0) {
-            await ImageUpload(data?.profile_pic[0], "deliveryboy", "ProfileImage", data?.first_name)
-            data.profile_pic = `${deliveryBoylink}${data?.first_name}_ProfileImage_${data?.profile_pic[0].name}`
-        } else {
-            data.profile_pic = ''
-        }
-        }
-        if (props.button !== 'edit') {   // for create
+        if (props.button != 'edit') {   // for create
             try {
                 // setLoader(true)
                 if (data.job_type === "Part Time (4-5 Hours/Day)") {
@@ -197,10 +199,11 @@ function AddDriverFrom(props) {
                     };
                 }
 
-                if (LoggedUserDetails?.role === 'franchise') {
+                let requestData;
+                if (LoggedUserDetails?.role == 'franchise') {
                     const additionalPayload = { created_by: user?.user?.id };
                     requestData = { ...data, ...additionalPayload };
-                } else if (LoggedUserDetails?.role === 'admin') {
+                } else if (LoggedUserDetails?.role == 'admin') {
                     requestData = { ...data };
                 } 
                 
