@@ -109,19 +109,19 @@ export default function AddFranchiseForm(props) {
         await ImageUpload(data?.bank_passbook[0], "franchisee", "BankPassbook", data?.first_name)
         data.bank_passbook = `${franchiselink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
       } else {
-        data.bank_passbook = ''
+        data.bank_passbook = props?.data?.bank_passbook
       }
       if (props?.data?.address_proof != data?.address_proof ) {
         await ImageUpload(data?.address_proof[0], "franchisee", "AddressProof", data?.first_name)
         data.address_proof = `${franchiselink}${data?.first_name}_AddressProof_${data?.address_proof[0].name}`
       } else {
-        data.address_proof = ''
+        data.address_proof = props?.data?.address_proof
       }
       if (props?.data?.user?.profile_pic != data?.profile_pic) {
         await ImageUpload(data?.profile_pic[0], "franchisee", "ProfileImage", data?.first_name)
         data.profile_pic = `${franchiselink}${data?.first_name}_ProfileImage_${data?.profile_pic[0].name}`
       } else {
-        data.profile_pic = ''
+        data.profile_pic = props?.data?.user?.profile_pic
       }
     }
     if (props.button !== 'edit') {   // for create

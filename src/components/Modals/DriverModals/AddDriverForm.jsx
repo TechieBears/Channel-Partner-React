@@ -417,7 +417,7 @@ function AddDriverFrom(props) {
                                                         />
                                                         {errors.email && <Error title="Email is required*" />}
                                                     </div>
-                                                    <div className="">
+                                                    {/* <div className="">
                                                         <label className={labelClass}>
                                                             Password*
                                                         </label>
@@ -428,7 +428,7 @@ function AddDriverFrom(props) {
                                                             {...register('password', { required: true, })}
                                                         />
                                                         {errors.password && <Error title="Password is required*" />}
-                                                    </div>
+                                                    </div> */}
                                                     <div className="">
                                                         <label className={labelClass}>Address*</label>
                                                         <input
