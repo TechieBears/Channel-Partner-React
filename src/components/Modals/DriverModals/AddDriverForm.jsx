@@ -52,7 +52,6 @@ function AddDriverFrom(props) {
         FranchiseeDetails()
     }, [])
 
-    
 
     const handleFileChange = (event) => {
         console.log("file", event.target.files[0]);
@@ -130,6 +129,7 @@ function AddDriverFrom(props) {
 
       // ============================= form submiting ======================================
     const onSubmit = async (data) => {
+        console.log(data)
         setLoader(true)
 
         console.log(data)
@@ -506,6 +506,7 @@ function AddDriverFrom(props) {
                                                             className={inputClass}
                                                             {...register('date_of_birth', { required: true, })}
                                                         />
+                                                        
                                                         {errors.date_of_birth && <Error title="Date Of Birth is required*" />}
                                                     </div>
                                                     <div className="">

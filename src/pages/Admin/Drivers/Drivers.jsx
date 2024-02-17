@@ -229,6 +229,7 @@ function Drivers() {
                 toggleModalBtn={toggleModalBtn}
                 description="Are you sure you want to delete this User" open={open}
             />
+            
             {/* ========================= user fileter ======================= */}
             <div className="p-4 bg-white sm:m-5 rounded-xl" >
                 <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2 md:items-center lg:flex-row'>
@@ -273,6 +274,7 @@ function Drivers() {
                     </div>
                 </form>
             </div>
+
             {/*====================== User Table ================================*/}
             <div className="p-4 bg-white sm:m-5 rounded-xl" >
                 <div className="flex flex-col items-start justify-between mb-6 sm:flex-row sm:items-center sm:space-y-0">
