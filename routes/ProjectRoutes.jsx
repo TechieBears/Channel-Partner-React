@@ -77,7 +77,7 @@ const ProjectRoutes = () => {
                                         <Route path="/menu" element={<Menu />} />
                                         <Route path="/resturants" element={<Restaurant />} />
                                         <Route path="/resturants/restaurant-detail/:id" element={<RestaurantDetail />} />
-                                        <Route path="/franchisee" element={< Franchisee />} />
+                                        <Route path="/franchisee" element={<Franchisee />} />
                                         <Route path="/vendors" element={<Vendors />} />
                                         <Route path="/vendors/vendors-detail/:id" element={<VendorDetails />} />
                                         <Route path="/menu/category-detail/:id" element={<CategoryDetail />} />

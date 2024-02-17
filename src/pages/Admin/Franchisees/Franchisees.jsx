@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Eye  } from 'iconsax-react';
+import { Eye } from 'iconsax-react';
 import Table from '../../../components/Table/Table';
 import { Link } from 'react-router-dom';
 import Switch from 'react-switch'
@@ -11,18 +11,18 @@ import { setFranchise } from "../../../redux/Slices/masterSlice";
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import userImg from '../../../assets/user.jpg';
-import { formBtn1, formBtn2, inputClass ,tableBtn } from '../../../utils/CustomClass';
+import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
 
 function Franchisees() {
-  const dispatch = useDispatch()
-  const Franchisee = useSelector((state) => state?.master?.Franchise);
-  console.log('franchisee Table data = ', Franchisee);
+    const dispatch = useDispatch()
+    const Franchisee = useSelector((state) => state?.master?.Franchise);
+    console.log('franchisee Table data = ', Franchisee);
 
 
-  const { register, handleSubmit, formState: { errors }, reset } = useForm();
-  const [open, setOpen] = React.useState(false);
-  const [delId, setDelId] = React.useState(0);
-    
+    const { register, handleSubmit, formState: { errors }, reset } = useForm();
+    const [open, setOpen] = React.useState(false);
+    const [delId, setDelId] = React.useState(0);
+
 
     const [activeTab, setActiveTab] = useState(true);
     const [rstatus, setStatus] = useState();
@@ -34,13 +34,13 @@ function Franchisees() {
     // // ========================= fetch data from api ==============================
     const FranchiseeDetails = () => {
         try {
-          GetFranchisee().then((res) => {
-            dispatch(setFranchise(res));
-          });
+            GetFranchisee().then((res) => {
+                dispatch(setFranchise(res));
+            });
         } catch (error) {
-          console.log(error);
+            console.log(error);
         }
-      };
+    };
 
     useEffect(() => {
         FranchiseeDetails()
@@ -48,7 +48,7 @@ function Franchisees() {
 
 
 
-    
+
     // =================== filter data ========================
     const onSubmit = async (data) => {
         if (data?.name != '' || data?.email != '' || data?.city != '' || data?.role != '') {
@@ -128,11 +128,11 @@ function Franchisees() {
 
     // =================== table user verify column  ========================
     const activeActionsRole = (rowData) => (
-    <h6 className={`${rowData?.user?.isactive !== "false" ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"} py-2 px-5 text-center capitalize rounded-full`}>
-        {rowData?.user?.isactive !== "false" ? "Active" : "Inactive"}
-    </h6>
+        <h6 className={`${rowData?.user?.isactive !== "false" ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"} py-2 px-5 text-center capitalize rounded-full`}>
+            {rowData?.user?.isactive !== "false" ? "Active" : "Inactive"}
+        </h6>
     );
- 
+
 
     const status = (row) => <Switch checked={row?.id == rstatus ? true : false} onChange={() => setStatus(row?.id)} />
     const action = (row) => <button className={`${tableBtn}`} >
@@ -153,13 +153,13 @@ function Franchisees() {
         { field: 'registration_date', header: 'Registration Date', body: (row) => <h6>{row?.user?.registration_date}</h6>, sortable: false },
         { field: 'status', header: 'Status', body: activeActionsRole, sortable: false },
         { field: 'id', header: 'Action', body: actionBodyTemplate, sortable: true },
-        {  header: 'Analyse', body: action, sortable: false },
+        { header: 'Analyse', body: action, sortable: false },
     ]
     return (
 
         <>
-             {/* ========================= user filter ======================= */}
-             <div className="p-4 bg-white sm:m-5 rounded-xl" >
+            {/* ========================= user filter ======================= */}
+            <div className="p-4 bg-white sm:m-5 rounded-xl" >
                 <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2 md:items-center lg:flex-row'>
                     <div className="grid w-full grid-cols-1 sm:grid-cols-4 gap-y-3 gap-x-2">
                         <div className="">
@@ -215,7 +215,7 @@ function Franchisees() {
                     </div>
                 </form>
             </div>
-            
+
             {/*====================== User Table ================================*/}
             <div className="p-4 bg-white sm:m-5 rounded-xl" >
                 <div className="flex flex-col items-start justify-between mb-6 sm:flex-row sm:items-center sm:space-y-0">
@@ -224,7 +224,7 @@ function Franchisees() {
                     </div>
                     <AddFranchisee title='Add Franchisee' FranchiseeDetails={FranchiseeDetails} />
                 </div>
-                <Table data={Franchisee} columns={columns} />
+                {Franchisee.length > 0 && <Table data={Franchisee} columns={columns} />}
             </div>
         </>
     )

@@ -14,6 +14,7 @@ import { toast } from 'react-toastify';
 import { ImageUpload, franchiselink } from '../../../env';
 
 function AddProduct(props) {
+    console.log('props?.row', props?.row)
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
     const [category, setCategory] = useState([]);
@@ -88,26 +89,27 @@ function AddProduct(props) {
                 data.product_image_5 = ''
             }
         }
-        const updatedData = { ...data, vendor: props?.sellerId }
         if (props?.title == 'Edit Product') {
+            var updatedData = { ...data, vendor: props?.row?.vendor }
             console.log('called')
-            editVendorProduct(updatedData).then(res => {
-                if (res.status == 'success') {
+            editVendorProduct(props?.row?.product_id, updatedData).then(res => {
+                if (res?.status == 'success') {
                     props?.getProducts()
                     toast.success('Product updated successfully')
                     toggle();
                 }
             })
         } else {
-            // addProduct(updatedData).then((res) => {
-            //     if (res?.status == 'success') {
-            //         props?.getProducts()
-            //         toast.success('Product Added Successfully')
-            //         toggle();
-            //     } else {
-            //         toast.error('Error while creating product')
-            //     }
-            // })
+            var updatedData = { ...data, vendor: props?.sellerId }
+            addProduct(updatedData).then((res) => {
+                if (res?.status == 'success') {
+                    props?.getProducts()
+                    toast.success('Product Added Successfully')
+                    toggle();
+                } else {
+                    toast.error('Error while creating product')
+                }
+            })
         }
     }
 
@@ -140,7 +142,7 @@ function AddProduct(props) {
     return (
         <>
             {props?.title == 'Edit Product' ?
-                <button className='items-center p-1 rounded-xl bg-yellow-100 hover:bg-yellow-200' onClick={() => setOpen(true)}>
+                <button className='items-center p-1 bg-yellow-100 rounded-xl hover:bg-yellow-200' onClick={() => setOpen(true)}>
                     <Edit size={24} className='text-yellow-400' />
                 </button> :
                 <button className={`${formBtn1} flex`} onClick={() => setOpen(true)}>
@@ -161,7 +163,7 @@ function AddProduct(props) {
                         <div className="fixed inset-0 bg-black bg-opacity-25" />
                     </Transition.Child>
                     <div className="fixed inset-0 overflow-y-scroll ">
-                        <div className="flex min-h-full items-center justify-center p-4 text-center">
+                        <div className="flex items-center justify-center min-h-full p-4 text-center">
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-out duration-300"
@@ -171,20 +173,20 @@ function AddProduct(props) {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-6xl transform overflow-hidden rounded-lg bg-white  text-left align-middle shadow-xl transition-all">
+                                <Dialog.Panel className="w-full max-w-6xl overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl">
 
                                     <Dialog.Title
                                         as="h2"
-                                        className="text-lg text-white w-full bg-sky-400 font-tb leading-6 font-semibold py-4 px-3"
+                                        className="w-full px-3 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
                                     >
                                         {props?.title}
                                     </Dialog.Title>
-                                    <div className=" bg-gray-200/70 ">
+                                    <div className=" bg-gray-200/70">
                                         {/* React Hook Form */}
                                         <form onSubmit={handleSubmit(onSubmit)} >
                                             <div className="p-4 overflow-y-scroll scrollbars " >
-                                                <div className="py-4 mx-4 grid md:grid-cols-1 lg:grid-cols-4 gap-x-3 gap-y-3 customBox">
-                                                    <p className='md:col-span-1 lg:col-span-4 text-xl font-semibold'>Basic Information</p>
+                                                <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-4 gap-x-3 gap-y-3 customBox">
+                                                    <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Basic Information</p>
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             Product Name*
@@ -353,7 +355,7 @@ function AddProduct(props) {
                                                         />
                                                         {errors.tags && <Error title='Tags is Required*' />}
                                                     </div> */}
-                                                    <p className='md:col-span-1 lg:col-span-4 text-xl font-semibold'>Additional Information</p>
+                                                    <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Additional Information</p>
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             Description*
@@ -414,7 +416,7 @@ function AddProduct(props) {
                                                         />
                                                         {errors.product_nutritional_info && <Error title='Nutritional Info is Required*' />}
                                                     </div>
-                                                    <p className='md:col-span-1 lg:col-span-4 text-xl font-semibold'>Brand Information</p>
+                                                    <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Brand Information</p>
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             Brand*
@@ -442,7 +444,7 @@ function AddProduct(props) {
                                                         </label>}
                                                         {errors.product_brand_logo && <Error title='Profile Image is required*' />}
                                                     </div> */}
-                                                    <p className='md:col-span-1 lg:col-span-4 text-xl font-semibold'>Product Images</p>
+                                                    <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Product Images</p>
                                                     <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Main Image*</label>
                                                         <input className={fileinput}
@@ -451,9 +453,9 @@ function AddProduct(props) {
                                                             multiple
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            {...register("product_image_1", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data.product_image_1 != '' && props?.data.product_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.data?.product_image_1?.split('/').pop()}
+                                                            {...register("product_image_1", { required: props.title == 'Edit Product' ? false : true })} />
+                                                        {props?.title == 'Edit Product' && props?.row?.product_image_1 != '' && props?.row?.product_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.row?.product_image_1?.split('/').pop()}
                                                         </label>}
                                                         {errors.product_image_1 && <Error title='Profile Image is required*' />}
                                                     </div>
@@ -465,9 +467,9 @@ function AddProduct(props) {
                                                             multiple
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            {...register("product_image_2", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data.product_image_2 != '' && props?.data.product_image_2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.data?.product_image_2?.split('/').pop()}
+                                                            {...register("product_image_2", { required: props.title == 'Edit Product' ? false : true })} />
+                                                        {props?.title == 'Edit Product' && props?.row?.product_image_2 != '' && props?.row?.product_image_2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.row?.product_image_2?.split('/').pop()}
                                                         </label>}
                                                         {errors.product_image_2 && <Error title='Profile Image is required*' />}
                                                     </div>
@@ -479,9 +481,9 @@ function AddProduct(props) {
                                                             multiple
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            {...register("product_image_3", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data.product_image_3 != '' && props?.data.product_image_3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.data?.product_image_3?.split('/').pop()}
+                                                            {...register("product_image_3", { required: props.title == 'Edit Product' ? false : true })} />
+                                                        {props?.title == 'edit' && props?.row?.product_image_3 != '' && props?.row?.product_image_3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.row?.product_image_3?.split('/').pop()}
                                                         </label>}
                                                         {errors.product_image_3 && <Error title='Profile Image is required*' />}
                                                     </div>
@@ -493,29 +495,29 @@ function AddProduct(props) {
                                                             multiple
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            {...register("product_image_4", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data.product_image_4 != '' && props?.data.product_image_4 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.data?.product_image_4?.split('/').pop()}
+                                                            {...register("product_image_4", { required: props.title == 'Edit Product' ? false : true })} />
+                                                        {props?.title == 'Edit Product' && props?.row?.product_image_4 != '' && props?.row?.product_image_4 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.row?.product_image_4?.split('/').pop()}
                                                         </label>}
                                                         {errors.product_image_4 && <Error title='Profile Image is required*' />}
                                                     </div>
                                                     <div className="">
-                                                        <label className={labelClass} htmlFor="main_input">Image 4*</label>
+                                                        <label className={labelClass} htmlFor="main_input">Image 5*</label>
                                                         <input className={fileinput}
                                                             id="main_input"
                                                             type='file'
                                                             multiple
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            {...register("product_image_5", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data.product_image_5 != '' && props?.data.product_image_5 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.data?.product_image_5?.split('/').pop()}
+                                                            {...register("product_image_5", { required: props.title == 'Edit Product' ? false : true })} />
+                                                        {props?.title == 'Edit Product' && props?.row?.product_image_5 != '' && props?.row?.product_image_5 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.row?.product_image_5?.split('/').pop()}
                                                         </label>}
                                                         {errors.product_image_5 && <Error title='Profile Image is required*' />}
                                                     </div>
                                                 </div>
                                             </div>
-                                            <footer className="py-2 flex bg-white justify-end px-4 space-x-3">
+                                            <footer className="flex justify-end px-4 py-2 space-x-3 bg-white">
                                                 {loader ? <LoadBox className="relative block w-auto px-5 transition-colors font-tb tracking-wide duration-200 py-2.5 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize" /> : <button type='submit' className={formBtn1}>Submit</button>}
                                                 <button type='button' className={formBtn2} onClick={closeBtn}>close</button>
                                             </footer>

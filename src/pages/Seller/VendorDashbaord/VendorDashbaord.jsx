@@ -323,7 +323,7 @@ const Dashboard = () => {
                     </Tabs>
                 </div> */}
                 {/* ===================== New Order Section ===================== */}
-                <div className="grid gap-6 m-4 bg-white p-4 rounded-xl md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2">
+                <div className="grid gap-6 m-4 bg-white p-4 rounded-xl md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
                     {data.map(product => (
                         <NavLink
                             to={`/vendor-orders/order-detail/:${product?.id}`}

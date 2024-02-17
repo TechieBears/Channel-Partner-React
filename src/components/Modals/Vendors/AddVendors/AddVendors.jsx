@@ -6,7 +6,7 @@ import LoadBox from '../../../Loader/LoadBox';
 import { useForm } from 'react-hook-form';
 import Error from '../../../Errors/Error';
 import { MultiSelect } from 'primereact/multiselect';
-import { Add , Edit} from 'iconsax-react';
+import { Add, Edit } from 'iconsax-react';
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../../utils/CustomClass';
 import { GetFranchiseeVendors, CreateFranchiseeVendors } from "../../../../api";
 import { setFranchiseVendors } from "../../../../redux/Slices/masterSlice";
@@ -16,9 +16,9 @@ import { ImageUpload, vendorlink } from "../../../../env";
 
 
 export default function AddVendors(props) {
-  console.log('props = ', props)
-    const categories = useSelector((state) => state?.master?.Category);  
-    const user = useSelector((state) => state?.user?.FranchiseeDetails);  
+    console.log('props = ', props)
+    const categories = useSelector((state) => state?.master?.Category);
+    const user = useSelector((state) => state?.user?.FranchiseeDetails);
 
 
     // console.log('Franchisee details = ', user);
@@ -49,36 +49,10 @@ export default function AddVendors(props) {
     };
 
 
-        // ============================= form submiting ======================================
-        const onSubmit = async (data) => {
-            if (props.button != 'edit') {    // for create
-                if (data?.bank_passbook.length != 0) {
-                    await ImageUpload(data?.bank_passbook[0], "vendor", "BankPassbook", data?.first_name)
-                    data.bank_passbook = `${vendorlink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
-                } else {
-                    data.bank_passbook = ''
-                }
-                if (data?.address_proof.length != 0) {
-                    await ImageUpload(data?.address_proof[0], "vendor", "AddressProof", data?.first_name)
-                    data.address_proof = `${vendorlink}${data?.first_name}_AddressProof_${data?.address_proof[0].name}`
-                } else {
-                    data.address_proof = ''
-                }
-                if (data?.profile_pic.length != 0) {
-                    await ImageUpload(data?.profile_pic[0], "vendor", "ProfileImage", data?.first_name)
-                    data.profile_pic = `${vendorlink}${data?.first_name}_ProfileImage_${data?.profile_pic[0].name}`
-                } else {
-                    data.profile_pic = ''
-                }
-                if (data?.hawker_shop_photo.length != 0) {
-                    await ImageUpload(data?.hawker_shop_photo[0], "vendor", "shopImage", data?.first_name)
-                    data.hawker_shop_photo = `${vendorlink}${data?.first_name}_shopImage_${data?.hawker_shop_photo[0].name}`
-                } else {
-                    data.hawker_shop_photo = ''
-                }
-            }
-            else {          // for edit
-              if (data?.bank_passbook.length != 0) {
+    // ============================= form submiting ======================================
+    const onSubmit = async (data) => {
+        if (props.button != 'edit') {    // for create
+            if (data?.bank_passbook.length != 0) {
                 await ImageUpload(data?.bank_passbook[0], "vendor", "BankPassbook", data?.first_name)
                 data.bank_passbook = `${vendorlink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
             } else {
@@ -102,101 +76,127 @@ export default function AddVendors(props) {
             } else {
                 data.hawker_shop_photo = ''
             }
+        }
+        else {          // for edit
+            if (data?.bank_passbook.length != 0) {
+                await ImageUpload(data?.bank_passbook[0], "vendor", "BankPassbook", data?.first_name)
+                data.bank_passbook = `${vendorlink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
+            } else {
+                data.bank_passbook = ''
             }
-            if (props.button !== 'edit') {   // for create
-                try {
-                    setLoader(true)
-                    const additionalPayload = { created_by: user?.user?.id };
-                    const requestData = { ...data, ...additionalPayload };
-
-                    const response = await CreateFranchiseeVendors(requestData)
-                    if (response?.code == 2002) {
-                        setTimeout(() => {
-                            dispatch(setFranchiseVendors(res));
-                            reset();
-                            toggle(), setLoader(false), FranchiseeVendors();
-                            toast.success(response?.Message);
-                        }, 1000);
-                    } else {
-                        setLoader(false)
-                        toast.error(response?.Message);
-                        console.log('failed to create user')
-                    }
-                } catch (error) {
-                    setLoader(false)
-                    console.log('error', error);
-                }
-            } else {                         // for edit
-                setLoader(true)
-                // const response = await editUser(props?.data?.id, data)
-                if (response) {
-                    setTimeout(() => {
-                        toggle();
-                        setLoader(false)
-                        fetchData()
-                        toast.success(response?.message);
-                    }, 1000);
-                } else {
-                    console.log('failed to update user')
-                }
+            if (data?.address_proof.length != 0) {
+                await ImageUpload(data?.address_proof[0], "vendor", "AddressProof", data?.first_name)
+                data.address_proof = `${vendorlink}${data?.first_name}_AddressProof_${data?.address_proof[0].name}`
+            } else {
+                data.address_proof = ''
+            }
+            if (data?.profile_pic.length != 0) {
+                await ImageUpload(data?.profile_pic[0], "vendor", "ProfileImage", data?.first_name)
+                data.profile_pic = `${vendorlink}${data?.first_name}_ProfileImage_${data?.profile_pic[0].name}`
+            } else {
+                data.profile_pic = ''
+            }
+            if (data?.hawker_shop_photo.length != 0) {
+                await ImageUpload(data?.hawker_shop_photo[0], "vendor", "shopImage", data?.first_name)
+                data.hawker_shop_photo = `${vendorlink}${data?.first_name}_shopImage_${data?.hawker_shop_photo[0].name}`
+            } else {
+                data.hawker_shop_photo = ''
             }
         }
+        if (props.button !== 'edit') {   // for create
+            try {
+                setLoader(true)
+                const additionalPayload = { franchise: user?.franch_id };
+                const requestData = { ...data, ...additionalPayload };
+
+                const response = await CreateFranchiseeVendors(requestData)
+                if (response?.code == 2002) {
+                    setTimeout(() => {
+                        dispatch(setFranchiseVendors(res));
+                        reset();
+                        toggle(), setLoader(false), FranchiseeVendors();
+                        toast.success(response?.Message);
+                    }, 1000);
+                } else {
+                    setLoader(false)
+                    toast.error(response?.Message);
+                    console.log('failed to create user')
+                }
+            } catch (error) {
+                setLoader(false)
+                console.log('error', error);
+            }
+        } else {                         // for edit
+            setLoader(true)
+            // const response = await editUser(props?.data?.id, data)
+            if (response) {
+                setTimeout(() => {
+                    toggle();
+                    setLoader(false)
+                    fetchData()
+                    toast.success(response?.message);
+                }, 1000);
+            } else {
+                console.log('failed to update user')
+            }
+        }
+    }
 
 
-        // ======================== Reset data into the form  =======================
-        useMemo(() => {
-            reset({
-              first_name: props?.data?.user?.first_name,
-              last_name: props?.data?.user?.last_name,
-              phone_no: props?.data?.user?.phone_no,
-              profile_pic: props?.data?.user?.profile_pic,
-              date_of_birth: props?.data?.user?.date_of_birth,
-              email: props?.data?.user?.email,
-              pincode: props?.data?.user?.pincode,
-              state: props?.data?.user?.state,
-              city: props?.data?.user?.city,
-              address: props?.data?.user?.address,
-              adhar_card: props?.data?.adhar_card,
-              pan_card: props?.data?.pan_card,
-              gst_number: props?.data?.gst_number,
-              bank_name: props?.data?.bank_name,
-              account_number: props?.data?.account_number,
-              bank_passbook: props?.data?.bank_passbook,
-              ifsc_code: props?.data?.ifsc_code,
-              address_proof: props?.data?.address_proof,
-              gender: props?.data?.user?.gender,
-              // password: props?.data?.password,
+    // ======================== Reset data into the form  =======================
+    useMemo(() => {
+        reset({
+            first_name: props?.data?.user?.first_name,
+            last_name: props?.data?.user?.last_name,
+            phone_no: props?.data?.user?.phone_no,
+            profile_pic: props?.data?.user?.profile_pic,
+            date_of_birth: props?.data?.user?.date_of_birth,
+            email: props?.data?.user?.email,
+            pincode: props?.data?.user?.pincode,
+            state: props?.data?.user?.state,
+            city: props?.data?.user?.city,
+            address: props?.data?.user?.address,
+            adhar_card: props?.data?.adhar_card,
+            pan_card: props?.data?.pan_card,
+            gst_number: props?.data?.gst_number,
+            bank_name: props?.data?.bank_name,
+            account_number: props?.data?.account_number,
+            bank_passbook: props?.data?.bank_passbook,
+            ifsc_code: props?.data?.ifsc_code,
+            address_proof: props?.data?.address_proof,
+            gender: props?.data?.user?.gender,
+            // password: props?.data?.password,
 
-              shop_name: props?.data?.shop_name,
-              hawker_shop_photo: props?.data?.hawker_shop_photo,
-              shop_start_time: props?.data?.shop_start_time,
-              shop_end_time: props?.data?.shop_end_time,
-              vendor_type: props?.data?.vendor_type,
-            });
-          }, [props.data]);
-      
-        // useEffect(() => {
-        //   if (props.button == "edit") {
-        //       fillData()
-        //   }
-        // }, [])
-      
+            shop_name: props?.data?.shop_name,
+            hawker_shop_photo: props?.data?.hawker_shop_photo,
+            shop_start_time: props?.data?.shop_start_time,
+            shop_end_time: props?.data?.shop_end_time,
+            vendor_type: props?.data?.vendor_type,
+        });
+    }, [props.data]);
+
+    // useEffect(() => {
+    //   if (props.button == "edit") {
+    //       fillData()
+    //   }
+    // }, [])
+
 
 
     return (
         <>
-          {props.button !== "edit" ? (
-            <button onClick={toggle} className={tableBtn}>
-                Add Vendors
-            </button>
-        ) : (
-            <button
-                onClick={toggle}
-                className="bg-yellow-100 px-1.5 py-2 rounded-sm"><Edit size="20" className='text-yellow-500' />
-            </button>
-        )}
+            {props.button !== "edit" ? (
+                <button onClick={toggle} className={tableBtn}>
+                    Add Vendors
+                </button>
+            ) : (
+                <button
+                    onClick={toggle}
+                    className="bg-yellow-100 px-1.5 py-2 rounded-sm"><Edit size="20" className='text-yellow-500' />
+                </button>
+            )}
 
-        
+
             {/* <button className={`${formBtn1} flex`} onClick={() => setOpen(true)}>
                 <Add className='text-white' />
                 {props?.title}
@@ -269,9 +269,9 @@ export default function AddVendors(props) {
                                                             id="main_input"
                                                             type='file'
                                                             multiple
-                                                        accept='image/jpeg,image/jpg,image/png'
-                                                        placeholder='Upload Images...'
-                                                        {...register("profile_pic", { required: props.button == 'edit' ? false : true })} />
+                                                            accept='image/jpeg,image/jpg,image/png'
+                                                            placeholder='Upload Images...'
+                                                            {...register("profile_pic", { required: props.button == 'edit' ? false : true })} />
                                                         {props?.button == 'edit' && props?.data.profile_pic != '' && props?.data.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                                                             {props?.data?.profile_pic?.split('/').pop()}
                                                         </label>}
@@ -301,19 +301,19 @@ export default function AddVendors(props) {
                                                             <Error title="Phone is Required*" />
                                                         )}
                                                     </div>
-                                                    {props.button != 'edit' && 
+                                                    {props.button != 'edit' &&
                                                         <div className="">
-                                                        <label className={labelClass}>
-                                                            Create Password
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder="Password"
-                                                            className={inputClass}
-                                                            {...register("password")}
-                                                        />
-                                                    </div>}
-                                            
+                                                            <label className={labelClass}>
+                                                                Create Password
+                                                            </label>
+                                                            <input
+                                                                type="text"
+                                                                placeholder="Password"
+                                                                className={inputClass}
+                                                                {...register("password")}
+                                                            />
+                                                        </div>}
+
 
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -369,10 +369,10 @@ export default function AddVendors(props) {
                                                         </label>}
                                                         {errors.hawker_shop_photo && <Error title='Shop Image is required*' />}
                                                     </div>
-                                                
+
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                          Shop Start Time*
+                                                            Shop Start Time*
                                                         </label>
                                                         <input
                                                             type="time"
@@ -404,10 +404,10 @@ export default function AddVendors(props) {
                                                             {...register("vendor_type", { required: true })}
                                                         >
                                                             <option value="">Select Type</option>
-                                                            {categories.map((category) => (
-                                                            <option key={category.id} value={category.category_name}  selected={props?.data?.category === category.id}>
-                                                                {category.category_name}
-                                                            </option>
+                                                            {categories?.map((category) => (
+                                                                <option key={category.id} value={category.category_name} selected={props?.data?.category === category.id}>
+                                                                    {category.category_name}
+                                                                </option>
                                                             ))}
                                                         </select>
                                                         {errors.vendor_type && (
@@ -513,7 +513,7 @@ export default function AddVendors(props) {
                                                             />
                                                         </div>
                                                     </div>
-                                                 
+
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             Bank Account Number
