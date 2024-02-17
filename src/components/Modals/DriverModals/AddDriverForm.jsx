@@ -10,17 +10,47 @@ import LoadBox from '../../Loader/LoadBox';
 import { toast } from 'react-toastify';
 import { ImageUpload, deliveryBoylink } from '../../../env';
 import { setDeliveryList } from '../../../redux/Slices/deliverySlice';
+import { setFranchise } from "../../../redux/Slices/masterSlice";
+import "../../../redux/Slices/loginSlice";
+import { GetFranchisee } from "../../../api";
+
 
 
 
 function AddDriverFrom(props) {
     const [isOpen, setIsOpen] = useState(false);
     const [loader, setLoader] = useState(false);
-    const getFranchiseDetail = useSelector((state) => state?.user?.FranchiseeDetails)
+    const getFranchiseDetail = useSelector((state) => state?.user?.FranchiseeDetails);
     console.log('getFranchiseDetail', getFranchiseDetail)
-    const toggle = () => setIsOpen(!isOpen);
 
+    const Franchisee = useSelector((state) => state?.master?.Franchise);
+    console.log('franchisee Table data = ', Franchisee);
+
+    // const RoleIs = useSelector((state) => state?.user?.roleIs);
+    // console.log('RoleIs = ', RoleIs);
+
+    const toggle = () => setIsOpen(!isOpen);
     const user = useSelector((state) => state?.user?.FranchiseeDetails);  
+    const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);  
+    // console.log('Logged User Details = ', LoggedUserDetails);
+
+
+    // // ========================= fetch data from api ==============================
+    const FranchiseeDetails = () => {
+        try {
+            GetFranchisee().then((res) => {
+            dispatch(setFranchise(res));
+            });
+        } catch (error) {
+            console.log(error);
+        }
+        };
+
+    useEffect(() => {
+        FranchiseeDetails()
+    }, [])
+
+    
 
     const handleFileChange = (event) => {
         console.log("file", event.target.files[0]);
@@ -167,9 +197,13 @@ function AddDriverFrom(props) {
                     };
                 }
 
-                const additionalPayload = { created_by: user?.user?.id };
-                const requestData = { ...data, ...additionalPayload };
-
+                if (LoggedUserDetails?.role === 'franchise') {
+                    const additionalPayload = { created_by: user?.user?.id };
+                    requestData = { ...data, ...additionalPayload };
+                } else if (LoggedUserDetails?.role === 'admin') {
+                    requestData = { ...data };
+                } 
+                
                 const response = await createDeliveryBoy(requestData);
                 if (response?.message == "delivery boy added successfully") {
                     setTimeout(() => {
@@ -350,6 +384,27 @@ function AddDriverFrom(props) {
                                                         </label>}
                                                         {errors.profile_pic && <Error title='Profile Image is required*' />}
                                                     </div>
+                                                    {
+                                                    LoggedUserDetails?.role == 'admin' &&
+                                                        <div className="">
+                                                            <label className={labelClass}>Select Franchisee*</label>
+                                                            <select
+                                                                className={inputClass}
+                                                                {...register("franchisee_id", { required: true })}
+                                                            >
+                                                                <option value="" selected>--Select Franchisee--</option>
+                                                                {Franchisee.map(franchisee => (
+                                                                    <option key={franchisee?.user?.id} value={franchisee?.user?.id}>
+                                                                        {franchisee?.user?.first_name + " (" + franchisee?.user?.pincode + ")"}
+                                                                    </option>
+                                                                ))}
+                                                            </select>
+                                                            {errors.franchisee_id && (
+                                                                <Error title="Franchisee is Required*" />
+                                                            )}
+                                                        </div>
+                                                    }
+                                                    
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             Email*

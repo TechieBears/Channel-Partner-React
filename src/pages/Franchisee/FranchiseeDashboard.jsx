@@ -242,8 +242,11 @@ const FranchiseeDashboard = () => {
                         </div>
                     </div>
                 </div>
+
+
+
                 {/* =====================Dashboard filters===================== */}
-                <div className="p-4 m-4 bg-white sm:m-5 rounded-xl">
+                {/* <div className="p-4 m-4 bg-white sm:m-5 rounded-xl">
                     <form
                         onSubmit={handleSubmit(onSubmit)}
                         className="flex flex-col gap-2 md:items-center lg:flex-row"
@@ -301,7 +304,7 @@ const FranchiseeDashboard = () => {
                             </button>
                         </div>
                     </form>
-                </div>
+                </div> */}
                 {/* <div className="mx-auto mt-8 sm:m-5">
                     <Tabs
                         selectedIndex={selectedTab}
@@ -323,7 +326,7 @@ const FranchiseeDashboard = () => {
                     </Tabs>
                 </div> */}
                 {/* ===================== New Order Section ===================== */}
-                <div className="grid gap-6 m-4 bg-white p-4 rounded-xl md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2">
+                {/* <div className="grid gap-6 p-4 m-4 bg-white rounded-xl md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2">
                     {data.map(product => (
                         <NavLink
                             to={`/vendor-orders/order-detail/:${product?.id}`}
@@ -343,12 +346,12 @@ const FranchiseeDashboard = () => {
                                     </p>
                                 </div>
                                 <div className="flex-1 p-4 my-2">
-                                    <div className="grid grid-cols-2 items-center">
+                                    <div className="grid items-center grid-cols-2">
                                         <div className="grid grid-cols-2">
                                             {product?.items?.map(item => (
                                                 <div key={item?.name} className="">
                                                     <img
-                                                        className="w-16 border-2 p-1 rounded-xl"
+                                                        className="w-16 p-1 border-2 rounded-xl"
                                                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU"
                                                         alt=""
                                                     />
@@ -356,13 +359,12 @@ const FranchiseeDashboard = () => {
                                                         <h2 className="text-sm font-semibold tracking-wide text-gray-800 ">
                                                             Butter Milk x {item?.quantity} more
                                                         </h2>
-                                                        {/* <p>Lorem ipsum dolor, sit amet </p> */}
                                                     </div>
                                                 </div>
                                             ))}
                                         </div>
 
-                                        <p className=" col-span-1 mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 ">
+                                        <p className="col-span-1 mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 ">
                                             Payment - {product?.paymentMethod}
                                         </p>
                                     </div>
@@ -388,7 +390,7 @@ const FranchiseeDashboard = () => {
                         </NavLink>
                     ))}
 
-                </div>
+                </div> */}
             </section>
         </>
     );

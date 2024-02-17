@@ -127,11 +127,11 @@ export const Franchise = [
         icon: <Element4 size="24" />,
         link: '/',
     },
-    {
-        title: 'Analytics',
-        icon: <Soup size="24" />,
-        link: '/analytics',
-    },
+    // {
+    //     title: 'Analytics',
+    //     icon: <Soup size="24" />,
+    //     link: '/analytics',
+    // },
     {
         title: 'Orders',
         icon: <LayoutList size="24" />,
@@ -147,9 +147,9 @@ export const Franchise = [
         icon: <Wallet size="24" />,
         link: '/delivery',
     },
-    {
-        title: 'Settings',
-        icon: <Wallet size="24" />,
-        link: '/settings',
-    },
+    // {
+    //     title: 'Settings',
+    //     icon: <Wallet size="24" />,
+    //     link: '/settings',
+    // },
 ]
