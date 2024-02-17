@@ -9,12 +9,11 @@ import Error from '../../Errors/Error';
 import { MultiSelect } from 'primereact/multiselect';
 import { Add, Edit } from 'iconsax-react';
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
-// import { addProduct, editVendorProduct, getAllSeller, getCategory, getSubCategory } from '../../../api';
+import { addProduct, editVendorProduct, getAllSeller, getCategory, getSubCategory } from '../../../api';
 import { toast } from 'react-toastify';
 import { ImageUpload, franchiselink } from '../../../env';
 
 function AddProduct(props) {
-    console.log('props?.row', props?.row)
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
     const [category, setCategory] = useState([]);
@@ -27,63 +26,63 @@ function AddProduct(props) {
     }
     const onSubmit = async (data) => {
         if (props?.title == 'Edit Product') {
-            if (data?.product_image_1.length != 0) {
-                await ImageUpload(data?.product_image_1[0], "franchisee", "MainImage", data?.product_name)
+            if (data?.product_image_1 != props?.row?.product_image_1) {
+                await ImageUpload(data?.product_image_1[0], "shopProduct", "MainImage", data?.product_name)
                 data.product_image_1 = `${franchiselink}${data?.product_name}_MainImage_${data?.product_image_1[0]?.name}`
             } else {
-                data.product_image_1 = ''
+                data.product_image_1 = props?.row?.product_image_1
             }
-            if (data?.product_image_2.length != 0) {
-                await ImageUpload(data?.product_image_2[0], "franchisee", "Image2", data?.product_name)
+            if (data?.product_image_2 != props?.row?.product_image_2) {
+                await ImageUpload(data?.product_image_2[0], "shopProduct", "Image2", data?.product_name)
                 data.product_image_2 = `${franchiselink}${data?.product_name}_Image2_${data?.product_image_2[0]?.name}`
             } else {
-                data.product_image_2 = ''
+                data.product_image_2 = props?.row?.product_image_2
             }
-            if (data?.product_image_3.length != 0) {
-                await ImageUpload(data?.product_image_3[0], "franchisee", "Image3", data?.product_name)
+            if (data?.product_image_3 != props?.row?.product_image_3) {
+                await ImageUpload(data?.product_image_3[0], "shopProduct", "Image3", data?.product_name)
                 data.product_image_3 = `${franchiselink}${data?.product_name}_Image3_${data?.product_image_3[0]?.name}`
             } else {
-                data.product_image_3 = ''
+                data.product_image_3 = props?.row?.product_image_3
             }
-            if (data?.product_image_4.length != 0) {
-                await ImageUpload(data?.product_image_4[0], "franchisee", "Image4", data?.product_name)
+            if (data?.product_image_4 != props?.row?.product_image_4) {
+                await ImageUpload(data?.product_image_4[0], "shopProduct", "Image4", data?.product_name)
                 data.product_image_4 = `${franchiselink}${data?.product_name}_Image4_${data?.product_image_4[0]?.name}`
             } else {
-                data.product_image_4 = ''
+                data.product_image_4 = props?.row?.product_image_4
             }
-            if (data?.product_image_5.length != 0) {
-                await ImageUpload(data?.product_image_5[0], "franchisee", "Image5", data?.product_name)
+            if (data?.product_image_5 != props?.row?.product_image_5) {
+                await ImageUpload(data?.product_image_5[0], "shopProduct", "Image5", data?.product_name)
                 data.product_image_5 = `${franchiselink}${data?.product_name}_Image5_${data?.product_image_5[0]?.name}`
             } else {
-                data.product_image_5 = ''
+                data.product_image_5 = props?.row?.product_image_5
             }
         } else {
             if (data?.product_image_1.length != 0) {
-                await ImageUpload(data?.product_image_1[0], "franchisee", "MainImage", data?.product_name)
+                await ImageUpload(data?.product_image_1[0], "shopProduct", "MainImage", data?.product_name)
                 data.product_image_1 = `${franchiselink}${data?.product_name}_MainImage_${data?.product_image_1[0]?.name}`
             } else {
                 data.product_image_1 = ''
             }
             if (data?.product_image_2.length != 0) {
-                await ImageUpload(data?.product_image_2[0], "franchisee", "Image2", data?.product_name)
+                await ImageUpload(data?.product_image_2[0], "shopProduct", "Image2", data?.product_name)
                 data.product_image_2 = `${franchiselink}${data?.product_name}_Image2_${data?.product_image_2[0]?.name}`
             } else {
                 data.product_image_2 = ''
             }
             if (data?.product_image_3.length != 0) {
-                await ImageUpload(data?.product_image_3[0], "franchisee", "Image3", data?.product_name)
+                await ImageUpload(data?.product_image_3[0], "shopProduct", "Image3", data?.product_name)
                 data.product_image_3 = `${franchiselink}${data?.product_name}_Image3_${data?.product_image_3[0]?.name}`
             } else {
                 data.product_image_3 = ''
             }
             if (data?.product_image_4.length != 0) {
-                await ImageUpload(data?.product_image_4[0], "franchisee", "Image4", data?.product_name)
+                await ImageUpload(data?.product_image_4[0], "shopProduct", "Image4", data?.product_name)
                 data.product_image_4 = `${franchiselink}${data?.product_name}_Image4_${data?.product_image_4[0]?.name}`
             } else {
                 data.product_image_4 = ''
             }
             if (data?.product_image_5.length != 0) {
-                await ImageUpload(data?.product_image_5[0], "franchisee", "Image5", data?.product_name)
+                await ImageUpload(data?.product_image_5[0], "shopProduct", "Image5", data?.product_name)
                 data.product_image_5 = `${franchiselink}${data?.product_name}_Image5_${data?.product_image_5[0]?.name}`
             } else {
                 data.product_image_5 = ''

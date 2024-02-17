@@ -1154,6 +1154,17 @@ export const getDeliveryBoys = async (data) => {
     }
 }
 
+// ================= Add Product =================
+export const addProduct = async (data) => {
+    const url = `${environment.baseUrl}vendor/add_shop_product`
+    try {
+        const response = await axios.post(url, data);
+        return response.data;
+    } catch (error) {
+        console.log('error creating product', error)
+    }
+}
+
 // ======================== Get All Product ===============
 
 export const getAllShopProduct = async () => {
