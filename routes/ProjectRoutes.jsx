@@ -42,6 +42,7 @@ import SellerLogin from '../src/pages/Auth/SellerLogin';
 import ViewOrder from '../src/components/Modals/Vendors/ViewOrder';
 import ViewProduct from '../src/components/Modals/Vendors/ViewProduct';
 import Complaints from '../src/components/Modals/Complaints/Complaints';
+import FranchiseDetail from '../src/pages/Admin/Franchisees/FranchiseDetail';
 
 
 
@@ -78,6 +79,7 @@ const ProjectRoutes = () => {
                                         <Route path="/resturants" element={<Restaurant />} />
                                         <Route path="/resturants/restaurant-detail/:id" element={<RestaurantDetail />} />
                                         <Route path="/franchisee" element={<Franchisee />} />
+                                        <Route path="/franchise/franchise-detail/:id" element={<FranchiseDetail />} />
                                         <Route path="/vendors" element={<Vendors />} />
                                         <Route path="/vendors/vendors-detail/:id" element={<VendorDetails />} />
                                         <Route path="/menu/category-detail/:id" element={<CategoryDetail />} />

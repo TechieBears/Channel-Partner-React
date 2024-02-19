@@ -30,8 +30,8 @@ function AddDriverFrom(props) {
     // console.log('RoleIs = ', RoleIs);
 
     const toggle = () => setIsOpen(!isOpen);
-    const user = useSelector((state) => state?.user?.FranchiseeDetails);  
-    const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);  
+    const user = useSelector((state) => state?.user?.FranchiseeDetails);
+    const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     // console.log('Logged User Details = ', LoggedUserDetails);
 
 
@@ -39,28 +39,28 @@ function AddDriverFrom(props) {
     const FranchiseeDetails = () => {
         try {
             GetFranchisee().then((res) => {
-            dispatch(setFranchise(res));
+                dispatch(setFranchise(res));
             });
         } catch (error) {
             console.log(error);
         }
-        };
+    };
 
     useEffect(() => {
         FranchiseeDetails()
     }, [])
 
-    
+
 
     const handleFileChange = (event) => {
         console.log("file", event.target.files[0]);
         const file = event.target.files[0];
         if (file.size > 100 * 1024 * 1024) {
-          event.target.value = null;
-          alert("File size exceeds 100MB limit");
-          return;
+            event.target.value = null;
+            alert("File size exceeds 100MB limit");
+            return;
         }
-      };
+    };
 
     const dispatch = useDispatch()
     const {
@@ -126,74 +126,74 @@ function AddDriverFrom(props) {
     }
 
 
-      // ============================= form submiting ======================================
+    // ============================= form submiting ======================================
     const onSubmit = async (data) => {
         setLoader(true)
 
         console.log(data)
         if (props.button != 'edit') {    // for create
-        if (data?.bank_passbook.length != 0) {
-            await ImageUpload(data?.bank_passbook[0], "deliveryboy", "BankPassbook", data?.first_name)
-            data.bank_passbook = `${deliveryBoylink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
-        } else {
-            data.bank_passbook = ''
-        }
-        if (data?.video_url.length != 0) {
-            await ImageUpload(data?.video_url[0], "deliveryboy", "AddressProof", data?.first_name)
-            data.video_url = `${deliveryBoylink}${data?.first_name}_AddressProof_${data?.video_url[0].name}`
-        } else {
-            data.video_url = ''
-        }
-        if (data?.profile_pic.length != 0) {
-            await ImageUpload(data?.profile_pic[0], "deliveryboy", "ProfileImage", data?.first_name)
-            data.profile_pic = `${deliveryBoylink}${data?.first_name}_ProfileImage_${data?.profile_pic[0].name}`
-        } else {
-            data.profile_pic = ''
-        }
+            if (data?.bank_passbook.length != 0) {
+                await ImageUpload(data?.bank_passbook[0], "deliveryboy", "BankPassbook", data?.first_name)
+                data.bank_passbook = `${deliveryBoylink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
+            } else {
+                data.bank_passbook = ''
+            }
+            if (data?.video_url.length != 0) {
+                await ImageUpload(data?.video_url[0], "deliveryboy", "AddressProof", data?.first_name)
+                data.video_url = `${deliveryBoylink}${data?.first_name}_AddressProof_${data?.video_url[0].name}`
+            } else {
+                data.video_url = ''
+            }
+            if (data?.profile_pic.length != 0) {
+                await ImageUpload(data?.profile_pic[0], "deliveryboy", "ProfileImage", data?.first_name)
+                data.profile_pic = `${deliveryBoylink}${data?.first_name}_ProfileImage_${data?.profile_pic[0].name}`
+            } else {
+                data.profile_pic = ''
+            }
         }
         else {          // for edit
-        if (data?.bank_passbook.length != 0) {
-            await ImageUpload(data?.bank_passbook[0], "deliveryboy", "BankPassbook", data?.first_name)
-            data.bank_passbook = `${deliveryBoylink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
-        } else {
-            data.bank_passbook = ''
-        }
-        if (data?.video_url.length != 0) {
-            await ImageUpload(data?.video_url[0], "deliveryboy", "AddressProof", data?.first_name)
-            data.video_url = `${deliveryBoylink}${data?.first_name}_AddressProof_${data?.video_url[0].name}`
-        } else {
-            data.video_url = ''
-        }
-        if (data?.profile_pic.length != 0) {
-            await ImageUpload(data?.profile_pic[0], "deliveryboy", "ProfileImage", data?.first_name)
-            data.profile_pic = `${deliveryBoylink}${data?.first_name}_ProfileImage_${data?.profile_pic[0].name}`
-        } else {
-            data.profile_pic = ''
-        }
+            if (data?.bank_passbook.length != 0) {
+                await ImageUpload(data?.bank_passbook[0], "deliveryboy", "BankPassbook", data?.first_name)
+                data.bank_passbook = `${deliveryBoylink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
+            } else {
+                data.bank_passbook = ''
+            }
+            if (data?.video_url.length != 0) {
+                await ImageUpload(data?.video_url[0], "deliveryboy", "AddressProof", data?.first_name)
+                data.video_url = `${deliveryBoylink}${data?.first_name}_AddressProof_${data?.video_url[0].name}`
+            } else {
+                data.video_url = ''
+            }
+            if (data?.profile_pic.length != 0) {
+                await ImageUpload(data?.profile_pic[0], "deliveryboy", "ProfileImage", data?.first_name)
+                data.profile_pic = `${deliveryBoylink}${data?.first_name}_ProfileImage_${data?.profile_pic[0].name}`
+            } else {
+                data.profile_pic = ''
+            }
         }
         if (props.button !== 'edit') {   // for create
             try {
                 // setLoader(true)
                 if (data.job_type === "Part Time (4-5 Hours/Day)") {
                     data.job_type = {
-                      subTitle: "4-5 hours per day",
-                      title: "Part Time"
+                        subTitle: "4-5 hours per day",
+                        title: "Part Time"
                     };
-                  } else if (data.job_type === "Full Time (9 Hours/Day)") {
+                } else if (data.job_type === "Full Time (9 Hours/Day)") {
                     data.job_type = {
-                      subTitle: "9 hours per day",
-                      title: "Full Time"
+                        subTitle: "9 hours per day",
+                        title: "Full Time"
                     };
                 }
                 if (data.shift === "Morning 9AM to Afternoon 1PM 4 Hours") {
                     data.shift = {
-                        "subTitle":"4 hours",
-                        "title":"Morning 9AM to Afternoon 1PM"
-                     };
-                    } else if (data.shift === "Afternoon 4PM to Evening 8PM 4 Hours") {
+                        "subTitle": "4 hours",
+                        "title": "Morning 9AM to Afternoon 1PM"
+                    };
+                } else if (data.shift === "Afternoon 4PM to Evening 8PM 4 Hours") {
                     data.shift = {
-                        "subTitle":"4 hours",
-                        "title":"Afternoon 4PM to Evening 8PM"
+                        "subTitle": "4 hours",
+                        "title": "Afternoon 4PM to Evening 8PM"
                     };
                 }
 
@@ -202,8 +202,8 @@ function AddDriverFrom(props) {
                     requestData = { ...data, ...additionalPayload };
                 } else if (LoggedUserDetails?.role === 'admin') {
                     requestData = { ...data };
-                } 
-                
+                }
+
                 const response = await createDeliveryBoy(requestData);
                 if (response?.message == "delivery boy added successfully") {
                     setTimeout(() => {
@@ -214,23 +214,23 @@ function AddDriverFrom(props) {
                         toast.success(response?.message);
                     }, 1000);
                 } else {
-                setLoader(false)
-                toast.error(response?.message);
-                // console.log('failed to create Delivery boy')
+                    setLoader(false)
+                    toast.error(response?.message);
+                    // console.log('failed to create Delivery boy')
                 }
             } catch (error) {
                 setLoader(false)
                 console.log('error', error);
             }
-            } else {            // for edit
+        } else {            // for edit
             setLoader(true)
             const response = await editUser(props?.data?.user?.id, data)
             if (response?.message == "franchise edited successfully") {
                 setTimeout(() => {
-                toggle();
-                setLoader(false)
-                fetchData()
-                toast.success(response?.message);
+                    toggle();
+                    setLoader(false)
+                    fetchData()
+                    toast.success(response?.message);
                 }, 1000);
             } else {
                 console.log('failed to update user')
@@ -345,7 +345,7 @@ function AddDriverFrom(props) {
                                             <div className="">
                                                 <h1 className='pt-4 mx-4 text-xl font-semibold text-gray-900 font-tbPop '>Basic Details:</h1>
                                                 <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-x-3 gap-y-3 ">
-                                              
+
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             First Name*
@@ -385,7 +385,7 @@ function AddDriverFrom(props) {
                                                         {errors.profile_pic && <Error title='Profile Image is required*' />}
                                                     </div>
                                                     {
-                                                    LoggedUserDetails?.role == 'admin' &&
+                                                        LoggedUserDetails?.role == 'admin' &&
                                                         <div className="">
                                                             <label className={labelClass}>Select Franchisee*</label>
                                                             <select
@@ -404,7 +404,7 @@ function AddDriverFrom(props) {
                                                             )}
                                                         </div>
                                                     }
-                                                    
+
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             Email*
@@ -432,13 +432,13 @@ function AddDriverFrom(props) {
                                                     <div className="">
                                                         <label className={labelClass}>Address*</label>
                                                         <input
-                                                        type="text"
-                                                        placeholder="Address"
-                                                        className={inputClass}
-                                                        {...register("address", { required: true })}
+                                                            type="text"
+                                                            placeholder="Address"
+                                                            className={inputClass}
+                                                            {...register("address", { required: true })}
                                                         />
                                                         {errors.address && (
-                                                        <Error title="Address is Required*" />
+                                                            <Error title="Address is Required*" />
                                                         )}
                                                     </div>
                                                     <div className="">
@@ -482,7 +482,7 @@ function AddDriverFrom(props) {
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                        Phone Number*
+                                                            Phone Number*
                                                         </label>
                                                         <input
                                                             type="number"
@@ -523,7 +523,7 @@ function AddDriverFrom(props) {
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                        Marital Status*
+                                                            Marital Status*
                                                         </label>
 
                                                         <select
@@ -537,7 +537,7 @@ function AddDriverFrom(props) {
                                                         {errors.marital_status && <Error title="Marital Status is required*" />}
                                                     </div>
                                                 </div>
-                                                
+
                                                 <h1 className='pt-4 mx-4 text-xl font-semibold text-gray-900 font-tbPop '>Additional Details:</h1>
                                                 <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-x-3 gap-y-3">
                                                     <div className="">
@@ -555,17 +555,17 @@ function AddDriverFrom(props) {
                                                     <div className="">
                                                         <label className={labelClass}>  Vehicle Type*</label>
                                                         <select
-                                                        className={inputClass}
-                                                        {...register("vehicle_type", { required: true })}
+                                                            className={inputClass}
+                                                            {...register("vehicle_type", { required: true })}
                                                         >
-                                                        <option value="" selected>--Select Type--</option>
-                                                        <option value="Cycle">Cycle</option>
-                                                        <option value="Bike">Bike</option>
-                                                        <option value="Electric Bike">Electric Bike</option>
-                                                        <option value="I don't own a vehicle">I don't own a vehicle</option>
+                                                            <option value="" selected>--Select Type--</option>
+                                                            <option value="Cycle">Cycle</option>
+                                                            <option value="Bike">Bike</option>
+                                                            <option value="Electric Bike">Electric Bike</option>
+                                                            <option value="I don't own a vehicle">I don't own a vehicle</option>
                                                         </select>
                                                         {errors.vehicle_type && (
-                                                        <Error title="Vehicle Type is Required*" />
+                                                            <Error title="Vehicle Type is Required*" />
                                                         )}
                                                     </div>
                                                     <div className="">
@@ -583,36 +583,36 @@ function AddDriverFrom(props) {
                                                     <div className="">
                                                         <label className={labelClass}>Job Type*</label>
                                                         <select
-                                                        className={inputClass}
-                                                        {...register("job_type", { required: true })}
+                                                            className={inputClass}
+                                                            {...register("job_type", { required: true })}
                                                         >
                                                             <option value="" selected>--Select Type--</option>
                                                             <option value="Part Time (4-5 Hours/Day)">Part Time (4-5 Hours/Day)</option>
                                                             <option value="Full Time (9 Hours/Day)">Full Time (9 Hours/Day)</option>
                                                         </select>
                                                         {errors.job_type && (
-                                                        <Error title="Job Type is Required*" />
+                                                            <Error title="Job Type is Required*" />
                                                         )}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>Select Shift*</label>
                                                         <select
-                                                        className={inputClass}
-                                                        {...register("shift", { required: true })}
+                                                            className={inputClass}
+                                                            {...register("shift", { required: true })}
                                                         >
                                                             <option value="" selected>--Select Type--</option>
                                                             <option value="Morning 9AM to Afternoon 1PM 4 Hours">Morning 9AM to Afternoon 1PM (4 Hours)</option>
                                                             <option value="Afternoon 4PM to Evening 8PM 4 Hours">Afternoon 4PM to Evening 8PM (4 Hours)</option>
                                                         </select>
                                                         {errors.shift && (
-                                                        <Error title="Shift Type is Required*" />
+                                                            <Error title="Shift Type is Required*" />
                                                         )}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>Select WeekOff*</label>
                                                         <select
-                                                        className={inputClass}
-                                                        {...register("week_off", { required: true })}
+                                                            className={inputClass}
+                                                            {...register("week_off", { required: true })}
                                                         >
                                                             <option value="" selected>--Select Type--</option>
                                                             <option value="Monday">Monday</option>
@@ -624,7 +624,7 @@ function AddDriverFrom(props) {
                                                             <option value="Sunday">Sunday</option>
                                                         </select>
                                                         {errors.shift && (
-                                                        <Error title="WeekOff is Required*" />
+                                                            <Error title="WeekOff is Required*" />
                                                         )}
                                                     </div>
                                                     <div className="">
@@ -640,13 +640,13 @@ function AddDriverFrom(props) {
                                                         />
                                                         {props?.button === 'edit' && props?.data.video_url && (
                                                             <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.data?.video_url?.name}
+                                                                {props?.data?.video_url?.name}
                                                             </label>
                                                         )}
                                                         {errors.video_url && <Error title='Video file is required*' />}
                                                     </div>
                                                 </div>
-                                                
+
                                                 <h1 className='pt-4 mx-4 text-xl font-semibold text-gray-900 font-tbPop '>Bank Details:</h1>
                                                 <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-x-3 gap-y-3">
                                                     <div className="">
@@ -687,7 +687,7 @@ function AddDriverFrom(props) {
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                           Bank Account Number*
+                                                            Bank Account Number*
                                                         </label>
                                                         <input
                                                             type="text"
@@ -708,7 +708,7 @@ function AddDriverFrom(props) {
                                                             {...register('ifsc_code', { required: true })}
                                                         />
                                                         {errors?.ifsc_code && <Error title='IFSC Code is required' />}
-                                                    </div>   
+                                                    </div>
                                                     <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Bank PassBook Image*</label>
                                                         <input className={fileinput}
