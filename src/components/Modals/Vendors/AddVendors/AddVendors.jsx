@@ -110,10 +110,11 @@ export default function AddVendors(props) {
                 const requestData = { ...data, ...additionalPayload };
 
                 const response = await CreateFranchiseeVendors(requestData)
-                if (response?.code == 2002) {
+                if (response?.message == "seller added successfully") {
                     setTimeout(() => {
                         dispatch(setFranchiseVendors(res));
                         reset();
+                        props?.FranchiseeVendors()
                         toggle(), setLoader(false), FranchiseeVendors();
                         toast.success(response?.Message);
                     }, 1000);
@@ -129,10 +130,11 @@ export default function AddVendors(props) {
         } else {                         // for edit
             setLoader(true)
             // const response = await editUser(props?.data?.id, data)
-            if (response) {
+            if (response?.message == "seller edited successfully") {
                 setTimeout(() => {
                     toggle();
                     setLoader(false)
+                    props?.FranchiseeVendors()
                     fetchData()
                     toast.success(response?.message);
                 }, 1000);

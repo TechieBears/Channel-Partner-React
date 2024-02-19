@@ -9,7 +9,7 @@ import Error from '../../Errors/Error';
 import { MultiSelect } from 'primereact/multiselect';
 import { Add, Edit } from 'iconsax-react';
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
-import { editVendorProduct, getAllSeller, getCategory, getSubCategory } from '../../../api';
+import { addProduct, editVendorProduct, getAllSeller, getCategory, getSubCategory } from '../../../api';
 import { toast } from 'react-toastify';
 import { ImageUpload, franchiselink } from '../../../env';
 

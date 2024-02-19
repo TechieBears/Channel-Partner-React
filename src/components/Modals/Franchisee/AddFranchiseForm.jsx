@@ -128,7 +128,7 @@ export default function AddFranchiseForm(props) {
       try {
         setLoader(true)
         const response = await CreateFranchisee(data);
-        if (response?.code == 2002) {
+        if (response?.message == "franchise added successfully") {
           setTimeout(() => {
             reset();
             setLoader(false)
