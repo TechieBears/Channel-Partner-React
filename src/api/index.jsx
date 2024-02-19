@@ -254,6 +254,18 @@ export const editfranchise = async (id, data) => {
     }
 };
 
+/* ============================ Create Rest ===================== */
+export const addRestaurant = async (data) => {
+    const url = `${environment.baseUrl}vendor/create_restaurant`;
+    try {
+        const response = await axios.post(url, data);
+        return response.data;
+    }
+    catch (err) {
+        console.log('error while creating restaurant')
+    }
+}
+
 
 /* ================== Get all Customers Api =========== */
 export const getAllCustomers = async () => {
