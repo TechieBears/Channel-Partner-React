@@ -36,7 +36,6 @@ export const getCategory = async () => {
     const url = `${environment.baseUrl}app/category-list`;
     try {
         const response = await axios.get(url)
-        console.log('category data == ', response.data.data);
         return response.data.data
     }
     catch (err) {

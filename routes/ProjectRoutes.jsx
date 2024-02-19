@@ -43,6 +43,7 @@ import ViewOrder from '../src/components/Modals/Vendors/ViewOrder';
 import ViewProduct from '../src/components/Modals/Vendors/ViewProduct';
 import Complaints from '../src/components/Modals/Complaints/Complaints';
 import FranchiseDetail from '../src/pages/Admin/Franchisees/FranchiseDetail';
+import DriverDetail from '../src/pages/Admin/Drivers/DriverDetail';
 
 
 
@@ -87,6 +88,7 @@ const ProjectRoutes = () => {
                                         <Route path="/DashboardAssets" element={<DashboardAssets />} />
                                         <Route path="/promotions" element={<Promotions />} />
                                         <Route path="/drivers" element={<Drivers />} />
+                                        <Route path="/drivers/driver-detail/:id" element={<DriverDetail />} />
                                         <Route path="/orders" element={<Order />} />
                                         <Route path="/banners" element={<Banner />} />
                                         <Route path="/user" element={<User />} />
@@ -111,6 +113,7 @@ const ProjectRoutes = () => {
                                             <Route path='/analytics' element={<FranchiseeDashboard />} />
                                             <Route path='/franchiesee-orders' element={<FranchiseeOrder />} />
                                             <Route path='/franchise-vendors' element={<FranchiseeVendors />} />
+                                            <Route path="/franchise-vendors/vendors-detail/:id" element={<VendorDetails />} />
                                             <Route path='/delivery' element={<DeliveryBoy />} />
                                         </>
                                             : ''}

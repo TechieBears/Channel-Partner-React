@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import LoadBox from '../../../components/Loader/LoadBox';
 import { formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
 import Error from '../../../components/Errors/Error';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Star, Star1, Trash } from 'iconsax-react';
 import { MultiSelect } from 'primereact/multiselect';
 import Switch from 'react-switch'
@@ -28,6 +28,8 @@ export default function VendorDetails() {
     const [saturdyaOn, setSaturdyaOn] = useState(true);
     const [sundayOn, setSundayOn] = useState(true);
     const [isRecommanded, setIsRecommanded] = useState(true);
+    const location = useLocation();
+    const data = location.state;
     const categories = ['Asian', 'Mexican', 'Italian', 'Russian cussion', 'Spanish', 'Comfort', 'American', 'North Indian', 'South Indian']
     const ratings = [
         {
@@ -97,7 +99,7 @@ export default function VendorDetails() {
                     <ArrowLeft className='text-white' /> Back
                 </button>
                 <img src={CoverPic} className='w-full h-60' alt='cover-pic' />
-                <img src={ProfilePic} alt='profile-pic' className='absolute w-1/12 border-4 rounded-full border-sky-400 left-14 bottom-1 top-44' />
+                <img src={data?.user?.profile_pic == null || data?.user?.profile_pic == undefined || data?.user?.profile_pic == '' ? ProfilePic : data?.user?.profile_pic } alt='profile-pic' className='absolute w-1/12 border-4 rounded-full border-sky-400 left-14 bottom-1 top-44' />
             </div>
             <div className='p-4 space-y-4'>
                 <div className='my-10'>
@@ -142,10 +144,100 @@ export default function VendorDetails() {
                         {/* ================= Vendor Details component ============== */}
                         <TabPanel>
                             <div className='mt-5'>
-                                <form onSubmit={handleSubmit(onSubmit)} className='space-y-4' >
+                                <div className='space-y-4' >
                                     <div className='p-2 border-2 border-gray-200'>
                                         <div className='flex justify-between mx-2'>
                                             <h4 className='text-xl font-semibold'>Personal Info.</h4>
+                                        </div>
+                                        <div className="p-4 overflow-y-scroll scrollbars " >
+                                            <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-2 gap-x-3 gap-y-3 customBox">
+                                                <div className="">
+                                                    <label className={labelClass}>
+                                                        Vendor ISB Code*
+                                                    </label>
+                                                    <h3
+                                                        className={inputClass}
+                                                    >{data?.isb_code}</h3>
+                                                </div>
+                                                <div className="">
+                                                    <label className={labelClass}>
+                                                        Vendor Name*
+                                                    </label>
+                                                    <h3
+                                                        className={inputClass}
+                                                    >{data?.user?.first_name} {data?.user?.last_name}</h3>
+                                                </div>
+                                                <div className="">
+                                                    <label className={labelClass}>
+                                                        Vendor Email*
+                                                    </label>
+                                                    <h3
+                                                        className={inputClass}
+                                                    >{data?.user?.email}</h3>
+                                                </div>
+                                                <div className="">
+                                                    <label className={labelClass}>
+                                                        Vendor Phone*
+                                                    </label>
+                                                    <h3
+                                                        className={inputClass}
+                                                    >{data?.user?.phone_no}</h3>
+                                                </div>
+                                                <div className="">
+                                                    <label className={labelClass}>
+                                                        Vendor Address*
+                                                    </label>
+                                                    <h3
+                                                        className={inputClass}
+                                                    >{data?.user?.address}</h3>
+                                                </div>
+                                                <div className="">
+                                                    <label className={labelClass}>
+                                                        PAN*
+                                                    </label>
+                                                    <h3
+                                                        className={inputClass}
+                                                    >{data?.pan_card}</h3>
+                                                </div>
+                                                <div className="">
+                                                    <label className={labelClass}>
+                                                        Bank Name*
+                                                    </label>
+                                                    <h3
+                                                        className={inputClass}
+                                                    >{data?.bank_name}</h3>
+                                                </div>
+                                                <div className="">
+                                                    <label className={labelClass}>
+                                                        Bank Account Number*
+                                                    </label>
+                                                    <h3
+                                                        className={inputClass}
+                                                    >{data?.account_number}</h3>
+                                                </div>
+                                                <div className="">
+                                                    <label className={labelClass}>
+                                                        IFSC Code*
+                                                    </label>
+                                                    <h3
+                                                        className={inputClass}
+                                                    >{data?.ifsc_code}</h3>
+                                                </div>
+                                                <div className="">
+                                                    <label className={labelClass}>
+                                                        GST Number*
+                                                    </label>
+                                                    <h3
+                                                        className={inputClass}
+                                                    >{data?.gst_number}</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div className='p-2 border-2 border-gray-200'>
+                                        <div className='flex justify-between mx-2'>
+                                            <h4 className='text-xl font-semibold'>Shop Info.</h4>
                                             <div className="flex items-center space-x-4">
                                                 <h6>Is Recommanded</h6>
                                                 <Switch checked={isRecommanded} onChange={() => setIsRecommanded(!isRecommanded)} />
@@ -156,51 +248,51 @@ export default function VendorDetails() {
                                             <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-2 gap-x-3 gap-y-3 customBox">
                                                 <div className="">
                                                     <label className={labelClass}>
-                                                        Vendor Name*
+                                                        Shop Name*
                                                     </label>
-                                                    <input
-                                                        type="text"
-                                                        placeholder='Vendor Name'
+                                                    <h3
                                                         className={inputClass}
-                                                        {...register('Vendor_name', { required: true })}
-                                                    />
-                                                    {errors.Vendor_name && <Error title='Vendor Name is Required*' />}
+                                                    >{data?.shop_name}</h3>
                                                 </div>
                                                 <div className="">
                                                     <label className={labelClass}>
-                                                        Vendor Email*
+                                                        Shop Opening Time*
                                                     </label>
-                                                    <input
-                                                        type="email"
-                                                        placeholder='Vendor Email'
+                                                    <h3
                                                         className={inputClass}
-                                                        {...register('Vendor_email', { required: true })}
-                                                    />
-                                                    {errors.Vendor_email && <Error title='Vendor Email is Required*' />}
+                                                    >{data?.shop_start_time}</h3>
+                                                </div>
+                                                <div className="">
+                                                    <label className={labelClass}>
+                                                        Shop Closing Time*
+                                                    </label>
+                                                    <h3
+                                                        className={inputClass}
+                                                    >{data?.shop_end_time}</h3>
+                                                </div>
+                                                <div className="">
+                                                    <label className={labelClass}>
+                                                        Shop Email*
+                                                    </label>
+                                                    <h3
+                                                        className={inputClass}
+                                                    >{data?.user?.email}</h3>
                                                 </div>
                                                 <div className="">
                                                     <label className={labelClass}>
                                                         Vendor Phone*
                                                     </label>
-                                                    <input
-                                                        type="tel"
-                                                        placeholder='Vendor Phone'
+                                                    <h3
                                                         className={inputClass}
-                                                        {...register('Vendor_phone', { required: true })}
-                                                    />
-                                                    {errors.Vendor_phone && <Error title='Vendor Phone is Required*' />}
+                                                    >{data?.user?.phone_no}</h3>
                                                 </div>
                                                 <div className="">
                                                     <label className={labelClass}>
                                                         Vendor Address*
                                                     </label>
-                                                    <input
-                                                        type="text"
-                                                        placeholder='Vendor Address'
+                                                                                                        <h3
                                                         className={inputClass}
-                                                        {...register('Vendor_address', { required: true })}
-                                                    />
-                                                    {errors.Vendor_address && <Error title='Vendor Address is Required*' />}
+                                                    >{data?.user?.address}</h3>
                                                 </div>
                                                 <div className="">
                                                     <label className={labelClass}>
@@ -243,14 +335,13 @@ export default function VendorDetails() {
                                                 </div>
                                                 <div className="">
                                                     <label className={labelClass}>
-                                                        License Number
+                                                       Fssai License Number
                                                     </label>
-                                                    <input
-                                                        type="text"
-                                                        placeholder='License Number'
+                                                    <h3
+
                                                         className={inputClass}
-                                                        {...register('license_number',)}
-                                                    />
+
+                                                    >{data?.fssai_license == null || data?.fssai_license == undefined || data?.fssai_license == '' ? '-----' : data?.fssai_license }</h3>
                                                 </div>
                                             </div>
                                         </div>
@@ -281,7 +372,7 @@ export default function VendorDetails() {
                                         {loader ? <LoadBox className="relative block w-auto px-5 transition-colors font-tb tracking-wide duration-200 py-2.5 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize" /> : <button type='submit' className={formBtn1}>Submit</button>}
                                         {/* <button type='button' className={formBtn2} onClick={closeBtn}>close</button> */}
                                     </footer>
-                                </form>
+                                </div>
                             </div>
                         </TabPanel>
                         {/* ================= Food Items component ============== */}

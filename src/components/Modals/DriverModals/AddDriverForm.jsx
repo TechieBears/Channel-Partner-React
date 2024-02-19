@@ -396,7 +396,7 @@ function AddDriverFrom(props) {
                                                                 {...register("franchisee_id", { required: true })}
                                                             >
                                                                 <option value="" selected>--Select Franchisee--</option>
-                                                                {Franchisee.map(franchisee => (
+                                                                {Franchisee?.map(franchisee => (
                                                                     <option key={franchisee?.user?.id} value={franchisee?.user?.id}>
                                                                         {franchisee?.user?.first_name + " (" + franchisee?.user?.pincode + ")"}
                                                                     </option>
@@ -506,7 +506,7 @@ function AddDriverFrom(props) {
                                                             className={inputClass}
                                                             {...register('date_of_birth', { required: true, })}
                                                         />
-                                                        
+
                                                         {errors.date_of_birth && <Error title="Date Of Birth is required*" />}
                                                     </div>
                                                     <div className="">

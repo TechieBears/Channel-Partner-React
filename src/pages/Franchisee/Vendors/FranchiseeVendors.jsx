@@ -1,59 +1,42 @@
 import React, { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form';
 import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
-import { Add, Refresh, SearchNormal } from 'iconsax-react';
 import Table from '../../../components/Table/Table';
-import AddRestaurant from '../../../components/Modals/Resturant/AddRestaurant';
-import { NavLink } from 'react-router-dom';
 import Switch from 'react-switch'
 import AddVendors from '../../../components/Modals/Vendors/AddVendors/AddVendors';
-import AddVendorShops from '../../../components/Modals/Vendors/AddVendors/AddVendorShops';
 import { GetFranchiseeVendors } from "../../../api";
 import { setFranchiseVendors } from "../../../redux/Slices/masterSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import axios from 'axios';
+import { setUserList } from '../../../redux/Slices/userSlice';
+import { toast } from 'react-toastify';
+import { Eye } from 'iconsax-react';
+import { Link } from 'react-router-dom';
 
 function FranchiseeVendors() {
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-        reset
-    } = useForm();
-    // const FranchiseVendors = useSelector((state) => state?.master?.FranchiseVendors);
-    const FranchiseVendors = [
-        {
-            id: 1,
-            first_name: "John Doe",
-            address: "123 Main St",
-            pincode: "12345",
-            phone_no: "555-123-4567",
-            email: "john@example.com",
-            status: true,
-        },
-        {
-            id: 2,
-            first_name: "Jane Smith",
-            address: "456 Elm St",
-            pincode: "67890",
-            phone_no: "555-987-6543",
-            email: "jane@example.com",
-            status: false,
-        },
-        {
-            id: 3,
-            first_name: "Alice Johnson",
-            address: "789 Oak St",
-            pincode: "54321",
-            phone_no: "555-555-5555",
-            email: "alice@example.com",
-            status: true,
-        }
-        // Add more fake data objects as needed
-    ];
-    const [activeTab, setActiveTab] = useState(0);
+    const [activeTab, setActiveTab] = useState(true);
     const [rstatus, setStatus] = useState();
+
+    const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const dispatch = useDispatch()
+    const Vendors = useSelector((state) => state?.master?.FranchiseVendors);
+    // console.log('Admin Vendors = ', Vendors);
+
+    // // ========================= fetch data from api ==============================
+    const FranchiseeVendors = () => {
+        try {
+            GetFranchiseeVendors().then((res) => {
+                // console.log('vendors data = ', res);
+                dispatch(setFranchiseVendors(res));
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        FranchiseeVendors()
+    }, [])
 
 
     const changeTab = (tabNumber) => {
@@ -74,53 +57,92 @@ function FranchiseeVendors() {
     }
 
 
-    // ========================= fetch data from api ==============================
-    const FranchiseeVendors = () => {
-        try {
-            GetFranchiseeVendors().then((res) => {
-                console.log('vendors data = ', res.data);
-                dispatch(setFranchiseVendors(res.data));
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    };
 
-    useEffect(() => {
-        FranchiseeVendors()
-    }, [])
+    // =============================== verify user switch =============================
+    const switchVerify = (row) => {
+        return (
+            <div className="flex items-center justify-center gap-2 ">
+                <Switch
+                    value={row?.isverify}
+                    onChange={() => verifyActions(row)}
+                    size={50}
+                    backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
+                    borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
+            </div>
+        )
+    }
+
+
+    // =============================== active user switch =============================
+    const switchActive = (row) => {
+        return (
+            <div className="flex items-center justify-center gap-2 ">
+                <Switch
+                    value={row?.isactive}
+                    onChange={() => activeActions(row)}
+                    size={50}
+                    backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
+                    borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
+            </div>
+        )
+    }
+
+    // =================== table action ========================
+    const actionBodyTemplate = (row) => (
+        <div className="flex items-center gap-2">
+            <Link to={`/franchise-vendors/vendors-detail/${row.id}`} state={row} className="bg-green-100 px-1.5 py-2 rounded-sm">
+                <Eye size="18" className='text-green-500' />
+            </Link>
+            <AddVendors button='edit' title='Edit User' data={row} FranchiseeVendors={FranchiseeVendors}/>
+        </div>
+    );
 
 
     // =================== table user profile column ========================
-    // const representativeBodyTemplate = (row) => {
-    //     return (
-    //         <div className="rounded-full w-11 h-11">
-    //             <img src={row?.profile == null || row?.profile == '' || row?.profile == undefined ? userImg : row?.profile} className="object-cover w-full h-full rounded-full" alt={row.first_name} />
-    //         </div>
-    //     );
-    // };
+    const representativeBodyTemplate = (row) => {
+        return (
+            <div className="rounded-full w-11 h-11">
+                <img src={row?.user?.profile_pic == null || row?.user?.profile_pic == '' || row?.user?.profile_pic == undefined ? userImg : row?.user?.profile_pic} className="object-cover w-full h-full rounded-full" alt={row?.user?.first_name} />
+            </div>
+        );
+    };
 
-    //=============== Table Columns =============================
+
+    // =================== table user verify column  ========================
+    const activeActionsRole = (rowData) => (
+        <h6 className={`${rowData?.isactive !== "false" ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"} py-2 px-5 text-center capitalize rounded-full`}>
+            {rowData?.isactive !== "false" ? "Active" : "Inactive"}
+        </h6>
+    );
+
+
+
+
+    /*================================     column    ========================= */
+
     // const status = (row) => <Switch checked={row?.id == rstatus ? true : false} onChange={() => setStatus(row?.id)} />
-    const status = (row) => <Switch checked={row?.status} onChange={() => setStatus(row?.id)} />
+    const status = (row) => <Switch checked={row?.id == rstatus ? true : false} onChange={() => setStatus(row?.id)} />
     const action = (row) => <button className={`${tableBtn}`} >
         View Analysis
     </button>
+
     const columns = [
-        { field: 'id', header: 'ID', sortable: false },
-        // { field: 'profile', header: 'Profile', body: representativeBodyTemplate, sortable: true, style: true },
-        { field: 'profile_pic', header: 'Image', sortable: false },
-        { field: 'first_name', body: (row) => <div className="capitalize">{row.first_name + " " + row.last_name}</div>, header: 'Name' },
-        { field: 'email', header: 'Email', sortable: false },
-        { field: 'phone_no', header: 'Phone No', sortable: false },
-        { field: 'pincode', header: 'Pincode', sortable: false },
-        { field: 'address', header: 'Address', sortable: false },
-        { field: 'status', header: 'Status', body: status, sortable: false },
-        { field: 'action', header: 'Action', body: action, sortable: false },
+        // { field: 'id', header: 'ID', sortable: false },
+        { field: 'profile_pic', header: 'Profile', body: representativeBodyTemplate, sortable: false, style: true },
+        { field: 'first_name', body: (row) => <div className="capitalize">{row?.user?.first_name + " " + row?.user?.last_name}</div>, header: 'Name' },
+        { field: 'email', header: 'Email', body: (row) => <h6>{row?.user?.email}</h6>, sortable: false },
+        { field: 'phone_no', header: 'Phone No', body: (row) => <h6>{row?.user?.phone_no}</h6>, sortable: false },
+        { field: 'pincode', header: 'Pincode', body: (row) => <h6>{row?.user?.pincode}</h6>, sortable: false },
+        { field: 'state', header: 'state', body: (row) => <h6>{row?.user?.state}</h6>, sortable: false },
+        { field: 'city', header: 'city', body: (row) => <h6>{row?.user?.city}</h6>, sortable: false },
+        { field: 'registration_date', header: 'Registration Date', body: (row) => <h6>{row?.user?.registration_date}</h6>, sortable: false },
+        { field: 'status', header: 'Status', body: activeActionsRole, sortable: false },
+        { field: 'id', header: 'Action', body: actionBodyTemplate, sortable: true },
+        { header: 'Analyse', body: action, sortable: false },
     ]
     return (
-        <div className='p-4 space-y-4'>
-            {/* ========================= user fileter ======================= */}
+        <>
+            {/* ========================= user filter ======================= */}
             <div className="p-4 bg-white sm:m-5 rounded-xl" >
                 <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2 md:items-center lg:flex-row'>
                     <div className="grid w-full grid-cols-1 sm:grid-cols-4 gap-y-3 gap-x-2">
@@ -177,37 +199,29 @@ function FranchiseeVendors() {
                     </div>
                 </form>
             </div>
+            {/* ========================= user filter ======================= */}
 
-            <Tabs
-                selectedIndex={activeTab}
-                onSelect={(index) => changeTab(index)}
-            >
-                <TabList className="flex justify-between space-x-4 border-b">
-                    <Tab
-                        className={`p-3 cursor-pointer font-tbPop font-medium   ${activeTab === 0
-                            ? "text-sky-500  border-b-2 border-sky-400 outline-0"
-                            : "text-gray-500 border-b"
-                            }`}
-                    >
-                        Registered
-                    </Tab>
-                    {activeTab == 0 && <div className='col-span-2'>
-                        <AddVendors title='Add Vendors' />
-                    </div>}
-                </TabList>
-                {/* ================= Vendor Details component ============== */}
-                <TabPanel className='mt-5'>
-                    <div className='bg-white p-2 rounded-xl space-y-4'>
-                        <div className='flex items-center justify-between p-2'>
-                            <p className='font-semibold ml-2 text-xl '>Vendors List</p>
-                            {/* <AddVendors title='Add Vendor' /> */}
-                        </div>
-                        <Table columns={columns} data={FranchiseVendors} />
+
+            {/*====================== User Table ================================*/}
+            <div className="p-4 bg-white sm:m-5 rounded-xl" >
+                <div className="flex flex-col items-start justify-between mb-6 sm:flex-row sm:items-center sm:space-y-0">
+                    <div className="">
+                        <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>  Vendor Details</h1>
                     </div>
-                </TabPanel>
+                    <AddVendors title='Add Vendors' FranchiseeVendors={FranchiseeVendors}  />
+                </div>
+                {/* {
+                    Vendors?.legth > 0 && <Table data={Vendors} columns={columns} />
+                } */}
+                {
+                    <Table data={Vendors} columns={columns} />
+                }
 
-            </Tabs>
-        </div>
+            </div>
+
+
+            {/*====================== User Table ================================*/}
+        </>
     )
 }
 

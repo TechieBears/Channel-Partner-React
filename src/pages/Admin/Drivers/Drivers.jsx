@@ -37,7 +37,7 @@ function Drivers() {
     console.log('DeliveryList Table data = ', DeliveryList?.data);
 
 
-    
+
     // =================== filter data ========================
     const onSubmit = async (data) => {
         if (data?.name != '' || data?.email != '' || data?.city != '' || data?.role != '') {
@@ -66,7 +66,7 @@ function Drivers() {
     useEffect(() => {
         DeliveryBoyDetails()
     }, [])
-    
+
 
     // =================== delete the user data ========================
     const toggleModalBtn = (id) => {
@@ -89,7 +89,7 @@ function Drivers() {
     // =================== table action ========================
     const actionBodyTemplate = (row) => (
         <div className="flex items-center gap-2">
-            <Link to={`/user/${row.id}`} state={row} className="bg-green-100 px-1.5 py-2 rounded-sm">
+            <Link to={`/drivers/driver-detail/${row.id}`} state={row} className="bg-green-100 px-1.5 py-2 rounded-sm">
                 <Eye size="20" className='text-green-500' />
             </Link>
             <AddDriverFrom button='edit' title='Edit User' data={row} DeliveryBoyDetails={DeliveryBoyDetails} />
@@ -222,7 +222,7 @@ function Drivers() {
         // { header: 'Analyse', body: action, sortable: false },
     ]
 
- 
+
 
     return (
         <>
@@ -232,7 +232,7 @@ function Drivers() {
                 toggleModalBtn={toggleModalBtn}
                 description="Are you sure you want to delete this User" open={open}
             />
-            
+
             {/* ========================= user fileter ======================= */}
             <div className="p-4 bg-white sm:m-5 rounded-xl" >
                 <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2 md:items-center lg:flex-row'>
@@ -286,7 +286,7 @@ function Drivers() {
                     </div>
                     <div className='flex gap-4'>
                         {/* <DriverTipForm title='Driver Tip'/> */}
-                        <AddDriverFrom title='Add Driver' DeliveryBoyDetails={DeliveryBoyDetails}/>
+                        <AddDriverFrom title='Add Driver' DeliveryBoyDetails={DeliveryBoyDetails} />
                     </div>
                 </div>
                 <Table data={DeliveryList?.data} columns={columns} />
