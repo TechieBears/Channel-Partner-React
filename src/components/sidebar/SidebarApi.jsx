@@ -148,6 +148,11 @@ export const Franchise = [
         link: '/franchise-vendors',
     },
     {
+        title: 'Resturants',
+        icon: <ChefHat />,
+        link: '/franchise-resturants',
+    },
+    {
         title: 'Delivery Boys',
         icon: <Wallet size="24" />,
         link: '/delivery',

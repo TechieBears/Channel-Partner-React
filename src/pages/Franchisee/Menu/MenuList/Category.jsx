@@ -9,6 +9,7 @@ import { NavLink } from "react-router-dom";
 
 const Category = () => {
   const category = useSelector((state) => state?.master?.Category);
+  // console.log('category = ', category)
   const dispatch = useDispatch();
 
   // ============== fetch data from api ================

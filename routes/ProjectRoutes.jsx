@@ -45,6 +45,7 @@ import Complaints from '../src/components/Modals/Complaints/Complaints';
 import FranchiseDetail from '../src/pages/Admin/Franchisees/FranchiseDetail';
 import DriverDetail from '../src/pages/Admin/Drivers/DriverDetail';
 import FranchiseMenu from '../src/pages/Franchisee/Menu/Menu';
+import FranchiseRestaurent from '../src/pages/Franchisee/Resturants/Resturant';
 
 
 
@@ -115,6 +116,7 @@ const ProjectRoutes = () => {
                                             <Route path='/menu' element={<FranchiseMenu />} />
                                             <Route path='/franchiesee-orders' element={<FranchiseeOrder />} />
                                             <Route path='/franchise-vendors' element={<FranchiseeVendors />} />
+                                            <Route path='/franchise-resturants' element={<FranchiseRestaurent />} />
                                             <Route path="/franchise-vendors/vendors-detail/:id" element={<VendorDetails />} />
                                             <Route path='/delivery' element={<DeliveryBoy />} />
                                         </>

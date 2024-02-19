@@ -5,9 +5,15 @@ import Table from "../../../../components/Table/Table";
 import { useDispatch, useSelector } from "react-redux";
 import { setSubCategory, setCategory } from "../../../../redux/Slices/masterSlice";
 import { deleteSubCategory, getSubCategory, getCategory } from "../../../../api";
+import Switch from 'react-js-switch';
+
 
 const SubCategory = () => {
   const subcategory = useSelector((state) => state?.master?.SubCategory);
+  const category = useSelector((state) => state?.master?.Category);
+  console.log('category = ', category)
+
+
   const dispatch = useDispatch();
 
   // ============== fetch data from api ================
@@ -70,22 +76,77 @@ const SubCategory = () => {
     </div>
   );
 
+  const verifyActions = (row) => {
+    const payload = { userId: row?.user?.id, isverifiedbyadmin: row?.user?.isverified_byadmin, isverifiedbyfranchise: !row?.isverifiedbyfranchise }
+    // try {
+    //     verifyDeliveryBoy(payload).then((form) => {
+    //         console.log(payload)
+    //         if (form.message == "delivery boy verified successfully") {
+    //             toast.success('Driver Verification Changed !');
+    //             DeliveryBoyDetails()
+    //         }
+    //         else {
+    //             console.log("err");
+    //         }
+    //     })
+    // }
+    // catch (err) {
+    //     console.log(err);
+    // }
+}
+
+
+// =============================== verify user switch =============================
+const switchVerify = (row) => {
+    return (
+        <div className="flex items-center justify-center gap-2 ">
+            <Switch
+                value={row?.isverifiedbyfranchise}
+                onChange={() => verifyActions(row)}
+                size={50}
+                backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
+                borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
+        </div>
+    )
+}
+// =============================== active user switch =============================
+const switchActive = (row) => {
+    return (
+        <div className="flex items-center justify-center gap-2">
+            <Switch
+                value={row?.user?.isverified_byadmin}
+                disabled={true}
+                // onChange={() => activeActions(row)}
+                size={50}
+                backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
+                borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
+        </div>
+    )
+}
+
+    // =================== table user profile column ========================
+    const representativeBodyTemplate = (row) => {
+      return (
+          <div className="rounded-full w-14 h-14">
+              <img src={row?.subcat_image} className="object-cover w-full h-full rounded-full" alt={row?.subcat_name} />
+          </div>
+      );
+  };
+
+
   // ================= columns of the table ===============
-  const columns = [
-    {
-      field: "subcat_image",
-      header: "Image",
-      body: imageBodyTemp,
-      style: true,
-    },
-    { field: "subcat_name", header: "Name" },
-    {
-      field: "subcat_id",
-      header: "Action",
-      body: actionBodyTemplate,
-      sortable: true,
-    },
-  ];
+       // ======================= Table Column Definitions =========================
+       const columns = [
+        { field: 'subcat_image', header: 'Image', body: representativeBodyTemplate, sortable: true, style: true },
+        { field: 'subcat_name', header: 'Name', sortable: true },
+        { field: 'category', header: 'Category',  body: rowData => {
+          const matchingCategory = category.find(category => category.id === rowData.category);
+          return matchingCategory ? matchingCategory.category_name : '';
+        }},
+        { field: 'isactive', header: 'Active', body: switchActive, sortable: true },
+        { field: 'isverify', header: 'Verify', body: switchVerify, sortable: true },
+    ];
+
 
   return (
     <>
