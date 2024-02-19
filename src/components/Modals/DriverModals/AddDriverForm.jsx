@@ -18,13 +18,15 @@ import { GetFranchisee } from "../../../api";
 
 
 function AddDriverFrom(props) {
+    // console.log('props = ', props);
+
     const [isOpen, setIsOpen] = useState(false);
     const [loader, setLoader] = useState(false);
     const getFranchiseDetail = useSelector((state) => state?.user?.FranchiseeDetails);
-    console.log('getFranchiseDetail', getFranchiseDetail)
+    // console.log('getFranchiseDetail', getFranchiseDetail)
 
     const Franchisee = useSelector((state) => state?.master?.Franchise);
-    console.log('franchisee Table data = ', Franchisee);
+    // console.log('franchisee Table data = ', Franchisee);
 
     // const RoleIs = useSelector((state) => state?.user?.roleIs);
     // console.log('RoleIs = ', RoleIs);
@@ -49,7 +51,6 @@ function AddDriverFrom(props) {
     useEffect(() => {
         FranchiseeDetails()
     }, [])
-
 
 
     const handleFileChange = (event) => {
@@ -128,6 +129,7 @@ function AddDriverFrom(props) {
 
     // ============================= form submiting ======================================
     const onSubmit = async (data) => {
+        console.log(data)
         setLoader(true)
 
         console.log(data)
@@ -171,7 +173,7 @@ function AddDriverFrom(props) {
                 data.profile_pic = ''
             }
         }
-        if (props.button !== 'edit') {   // for create
+        if (props.button != 'edit') {   // for create
             try {
                 // setLoader(true)
                 if (data.job_type === "Part Time (4-5 Hours/Day)") {
@@ -197,10 +199,11 @@ function AddDriverFrom(props) {
                     };
                 }
 
-                if (LoggedUserDetails?.role === 'franchise') {
+                let requestData;
+                if (LoggedUserDetails?.role == 'franchise') {
                     const additionalPayload = { created_by: user?.user?.id };
                     requestData = { ...data, ...additionalPayload };
-                } else if (LoggedUserDetails?.role === 'admin') {
+                } else if (LoggedUserDetails?.role == 'admin') {
                     requestData = { ...data };
                 }
 
@@ -503,6 +506,7 @@ function AddDriverFrom(props) {
                                                             className={inputClass}
                                                             {...register('date_of_birth', { required: true, })}
                                                         />
+
                                                         {errors.date_of_birth && <Error title="Date Of Birth is required*" />}
                                                     </div>
                                                     <div className="">
