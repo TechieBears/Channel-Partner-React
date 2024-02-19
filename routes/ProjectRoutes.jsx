@@ -120,8 +120,8 @@ const ProjectRoutes = () => {
                 </>
                 :
                 <Routes>
-                    <Route path="/" element={<Login />} />
-                    <Route path="/seller" element={<SellerLogin />} />
+                    <Route path="/admin" element={<Login />} />
+                    <Route path="/" element={<SellerLogin />} />
                 </Routes>
             }
             <ToastContainer position="top-right"

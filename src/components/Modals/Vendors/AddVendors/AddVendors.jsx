@@ -8,7 +8,7 @@ import Error from '../../../Errors/Error';
 import { MultiSelect } from 'primereact/multiselect';
 import { Add, Edit } from 'iconsax-react';
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../../utils/CustomClass';
-import { GetFranchiseeVendors, CreateFranchiseeVendors } from "../../../../api";
+import { GetFranchiseeVendors, CreateFranchiseeVendors, EditFranchiseeVendors } from "../../../../api";
 import { setFranchiseVendors } from "../../../../redux/Slices/masterSlice";
 import { setLoggedUser, setLoggedUserDetails, setRoleIs, setFranchiseeDetails } from '../../../../redux/Slices/loginSlice';
 import { useDispatch, useSelector } from "react-redux";
@@ -127,22 +127,29 @@ export default function AddVendors(props) {
                 setLoader(false)
                 console.log('error', error);
             }
-        } else {                         // for edit
-            setLoader(true)
-            // const response = await editUser(props?.data?.id, data)
-            if (response?.message == "seller edited successfully") {
-                setTimeout(() => {
-                    toggle();
-                    setLoader(false)
-                    props?.FranchiseeVendors()
-                    fetchData()
-                    toast.success(response?.message);
-                }, 1000);
-            } else {
-                console.log('failed to update user')
+        } else {           
+            try {      // for edit
+                setLoader(true)
+                const response = await EditFranchiseeVendors(props?.data?.user?.id, data)
+                    if (response?.message == "seller edited successfully") {
+                        setTimeout(() => {
+                            toggle();
+                            setLoader(false)
+                            props?.FranchiseeVendors()
+                            fetchData()
+                            toast.success(response?.message);
+                        }, 1000);
+                    } else {
+                        console.log('failed to update user')
+                    }
+                }
+             catch (error) {
+                setLoader(false)
+                console.log('error', error);
             }
         }
     }
+   
 
 
     // ======================== Reset data into the form  =======================
@@ -274,8 +281,8 @@ export default function AddVendors(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("profile_pic", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data.profile_pic != '' && props?.data.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.data?.profile_pic?.split('/').pop()}
+                                                        {props?.button == 'edit' && props?.data?.user?.profile_pic != '' && props?.data?.user?.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.data?.user?.profile_pic?.split('/').pop()}
                                                         </label>}
                                                         {errors.profile_pic && <Error title='Profile Image is required*' />}
                                                     </div>

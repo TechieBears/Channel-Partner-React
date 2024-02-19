@@ -7,7 +7,7 @@ import { setLoggedUser, setLoggedUserDetails, setRoleIs, setFranchiseeDetails } 
 import LoadBox from '../../components/Loader/LoadBox';
 import { toast } from 'react-toastify';
 import Error from '../../components/Errors/Error';
-import { login , getFranchiseDetails} from '../../api/index';
+import { vendorlogin , getFranchiseDetails} from '../../api/index';
 import { useDispatch, useSelector } from "react-redux";
 
 
@@ -34,7 +34,7 @@ const SellerLogin = () => {
     const onSubmit = async (data) => {
         try {
             setLoader(true)
-            await login(data).then((res) => {
+            await vendorlogin(data).then((res) => {
                 console.log("🚀 ~ awaitlogin ~ res:", res)
                 if (res.message == "Successfully logged in") {
                     document.title = `Insta Smart Bazzar Admin Dashbaord | ${res?.role?.charAt(0)?.toUpperCase() + res?.role?.slice(1)}`
@@ -143,7 +143,7 @@ const SellerLogin = () => {
                                     {errors.password && <p className='text-xs text-red-500'>Password is required*</p>}
                                 </div>
                             </div>
-                            {/* <div>
+                            <div>
                                 <label htmlFor="email" className="block text-base font-medium leading-6 text-gray-500 font-tbPop">
                                     ISB*
                                 </label>
@@ -153,14 +153,14 @@ const SellerLogin = () => {
                                         name="isb"
                                         type="text"
                                         placeholder='ISB Code'
-                                        autoComplete="isb"
+                                        autoComplete="isb_code"
                                         required
                                         className={`${inputClass} bg-neutral-100 border border-gray-200/50`}
-                                        {...register('isb', { required: true })}
+                                        {...register('isb_code', { required: true })}
                                     />
-                                    {errors.isb && <Error title={'ISB code is required*'} />}
+                                    {errors.isb_code && <Error title={'ISB code is required*'} />}
                                 </div>
-                            </div> */}
+                            </div>
                             <div className='pt-3'>
                                 {loader ? <LoadBox /> : <button
                                     type="submit"
