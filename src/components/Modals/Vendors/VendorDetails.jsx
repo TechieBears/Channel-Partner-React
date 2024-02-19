@@ -30,7 +30,6 @@ export default function VendorDetails() {
     const [isRecommanded, setIsRecommanded] = useState(true);
     const location = useLocation();
     const data = location.state;
-    console.log('dataaaaaaaaaaaaaaaaaaaa', data);
     const categories = ['Asian', 'Mexican', 'Italian', 'Russian cussion', 'Spanish', 'Comfort', 'American', 'North Indian', 'South Indian']
     const ratings = [
         {
@@ -147,6 +146,9 @@ export default function VendorDetails() {
                             <div className='mt-5'>
                                 <div className='space-y-4' >
                                     <div className='p-2 border-2 border-gray-200'>
+                                        <div className='flex justify-between mx-2'>
+                                            <h4 className='text-xl font-semibold'>Personal Info.</h4>
+                                        </div>
                                         <div className="p-4 overflow-y-scroll scrollbars " >
                                             <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-2 gap-x-3 gap-y-3 customBox">
                                                 <div className="">
@@ -185,9 +187,49 @@ export default function VendorDetails() {
                                                     <label className={labelClass}>
                                                         Vendor Address*
                                                     </label>
-                                                                                                        <h3
+                                                    <h3
                                                         className={inputClass}
                                                     >{data?.user?.address}</h3>
+                                                </div>
+                                                <div className="">
+                                                    <label className={labelClass}>
+                                                        PAN*
+                                                    </label>
+                                                    <h3
+                                                        className={inputClass}
+                                                    >{data?.pan_card}</h3>
+                                                </div>
+                                                <div className="">
+                                                    <label className={labelClass}>
+                                                        Bank Name*
+                                                    </label>
+                                                    <h3
+                                                        className={inputClass}
+                                                    >{data?.bank_name}</h3>
+                                                </div>
+                                                <div className="">
+                                                    <label className={labelClass}>
+                                                        Bank Account Number*
+                                                    </label>
+                                                    <h3
+                                                        className={inputClass}
+                                                    >{data?.account_number}</h3>
+                                                </div>
+                                                <div className="">
+                                                    <label className={labelClass}>
+                                                        IFSC Code*
+                                                    </label>
+                                                    <h3
+                                                        className={inputClass}
+                                                    >{data?.ifsc_code}</h3>
+                                                </div>
+                                                <div className="">
+                                                    <label className={labelClass}>
+                                                        GST Number*
+                                                    </label>
+                                                    <h3
+                                                        className={inputClass}
+                                                    >{data?.gst_number}</h3>
                                                 </div>
                                             </div>
                                         </div>
@@ -214,7 +256,23 @@ export default function VendorDetails() {
                                                 </div>
                                                 <div className="">
                                                     <label className={labelClass}>
-                                                        Vendor Email*
+                                                        Shop Opening Time*
+                                                    </label>
+                                                    <h3
+                                                        className={inputClass}
+                                                    >{data?.shop_start_time}</h3>
+                                                </div>
+                                                <div className="">
+                                                    <label className={labelClass}>
+                                                        Shop Closing Time*
+                                                    </label>
+                                                    <h3
+                                                        className={inputClass}
+                                                    >{data?.shop_end_time}</h3>
+                                                </div>
+                                                <div className="">
+                                                    <label className={labelClass}>
+                                                        Shop Email*
                                                     </label>
                                                     <h3
                                                         className={inputClass}
