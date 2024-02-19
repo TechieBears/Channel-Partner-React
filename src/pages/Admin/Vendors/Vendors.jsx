@@ -4,7 +4,7 @@ import { Add, Refresh, SearchNormal } from 'iconsax-react';
 import Table from '../../../components/Table/Table';
 import AddRestaurant from '../../../components/Modals/Resturant/AddRestaurant';
 import { NavLink, Link } from 'react-router-dom';
-import Switch from 'react-switch'
+import Switch from 'react-js-switch';
 import AddVendors from '../../../components/Modals/Vendors/AddVendors/AddVendors';
 import AddVendorShops from '../../../components/Modals/Vendors/AddVendors/AddVendorShops';
 import { useForm } from 'react-hook-form';
@@ -62,14 +62,65 @@ function Vendors() {
         }
     }
 
+    // =================== table user active column ========================
 
+    const activeActions = (row) => {
+        const payload = { isactive: !row.isactive, email: row?.email }
+        try {
+            editUser(row?.id, payload).then((form) => {
+                if (form.code == 2002) {
+                    toast.success('User Active Changed !');
+                    DeliveryBoyDetails()
+                }
+                else {
+                    console.log("err");
+                }
+            })
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
+    const verifyActions = (row) => {
+        const payload = { isverify: !row.isverify, email: row?.email }
+        try {
+            editUser(row?.id, payload).then((form) => {
+                if (form.code == 2002) {
+                    toast.success('User Verify Changed !');
+                    DeliveryBoyDetails()
+                }
+                else {
+                    console.log("err");
+                }
+            })
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
+    // =============================== active user switch =============================
+    const switchActive = (row) => {
+        return (
+            <div className="flex items-center justify-center gap-2">
+                <Switch
+                    value={row?.isverified_byadmin}
+                    disabled={true}
+                    onChange={() => activeActions(row)}
+                    size={50}
+                    backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
+                    borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
+            </div>
+        )
+    }
 
     // =============================== verify user switch =============================
     const switchVerify = (row) => {
         return (
             <div className="flex items-center justify-center gap-2 ">
                 <Switch
-                    value={row?.isverify}
+                    value={row?.user?.isverified_byadmin}
                     onChange={() => verifyActions(row)}
                     size={50}
                     backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
@@ -78,20 +129,6 @@ function Vendors() {
         )
     }
 
-
-    // =============================== active user switch =============================
-    const switchActive = (row) => {
-        return (
-            <div className="flex items-center justify-center gap-2 ">
-                <Switch
-                    value={row?.isactive}
-                    onChange={() => activeActions(row)}
-                    size={50}
-                    backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
-                    borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
-            </div>
-        )
-    }
 
     // =================== table action ========================
     const actionBodyTemplate = (row) => (
@@ -144,7 +181,9 @@ function Vendors() {
         { field: 'registration_date', header: 'Registration Date', body: (row) => <h6>{row?.user?.registration_date}</h6>, sortable: false },
         { field: 'status', header: 'Status', body: activeActionsRole, sortable: false },
         { field: 'id', header: 'Action', body: actionBodyTemplate, sortable: true },
-        { header: 'Analyse', body: action, sortable: false },
+        { field: 'isactive', header: 'Franchise Verify', body: switchActive, sortable: true },
+        { field: 'isverify', header: 'Admin Verify', body: switchVerify, sortable: true },
+        // { header: 'Analyse', body: action, sortable: false },
     ]
 
 

@@ -185,7 +185,7 @@ function User() {
         { field: 'role', header: 'Role', body: activeActionsRole },
         { field: 'id', header: 'Action', body: actionBodyTemplate, sortable: true },
         { field: 'isactive', header: 'Active', body: switchActive, sortable: true },
-        { field: 'isverify', header: 'Verify', body: switchVerify, sortable: true },
+        // { field: 'isverify', header: 'Verify', body: switchVerify, sortable: true },
     ];
 
     useEffect(() => {

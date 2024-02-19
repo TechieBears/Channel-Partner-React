@@ -171,20 +171,7 @@ function Drivers() {
         View Analysis
     </button>
 
-    
-    // =============================== verify user switch =============================
-    const switchVerify = (row) => {
-        return (
-            <div className="flex items-center justify-center gap-2 ">
-                <Switch
-                    value={row?.isactive}
-                    onChange={() => verifyActions(row)}
-                    size={50}
-                    backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
-                    borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
-            </div>
-        )
-    }
+
     // =============================== active user switch =============================
     const switchActive = (row) => {
         return (
@@ -199,6 +186,22 @@ function Drivers() {
             </div>
         )
     }
+
+    
+    // =============================== verify user switch =============================
+    const switchVerify = (row) => {
+        return (
+            <div className="flex items-center justify-center gap-2 ">
+                <Switch
+                    value={row?.isactive}
+                    onChange={() => verifyActions(row)}
+                    size={50}
+                    backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
+                    borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
+            </div>
+        )
+    }
+
 
     const columns = [
         // { field: 'id', header: 'ID', sortable: false },

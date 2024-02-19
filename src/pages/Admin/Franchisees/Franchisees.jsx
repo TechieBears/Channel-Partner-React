@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Eye } from 'iconsax-react';
 import Table from '../../../components/Table/Table';
 import { Link } from 'react-router-dom';
-import Switch from 'react-switch'
+import Switch from 'react-js-switch'
 import AddFranchisee from '../../../components/Modals/Franchisee/AddFranchiseForm';
 import AddFranchiseForm from '../../../components/Modals/Franchisee/AddFranchiseForm';
 import { useDispatch, useSelector } from "react-redux";
@@ -64,40 +64,31 @@ function Franchisees() {
 
 
 
-    // =================== fetching data ========================
-    // const fetchData = () => {
-    //     try {
-    //         getUser().then((res) => {
-    //             dispatch(setUserList(res))
-    //         })
-    //     } catch (err) {
-    //         console.log('error', err);
-    //     }
-    // }
-
+    const verifyActions = (row) => {
+        const payload = { isverified_byadmin: !row.user?.isverified_byadmin, email: row?.email }
+        try {
+            editUser(row?.id, payload).then((form) => {
+                if (form.code == 2002) {
+                    toast.success('User Verify Changed !');
+                    DeliveryBoyDetails()
+                }
+                else {
+                    console.log("err");
+                }
+            })
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
 
     // =============================== verify user switch =============================
     const switchVerify = (row) => {
         return (
             <div className="flex items-center justify-center gap-2 ">
                 <Switch
-                    value={row?.isverify}
+                    value={row?.user?.isverified_byadmin}
                     onChange={() => verifyActions(row)}
-                    size={50}
-                    backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
-                    borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
-            </div>
-        )
-    }
-
-
-    // =============================== active user switch =============================
-    const switchActive = (row) => {
-        return (
-            <div className="flex items-center justify-center gap-2 ">
-                <Switch
-                    value={row?.isactive}
-                    onChange={() => activeActions(row)}
                     size={50}
                     backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
                     borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
@@ -153,6 +144,7 @@ function Franchisees() {
         { field: 'registration_date', header: 'Registration Date', body: (row) => <h6>{row?.user?.registration_date}</h6>, sortable: false },
         { field: 'status', header: 'Status', body: activeActionsRole, sortable: false },
         { field: 'id', header: 'Action', body: actionBodyTemplate, sortable: true },
+        { field: 'isverify', header: 'Admin Verify', body: switchVerify, sortable: true },
         { header: 'Analyse', body: action, sortable: false },
     ]
     return (

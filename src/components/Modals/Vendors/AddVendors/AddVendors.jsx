@@ -131,7 +131,7 @@ export default function AddVendors(props) {
             try {      // for edit
                 setLoader(true)
                 const response = await EditFranchiseeVendors(props?.data?.user?.id, data)
-                    if (response?.message == "seller edited successfully") {
+                    if (response?.message == "vendor edited successfully") {
                         setTimeout(() => {
                             toggle();
                             setLoader(false)
@@ -140,6 +140,7 @@ export default function AddVendors(props) {
                             toast.success(response?.message);
                         }, 1000);
                     } else {
+                        setLoader(false)
                         console.log('failed to update user')
                     }
                 }
