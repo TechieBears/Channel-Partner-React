@@ -133,14 +133,14 @@ export default function VendorDetails() {
                             >
                                 Ratings and Reviews
                             </Tab>
-                            <Tab
+                            {/* <Tab
                                 className={`p-3 cursor-pointer font-tbPop font-medium   ${tab === 3
                                     ? "text-sky-500  border-b-2 border-sky-400 outline-0"
                                     : "text-gray-500 border-b"
                                     }`}
                             >
                                 Configuration
-                            </Tab>
+                            </Tab> */}
                         </TabList>
                         {/* ================= Vendor Details component ============== */}
                         <TabPanel>
@@ -443,7 +443,7 @@ export default function VendorDetails() {
                             </div>
                         </TabPanel>
                         {/* ================= Configuration component ============== */}
-                        <TabPanel>
+                        {/* <TabPanel>
                             <div className='mt-5'>
                                 <div className='p-2 overflow-hidden bg-white rounded-lg '>
                                     <div className='p-2 border-2 border-gray-300 rounded-lg'>
@@ -629,7 +629,7 @@ export default function VendorDetails() {
                                     </div>
                                 </div>
                             </div>
-                        </TabPanel>
+                        </TabPanel> */}
                     </Tabs>
                 </div>
             </div>
