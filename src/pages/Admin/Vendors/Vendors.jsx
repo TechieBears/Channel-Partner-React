@@ -23,16 +23,11 @@ function Vendors() {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const dispatch = useDispatch()
     const Vendors = useSelector((state) => state?.master?.FranchiseVendors);
-    console.log('Admin Vendors = ', Vendors);
-
-
-
 
     // // ========================= fetch data from api ==============================
     const FranchiseeVendors = () => {
         try {
             GetFranchiseeVendors().then((res) => {
-                console.log('vendors data = ', res);
                 dispatch(setFranchiseVendors(res));
             });
         } catch (error) {
@@ -126,15 +121,16 @@ function Vendors() {
 
     /*================================     column    ========================= */
 
-    // const status = (row) => <Switch checked={row?.id == rstatus ? true : false} onChange={() => setStatus(row?.id)} />
+    const verifyByAdmin = (row) => <Switch checked={row?.is_verified} onChange={() => setStatus(row?.id)} />
+    const ActiveStatus = (row) => <Switch checked={row?.is_active} onChange={() => setStatus(row?.id)} />
     const status = (row) => <Switch checked={row?.id == rstatus ? true : false} onChange={() => setStatus(row?.id)} />
     const action = (row) => <button className={`${tableBtn}`} >
         View Analysis
     </button>
 
     const columns = [
-        // { field: 'id', header: 'ID', sortable: false },
         { field: 'profile_pic', header: 'Profile', body: representativeBodyTemplate, sortable: false, style: true },
+        { field: 'isb_code', header: 'ISB', sortable: false },
         { field: 'first_name', body: (row) => <div className="capitalize">{row?.user?.first_name + " " + row?.user?.last_name}</div>, header: 'Name' },
         { field: 'email', header: 'Email', body: (row) => <h6>{row?.user?.email}</h6>, sortable: false },
         { field: 'phone_no', header: 'Phone No', body: (row) => <h6>{row?.user?.phone_no}</h6>, sortable: false },
@@ -144,6 +140,8 @@ function Vendors() {
         { field: 'registration_date', header: 'Registration Date', body: (row) => <h6>{row?.user?.registration_date}</h6>, sortable: false },
         { field: 'status', header: 'Status', body: activeActionsRole, sortable: false },
         { field: 'id', header: 'Action', body: actionBodyTemplate, sortable: true },
+        { field: 'isVerify', header: 'Verified By Admin', body: verifyByAdmin, sortable: true },
+        { field: 'isActive', header: 'Active Status', body: ActiveStatus, sortable: true },
         { header: 'Analyse', body: action, sortable: false },
     ]
 

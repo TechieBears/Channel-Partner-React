@@ -30,6 +30,7 @@ export default function VendorDetails() {
     const [isRecommanded, setIsRecommanded] = useState(true);
     const location = useLocation();
     const data = location.state;
+    console.log('dataaaaaaaaaaaaaa', data)
     const categories = ['Asian', 'Mexican', 'Italian', 'Russian cussion', 'Spanish', 'Comfort', 'American', 'North Indian', 'South Indian']
     const ratings = [
         {
@@ -236,11 +237,19 @@ export default function VendorDetails() {
 
                                     </div>
                                     <div className='p-2 border-2 border-gray-200'>
-                                        <div className='flex justify-between mx-2'>
+                                        <div className='grid grid-cols-4 mx-2 mt-2'>
                                             <h4 className='text-xl font-semibold'>Shop Info.</h4>
                                             <div className="flex items-center space-x-4">
                                                 <h6>Is Recommanded</h6>
                                                 <Switch checked={isRecommanded} onChange={() => setIsRecommanded(!isRecommanded)} />
+                                            </div>
+                                            <div className="flex items-center space-x-4">
+                                                <h6>Is Verified</h6>
+                                                <Switch checked={data?.is_verified} onChange={() => setIsRecommanded(!isRecommanded)} />
+                                            </div>
+                                            <div className="flex items-center space-x-4">
+                                                <h6>Is Active</h6>
+                                                <Switch checked={data?.is_activated} onChange={() => setIsRecommanded(!isRecommanded)} />
                                             </div>
                                         </div>
 
@@ -290,7 +299,7 @@ export default function VendorDetails() {
                                                     <label className={labelClass}>
                                                         Vendor Address*
                                                     </label>
-                                                                                                        <h3
+                                                    <h3
                                                         className={inputClass}
                                                     >{data?.user?.address}</h3>
                                                 </div>
@@ -338,9 +347,7 @@ export default function VendorDetails() {
                                                        Fssai License Number
                                                     </label>
                                                     <h3
-
                                                         className={inputClass}
-
                                                     >{data?.fssai_license == null || data?.fssai_license == undefined || data?.fssai_license == '' ? '-----' : data?.fssai_license }</h3>
                                                 </div>
                                             </div>
