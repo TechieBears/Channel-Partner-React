@@ -16,7 +16,7 @@ import { ImageUpload, vendorlink } from "../../../../env";
 
 
 export default function AddVendors(props) {
-    console.log('props = ', props)
+    // console.log('props = ', props)
     const categories = useSelector((state) => state?.master?.Category);
     const user = useSelector((state) => state?.user?.FranchiseeDetails);
 

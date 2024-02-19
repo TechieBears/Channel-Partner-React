@@ -113,6 +113,7 @@ const ProjectRoutes = () => {
                                             <Route path='/analytics' element={<FranchiseeDashboard />} />
                                             <Route path='/franchiesee-orders' element={<FranchiseeOrder />} />
                                             <Route path='/franchise-vendors' element={<FranchiseeVendors />} />
+                                            <Route path="/franchise-vendors/vendors-detail/:id" element={<VendorDetails />} />
                                             <Route path='/delivery' element={<DeliveryBoy />} />
                                         </>
                                             : ''}

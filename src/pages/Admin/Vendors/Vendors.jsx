@@ -96,7 +96,7 @@ function Vendors() {
     // =================== table action ========================
     const actionBodyTemplate = (row) => (
         <div className="flex items-center gap-2">
-            <Link to={`/user/${row.id}`} state={row} className="bg-green-100 px-1.5 py-2 rounded-sm">
+            <Link to={`/vendors/vendors-detail/${row.id}`} state={row} className="bg-green-100 px-1.5 py-2 rounded-sm">
                 <Eye size="20" className='text-green-500' />
             </Link>
             <AddVendors button='edit' title='Edit User' data={row} FranchiseeVendors={FranchiseeVendors}/>
