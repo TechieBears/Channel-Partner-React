@@ -77,30 +77,30 @@ export default function AddVendors(props) {
                 data.hawker_shop_photo = ''
             }
         }
-        else {          // for edit 
-            if (data?.bank_passbook.length != 0) {
+        else {          // for edit
+            if (data?.bank_passbook != props?.data?.bank_passbook) {
                 await ImageUpload(data?.bank_passbook[0], "vendor", "BankPassbook", data?.first_name)
                 data.bank_passbook = `${vendorlink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
             } else {
-                data.bank_passbook = ''
+                data.bank_passbook = props?.data?.bank_passbook
             }
-            if (data?.address_proof.length != 0) {
+            if (data?.address_proof != props?.data?.address_proof) {
                 await ImageUpload(data?.address_proof[0], "vendor", "AddressProof", data?.first_name)
                 data.address_proof = `${vendorlink}${data?.first_name}_AddressProof_${data?.address_proof[0].name}`
             } else {
-                data.address_proof = ''
+                data.address_proof = props?.data?.address_proof
             }
-            if (data?.profile_pic.length != 0) {
+            if (data?.profile_pic != props?.data?.profile_pic) {
                 await ImageUpload(data?.profile_pic[0], "vendor", "ProfileImage", data?.first_name)
                 data.profile_pic = `${vendorlink}${data?.first_name}_ProfileImage_${data?.profile_pic[0].name}`
             } else {
-                data.profile_pic = ''
+                data.profile_pic = props?.data?.profile_pic
             }
-            if (data?.hawker_shop_photo.length != 0) {
+            if (data?.hawker_shop_photo != props?.data?.hawker_shop_photo) {
                 await ImageUpload(data?.hawker_shop_photo[0], "vendor", "shopImage", data?.first_name)
                 data.hawker_shop_photo = `${vendorlink}${data?.first_name}_shopImage_${data?.hawker_shop_photo[0].name}`
             } else {
-                data.hawker_shop_photo = ''
+                data.hawker_shop_photo = props?.data?.hawker_shop_photo
             }
         }
         if (props.button !== 'edit') {   // for create
@@ -398,7 +398,7 @@ export default function AddVendors(props) {
                                                             <Error title="shop end time is Required*" />
                                                         )}
                                                     </div>
-                                                    <div className="">
+                                                    {/* <div className="">
                                                         <label className={labelClass}>Vendor Type*</label>
                                                         <select
                                                             name="category Type"
@@ -415,7 +415,7 @@ export default function AddVendors(props) {
                                                         {errors.vendor_type && (
                                                             <Error title="Vendor Type is required*" />
                                                         )}
-                                                    </div>
+                                                    </div> */}
                                                     <div className="">
                                                         <label className={labelClass}>PINCODE*</label>
                                                         <input
