@@ -131,8 +131,6 @@ function AddDriverFrom(props) {
     const onSubmit = async (data) => {
         console.log(data)
         setLoader(true)
-
-        console.log(data)
         if (props.button != 'edit') {    // for create
             if (data?.bank_passbook.length != 0) {
                 await ImageUpload(data?.bank_passbook[0], "deliveryboy", "BankPassbook", data?.first_name)
@@ -154,23 +152,23 @@ function AddDriverFrom(props) {
             }
         }
         else {          // for edit
-            if (data?.bank_passbook.length != 0) {
+            if (data?.bank_passbook.length != props?.data.bank_passbook ) {
                 await ImageUpload(data?.bank_passbook[0], "deliveryboy", "BankPassbook", data?.first_name)
                 data.bank_passbook = `${deliveryBoylink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
             } else {
-                data.bank_passbook = ''
+                data.bank_passbook = props?.data.bank_passbook
             }
-            if (data?.video_url.length != 0) {
+            if (data?.video_url.length != props?.data?.video_url) {
                 await ImageUpload(data?.video_url[0], "deliveryboy", "AddressProof", data?.first_name)
                 data.video_url = `${deliveryBoylink}${data?.first_name}_AddressProof_${data?.video_url[0].name}`
             } else {
-                data.video_url = ''
+                data.video_url = props?.data?.video_url
             }
-            if (data?.profile_pic.length != 0) {
+            if (data?.profile_pic.length != props?.data?.profile_pic) {
                 await ImageUpload(data?.profile_pic[0], "deliveryboy", "ProfileImage", data?.first_name)
                 data.profile_pic = `${deliveryBoylink}${data?.first_name}_ProfileImage_${data?.profile_pic[0].name}`
             } else {
-                data.profile_pic = ''
+                data.profile_pic = props?.data?.profile_pic
             }
         }
         if (props.button != 'edit') {   // for create

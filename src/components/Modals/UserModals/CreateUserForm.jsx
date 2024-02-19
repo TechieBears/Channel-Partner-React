@@ -93,12 +93,6 @@ function CreateUserForm(props) {
             } else {
                 data.pan_url = ''
             }
-            // if (data?.cheque_url.length != 0) {
-            //     await ImageUpload(data?.cheque_url[0], "doc", "chequeImage", data?.name)
-            //     data.cheque_url = `${link}${data?.name}_chequeImage_${data?.cheque_url[0].name}`
-            // } else {
-            //     data.cheque_url = ''
-            // }
             if (data?.gst_url.length != 0) {
                 await ImageUpload(data?.gst_url[0], "doc", "gstImage", data?.name)
                 data.gst_url = `${link}${data?.name}_gstImage_${data?.gst_url[0].name}`
@@ -111,12 +105,6 @@ function CreateUserForm(props) {
             } else {
                 data.fssai_url = ''
             }
-            // if (data?.bus_card_url.length != 0) {
-            //     await ImageUpload(data?.bus_card_url[0], "doc", "businessImage", data?.name)
-            //     data.bus_card_url = `${link}${data?.name}_businessImage_${data?.bus_card_url[0].name}`
-            // } else {
-            //     data.bus_card_url = ''
-            // }
             if (data?.odoc_url.length != 0) {
                 await ImageUpload(data?.odoc_url[0], "doc", "otherImage", data?.name)
                 data.odoc_url = `${link}${data?.name}_otherImage_${data?.odoc_url[0].name}`
@@ -131,12 +119,6 @@ function CreateUserForm(props) {
             } else {
                 data.pan_url = props?.data?.pan_url
             }
-            // if (data?.cheque_url.length != 0) {
-            //     await ImageUpload(data?.cheque_url[0], "doc", "chequeImage", data?.name)
-            //     data.cheque_url = `${link}${data?.name}_chequeImage_${data?.cheque_url[0].name}`
-            // } else {
-            //     data.cheque_url = props?.data?.cheque_url
-            // }
             if (data?.gst_url.length != 0) {
                 await ImageUpload(data?.gst_url[0], "doc", "gstImage", data?.name)
                 data.gst_url = `${link}${data?.name}_gstImage_${data?.gst_url[0].name}`
@@ -149,12 +131,6 @@ function CreateUserForm(props) {
             } else {
                 data.fssai_url = props?.data?.fssai_url
             }
-            // if (data?.bus_card_url.length != 0) {
-            //     await ImageUpload(data?.bus_card_url[0], "doc", "businessImage", data?.name)
-            //     data.bus_card_url = `${link}${data?.name}_businessImage_${data?.bus_card_url[0].name}`
-            // } else {
-            //     data.bus_card_url = props?.data?.bus_card_url
-            // }
             if (data?.odoc_url.length != 0) {
                 await ImageUpload(data?.odoc_url[0], "doc", "otherImage", data?.name)
                 data.odoc_url = `${link}${data?.name}_otherImage_${data?.odoc_url[0].name}`
