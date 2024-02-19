@@ -17,6 +17,20 @@ export const login = async (data) => {
 };
 
 
+// ====================Seller Login Api===================
+
+export const vendorlogin = async (data) => {
+    const url = `${environment.baseUrl}vendor/vendor_login`;
+    try {
+        const response = await axios.post(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+
 /* ================== Menu Category Api =========== */
 export const getCategory = async () => {
     const url = `${environment.baseUrl}app/category-list`;
@@ -185,6 +199,18 @@ export const CreateFranchiseeVendors = async (data) => {
     const url = `${environment.baseUrl}vendor/create_vendor`;
     try {
         const response = await axios.post(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+/* ================== Edit Franchisee Vendors Api =========== */
+export const EditFranchiseeVendors = async (id, data) => {
+    const url = `${environment.baseUrl}vendor/edit_vendor/${id}`;
+    try {
+        const response = await axios.put(url, data)
         return response.data
     }
     catch (err) {
