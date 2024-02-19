@@ -12,8 +12,10 @@ import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomC
 import { useDispatch, useSelector } from "react-redux";
 import userImg from '../../../assets/user.jpg';
 import { setFranchiseVendors } from "../../../redux/Slices/masterSlice";
-import { GetFranchiseeVendors } from "../../../api";
+import { GetFranchiseeVendors, verifyVendors } from "../../../api";
 import axios from 'axios';
+import { toast } from 'react-toastify';
+
 
 
 function Vendors() {
@@ -70,7 +72,7 @@ function Vendors() {
             editUser(row?.id, payload).then((form) => {
                 if (form.code == 2002) {
                     toast.success('User Active Changed !');
-                    DeliveryBoyDetails()
+                    FranchiseeVendors()
                 }
                 else {
                     console.log("err");
@@ -83,12 +85,13 @@ function Vendors() {
     }
 
     const verifyActions = (row) => {
-        const payload = { isverify: !row.isverify, email: row?.email }
+        const payload = { userId: row?.user?.id, isverifiedbyadmin: !row?.user?.isverified_byadmin, isverifiedbyfranchise: row?.isverifiedbyfranchise }
         try {
-            editUser(row?.id, payload).then((form) => {
-                if (form.code == 2002) {
-                    toast.success('User Verify Changed !');
-                    DeliveryBoyDetails()
+            verifyVendors(payload).then((form) => {
+                console.log(payload)
+                if (form.status == "success") {
+                    toast.success('Driver Verification Changed !');
+                    FranchiseeVendors()
                 }
                 else {
                     console.log("err");
@@ -100,14 +103,15 @@ function Vendors() {
         }
     }
 
+
     // =============================== active user switch =============================
     const switchActive = (row) => {
         return (
             <div className="flex items-center justify-center gap-2">
                 <Switch
-                    value={row?.isverified_byadmin}
+                    value={row?.isverifiedbyfranchise}
                     disabled={true}
-                    onChange={() => activeActions(row)}
+                    // onChange={() => activeActions(row)}
                     size={50}
                     backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
                     borderColor={{ on: '#86d993', off: '#c6c6c6' }} />

@@ -103,7 +103,7 @@ export default function AddVendors(props) {
                 data.hawker_shop_photo = props?.data?.hawker_shop_photo
             }
         }
-        if (props.button !== 'edit') {   // for create
+        if (props.button != 'edit') {   // for create
             try {
                 setLoader(true)
                 const additionalPayload = { franchise: user?.franch_id };

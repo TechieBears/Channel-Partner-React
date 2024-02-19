@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import Table from '../../../components/Table/Table';
 import { Link } from 'react-router-dom';
 import { Eye, Trash } from 'iconsax-react';
-import { delUser, editUser, getUser, getDeliveryBoy } from '../../../api';
+import { delUser, verifyDeliveryBoy, getUser, getDeliveryBoy } from '../../../api';
 import Switch from 'react-js-switch';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -114,44 +114,7 @@ function Drivers() {
         </h6>
     );
 
-    const verifyActions = (row) => {
-        const payload = { isverify: !row.isverify, email: row?.email }
-        try {
-            editUser(row?.id, payload).then((form) => {
-                if (form.code == 2002) {
-                    toast.success('User Verify Changed !');
-                    DeliveryBoyDetails()
-                }
-                else {
-                    console.log("err");
-                }
-            })
-        }
-        catch (err) {
-            console.log(err);
-        }
-    }
-
-    // =================== table user active column ========================
-
-    const activeActions = (row) => {
-        const payload = { isactive: !row.isactive, email: row?.email }
-        try {
-            editUser(row?.id, payload).then((form) => {
-                if (form.code == 2002) {
-                    toast.success('User Active Changed !');
-                    DeliveryBoyDetails()
-                }
-                else {
-                    console.log("err");
-                }
-            })
-        }
-        catch (err) {
-            console.log(err);
-        }
-    }
-
+  
     // ======================= Table Column Definitions =========================
     // const columns = [
     //     { field: 'id', header: 'ID', body: representativeBodyTemplate, sortable: true, style: true },
@@ -179,7 +142,7 @@ function Drivers() {
                 <Switch
                     value={row?.isverifiedbyfranchise}
                     disabled={true}
-                    onChange={() => activeActions(row)}
+                    // onChange={() => activeActions(row)}
                     size={50}
                     backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
                     borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
@@ -187,13 +150,32 @@ function Drivers() {
         )
     }
 
-    
+    const verifyActions = (row) => {
+        const payload = { userId: row?.user?.id, isverifiedbyadmin: !row?.user?.isverified_byadmin, isverifiedbyfranchise: row?.isverifiedbyfranchise }
+        try {
+            verifyDeliveryBoy(payload).then((form) => {
+                console.log(payload)
+                if (form.status == "success") {
+                    toast.success('Driver Verification Changed !');
+                    DeliveryBoyDetails()
+                }
+                else {
+                    console.log("err");
+                }
+            })
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
+
     // =============================== verify user switch =============================
     const switchVerify = (row) => {
         return (
             <div className="flex items-center justify-center gap-2 ">
                 <Switch
-                    value={row?.isactive}
+                    value={row?.user?.isverified_byadmin}
                     onChange={() => verifyActions(row)}
                     size={50}
                     backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}

@@ -86,13 +86,13 @@ const VendorProduct = () => {
     ];
 
 
-    const action = (row) => <div className='space-x-2 flex'>
-        <NavLink to={`/product-list/product-details/${row?.product_id}`} className=' bg-sky-100 items-center p-1 rounded-xl hover:bg-sky-200'>
+    const action = (row) => <div className='flex space-x-2'>
+        <NavLink to={`/product-list/product-details/${row?.product_id}`} className='items-center p-1 bg-sky-100 rounded-xl hover:bg-sky-200'>
             <Eye size={24} className='text-sky-400' />
         </NavLink>
         {/* <ViewProduct /> */}
         <AddProduct title='Edit Product' row={row} getProducts={getProducts} />
-        <button className='items-center p-1 rounded-xl bg-red-100 hover:bg-red-200'>
+        <button className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
             <Trash size={24} className='text-red-400' />
         </button>
     </div>

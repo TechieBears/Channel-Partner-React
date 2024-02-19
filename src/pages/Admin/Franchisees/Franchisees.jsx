@@ -6,12 +6,14 @@ import Switch from 'react-js-switch'
 import AddFranchisee from '../../../components/Modals/Franchisee/AddFranchiseForm';
 import AddFranchiseForm from '../../../components/Modals/Franchisee/AddFranchiseForm';
 import { useDispatch, useSelector } from "react-redux";
-import { GetFranchisee } from "../../../api";
+import { GetFranchisee, verifyFranchise } from "../../../api";
 import { setFranchise } from "../../../redux/Slices/masterSlice";
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import userImg from '../../../assets/user.jpg';
 import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
+import { toast } from 'react-toastify';
+
 
 function Franchisees() {
     const dispatch = useDispatch()
@@ -65,12 +67,13 @@ function Franchisees() {
 
 
     const verifyActions = (row) => {
-        const payload = { isverified_byadmin: !row.user?.isverified_byadmin, email: row?.email }
+        const payload = { userId: row?.user?.id, isverifiedbyadmin: !row?.user?.isverified_byadmin }
         try {
-            editUser(row?.id, payload).then((form) => {
-                if (form.code == 2002) {
-                    toast.success('User Verify Changed !');
-                    DeliveryBoyDetails()
+            verifyFranchise(payload).then((form) => {
+                console.log(payload)
+                if (form.status == "success") {
+                    toast.success('Franchisee Verification Changed !');
+                    FranchiseeDetails()
                 }
                 else {
                     console.log("err");

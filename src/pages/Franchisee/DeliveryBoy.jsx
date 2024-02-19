@@ -2,14 +2,17 @@ import { Refresh, SearchNormal } from 'iconsax-react'
 import React, {useEffect} from 'react'
 import { useForm } from 'react-hook-form';
 import { Eye  } from 'iconsax-react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Table from '../../components/Table/Table'
 import AddDriverFrom from '../../components/Modals/DriverModals/AddDriverForm'
-import { getDeliveryBoys } from '../../api';
+import { getDeliveryBoys, verifyDeliveryBoy } from '../../api';
 import { setDeliveryList } from '../../redux/Slices/deliverySlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { formBtn1, formBtn2, inputClass ,tableBtn } from '../../utils/CustomClass';
 import Switch from 'react-js-switch';
+import { toast } from 'react-toastify';
+
 
 
 
@@ -18,7 +21,7 @@ import Switch from 'react-js-switch';
 function DeliveryBoy() {
     const dispatch = useDispatch()
     const deliveryList = useSelector((state) => state?.delivery?.deliveryList)
-    // console.log('delivery Tablle data = ', deliveryList?.data)
+    console.log('delivery Table data = ', deliveryList?.data)
     const {
         register,
         handleSubmit,
@@ -45,7 +48,7 @@ function DeliveryBoy() {
             // // ========================= fetch data from api ==============================
     const DeliveryBoyDetails = () => {
         try {
-            getDeliveryBoy().then((res) => {
+            getDeliveryBoys().then((res) => {
                 dispatch(setDeliveryList(res));
             });
         } catch (error) {
@@ -74,12 +77,32 @@ function DeliveryBoy() {
     }, [])
 
 
+    const verifyActions = (row) => {
+        const payload = { userId: row?.user?.id, isverifiedbyadmin: row?.user?.isverified_byadmin, isverifiedbyfranchise: !row?.isverifiedbyfranchise }
+        try {
+            verifyDeliveryBoy(payload).then((form) => {
+                console.log(payload)
+                if (form.message == "delivery boy verified successfully") {
+                    toast.success('Driver Verification Changed !');
+                    DeliveryBoyDetails()
+                }
+                else {
+                    console.log("err");
+                }
+            })
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
+
     // =============================== verify user switch =============================
     const switchVerify = (row) => {
         return (
             <div className="flex items-center justify-center gap-2 ">
                 <Switch
-                    value={row?.isactive}
+                    value={row?.isverifiedbyfranchise}
                     onChange={() => verifyActions(row)}
                     size={50}
                     backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
@@ -92,9 +115,9 @@ function DeliveryBoy() {
         return (
             <div className="flex items-center justify-center gap-2">
                 <Switch
-                    value={row?.isverifiedbyfranchise}
+                    value={row?.user?.isverified_byadmin}
                     disabled={true}
-                    onChange={() => activeActions(row)}
+                    // onChange={() => activeActions(row)}
                     size={50}
                     backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
                     borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
@@ -166,8 +189,8 @@ function DeliveryBoy() {
         { field: 'registration_date', header: 'Registration Date', body: (row) => <h6>{row?.user?.registration_date}</h6>, sortable: false },
         { field: 'status', header: 'Status', body: activeActionsRole, sortable: false },
         { field: 'id', header: 'Action', body: actionBodyTemplate, sortable: true },
-        { field: 'isactive', header: 'Franchise Verify', body: switchActive, sortable: true },
-        { field: 'isverify', header: 'Admin Verify', body: switchVerify, sortable: true },
+        { field: 'isverify', header: 'Admin Verify', body: switchActive, sortable: true },
+        { field: 'isactive', header: 'Franchise Verify', body: switchVerify, sortable: true },
         // { header: 'Analyse', body: action, sortable: false },
     ]
 

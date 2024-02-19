@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form';
 import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
 import Table from '../../../components/Table/Table';
-import Switch from 'react-switch'
+import Switch from 'react-js-switch'
 import AddVendors from '../../../components/Modals/Vendors/AddVendors/AddVendors';
-import { GetFranchiseeVendors } from "../../../api";
+import { GetFranchiseeVendors, verifyVendors } from "../../../api";
 import { setFranchiseVendors } from "../../../redux/Slices/masterSlice";
 import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios';
@@ -20,7 +20,7 @@ function FranchiseeVendors() {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const dispatch = useDispatch()
     const Vendors = useSelector((state) => state?.master?.FranchiseVendors);
-    // console.log('Admin Vendors = ', Vendors);
+    console.log('Franchise Vendors = ', Vendors);
 
     // // ========================= fetch data from api ==============================
     const FranchiseeVendors = () => {
@@ -57,13 +57,32 @@ function FranchiseeVendors() {
     }
 
 
+    const verifyActions = (row) => {
+        const payload = { userId: row?.user?.id, isverifiedbyadmin: row?.user?.isverified_byadmin, isverifiedbyfranchise: !row?.isverifiedbyfranchise }
+        try {
+            verifyVendors(payload).then((form) => {
+                console.log(payload)
+                if (form.message == "seller verified Successfully") {
+                    toast.success('Vendor Verification Changed !');
+                    FranchiseeVendors()
+                }
+                else {
+                    console.log("err");
+                }
+            })
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
 
     // =============================== verify user switch =============================
     const switchVerify = (row) => {
         return (
             <div className="flex items-center justify-center gap-2 ">
                 <Switch
-                    value={row?.isverify}
+                    value={row?.isverifiedbyfranchise}
                     onChange={() => verifyActions(row)}
                     size={50}
                     backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
@@ -71,21 +90,21 @@ function FranchiseeVendors() {
             </div>
         )
     }
-
-
     // =============================== active user switch =============================
     const switchActive = (row) => {
         return (
-            <div className="flex items-center justify-center gap-2 ">
+            <div className="flex items-center justify-center gap-2">
                 <Switch
-                    value={row?.isactive}
-                    onChange={() => activeActions(row)}
+                    value={row?.user?.isverified_byadmin}
+                    disabled={true}
+                    // onChange={() => activeActions(row)}
                     size={50}
                     backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
                     borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
             </div>
         )
     }
+
 
     // =================== table action ========================
     const actionBodyTemplate = (row) => (
@@ -138,7 +157,10 @@ function FranchiseeVendors() {
         { field: 'registration_date', header: 'Registration Date', body: (row) => <h6>{row?.user?.registration_date}</h6>, sortable: false },
         { field: 'status', header: 'Status', body: activeActionsRole, sortable: false },
         { field: 'id', header: 'Action', body: actionBodyTemplate, sortable: true },
-        { header: 'Analyse', body: action, sortable: false },
+        { field: 'isverify', header: 'Admin Verify', body: switchActive, sortable: true },
+        { field: 'isactive', header: 'Franchise Verify', body: switchVerify, sortable: true },
+
+        // { header: 'Analyse', body: action, sortable: false },
     ]
     return (
         <>

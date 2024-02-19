@@ -138,6 +138,11 @@ export const Franchise = [
         link: '/franchiesee-orders',
     },
     {
+        title: 'menu',
+        icon: <Menu size="24" />,
+        link: '/menu',
+    },
+    {
         title: 'Vendors',
         icon: <Notebook size="24" />,
         link: '/franchise-vendors',

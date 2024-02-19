@@ -280,6 +280,41 @@ export const deactivateUser = async (data) => {
     }
 };
 
+//  ===================  Active/Deactive Delivery Boy by Toggle Api ===============
+export const verifyDeliveryBoy = async (data) => {
+    const url = `${environment.baseUrl}delivery/verify_deliveryboy`;
+    try {
+        const response = await axios.post(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+//  ===================  Active/Deactive Franchisee by Admin Toggle Api ===============
+export const verifyFranchise = async (data) => {
+    const url = `${environment.baseUrl}franchise/verify_franchise`;
+    try {
+        const response = await axios.post(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+//  ===================  Active/Deactive Vendors by Admin Toggle Api ===============
+export const verifyVendors = async (data) => {
+    const url = `${environment.baseUrl}vendor/verify_vendor`;
+    try {
+        const response = await axios.post(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
 
 
 
@@ -1185,7 +1220,6 @@ export const getDeliveryBoys = async (data) => {
         return response.data;
     } catch (error) {
         console.log(error)
-        console.log('error creating product', error)
     }
 }
 
