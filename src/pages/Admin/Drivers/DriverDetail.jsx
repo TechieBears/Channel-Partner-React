@@ -1,12 +1,11 @@
-import { ArrowLeft } from 'iconsax-react'
-import { useState } from 'react';
-import PathName from '../../../components/PathName/PathName'
+import { ArrowLeft } from 'iconsax-react';
+import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { Tab, TabList, Tabs, TabPanel } from 'react-tabs'
-import userImg from '../../../assets/user.jpg';
-import ImageGallery from '../../../components/Modals/LightBox/ImageGallery'
+import PathName from '../../../components/PathName/PathName';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import ImageGallery from '../../../components/Modals/LightBox/ImageGallery';
 
-export default function FranchiseDetail() {
+function DriverDetail() {
     const location = useLocation();
     const data = location.state;
     console.log('state', data)
@@ -175,3 +174,5 @@ export default function FranchiseDetail() {
         </>
     )
 }
+
+export default DriverDetail

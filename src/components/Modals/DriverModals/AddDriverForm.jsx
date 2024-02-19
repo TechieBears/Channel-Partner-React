@@ -396,7 +396,7 @@ function AddDriverFrom(props) {
                                                                 {...register("franchisee_id", { required: true })}
                                                             >
                                                                 <option value="" selected>--Select Franchisee--</option>
-                                                                {Franchisee.map(franchisee => (
+                                                                {Franchisee?.map(franchisee => (
                                                                     <option key={franchisee?.user?.id} value={franchisee?.user?.id}>
                                                                         {franchisee?.user?.first_name + " (" + franchisee?.user?.pincode + ")"}
                                                                     </option>
