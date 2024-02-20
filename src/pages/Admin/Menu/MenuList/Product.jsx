@@ -6,11 +6,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setProduct } from '../../../../redux/Slices/masterSlice';
 import { getProducts, deleteProduct } from "../../../../api";
 import { setSubCategory, setCategory } from "../../../../redux/Slices/masterSlice";
+// import { AddProducts } from '../../../../components/Modals/Vendors/AddProduct';
+
 
 const Product = () => {
   const subcategory = useSelector((state) => state?.master?.SubCategory);
   const category = useSelector((state) => state?.master?.Category);
-  const product = useSelector((state) => state?.master?.Product)
+  const product = useSelector((state) => state?.master?.Product);
   const dispatch = useDispatch()
 
   // ============== fetch data from api ================
@@ -67,7 +69,7 @@ const Product = () => {
                   <div className="">
                       <h1 className='text-xl font-semibold text-gray-900 font-tbPop '>Product List</h1>
                   </div>
-                  <ProductForm title='Add Product' />
+                  {/* <AddProducts title='Add Product' getProducts={getProducts} sellerId={matchedSeller?.vendor_id} /> */}
               </div>
               {product?.length > 0 && <Table data={product} columns={columns} />}
           </div>

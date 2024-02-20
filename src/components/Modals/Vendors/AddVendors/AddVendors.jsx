@@ -22,6 +22,8 @@ export default function AddVendors(props) {
     const categories = useSelector((state) => state?.master?.Category);
     const user = useSelector((state) => state?.user?.FranchiseeDetails);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
+    console.log('logged User details = ', LoggedUserDetails)
+    
     const Franchisee = useSelector((state) => state?.master?.Franchise);
 
 
@@ -495,6 +497,21 @@ export default function AddVendors(props) {
                                                             <Error title="City is Required*" />
                                                         )}
                                                     </div>
+
+                                                    {/* {LoggedUserDetails?.role == 'admin' &&  */}
+                                                        <div className="">
+                                                            <label className={labelClass}>Insta Commission (%)*</label>
+                                                            <input
+                                                                type="text"
+                                                                placeholder="10"
+                                                                className={inputClass}
+                                                                {...register("city", { required: true })}
+                                                            />
+                                                            {errors.address && (
+                                                                <Error title="City is Required*" />
+                                                            )}
+                                                        </div>
+                                                    {/* } */}
                                                 </div>
                                                 <h1 className='col-span-4 pt-4 mx-4 text-xl font-semibold text-gray-900 font-tbPop '>Additional Details:</h1>
                                                 <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-x-3 gap-y-3">

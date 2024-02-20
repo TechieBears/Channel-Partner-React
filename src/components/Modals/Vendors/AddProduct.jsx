@@ -11,12 +11,14 @@ import { Add, Edit } from 'iconsax-react';
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
 import { addProduct, editVendorProduct, getAllSeller, getCategory, getSubCategory } from '../../../api';
 import { toast } from 'react-toastify';
-import { ImageUpload, franchiselink } from '../../../env';
+import { ImageUpload, productLink } from '../../../env';
 
-function AddProduct(props) {
+function AddProducts(props) {
+    console.log('props = ', props);
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
     const [category, setCategory] = useState([]);
+    console.log('category = ', category)
     const [subCategory, setsubCategory] = useState([]);
     const { register, handleSubmit, control, watch, reset, formState: { errors } } = useForm();
     const toggle = () => setOpen(!isOpen)
@@ -24,68 +26,91 @@ function AddProduct(props) {
         toggle();
         reset()
     }
+
+    const handleFileChange = (event) => {
+        console.log("file", event.target.files[0]);
+        const file = event.target.files[0];
+        if (file.size > 100 * 1024 * 1024) {
+            event.target.value = null;
+            alert("File size exceeds 100MB limit");
+            return;
+        }
+    };
+
     const onSubmit = async (data) => {
         if (props?.title == 'Edit Product') {
             if (data?.product_image_1 != props?.row?.product_image_1) {
                 await ImageUpload(data?.product_image_1[0], "shopProduct", "MainImage", data?.product_name)
-                data.product_image_1 = `${franchiselink}${data?.product_name}_MainImage_${data?.product_image_1[0]?.name}`
+                data.product_image_1 = `${productLink}${data?.product_name}_MainImage_${data?.product_image_1[0]?.name}`
             } else {
                 data.product_image_1 = props?.row?.product_image_1
             }
             if (data?.product_image_2 != props?.row?.product_image_2) {
                 await ImageUpload(data?.product_image_2[0], "shopProduct", "Image2", data?.product_name)
-                data.product_image_2 = `${franchiselink}${data?.product_name}_Image2_${data?.product_image_2[0]?.name}`
+                data.product_image_2 = `${productLink}${data?.product_name}_Image2_${data?.product_image_2[0]?.name}`
             } else {
                 data.product_image_2 = props?.row?.product_image_2
             }
             if (data?.product_image_3 != props?.row?.product_image_3) {
                 await ImageUpload(data?.product_image_3[0], "shopProduct", "Image3", data?.product_name)
-                data.product_image_3 = `${franchiselink}${data?.product_name}_Image3_${data?.product_image_3[0]?.name}`
+                data.product_image_3 = `${productLink}${data?.product_name}_Image3_${data?.product_image_3[0]?.name}`
             } else {
                 data.product_image_3 = props?.row?.product_image_3
             }
             if (data?.product_image_4 != props?.row?.product_image_4) {
                 await ImageUpload(data?.product_image_4[0], "shopProduct", "Image4", data?.product_name)
-                data.product_image_4 = `${franchiselink}${data?.product_name}_Image4_${data?.product_image_4[0]?.name}`
+                data.product_image_4 = `${productLink}${data?.product_name}_Image4_${data?.product_image_4[0]?.name}`
             } else {
                 data.product_image_4 = props?.row?.product_image_4
             }
             if (data?.product_image_5 != props?.row?.product_image_5) {
                 await ImageUpload(data?.product_image_5[0], "shopProduct", "Image5", data?.product_name)
-                data.product_image_5 = `${franchiselink}${data?.product_name}_Image5_${data?.product_image_5[0]?.name}`
+                data.product_image_5 = `${productLink}${data?.product_name}_Image5_${data?.product_image_5[0]?.name}`
             } else {
                 data.product_image_5 = props?.row?.product_image_5
+            }
+            if (data?.product_video_url != props?.row?.product_video_url) {
+                await ImageUpload(data?.product_video_url[0], "shopProduct", "Image5", data?.product_name)
+                data.product_video_url = `${productLink}${data?.product_name}_Image5_${data?.product_video_url[0]?.name}`
+            } else {
+                data.product_video_url = props?.row?.product_video_url
             }
         } else {
             if (data?.product_image_1.length != 0) {
                 await ImageUpload(data?.product_image_1[0], "shopProduct", "MainImage", data?.product_name)
-                data.product_image_1 = `${franchiselink}${data?.product_name}_MainImage_${data?.product_image_1[0]?.name}`
+                data.product_image_1 = `${productLink}${data?.product_name}_MainImage_${data?.product_image_1[0]?.name}`
             } else {
                 data.product_image_1 = ''
             }
             if (data?.product_image_2.length != 0) {
                 await ImageUpload(data?.product_image_2[0], "shopProduct", "Image2", data?.product_name)
-                data.product_image_2 = `${franchiselink}${data?.product_name}_Image2_${data?.product_image_2[0]?.name}`
+                data.product_image_2 = `${productLink}${data?.product_name}_Image2_${data?.product_image_2[0]?.name}`
             } else {
                 data.product_image_2 = ''
             }
             if (data?.product_image_3.length != 0) {
                 await ImageUpload(data?.product_image_3[0], "shopProduct", "Image3", data?.product_name)
-                data.product_image_3 = `${franchiselink}${data?.product_name}_Image3_${data?.product_image_3[0]?.name}`
+                data.product_image_3 = `${productLink}${data?.product_name}_Image3_${data?.product_image_3[0]?.name}`
             } else {
                 data.product_image_3 = ''
             }
             if (data?.product_image_4.length != 0) {
                 await ImageUpload(data?.product_image_4[0], "shopProduct", "Image4", data?.product_name)
-                data.product_image_4 = `${franchiselink}${data?.product_name}_Image4_${data?.product_image_4[0]?.name}`
+                data.product_image_4 = `${productLink}${data?.product_name}_Image4_${data?.product_image_4[0]?.name}`
             } else {
                 data.product_image_4 = ''
             }
             if (data?.product_image_5.length != 0) {
                 await ImageUpload(data?.product_image_5[0], "shopProduct", "Image5", data?.product_name)
-                data.product_image_5 = `${franchiselink}${data?.product_name}_Image5_${data?.product_image_5[0]?.name}`
+                data.product_image_5 = `${productLink}${data?.product_name}_Image5_${data?.product_image_5[0]?.name}`
             } else {
                 data.product_image_5 = ''
+            }
+            if (data?.product_video_url.length != 0) {
+                await ImageUpload(data?.product_video_url[0], "shopProduct", "Image5", data?.product_name)
+                data.product_video_url = `${productLink}${data?.product_name}_Image5_${data?.product_video_url[0]?.name}`
+            } else {
+                data.product_video_url = ''
             }
         }
         if (props?.title == 'Edit Product') {
@@ -100,6 +125,7 @@ function AddProduct(props) {
             })
         } else {
             var updatedData = { ...data, vendor: props?.sellerId }
+            console.log(updatedData)
             addProduct(updatedData).then((res) => {
                 if (res?.status == 'success') {
                     props?.getProducts()
@@ -207,9 +233,12 @@ function AddProduct(props) {
                                                             {...register('product_category', { required: true })}
                                                         >
                                                             <option value=''>Select</option>
-                                                            {category?.map(item => (
-                                                                <option key={item?.id} value={item?.category_name}>{item?.category_name}</option>
-                                                            ))}
+                                                            {category?.map(item => 
+                                                                // {
+                                                                    // console.log(item?.id)
+                                                                    <option key={item?.id} value={item?.id}>{item?.category_name}</option>
+                                                                    // }
+                                                            )}
                                                         </select>
                                                         {errors.product_category && <Error title='Category is Required*' />}
                                                     </div>
@@ -406,6 +435,24 @@ function AddProduct(props) {
                                                         />
                                                         {errors.product_shelflife && <Error title='Shelf Life is Required*' />}
                                                     </div>
+                                                    <div className="">
+                                                        <label className={labelClass} htmlFor="video_input">Product Video*</label>
+                                                        <input
+                                                            className={fileinput}
+                                                            id="video_input"
+                                                            type='file'
+                                                            accept='video/mp4,video/x-m4v,video/*'
+                                                            placeholder='Upload Video...'
+                                                            {...register("product_video_url", { required: props.button === 'edit' ? false : true })}
+                                                            onChange={handleFileChange}
+                                                        />
+                                                        {props?.button === 'edit' && props?.data.product_video_url && (
+                                                            <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                                {props?.data?.product_video_url?.name}
+                                                            </label>
+                                                        )}
+                                                        {errors.product_video_url && <Error title='Video file is required*' />}
+                                                    </div>
                                                     {/* <div className="">
                                                         <label className={labelClass}>
                                                             FSSAI License*
@@ -442,20 +489,20 @@ function AddProduct(props) {
                                                         />
                                                         {errors.product_nutritional_info && <Error title='Nutritional Info is Required*' />}
                                                     </div>
-                                                    <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Brand Information</p>
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             Brand*
                                                         </label>
                                                         <input
                                                             type="text"
-                                                            maxLength={6}
                                                             placeholder='Brand'
                                                             className={inputClass}
                                                             {...register('product_brand', { required: true })}
                                                         />
                                                         {errors.product_brand && <Error title='Brand is Required*' />}
                                                     </div>
+                                                    {/* <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Brand Information</p> */}
+                                                
                                                     {/* <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Brand Logo*</label>
                                                         <input className={fileinput}
@@ -514,7 +561,7 @@ function AddProduct(props) {
                                                         {errors.product_image_3 && <Error title='Profile Image is required*' />}
                                                     </div>
                                                     <div className="">
-                                                        <label className={labelClass} htmlFor="main_input">Image 3*</label>
+                                                        <label className={labelClass} htmlFor="main_input">Image 4*</label>
                                                         <input className={fileinput}
                                                             id="main_input"
                                                             type='file'
@@ -559,4 +606,4 @@ function AddProduct(props) {
     )
 }
 
-export default AddProduct
+export default AddProducts
