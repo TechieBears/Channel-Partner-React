@@ -2,14 +2,13 @@ import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../utils/CustomClass';
 import { useForm } from 'react-hook-form';
-import { addDeliveryBoy, createUser, editUser, getDeliveryBoys, createDeliveryBoy } from '../../../api';
+import { editUser, getDeliveryBoys, createDeliveryBoy } from '../../../api';
 import { Edit } from 'iconsax-react';
 import { useDispatch, useSelector } from 'react-redux';
 import Error from '../../Errors/Error';
 import LoadBox from '../../Loader/LoadBox';
 import { toast } from 'react-toastify';
 import { ImageUpload, deliveryBoylink } from '../../../env';
-import { setDeliveryList } from '../../../redux/Slices/deliverySlice';
 import { setFranchise } from "../../../redux/Slices/masterSlice";
 import "../../../redux/Slices/loginSlice";
 import { GetFranchisee } from "../../../api";
@@ -33,6 +32,10 @@ function AddDriverFrom(props) {
 
     const toggle = () => setIsOpen(!isOpen);
     const user = useSelector((state) => state?.user?.FranchiseeDetails);
+
+    // const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails)
+    // console.log('Logged Details = ', LoggedDetails);
+    
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     // console.log('Logged User Details = ', LoggedUserDetails);
 
@@ -115,16 +118,6 @@ function AddDriverFrom(props) {
 
         return 'Invalid GST number*';
     };
-    // ============================= fetching data api ==================================
-    const fetchData = () => {
-        try {
-            getDeliveryBoys().then((res) => {
-                dispatch(setDeliveryList(res))
-            })
-        } catch (err) {
-            console.log('error', err);
-        }
-    }
 
 
     // ============================= form submiting ======================================
@@ -213,7 +206,7 @@ function AddDriverFrom(props) {
                         reset();
                         setLoader(false)
                         toggle();
-                        fetchData()
+                        props?.DeliveryBoyDetails()
                         toast.success(response?.message);
                     }, 1000);
                 } else {
@@ -232,7 +225,7 @@ function AddDriverFrom(props) {
                 setTimeout(() => {
                     toggle();
                     setLoader(false)
-                    fetchData()
+                    props?.DeliveryBoyDetails()
                     toast.success(response?.message);
                 }, 1000);
             } else {

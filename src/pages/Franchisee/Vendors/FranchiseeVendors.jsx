@@ -4,7 +4,7 @@ import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomC
 import Table from '../../../components/Table/Table';
 import Switch from 'react-js-switch'
 import AddVendors from '../../../components/Modals/Vendors/AddVendors/AddVendors';
-import { GetFranchiseeVendors, verifyVendors } from "../../../api";
+import { GetFranchiseeVendorsByID, verifyVendors } from "../../../api";
 import { setFranchiseVendors } from "../../../redux/Slices/masterSlice";
 import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios';
@@ -19,18 +19,24 @@ function FranchiseeVendors() {
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const dispatch = useDispatch()
-    const Vendors = useSelector((state) => state?.master?.FranchiseVendors);
-    console.log('Franchise Vendors = ', Vendors);
+    const [Vendors, setVendors] = useState();
+    // const Vendors = useSelector((state) => state?.master?.FranchiseVendors);
+    // console.log('Franchise Vendors = ', Vendors);
+
+    const LoggedDetails = useSelector((state) => state?.user?.loggedUserDetails)
+    console.log('Logged Details = ', LoggedDetails);
+
 
     // // ========================= fetch data from api ==============================
     const FranchiseeVendors = () => {
         try {
-            GetFranchiseeVendors().then((res) => {
-                // console.log('vendors data = ', res);
+            GetFranchiseeVendorsByID(LoggedDetails?.userid).then((res) => {
+                console.log('Franchise vendors = ', res);
+                setVendors(res);
                 dispatch(setFranchiseVendors(res));
             });
         } catch (error) {
-            console.log(error);
+            console.log(error); 
         }
     };
 

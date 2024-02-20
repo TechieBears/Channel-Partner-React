@@ -13,12 +13,17 @@ import { setFranchiseVendors } from "../../../../redux/Slices/masterSlice";
 import { setLoggedUser, setLoggedUserDetails, setRoleIs, setFranchiseeDetails } from '../../../../redux/Slices/loginSlice';
 import { useDispatch, useSelector } from "react-redux";
 import { ImageUpload, vendorlink } from "../../../../env";
+import { toast } from 'react-toastify';
+
 
 
 export default function AddVendors(props) {
     // console.log('props = ', props)
     const categories = useSelector((state) => state?.master?.Category);
     const user = useSelector((state) => state?.user?.FranchiseeDetails);
+    const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
+    const Franchisee = useSelector((state) => state?.master?.Franchise);
+
 
 
     // console.log('Franchisee details = ', user);
@@ -287,6 +292,26 @@ export default function AddVendors(props) {
                                                         </label>}
                                                         {errors.profile_pic && <Error title='Profile Image is required*' />}
                                                     </div>
+                                                    {
+                                                        LoggedUserDetails?.role == 'admin' &&
+                                                        <div className="">
+                                                            <label className={labelClass}>Select Franchisee*</label>
+                                                            <select
+                                                                className={inputClass}
+                                                                {...register("franchisee_id", { required: true })}
+                                                            >
+                                                                <option value="" selected>--Select Franchisee--</option>
+                                                                {Franchisee?.map(franchisee => (
+                                                                    <option key={franchisee?.user?.id} value={franchisee?.user?.id}>
+                                                                        {franchisee?.user?.first_name + " (" + franchisee?.user?.pincode + ")"}
+                                                                    </option>
+                                                                ))}
+                                                            </select>
+                                                            {errors.franchisee_id && (
+                                                                <Error title="Franchisee is Required*" />
+                                                            )}
+                                                        </div>
+                                                    }
                                                     <div className="">
                                                         <label className={labelClass}>Email*</label>
                                                         <input

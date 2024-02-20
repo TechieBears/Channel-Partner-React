@@ -4,7 +4,7 @@ import Table from '../../../components/Table/Table';
 import { formBtn1, inputClass, tableBtn } from '../../../utils/CustomClass';
 import AddRestaurant from '../../../components/Modals/Resturant/AddRestaurant';
 import { NavLink } from 'react-router-dom';
-import Switch from 'react-switch'
+import Switch from 'react-js-switch'
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 
 export default function FranchiseRestaurent() {

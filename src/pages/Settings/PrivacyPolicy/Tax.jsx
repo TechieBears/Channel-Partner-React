@@ -22,7 +22,7 @@ function Tax() {
                 </div>
                 <form>
                     <div className="p-4 overflow-y-scroll scrollbars ">
-                        <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-2 gap-x-3 gap-y-3 customBox">
+                        <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
                             <div className="">
                                 <label className={labelClass}>
                                     GST*
@@ -99,7 +99,7 @@ function Tax() {
                 </div>
                 <form>
                     <div className="p-4 overflow-y-scroll scrollbars ">
-                        <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-2 gap-x-3 gap-y-3 customBox">
+                        <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
                         <div className="">
                                 <label className={labelClass}>
                                     GST*

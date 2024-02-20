@@ -21,11 +21,12 @@ import { toast } from 'react-toastify';
 function Vendors() {
     const [activeTab, setActiveTab] = useState(true);
     const [rstatus, setStatus] = useState();
+    const [Vendors, SetVendors] = useState();
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const dispatch = useDispatch()
-    const Vendors = useSelector((state) => state?.master?.FranchiseVendors);
-    console.log('Admin Vendors = ', Vendors);
+    // const Vendors = useSelector((state) => state?.master?.FranchiseVendors);
+    // console.log('Admin Vendors = ', Vendors);
 
 
 
@@ -34,7 +35,8 @@ function Vendors() {
     const FranchiseeVendors = () => {
         try {
             GetFranchiseeVendors().then((res) => {
-                console.log('vendors data = ', res);
+                console.log('Admin vendors = ', res);
+                SetVendors(res);
                 dispatch(setFranchiseVendors(res));
             });
         } catch (error) {
@@ -90,7 +92,7 @@ function Vendors() {
             verifyVendors(payload).then((form) => {
                 console.log(payload)
                 if (form.status == "success") {
-                    toast.success('Driver Verification Changed !');
+                    toast.success('Vendor Verification Changed !');
                     FranchiseeVendors()
                 }
                 else {

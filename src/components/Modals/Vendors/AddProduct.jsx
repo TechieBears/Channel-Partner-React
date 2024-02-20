@@ -213,9 +213,9 @@ function AddProduct(props) {
                                                         </select>
                                                         {errors.product_category && <Error title='Category is Required*' />}
                                                     </div>
-                                                    {/* <div className="">
+                                                    <div className="">
                                                         <label className={labelClass}>
-                                                            Product Category*
+                                                            Product Sub-Category*
                                                         </label>
                                                         <select
                                                             className={inputClass}
@@ -229,7 +229,7 @@ function AddProduct(props) {
                                                             }
                                                         </select>
                                                         {errors.product_subcategory && <Error title='Sub Category is Required*' />}
-                                                    </div> */}
+                                                    </div>
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             Product MRP*
@@ -287,11 +287,38 @@ function AddProduct(props) {
                                                             className={inputClass}
                                                             {...register('product_isactive', { required: true })}
                                                         >
-                                                            <option value={true}>Avilable</option>
+                                                            <option value=''>Select</option>
+                                                            <option value={true}>Available</option>
                                                             <option value={false}>Out Of Stock</option>
                                                         </select>
                                                         {errors.product_isactive && <Error title='Status is Required*' />}
                                                     </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Country of Origin*
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='India'
+                                                            className={inputClass}
+                                                            {...register('product_country_of_origin', { required: true })}
+                                                        />
+                                                        {errors.product_country_of_origin && <Error title='Country of Origin is Required*' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Product Available Quantity*
+                                                        </label>
+                                                        <input
+                                                            type="number"
+                                                            placeholder='150'
+                                                            className={inputClass}
+                                                            {...register('product_available_qty', { required: true })}
+                                                        />
+                                                        {errors.product_available_qty && <Error title='Country of Origin is Required*' />}
+                                                    </div>
+                                                    
+
                                                     {/* <div className="">
                                                         <label className={labelClass}>
                                                             Availability Date

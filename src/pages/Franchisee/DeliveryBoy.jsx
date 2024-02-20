@@ -1,27 +1,30 @@
 import { Refresh, SearchNormal } from 'iconsax-react'
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import { useForm } from 'react-hook-form';
 import { Eye  } from 'iconsax-react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Table from '../../components/Table/Table'
 import AddDriverFrom from '../../components/Modals/DriverModals/AddDriverForm'
-import { getDeliveryBoys, verifyDeliveryBoy } from '../../api';
+import { getDeliveryBoysByID, verifyDeliveryBoy } from '../../api';
 import { setDeliveryList } from '../../redux/Slices/deliverySlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { formBtn1, formBtn2, inputClass ,tableBtn } from '../../utils/CustomClass';
 import Switch from 'react-js-switch';
 import { toast } from 'react-toastify';
 
-
-
-
-
-
 function DeliveryBoy() {
     const dispatch = useDispatch()
-    const deliveryList = useSelector((state) => state?.delivery?.deliveryList)
-    console.log('delivery Table data = ', deliveryList?.data)
+    // const deliveryList = useSelector((state) => state?.delivery?.deliveryList)
+    // const deliveryList = useSelector((state) => state?.user?.setLoggedUserDetails)
+    // console.log('delivery Table data = ', deliveryList?.data)
+
+    const LoggedDetails = useSelector((state) => state?.user?.loggedUserDetails)
+    // console.log('Logged Details = ', LoggedDetails);
+
+    const [deliveryList, setdeliveryList] = useState();
+
+    
     const {
         register,
         handleSubmit,
@@ -45,10 +48,12 @@ function DeliveryBoy() {
         
 
 
-            // // ========================= fetch data from api ==============================
+    // // ========================= fetch data from api ==============================
     const DeliveryBoyDetails = () => {
         try {
-            getDeliveryBoys().then((res) => {
+            getDeliveryBoysByID(LoggedDetails?.userid).then((res) => {
+                console.log('Franchise Drivers = ', res);
+                setdeliveryList(res);
                 dispatch(setDeliveryList(res));
             });
         } catch (error) {
@@ -62,19 +67,19 @@ function DeliveryBoy() {
 
 
     // ============================= fetching data api ==================================
-    const fetchData = () => {
-        try {
-            getDeliveryBoys().then((res) => {
-                dispatch(setDeliveryList(res));
-            })
-        } catch (err) {
-            console.log('error', err);
-        }
-    }
+    // const fetchData = () => {
+    //     try {
+    //         getDeliveryBoys().then((res) => {
+    //             dispatch(setDeliveryList(res));
+    //         })
+    //     } catch (err) {
+    //         console.log('error', err);
+    //     }
+    // }
 
-    useEffect(() => {
-        fetchData()
-    }, [])
+    // useEffect(() => {
+    //     fetchData()
+    // }, [])
 
 
     const verifyActions = (row) => {
@@ -275,7 +280,7 @@ function DeliveryBoy() {
                     <AddDriverFrom title='Add Driver' DeliveryBoyDetails={DeliveryBoyDetails}/>
                 </div>
             </div>
-                <Table data={deliveryList?.data} columns={columns} />
+                <Table data={deliveryList} columns={columns} />
             </div>
 
 

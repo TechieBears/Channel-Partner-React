@@ -218,7 +218,7 @@ export const EditFranchiseeVendors = async (id, data) => {
     }
 };
 
-/* ================== Get Franchisee Vendors Api =========== */
+/* ================== Get Vendors For Admin Api =========== */
 export const GetFranchiseeVendors = async (data) => {
     const url = `${environment.baseUrl}vendor/create_vendor`;
     try {
@@ -229,6 +229,20 @@ export const GetFranchiseeVendors = async (data) => {
         console.log(err);
     }
 };
+
+/* ================== Get Vendors for FranchiseeID Api =========== */
+export const GetFranchiseeVendorsByID = async (id) => {
+    const url = `${environment.baseUrl}franchise/all_seller_byfranchise/${id}`;
+    try {
+        const response = await axios.get(url, id)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+
 
 /* ================== Get Franchisee Deatails Api =========== */
 export const getFranchiseDetails = async (id) => {
@@ -1217,6 +1231,16 @@ export const getDeliveryBoys = async (data) => {
     const url = `${environment.baseUrl}delivery/create_deliveryboy`
     try {
         const response = await axios.get(url, data);
+        return response.data;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const getDeliveryBoysByID = async (id) => {
+    const url = `${environment.baseUrl}franchise/all_deliveryboy_byfranchise/${id}`
+    try {
+        const response = await axios.get(url, id);
         return response.data;
     } catch (error) {
         console.log(error)
