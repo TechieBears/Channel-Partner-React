@@ -16,11 +16,6 @@ import userImg from '../../../assets/user.jpg';
 import AddDriverFrom from '../../../components/Modals/DriverModals/AddDriverForm';
 import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
 
-// import DriverTipForm from '../../../components/Modals/DriverModals/DriverTipForm';
-// import userImg from '../../../assets/user.webp';
-
-
-
 function Drivers() {
     const dispatch = useDispatch()
     const userList = useSelector(state => state.users.list)
@@ -32,11 +27,7 @@ function Drivers() {
     } = useForm();
     const [open, setOpen] = React.useState(false);
     const [delId, setDelId] = React.useState(0);
-
     const DeliveryList = useSelector((state) => state?.delivery?.deliveryList);
-    console.log('DeliveryList Table data = ', DeliveryList?.data);
-
-
 
     // =================== filter data ========================
     const onSubmit = async (data) => {
@@ -89,7 +80,7 @@ function Drivers() {
     // =================== table action ========================
     const actionBodyTemplate = (row) => (
         <div className="flex items-center gap-2">
-            <Link to={`/drivers/driver-detail/${row.id}`} state={row} className="bg-green-100 px-1.5 py-2 rounded-sm">
+            <Link to={`/drivers/driver-detail/${row.driver_id}`} state={row} className="bg-green-100 px-1.5 py-2 rounded-sm">
                 <Eye size="20" className='text-green-500' />
             </Link>
             <AddDriverFrom button='edit' title='Edit User' data={row} DeliveryBoyDetails={DeliveryBoyDetails} />
