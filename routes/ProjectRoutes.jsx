@@ -100,6 +100,7 @@ const ProjectRoutes = () => {
                                         <Route path="/subadmin" element={<SubAdmin />} />
                                         <Route path="/subadmin/subadmin-detail/:id" element={<SubAdminDetail />} />
                                         <Route path="/settings" element={<Settings />} />
+                                        {/* <Route path='/product-list/product-details/:id' element={<ViewProduct />} /> */}
                                     </> :
                                     user?.role == 'seller' ?
                                         <>

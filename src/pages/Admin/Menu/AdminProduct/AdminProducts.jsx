@@ -2,16 +2,18 @@ import React, { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux';
 import AsyncSelect from "react-select/async";
-import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
+import { formBtn1, formBtn2, inputClass } from '../../../../utils/CustomClass';
 import { toast } from 'react-toastify';
-import Table from '../../../components/Table/Table';
+import Table from '../../../../components/Table/Table';
 import { NavLink } from 'react-router-dom';
-import AddProduct from '../../../components/Modals/Vendors/AddProduct';
 import { Edit, Eye, Trash } from 'iconsax-react';
-import ViewProduct from '../../../components/Modals/Vendors/ViewProduct';
-import { getAllSeller, getAllShopProduct } from '../../../api';
+// import ViewProduct from '../../../../components/Modals/Vendors/ViewProduct';
+import { getAllSeller, getAllShopProduct } from '../../../../api';
+import AddProduct from '../../../../components/Modals/Vendors/AddProduct';
+import Switch from 'react-js-switch';
 
-const VendorProduct = () => {
+
+const AdminProduct = () => {
     const [sellers, setSellers] = useState([]);
     const [shopProducts, setShopProducts] = useState([])
     console.log('shopProducts', shopProducts)
@@ -56,40 +58,6 @@ const VendorProduct = () => {
 
     //======================= Table =======================
 
-    const restaurantData = [
-        {
-            "productId": "001",
-            "name": "Product A",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-            "category": "Breakfast",
-            "subcategory": "South Indian",
-            "createdDate": "2024-02-12",
-            "MRP": 50,
-            "quantity": 100
-        },
-        {
-            "productId": "002",
-            "name": "Product B",
-            "description": "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-            "category": "Lunch",
-            "subcategory": "Thali",
-            "createdDate": "2024-02-10",
-            "MRP": 100,
-            "quantity": 80
-        },
-        {
-            "productId": "003",
-            "name": "Product C",
-            "description": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-            "category": "Drinks",
-            "subcategory": "Soft Drink",
-            "createdDate": "2024-02-08",
-            "MRP": 75,
-            "quantity": 120
-        }
-    ];
-
-
     const action = (row) => <div className='flex space-x-2'>
         <NavLink to={`/product-list/product-details/${row?.product_id}`} className='items-center p-1 bg-sky-100 rounded-xl hover:bg-sky-200'>
             <Eye size={24} className='text-sky-400' />
@@ -101,8 +69,59 @@ const VendorProduct = () => {
         </button>
     </div>
 
+
+
+    // =============================== active user switch =============================
+    const switchActive = (row) => {
+        return (
+            <div className="flex items-center justify-center gap-2">
+                <Switch
+                    value={row?.isverifiedbyfranchise}
+                    disabled={true}
+                    // onChange={() => activeActions(row)}
+                    size={50}
+                    backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
+                    borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
+            </div>
+        )
+    }
+
+    const verifyActions = (row) => {
+        const payload = { userId: row?.user?.id, isverifiedbyadmin: !row?.user?.isverified_byadmin, isverifiedbyfranchise: row?.isverifiedbyfranchise }
+        try {
+            verifyDeliveryBoy(payload).then((form) => {
+                console.log(payload)
+                if (form.status == "success") {
+                    toast.success('Driver Verification Changed !');
+                    DeliveryBoyDetails()
+                }
+                else {
+                    console.log("err");
+                }
+            })
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
+
+    // =============================== verify user switch =============================
+    const switchVerify = (row) => {
+        return (
+            <div className="flex items-center justify-center gap-2 ">
+                <Switch
+                    value={row?.user?.isverified_byadmin}
+                    onChange={() => verifyActions(row)}
+                    size={50}
+                    backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
+                    borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
+            </div>
+        )
+    }
+
     
-    const shopColumns = [
+    const Columns = [
         { field: 'product_id', header: 'ID', sortable: false },
         { field: 'product_name', header: 'Product Name', sortable: true },
         { field: 'product_actual_price', header: 'MRP', sortable: true },
@@ -115,6 +134,10 @@ const VendorProduct = () => {
         { field: 'product_Manufacturer_Name', header: 'Manufacturer Name', sortable: true },
         { field: 'product_country_of_origin', header: 'Country Of Origin', sortable: true },
         { filed: 'action', header: 'Action', body: action, sortable: true },
+
+        { field: 'isactive', header: 'Franchise Verify', body: switchActive, sortable: true },
+        { field: 'isverify', header: 'Admin Verify', body: switchVerify, sortable: true },
+
   
         // { field: 'createdDate', header: 'Create Date', sortable: true },
         // { field: 'MRP', header: 'MRP', sortable: true },
@@ -209,7 +232,7 @@ const VendorProduct = () => {
                 </div>
                 <div className='mt-4'>
                     {user?.isShop == true ?
-                        <Table data={shopProducts} columns={shopColumns} /> :
+                        <Table data={shopProducts} columns={Columns} /> :
                         <Table data={restaurantData} columns={restaurantColumns} />
                     }
                 </div>
@@ -218,4 +241,4 @@ const VendorProduct = () => {
     )
 }
 
-export default VendorProduct
+export default AdminProduct

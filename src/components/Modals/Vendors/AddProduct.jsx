@@ -13,7 +13,7 @@ import { addProduct, editVendorProduct, getAllSeller, getCategory, getSubCategor
 import { toast } from 'react-toastify';
 import { ImageUpload, productLink } from '../../../env';
 
-function AddProducts(props) {
+const AddProduct = (props) => {
     console.log('props = ', props);
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
@@ -606,4 +606,4 @@ function AddProducts(props) {
     )
 }
 
-export default AddProducts
+export default AddProduct

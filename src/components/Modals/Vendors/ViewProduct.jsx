@@ -56,28 +56,40 @@ function ViewProduct(props) {
             <button onClick={() => navigate(-1)}>
                 <ArrowLeft />
             </button>
-            <div className='p-4 bg-white rounded-xl grid grid-cols-3'>
-                <div className='col-span-2 mt-4 space-y-4 '>
-                    <p className='font-semibold text-2xl'>{product?.product_name}</p>
-                    <div className='flex gap-5 items-center border-b p-2'>
-                        <img src='https://www.thisday.app/uploads/Amul_bc2a81aa60.png' className='w-24 border p-2 rounded-xl' />
+            <div className='grid grid-cols-3 p-4 bg-white rounded-xl'>
+                <div className='mt-4 space-y-4 col-span-full '>
+                    <p className='text-2xl font-semibold'>{product?.product_name}</p>
+                    <div className='flex items-center gap-5 p-2 border-b'>
+                        <img src='https://www.thisday.app/uploads/Amul_bc2a81aa60.png' className='w-24 p-2 border rounded-xl' />
                         <p className='font-semibold'>{ }</p>
                     </div>
-                    <p className='text-sm border-b p-2'>{product?.product_description}</p>
-                    <div className='text-sm items-center border-b p-2'>
+                    <p className='p-2 text-sm border-b'>{product?.product_description}</p>
+                    <div className='items-center p-2 text-sm border-b'>
                         <p>175 ml</p>
                         <p className='text-lg font-semibold'>₹ {product?.product_actual_price}</p>
                     </div>
                 </div>
-                <div className='w-96'>
+               
+                {/* <div className='w-96'>
                     <SimpleGallery
                         galleryID="my-test-gallery"
                         images={images}
                     />
-                </div>
+                </div> */}
             </div>
-            <div className='p-4 bg-white rounded-xl space-y-2'>
-                <p className='font-semibold text-2xl'>Product Details</p>
+            <div className='flex gap-2 py-10 bg-white'>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU" alt="" />
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU" alt="" />
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU" alt="" />
+           
+                {/* <img src={product?.product_image_1} alt="" />
+                <img src={product?.product_image_2} alt="" />
+                <img src={product?.product_image_3} alt="" />
+                <img src={product?.product_image_4} alt="" />
+                <img src={product?.product_image_5} alt="" /> */}
+            </div>
+            <div className='p-4 space-y-2 bg-white rounded-xl'>
+                <p className='text-2xl font-semibold'>Product Details</p>
                 <div>
                     <p className='text-lg font-semibold'>Key Feature</p>
                     <p className='text-sm text-gray-600'>Wholesome taste</p>

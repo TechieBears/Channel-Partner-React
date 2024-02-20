@@ -70,6 +70,20 @@ export const getProducts = async () => {
     }
 };
 
+/* ================== Menu SubCategory Api =========== */
+export const getProductsAdmin = async () => {
+    const url = `${environment.baseUrl}vendor/add_shop_product`;
+    try {
+        const response = await axios.get(url)
+        console.log('products data == ', response.data);
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+
 
 /* ================== Menu SubCategory by CatId Api =========== */
 export const getSubCategorybyCatId = async (id) => {

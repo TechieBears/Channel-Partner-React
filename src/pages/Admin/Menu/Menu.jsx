@@ -3,6 +3,7 @@ import { Tab, TabList, Tabs, TabPanel } from 'react-tabs'
 import Category from './MenuList/Category';
 import SubCategory from './MenuList/SubCategory';
 import Product from './MenuList/Product';
+import AdminProduct from './AdminProduct/AdminProducts';
 
 
 const Menu = () => {
@@ -40,7 +41,7 @@ const Menu = () => {
               </TabPanel>
               {/* ================= Product component ============== */}
               <TabPanel>
-                <Product/>
+                <AdminProduct />
               </TabPanel>
           </Tabs>
       </div>
