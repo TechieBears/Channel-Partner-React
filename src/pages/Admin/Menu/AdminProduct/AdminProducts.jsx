@@ -5,7 +5,7 @@ import AsyncSelect from "react-select/async";
 import { formBtn1, formBtn2, inputClass } from '../../../../utils/CustomClass';
 import { toast } from 'react-toastify';
 import Table from '../../../../components/Table/Table';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { Edit, Eye, Trash } from 'iconsax-react';
 // import ViewProduct from '../../../../components/Modals/Vendors/ViewProduct';
 import { getAllSeller, getAllShopProduct } from '../../../../api';
@@ -59,9 +59,9 @@ const AdminProduct = () => {
     //======================= Table =======================
 
     const action = (row) => <div className='flex space-x-2'>
-        <NavLink to={`/product-list/product-details/${row?.product_id}`} className='items-center p-1 bg-sky-100 rounded-xl hover:bg-sky-200'>
+        <Link to={`/product-list/product-details/${row?.product_id}`} state={row} className='items-center p-1 bg-sky-100 rounded-xl hover:bg-sky-200'>
             <Eye size={24} className='text-sky-400' />
-        </NavLink>
+        </Link>
         {/* <ViewProduct /> */}
         <AddProduct title='Edit Product' row={row} getProducts={getProducts} />
         <button className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
@@ -120,7 +120,7 @@ const AdminProduct = () => {
         )
     }
 
-    
+
     const Columns = [
         { field: 'product_id', header: 'ID', sortable: false },
         { field: 'product_name', header: 'Product Name', sortable: true },
@@ -138,7 +138,7 @@ const AdminProduct = () => {
         { field: 'isactive', header: 'Franchise Verify', body: switchActive, sortable: true },
         { field: 'isverify', header: 'Admin Verify', body: switchVerify, sortable: true },
 
-  
+
         // { field: 'createdDate', header: 'Create Date', sortable: true },
         // { field: 'MRP', header: 'MRP', sortable: true },
         // { filed: 'action', header: 'Action', body: action, sortable: true }
