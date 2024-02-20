@@ -1,25 +1,21 @@
-import { Fragment, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
+import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
 import LoadBox from '../../Loader/LoadBox';
 import { useForm } from 'react-hook-form';
 import Error from '../../Errors/Error';
 import { MultiSelect } from 'primereact/multiselect';
-import { Add } from 'iconsax-react';
-import { addRestaurant } from '../../../api';
+import { Add, Edit } from 'iconsax-react';
+import { addRestaurant, editRestaurant } from '../../../api';
 import { toast } from 'react-toastify';
 
 export default function AddRestaurant(props) {
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
-    const [selectedCategory, setSelectedCategory] = useState([])
     const user = useSelector((state) => state?.user?.FranchiseeDetails);
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const cancelButtonRef = useRef(null)
     const { register, handleSubmit, control, watch, reset, formState: { errors } } = useForm();
     const toggle = () => {
         setOpen(!isOpen)
@@ -31,27 +27,74 @@ export default function AddRestaurant(props) {
     }
     const categories = ['Asian', 'Mexican', 'Italian', 'Russian cussion', 'Spanish', 'Comfort', 'American', 'North Indian', 'South Indian']
     const onSubmit = (data) => {
-        let updateData = {
-            ...data,
-            "vendor_type": 'restaurant',
-            'created_by': user?.franch_id
-        }
-        console.log('restaurant data ==============================', updateData)
-        addRestaurant(updateData).then(res => {
-            if (res.status == 'success') {
-                toast.success('Resuraurant added successfully')
-                toggle();
-            } else {
-                toast.error('Error adding restaurant')
+        if (props?.button == 'edit') {
+            let updateData = {
+                ...data,
+                'created_by': props?.id,
+                "vendor_type": 'restaurant'
             }
-        })
+            editRestaurant(props?.id, updateData).then(res => {
+                if (res?.status == 'success') {
+                    toast.success('Restaurant Updated Successfully')
+                    props?.getAllRestaurant()
+                    toggle()
+                }
+            })
+        } else {
+            let updateData = {
+                ...data,
+                "vendor_type": 'restaurant',
+                'created_by': props?.id
+            }
+            addRestaurant(updateData).then(res => {
+                if (res.status == 'success') {
+                    toast.success('Resuraurant added successfully')
+                    props?.getAllRestaurant()
+                    toggle();
+                } else {
+                    toast.error('Error adding restaurant')
+                }
+            })
+        }
     }
+    useEffect(() => {
+        if (props?.button === 'edit') {
+            reset({
+                'first_name': props?.data?.user?.first_name,
+                'last_name': props?.data?.user?.last_name,
+                'date_of_birth': props?.data?.user?.date_of_birth,
+                'gender': props?.data?.user?.gender,
+                'email': props?.data?.user?.email,
+                'shop_name': props?.data?.shop_name,
+                'restaurant_phone': props?.data?.user?.phone_no,
+                'restaurant_address': props?.data?.user?.address,
+                'restaurant_city': props?.data?.user?.city,
+                'restaurant_state': props?.data?.user?.state,
+                'restaurant_pin_code': props?.data?.user?.pincode,
+                'restaurant_opening_time': props?.data?.shop_start_time,
+                'restaurant_closing_time': props?.data?.shop_end_time,
+                'veg_or_nonveg': props?.data?.veg_or_nonveg,
+                'short_description': props?.data?.short_description,
+                'selectedCategory': props?.data?.selectedCategory,
+                'bank_name': props?.data?.bank_name,
+                'account_number': props?.data?.account_number,
+                'ifsc_code': props?.data?.ifsc_code,
+                'adhar_card': props?.data?.adhar_card,
+                'pan_card': props?.data?.pan_card,
+                'gst_number': props?.data?.gst_number,
+            });
+        }
+    }, []);
     return (
         <>
-            <button className={`${formBtn1} flex`} onClick={() => setOpen(true)}>
-                <Add className='text-white' />
-                {props?.title}
-            </button>
+            {
+                props?.button == 'edit' ? <button className={`bg-yellow-100 p-1 rounded-lg`} onClick={() => setOpen(true)}>
+                    <Edit size={20} className='text-yellow-500' />
+                </button> : <button className={`${formBtn1} flex`} onClick={() => setOpen(true)}>
+                    <Add className='text-white' />
+                    {props?.title}
+                </button>
+            }
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-[100]" onClose={() => toggle}>
                     <Transition.Child
@@ -152,18 +195,20 @@ export default function AddRestaurant(props) {
                                                         />
                                                         {errors.email && <Error title='Email is Required*' />}
                                                     </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Password*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Password'
-                                                            className={inputClass}
-                                                            {...register('password', { required: true })}
-                                                        />
-                                                        {errors.password && <Error title='Password is Required*' />}
-                                                    </div>
+                                                    {props?.button != 'edit' &&
+                                                        <div className="">
+                                                            <label className={labelClass}>
+                                                                Password*
+                                                            </label>
+                                                            <input
+                                                                type="text"
+                                                                placeholder='Password'
+                                                                className={inputClass}
+                                                                {...register('password', { required: true })}
+                                                            />
+                                                            {errors.password && <Error title='Password is Required*' />}
+                                                        </div>
+                                                    }
                                                     <h3 className='col-span-4 font-semibold text-xl'>Basic Details</h3>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -233,9 +278,9 @@ export default function AddRestaurant(props) {
                                                             type="text"
                                                             placeholder='PIN Code'
                                                             className={inputClass}
-                                                            {...register('restaurant_pin_code', { required: true })}
+                                                            {...register('pincode', { required: true })}
                                                         />
-                                                        {errors.restaurant_pin_code && <Error title='Restaurant PIN Code is Required*' />}
+                                                        {errors.pincode && <Error title='Restaurant PIN Code is Required*' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -263,45 +308,18 @@ export default function AddRestaurant(props) {
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Price Range for 2*
-                                                        </label>
-                                                        <input
-                                                            type="number"
-                                                            placeholder='Price Range for 2'
-                                                            className={inputClass}
-                                                            {...register('price_range', { required: true })}
-                                                        />
-                                                        {errors.price_range && <Error title='Restaurant Closing is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Delivery Mode *
-                                                        </label>
-                                                        <select
-                                                            className={inputClass}
-                                                            {...register('delivery_mode', { required: true })}
-                                                        >
-                                                            <option value=''>Select</option>
-                                                            <option value='both'>Both</option>
-                                                            <option value='pickup'>Pick Up</option>
-                                                            <option value='delivery'>Delivery</option>
-                                                        </select>
-                                                        {errors.delivery_mode && <Error title='Delivery Mode is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
                                                             Type *
                                                         </label>
                                                         <select
                                                             className={inputClass}
-                                                            {...register('type', { required: true })}
+                                                            {...register('veg_or_nonveg', { required: true })}
                                                         >
                                                             <option value=''>Select</option>
                                                             <option value='both'>Both</option>
                                                             <option value='Veg'>Veg</option>
                                                             <option value='Non Veg'>Non Veg</option>
                                                         </select>
-                                                        {errors.type && <Error title='Type is Required*' />}
+                                                        {errors.veg_or_nonveg && <Error title='Type is Required*' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -311,19 +329,6 @@ export default function AddRestaurant(props) {
                                                             placeholder='Short Description'
                                                             className={inputClass}
                                                             {...register('short_description',)}
-                                                        />
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Categories
-                                                        </label>
-                                                        <MultiSelect
-                                                            value={selectedCategory}
-                                                            onChange={(e) => setSelectedCategory(e.target.value)}
-                                                            options={categories}
-                                                            placeholder='Select Category'
-                                                            maxSelectedLabels={3}
-                                                            className={`w-full`}
                                                         />
                                                     </div>
                                                     <h3 className='col-span-4 text-xl font-semibold'>Banking Details</h3>
@@ -400,43 +405,6 @@ export default function AddRestaurant(props) {
                                                         />
                                                         {errors.gst_number && <Error title='GST is Required*' />}
                                                     </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Admin Delivery Comission (%)
-                                                        </label>
-                                                        <input
-                                                            type="number"
-                                                            placeholder='Admin Delivery Comission (%)'
-                                                            className={inputClass}
-                                                            {...register('admin_del_commission')}
-                                                        />
-                                                        {/* {errors.admin_del_commission && <Error title='Admin Delivery Commission is Required*' />} */}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Admin Pickup Comission (%)
-                                                        </label>
-                                                        <input
-                                                            type="number"
-                                                            placeholder='Admin Pickup Comission (%)'
-                                                            className={inputClass}
-                                                            {...register('admin_pickup_commission')}
-                                                        />
-                                                        {/* {errors.admin_pickup_commission && <Error title='Admin Pickup Commission is Required*' />} */}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            License Number
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='License Number'
-                                                            className={inputClass}
-                                                            {...register('license_number',)}
-                                                        />
-                                                    </div>
-
-
                                                 </div>
                                             </div>
                                             <footer className="py-2 flex bg-white justify-end px-4 space-x-3">
@@ -448,8 +416,8 @@ export default function AddRestaurant(props) {
                                 </Dialog.Panel>
                             </Transition.Child>
                         </div>
-                    </div>
-                </Dialog>
+                    </div >
+                </Dialog >
             </Transition >
         </>
     )

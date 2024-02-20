@@ -7,8 +7,9 @@ import { setLoggedUser, setLoggedUserDetails, setRoleIs, setFranchiseeDetails } 
 import LoadBox from '../../components/Loader/LoadBox';
 import { toast } from 'react-toastify';
 import Error from '../../components/Errors/Error';
-import { vendorlogin , getFranchiseDetails} from '../../api/index';
+import { vendorlogin, getFranchiseDetails } from '../../api/index';
 import { useDispatch, useSelector } from "react-redux";
+import { NavLink } from 'react-router-dom';
 
 
 const SellerLogin = () => {
@@ -42,13 +43,13 @@ const SellerLogin = () => {
                     dispatch(setRoleIs(res?.is_subadmin))
                     setLoader(false)
                     dispatch(setLoggedUser(true))
-                    if(res?.userid && res?.role == 'franchise'){
+                    if (res?.userid && res?.role == 'franchise') {
                         getFranchiseDetailsById(res?.userid);
                     }
-                    } else {
-                        setLoader(false)
-                        toast.error(res?.message)
-                    }
+                } else {
+                    setLoader(false)
+                    toast.error(res?.message)
+                }
             })
         } catch (error) {
             setLoader(false)
@@ -169,6 +170,7 @@ const SellerLogin = () => {
                                     Sign in
                                 </button>}
                             </div>
+                            <div className=''><NavLink className='w-full' to='/admin'>Sign-in as a <span className='text-sky-400'>Admin</span></NavLink></div>
                         </div>
                     </div>
                 </form>

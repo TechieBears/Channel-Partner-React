@@ -54,7 +54,7 @@ export default function Restaurant() {
         <NavLink to={`/resturants/restaurant-detail/${row?.vendor_id}`} state={row} className="bg-green-100 px-1.5 py-1 rounded-lg">
             <Eye size="20" className='text-green-500' />
         </NavLink>
-        <AddRestaurant button='edit' title='Edit User' data={row} getAllRestaurant={getAllRestaurant} />
+        <AddRestaurant button='edit' title='Edit User' id={row?.user?.id} data={row} getAllRestaurant={getAllRestaurant} />
     </div>
 
     const columns = [
