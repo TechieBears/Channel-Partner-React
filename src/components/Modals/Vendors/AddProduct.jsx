@@ -436,14 +436,14 @@ const AddProduct = (props) => {
                                                         {errors.product_shelflife && <Error title='Shelf Life is Required*' />}
                                                     </div>
                                                     <div className="">
-                                                        <label className={labelClass} htmlFor="video_input">Product Video*</label>
+                                                        <label className={labelClass} htmlFor="video_input">Product Video</label>
                                                         <input
                                                             className={fileinput}
                                                             id="video_input"
                                                             type='file'
                                                             accept='video/mp4,video/x-m4v,video/*'
                                                             placeholder='Upload Video...'
-                                                            {...register("product_video_url", { required: props.button === 'edit' ? false : true })}
+                                                            {...register("product_video_url")}
                                                             onChange={handleFileChange}
                                                         />
                                                         {props?.button === 'edit' && props?.data.product_video_url && (
@@ -451,7 +451,7 @@ const AddProduct = (props) => {
                                                                 {props?.data?.product_video_url?.name}
                                                             </label>
                                                         )}
-                                                        {errors.product_video_url && <Error title='Video file is required*' />}
+                                                        {/* {errors.product_video_url && <Error title='Video file is required*' />} */}
                                                     </div>
                                                     {/* <div className="">
                                                         <label className={labelClass}>
@@ -526,67 +526,70 @@ const AddProduct = (props) => {
                                                             multiple
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            {...register("product_image_1", { required: props.title == 'Edit Product' ? false : true })} />
+                                                            {...register("product_image_1", 
+                                                            { required: props.title == 'Edit Product' ? false : true })} />
                                                         {props?.title == 'Edit Product' && props?.row?.product_image_1 != '' && props?.row?.product_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                                                             {props?.row?.product_image_1?.split('/').pop()}
                                                         </label>}
-                                                        {errors.product_image_1 && <Error title='Profile Image is required*' />}
+                                                        {errors.product_image_1 && <Error title='Main Image is required*' />}
                                                     </div>
                                                     <div className="">
-                                                        <label className={labelClass} htmlFor="main_input">Image 2*</label>
+                                                        <label className={labelClass} htmlFor="main_input">Image 2</label>
                                                         <input className={fileinput}
                                                             id="main_input"
                                                             type='file'
                                                             multiple
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            {...register("product_image_2", { required: props.title == 'Edit Product' ? false : true })} />
+                                                            {...register("product_image_2",
+                                                             )} 
+                                                             />
                                                         {props?.title == 'Edit Product' && props?.row?.product_image_2 != '' && props?.row?.product_image_2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                                                             {props?.row?.product_image_2?.split('/').pop()}
                                                         </label>}
-                                                        {errors.product_image_2 && <Error title='Profile Image is required*' />}
+                                                        {/* {errors.product_image_2 && <Error title='Profile Image is required*' />} */}
                                                     </div>
                                                     <div className="">
-                                                        <label className={labelClass} htmlFor="main_input">Image 3*</label>
+                                                        <label className={labelClass} htmlFor="main_input">Image 3</label>
                                                         <input className={fileinput}
                                                             id="main_input"
                                                             type='file'
                                                             multiple
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            {...register("product_image_3", { required: props.title == 'Edit Product' ? false : true })} />
+                                                            {...register("product_image_3")} />
                                                         {props?.title == 'edit' && props?.row?.product_image_3 != '' && props?.row?.product_image_3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                                                             {props?.row?.product_image_3?.split('/').pop()}
                                                         </label>}
-                                                        {errors.product_image_3 && <Error title='Profile Image is required*' />}
+                                                        {/* {errors.product_image_3 && <Error title='Profile Image is required*' />} */}
                                                     </div>
                                                     <div className="">
-                                                        <label className={labelClass} htmlFor="main_input">Image 4*</label>
+                                                        <label className={labelClass} htmlFor="main_input">Image 4</label>
                                                         <input className={fileinput}
                                                             id="main_input"
                                                             type='file'
                                                             multiple
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            {...register("product_image_4", { required: props.title == 'Edit Product' ? false : true })} />
+                                                            {...register("product_image_4")} />
                                                         {props?.title == 'Edit Product' && props?.row?.product_image_4 != '' && props?.row?.product_image_4 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                                                             {props?.row?.product_image_4?.split('/').pop()}
                                                         </label>}
-                                                        {errors.product_image_4 && <Error title='Profile Image is required*' />}
+                                                        {/* {errors.product_image_4 && <Error title='Profile Image is required*' />} */}
                                                     </div>
                                                     <div className="">
-                                                        <label className={labelClass} htmlFor="main_input">Image 5*</label>
+                                                        <label className={labelClass} htmlFor="main_input">Image 5</label>
                                                         <input className={fileinput}
                                                             id="main_input"
                                                             type='file'
                                                             multiple
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            {...register("product_image_5", { required: props.title == 'Edit Product' ? false : true })} />
+                                                            {...register("product_image_5")} />
                                                         {props?.title == 'Edit Product' && props?.row?.product_image_5 != '' && props?.row?.product_image_5 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                                                             {props?.row?.product_image_5?.split('/').pop()}
                                                         </label>}
-                                                        {errors.product_image_5 && <Error title='Profile Image is required*' />}
+                                                        {/* {errors.product_image_5 && <Error title='Profile Image is required*' />} */}
                                                     </div>
                                                 </div>
                                             </div>
