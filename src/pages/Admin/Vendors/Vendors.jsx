@@ -139,10 +139,10 @@ function Vendors() {
     // =================== table action ========================
     const actionBodyTemplate = (row) => (
         <div className="flex items-center gap-2">
-            <Link to={`/vendors/vendors-detail/${row.id}`} state={row} className="bg-green-100 px-1.5 py-2 rounded-sm">
+            <Link to={`/vendors/vendors-detail/${row?.vendor_id}`} state={row} className="bg-green-100 px-1.5 py-2 rounded-sm">
                 <Eye size="20" className='text-green-500' />
             </Link>
-            <AddVendors button='edit' title='Edit User' data={row} FranchiseeVendors={FranchiseeVendors}/>
+            <AddVendors button='edit' title='Edit User' data={row} FranchiseeVendors={FranchiseeVendors} />
         </div>
     );
 
@@ -169,15 +169,16 @@ function Vendors() {
 
     /*================================     column    ========================= */
 
-    // const status = (row) => <Switch checked={row?.id == rstatus ? true : false} onChange={() => setStatus(row?.id)} />
+    const verifyByAdmin = (row) => <Switch checked={row?.is_verified} onChange={() => setStatus(row?.id)} />
+    const ActiveStatus = (row) => <Switch checked={row?.is_active} onChange={() => setStatus(row?.id)} />
     const status = (row) => <Switch checked={row?.id == rstatus ? true : false} onChange={() => setStatus(row?.id)} />
     const action = (row) => <button className={`${tableBtn}`} >
         View Analysis
     </button>
 
     const columns = [
-        // { field: 'id', header: 'ID', sortable: false },
         { field: 'profile_pic', header: 'Profile', body: representativeBodyTemplate, sortable: false, style: true },
+        { field: 'isb_code', header: 'ISB', sortable: false },
         { field: 'first_name', body: (row) => <div className="capitalize">{row?.user?.first_name + " " + row?.user?.last_name}</div>, header: 'Name' },
         { field: 'email', header: 'Email', body: (row) => <h6>{row?.user?.email}</h6>, sortable: false },
         { field: 'phone_no', header: 'Phone No', body: (row) => <h6>{row?.user?.phone_no}</h6>, sortable: false },
@@ -262,7 +263,7 @@ function Vendors() {
                     <div className="">
                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>  Vendor Details</h1>
                     </div>
-                    <AddVendors title='Add Vendors' FranchiseeVendors={FranchiseeVendors}  />
+                    <AddVendors title='Add Vendors' FranchiseeVendors={FranchiseeVendors} />
                 </div>
                 {/* {
                     Vendors?.legth > 0 && <Table data={Vendors} columns={columns} />

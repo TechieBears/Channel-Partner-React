@@ -268,6 +268,43 @@ export const editfranchise = async (id, data) => {
     }
 };
 
+/* ============================ Create Rest ===================== */
+export const addRestaurant = async (data) => {
+    const url = `${environment.baseUrl}vendor/create_restaurant`;
+    try {
+        const response = await axios.post(url, data);
+        return response.data;
+    }
+    catch (err) {
+        console.log('error while creating restaurant')
+    }
+}
+
+/* ========================== get all Restaurant =========================== */
+export const getRestarant = async () => {
+    const url = `${environment.baseUrl}vendor/create_restaurant`;
+    try {
+        const response = await axios.get(url);
+
+        // console.log('response.data ========== restaurant', response.data);
+        return response.data;
+    }
+    catch (err) {
+        console.log('error while creating restaurant')
+    }
+}
+
+/* ============== update restaurant ============ */
+export const editRestaurant = async (vendorID, data) => {
+    const url = `${environment.baseUrl}vendor/edit_restaurant/${vendorID}`;
+    try {
+        const response = await axios.put(url, data)
+        return response.data
+    } catch (err) {
+        console.log('Error updating restaurant', err)
+    }
+}
+
 
 /* ================== Get all Customers Api =========== */
 export const getAllCustomers = async () => {
