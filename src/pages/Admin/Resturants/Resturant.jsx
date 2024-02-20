@@ -15,7 +15,6 @@ export default function Restaurant() {
     const [rstatus, setStatus] = useState(false);
     const user = useSelector(state => state?.user?.loggedUserDetails);
     const Vendors = useSelector((state) => state?.master?.FranchiseVendors);
-    console.log('user ========================', Vendors)
     const changeTab = (tabNumber) => {
         setActiveTab(tabNumber);
     };
@@ -33,7 +32,7 @@ export default function Restaurant() {
         <NavLink to={`/resturants/restaurant-detail/${row?.vendor_id}`} state={row} className="bg-green-100 px-1.5 py-1 rounded-lg">
             <Eye size="20" className='text-green-500' />
         </NavLink>
-        <AddRestaurant button='edit' title='Edit User' data={row} getAllRestaurant={getAllRestaurant} />
+        <AddRestaurant button='edit' title='Edit User' id={row?.user?.id} data={row} getAllRestaurant={getAllRestaurant} />
     </div>
 
     const columns = [
