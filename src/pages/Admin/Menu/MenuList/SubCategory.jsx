@@ -11,7 +11,6 @@ import Switch from 'react-js-switch';
 const SubCategory = () => {
   const subcategory = useSelector((state) => state?.master?.SubCategory);
   const category = useSelector((state) => state?.master?.Category);
-  console.log('category = ', category)
 
   const dispatch = useDispatch();
 
@@ -132,7 +131,6 @@ const SubCategory = () => {
       </div>
     );
   };
-
 
   // ================= columns of the table ===============
   // ======================= Table Column Definitions =========================

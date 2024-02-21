@@ -143,7 +143,7 @@ export default function AddVendors(props) {
             try {      // for edit
                 setLoader(true)
                 const response = await EditFranchiseeVendors(props?.data?.user?.id, data)
-                if (response?.message == "vendor edited successfully") {
+                if (response?.status == "success") {
                     setTimeout(() => {
                         toggle();
                         setLoader(false)

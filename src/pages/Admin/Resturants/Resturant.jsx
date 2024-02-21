@@ -34,8 +34,7 @@ export default function Restaurant() {
 
     const getAllRestaurant = () => {
         getRestarant().then((res) => {
-            const restaurantVendors = res.filter(item => item?.vendor_type === "restaurant");
-            console.log('restaurantVendors:', restaurantVendors);
+            const restaurantVendors = res.filter(item => item?.vendor_type == "restaurant");
             setData(restaurantVendors);
         });
     }
@@ -63,6 +62,7 @@ export default function Restaurant() {
     ]
 
     useEffect(() => {
+        console.log('called restaurant')
         getAllRestaurant()
     }, []);
 
