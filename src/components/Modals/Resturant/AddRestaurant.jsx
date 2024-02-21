@@ -19,7 +19,6 @@ export default function AddRestaurant(props) {
     const { register, handleSubmit, control, watch, reset, formState: { errors } } = useForm();
     const toggle = () => {
         setOpen(!isOpen)
-        setSelectedCategory([])
     }
     const closeBtn = () => {
         toggle();
@@ -49,8 +48,8 @@ export default function AddRestaurant(props) {
             addRestaurant(updateData).then(res => {
                 if (res.status == 'success') {
                     toast.success('Resuraurant added successfully')
-                    props?.getAllRestaurant()
                     toggle();
+                    props?.getAllRestaurant()
                 } else {
                     toast.error('Error adding restaurant')
                 }
@@ -70,7 +69,7 @@ export default function AddRestaurant(props) {
                 'restaurant_address': props?.data?.user?.address,
                 'restaurant_city': props?.data?.user?.city,
                 'restaurant_state': props?.data?.user?.state,
-                'restaurant_pin_code': props?.data?.user?.pincode,
+                'pincode': props?.data?.user?.pincode,
                 'restaurant_opening_time': props?.data?.shop_start_time,
                 'restaurant_closing_time': props?.data?.shop_end_time,
                 'veg_or_nonveg': props?.data?.veg_or_nonveg,

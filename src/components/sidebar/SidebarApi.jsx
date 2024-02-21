@@ -6,7 +6,7 @@ export const Admin = [
     {
         title: 'Dashboard',
         icon: <Element4 size="24" />,
-        link: '/',
+        link: '/admin',
     },
     {
         title: 'Menu',

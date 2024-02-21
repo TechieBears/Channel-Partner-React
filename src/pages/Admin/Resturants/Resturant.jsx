@@ -143,7 +143,7 @@ export default function Restaurant() {
                     <div className="">
                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>  Restaurent Details</h1>
                     </div>
-                    <AddRestaurant title='Add Restaurant' id={user?.userid} />
+                    <AddRestaurant title='Add Restaurant' getAllRestaurant={getAllRestaurant} id={user?.userid} />
                 </div>
                 {
                     <Table columns={columns} data={data} />

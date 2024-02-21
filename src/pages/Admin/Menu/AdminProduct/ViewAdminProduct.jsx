@@ -8,7 +8,7 @@ function ViewAdminProduct() {
     const { id } = useParams();
     const location = useLocation();
     const product = location.state;
-    console.log('product', product);
+    console.log('product', product)
     const navigate = useNavigate();
 
     const images = [
@@ -40,16 +40,21 @@ function ViewAdminProduct() {
                 <ArrowLeft />
             </button>
             <div className='grid grid-cols-3 p-4 bg-white rounded-xl'>
-                <div className='mt-4 space-y-4 col-span-full '>
-                    <p className='text-2xl font-semibold'>{product?.product_name}</p>
-                    <div className='flex items-center gap-5 p-2 border-b'>
-                        <img src='https://www.thisday.app/uploads/Amul_bc2a81aa60.png' className='w-24 p-2 border rounded-xl' />
-                        <p className='font-semibold'>{ }</p>
+                <div>
+                    <div className='mt-4 space-y-4 col-span-full '>
+                        <p className='text-2xl font-semibold'>{product?.product_name}</p>
+                        <div className='flex items-center gap-5 p-2 '>
+                            <img src='https://www.thisday.app/uploads/Amul_bc2a81aa60.png' className='w-24 p-2 border rounded-xl' />
+                            <p className='font-semibold'>{ }</p>
+                        </div>
+                        <p className='p-2 text-sm'>{product?.product_description}</p>
+                        <div className='items-center p-2 text-sm '>
+                            <p>175 ml</p>
+                            <p className='text-lg font-semibold'>₹ {product?.product_actual_price}</p>
+                        </div>
                     </div>
-                    <p className='p-2 text-sm border-b'>{product?.product_description}</p>
-                    <div className='items-center p-2 text-sm border-b'>
-                        <p>175 ml</p>
-                        <p className='text-lg font-semibold'>₹ {product?.product_actual_price}</p>
+                    <div>
+
                     </div>
                 </div>
 
@@ -73,35 +78,37 @@ function ViewAdminProduct() {
             </div>
             <div className='p-4 space-y-2 bg-white rounded-xl'>
                 <p className='text-2xl font-semibold'>Product Details</p>
-                <div>
-                    <p className='text-lg font-semibold'>Key Feature</p>
-                    <p className='text-sm text-gray-600'>Wholesome taste</p>
-                    <p className='text-sm text-gray-600'>Healthy and nutritious milk</p>
-                    <p className='text-sm text-gray-600'>Rich in calcium</p>
-                </div>
-                <div>
-                    <p className='text-lg font-semibold'>Unit</p>
-                    <p className='text-sm text-gray-600'>175 ml</p>
-                </div>
-                <div>
-                    <p className='text-lg font-semibold'>Disclaimer</p>
-                    <p className='text-sm text-gray-600'>{product?.product_description}</p>
-                </div>
-                <div>
-                    <p className='text-lg font-semibold'>Self Life</p>
-                    <p className='text-sm text-gray-600'>{product?.product_shelflife}</p>
-                </div>
-                <div>
-                    <p className='text-lg font-semibold'>Country of Origin</p>
-                    <p className='text-sm text-gray-600'>{product?.product_country_of_origin}</p>
-                </div>
-                <div>
-                    <p className='text-lg font-semibold'>FSSAI License</p>
-                    <p className='text-sm text-gray-600'>100234957362</p>
-                </div>
-                <div>
-                    <p className='text-lg font-semibold'>Packaging Type</p>
-                    <p className='text-sm text-gray-600'>Tetra Pack</p>
+                <div className='grid grid-cols-4 gap-5'>
+                    <div>
+                        <p className='text-lg font-semibold'>Key Feature</p>
+                        <p className='text-sm text-gray-600'>Wholesome taste</p>
+                        <p className='text-sm text-gray-600'>Healthy and nutritious milk</p>
+                        <p className='text-sm text-gray-600'>Rich in calcium</p>
+                    </div>
+                    <div>
+                        <p className='text-lg font-semibold'>Unit</p>
+                        <p className='text-sm text-gray-600'>175 ml</p>
+                    </div>
+                    <div>
+                        <p className='text-lg font-semibold'>Disclaimer</p>
+                        <p className='text-sm text-gray-600'>{product?.product_description}</p>
+                    </div>
+                    <div>
+                        <p className='text-lg font-semibold'>Self Life</p>
+                        <p className='text-sm text-gray-600'>{product?.product_shelflife}</p>
+                    </div>
+                    <div>
+                        <p className='text-lg font-semibold'>Country of Origin</p>
+                        <p className='text-sm text-gray-600'>{product?.product_country_of_origin}</p>
+                    </div>
+                    <div>
+                        <p className='text-lg font-semibold'>FSSAI License</p>
+                        <p className='text-sm text-gray-600'>100234957362</p>
+                    </div>
+                    <div>
+                        <p className='text-lg font-semibold'>Packaging Type</p>
+                        <p className='text-sm text-gray-600'>Tetra Pack</p>
+                    </div>
                 </div>
             </div>
         </div>
