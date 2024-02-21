@@ -19,12 +19,12 @@ const AdminProduct = () => {
     const [sellers, setSellers] = useState([]);
     const [shopProducts, setShopProducts] = useState([])
     console.log('shopProducts', shopProducts)
-    
+
     const userid = useSelector((state) => state?.user?.loggedUserDetails?.userid);
     const matchedSeller = sellers?.find(seller => seller?.user?.id === userid);
     const storages = useSelector((state) => state?.storage?.list);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
-    
+
     console.log('Logged User Details = ', LoggedUserDetails);
 
 
@@ -137,16 +137,16 @@ const AdminProduct = () => {
         )
     }
 
-        // =================== table user profile column ========================
-        const representativeBodyTemplate = (row) => {
-            return (
-                <div className="rounded-full w-11 h-11">
-                    <img src={row?.product_image_1 == null || row?.product_image_1 == '' || row?.product_image_1 == undefined ? userImg : row?.product_image_1} className="object-cover w-full h-full rounded-full" alt={row.user?.first_name} />
-                </div>
-            );
-        };
-    
-    
+    // =================== table user profile column ========================
+    const representativeBodyTemplate = (row) => {
+        return (
+            <div className="rounded-full w-11 h-11">
+                <img src={row?.product_image_1 == null || row?.product_image_1 == '' || row?.product_image_1 == undefined ? userImg : row?.product_image_1} className="object-cover w-full h-full rounded-full" alt={row.user?.first_name} />
+            </div>
+        );
+    };
+
+
     const Columns = [
         { field: 'profile_pic', header: 'Image', body: representativeBodyTemplate, sortable: false, style: true },
         { field: 'product_name', header: 'Product Name', sortable: true },
@@ -182,7 +182,7 @@ const AdminProduct = () => {
         { filed: 'action', header: 'Action', body: action, sortable: true }
     ]
 
- 
+
 
     return (
         <>
@@ -243,7 +243,7 @@ const AdminProduct = () => {
             <div className='p-4 m-4 bg-white sm:m-5 rounded-xl'>
                 <div className='grid items-center grid-cols-6'>
                     <h2 className='col-span-5 text-xl font-semibold'>Product List</h2>
-                    <AddProduct title='Add Product' getProducts={getProducts} sellerId={matchedSeller?.vendor_id} />
+                    {/* <AddProduct title='Add Product' getProducts={getProducts} sellerId={matchedSeller?.vendor_id} /> */}
                 </div>
                 <div className='mt-4'>
                     <Table data={shopProducts} columns={Columns} />

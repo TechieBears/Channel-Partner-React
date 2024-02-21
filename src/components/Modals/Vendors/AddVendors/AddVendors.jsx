@@ -23,7 +23,7 @@ export default function AddVendors(props) {
     const user = useSelector((state) => state?.user?.FranchiseeDetails);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     console.log('logged User details = ', LoggedUserDetails)
-    
+
     const Franchisee = useSelector((state) => state?.master?.Franchise);
 
 
@@ -113,18 +113,18 @@ export default function AddVendors(props) {
         if (props.button != 'edit') {   // for create
             try {
                 setLoader(true);
-                
-                let additionalPayload = {}; 
+
+                let additionalPayload = {};
                 if (LoggedUserDetails?.role == 'franchise') {
                     additionalPayload = { created_by: LoggedUserDetails?.userid };
                 }
-                
+
                 const requestData = { ...data, ...additionalPayload };
 
                 const response = await CreateFranchiseeVendors(requestData)
                 if (response?.message == "seller added successfully") {
                     setTimeout(() => {
-                        dispatch(setFranchiseVendors(res));
+                        // dispatch(setFranchiseVendors(res));
                         reset();
                         props?.FranchiseeVendors()
                         toggle(), setLoader(false), FranchiseeVendors();
@@ -139,30 +139,30 @@ export default function AddVendors(props) {
                 setLoader(false)
                 console.log('error', error);
             }
-        } else {           
+        } else {
             try {      // for edit
                 setLoader(true)
                 const response = await EditFranchiseeVendors(props?.data?.user?.id, data)
-                    if (response?.message == "vendor edited successfully") {
-                        setTimeout(() => {
-                            toggle();
-                            setLoader(false)
-                            props?.FranchiseeVendors()
-                            fetchData()
-                            toast.success(response?.message);
-                        }, 1000);
-                    } else {
+                if (response?.message == "vendor edited successfully") {
+                    setTimeout(() => {
+                        toggle();
                         setLoader(false)
-                        console.log('failed to update user')
-                    }
+                        props?.FranchiseeVendors()
+                        fetchData()
+                        toast.success(response?.message);
+                    }, 1000);
+                } else {
+                    setLoader(false)
+                    console.log('failed to update user')
                 }
-             catch (error) {
+            }
+            catch (error) {
                 setLoader(false)
                 console.log('error', error);
             }
         }
     }
-   
+
 
 
     // ======================== Reset data into the form  =======================
@@ -305,7 +305,7 @@ export default function AddVendors(props) {
                                                             <label className={labelClass}>Select Franchisee*</label>
                                                             <select
                                                                 className={inputClass}
-                                                                {...register("franchisee_id", { required: true })}
+                                                                {...register("created_by", { required: true })}
                                                             >
                                                                 <option value="" selected>--Select Franchisee--</option>
                                                                 {Franchisee?.map(franchisee => (
@@ -314,7 +314,7 @@ export default function AddVendors(props) {
                                                                     </option>
                                                                 ))}
                                                             </select>
-                                                            {errors.franchisee_id && (
+                                                            {errors.created_by && (
                                                                 <Error title="Franchisee is Required*" />
                                                             )}
                                                         </div>
@@ -503,7 +503,7 @@ export default function AddVendors(props) {
                                                         )}
                                                     </div>
 
-                                                    {LoggedUserDetails?.role == 'admin' && 
+                                                    {LoggedUserDetails?.role == 'admin' &&
                                                         <div className="">
                                                             <label className={labelClass}>Insta Commission (%)*</label>
                                                             <input
@@ -517,7 +517,7 @@ export default function AddVendors(props) {
                                                             )}
                                                         </div>
                                                     }
-                                                    
+
                                                 </div>
                                                 <h1 className='col-span-4 pt-4 mx-4 text-xl font-semibold text-gray-900 font-tbPop '>Additional Details:</h1>
                                                 <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-x-3 gap-y-3">
