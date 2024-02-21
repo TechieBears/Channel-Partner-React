@@ -9,49 +9,43 @@ import Error from '../../Errors/Error';
 import { MultiSelect } from 'primereact/multiselect';
 import { Add, Edit } from 'iconsax-react';
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
-import { addProduct, editVendorProduct, getAllSeller, getCategory, getSubCategory } from '../../../api';
+import { addProduct, editAdminFinalProduct, getAllSeller, getCategory, getSubCategory } from '../../../api';
 import { toast } from 'react-toastify';
 import { ImageUpload, productLink } from '../../../env';
 
-const AddProduct = (props) => {
-    console.log('props = ', props);
+const EditAdminProduct = (props) => {
+    // console.log('props = ', props);
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
     const [category, setCategory] = useState([]);
-    console.log('category = ', category)
+    // console.log('category = ', category)
     const [subCategory, setsubCategory] = useState([]);
     const [FinalPrice, setFinalPrice] = useState([]);
-    console.log('FinalPrice = ', FinalPrice)
+    // console.log('FinalPrice = ', FinalPrice)
 
 
     const { register, handleSubmit, control, watch, reset, setValue,  formState: { errors } } = useForm();
     const toggle = () => setOpen(!isOpen)
 
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
-    console.log('Logged User Details = ', LoggedUserDetails);
+    // console.log('Logged User Details = ', LoggedUserDetails);
     
     const closeBtn = () => {
         toggle();
         reset()
     }
 
-    const calculateRevenue = watch('product_actual_price')
+    const calculateRevenue = watch('markup_percentage')
     console.log('calculateRevenue = ', calculateRevenue)
 
     useEffect(() => {
       if (calculateRevenue !=="") {
-        var mainUserPrice =  calculateRevenue * (LoggedUserDetails?.insta_commission == null ? 0 : LoggedUserDetails?.insta_commission / 100);
-
-        console.log('mainUserPrice = ', (calculateRevenue - mainUserPrice));
-        const final_price = (calculateRevenue - mainUserPrice)
-        setFinalPrice(parseFloat(final_price));
-        
-        if(final_price == NaN){
-            setValue('product_revenue', 0)
-        }else{
-            setValue('product_revenue', final_price)
-        }
-        console.log('final_price = ', final_price);
+        var mainPrice = (props?.row?.product_actual_price == null ? 0 : props?.row?.product_actual_price) * (calculateRevenue / 100);
+        var actualprice = (props?.row?.product_actual_price == null ? 0 : props?.row?.product_actual_price) * (props?.row?.vendor?.insta_commison_percentage / 100);
+        var adminfinalprice =  props?.row?.product_actual_price + mainPrice + actualprice;
+        console.log('adminfinalprice = ', adminfinalprice);
+        setFinalPrice(adminfinalprice);
+        setValue('final_price', adminfinalprice)
       }
     }, [calculateRevenue])
     
@@ -68,106 +62,109 @@ const AddProduct = (props) => {
     };
 
     const onSubmit = async (data) => {
-        if (props?.title == 'Edit Product') {
-            if (data?.product_image_1 != props?.row?.product_image_1) {
-                await ImageUpload(data?.product_image_1[0], "shopProduct", "MainImage", data?.product_name)
-                data.product_image_1 = `${productLink}${data?.product_name}_MainImage_${data?.product_image_1[0]?.name}`
-            } else {
-                data.product_image_1 = props?.row?.product_image_1
-            }
-            if (data?.product_image_2 != props?.row?.product_image_2) {
-                await ImageUpload(data?.product_image_2[0], "shopProduct", "Image2", data?.product_name)
-                data.product_image_2 = `${productLink}${data?.product_name}_Image2_${data?.product_image_2[0]?.name}`
-            } else {
-                data.product_image_2 = props?.row?.product_image_2
-            }
-            if (data?.product_image_3 != props?.row?.product_image_3) {
-                await ImageUpload(data?.product_image_3[0], "shopProduct", "Image3", data?.product_name)
-                data.product_image_3 = `${productLink}${data?.product_name}_Image3_${data?.product_image_3[0]?.name}`
-            } else {
-                data.product_image_3 = props?.row?.product_image_3
-            }
-            if (data?.product_image_4 != props?.row?.product_image_4) {
-                await ImageUpload(data?.product_image_4[0], "shopProduct", "Image4", data?.product_name)
-                data.product_image_4 = `${productLink}${data?.product_name}_Image4_${data?.product_image_4[0]?.name}`
-            } else {
-                data.product_image_4 = props?.row?.product_image_4
-            }
-            if (data?.product_image_5 != props?.row?.product_image_5) {
-                await ImageUpload(data?.product_image_5[0], "shopProduct", "Image5", data?.product_name)
-                data.product_image_5 = `${productLink}${data?.product_name}_Image5_${data?.product_image_5[0]?.name}`
-            } else {
-                data.product_image_5 = props?.row?.product_image_5
-            }
-            if (data?.product_video_url != props?.row?.product_video_url) {
-                await ImageUpload(data?.product_video_url[0], "shopProduct", "Image5", data?.product_name)
-                data.product_video_url = `${productLink}${data?.product_name}_Image5_${data?.product_video_url[0]?.name}`
-            } else {
-                data.product_video_url = props?.row?.product_video_url
-            }
-        } else {
-            if (data?.product_image_1.length != 0) {
-                await ImageUpload(data?.product_image_1[0], "shopProduct", "MainImage", data?.product_name)
-                data.product_image_1 = `${productLink}${data?.product_name}_MainImage_${data?.product_image_1[0]?.name}`
-            } else {
-                data.product_image_1 = ''
-            }
-            if (data?.product_image_2.length != 0) {
-                await ImageUpload(data?.product_image_2[0], "shopProduct", "Image2", data?.product_name)
-                data.product_image_2 = `${productLink}${data?.product_name}_Image2_${data?.product_image_2[0]?.name}`
-            } else {
-                data.product_image_2 = ''
-            }
-            if (data?.product_image_3.length != 0) {
-                await ImageUpload(data?.product_image_3[0], "shopProduct", "Image3", data?.product_name)
-                data.product_image_3 = `${productLink}${data?.product_name}_Image3_${data?.product_image_3[0]?.name}`
-            } else {
-                data.product_image_3 = ''
-            }
-            if (data?.product_image_4.length != 0) {
-                await ImageUpload(data?.product_image_4[0], "shopProduct", "Image4", data?.product_name)
-                data.product_image_4 = `${productLink}${data?.product_name}_Image4_${data?.product_image_4[0]?.name}`
-            } else {
-                data.product_image_4 = ''
-            }
-            if (data?.product_image_5.length != 0) {
-                await ImageUpload(data?.product_image_5[0], "shopProduct", "Image5", data?.product_name)
-                data.product_image_5 = `${productLink}${data?.product_name}_Image5_${data?.product_image_5[0]?.name}`
-            } else {
-                data.product_image_5 = ''
-            }
-            if (data?.product_video_url.length != 0) {
-                await ImageUpload(data?.product_video_url[0], "shopProduct", "Image5", data?.product_name)
-                data.product_video_url = `${productLink}${data?.product_name}_Image5_${data?.product_video_url[0]?.name}`
-            } else {
-                data.product_video_url = ''
-            }
-        }
-        if (props?.title == 'Edit Product') {
-            var updatedData = { ...data, vendor: props?.row?.vendor }
-            console.log('called')
-            editVendorProduct(props?.row?.product_id, updatedData).then(res => {
-                if (res?.status == 'success') {
-                    props?.getProducts()
-                    toast.success('Product updated successfully')
-                    toggle();
-                }
-            })
-        } else {
+        // if (props?.title == 'Edit Product') {
+        //     if (data?.product_image_1 != props?.row?.product_image_1) {
+        //         await ImageUpload(data?.product_image_1[0], "shopProduct", "MainImage", data?.product_name)
+        //         data.product_image_1 = `${productLink}${data?.product_name}_MainImage_${data?.product_image_1[0]?.name}`
+        //     } else {
+        //         data.product_image_1 = props?.row?.product_image_1
+        //     }
+        //     if (data?.product_image_2 != props?.row?.product_image_2) {
+        //         await ImageUpload(data?.product_image_2[0], "shopProduct", "Image2", data?.product_name)
+        //         data.product_image_2 = `${productLink}${data?.product_name}_Image2_${data?.product_image_2[0]?.name}`
+        //     } else {
+        //         data.product_image_2 = props?.row?.product_image_2
+        //     }
+        //     if (data?.product_image_3 != props?.row?.product_image_3) {
+        //         await ImageUpload(data?.product_image_3[0], "shopProduct", "Image3", data?.product_name)
+        //         data.product_image_3 = `${productLink}${data?.product_name}_Image3_${data?.product_image_3[0]?.name}`
+        //     } else {
+        //         data.product_image_3 = props?.row?.product_image_3
+        //     }
+        //     if (data?.product_image_4 != props?.row?.product_image_4) {
+        //         await ImageUpload(data?.product_image_4[0], "shopProduct", "Image4", data?.product_name)
+        //         data.product_image_4 = `${productLink}${data?.product_name}_Image4_${data?.product_image_4[0]?.name}`
+        //     } else {
+        //         data.product_image_4 = props?.row?.product_image_4
+        //     }
+        //     if (data?.product_image_5 != props?.row?.product_image_5) {
+        //         await ImageUpload(data?.product_image_5[0], "shopProduct", "Image5", data?.product_name)
+        //         data.product_image_5 = `${productLink}${data?.product_name}_Image5_${data?.product_image_5[0]?.name}`
+        //     } else {
+        //         data.product_image_5 = props?.row?.product_image_5
+        //     }
+        //     if (data?.product_video_url != props?.row?.product_video_url) {
+        //         await ImageUpload(data?.product_video_url[0], "shopProduct", "Image5", data?.product_name)
+        //         data.product_video_url = `${productLink}${data?.product_name}_Image5_${data?.product_video_url[0]?.name}`
+        //     } else {
+        //         data.product_video_url = props?.row?.product_video_url
+        //     }
+        // } else {
+        //     if (data?.product_image_1.length != 0) {
+        //         await ImageUpload(data?.product_image_1[0], "shopProduct", "MainImage", data?.product_name)
+        //         data.product_image_1 = `${productLink}${data?.product_name}_MainImage_${data?.product_image_1[0]?.name}`
+        //     } else {
+        //         data.product_image_1 = ''
+        //     }
+        //     if (data?.product_image_2.length != 0) {
+        //         await ImageUpload(data?.product_image_2[0], "shopProduct", "Image2", data?.product_name)
+        //         data.product_image_2 = `${productLink}${data?.product_name}_Image2_${data?.product_image_2[0]?.name}`
+        //     } else {
+        //         data.product_image_2 = ''
+        //     }
+        //     if (data?.product_image_3.length != 0) {
+        //         await ImageUpload(data?.product_image_3[0], "shopProduct", "Image3", data?.product_name)
+        //         data.product_image_3 = `${productLink}${data?.product_name}_Image3_${data?.product_image_3[0]?.name}`
+        //     } else {
+        //         data.product_image_3 = ''
+        //     }
+        //     if (data?.product_image_4.length != 0) {
+        //         await ImageUpload(data?.product_image_4[0], "shopProduct", "Image4", data?.product_name)
+        //         data.product_image_4 = `${productLink}${data?.product_name}_Image4_${data?.product_image_4[0]?.name}`
+        //     } else {
+        //         data.product_image_4 = ''
+        //     }
+        //     if (data?.product_image_5.length != 0) {
+        //         await ImageUpload(data?.product_image_5[0], "shopProduct", "Image5", data?.product_name)
+        //         data.product_image_5 = `${productLink}${data?.product_name}_Image5_${data?.product_image_5[0]?.name}`
+        //     } else {
+        //         data.product_image_5 = ''
+        //     }
+        //     if (data?.product_video_url.length != 0) {
+        //         await ImageUpload(data?.product_video_url[0], "shopProduct", "Image5", data?.product_name)
+        //         data.product_video_url = `${productLink}${data?.product_name}_Image5_${data?.product_video_url[0]?.name}`
+        //     } else {
+        //         data.product_video_url = ''
+        //     }
+        // }
+        // if (props?.title == 'Edit Product') {
+       
+        // } 
+        // else {
 
-            var updatedData = { ...data, vendor: LoggedUserDetails?.sellerId, final_price: FinalPrice }
-            console.log(updatedData)
-            addProduct(updatedData).then((res) => {
-                if (res?.status == 'success') {
-                    props?.getProducts()
-                    toast.success('Product Added Successfully')
-                    toggle();
-                    props?.getProducts()
-                } else {
-                    toast.error('Error while creating product')
-                }
-            })
-        }
+        //     var updatedData = { ...data, vendor: LoggedUserDetails?.sellerId, final_price: FinalPrice }
+        //     console.log(updatedData)
+        //     addProduct(updatedData).then((res) => {
+        //         if (res?.status == 'success') {
+        //             props?.getProducts()
+        //             toast.success('Product Added Successfully')
+        //             toggle();
+        //             props?.getProducts()
+        //         } else {
+        //             toast.error('Error while creating product')
+        //         }
+        //     })
+        // }
+
+        var updatedData = { ...data, vendor: props?.row?.vendor?.vendor_id }
+        console.log('called')
+        editAdminFinalProduct(props?.row?.product_id, updatedData).then(res => {
+            if (res?.status == 'success') {
+                props?.getProducts()
+                toast.success('Product updated successfully')
+                toggle();
+            }
+        })
     }
 
     useEffect(() => {
@@ -180,7 +177,8 @@ const AddProduct = (props) => {
         if (props?.title == 'Edit Product') {
             reset({
                 'product_name': props?.row?.product_name,
-                'product_category': props?.row?.product_category,
+                'product_category': props?.row?.product_category?.id,
+                'product_subcategory': props?.row?.product_subcategory?.subcat_id,
                 'product_description': props?.row?.product_description,
                 'product_brand': props?.row?.product_brand,
                 'product_country_of_origin': props?.row?.product_country_of_origin,
@@ -193,9 +191,21 @@ const AddProduct = (props) => {
                 'product_stock': props?.row?.product_stock,
                 'product_isactive': props?.row?.product_isactive,
                 'product_actual_price': props?.row?.product_actual_price,
+                'insta_commison_percentage': props?.row?.vendor?.insta_commison_percentage,
+                'product_image_1': props?.row?.product_image_1,
+                'product_image_2': props?.row?.product_image_2,
+                'product_image_3': props?.row?.product_image_3,
+                'product_image_4': props?.row?.product_image_4,
+                'product_image_5': props?.row?.product_image_5,
+                'product_video_url': props?.row?.product_video_url,
+
+                'final_price': props?.row?.final_price,
+                'markup_percentage': props?.row?.markup_percentage,
             })
         }
     }, [])
+
+    
     return (
         <>
             {props?.title == 'Edit Product' ?
@@ -291,18 +301,7 @@ const AddProduct = (props) => {
                                                         </select>
                                                         {errors.product_subcategory && <Error title='Sub Category is Required*' />}
                                                     </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Product MRP*
-                                                        </label>
-                                                        <input
-                                                            type="number"
-                                                            placeholder='Product MRP'
-                                                            className={inputClass}
-                                                            {...register('product_actual_price', { required: true })}
-                                                        />
-                                                        {errors.product_actual_price && <Error title='MRP is Required*' />}
-                                                    </div>
+                                             
 
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -311,10 +310,11 @@ const AddProduct = (props) => {
                                                         <input
                                                             type="number"
                                                             placeholder='SKU'
+                                                            readOnly
                                                             className={inputClass}
-                                                            {...register('product_stock', { required: true })}
+                                                            {...register('product_available_qty', { required: true })}
                                                         />
-                                                        {errors.product_stock && <Error title='SKU is Required*' />}
+                                                        {errors.product_available_qty && <Error title='SKU is Required*' />}
                                                     </div>
                                                     {/* <div className="">
                                                         <label className={labelClass}>
@@ -373,39 +373,66 @@ const AddProduct = (props) => {
                                                         <input
                                                             type="number"
                                                             placeholder='150'
+                                                            readOnly
                                                             className={inputClass}
                                                             {...register('product_available_qty', { required: true })}
                                                         />
-                                                        {errors.product_available_qty && <Error title='Available Quantity is Required*' />}
+                                                        {errors.product_available_qty && <Error title='Country of Origin is Required*' />}
                                                     </div>
+                                                    <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Price Calculation</p>
+
+
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                        Product Unit Type *
-                                                        </label>
-                                                        <select
-                                                            className={inputClass}
-                                                            {...register('product_unit_type', { required: true })}
-                                                        >
-                                                            <option value=''>Select</option>
-                                                            <option key="" value="Kilograms (kg)">Kilograms (kg)</option>
-                                                            <option key="" value="grams (g)">grams (g)</option>
-                                                            <option key="" value="Liters (ltr)">Liters (ltr)</option>
-                                                            <option key="" value="Pieces (pcs)">Pieces (pcs)</option>
-                                                        </select>
-                                                        {errors.product_unit_type && <Error title='Product Unit Type is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Product Unit*
+                                                            Product MRP*
                                                         </label>
                                                         <input
                                                             type="number"
-                                                            placeholder='50g'
+                                                            readOnly
+                                                            placeholder='Product MRP'
                                                             className={inputClass}
-                                                            {...register('product_unit', { required: true })}
+                                                            {...register('product_actual_price', { required: true })}
                                                         />
-                                                        {errors.product_unit && <Error title='Product Unit is Required*' />}
+                                                        {errors.product_actual_price && <Error title='MRP is Required*' />}
                                                     </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Vendor Commision*
+                                                        </label>
+                                                        <input
+                                                            type="number"
+                                                            readOnly
+                                                            placeholder=''
+                                                            className={inputClass}
+                                                            {...register('insta_commison_percentage', { required: true })}
+                                                        />
+                                                        {errors.insta_commison_percentage && <Error title='Country of Origin is Required*' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Markup (in %)*
+                                                        </label>
+                                                        <input
+                                                            type="number"
+                                                            placeholder='₹ 0.00'
+                                                            className={inputClass}
+                                                            {...register('markup_percentage', { required: true })}
+                                                        />
+                                                        {errors.markup_percentage && <Error title='Markup Percentage is required*' />}
+                                                    </div>
+                                                        <div className="">
+                                                        <label className={labelClass}>
+                                                            Product Final Price* <span className='text-red-500'>(App View)</span> 
+                                                        </label>
+                                                        <input
+                                                            type="number"
+                                                            placeholder='₹ 0.00'
+                                                            className={inputClass}
+                                                            {...register('final_price', { required: true })}
+                                                        />
+                                                        {errors.final_price && <Error title='Product Final Price is required*' />}
+                                                    </div>
+                                                
                                                     
 
                                                     {/* <div className="">
@@ -561,7 +588,9 @@ const AddProduct = (props) => {
                                                         />
                                                         {errors.product_brand && <Error title='Brand is Required*' />}
                                                     </div>
-                                                    <div className="">
+                                                 
+                                                
+                                                    {/* <div className="">
                                                         <label className={labelClass}>
                                                             Product Revenue*
                                                         </label>
@@ -572,7 +601,7 @@ const AddProduct = (props) => {
                                                             className={inputClass}
                                                             {...register('product_revenue')}
                                                         />
-                                                    </div>
+                                                    </div> */}
                                                     {/* <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Brand Information</p> */}
                                                 
                                                     {/* <div className="">
@@ -681,4 +710,4 @@ const AddProduct = (props) => {
     )
 }
 
-export default AddProduct
+export default EditAdminProduct

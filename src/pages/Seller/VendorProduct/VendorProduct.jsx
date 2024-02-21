@@ -116,13 +116,10 @@ const VendorProduct = () => {
     const shopColumns = [
         { field: 'product_id', header: 'ID', sortable: false },
         { field: 'Product Image', header: 'Image', body: representativeBodyTemplate, sortable: true, style: true },
-
-        // { field: 'product_image_1', header: 'Image', sortable: false },
-        
         { field: 'product_name', header: 'Product Name', sortable: true },
         { field: 'product_actual_price', header: 'MRP', sortable: true },
-        { field: 'product_category', header: 'Category', sortable: true },
-        { field: 'product_subcategory', header: 'Sub-Category', body: (row) => <h6>{row?.product_subcategory == '' ? '---' : row?.product_subcategory}</h6>, sortable: true },
+        // { field: 'product_category', header: 'Category', sortable: true },
+        // { field: 'product_subcategory', header: 'Sub-Category', body: (row) => <h6>{row?.product_subcategory == '' ? '---' : row?.product_subcategory}</h6>, sortable: true },
         { field: 'product_available_qty', header: 'Quantity', sortable: true },
         { field: 'product_brand', header: 'Brand', sortable: true },
         { field: 'product_shelflife', header: 'Self Life', sortable: true },
@@ -130,7 +127,8 @@ const VendorProduct = () => {
         { field: 'product_Manufacturer_Name', header: 'Manufacturer Name', sortable: true },
         { field: 'product_country_of_origin', header: 'Country Of Origin', sortable: true },
         { filed: 'action', header: 'Action', body: action, sortable: true },
-  
+        
+        // { field: 'product_image_1', header: 'Image', sortable: false },
         // { field: 'createdDate', header: 'Create Date', sortable: true },
         // { field: 'MRP', header: 'MRP', sortable: true },
         // { filed: 'action', header: 'Action', body: action, sortable: true }
@@ -220,13 +218,16 @@ const VendorProduct = () => {
             <div className='p-4 m-4 bg-white sm:m-5 rounded-xl'>
                 <div className='grid items-center grid-cols-6'>
                     <h2 className='col-span-5 text-xl font-semibold'>Product List</h2>
-                    <AddProduct title='Add Product' getProducts={getProducts} sellerId={matchedSeller?.vendor_id} />
+                    <AddProduct title='Add Product' getProducts={getProducts}  />
                 </div>
                 <div className='mt-4'>
-                    {user?.isShop == true ?
-                        <Table data={shopProducts} columns={shopColumns} /> :
-                        <Table data={restaurantData} columns={restaurantColumns} />
-                    }
+                    <Table data={shopProducts} columns={shopColumns} />
+
+
+                    {/* {user?.isShop == true ? */}
+                        {/* // <Table data={shopProducts} columns={shopColumns} /> : */}
+                        {/* // <Table data={restaurantData} columns={restaurantColumns} /> */}
+                    {/* } */}
                 </div>
             </div>
         </>

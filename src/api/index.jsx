@@ -394,6 +394,29 @@ export const VerifyProductAdmin = async (data) => {
     }
 };
 
+//  ===================  Approve/Reject  Products for Admin Api ===============
+export const ConfigurationCharges = async (data) => {
+    const url = `${environment.baseUrl}app/add_config_charges`;
+    try {
+        const response = await axios.post(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+//  ===================  Approve/Reject  Products for Admin Api ===============
+export const GetConfigurationCharges = async (data) => {
+    const url = `${environment.baseUrl}app/add_config_charges`;
+    try {
+        const response = await axios.get(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
 
 
 
@@ -1370,6 +1393,19 @@ export const getProductById = async (id) => {
 
 export const editVendorProduct = async (id, data) => {
     const url = `${environment.baseUrl}vendor/edit_product/${id}`;
+    try {
+        const response = await axios.put(url, data);
+        console.log('responseeeeeeeeeeeeeeeeeeeeeeeee', response)
+        return response.data
+    } catch (err) {
+        console.log('error while getting vendor by id', err)
+    }
+}
+
+
+
+export const editAdminFinalProduct = async (id, data) => {
+    const url = `${environment.baseUrl}vendor/edit_product_admin/${id}`;
     try {
         const response = await axios.put(url, data);
         console.log('responseeeeeeeeeeeeeeeeeeeeeeeee', response)

@@ -305,7 +305,7 @@ export default function AddVendors(props) {
                                                             <label className={labelClass}>Select Franchisee*</label>
                                                             <select
                                                                 className={inputClass}
-                                                                {...register("franchisee_id", { required: true })}
+                                                                {...register("created_by", { required: true })}
                                                             >
                                                                 <option value="" selected>--Select Franchisee--</option>
                                                                 {Franchisee?.map(franchisee => (
@@ -314,7 +314,7 @@ export default function AddVendors(props) {
                                                                     </option>
                                                                 ))}
                                                             </select>
-                                                            {errors.franchisee_id && (
+                                                            {errors.created_by && (
                                                                 <Error title="Franchisee is Required*" />
                                                             )}
                                                         </div>
