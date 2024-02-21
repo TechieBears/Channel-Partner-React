@@ -8,16 +8,51 @@ import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { useForm } from 'react-hook-form';
 import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
-import { getRestarant } from '../../../api';
 
 
 
 export default function FranchiseRestaurent() {
-    const [data, setData] = useState([])
+    const data = [
+        {
+            "id": 1,
+            "name": "Delicious Bites",
+            "address": "123 Main Street, Cityville",
+            "email": "info@deliciousbites.com",
+            "dl_commission": 0.15,
+            "pick_commission": 0.1,
+            "revenue": 50000
+        },
+        {
+            "id": 2,
+            "name": "Tasty Treats",
+            "address": "456 Oak Avenue, Townsville",
+            "email": "hello@tastytreats.net",
+            "dl_commission": 0.12,
+            "pick_commission": 0.08,
+            "revenue": 75000
+        },
+        {
+            "id": 3,
+            "name": "Gourmet Haven",
+            "address": "789 Pine Road, Villageland",
+            "email": "contact@gourmethaven.org",
+            "dl_commission": 0.18,
+            "pick_commission": 0.15,
+            "revenue": 60000
+        }
+    ]
+
+    const [activeTab, setActiveTab] = useState(true);
     const [rstatus, setStatus] = useState(false);
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const user = useSelector(state => state?.user?.loggedUserDetails);
+
+
+
+    const changeTab = (tabNumber) => {
+        setActiveTab(tabNumber);
+    };
+    /*================================     column    ========================= */
 
     // =================== filter data ========================
     const onSubmit = async (data) => {
@@ -31,23 +66,12 @@ export default function FranchiseRestaurent() {
             toast.warn("No Selected Value !")
         }
     }
-
-    const getAllRestaurant = () => {
-        getRestarant().then((res) => {
-            const restaurantVendors = res.filter(item => item?.vendor_type === "restaurant");
-            console.log('restaurantVendors:', restaurantVendors);
-            setData(restaurantVendors);
-        });
-    }
     // =================== table user active column ========================
 
     const status = (row) => <Switch checked={rstatus} onChange={() => setStatus(!rstatus)} />
-    const action = row => <div className="flex items-center gap-2">
-        <NavLink to={`/franchise-resturants/restaurant-detail/${row?.vendor_id}`} state={row} className="bg-green-100 px-1.5 py-1 rounded-lg">
-            <Eye size="20" className='text-green-500' />
-        </NavLink>
-        <AddRestaurant button='edit' title='Edit User' id={row?.user?.id} data={row} getAllRestaurant={getAllRestaurant} />
-    </div>
+    const action = (row) => <button className={`${tableBtn}`} >
+        View Analysis
+    </button>
     const columns = [
         { field: 'vendor_id', header: 'ID', sortable: false },
         { field: 'isb_code', header: 'ISB Code', sortable: false },
@@ -61,10 +85,6 @@ export default function FranchiseRestaurent() {
         { field: 'is_activated', header: 'Activation Status', body: (row) => <h6>{row?.is_activated == false ? 'Pending' : 'Verified'}</h6>, sortable: true },
         { field: 'action', header: 'Action', body: action, sortable: true },
     ]
-
-    useEffect(() => {
-        getAllRestaurant()
-    }, [])
     return (
         <>
             {/* ========================= user filter ======================= */}

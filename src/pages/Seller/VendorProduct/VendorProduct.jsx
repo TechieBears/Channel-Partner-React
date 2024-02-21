@@ -5,7 +5,7 @@ import AsyncSelect from "react-select/async";
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 import { toast } from 'react-toastify';
 import Table from '../../../components/Table/Table';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import AddProduct from '../../../components/Modals/Vendors/AddProduct';
 import { Edit, Eye, Trash } from 'iconsax-react';
 import ViewProduct from '../../../components/Modals/Vendors/ViewProduct';
@@ -91,9 +91,9 @@ const VendorProduct = () => {
 
 
     const action = (row) => <div className='flex space-x-2'>
-        <NavLink to={`/product-list/product-details/${row?.product_id}`} className='items-center p-1 bg-sky-100 rounded-xl hover:bg-sky-200'>
+        <Link to={`/product-list/product-details/${row?.product_id}`} state={row} className='items-center p-1 bg-sky-100 rounded-xl hover:bg-sky-200'>
             <Eye size={24} className='text-sky-400' />
-        </NavLink>
+        </Link>
         {/* <ViewProduct /> */}
         <AddProduct title='Edit Product' row={row} getProducts={getProducts} />
         <button className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
@@ -103,22 +103,19 @@ const VendorProduct = () => {
 
 
 
-        const representativeBodyTemplate = (row) => {
-            return (
-                <div className="rounded-full w-11 h-11">
-                    <img src={row?.product_image_1 == null || row?.product_image_1 == '' || row?.product_image_1 == undefined ? userImg : row?.product_image_1} className="object-cover w-full h-full rounded-full" alt={row.first_name} />
-                </div>
-            );
-        };
+    const representativeBodyTemplate = (row) => {
+        return (
+            <div className="rounded-full w-11 h-11">
+                <img src={row?.product_image_1 == null || row?.product_image_1 == '' || row?.product_image_1 == undefined ? userImg : row?.product_image_1} className="object-cover w-full h-full rounded-full" alt={row.first_name} />
+            </div>
+        );
+    };
 
 
-    
+
     const shopColumns = [
         { field: 'product_id', header: 'ID', sortable: false },
         { field: 'Product Image', header: 'Image', body: representativeBodyTemplate, sortable: true, style: true },
-
-        // { field: 'product_image_1', header: 'Image', sortable: false },
-        
         { field: 'product_name', header: 'Product Name', sortable: true },
         { field: 'product_actual_price', header: 'MRP', sortable: true },
         { field: 'product_category', header: 'Category', sortable: true },
@@ -130,10 +127,6 @@ const VendorProduct = () => {
         { field: 'product_Manufacturer_Name', header: 'Manufacturer Name', sortable: true },
         { field: 'product_country_of_origin', header: 'Country Of Origin', sortable: true },
         { filed: 'action', header: 'Action', body: action, sortable: true },
-  
-        // { field: 'createdDate', header: 'Create Date', sortable: true },
-        // { field: 'MRP', header: 'MRP', sortable: true },
-        // { filed: 'action', header: 'Action', body: action, sortable: true }
     ]
 
     const restaurantColumns = [

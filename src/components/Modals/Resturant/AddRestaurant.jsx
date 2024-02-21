@@ -42,8 +42,8 @@ export default function AddRestaurant(props) {
         } else {
             let updateData = {
                 ...data,
-                "vendor_type": 'restaurant',
-                'created_by': props?.id
+                'created_by': props?.id,
+                "vendor_type": 'restaurant'
             }
             addRestaurant(updateData).then(res => {
                 if (res.status == 'success') {
