@@ -18,7 +18,7 @@ import { toast } from 'react-toastify';
 
 
 export default function AddVendors(props) {
-    // console.log('props = ', props)
+    console.log('props = ', props)
     const categories = useSelector((state) => state?.master?.Category);
     const user = useSelector((state) => state?.user?.FranchiseeDetails);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
@@ -112,8 +112,13 @@ export default function AddVendors(props) {
         }
         if (props.button != 'edit') {   // for create
             try {
-                setLoader(true)
-                const additionalPayload = { franchise: user?.franch_id };
+                setLoader(true);
+                
+                let additionalPayload = {}; 
+                if (LoggedUserDetails?.role == 'franchise') {
+                    additionalPayload = { created_by: LoggedUserDetails?.userid };
+                }
+                
                 const requestData = { ...data, ...additionalPayload };
 
                 const response = await CreateFranchiseeVendors(requestData)
@@ -498,20 +503,21 @@ export default function AddVendors(props) {
                                                         )}
                                                     </div>
 
-                                                    {/* {LoggedUserDetails?.role == 'admin' &&  */}
+                                                    {LoggedUserDetails?.role == 'admin' && 
                                                         <div className="">
                                                             <label className={labelClass}>Insta Commission (%)*</label>
                                                             <input
-                                                                type="text"
+                                                                type="number"
                                                                 placeholder="10"
                                                                 className={inputClass}
-                                                                {...register("city", { required: true })}
+                                                                {...register("insta_commison_percentage", { required: true })}
                                                             />
                                                             {errors.address && (
-                                                                <Error title="City is Required*" />
+                                                                <Error title="Insta commison percentage is Required*" />
                                                             )}
                                                         </div>
-                                                    {/* } */}
+                                                    }
+                                                    
                                                 </div>
                                                 <h1 className='col-span-4 pt-4 mx-4 text-xl font-semibold text-gray-900 font-tbPop '>Additional Details:</h1>
                                                 <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-x-3 gap-y-3">
