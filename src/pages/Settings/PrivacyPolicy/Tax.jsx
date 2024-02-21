@@ -43,7 +43,7 @@ function Tax() {
             tds: configData[0]?.tds,
             tcs: configData[0]?.tcs,
             handling_charges: configData[0]?.handling_charges,
-            platform_fees: configData[0]?.platform_fees,
+            platform_fee: configData[0]?.platform_fee,
         });
     }, [configData]);
 
@@ -145,7 +145,7 @@ function Tax() {
                                     type="number"
                                     placeholder="25"
                                     className={inputClass}
-                                    {...register("platform_fees", { required: true })}
+                                    {...register("platform_fee", { required: true })}
                                 />
                                 {errors.platform_fees && <Error title='Platform fees is Required*' />}
                             </div>
