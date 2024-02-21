@@ -46,6 +46,7 @@ import FranchiseDetail from '../src/pages/Admin/Franchisees/FranchiseDetail';
 import DriverDetail from '../src/pages/Admin/Drivers/DriverDetail';
 import FranchiseMenu from '../src/pages/Franchisee/Menu/Menu';
 import FranchiseRestaurent from '../src/pages/Franchisee/Resturants/Resturant';
+import ViewAdminProduct from '../src/pages/Admin/Menu/AdminProduct/ViewAdminProduct';
 
 
 
@@ -79,6 +80,7 @@ const ProjectRoutes = () => {
                                     <>
                                         <Route path="/" element={<Dashboard />} />
                                         <Route path="/menu" element={<Menu />} />
+                                        <Route path='/product-list/product-details/:id' element={<ViewAdminProduct />} />
                                         <Route path="/resturants" element={<Restaurant />} />
                                         <Route path="/resturants/restaurant-detail/:id" element={<RestaurantDetail />} />
                                         <Route path="/franchisee" element={<Franchisee />} />
