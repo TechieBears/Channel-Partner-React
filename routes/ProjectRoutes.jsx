@@ -120,6 +120,7 @@ const ProjectRoutes = () => {
                                             <Route path='/franchiesee-orders' element={<FranchiseeOrder />} />
                                             <Route path='/franchise-vendors' element={<FranchiseeVendors />} />
                                             <Route path='/franchise-resturants' element={<FranchiseRestaurent />} />
+                                            <Route path='/franchise-resturants/restaurant-detail/:id' element={<RestaurantDetail />} />
                                             <Route path="/franchise-vendors/vendors-detail/:id" element={<VendorDetails />} />
                                             <Route path='/delivery' element={<DeliveryBoy />} />
                                         </>
