@@ -101,9 +101,24 @@ const VendorProduct = () => {
         </button>
     </div>
 
+
+
+        const representativeBodyTemplate = (row) => {
+            return (
+                <div className="rounded-full w-11 h-11">
+                    <img src={row?.product_image_1 == null || row?.product_image_1 == '' || row?.product_image_1 == undefined ? userImg : row?.product_image_1} className="object-cover w-full h-full rounded-full" alt={row.first_name} />
+                </div>
+            );
+        };
+
+
     
     const shopColumns = [
         { field: 'product_id', header: 'ID', sortable: false },
+        { field: 'Product Image', header: 'Image', body: representativeBodyTemplate, sortable: true, style: true },
+
+        // { field: 'product_image_1', header: 'Image', sortable: false },
+        
         { field: 'product_name', header: 'Product Name', sortable: true },
         { field: 'product_actual_price', header: 'MRP', sortable: true },
         { field: 'product_category', header: 'Category', sortable: true },

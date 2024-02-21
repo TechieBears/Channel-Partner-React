@@ -382,6 +382,19 @@ export const verifyVendors = async (data) => {
 };
 
 
+//  ===================  Approve/Reject  Products for Admin Api ===============
+export const VerifyProductAdmin = async (data) => {
+    const url = `${environment.baseUrl}vendor/verify_product`;
+    try {
+        const response = await axios.post(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+
 
 
 
@@ -1310,9 +1323,20 @@ export const addProduct = async (data) => {
 }
 
 // ======================== Get All Product ===============
-
 export const getAllShopProduct = async () => {
     const url = `${environment.baseUrl}vendor/add_shop_product`
+    try {
+        const response = await axios.get(url);
+        return response.data;
+    } catch (error) {
+        console.log('error getting product', error)
+    }
+}
+
+
+// ======================== Get All Admin Product ===============
+export const getProductsByAdmin = async () => {
+    const url = `${environment.baseUrl}app/all_products`
     try {
         const response = await axios.get(url);
         return response.data;

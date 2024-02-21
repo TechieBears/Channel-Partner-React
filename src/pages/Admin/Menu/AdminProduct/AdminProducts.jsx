@@ -8,21 +8,38 @@ import Table from '../../../../components/Table/Table';
 import { Link, NavLink } from 'react-router-dom';
 import { Edit, Eye, Trash } from 'iconsax-react';
 // import ViewProduct from '../../../../components/Modals/Vendors/ViewProduct';
-import { getAllSeller, getAllShopProduct } from '../../../../api';
+import { getAllSeller, getProductsByAdmin, VerifyProductAdmin } from '../../../../api';
 import AddProduct from '../../../../components/Modals/Vendors/AddProduct';
 import Switch from 'react-js-switch';
+import userImg from '../../../../assets/user.jpg';
+
 
 
 const AdminProduct = () => {
     const [sellers, setSellers] = useState([]);
     const [shopProducts, setShopProducts] = useState([])
     console.log('shopProducts', shopProducts)
+    
     const userid = useSelector((state) => state?.user?.loggedUserDetails?.userid);
     const matchedSeller = sellers?.find(seller => seller?.user?.id === userid);
     const storages = useSelector((state) => state?.storage?.list);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
+    
     console.log('Logged User Details = ', LoggedUserDetails);
 
+
+    const getProducts = () => {
+        getProductsByAdmin().then(res => {
+            setShopProducts(res)
+        })
+    }
+
+    useEffect(() => {
+        // getAllSeller().then(res => {
+        //     setSellers(res)
+        // })
+        getProducts()
+    }, [])
 
     const user = {
         isShop: true,
@@ -76,7 +93,7 @@ const AdminProduct = () => {
         return (
             <div className="flex items-center justify-center gap-2">
                 <Switch
-                    value={row?.isverifiedbyfranchise}
+                    value={row?.product_isverified_byfranchise}
                     disabled={true}
                     // onChange={() => activeActions(row)}
                     size={50}
@@ -87,13 +104,13 @@ const AdminProduct = () => {
     }
 
     const verifyActions = (row) => {
-        const payload = { userId: row?.user?.id, isverifiedbyadmin: !row?.user?.isverified_byadmin, isverifiedbyfranchise: row?.isverifiedbyfranchise }
+        const payload = { productId: row?.product_id, product_isverified_byadmin: !row?.product_isverified_byadmin, product_isverified_byfranchise: row?.product_isverified_byfranchise }
         try {
-            verifyDeliveryBoy(payload).then((form) => {
+            VerifyProductAdmin(payload).then((form) => {
                 console.log(payload)
-                if (form.status == "success") {
-                    toast.success('Driver Verification Changed !');
-                    DeliveryBoyDetails()
+                if (form.message == "product is verified successfully") {
+                    toast.success('Product Verification Changed !');
+                    getProducts()
                 }
                 else {
                     console.log("err");
@@ -111,7 +128,7 @@ const AdminProduct = () => {
         return (
             <div className="flex items-center justify-center gap-2 ">
                 <Switch
-                    value={row?.user?.isverified_byadmin}
+                    value={row?.product_isverified_byadmin}
                     onChange={() => verifyActions(row)}
                     size={50}
                     backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
@@ -120,13 +137,23 @@ const AdminProduct = () => {
         )
     }
 
-
+        // =================== table user profile column ========================
+        const representativeBodyTemplate = (row) => {
+            return (
+                <div className="rounded-full w-11 h-11">
+                    <img src={row?.product_image_1 == null || row?.product_image_1 == '' || row?.product_image_1 == undefined ? userImg : row?.product_image_1} className="object-cover w-full h-full rounded-full" alt={row.user?.first_name} />
+                </div>
+            );
+        };
+    
+    
     const Columns = [
-        { field: 'product_id', header: 'ID', sortable: false },
+        { field: 'profile_pic', header: 'Image', body: representativeBodyTemplate, sortable: false, style: true },
         { field: 'product_name', header: 'Product Name', sortable: true },
         { field: 'product_actual_price', header: 'MRP', sortable: true },
-        { field: 'product_category', header: 'Category', sortable: true },
-        { field: 'product_subcategory', header: 'Sub-Category', body: (row) => <h6>{row?.product_subcategory == '' ? '---' : row?.product_subcategory}</h6>, sortable: true },
+        // { field: 'product_id', header: 'ID', sortable: false },
+        // { field: 'product_category', header: 'Category', sortable: true },
+        // { field: 'product_subcategory', header: 'Sub-Category', body: (row) => <h6>{row?.product_subcategory == '' ? '---' : row?.product_subcategory}</h6>, sortable: true },
         { field: 'product_available_qty', header: 'Quantity', sortable: true },
         { field: 'product_brand', header: 'Brand', sortable: true },
         { field: 'product_shelflife', header: 'Self Life', sortable: true },
@@ -134,8 +161,7 @@ const AdminProduct = () => {
         { field: 'product_Manufacturer_Name', header: 'Manufacturer Name', sortable: true },
         { field: 'product_country_of_origin', header: 'Country Of Origin', sortable: true },
         { filed: 'action', header: 'Action', body: action, sortable: true },
-
-        { field: 'isactive', header: 'Franchise Verify', body: switchActive, sortable: true },
+        // { field: 'isactive', header: 'Franchise Verify', body: switchActive, sortable: true },
         { field: 'isverify', header: 'Admin Verify', body: switchVerify, sortable: true },
 
 
@@ -156,18 +182,7 @@ const AdminProduct = () => {
         { filed: 'action', header: 'Action', body: action, sortable: true }
     ]
 
-    const getProducts = () => {
-        getAllShopProduct().then(res => {
-            setShopProducts(res)
-        })
-    }
-
-    useEffect(() => {
-        getAllSeller().then(res => {
-            setSellers(res)
-        })
-        getProducts()
-    }, [])
+ 
 
     return (
         <>
@@ -231,10 +246,11 @@ const AdminProduct = () => {
                     <AddProduct title='Add Product' getProducts={getProducts} sellerId={matchedSeller?.vendor_id} />
                 </div>
                 <div className='mt-4'>
-                    {user?.isShop == true ?
+                    <Table data={shopProducts} columns={Columns} />
+                    {/* {user?.isShop == true ?
                         <Table data={shopProducts} columns={Columns} /> :
                         <Table data={restaurantData} columns={restaurantColumns} />
-                    }
+                    } */}
                 </div>
             </div>
         </>

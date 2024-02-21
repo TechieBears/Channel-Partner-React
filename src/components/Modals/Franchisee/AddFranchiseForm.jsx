@@ -292,11 +292,11 @@ export default function AddFranchiseForm(props) {
                               multiple
                               accept='image/jpeg,image/jpg,image/png'
                               placeholder='Upload Images...'
-                              {...register("profile_pic", { required: props.button == 'edit' ? false : true })} />
+                              {...register("profile_pic")} />
                             {props?.button == 'edit' && props?.data?.user?.profile_pic != '' && props?.data?.user?.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                               {props?.data?.user?.profile_pic?.split('/').pop()}
                             </label>}
-                            {errors.profile_pic && <Error title='Profile Image is required*' />}
+                            {/* {errors.profile_pic && <Error title='Profile Image is required*' />} */}
                           </div>
                           <div className="">
                             <label className={labelClass}>Email*</label>
@@ -500,11 +500,11 @@ export default function AddFranchiseForm(props) {
                               multiple
                               accept='image/jpeg,image/jpg,image/png'
                               placeholder='Upload Images...'
-                              {...register("bank_passbook", { required: props.button == 'edit' ? false : true })} />
+                              {...register("bank_passbook")} />
                             {props?.button == 'edit' && props?.data.bank_passbook != '' && props?.data.bank_passbook != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                               {props?.data?.bank_passbook?.split('/').pop()}
                             </label>}
-                            {errors.bank_passbook && <Error title='Bank PassBook Image is required*' />}
+                            {/* {errors.bank_passbook && <Error title='Bank PassBook Image is required*' />} */}
                           </div>
                           <div className="">
                             <label className={labelClass}>IFSC Code*</label>
@@ -526,11 +526,11 @@ export default function AddFranchiseForm(props) {
                               multiple
                               accept='image/jpeg,image/jpg,image/png'
                               placeholder='Upload Images...'
-                              {...register("address_proof", { required: props.button == 'edit' ? false : true })} />
+                              {...register("address_proof", )} />
                             {props?.button == 'edit' && props?.data?.address_proof != '' && props?.data?.address_proof != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                               {props?.data?.address_proof?.split('/').pop()}
                             </label>}
-                            {errors.address_proof && <Error title='Address Proof Image is required*' />}
+                            {/* {errors.address_proof && <Error title='Address Proof Image is required*' />} */}
                           </div>
                         </div>
                       </div>

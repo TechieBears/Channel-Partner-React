@@ -79,7 +79,7 @@ export const profileUpload = async (data, name) => {
 // export const categoryLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/category/'
 export const categoryLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/category/'
 export const subcategoryLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/subcategory/'
-export const productLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/product/'
+export const productLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/shopProduct/'
 // export const categoryLink = 's3://channel-partner-media/category/'
 
 
