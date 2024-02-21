@@ -382,6 +382,19 @@ export const verifyVendors = async (data) => {
 };
 
 
+//  ===================  Approve/Reject  Products for Admin Api ===============
+export const VerifyProductAdmin = async (data) => {
+    const url = `${environment.baseUrl}vendor/verify_product`;
+    try {
+        const response = await axios.post(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+
 
 
 
