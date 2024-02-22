@@ -18,32 +18,22 @@ import { toast } from 'react-toastify';
 
 
 export default function AddVendors(props) {
-    console.log('props = ', props)
+    console.log('props==========', props);
     const categories = useSelector((state) => state?.master?.Category);
     const user = useSelector((state) => state?.user?.FranchiseeDetails);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
-    console.log('logged User details = ', LoggedUserDetails)
-
     const Franchisee = useSelector((state) => state?.master?.Franchise);
-
-
-
-    // console.log('Franchisee details = ', user);
-    // console.log('Categories details = ', categories);
-
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const cancelButtonRef = useRef(null)
-    const { register, handleSubmit, control, watch, reset, formState: { errors } } = useForm();
+    const { register, handleSubmit, control, watch, reset, formState: { errors }, setValue } = useForm();
     const toggle = () => setOpen(!isOpen)
     const closeBtn = () => {
         toggle();
         reset()
     }
-
-
     const FranchiseeVendors = () => {
         try {
             GetFranchiseeVendors().then((res) => {
@@ -54,8 +44,6 @@ export default function AddVendors(props) {
             console.log(error);
         }
     };
-
-
     // ============================= form submiting ======================================
     const onSubmit = async (data) => {
         if (props.button != 'edit') {    // for create
@@ -97,7 +85,10 @@ export default function AddVendors(props) {
             } else {
                 data.address_proof = props?.data?.address_proof
             }
-            if (data?.profile_pic != props?.data?.profile_pic) {
+            if (data?.profile_pic != props?.data?.user?.profile_pic) {
+                console.log('inside prifile')
+                console.log('data?.profile_pic', data?.profile_pic)
+                console.log('props?.data?.profile_pic', props?.data?.profile_pic)
                 await ImageUpload(data?.profile_pic[0], "vendor", "ProfileImage", data?.first_name)
                 data.profile_pic = `${vendorlink}${data?.first_name}_ProfileImage_${data?.profile_pic[0].name}`
             } else {
@@ -187,7 +178,8 @@ export default function AddVendors(props) {
             ifsc_code: props?.data?.ifsc_code,
             address_proof: props?.data?.address_proof,
             gender: props?.data?.user?.gender,
-            // password: props?.data?.password,
+            insta_commison_percentage: props?.data?.insta_commison_percentage,
+            created_by: props?.data?.created_by?.id,
 
             shop_name: props?.data?.shop_name,
             hawker_shop_photo: props?.data?.hawker_shop_photo,
@@ -195,6 +187,7 @@ export default function AddVendors(props) {
             shop_end_time: props?.data?.shop_end_time,
             vendor_type: props?.data?.vendor_type,
         });
+        setValue('created_by', props?.data?.created_by?.id)
     }, [props.data]);
 
     // useEffect(() => {
@@ -305,6 +298,7 @@ export default function AddVendors(props) {
                                                             <label className={labelClass}>Select Franchisee*</label>
                                                             <select
                                                                 className={inputClass}
+
                                                                 {...register("created_by", { required: true })}
                                                             >
                                                                 <option value="" selected>--Select Franchisee--</option>
@@ -511,6 +505,7 @@ export default function AddVendors(props) {
                                                                 placeholder="10"
                                                                 className={inputClass}
                                                                 {...register("insta_commison_percentage", { required: true })}
+                                                            // disabled={props?.button == 'edit' ? true : false}
                                                             />
                                                             {errors.address && (
                                                                 <Error title="Insta commison percentage is Required*" />

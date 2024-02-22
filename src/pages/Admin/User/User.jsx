@@ -263,7 +263,7 @@ function User() {
                     <div className="">
                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>Registered Users</h1>
                     </div>
-                    <CreateUserForm title='Add User' />
+                    {/* <CreateUserForm title='Add User' /> */}
                 </div>
                 <Table data={customersData} columns={columns} />
             </div>
