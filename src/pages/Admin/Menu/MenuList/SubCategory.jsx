@@ -143,7 +143,7 @@ const switchActive = (row) => {
           const matchingCategory = category.find(category => category.id === rowData.category);
           return matchingCategory ? matchingCategory.category_name : '';
         }},
-        { field: 'isactive', header: 'Active', body: switchActive, sortable: true },
+        // { field: 'isactive', header: 'Active', body: switchActive, sortable: true },
         // { field: 'isverify', header: 'Verify', body: switchVerify, sortable: true },
     ];
 
