@@ -22,8 +22,6 @@ function Tax() {
     const [configData, setConfigData] = useState();
     console.log('editable = ', editable)
 
-
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevState => ({
@@ -31,6 +29,16 @@ function Tax() {
             [name]: value
         }));
     };
+
+    const [formData, setFormData] = useState({
+        gst: '',
+        tds: '',
+        tcs: '',
+        handling_charges: '',
+        platform_fee: '',
+        mini_cart: '',
+        multi_cart: ''
+    });
 
     const handleEdit = () => {
         setEditable(!editable);
@@ -43,46 +51,61 @@ function Tax() {
         setSaveButtonVisible(false); // Hide the Save button
     };
 
-    const [formData, setFormData] = useState({
-        gst: '',
-        tds: '',
-        tcs: '',
-        handling_charges: '',
-        platform_fee: '',
-        mini_cart: '',
-        multi_cart: '',
-    });
-    
     const getconfig = () => {
         try {
             GetConfigurationCharges().then((res) => {
                 console.log('config data = ', res);
-                setFormData(res[0])
-                setConfigData(res[0]);
+                setFormData(res[0]);
+                setConfigData(res);
                 dispatch(setConfigurations(res));
             });
         } catch (error) {
             console.log(error);
         }
     };
-    
+
     useEffect(() => {
-        getconfig();   
-        reset({
-            gst: formData?.gst,
-            tds: formData?.tds,
-            tcs: formData?.tcs,
-            handling_charges: formData?.handling_charges,
-            platform_fee: formData?.platform_fee,
-            mini_cart: formData?.mini_cart,
-            multi_cart: formData?.multi_cart,
-        })
+        getconfig();    
     }, []);
-        
-    console.log('formData = ', formData);
+
+    
+    // ======================== Reset data into the form  =======================
+    // useMemo(() => {
+    //     reset({
+    //         gst: configData[0]?.gst,
+    //         tds: configData[0]?.tds,
+    //         tcs: configData[0]?.tcs,
+    //         handling_charges: configData[0]?.handling_charges,
+    //         platform_fee: configData[0]?.platform_fee,
+    //         mini_cart: configData[0]?.mini_cart,
+    //         multi_cart: configData[0]?.multi_cart,
+    //     });
+    // }, [configData]);
 
     // ============================= form submiting ======================================
-    const onSubmit = async (data) => {
+    const onSubmit = async (data, event) => {
+        event.preventDefault();
+        if (data?.gst == '') {
+            data.gst = formData?.gst
+        } 
+        if (data?.tds == '') {
+            data.tds = formData?.tds
+        } 
+        if (data?.tcs == '') {
+            data.tcs = formData?.tcs
+        } 
+        if (data?.handling_charges == '') {
+            data.handling_charges = formData?.handling_charges
+        } 
+        if (data?.platform_fee == '') {
+            data.platform_fee = formData?.platform_fee
+        } 
+        if (data?.mini_cart == '') {
+            data.mini_cart = formData?.mini_cart
+        } 
+        if (data?.multi_cart == '') {
+            data.multi_cart = formData?.multi_cart
+        } 
         try {
             console.log('data', data)
             setLoader(true);
@@ -109,6 +132,7 @@ function Tax() {
         <div className='p-4 m-4'>
             <div className="p-4 mb-6 bg-white rounded-lg">
                 <div className="">
+                    {/* <h1 className='text-xl font-semibold text-gray-900 font-tbPop '>Restaurent</h1> */}
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="p-4 overflow-y-scroll scrollbars ">
@@ -119,7 +143,8 @@ function Tax() {
                                 </label>
                                 <select
                                     className={inputClass}
-                                    {...register('gst', { required: editable })}
+                                    value={formData.gst}
+                                    {...register('gst')}
                                     disabled={!editable}
                                     onChange={handleChange}
                                 >
@@ -128,7 +153,7 @@ function Tax() {
                                     <option value='16'>16%</option>
                                     <option value='20'>20%</option>
                                 </select>
-                                {errors.gst &&  editable && <Error title='GST is Required*' />}
+                                {/* {errors.gst && <Error title='GST is Required*' />} */}
                             </div>
                             <div className="">
                                 <label className={labelClass}>
@@ -136,7 +161,8 @@ function Tax() {
                                 </label>
                                 <select
                                     className={inputClass}
-                                    {...register('tds', { required: editable })}
+                                    value={formData.tds}
+                                    {...register('tds')}
                                     disabled={!editable}
                                     onChange={handleChange}
                                 >
@@ -147,7 +173,7 @@ function Tax() {
                                     <option value='4'>4%</option>
                                     <option value='5'>5%</option>
                                 </select>
-                                {errors.tds && editable && <Error title='TDS is Required*' />}
+                                {/* {errors.tds && <Error title='TDS is Required*' />} */}
                             </div>
                     
                             <div className="">
@@ -156,7 +182,8 @@ function Tax() {
                                 </label>
                                 <select
                                     className={inputClass}
-                                    {...register('tcs', { required: editable })}
+                                    value={formData.tcs}
+                                    {...register('tcs')}
                                     disabled={!editable}
                                     onChange={handleChange}
                                 >
@@ -167,7 +194,7 @@ function Tax() {
                                     <option value='4'>4%</option>
                                     <option value='5'>5%</option>
                                 </select>
-                                {errors.tcs && editable && <Error title='TCS is Required*' />}
+                                {/* {errors.tcs && <Error title='TCS is Required*' />} */}
                             </div>
                             
                             <div className="">
@@ -176,11 +203,12 @@ function Tax() {
                                     type="number"
                                     placeholder="20"
                                     className={inputClass}
-                                    {...register("handling_charges", { required: editable })}
+                                    value={formData.handling_charges}
+                                    {...register("handling_charges")}
                                     readOnly={!editable}
                                     onChange={handleChange}
                                 />
-                                {errors.handling_charges && editable && <Error title='Handling charges is Required*' />}
+                                {/* {errors.handling_charges && <Error title='Handling charges is Required*' />} */}
                             </div>
                             <div className="">
                                 <label className={labelClass}>Platform Fees*</label>
@@ -188,11 +216,12 @@ function Tax() {
                                     type="number"
                                     placeholder="25"
                                     className={inputClass}
-                                    {...register("platform_fee", { required: editable })}
+                                    value={formData.platform_fee}
+                                    {...register("platform_fee")}
                                     readOnly={!editable}
                                     onChange={handleChange}
                                 />
-                                {errors.platform_fee && editable && <Error title='Platform fees is Required*' />}
+                                {/* {errors.platform_fee && <Error title='Platform fees is Required*' />} */}
                             </div>
                             <div className="">
                                 <label className={labelClass}>Mini Cart Charges*</label>
@@ -200,11 +229,12 @@ function Tax() {
                                     type="number"
                                     placeholder="25"
                                     className={inputClass}
-                                    {...register("mini_cart", { required: editable })}
+                                    value={formData.mini_cart}
+                                    {...register("mini_cart")}
                                     readOnly={!editable}
                                     onChange={handleChange}
                                 />
-                                {errors.mini_cart && editable && <Error title='mini cart is Required*' />}
+                                {/* {errors.mini_cart && <Error title='mini cart is Required*' />} */}
                             </div>
                             <div className="">
                                 <label className={labelClass}>Multi Cart Charges*</label>
@@ -212,11 +242,12 @@ function Tax() {
                                     type="number"
                                     placeholder="25"
                                     className={inputClass}
-                                    {...register("multi_cart", { required: editable })}
+                                    value={formData.multi_cart}
+                                    {...register("multi_cart")}
                                     readOnly={!editable}
                                     onChange={handleChange}
                                 />
-                                {errors.multi_cart && editable && <Error title='multi cart is Required*' />}
+                                {/* {errors.multi_cart && <Error title='multi cart is Required*' />} */}
                             </div>
                         </div>
                     </div>
