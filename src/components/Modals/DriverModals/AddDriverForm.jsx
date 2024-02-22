@@ -17,7 +17,7 @@ import { GetFranchisee } from "../../../api";
 
 
 function AddDriverFrom(props) {
-    // console.log('props = ', props);
+    console.log('props = ', props);
 
     const [isOpen, setIsOpen] = useState(false);
     const [loader, setLoader] = useState(false);
@@ -243,16 +243,16 @@ function AddDriverFrom(props) {
     // ============================== Reseting data ======================================
     const fillData = () => {
         reset({
-            "first_name": props?.data?.first_name,
-            "last_name": props?.data?.last_name,
-            "email": props?.data?.email,
-            "pincode": props?.data?.pincode,
-            "phone_no": props?.data?.phone_no,
-            "address": props?.data?.address,
-            "state": props?.data?.state,
-            "city": props?.data?.city,
-            "date_of_birth": props?.data?.date_of_birth,
-            "gender": props?.data?.gender,
+            "first_name": props?.data?.user?.first_name,
+            "last_name": props?.data?.user?.last_name,
+            "email": props?.data?.user?.email,
+            "pincode": props?.data?.user?.pincode,
+            "phone_no": props?.data?.user?.phone_no,
+            "address": props?.data?.user?.address,
+            "state": props?.data?.user?.state,
+            "city": props?.data?.user?.city,
+            "date_of_birth": props?.data?.user?.date_of_birth,
+            "gender": props?.data?.user?.gender,
             "vehicle_type": props?.data?.vehicle_type,
             "driver_license": props?.data?.driver_license,
             "vehicle_rc": props?.data?.vehicle_rc,
@@ -281,11 +281,11 @@ function AddDriverFrom(props) {
     //     )
     // }, [pincodeWatch])
 
-    // useEffect(() => {
-    //     if (props.button == "edit") {
-    //         fillData()
-    //     }
-    // }, [])
+    useEffect(() => {
+        if (props.button == "edit") {
+            fillData()
+        }
+    }, [])
 
     return (
         <>
