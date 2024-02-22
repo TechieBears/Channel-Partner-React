@@ -8,10 +8,10 @@ import Table from '../../../../components/Table/Table';
 import { Link, NavLink } from 'react-router-dom';
 import { Edit, Eye, Trash } from 'iconsax-react';
 // import ViewProduct from '../../../../components/Modals/Vendors/ViewProduct';
-import { getAllSeller, getProductsByAdmin, VerifyProductAdmin } from '../../../../api';
-import AddProduct from '../../../../components/Modals/Vendors/AddProduct';
+import { getAllSeller, editVendorProduct, getProductsByAdmin, VerifyProductAdmin } from '../../../../api';
 import Switch from 'react-js-switch';
 import userImg from '../../../../assets/user.jpg';
+import EditAdminProduct from '../../../../components/Modals/Vendors/EditAdminProduct';
 
 
 
@@ -29,6 +29,7 @@ const AdminProduct = () => {
 
     const getProducts = () => {
         getProductsByAdmin().then(res => {
+            console.log('admin products = ', res)
             setShopProducts(res)
         })
     }
@@ -61,9 +62,112 @@ const AdminProduct = () => {
         callback(uniqueProducts || []);
     };
 
-    const onSubmit = (data) => {
-        console.log('data', data)
+    const onSubmit = async (data) => {
+        var updatedData = { ...data, vendor: props?.row?.vendor }
+        console.log('called')
+        editVendorProduct(props?.row?.product_id, updatedData).then(res => {
+            if (res?.status == 'success') {
+                props?.getProducts()
+                toast.success('Product updated successfully')
+                toggle();
+            }
+        })
+
+
+        // if (props?.title == 'Edit Product') {
+        //     if (data?.product_image_1 != props?.row?.product_image_1) {
+        //         await ImageUpload(data?.product_image_1[0], "shopProduct", "MainImage", data?.product_name)
+        //         data.product_image_1 = `${productLink}${data?.product_name}_MainImage_${data?.product_image_1[0]?.name}`
+        //     } else {
+        //         data.product_image_1 = props?.row?.product_image_1
+        //     }
+        //     if (data?.product_image_2 != props?.row?.product_image_2) {
+        //         await ImageUpload(data?.product_image_2[0], "shopProduct", "Image2", data?.product_name)
+        //         data.product_image_2 = `${productLink}${data?.product_name}_Image2_${data?.product_image_2[0]?.name}`
+        //     } else {
+        //         data.product_image_2 = props?.row?.product_image_2
+        //     }
+        //     if (data?.product_image_3 != props?.row?.product_image_3) {
+        //         await ImageUpload(data?.product_image_3[0], "shopProduct", "Image3", data?.product_name)
+        //         data.product_image_3 = `${productLink}${data?.product_name}_Image3_${data?.product_image_3[0]?.name}`
+        //     } else {
+        //         data.product_image_3 = props?.row?.product_image_3
+        //     }
+        //     if (data?.product_image_4 != props?.row?.product_image_4) {
+        //         await ImageUpload(data?.product_image_4[0], "shopProduct", "Image4", data?.product_name)
+        //         data.product_image_4 = `${productLink}${data?.product_name}_Image4_${data?.product_image_4[0]?.name}`
+        //     } else {
+        //         data.product_image_4 = props?.row?.product_image_4
+        //     }
+        //     if (data?.product_image_5 != props?.row?.product_image_5) {
+        //         await ImageUpload(data?.product_image_5[0], "shopProduct", "Image5", data?.product_name)
+        //         data.product_image_5 = `${productLink}${data?.product_name}_Image5_${data?.product_image_5[0]?.name}`
+        //     } else {
+        //         data.product_image_5 = props?.row?.product_image_5
+        //     }
+        //     if (data?.product_video_url != props?.row?.product_video_url) {
+        //         await ImageUpload(data?.product_video_url[0], "shopProduct", "Image5", data?.product_name)
+        //         data.product_video_url = `${productLink}${data?.product_name}_Image5_${data?.product_video_url[0]?.name}`
+        //     } else {
+        //         data.product_video_url = props?.row?.product_video_url
+        //     }
+        // } else {
+        //     if (data?.product_image_1.length != 0) {
+        //         await ImageUpload(data?.product_image_1[0], "shopProduct", "MainImage", data?.product_name)
+        //         data.product_image_1 = `${productLink}${data?.product_name}_MainImage_${data?.product_image_1[0]?.name}`
+        //     } else {
+        //         data.product_image_1 = ''
+        //     }
+        //     if (data?.product_image_2.length != 0) {
+        //         await ImageUpload(data?.product_image_2[0], "shopProduct", "Image2", data?.product_name)
+        //         data.product_image_2 = `${productLink}${data?.product_name}_Image2_${data?.product_image_2[0]?.name}`
+        //     } else {
+        //         data.product_image_2 = ''
+        //     }
+        //     if (data?.product_image_3.length != 0) {
+        //         await ImageUpload(data?.product_image_3[0], "shopProduct", "Image3", data?.product_name)
+        //         data.product_image_3 = `${productLink}${data?.product_name}_Image3_${data?.product_image_3[0]?.name}`
+        //     } else {
+        //         data.product_image_3 = ''
+        //     }
+        //     if (data?.product_image_4.length != 0) {
+        //         await ImageUpload(data?.product_image_4[0], "shopProduct", "Image4", data?.product_name)
+        //         data.product_image_4 = `${productLink}${data?.product_name}_Image4_${data?.product_image_4[0]?.name}`
+        //     } else {
+        //         data.product_image_4 = ''
+        //     }
+        //     if (data?.product_image_5.length != 0) {
+        //         await ImageUpload(data?.product_image_5[0], "shopProduct", "Image5", data?.product_name)
+        //         data.product_image_5 = `${productLink}${data?.product_name}_Image5_${data?.product_image_5[0]?.name}`
+        //     } else {
+        //         data.product_image_5 = ''
+        //     }
+        //     if (data?.product_video_url.length != 0) {
+        //         await ImageUpload(data?.product_video_url[0], "shopProduct", "Image5", data?.product_name)
+        //         data.product_video_url = `${productLink}${data?.product_name}_Image5_${data?.product_video_url[0]?.name}`
+        //     } else {
+        //         data.product_video_url = ''
+        //     }
+        // }
+        // if (props?.title == 'Edit Product') {
+
+        // }
+        // else {
+        //     var updatedData = { ...data, vendor: props?.sellerId }
+        //     console.log(updatedData)
+        //     EditAdminProduct(updatedData).then((res) => {
+        //         if (res?.status == 'success') {
+        //             props?.getProducts()
+        //             toast.success('Product Added Successfully')
+        //             toggle();
+        //         } else {
+        //             toast.error('Error while creating product')
+        //         }
+        //     })
+        // }
     }
+
+
     const filterReset = () => {
         reset({
             name: null,
@@ -79,7 +183,7 @@ const AdminProduct = () => {
             <Eye size={24} className='text-sky-400' />
         </Link>
         {/* <ViewProduct /> */}
-        <AddProduct title='Edit Product' row={row} getProducts={getProducts} />
+        <EditAdminProduct title='Edit Product' row={row} getProducts={getProducts} />
         <button className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
             <Trash size={24} className='text-red-400' />
         </button>
@@ -150,7 +254,8 @@ const AdminProduct = () => {
         { field: 'profile_pic', header: 'Image', body: representativeBodyTemplate, sortable: false, style: true },
         { field: 'product_name', header: 'Product Name', sortable: true },
         { field: 'product_actual_price', header: 'MRP', sortable: true },
-        { field: 'product_available_qty', header: 'Quantity', sortable: true },
+        { field: 'final_price', header: 'Final Price', sortable: true },
+        { field: 'product_available_qty', header: 'Available Quantity', sortable: true },
         { field: 'product_brand', header: 'Brand', sortable: true },
         { field: 'product_shelflife', header: 'Self Life', sortable: true },
         { field: 'product_description', header: 'Description', sortable: true },
@@ -235,6 +340,7 @@ const AdminProduct = () => {
             <div className='p-4 m-4 bg-white sm:m-5 rounded-xl'>
                 <div className='grid items-center grid-cols-6'>
                     <h2 className='col-span-5 text-xl font-semibold'>Product List</h2>
+                    <EditAdminProduct title='Add Product' getProducts={getProducts} sellerId={matchedSeller?.vendor_id} />
                 </div>
                 <div className='mt-4'>
                     <Table data={shopProducts} columns={userDetails?.role == 'franchise' ? restaurantColumns : Columns} />

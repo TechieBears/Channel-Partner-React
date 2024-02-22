@@ -394,6 +394,29 @@ export const VerifyProductAdmin = async (data) => {
     }
 };
 
+//  ===================  Approve/Reject  Products for Admin Api ===============
+export const ConfigurationCharges = async (id, data) => {
+    const url = `${environment.baseUrl}app/edit_config_charges/${id}`;
+    try {
+        const response = await axios.put(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+//  ===================  Approve/Reject  Products for Admin Api ===============
+export const GetConfigurationCharges = async (data) => {
+    const url = `${environment.baseUrl}app/add_config_charges`;
+    try {
+        const response = await axios.get(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
 
 
 
@@ -1323,8 +1346,8 @@ export const addProduct = async (data) => {
 }
 
 // ======================== Get All Product ===============
-export const getAllShopProduct = async () => {
-    const url = `${environment.baseUrl}vendor/add_shop_product`
+export const getAllShopProduct = async (id) => {
+    const url = `${environment.baseUrl}vendor/product_by_vendor/${id}`
     try {
         const response = await axios.get(url);
         return response.data;
@@ -1370,6 +1393,19 @@ export const getProductById = async (id) => {
 
 export const editVendorProduct = async (id, data) => {
     const url = `${environment.baseUrl}vendor/edit_product/${id}`;
+    try {
+        const response = await axios.put(url, data);
+        console.log('responseeeeeeeeeeeeeeeeeeeeeeeee', response)
+        return response.data
+    } catch (err) {
+        console.log('error while getting vendor by id', err)
+    }
+}
+
+
+
+export const editAdminFinalProduct = async (id, data) => {
+    const url = `${environment.baseUrl}vendor/edit_product_admin/${id}`;
     try {
         const response = await axios.put(url, data);
         console.log('responseeeeeeeeeeeeeeeeeeeeeeeee', response)

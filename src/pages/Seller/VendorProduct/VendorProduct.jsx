@@ -139,7 +139,7 @@ const VendorProduct = () => {
     ]
 
     const getProducts = () => {
-        getAllShopProduct().then(res => {
+        getAllShopProduct(LoggedUserDetails?.sellerId).then(res => {
             setShopProducts(res)
         })
     }
@@ -210,13 +210,16 @@ const VendorProduct = () => {
             <div className='p-4 m-4 bg-white sm:m-5 rounded-xl'>
                 <div className='grid items-center grid-cols-6'>
                     <h2 className='col-span-5 text-xl font-semibold'>Product List</h2>
-                    <AddProduct title='Add Product' getProducts={getProducts} sellerId={matchedSeller?.vendor_id} />
+                    <AddProduct title='Add Product' getProducts={getProducts} />
                 </div>
                 <div className='mt-4'>
-                    {user?.isShop == true ?
-                        <Table data={shopProducts} columns={shopColumns} /> :
-                        <Table data={restaurantData} columns={restaurantColumns} />
-                    }
+                    <Table data={shopProducts} columns={shopColumns} />
+
+
+                    {/* {user?.isShop == true ? */}
+                    {/* // <Table data={shopProducts} columns={shopColumns} /> : */}
+                    {/* // <Table data={restaurantData} columns={restaurantColumns} /> */}
+                    {/* } */}
                 </div>
             </div>
         </>
