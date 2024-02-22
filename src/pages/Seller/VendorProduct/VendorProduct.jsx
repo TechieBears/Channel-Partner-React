@@ -19,9 +19,6 @@ const VendorProduct = () => {
     const matchedSeller = sellers?.find(seller => seller?.user?.id === userid);
     const storages = useSelector((state) => state?.storage?.list);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
-    console.log('Logged User Details = ', LoggedUserDetails);
-
-
     const user = {
         isShop: true,
     }
@@ -118,8 +115,8 @@ const VendorProduct = () => {
         { field: 'Product Image', header: 'Image', body: representativeBodyTemplate, sortable: true, style: true },
         { field: 'product_name', header: 'Product Name', sortable: true },
         { field: 'product_actual_price', header: 'MRP', sortable: true },
-        { field: 'product_category', header: 'Category', sortable: true },
-        { field: 'product_subcategory', header: 'Sub-Category', body: (row) => <h6>{row?.product_subcategory == '' ? '---' : row?.product_subcategory}</h6>, sortable: true },
+        { field: 'product_category', header: 'Category', body: (row) => (row?.product_category?.category_name), sortable: true },
+        { field: 'product_subcategory', header: 'Sub-Category', body: (row) => <h6>{row?.product_subcategory?.subcat_name == '' ? '---' : row?.product_subcategory?.subcat_name}</h6>, sortable: true },
         { field: 'product_available_qty', header: 'Quantity', sortable: true },
         { field: 'product_brand', header: 'Brand', sortable: true },
         { field: 'product_shelflife', header: 'Self Life', sortable: true },

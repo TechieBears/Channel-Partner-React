@@ -18,10 +18,9 @@ import userImg from '../../../../assets/user.jpg';
 const AdminProduct = () => {
     const [sellers, setSellers] = useState([]);
     const [shopProducts, setShopProducts] = useState([])
-    console.log('shopProducts', shopProducts)
-
-    const userid = useSelector((state) => state?.user?.loggedUserDetails?.userid);
-    const matchedSeller = sellers?.find(seller => seller?.user?.id === userid);
+    const userDetails = useSelector((state) => state?.user?.loggedUserDetails);
+    console.log('userDetails', userDetails)
+    // const matchedSeller = sellers?.find(seller => seller?.user?.id === userid);
     const storages = useSelector((state) => state?.storage?.list);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
 
@@ -151,9 +150,6 @@ const AdminProduct = () => {
         { field: 'profile_pic', header: 'Image', body: representativeBodyTemplate, sortable: false, style: true },
         { field: 'product_name', header: 'Product Name', sortable: true },
         { field: 'product_actual_price', header: 'MRP', sortable: true },
-        // { field: 'product_id', header: 'ID', sortable: false },
-        // { field: 'product_category', header: 'Category', sortable: true },
-        // { field: 'product_subcategory', header: 'Sub-Category', body: (row) => <h6>{row?.product_subcategory == '' ? '---' : row?.product_subcategory}</h6>, sortable: true },
         { field: 'product_available_qty', header: 'Quantity', sortable: true },
         { field: 'product_brand', header: 'Brand', sortable: true },
         { field: 'product_shelflife', header: 'Self Life', sortable: true },
@@ -161,25 +157,21 @@ const AdminProduct = () => {
         { field: 'product_Manufacturer_Name', header: 'Manufacturer Name', sortable: true },
         { field: 'product_country_of_origin', header: 'Country Of Origin', sortable: true },
         { filed: 'action', header: 'Action', body: action, sortable: true },
-        // { field: 'isactive', header: 'Franchise Verify', body: switchActive, sortable: true },
         { field: 'isverify', header: 'Admin Verify', body: switchVerify, sortable: true },
-
-
-        // { field: 'createdDate', header: 'Create Date', sortable: true },
-        // { field: 'MRP', header: 'MRP', sortable: true },
-        // { filed: 'action', header: 'Action', body: action, sortable: true }
     ]
 
     const restaurantColumns = [
-        { field: 'productId', header: 'ID', sortable: false },
-        { field: 'name', header: 'Product Name', sortable: false },
-        { field: 'description', header: 'Description', sortable: false },
-        { field: 'category', header: 'Category', sortable: false },
-        { field: 'subcategory', header: 'Sub-Category', sortable: false },
-        { field: 'createdDate', header: 'Create Date', sortable: true },
-        { field: 'MRP', header: 'MRP', sortable: true },
-        { field: 'quantity', header: 'Quantity', sortable: false },
-        { filed: 'action', header: 'Action', body: action, sortable: true }
+        { field: 'profile_pic', header: 'Image', body: representativeBodyTemplate, sortable: false, style: true },
+        { field: 'product_name', header: 'Product Name', sortable: true },
+        { field: 'product_actual_price', header: 'MRP', sortable: true },
+        { field: 'product_available_qty', header: 'Quantity', sortable: true },
+        { field: 'product_brand', header: 'Brand', sortable: true },
+        { field: 'product_shelflife', header: 'Self Life', sortable: true },
+        { field: 'product_description', header: 'Description', sortable: true },
+        { field: 'product_Manufacturer_Name', header: 'Manufacturer Name', sortable: true },
+        { field: 'product_country_of_origin', header: 'Country Of Origin', sortable: true },
+        { filed: 'action', header: 'Action', body: action, sortable: true },
+        // { field: 'isverify', header: 'Admin Verify', body: switchVerify, sortable: true },
     ]
 
 
@@ -243,14 +235,9 @@ const AdminProduct = () => {
             <div className='p-4 m-4 bg-white sm:m-5 rounded-xl'>
                 <div className='grid items-center grid-cols-6'>
                     <h2 className='col-span-5 text-xl font-semibold'>Product List</h2>
-                    {/* <AddProduct title='Add Product' getProducts={getProducts} sellerId={matchedSeller?.vendor_id} /> */}
                 </div>
                 <div className='mt-4'>
-                    <Table data={shopProducts} columns={Columns} />
-                    {/* {user?.isShop == true ?
-                        <Table data={shopProducts} columns={Columns} /> :
-                        <Table data={restaurantData} columns={restaurantColumns} />
-                    } */}
+                    <Table data={shopProducts} columns={userDetails?.role == 'franchise' ? restaurantColumns : Columns} />
                 </div>
             </div>
         </>

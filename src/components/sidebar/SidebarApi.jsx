@@ -23,11 +23,11 @@ export const Admin = [
         icon: <Bank size="24" />,
         link: '/vendors',
     },
-    {
-        title: 'Resturants',
-        icon: <ChefHat />,
-        link: '/resturants',
-    },
+    // {
+    //     title: 'Resturants',
+    //     icon: <ChefHat />,
+    //     link: '/resturants',
+    // },
     {
         title: 'Drivers',
         icon: <Bike size="24" />,
@@ -38,36 +38,36 @@ export const Admin = [
         icon: <User size="24" />,
         link: '/user',
     },
-    {
-        title: 'Sub-Admin',
-        icon: <SecurityUser size="24" />,
-        link: '/subadmin',
-    },
+    // {
+    //     title: 'Sub-Admin',
+    //     icon: <SecurityUser size="24" />,
+    //     link: '/subadmin',
+    // },
     {
         title: 'Orders',
         icon: <Book size="24" />,
         link: '/orders',
     },
-    {
-        title: 'Banners',
-        icon: <TicketDiscount size="24" />,
-        link: '/DashboardAssets',
-    },
+    // {
+    //     title: 'Banners',
+    //     icon: <TicketDiscount size="24" />,
+    //     link: '/DashboardAssets',
+    // },
     {
         title: 'Promotions',
         icon: <Megaphone size="24" />,
         link: '/promotions',
     },
-    {
-        title: 'Reports',
-        icon: <ClipboardTick size="24" />,
-        link: '/reports',
-    },
-    {
-        title: 'Account Statement',
-        icon: <Bank size="24" />,
-        link: '/accountStatement',
-    },
+    // {
+    //     title: 'Reports',
+    //     icon: <ClipboardTick size="24" />,
+    //     link: '/reports',
+    // },
+    // {
+    //     title: 'Account Statement',
+    //     icon: <Bank size="24" />,
+    //     link: '/accountStatement',
+    // },
     {
         title: 'Settings',
         icon: <Setting2 size="24" />,
@@ -135,7 +135,7 @@ export const Franchise = [
     {
         title: 'Orders',
         icon: <LayoutList size="24" />,
-        link: '/franchiesee-orders',
+        link: '/orders',
     },
     {
         title: 'menu',
@@ -145,13 +145,13 @@ export const Franchise = [
     {
         title: 'Vendors',
         icon: <Notebook size="24" />,
-        link: '/franchise-vendors',
+        link: '/vendors',
     },
-    {
-        title: 'Resturants',
-        icon: <ChefHat />,
-        link: '/franchise-resturants',
-    },
+    // {
+    //     title: 'Resturants',
+    //     icon: <ChefHat />,
+    //     link: '/resturants',
+    // },
     {
         title: 'Delivery Boys',
         icon: <Wallet size="24" />,
