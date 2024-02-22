@@ -147,7 +147,7 @@ const VendorProduct = () => {
     ]
 
     const getProducts = () => {
-        getAllShopProduct().then(res => {
+        getAllShopProduct(LoggedUserDetails?.sellerId).then(res => {
             setShopProducts(res)
         })
     }

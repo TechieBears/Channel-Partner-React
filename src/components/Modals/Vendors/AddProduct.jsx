@@ -190,7 +190,7 @@ const AddProduct = (props) => {
                 'product_nutritional_info': props?.row?.product_nutritional_info,
                 'product_additional_details': props?.row?.product_additional_details,
                 'product_available_qty': props?.row?.product_available_qty,
-                'product_stock': props?.row?.product_stock,
+                // 'product_stock': props?.row?.product_stock,
                 'product_isactive': props?.row?.product_isactive,
                 'product_actual_price': props?.row?.product_actual_price,
             })
@@ -304,7 +304,7 @@ const AddProduct = (props) => {
                                                         {errors.product_actual_price && <Error title='MRP is Required*' />}
                                                     </div>
 
-                                                    <div className="">
+                                                    {/* <div className="">
                                                         <label className={labelClass}>
                                                             SKU*
                                                         </label>
@@ -315,7 +315,7 @@ const AddProduct = (props) => {
                                                             {...register('product_stock', { required: true })}
                                                         />
                                                         {errors.product_stock && <Error title='SKU is Required*' />}
-                                                    </div>
+                                                    </div> */}
                                                     {/* <div className="">
                                                         <label className={labelClass}>
                                                             Variations

@@ -395,10 +395,10 @@ export const VerifyProductAdmin = async (data) => {
 };
 
 //  ===================  Approve/Reject  Products for Admin Api ===============
-export const ConfigurationCharges = async (data) => {
-    const url = `${environment.baseUrl}app/add_config_charges`;
+export const ConfigurationCharges = async (id, data) => {
+    const url = `${environment.baseUrl}app/edit_config_charges/${id}`;
     try {
-        const response = await axios.post(url, data)
+        const response = await axios.put(url, data)
         return response.data
     }
     catch (err) {
@@ -1346,8 +1346,8 @@ export const addProduct = async (data) => {
 }
 
 // ======================== Get All Product ===============
-export const getAllShopProduct = async () => {
-    const url = `${environment.baseUrl}vendor/add_shop_product`
+export const getAllShopProduct = async (id) => {
+    const url = `${environment.baseUrl}vendor/product_by_vendor/${id}`
     try {
         const response = await axios.get(url);
         return response.data;

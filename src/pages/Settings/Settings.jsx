@@ -15,7 +15,7 @@ export default function Settings() {
                         className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 0 ? 'text-sky-500  border-b-2 border-sky-400 outline-0' : 'text-gray-500 border-b'
                             }`}
                     >Tax / Commission</Tab>
-                    <Tab
+                    {/* <Tab
                         className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 1 ? 'text-sky-500  border-b-2 border-sky-400 outline-0' : 'text-gray-500 border-b'
                             }`}
                     >Basic</Tab>
@@ -26,12 +26,12 @@ export default function Settings() {
                     <Tab
                         className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 3 ? 'text-sky-500  border-b-2 border-sky-400 outline-0' : 'text-gray-500 border-b'
                             }`}
-                    >Custom</Tab>
+                    >Custom</Tab> */}
                 </TabList>
                 <TabPanel><Tax /></TabPanel>
-                <TabPanel><Basic /></TabPanel>
+                {/* <TabPanel><Basic /></TabPanel>
                 <TabPanel><PrivacyPolicy /></TabPanel>
-                <TabPanel><Custom /></TabPanel>
+                <TabPanel><Custom /></TabPanel> */}
             </Tabs>
         </div>
     )
