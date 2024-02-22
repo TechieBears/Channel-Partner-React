@@ -41,8 +41,9 @@ const EditAdminProduct = (props) => {
     useEffect(() => {
       if (calculateRevenue !=="") {
         var mainPrice = (props?.row?.product_actual_price == null ? 0 : props?.row?.product_actual_price) * (calculateRevenue / 100);
-        var actualprice = (props?.row?.product_actual_price == null ? 0 : props?.row?.product_actual_price) * (props?.row?.vendor?.insta_commison_percentage / 100);
-        var adminfinalprice =  props?.row?.product_actual_price + mainPrice + actualprice;
+        // var actualprice = (props?.row?.product_actual_price == null ? 0 : props?.row?.product_actual_price) * (props?.row?.vendor?.insta_commison_percentage / 100);
+        // var adminfinalprice =  props?.row?.product_actual_price + mainPrice + actualprice;
+        var adminfinalprice =  props?.row?.product_actual_price + mainPrice;
         console.log('adminfinalprice = ', adminfinalprice);
         setFinalPrice(adminfinalprice);
         setValue('final_price', adminfinalprice)
