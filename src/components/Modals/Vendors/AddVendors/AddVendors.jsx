@@ -86,13 +86,10 @@ export default function AddVendors(props) {
                 data.address_proof = props?.data?.address_proof
             }
             if (data?.profile_pic != props?.data?.user?.profile_pic) {
-                console.log('inside prifile')
-                console.log('data?.profile_pic', data?.profile_pic)
-                console.log('props?.data?.profile_pic', props?.data?.profile_pic)
                 await ImageUpload(data?.profile_pic[0], "vendor", "ProfileImage", data?.first_name)
                 data.profile_pic = `${vendorlink}${data?.first_name}_ProfileImage_${data?.profile_pic[0].name}`
             } else {
-                data.profile_pic = props?.data?.profile_pic
+                data.profile_pic = props?.data?.user?.profile_pic
             }
             if (data?.hawker_shop_photo != props?.data?.hawker_shop_photo) {
                 await ImageUpload(data?.hawker_shop_photo[0], "vendor", "shopImage", data?.first_name)
@@ -133,7 +130,14 @@ export default function AddVendors(props) {
         } else {
             try {      // for edit
                 setLoader(true)
-                const response = await EditFranchiseeVendors(props?.data?.user?.id, data)
+
+                let additionalPayload = {};
+                if (LoggedUserDetails?.role == 'franchise') {
+                    additionalPayload = { created_by: LoggedUserDetails?.userid };
+                }
+                const requestData = { ...data, ...additionalPayload };
+
+                const response = await EditFranchiseeVendors(props?.data?.user?.id, requestData)
                 if (response?.status == "success") {
                     setTimeout(() => {
                         toggle();
@@ -185,7 +189,7 @@ export default function AddVendors(props) {
             hawker_shop_photo: props?.data?.hawker_shop_photo,
             shop_start_time: props?.data?.shop_start_time,
             shop_end_time: props?.data?.shop_end_time,
-            vendor_type: props?.data?.vendor_type,
+            // vendor_type: props?.data?.vendor_type,
         });
         setValue('created_by', props?.data?.created_by?.id)
     }, [props.data]);
