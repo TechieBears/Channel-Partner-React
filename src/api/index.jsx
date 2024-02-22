@@ -300,7 +300,7 @@ export const getRestarant = async () => {
     try {
         const response = await axios.get(url);
 
-        // console.log('response.data ========== restaurant', response.data);
+        console.log('response.data ========== restaurant', response.data);
         return response.data;
     }
     catch (err) {

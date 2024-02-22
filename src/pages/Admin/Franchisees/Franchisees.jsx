@@ -148,7 +148,7 @@ function Franchisees() {
         { field: 'status', header: 'Status', body: activeActionsRole, sortable: false },
         { field: 'id', header: 'Action', body: actionBodyTemplate, sortable: true },
         { field: 'isverify', header: 'Admin Verify', body: switchVerify, sortable: true },
-        { header: 'Analyse', body: action, sortable: false },
+        // { header: 'Analyse', body: action, sortable: false },
     ]
     return (
 

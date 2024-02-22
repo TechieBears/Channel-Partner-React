@@ -8,16 +8,28 @@ import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { useForm } from 'react-hook-form';
 import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
 import { getRestarant } from '../../../api';
 
 
 
 export default function FranchiseRestaurent() {
     const [data, setData] = useState([])
+    const [activeTab, setActiveTab] = useState(true);
     const [rstatus, setStatus] = useState(false);
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const user = useSelector(state => state?.user?.loggedUserDetails);
+
+    const getAllRestaurant = () => {
+        getRestarant().then((res) => {
+            const restaurantVendors = res.filter(item => item?.vendor_type == "restaurant");
+            setData(restaurantVendors);
+        });
+    }
+
+    const changeTab = (tabNumber) => {
+        setActiveTab(tabNumber);
+    };
+    /*================================     column    ========================= */
 
     // =================== filter data ========================
     const onSubmit = async (data) => {
@@ -31,23 +43,15 @@ export default function FranchiseRestaurent() {
             toast.warn("No Selected Value !")
         }
     }
-
-    const getAllRestaurant = () => {
-        getRestarant().then((res) => {
-            const restaurantVendors = res.filter(item => item?.vendor_type === "restaurant");
-            console.log('restaurantVendors:', restaurantVendors);
-            setData(restaurantVendors);
-        });
-    }
     // =================== table user active column ========================
 
-    const status = (row) => <Switch checked={rstatus} onChange={() => setStatus(!rstatus)} />
     const action = row => <div className="flex items-center gap-2">
         <NavLink to={`/franchise-resturants/restaurant-detail/${row?.vendor_id}`} state={row} className="bg-green-100 px-1.5 py-1 rounded-lg">
             <Eye size="20" className='text-green-500' />
         </NavLink>
         <AddRestaurant button='edit' title='Edit User' id={row?.user?.id} data={row} getAllRestaurant={getAllRestaurant} />
     </div>
+
     const columns = [
         { field: 'vendor_id', header: 'ID', sortable: false },
         { field: 'isb_code', header: 'ISB Code', sortable: false },
@@ -63,7 +67,7 @@ export default function FranchiseRestaurent() {
     ]
 
     useEffect(() => {
-        getAllRestaurant()
+
     }, [])
     return (
         <>

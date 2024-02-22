@@ -154,7 +154,6 @@ const AddProduct = (props) => {
                 }
             })
         } else {
-
             var updatedData = { ...data, vendor: LoggedUserDetails?.sellerId, final_price: FinalPrice }
             console.log(updatedData)
             addProduct(updatedData).then((res) => {
@@ -265,11 +264,11 @@ const AddProduct = (props) => {
                                                             {...register('product_category', { required: true })}
                                                         >
                                                             <option value=''>Select</option>
-                                                            {category?.map(item => 
+                                                            {category?.map(item =>
                                                                 // {
-                                                                    // console.log(item?.id)
-                                                                    <option key={item?.id} value={item?.id}>{item?.category_name}</option>
-                                                                    // }
+                                                                // console.log(item?.id)
+                                                                <option key={item?.id} value={item?.id}>{item?.category_name}</option>
+                                                                // }
                                                             )}
                                                         </select>
                                                         {errors.product_category && <Error title='Category is Required*' />}
@@ -406,7 +405,7 @@ const AddProduct = (props) => {
                                                         />
                                                         {errors.product_unit && <Error title='Product Unit is Required*' />}
                                                     </div>
-                                                    
+
 
                                                     {/* <div className="">
                                                         <label className={labelClass}>
@@ -574,7 +573,7 @@ const AddProduct = (props) => {
                                                         />
                                                     </div>
                                                     {/* <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Brand Information</p> */}
-                                                
+
                                                     {/* <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Brand Logo*</label>
                                                         <input className={fileinput}
@@ -598,8 +597,8 @@ const AddProduct = (props) => {
                                                             multiple
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            {...register("product_image_1", 
-                                                            { required: props.title == 'Edit Product' ? false : true })} />
+                                                            {...register("product_image_1",
+                                                                { required: props.title == 'Edit Product' ? false : true })} />
                                                         {props?.title == 'Edit Product' && props?.row?.product_image_1 != '' && props?.row?.product_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                                                             {props?.row?.product_image_1?.split('/').pop()}
                                                         </label>}
@@ -614,8 +613,8 @@ const AddProduct = (props) => {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("product_image_2",
-                                                             )} 
-                                                             />
+                                                            )}
+                                                        />
                                                         {props?.title == 'Edit Product' && props?.row?.product_image_2 != '' && props?.row?.product_image_2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                                                             {props?.row?.product_image_2?.split('/').pop()}
                                                         </label>}

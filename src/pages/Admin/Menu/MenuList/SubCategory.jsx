@@ -11,8 +11,7 @@ import Switch from 'react-js-switch';
 const SubCategory = () => {
   const subcategory = useSelector((state) => state?.master?.SubCategory);
   const category = useSelector((state) => state?.master?.Category);
-  console.log('category = ', category)
-  
+  console.log('category', category)
   const dispatch = useDispatch();
 
   // ============== fetch data from api ================
@@ -36,7 +35,7 @@ const SubCategory = () => {
       console.log(error);
     }
   };
-  
+
 
   // ============== delete data from api ================
   const deleteData = (data) => {
@@ -65,7 +64,7 @@ const SubCategory = () => {
     </div>
   );
 
-  
+
   const imageBodyTemp = (row) => (
     <div className="w-20 h-20">
       <img
@@ -93,44 +92,44 @@ const SubCategory = () => {
     // catch (err) {
     //     console.log(err);
     // }
-}
+  }
 
 
-// =============================== verify user switch =============================
-const switchVerify = (row) => {
+  // =============================== verify user switch =============================
+  const switchVerify = (row) => {
     return (
-        <div className="flex items-center justify-center gap-2 ">
-            <Switch
-                value={row?.isverifiedbyfranchise}
-                onChange={() => verifyActions(row)}
-                size={50}
-                backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
-                borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
-        </div>
+      <div className="flex items-center justify-center gap-2 ">
+        <Switch
+          value={row?.isverifiedbyfranchise}
+          onChange={() => verifyActions(row)}
+          size={50}
+          backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
+          borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
+      </div>
     )
-}
-// =============================== active user switch =============================
-const switchActive = (row) => {
+  }
+  // =============================== active user switch =============================
+  const switchActive = (row) => {
     return (
-        <div className="flex items-center justify-center gap-2">
-            <Switch
-                value={row?.user?.isverified_byadmin}
-                disabled={true}
-                onChange={() => activeActions(row)}
-                size={50}
-                backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
-                borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
-        </div>
+      <div className="flex items-center justify-center gap-2">
+        <Switch
+          value={row?.user?.isverified_byadmin}
+          disabled={true}
+          onChange={() => activeActions(row)}
+          size={50}
+          backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
+          borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
+      </div>
     )
-}
+  }
 
-    // =================== table user profile column ========================
-    const representativeBodyTemplate = (row) => {
-      return (
-          <div className="rounded-full w-14 h-14">
-              <img src={row?.subcat_image} className="object-cover w-full h-full rounded-full" alt={row?.subcat_name} />
-          </div>
-      );
+  // =================== table user profile column ========================
+  const representativeBodyTemplate = (row) => {
+    return (
+      <div className="rounded-full w-14 h-14">
+        <img src={row?.subcat_image} className="object-cover w-full h-full rounded-full" alt={row?.subcat_name} />
+      </div>
+    );
   };
 
 
@@ -139,12 +138,23 @@ const switchActive = (row) => {
        const columns = [
         { field: 'subcat_image', header: 'Image', body: representativeBodyTemplate, sortable: true, style: true },
         { field: 'subcat_name', header: 'Name', sortable: true },
-        { field: 'category', header: 'Category',  body: rowData => {
-          const matchingCategory = category.find(category => category.id === rowData.category);
-          return matchingCategory ? matchingCategory.category_name : '';
-        }},
+        { field: 'category', header: 'Category',  
+        // body: rowData => {
+        //   const matchingCategory = category.find(category => category?.id == rowData?.category);
+        //   return matchingCategory ? matchingCategory?.category_name : '';
+        // }
+        body: rowData => {
+          if (Array.isArray(category)) {
+              const matchingCategory = category.find(cat => cat?.id == rowData?.category);
+              return matchingCategory ? matchingCategory?.category_name : '';
+          } else {
+              return 'Category data is not available.';
+          }
+      }
+      },
         // { field: 'isactive', header: 'Active', body: switchActive, sortable: true },
         // { field: 'isverify', header: 'Verify', body: switchVerify, sortable: true },
+        { field: "id", header: "Action", body: actionBodyTemplate, sortable: true },
     ];
 
 

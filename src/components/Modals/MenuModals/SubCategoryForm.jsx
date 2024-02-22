@@ -3,7 +3,7 @@ import { Fragment, useMemo, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Edit } from "iconsax-react";
 import { toast } from "react-toastify";
-import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn} from "../../../utils/CustomClass";
+import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from "../../../utils/CustomClass";
 import { getCategory, getSubCategory, editSubCategory, createSubCategory } from "../../../api";
 import { setCategory, setSubCategory } from "../../../redux/Slices/masterSlice";
 import LoadBox from "../../Loader/LoadBox";
@@ -15,8 +15,9 @@ export default function SubCategoryForm(props) {
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const categories = useSelector((state) => state?.master?.Category);
+  console.log('categories', categories)
 
-  const { register, handleSubmit, control, watch, reset, formState: { errors }} = useForm();
+  const { register, handleSubmit, control, watch, reset, formState: { errors } } = useForm();
 
   const dispatch = useDispatch();
 
@@ -34,7 +35,7 @@ export default function SubCategoryForm(props) {
       console.log(error);
     }
   };
-  
+
 
   // ============================ submit data  =====================================
   const onSubmit = async (data) => {
@@ -55,9 +56,9 @@ export default function SubCategoryForm(props) {
         setLoader(true);
         createSubCategory(data)
           .then((res) => {
-            if (res?.message === "Data added successfully") {
+            if (res?.status === "success") {
               setTimeout(() => {
-                dispatch(setCategory(res));
+                // dispatch(setCategory(res));
                 reset();
                 toggle(), setLoader(false), subCategoryList();
                 toast.success(res.message);
@@ -75,7 +76,7 @@ export default function SubCategoryForm(props) {
     } else {
       try {
         if (data.subcat_image.length != 0) {
-          await ImageUpload( data.subcat_image[0], "subcategory", "subcategory", data.subcat_name);
+          await ImageUpload(data.subcat_image[0], "subcategory", "subcategory", data.subcat_name);
           data.subcat_image = `${subcategoryLink}${data.subcat_name}_subcategory_${data.subcat_image[0].name}`;
         } else {
           data.subcat_image = props.data.subcat_image;
@@ -84,7 +85,7 @@ export default function SubCategoryForm(props) {
         editSubCategory(props?.data?.subcat_id, data).then((res) => {
           if (res?.message === "subcategory edited successfully") {
             setTimeout(() => {
-              dispatch(setSubCategory(res));
+              // dispatch(setSubCategory(res));
               reset();
               toggle(), setLoader(false), subCategoryList();
               toast.success(res.message);
@@ -209,8 +210,8 @@ export default function SubCategoryForm(props) {
                             {...register("category", { required: true })}
                           >
                             <option value="" disabled>Select Type</option>
-                            {categories.map((category) => (
-                              <option key={category.id} value={category.id}  selected={props?.data?.category === category.id}>
+                            {categories?.length > 0 && categories.map(category => (
+                              <option key={category.id} value={category.id} selected={props?.data?.category === category.id}>
                                 {category.category_name}
                               </option>
                             ))}

@@ -70,11 +70,9 @@ const Category = () => {
       field: "category_name",
       header: "Name",
       body: (row) => (
-        <NavLink to={`/menu/category-detail/${row?.id}`}>
-          <h6 className="hover:underline hover:text-sky-400">
-            {row?.category_name}
-          </h6>{" "}
-        </NavLink>
+        <h6 className="">
+          {row?.category_name}
+        </h6>
       ),
     },
     { field: "id", header: "Action", body: actionBodyTemplate, sortable: true },

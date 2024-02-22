@@ -9,23 +9,14 @@ import { useSelector } from 'react-redux';
 import { getRestarant } from '../../../api';
 import { useForm } from 'react-hook-form';
 import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
+import axios from 'axios';
 
 
 
 export default function Restaurant() {
     const [data, setData] = useState([]);
-    const [activeTab, setActiveTab] = useState(0);
-    const [rstatus, setStatus] = useState(false);
     const user = useSelector(state => state?.user?.loggedUserDetails);
-    const Vendors = useSelector((state) => state?.master?.FranchiseVendors);
-    console.log('Vendors ========================', Vendors)
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
-
-
-
-    const changeTab = (tabNumber) => {
-        setActiveTab(tabNumber);
-    };
 
     // =================== filter data ========================
     const onSubmit = async (data) => {
@@ -43,8 +34,7 @@ export default function Restaurant() {
 
     const getAllRestaurant = () => {
         getRestarant().then((res) => {
-            const restaurantVendors = res.filter(item => item?.vendor_type === "restaurant");
-            console.log('restaurantVendors:', restaurantVendors);
+            const restaurantVendors = res.filter(item => item?.vendor_type == "restaurant");
             setData(restaurantVendors);
         });
     }
@@ -72,6 +62,7 @@ export default function Restaurant() {
     ]
 
     useEffect(() => {
+        console.log('called restaurant')
         getAllRestaurant()
     }, []);
 

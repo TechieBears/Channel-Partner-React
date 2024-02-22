@@ -14,6 +14,7 @@ import { toast } from 'react-toastify';
 import AsyncSelect from 'react-select/async';
 import DashboardForm from '../../../components/modals/DashboardModals/DashboardForm';
 import DeleteModal from '../../../components/Modals/DeleteModal/DeleteModal';
+import { getStorages } from '../../../api';
 
 const Order = () => {
     const user = useSelector((state) => state.user.loggedUserDetails)

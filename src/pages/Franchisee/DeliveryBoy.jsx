@@ -1,7 +1,7 @@
 import { Refresh, SearchNormal } from 'iconsax-react'
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
-import { Eye  } from 'iconsax-react';
+import { Eye } from 'iconsax-react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Table from '../../components/Table/Table'
@@ -9,30 +9,20 @@ import AddDriverFrom from '../../components/Modals/DriverModals/AddDriverForm'
 import { getDeliveryBoysByID, verifyDeliveryBoy } from '../../api';
 import { setDeliveryList } from '../../redux/Slices/deliverySlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { formBtn1, formBtn2, inputClass ,tableBtn } from '../../utils/CustomClass';
+import { formBtn1, formBtn2, inputClass, tableBtn } from '../../utils/CustomClass';
 import Switch from 'react-js-switch';
 import { toast } from 'react-toastify';
 
 function DeliveryBoy() {
     const dispatch = useDispatch()
-    // const deliveryList = useSelector((state) => state?.delivery?.deliveryList)
-    // const deliveryList = useSelector((state) => state?.user?.setLoggedUserDetails)
-    // console.log('delivery Table data = ', deliveryList?.data)
-
     const LoggedDetails = useSelector((state) => state?.user?.loggedUserDetails)
-    // console.log('Logged Details = ', LoggedDetails);
-
     const [deliveryList, setdeliveryList] = useState();
-
-    
     const {
         register,
         handleSubmit,
         formState: { errors },
         reset
     } = useForm();
-
-
     // =================== filter data ========================
     const onSubmit = async (data) => {
         if (data?.name != '' || data?.email != '' || data?.city != '' || data?.role != '') {
@@ -45,14 +35,10 @@ function DeliveryBoy() {
             toast.warn("No Selected Value !")
         }
     }
-        
-
-
     // // ========================= fetch data from api ==============================
     const DeliveryBoyDetails = () => {
         try {
             getDeliveryBoysByID(LoggedDetails?.userid).then((res) => {
-                console.log('Franchise Drivers = ', res);
                 setdeliveryList(res);
                 dispatch(setDeliveryList(res));
             });
@@ -64,23 +50,6 @@ function DeliveryBoy() {
     useEffect(() => {
         DeliveryBoyDetails()
     }, [])
-
-
-    // ============================= fetching data api ==================================
-    // const fetchData = () => {
-    //     try {
-    //         getDeliveryBoys().then((res) => {
-    //             dispatch(setDeliveryList(res));
-    //         })
-    //     } catch (err) {
-    //         console.log('error', err);
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     fetchData()
-    // }, [])
-
 
     const verifyActions = (row) => {
         const payload = { userId: row?.user?.id, isverifiedbyadmin: row?.user?.isverified_byadmin, isverifiedbyfranchise: !row?.isverifiedbyfranchise }
@@ -129,7 +98,7 @@ function DeliveryBoy() {
             </div>
         )
     }
-    
+
 
     // =================== table action ========================
     const actionBodyTemplate = (row) => (
@@ -154,13 +123,13 @@ function DeliveryBoy() {
 
     // =================== table user verify column  ========================
     const activeActionsRole = (rowData) => (
-    <h6 className={`${rowData?.user?.isactive !== "false" ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"} py-2 px-5 text-center capitalize rounded-full`}>
-        {rowData?.user?.isactive !== "false" ? "Active" : "Inactive"}
-    </h6>
+        <h6 className={`${rowData?.user?.isactive !== "false" ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"} py-2 px-5 text-center capitalize rounded-full`}>
+            {rowData?.user?.isactive !== "false" ? "Active" : "Inactive"}
+        </h6>
     );
-    
+
     const action = (row) => <button className={`${tableBtn}`} >
-    View Analysis
+        View Analysis
     </button>
 
     // const columns = [
@@ -179,7 +148,7 @@ function DeliveryBoy() {
     //     { field: 'id', header: 'Action', body: actionBodyTemplate, sortable: true },
     //     {  header: 'Analyse', body: action, sortable: false },
     // ]
-    
+
     const columns = [
         // { field: 'id', header: 'ID', sortable: false },
         { field: 'profile_pic', header: 'Profile', body: representativeBodyTemplate, sortable: false, style: true },
@@ -203,8 +172,8 @@ function DeliveryBoy() {
 
     return (
         <>
-              {/* ========================= user fileter ======================= */}
-              <div className="p-4 bg-white sm:m-5 rounded-xl" >
+            {/* ========================= user fileter ======================= */}
+            <div className="p-4 bg-white sm:m-5 rounded-xl" >
                 <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2 md:items-center lg:flex-row'>
                     <div className="grid w-full grid-cols-1 sm:grid-cols-4 gap-y-3 gap-x-2">
                         <div className="">
@@ -269,17 +238,17 @@ function DeliveryBoy() {
                 </div>
             </div> */}
 
-                 {/*====================== User Table ================================*/}
+            {/*====================== User Table ================================*/}
             <div className="p-4 bg-white sm:m-5 rounded-xl" >
-            <div className="flex flex-col items-start justify-between mb-6 sm:flex-row sm:items-center sm:space-y-0">
-                <div className="">
-                    <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>Drivers</h1>
+                <div className="flex flex-col items-start justify-between mb-6 sm:flex-row sm:items-center sm:space-y-0">
+                    <div className="">
+                        <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>Drivers</h1>
+                    </div>
+                    <div className='flex gap-4'>
+                        {/* <DriverTipForm title='Driver Tip'/> */}
+                        <AddDriverFrom title='Add Driver' DeliveryBoyDetails={DeliveryBoyDetails} />
+                    </div>
                 </div>
-                <div className='flex gap-4'>
-                    {/* <DriverTipForm title='Driver Tip'/> */}
-                    <AddDriverFrom title='Add Driver' DeliveryBoyDetails={DeliveryBoyDetails}/>
-                </div>
-            </div>
                 <Table data={deliveryList} columns={columns} />
             </div>
 

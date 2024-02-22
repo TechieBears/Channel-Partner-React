@@ -37,7 +37,8 @@ function Tax() {
         handling_charges: '',
         platform_fee: '',
         mini_cart: '',
-        multi_cart: ''
+        multi_cart: '',
+        delivery_charges: ''
     });
 
     const handleEdit = () => {
@@ -68,20 +69,6 @@ function Tax() {
         getconfig();    
     }, []);
 
-    
-    // ======================== Reset data into the form  =======================
-    // useMemo(() => {
-    //     reset({
-    //         gst: configData[0]?.gst,
-    //         tds: configData[0]?.tds,
-    //         tcs: configData[0]?.tcs,
-    //         handling_charges: configData[0]?.handling_charges,
-    //         platform_fee: configData[0]?.platform_fee,
-    //         mini_cart: configData[0]?.mini_cart,
-    //         multi_cart: configData[0]?.multi_cart,
-    //     });
-    // }, [configData]);
-
     // ============================= form submiting ======================================
     const onSubmit = async (data, event) => {
         event.preventDefault();
@@ -105,6 +92,9 @@ function Tax() {
         } 
         if (data?.multi_cart == '') {
             data.multi_cart = formData?.multi_cart
+        } 
+        if (data?.delivery_charges == '') {
+            data.delivery_charges = formData?.delivery_charges
         } 
         try {
             console.log('data', data)
@@ -136,19 +126,19 @@ function Tax() {
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="p-4 overflow-y-scroll scrollbars ">
-                        <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
+                        <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-4 gap-x-3 gap-y-3 customBox">
                             <div className="">
                                 <label className={labelClass}>
                                     GST*
                                 </label>
                                 <select
                                     className={inputClass}
-                                    value={formData.gst}
+                                    value={formData?.gst}
                                     {...register('gst')}
                                     disabled={!editable}
                                     onChange={handleChange}
                                 >
-                                    <option value="">select</option>
+                                    {/* <option value="">select</option> */}
                                     <option value='18'>18%</option>
                                     <option value='16'>16%</option>
                                     <option value='20'>20%</option>
@@ -161,12 +151,12 @@ function Tax() {
                                 </label>
                                 <select
                                     className={inputClass}
-                                    value={formData.tds}
+                                    value={formData?.tds}
                                     {...register('tds')}
                                     disabled={!editable}
                                     onChange={handleChange}
                                 >
-                                    <option value="">select</option>
+                                    {/* <option value="">select</option> */}
                                     <option value='1'>1%</option>
                                     <option value='2'>2%</option>
                                     <option value='3'>3%</option>
@@ -182,12 +172,12 @@ function Tax() {
                                 </label>
                                 <select
                                     className={inputClass}
-                                    value={formData.tcs}
+                                    value={formData?.tcs}
                                     {...register('tcs')}
                                     disabled={!editable}
                                     onChange={handleChange}
                                 >
-                                    <option value="">select</option>
+                                    {/* <option value="">select</option> */}
                                     <option value='1'>1%</option>
                                     <option value='2'>2%</option>
                                     <option value='3'>3%</option>
@@ -203,7 +193,7 @@ function Tax() {
                                     type="number"
                                     placeholder="20"
                                     className={inputClass}
-                                    value={formData.handling_charges}
+                                    value={formData?.handling_charges}
                                     {...register("handling_charges")}
                                     readOnly={!editable}
                                     onChange={handleChange}
@@ -216,7 +206,7 @@ function Tax() {
                                     type="number"
                                     placeholder="25"
                                     className={inputClass}
-                                    value={formData.platform_fee}
+                                    value={formData?.platform_fee}
                                     {...register("platform_fee")}
                                     readOnly={!editable}
                                     onChange={handleChange}
@@ -229,7 +219,7 @@ function Tax() {
                                     type="number"
                                     placeholder="25"
                                     className={inputClass}
-                                    value={formData.mini_cart}
+                                    value={formData?.mini_cart}
                                     {...register("mini_cart")}
                                     readOnly={!editable}
                                     onChange={handleChange}
@@ -242,12 +232,24 @@ function Tax() {
                                     type="number"
                                     placeholder="25"
                                     className={inputClass}
-                                    value={formData.multi_cart}
+                                    value={formData?.multi_cart}
                                     {...register("multi_cart")}
                                     readOnly={!editable}
                                     onChange={handleChange}
                                 />
                                 {/* {errors.multi_cart && <Error title='multi cart is Required*' />} */}
+                            </div>
+                            <div className="">
+                                <label className={labelClass}>Delivery Charges*</label>
+                                <input
+                                    type="number"
+                                    placeholder="25"
+                                    className={inputClass}
+                                    value={formData?.delivery_charges}
+                                    {...register("delivery_charges")}
+                                    readOnly={!editable}
+                                    onChange={handleChange}
+                                />
                             </div>
                         </div>
                     </div>

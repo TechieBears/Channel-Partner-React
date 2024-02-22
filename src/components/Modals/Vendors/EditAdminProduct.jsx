@@ -426,6 +426,7 @@ const EditAdminProduct = (props) => {
                                                         </label>
                                                         <input
                                                             type="number"
+                                                            readOnly
                                                             placeholder='₹ 0.00'
                                                             className={inputClass}
                                                             {...register('final_price', { required: true })}

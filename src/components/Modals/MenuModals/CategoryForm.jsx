@@ -63,7 +63,7 @@ export default function CategoryForm(props) {
         setLoader(true);
         createCategory(data)
           .then((res) => {
-            if (res?.message === "Data added successfully") {
+            if (res?.code == 2002) {
               setTimeout(() => {
                 dispatch(setCategory(res));
                 reset();

@@ -29,11 +29,6 @@ function ViewAdminProduct() {
         },
     ].filter(image => image.URL !== '');
 
-    // useEffect(() => {
-    //     getProductById(id).then(res => {
-    //         setProduct(res);
-    //     })
-    // }, [])
     return (
         <div className='m-4 space-y-2'>
             <button onClick={() => navigate(-1)}>
@@ -57,7 +52,6 @@ function ViewAdminProduct() {
 
                     </div>
                 </div>
-
                 {/* <div className='w-96'>
                     <SimpleGallery
                         galleryID="my-test-gallery"
@@ -69,12 +63,6 @@ function ViewAdminProduct() {
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU" alt="" />
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU" alt="" />
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU" alt="" />
-
-                {/* <img src={product?.product_image_1} alt="" />
-                <img src={product?.product_image_2} alt="" />
-                <img src={product?.product_image_3} alt="" />
-                <img src={product?.product_image_4} alt="" />
-                <img src={product?.product_image_5} alt="" /> */}
             </div>
             <div className='p-4 space-y-2 bg-white rounded-xl'>
                 <p className='text-2xl font-semibold'>Product Details</p>
