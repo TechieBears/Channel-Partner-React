@@ -14,7 +14,7 @@ import { toast } from 'react-toastify';
 import { ImageUpload, productLink } from '../../../env';
 
 const AddProduct = (props) => {
-    console.log('props = ', props);
+    // console.log('props = ', props);
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
     const [category, setCategory] = useState([]);
@@ -95,6 +95,7 @@ const AddProduct = (props) => {
     };
 
     const onSellerSubmit = async (data) => {
+        console.log('seller payload = ', data);
         if (props?.title == 'Edit Product') {
             if (data?.product_image_1 != props?.row?.product_image_1) {
                 await ImageUpload(data?.product_image_1[0], "shopProduct", "MainImage", data?.product_name)
@@ -171,7 +172,7 @@ const AddProduct = (props) => {
             }
         }
         if (props?.title == 'Edit Product') {
-            var updatedData = { ...data, vendor: props?.row?.vendor?.user }
+            var updatedData = { ...data, vendor: props?.row?.vendor?.vendor_id }
             // console.log('called')
             editVendorProduct(props?.row?.product_id, updatedData).then(res => {
                 if (res?.status == 'success') {
@@ -235,7 +236,13 @@ const AddProduct = (props) => {
                 'product_unit': props?.row?.product_unit,
                 'product_unit_type': props?.row?.product_unit_type,
                 'product_revenue': props?.row?.product_revenue,
-                'product_video_url': props?.row?.product_video_url
+                'product_video_url': props?.row?.product_video_url,
+                'product_image_1': props?.row?.product_image_1,
+                'product_image_2': props?.row?.product_image_2,
+                'product_image_3': props?.row?.product_image_3,
+                'product_image_4': props?.row?.product_image_4,
+                'product_image_5': props?.row?.product_image_5
+
             })
         }
         if (LoggedUserDetails?.role == 'admin') {

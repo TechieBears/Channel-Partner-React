@@ -48,7 +48,6 @@ export const getSubCategory = async () => {
     const url = `${environment.baseUrl}app/get-subcategory`;
     try {
         const response = await axios.get(url)
-        console.log('subcategory data == ', response.data.data);
         return response.data.data
     }
     catch (err) {
@@ -62,7 +61,6 @@ export const getProducts = async () => {
     const url = `${environment.baseUrl}app/product-list`;
     try {
         const response = await axios.get(url)
-        console.log('products data == ', response.data);
         return response.data
     }
     catch (err) {
@@ -75,7 +73,6 @@ export const getProductsAdmin = async () => {
     const url = `${environment.baseUrl}vendor/add_shop_product`;
     try {
         const response = await axios.get(url)
-        console.log('products data == ', response.data);
         return response.data
     }
     catch (err) {
@@ -90,7 +87,6 @@ export const getSubCategorybyCatId = async (id) => {
     const url = `${environment.baseUrl}app/get-subcategory/${id}`;
     try {
         const response = await axios.get(url)
-        console.log('data == ', response.data);
         return response.data
     }
     catch (err) {
@@ -104,7 +100,6 @@ export const getProductsbySubCat = async (id) => {
     const url = `${environment.baseUrl}app/get-subcategoryproducts/${id}`;
     try {
         const response = await axios.get(url)
-        console.log('products = ', response.data);
         return response.data
     }
     catch (err) {
@@ -176,7 +171,6 @@ export const getAllOrders = async (id) => {
     const url = `${environment.baseUrl}app/get_orderedetails`;
     try {
         const response = await axios.get(url)
-        console.log('orders = ', response.data.data);
         return response.data.data
     }
     catch (err) {
@@ -299,8 +293,6 @@ export const getRestarant = async () => {
     const url = `${environment.baseUrl}vendor/create_restaurant`;
     try {
         const response = await axios.get(url);
-
-        console.log('response.data ========== restaurant', response.data);
         return response.data;
     }
     catch (err) {

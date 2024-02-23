@@ -11,7 +11,7 @@ import Switch from 'react-js-switch';
 const SubCategory = () => {
   const subcategory = useSelector((state) => state?.master?.SubCategory);
   const category = useSelector((state) => state?.master?.Category);
-  console.log('category', category)
+  // console.log('category', category)
   const dispatch = useDispatch();
 
   // ============== fetch data from api ================
