@@ -22,17 +22,17 @@ export default function AddFranchiseForm(props) {
   const { register, handleSubmit, reset, watch, control, setValue, formState: { errors }, } = useForm();
 
 
-    // // ========================= fetch data from api ==============================
-    const FranchiseeDetails = () => {
-      try {
-        GetFranchisee().then((res) => {
-          dispatch(setFranchise(res));
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    };
-  
+  // // ========================= fetch data from api ==============================
+  const FranchiseeDetails = () => {
+    try {
+      GetFranchisee().then((res) => {
+        dispatch(setFranchise(res));
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 
   // ============================ file uplaod watch ===============================
   // const buscard_watch = watch('bus_card_url')
@@ -113,7 +113,7 @@ export default function AddFranchiseForm(props) {
       } else {
         data.bank_passbook = props?.data?.bank_passbook
       }
-      if (props?.data?.address_proof != data?.address_proof ) {
+      if (props?.data?.address_proof != data?.address_proof) {
         await ImageUpload(data?.address_proof[0], "franchisee", "AddressProof", data?.first_name)
         data.address_proof = `${franchiselink}${data?.first_name}_AddressProof_${data?.address_proof[0].name}`
       } else {
@@ -130,15 +130,16 @@ export default function AddFranchiseForm(props) {
       try {
         setLoader(true)
         const response = await CreateFranchisee(data);
-        if (response?.message == "franchise added successfully") {
+        console.log('response', response)
+        if (response?.status == "success") {
           setTimeout(() => {
             reset();
             setLoader(false)
+            toast.success(response?.message);
+            props?.FranchiseeDetails()
+            GetFranchisee()
             toggle();
             // fetchData()
-          props?.FranchiseeDetails()
-          GetFranchisee()
-            toast.success(response?.Message);
           }, 1000);
         } else {
           setLoader(false)
@@ -180,31 +181,31 @@ export default function AddFranchiseForm(props) {
 
 
 
-    // ======================== Reset data into the form  =======================
-    useMemo(() => {
-      reset({
-        first_name: props?.data?.user?.first_name,
-        last_name: props?.data?.user?.last_name,
-        phone_no: props?.data?.user?.phone_no,
-        profile_pic: props?.data?.user?.profile_pic,
-        date_of_birth: props?.data?.user?.date_of_birth,
-        email: props?.data?.user?.email,
-        pincode: props?.data?.user?.pincode,
-        state: props?.data?.user?.state,
-        city: props?.data?.user?.city,
-        address: props?.data?.user?.address,
-        adhar_card: props?.data?.adhar_card,
-        pan_card: props?.data?.pan_card,
-        gst_number: props?.data?.gst_number,
-        bank_name: props?.data?.bank_name,
-        account_number: props?.data?.account_number,
-        bank_passbook: props?.data?.bank_passbook,
-        ifsc_code: props?.data?.ifsc_code,
-        address_proof: props?.data?.address_proof,
-        gender: props?.data?.user?.gender,
-        // password: props?.data?.password,
-      });
-    }, [props.data]);
+  // ======================== Reset data into the form  =======================
+  useMemo(() => {
+    reset({
+      first_name: props?.data?.user?.first_name,
+      last_name: props?.data?.user?.last_name,
+      phone_no: props?.data?.user?.phone_no,
+      profile_pic: props?.data?.user?.profile_pic,
+      date_of_birth: props?.data?.user?.date_of_birth,
+      email: props?.data?.user?.email,
+      pincode: props?.data?.user?.pincode,
+      state: props?.data?.user?.state,
+      city: props?.data?.user?.city,
+      address: props?.data?.user?.address,
+      adhar_card: props?.data?.adhar_card,
+      pan_card: props?.data?.pan_card,
+      gst_number: props?.data?.gst_number,
+      bank_name: props?.data?.bank_name,
+      account_number: props?.data?.account_number,
+      bank_passbook: props?.data?.bank_passbook,
+      ifsc_code: props?.data?.ifsc_code,
+      address_proof: props?.data?.address_proof,
+      gender: props?.data?.user?.gender,
+      // password: props?.data?.password,
+    });
+  }, [props.data]);
 
   // useEffect(() => {
   //   if (props.button == "edit") {
@@ -216,15 +217,15 @@ export default function AddFranchiseForm(props) {
   return (
     <>
       {props.button !== "edit" ? (
-            <button onClick={toggle} className={tableBtn}>
-                Add Franchisee
-            </button>
-        ) : (
-            <button
-                onClick={toggle}
-                className="bg-yellow-100 px-1.5 py-2 rounded-sm"><Edit size="20" className='text-yellow-500' />
-            </button>
-        )}
+        <button onClick={toggle} className={tableBtn}>
+          Add Franchisee
+        </button>
+      ) : (
+        <button
+          onClick={toggle}
+          className="bg-yellow-100 px-1.5 py-2 rounded-sm"><Edit size="20" className='text-yellow-500' />
+        </button>
+      )}
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-[100]" onClose={() => toggle}>
           <Transition.Child
@@ -336,9 +337,9 @@ export default function AddFranchiseForm(props) {
                                 className={inputClass}
                                 {...register("password", { required: true })}
                               />
-                                 {errors.password && (
-                              <Error title="Password is Required*" />
-                            )}
+                              {errors.password && (
+                                <Error title="Password is Required*" />
+                              )}
                             </div>
                           }
 
@@ -367,7 +368,7 @@ export default function AddFranchiseForm(props) {
                               <option value="Female">Female</option>
                               <option value="Other">Other</option>
                             </select>
-                              {errors.gender && (
+                            {errors.gender && (
                               <Error title="Gender is Required*" />
                             )}
                           </div>
@@ -402,9 +403,9 @@ export default function AddFranchiseForm(props) {
                               type="text"
                               placeholder="Enter State"
                               className={inputClass}
-                              {...register("state",  { required: true })}
+                              {...register("state", { required: true })}
                             />
-                               {errors.state && (
+                            {errors.state && (
                               <Error title="State is Required*" />
                             )}
                           </div>
@@ -421,7 +422,7 @@ export default function AddFranchiseForm(props) {
                             )}
                           </div>
                         </div>
-                        
+
                         <h1 className='pt-4 mx-4 text-xl font-semibold text-gray-900 font-tbPop '>Additional Details:</h1>
                         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-x-3 gap-y-3">
                           <div className="">
@@ -528,7 +529,7 @@ export default function AddFranchiseForm(props) {
                               multiple
                               accept='image/jpeg,image/jpg,image/png'
                               placeholder='Upload Images...'
-                              {...register("address_proof", )} />
+                              {...register("address_proof",)} />
                             {props?.button == 'edit' && props?.data?.address_proof != '' && props?.data?.address_proof != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                               {props?.data?.address_proof?.split('/').pop()}
                             </label>}
