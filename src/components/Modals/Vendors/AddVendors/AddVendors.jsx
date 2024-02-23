@@ -18,10 +18,12 @@ import { toast } from 'react-toastify';
 
 
 export default function AddVendors(props) {
-    console.log('props==========', props);
+    // console.log('props = ', props)
     const categories = useSelector((state) => state?.master?.Category);
     const user = useSelector((state) => state?.user?.FranchiseeDetails);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
+    // console.log('logged User details = ', LoggedUserDetails)
+
     const Franchisee = useSelector((state) => state?.master?.Franchise);
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
@@ -37,7 +39,7 @@ export default function AddVendors(props) {
     const FranchiseeVendors = () => {
         try {
             GetFranchiseeVendors().then((res) => {
-                console.log('vendors data = ', res);
+                // console.log('vendors data = ', res);
                 dispatch(setFranchiseVendors(res));
             });
         } catch (error) {

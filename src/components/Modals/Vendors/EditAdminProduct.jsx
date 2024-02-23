@@ -44,9 +44,10 @@ const EditAdminProduct = (props) => {
         // var actualprice = (props?.row?.product_actual_price == null ? 0 : props?.row?.product_actual_price) * (props?.row?.vendor?.insta_commison_percentage / 100);
         // var adminfinalprice =  props?.row?.product_actual_price + mainPrice + actualprice;
         var adminfinalprice =  props?.row?.product_actual_price + mainPrice;
-        console.log('adminfinalprice = ', adminfinalprice);
+        console.log('adminfinalprice = ', adminfinalprice.toFixed(0));
         setFinalPrice(adminfinalprice);
-        setValue('final_price', adminfinalprice)
+        setValue('final_price', adminfinalprice?.toFixed(0));
+        // setValue('final_price', adminfinalprice);
       }
     }, [calculateRevenue])
     
