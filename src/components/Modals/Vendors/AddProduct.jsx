@@ -18,20 +18,20 @@ const AddProduct = (props) => {
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
     const [category, setCategory] = useState([]);
-    console.log('category = ', category)
+    // console.log('category = ', category)
     const [subCategory, setsubCategory] = useState([]);
     const [FinalPriceSeller, setFinalPriceSeller] = useState([]);
     const [FinalPriceAdmin, setFinalPriceAdmin] = useState([]);
-    console.log('FinalPriceSeller = ', FinalPriceSeller)
-    console.log('FinalPriceAdmin = ', FinalPriceAdmin)
+    // console.log('FinalPriceSeller = ', FinalPriceSeller)
+    // console.log('FinalPriceAdmin = ', FinalPriceAdmin)
 
 
-    const { register, handleSubmit, control, watch, reset, setValue,  formState: { errors } } = useForm();
+    const { register, handleSubmit, control, watch, reset, setValue, formState: { errors } } = useForm();
     const toggle = () => setOpen(!isOpen)
 
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
-    console.log('Logged User Details = ', LoggedUserDetails);
-    
+    // console.log('Logged User Details = ', LoggedUserDetails);
+
     const closeBtn = () => {
         toggle();
         reset()
@@ -41,22 +41,22 @@ const AddProduct = (props) => {
 
     //  ------------   Seller Calculations SetPrice --------------------------------
     const calculateRevenueSeller = watch('product_actual_price')
-    console.log('calculateRevenueSeller = ', calculateRevenueSeller)
+    // console.log('calculateRevenueSeller = ', calculateRevenueSeller)
 
     useEffect(() => {
         if (LoggedUserDetails?.role == 'seller') {
-            if (calculateRevenueSeller !=="") {
-              var mainUserPrice =  calculateRevenueSeller * (LoggedUserDetails?.insta_commission == null ? 0 : LoggedUserDetails?.insta_commission / 100);
-              console.log('mainUserPrice = ', (calculateRevenueSeller - mainUserPrice));
-              const final_price = (calculateRevenueSeller - mainUserPrice)
-              setFinalPriceSeller(parseFloat(final_price));
-              
-              if(final_price == NaN){
-                  setValue('product_revenue', 0)
-              }else{
-                  setValue('product_revenue', final_price)
-              }
-              console.log('final_price = ', final_price);
+            if (calculateRevenueSeller !== "") {
+                var mainUserPrice = calculateRevenueSeller * (LoggedUserDetails?.insta_commission == null ? 0 : LoggedUserDetails?.insta_commission / 100);
+                // console.log('mainUserPrice = ', (calculateRevenueSeller - mainUserPrice));
+                const final_price = (calculateRevenueSeller - mainUserPrice)
+                setFinalPriceSeller(parseFloat(final_price));
+
+                if (final_price == NaN) {
+                    setValue('product_revenue', 0)
+                } else {
+                    setValue('product_revenue', final_price)
+                }
+                // console.log('final_price = ', final_price);
             }
         }
     }, [calculateRevenueSeller])
@@ -65,27 +65,27 @@ const AddProduct = (props) => {
 
     //  ------------   Admin Calculations Set Final Price to User  --------------------------------
     const calculateRevenueAdmin = watch('markup_percentage')
-    console.log('calculateRevenueAdmin = ', calculateRevenueAdmin)
+    // console.log('calculateRevenueAdmin = ', calculateRevenueAdmin)
 
     useEffect(() => {
         if (LoggedUserDetails?.role == 'admin') {
-            if (calculateRevenueAdmin !=="") {
-              var mainPrice = (props?.row?.product_actual_price == null ? 0 : props?.row?.product_actual_price) * (calculateRevenueAdmin / 100);
-              // var actualprice = (props?.row?.product_actual_price == null ? 0 : props?.row?.product_actual_price) * (props?.row?.vendor?.insta_commison_percentage / 100);
-              // var adminfinalprice =  props?.row?.product_actual_price + mainPrice + actualprice;
-              var adminfinalprice =  props?.row?.product_actual_price + mainPrice;
-              console.log('adminfinalprice = ', adminfinalprice.toFixed(0));
-              setFinalPriceAdmin(adminfinalprice);
-              setValue('final_price', adminfinalprice?.toFixed(0));
-              // setValue('final_price', adminfinalprice);
+            if (calculateRevenueAdmin !== "") {
+                var mainPrice = (props?.row?.product_actual_price == null ? 0 : props?.row?.product_actual_price) * (calculateRevenueAdmin / 100);
+                // var actualprice = (props?.row?.product_actual_price == null ? 0 : props?.row?.product_actual_price) * (props?.row?.vendor?.insta_commison_percentage / 100);
+                // var adminfinalprice =  props?.row?.product_actual_price + mainPrice + actualprice;
+                var adminfinalprice = props?.row?.product_actual_price + mainPrice;
+                console.log('adminfinalprice = ', adminfinalprice.toFixed(0));
+                setFinalPriceAdmin(adminfinalprice);
+                setValue('final_price', adminfinalprice?.toFixed(0));
+                // setValue('final_price', adminfinalprice);
             }
         }
     }, [calculateRevenueAdmin])
-    
+
 
 
     const handleFileChange = (event) => {
-        console.log("file", event.target.files[0]);
+        // console.log("file", event.target.files[0]);
         const file = event.target.files[0];
         if (file.size > 100 * 1024 * 1024) {
             event.target.value = null;
@@ -171,8 +171,8 @@ const AddProduct = (props) => {
             }
         }
         if (props?.title == 'Edit Product') {
-            var updatedData = { ...data, vendor: props?.row?.vendor }
-            console.log('called')
+            var updatedData = { ...data, vendor: props?.row?.vendor?.user }
+            // console.log('called')
             editVendorProduct(props?.row?.product_id, updatedData).then(res => {
                 if (res?.status == 'success') {
                     props?.getProducts()
@@ -197,7 +197,7 @@ const AddProduct = (props) => {
     }
 
     const onAdminSubmit = async (data) => {
-        console.log('admin payload = ', data )
+        // console.log('admin payload = ', data )
         var updatedData = { ...data, vendor: props?.row?.vendor?.vendor_id }
         editAdminFinalProduct(props?.row?.product_id, updatedData).then(res => {
             if (res?.status == 'success') {
@@ -218,7 +218,8 @@ const AddProduct = (props) => {
         if (LoggedUserDetails?.role == 'seller') {
             reset({
                 'product_name': props?.row?.product_name,
-                'product_category': props?.row?.product_category,
+                'product_category': props?.row?.product_category?.id,
+                'product_subcategory': props?.row?.product_subcategory?.subcat_id,
                 'product_description': props?.row?.product_description,
                 'product_brand': props?.row?.product_brand,
                 'product_country_of_origin': props?.row?.product_country_of_origin,
@@ -231,6 +232,10 @@ const AddProduct = (props) => {
                 // 'product_stock': props?.row?.product_stock,
                 'product_isactive': props?.row?.product_isactive,
                 'product_actual_price': props?.row?.product_actual_price,
+                'product_unit': props?.row?.product_unit,
+                'product_unit_type': props?.row?.product_unit_type,
+                'product_revenue': props?.row?.product_revenue,
+                'product_video_url': props?.row?.product_video_url
             })
         }
         if (LoggedUserDetails?.role == 'admin') {
@@ -261,11 +266,12 @@ const AddProduct = (props) => {
                 'markup_percentage': props?.row?.markup_percentage,
                 'product_unit': props?.row?.product_unit,
                 'product_unit_type': props?.row?.product_unit_type,
+                'product_revenue': props?.row?.product_revenue,
             })
         }
     }, [])
 
-    
+
     return (
         <>
             {props?.title == 'Edit Product' ?
@@ -310,8 +316,8 @@ const AddProduct = (props) => {
                                     </Dialog.Title>
                                     <div className=" bg-gray-200/70">
                                         {/* React Hook Form */}
-                                        
-                                        <form onSubmit={LoggedUserDetails?.role == 'admin' ?  handleSubmit(onAdminSubmit) : handleSubmit(onSellerSubmit)}>
+
+                                        <form onSubmit={LoggedUserDetails?.role == 'admin' ? handleSubmit(onAdminSubmit) : handleSubmit(onSellerSubmit)}>
                                             <div className="p-4 overflow-y-scroll scrollbars " >
                                                 <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-4 gap-x-3 gap-y-3 customBox">
                                                     <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Basic Information</p>
@@ -363,8 +369,8 @@ const AddProduct = (props) => {
                                                         {errors.product_subcategory && <Error title='Sub Category is Required*' />}
                                                     </div>
                                                     {
-                                                        LoggedUserDetails?.role == 'seller' && 
-                                                            <div className="">
+                                                        LoggedUserDetails?.role == 'seller' &&
+                                                        <div className="">
                                                             <label className={labelClass}>
                                                                 Product MRP*
                                                             </label>
@@ -377,7 +383,7 @@ const AddProduct = (props) => {
                                                             {errors.product_actual_price && <Error title='MRP is Required*' />}
                                                         </div>
                                                     }
-                                                 
+
 
                                                     {/* <div className="">
                                                         <label className={labelClass}>
@@ -455,7 +461,7 @@ const AddProduct = (props) => {
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                        Product Unit Type *
+                                                            Product Unit Type *
                                                         </label>
                                                         <select
                                                             className={inputClass}
@@ -545,12 +551,12 @@ const AddProduct = (props) => {
                                                         />
                                                         {errors.tags && <Error title='Tags is Required*' />}
                                                     </div> */}
-                                                      {
-                                                            LoggedUserDetails?.role == 'admin' && 
-                                                            <>
-                                                                <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Price Calculation</p>
-                                                               
-                                                                <div className="">
+                                                    {
+                                                        LoggedUserDetails?.role == 'admin' &&
+                                                        <>
+                                                            <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Price Calculation</p>
+
+                                                            <div className="">
                                                                 <label className={labelClass}>
                                                                     Product MRP*
                                                                 </label>
@@ -563,7 +569,7 @@ const AddProduct = (props) => {
                                                                 />
                                                                 {errors.product_actual_price && <Error title='MRP is Required*' />}
                                                             </div>
-                                                                <div className="">
+                                                            <div className="">
                                                                 <label className={labelClass}>
                                                                     Vendor Commision*
                                                                 </label>
@@ -575,29 +581,29 @@ const AddProduct = (props) => {
                                                                     {...register('insta_commison_percentage', { required: true })} />
                                                                 {errors.insta_commison_percentage && <Error title='Country of Origin is Required*' />}
                                                             </div><div className="">
-                                                                    <label className={labelClass}>
-                                                                        Markup (in %)*
-                                                                    </label>
-                                                                    <input
-                                                                        type="number"
-                                                                        placeholder='₹ 0.00'
-                                                                        className={inputClass}
-                                                                        {...register('markup_percentage', { required: true })} />
-                                                                    {errors.markup_percentage && <Error title='Markup Percentage is required*' />}
-                                                                </div><div className="">
-                                                                    <label className={labelClass}>
-                                                                        Product Final Price* <span className='text-red-500'>(App View)</span>
-                                                                    </label>
-                                                                    <input
-                                                                        type="number"
-                                                                        readOnly
-                                                                        placeholder='₹ 0.00'
-                                                                        className={inputClass}
-                                                                        {...register('final_price', { required: true })} />
-                                                                    {errors.final_price && <Error title='Product Final Price is required*' />}
-                                                                </div>
-                                                            </>
-                                                        }
+                                                                <label className={labelClass}>
+                                                                    Markup (in %)*
+                                                                </label>
+                                                                <input
+                                                                    type="number"
+                                                                    placeholder='₹ 0.00'
+                                                                    className={inputClass}
+                                                                    {...register('markup_percentage', { required: true })} />
+                                                                {errors.markup_percentage && <Error title='Markup Percentage is required*' />}
+                                                            </div><div className="">
+                                                                <label className={labelClass}>
+                                                                    Product Final Price* <span className='text-red-500'>(App View)</span>
+                                                                </label>
+                                                                <input
+                                                                    type="number"
+                                                                    readOnly
+                                                                    placeholder='₹ 0.00'
+                                                                    className={inputClass}
+                                                                    {...register('final_price', { required: true })} />
+                                                                {errors.final_price && <Error title='Product Final Price is required*' />}
+                                                            </div>
+                                                        </>
+                                                    }
 
                                                     <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Additional Information</p>
                                                     <div className="">
@@ -691,7 +697,7 @@ const AddProduct = (props) => {
                                                         {errors.product_brand && <Error title='Brand is Required*' />}
                                                     </div>
                                                     {
-                                                        LoggedUserDetails?.role == 'seller' && 
+                                                        LoggedUserDetails?.role == 'seller' &&
                                                         <div className="">
                                                             <label className={labelClass}>
                                                                 Product Revenue*
@@ -721,8 +727,8 @@ const AddProduct = (props) => {
                                                         </label>}
                                                         {errors.product_brand_logo && <Error title='Profile Image is required*' />}
                                                     </div> */}
-                                                  
-                                   
+
+
 
                                                     <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Product Images</p>
                                                     <div className="">
