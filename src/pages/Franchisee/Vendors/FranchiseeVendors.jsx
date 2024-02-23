@@ -16,27 +16,22 @@ import { Link } from 'react-router-dom';
 function FranchiseeVendors() {
     const [activeTab, setActiveTab] = useState(true);
     const [rstatus, setStatus] = useState();
-
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const dispatch = useDispatch()
     const [Vendors, setVendors] = useState();
-    // const Vendors = useSelector((state) => state?.master?.FranchiseVendors);
-    // console.log('Franchise Vendors = ', Vendors);
-
+    console.log('vendors', Vendors)
     const LoggedDetails = useSelector((state) => state?.user?.loggedUserDetails)
-    console.log('Logged Details = ', LoggedDetails);
 
 
     // // ========================= fetch data from api ==============================
     const FranchiseeVendors = () => {
         try {
             GetFranchiseeVendorsByID(LoggedDetails?.userid).then((res) => {
-                console.log('Franchise vendors = ', res);
                 setVendors(res);
                 dispatch(setFranchiseVendors(res));
             });
         } catch (error) {
-            console.log(error); 
+            console.log(error);
         }
     };
 
@@ -115,10 +110,10 @@ function FranchiseeVendors() {
     // =================== table action ========================
     const actionBodyTemplate = (row) => (
         <div className="flex items-center gap-2">
-            <Link to={`/franchise-vendors/vendors-detail/${row.id}`} state={row} className="bg-green-100 px-1.5 py-2 rounded-sm">
+            <Link to={`/vendors/vendors-detail/${row.id}`} state={row} className="bg-green-100 px-1.5 py-2 rounded-sm">
                 <Eye size="18" className='text-green-500' />
             </Link>
-            <AddVendors button='edit' title='Edit User' data={row} FranchiseeVendors={FranchiseeVendors}/>
+            <AddVendors button='edit' title='Edit User' data={row} FranchiseeVendors={FranchiseeVendors} />
         </div>
     );
 
@@ -236,7 +231,7 @@ function FranchiseeVendors() {
                     <div className="">
                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>  Vendor Details</h1>
                     </div>
-                    <AddVendors title='Add Vendors' FranchiseeVendors={FranchiseeVendors}  />
+                    <AddVendors title='Add Vendors' FranchiseeVendors={FranchiseeVendors} />
                 </div>
                 {/* {
                     Vendors?.legth > 0 && <Table data={Vendors} columns={columns} />
