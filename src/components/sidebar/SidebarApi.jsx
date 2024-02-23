@@ -107,16 +107,16 @@ export const Seller = [
     //     icon: <ShoppingCart size="24" />,
     //     link: '/market-place',
     // },
-    {
-        title: 'Support',
-        icon: <Headphone size="24" />,
-        link: '/support',
-    },
-    {
-        title: 'Complaints',
-        icon: <AlertTriangle size="24" />,
-        link: '/complaints',
-    },
+    // {
+    //     title: 'Support',
+    //     icon: <Headphone size="24" />,
+    //     link: '/support',
+    // },
+    // {
+    //     title: 'Complaints',
+    //     icon: <AlertTriangle size="24" />,
+    //     link: '/complaints',
+    // },
 ]
 
 
