@@ -9,7 +9,6 @@ import Error from '../../../components/Errors/Error';
 import { editUser } from '../../../api';
 import { toast } from 'react-toastify';
 import { setLoggedUserDetails } from '../../../redux/Slices/loginSlice';
-// import { profileUpload, profileLink } from '../../../env';
 import { ImageUpload, categoryLink, profileImage } from "../../../env";
 import PathName from '../../../components/PathName/PathName';
 
