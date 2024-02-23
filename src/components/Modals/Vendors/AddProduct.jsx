@@ -47,16 +47,17 @@ const AddProduct = (props) => {
         if (LoggedUserDetails?.role == 'seller') {
             if (calculateRevenueSeller !== "") {
                 var mainUserPrice = calculateRevenueSeller * (LoggedUserDetails?.insta_commission == null ? 0 : LoggedUserDetails?.insta_commission / 100);
-                // console.log('mainUserPrice = ', (calculateRevenueSeller - mainUserPrice));
-                const final_price = (calculateRevenueSeller - mainUserPrice)
-                setFinalPriceSeller(parseFloat(final_price));
+                console.log('mainUserPrice = ', (calculateRevenueSeller - mainUserPrice));
+                const final_price = (calculateRevenueSeller - mainUserPrice);
 
-                if (final_price == NaN) {
-                    setValue('product_revenue', 0)
+                if (isNaN(final_price)) {
+                    setValue('product_revenue', 0);
                 } else {
-                    setValue('product_revenue', final_price)
+                    setFinalPriceSeller(parseFloat(final_price));
+                    setValue('product_revenue', final_price);
                 }
-                // console.log('final_price = ', final_price);
+
+                console.log('final_price = ', final_price);
             }
         }
     }, [calculateRevenueSeller])

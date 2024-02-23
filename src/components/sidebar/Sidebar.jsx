@@ -5,7 +5,7 @@ import SidebarLink from './SidebarLink';
 import Navbar from './Navbar';
 import { useDispatch, useSelector } from 'react-redux';
 import { Admin, Seller, Franchise } from './SidebarApi';
-import logoImg from '../../assets/logo.jpeg';
+import logoImg from '../../assets/logo_white.png';
 
 const Sidebar = ({ children }) => {
     const user = useSelector(state => state?.user?.loggedUserDetails)
@@ -28,12 +28,13 @@ const Sidebar = ({ children }) => {
                                 <DirectLeft className={`text-sky-400 group-hover:text-white transition-all duration-500 ${isActiveLink && "rotate-180"}`} size={22} />
                             </button>
                         </div>}
-                        <div className="flex items-center justify-center px-5 py-4">
-                            <NavLink className="flex items-center space-x-2" to="/">
-                                {/* <Trade size={isActiveLink ? "36" : "30"} className="text-sky-400 " variant='Bulk' /> */}
-                                <img src={logoImg} className='object-contain w-16 h-16' />
-                                {/* <h2 className={isActiveLink ? 'hidden ' : 'font-tb font-extrabold text-3xl text-black transition-all duration-700 delay-200'}>Refeer<span className='text-sky-400'>ON</span></h2> */}
-                                <h2 className={isActiveLink ? 'hidden ' : 'font-tb font-extrabold text-3xl text-black transition-all duration-700 delay-200'}>Channel <span className='text-sky-400'>Partner</span></h2>
+                        <div className={isActiveLink ? "flex px-3  pt-3 transition-all duration-700" : "flex px-5  pt-3 transition-all duration-700"}>
+                            <NavLink className="flex items-center space-x-2" >
+                                <img src={logoImg} className={isActiveLink ? " object-contain w-16 h-16 transition-all duration-700" : 'object-contain w-16 h-16 transition-all duration-700'} />
+                                <NavLink className={"border-none decoration-0"} >
+                                    <h1 className={isActiveLink ? ' transition-all duration-700 delay-200 hidden' : "font-tb font-black text-2xl tracking-wide  transition-all duration-700 delay-200 text-orange-500"}>INSTA</h1>
+                                    <h6 className={isActiveLink ? ' transition-all duration-700 delay-200 hidden' : "font-tb font-extrabold text-lg text-black transition-all duration-700 whitespace-nowrap delay-200 capitalize tracking-wide leading-4"}>Smart Bazaar</h6>
+                                </NavLink>
                             </NavLink>
                         </div>
                         {user?.role == 'admin' ?
