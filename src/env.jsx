@@ -24,7 +24,7 @@ const client = new S3Client({
 export const ImageUpload = async (data, folder, imgname, name) => {
     const command = new PutObjectCommand({
         Bucket: "channel-partner-media",
-        Key: `${folder}/${name}_${imgname}_${data.name}`,
+        Key: `${folder}/${name}_${imgname}_${data?.name}`,
         Body: data,
     });
     try {
