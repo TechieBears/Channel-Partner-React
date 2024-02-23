@@ -9,7 +9,7 @@ import Error from '../../Errors/Error';
 import { MultiSelect } from 'primereact/multiselect';
 import { Add, Edit } from 'iconsax-react';
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
-import { addProduct, editVendorProduct, getAllSeller, getCategory, getSubCategory } from '../../../api';
+import { addProduct, editVendorProduct, getAllSeller, editAdminFinalProduct, getCategory, getSubCategory } from '../../../api';
 import { toast } from 'react-toastify';
 import { ImageUpload, productLink } from '../../../env';
 
@@ -20,8 +20,10 @@ const AddProduct = (props) => {
     const [category, setCategory] = useState([]);
     console.log('category = ', category)
     const [subCategory, setsubCategory] = useState([]);
-    const [FinalPrice, setFinalPrice] = useState([]);
-    console.log('FinalPrice = ', FinalPrice)
+    const [FinalPriceSeller, setFinalPriceSeller] = useState([]);
+    const [FinalPriceAdmin, setFinalPriceAdmin] = useState([]);
+    console.log('FinalPriceSeller = ', FinalPriceSeller)
+    console.log('FinalPriceAdmin = ', FinalPriceAdmin)
 
 
     const { register, handleSubmit, control, watch, reset, setValue,  formState: { errors } } = useForm();
@@ -35,25 +37,50 @@ const AddProduct = (props) => {
         reset()
     }
 
-    const calculateRevenue = watch('product_actual_price')
-    console.log('calculateRevenue = ', calculateRevenue)
+
+
+    //  ------------   Seller Calculations SetPrice --------------------------------
+    const calculateRevenueSeller = watch('product_actual_price')
+    console.log('calculateRevenueSeller = ', calculateRevenueSeller)
 
     useEffect(() => {
-      if (calculateRevenue !=="") {
-        var mainUserPrice =  calculateRevenue * (LoggedUserDetails?.insta_commission == null ? 0 : LoggedUserDetails?.insta_commission / 100);
-
-        console.log('mainUserPrice = ', (calculateRevenue - mainUserPrice));
-        const final_price = (calculateRevenue - mainUserPrice)
-        setFinalPrice(parseFloat(final_price));
-        
-        if(final_price == NaN){
-            setValue('product_revenue', 0)
-        }else{
-            setValue('product_revenue', final_price)
+        if (LoggedUserDetails?.role == 'seller') {
+            if (calculateRevenueSeller !=="") {
+              var mainUserPrice =  calculateRevenueSeller * (LoggedUserDetails?.insta_commission == null ? 0 : LoggedUserDetails?.insta_commission / 100);
+              console.log('mainUserPrice = ', (calculateRevenueSeller - mainUserPrice));
+              const final_price = (calculateRevenueSeller - mainUserPrice)
+              setFinalPriceSeller(parseFloat(final_price));
+              
+              if(final_price == NaN){
+                  setValue('product_revenue', 0)
+              }else{
+                  setValue('product_revenue', final_price)
+              }
+              console.log('final_price = ', final_price);
+            }
         }
-        console.log('final_price = ', final_price);
-      }
-    }, [calculateRevenue])
+    }, [calculateRevenueSeller])
+
+
+
+    //  ------------   Admin Calculations Set Final Price to User  --------------------------------
+    const calculateRevenueAdmin = watch('markup_percentage')
+    console.log('calculateRevenueAdmin = ', calculateRevenueAdmin)
+
+    useEffect(() => {
+        if (LoggedUserDetails?.role == 'admin') {
+            if (calculateRevenueAdmin !=="") {
+              var mainPrice = (props?.row?.product_actual_price == null ? 0 : props?.row?.product_actual_price) * (calculateRevenueAdmin / 100);
+              // var actualprice = (props?.row?.product_actual_price == null ? 0 : props?.row?.product_actual_price) * (props?.row?.vendor?.insta_commison_percentage / 100);
+              // var adminfinalprice =  props?.row?.product_actual_price + mainPrice + actualprice;
+              var adminfinalprice =  props?.row?.product_actual_price + mainPrice;
+              console.log('adminfinalprice = ', adminfinalprice.toFixed(0));
+              setFinalPriceAdmin(adminfinalprice);
+              setValue('final_price', adminfinalprice?.toFixed(0));
+              // setValue('final_price', adminfinalprice);
+            }
+        }
+    }, [calculateRevenueAdmin])
     
 
 
@@ -67,7 +94,7 @@ const AddProduct = (props) => {
         }
     };
 
-    const onSubmit = async (data) => {
+    const onSellerSubmit = async (data) => {
         if (props?.title == 'Edit Product') {
             if (data?.product_image_1 != props?.row?.product_image_1) {
                 await ImageUpload(data?.product_image_1[0], "shopProduct", "MainImage", data?.product_name)
@@ -154,7 +181,7 @@ const AddProduct = (props) => {
                 }
             })
         } else {
-            var updatedData = { ...data, vendor: LoggedUserDetails?.sellerId, final_price: FinalPrice }
+            var updatedData = { ...data, vendor: LoggedUserDetails?.sellerId, final_price: FinalPriceSeller }
             console.log(updatedData)
             addProduct(updatedData).then((res) => {
                 if (res?.status == 'success') {
@@ -169,6 +196,18 @@ const AddProduct = (props) => {
         }
     }
 
+    const onAdminSubmit = async (data) => {
+        console.log('admin payload = ', data )
+        var updatedData = { ...data, vendor: props?.row?.vendor?.vendor_id }
+        editAdminFinalProduct(props?.row?.product_id, updatedData).then(res => {
+            if (res?.status == 'success') {
+                props?.getProducts()
+                toast.success('Product updated successfully')
+                toggle();
+            }
+        })
+    }
+
     useEffect(() => {
         getCategory().then(res => {
             setCategory(res)
@@ -176,7 +215,7 @@ const AddProduct = (props) => {
         getSubCategory().then(res => {
             setsubCategory(res)
         })
-        if (props?.title == 'Edit Product') {
+        if (LoggedUserDetails?.role == 'seller') {
             reset({
                 'product_name': props?.row?.product_name,
                 'product_category': props?.row?.product_category,
@@ -194,7 +233,39 @@ const AddProduct = (props) => {
                 'product_actual_price': props?.row?.product_actual_price,
             })
         }
+        if (LoggedUserDetails?.role == 'admin') {
+            reset({
+                'product_name': props?.row?.product_name,
+                'product_category': props?.row?.product_category?.id,
+                'product_subcategory': props?.row?.product_subcategory?.subcat_id,
+                'product_description': props?.row?.product_description,
+                'product_brand': props?.row?.product_brand,
+                'product_country_of_origin': props?.row?.product_country_of_origin,
+                'product_shelflife': props?.row?.product_shelflife,
+                'product_Manufacturer_Name': props?.row?.product_Manufacturer_Name,
+                'product_Manufacturer_Address': props?.row?.product_Manufacturer_Address,
+                'product_nutritional_info': props?.row?.product_nutritional_info,
+                'product_additional_details': props?.row?.product_additional_details,
+                'product_available_qty': props?.row?.product_available_qty,
+                'product_stock': props?.row?.product_stock,
+                'product_isactive': props?.row?.product_isactive,
+                'product_actual_price': props?.row?.product_actual_price,
+                'insta_commison_percentage': props?.row?.vendor?.insta_commison_percentage,
+                'product_image_1': props?.row?.product_image_1,
+                'product_image_2': props?.row?.product_image_2,
+                'product_image_3': props?.row?.product_image_3,
+                'product_image_4': props?.row?.product_image_4,
+                'product_image_5': props?.row?.product_image_5,
+                'product_video_url': props?.row?.product_video_url,
+                'final_price': props?.row?.final_price,
+                'markup_percentage': props?.row?.markup_percentage,
+                'product_unit': props?.row?.product_unit,
+                'product_unit_type': props?.row?.product_unit_type,
+            })
+        }
     }, [])
+
+    
     return (
         <>
             {props?.title == 'Edit Product' ?
@@ -239,7 +310,8 @@ const AddProduct = (props) => {
                                     </Dialog.Title>
                                     <div className=" bg-gray-200/70">
                                         {/* React Hook Form */}
-                                        <form onSubmit={handleSubmit(onSubmit)} >
+                                        
+                                        <form onSubmit={LoggedUserDetails?.role == 'admin' ?  handleSubmit(onAdminSubmit) : handleSubmit(onSellerSubmit)}>
                                             <div className="p-4 overflow-y-scroll scrollbars " >
                                                 <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-4 gap-x-3 gap-y-3 customBox">
                                                     <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Basic Information</p>
@@ -290,18 +362,22 @@ const AddProduct = (props) => {
                                                         </select>
                                                         {errors.product_subcategory && <Error title='Sub Category is Required*' />}
                                                     </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Product MRP*
-                                                        </label>
-                                                        <input
-                                                            type="number"
-                                                            placeholder='Product MRP'
-                                                            className={inputClass}
-                                                            {...register('product_actual_price', { required: true })}
-                                                        />
-                                                        {errors.product_actual_price && <Error title='MRP is Required*' />}
-                                                    </div>
+                                                    {
+                                                        LoggedUserDetails?.role == 'seller' && 
+                                                            <div className="">
+                                                            <label className={labelClass}>
+                                                                Product MRP*
+                                                            </label>
+                                                            <input
+                                                                type="number"
+                                                                placeholder='Product MRP'
+                                                                className={inputClass}
+                                                                {...register('product_actual_price', { required: true })}
+                                                            />
+                                                            {errors.product_actual_price && <Error title='MRP is Required*' />}
+                                                        </div>
+                                                    }
+                                                 
 
                                                     {/* <div className="">
                                                         <label className={labelClass}>
@@ -469,6 +545,60 @@ const AddProduct = (props) => {
                                                         />
                                                         {errors.tags && <Error title='Tags is Required*' />}
                                                     </div> */}
+                                                      {
+                                                            LoggedUserDetails?.role == 'admin' && 
+                                                            <>
+                                                                <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Price Calculation</p>
+                                                               
+                                                                <div className="">
+                                                                <label className={labelClass}>
+                                                                    Product MRP*
+                                                                </label>
+                                                                <input
+                                                                    type="number"
+                                                                    readOnly
+                                                                    placeholder='Product MRP'
+                                                                    className={inputClass}
+                                                                    {...register('product_actual_price', { required: true })}
+                                                                />
+                                                                {errors.product_actual_price && <Error title='MRP is Required*' />}
+                                                            </div>
+                                                                <div className="">
+                                                                <label className={labelClass}>
+                                                                    Vendor Commision*
+                                                                </label>
+                                                                <input
+                                                                    type="number"
+                                                                    readOnly
+                                                                    placeholder=''
+                                                                    className={inputClass}
+                                                                    {...register('insta_commison_percentage', { required: true })} />
+                                                                {errors.insta_commison_percentage && <Error title='Country of Origin is Required*' />}
+                                                            </div><div className="">
+                                                                    <label className={labelClass}>
+                                                                        Markup (in %)*
+                                                                    </label>
+                                                                    <input
+                                                                        type="number"
+                                                                        placeholder='₹ 0.00'
+                                                                        className={inputClass}
+                                                                        {...register('markup_percentage', { required: true })} />
+                                                                    {errors.markup_percentage && <Error title='Markup Percentage is required*' />}
+                                                                </div><div className="">
+                                                                    <label className={labelClass}>
+                                                                        Product Final Price* <span className='text-red-500'>(App View)</span>
+                                                                    </label>
+                                                                    <input
+                                                                        type="number"
+                                                                        readOnly
+                                                                        placeholder='₹ 0.00'
+                                                                        className={inputClass}
+                                                                        {...register('final_price', { required: true })} />
+                                                                    {errors.final_price && <Error title='Product Final Price is required*' />}
+                                                                </div>
+                                                            </>
+                                                        }
+
                                                     <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Additional Information</p>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -560,18 +690,21 @@ const AddProduct = (props) => {
                                                         />
                                                         {errors.product_brand && <Error title='Brand is Required*' />}
                                                     </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Product Revenue*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            readOnly
-                                                            placeholder='₹ 0.00'
-                                                            className={inputClass}
-                                                            {...register('product_revenue')}
-                                                        />
-                                                    </div>
+                                                    {
+                                                        LoggedUserDetails?.role == 'seller' && 
+                                                        <div className="">
+                                                            <label className={labelClass}>
+                                                                Product Revenue*
+                                                            </label>
+                                                            <input
+                                                                type="text"
+                                                                readOnly
+                                                                placeholder='₹ 0.00'
+                                                                className={inputClass}
+                                                                {...register('product_revenue')}
+                                                            />
+                                                        </div>
+                                                    }
                                                     {/* <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Brand Information</p> */}
 
                                                     {/* <div className="">
@@ -588,6 +721,9 @@ const AddProduct = (props) => {
                                                         </label>}
                                                         {errors.product_brand_logo && <Error title='Profile Image is required*' />}
                                                     </div> */}
+                                                  
+                                   
+
                                                     <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Product Images</p>
                                                     <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Main Image*</label>
