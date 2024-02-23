@@ -5,10 +5,9 @@ import AsyncSelect from "react-select/async";
 import { formBtn1, formBtn2, inputClass } from '../../../../utils/CustomClass';
 import { toast } from 'react-toastify';
 import Table from '../../../../components/Table/Table';
-import { Link, NavLink } from 'react-router-dom';
-import { Edit, Eye, Trash } from 'iconsax-react';
-// import ViewProduct from '../../../../components/Modals/Vendors/ViewProduct';
-import { getAllSeller, editVendorProduct, getProductsByAdmin, VerifyProductAdmin } from '../../../../api';
+import { Link } from 'react-router-dom';
+import { Eye, Trash } from 'iconsax-react';
+import { editVendorProduct, getProductsByAdmin, VerifyProductAdmin } from '../../../../api';
 import Switch from 'react-js-switch';
 import userImg from '../../../../assets/user.jpg';
 import EditAdminProduct from '../../../../components/Modals/Vendors/EditAdminProduct';
@@ -18,35 +17,18 @@ import EditAdminProduct from '../../../../components/Modals/Vendors/EditAdminPro
 const AdminProduct = () => {
     const [sellers, setSellers] = useState([]);
     const [shopProducts, setShopProducts] = useState([])
-    console.log('admin products = ', shopProducts)
-
-
-    
     const userid = useSelector((state) => state?.user?.loggedUserDetails?.userid);
     const matchedSeller = sellers?.find(seller => seller?.user?.id === userid);
     const storages = useSelector((state) => state?.storage?.list);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
-    
-    // console.log('Logged User Details = ', LoggedUserDetails);
-
-
     const getProducts = () => {
         getProductsByAdmin().then(res => {
-            console.log('admin products = ', res)
             setShopProducts(res)
         })
     }
-
     useEffect(() => {
-        // getAllSeller().then(res => {
-        //     setSellers(res)
-        // })
         getProducts()
     }, [])
-
-    const user = {
-        isShop: true,
-    }
     const {
         register,
         handleSubmit,
@@ -75,8 +57,6 @@ const AdminProduct = () => {
                 toggle();
             }
         })
-
-
         // if (props?.title == 'Edit Product') {
         //     if (data?.product_image_1 != props?.row?.product_image_1) {
         //         await ImageUpload(data?.product_image_1[0], "shopProduct", "MainImage", data?.product_name)
@@ -153,7 +133,7 @@ const AdminProduct = () => {
         //     }
         // }
         // if (props?.title == 'Edit Product') {
-       
+
         // }
         // else {
         //     var updatedData = { ...data, vendor: props?.sellerId }
@@ -169,8 +149,6 @@ const AdminProduct = () => {
         //     })
         // }
     }
-
-    
     const filterReset = () => {
         reset({
             name: null,
@@ -227,8 +205,6 @@ const AdminProduct = () => {
             console.log(err);
         }
     }
-
-
     // =============================== verify user switch =============================
     const switchVerify = (row) => {
         return (
@@ -251,8 +227,8 @@ const AdminProduct = () => {
             </div>
         );
     };
-    
-    
+
+
     const Columns = [
         { field: 'profile_pic', header: 'Image', body: representativeBodyTemplate, sortable: false, style: true },
         { field: 'product_name', header: 'Product Name', sortable: true },
@@ -261,7 +237,6 @@ const AdminProduct = () => {
         { field: 'product_available_qty', header: 'Available Quantity', sortable: true },
         { field: 'product_brand', header: 'Brand', sortable: true },
         { field: 'product_shelflife', header: 'Self Life', sortable: true },
-        { field: 'product_description', header: 'Description', sortable: true },
         { field: 'product_Manufacturer_Name', header: 'Manufacturer Name', sortable: true },
         { field: 'product_country_of_origin', header: 'Country Of Origin', sortable: true },
         { filed: 'action', header: 'Action', body: action, sortable: true },
@@ -343,7 +318,6 @@ const AdminProduct = () => {
             <div className='p-4 m-4 bg-white sm:m-5 rounded-xl'>
                 <div className='grid items-center grid-cols-6'>
                     <h2 className='col-span-5 text-xl font-semibold'>Product List</h2>
-                    {/* <EditAdminProduct title='Add Product' getProducts={getProducts} sellerId={matchedSeller?.vendor_id} /> */}
                 </div>
                 <div className='mt-4'>
                     <Table data={shopProducts} columns={LoggedUserDetails?.role == 'franchise' ? restaurantColumns : Columns} />
