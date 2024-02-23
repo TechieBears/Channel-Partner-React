@@ -145,9 +145,13 @@ const AdminProduct = () => {
     const Columns = [
         { field: 'profile_pic', header: 'Image', body: representativeBodyTemplate, sortable: false, style: true },
         { field: 'product_name', header: 'Product Name', sortable: true },
+        { field: 'product_category', header: 'Product Category', body: (row) => <h6>{row?.product_category?.category_name}</h6>, sortable: true },
+        { field: 'product_subcategory', header: 'Product Sub-Category', body: (row) => <h6>{row?.product_subcategory?.subcat_name}</h6>, sortable: true },
         { field: 'product_actual_price', header: 'MRP', sortable: true },
         { field: 'final_price', header: 'Final Price', sortable: true },
         { field: 'product_available_qty', header: 'Available Quantity', sortable: true },
+        { field: 'shop_name', header: 'Vendor Name', body: (row) => <h6>{row?.vendor?.shop_name}</h6>, sortable: true },
+        { field: 'pincode', header: 'PINCODE', body: (row) => <h6>{row?.vendor?.user?.pincode}</h6>, sortable: true },
         { field: 'product_brand', header: 'Brand', sortable: true },
         { field: 'product_shelflife', header: 'Self Life', sortable: true },
         { field: 'product_Manufacturer_Name', header: 'Manufacturer Name', sortable: true },

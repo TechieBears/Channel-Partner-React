@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCategory } from "../../../../redux/Slices/masterSlice";
 import { delCategory, getCategory } from "../../../../api";
 import { NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Category = () => {
   const category = useSelector((state) => state?.master?.Category);
@@ -25,7 +26,7 @@ const Category = () => {
   // ============== delete data from api ================
   const deleteData = (data) => {
     delCategory(data).then((res) => {
-      if (res?.message === "Data deleted successfully") {
+      if (res?.status === "success") {
         fetchData();
         toast.success(res?.message);
       }
