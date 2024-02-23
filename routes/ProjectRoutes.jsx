@@ -107,6 +107,7 @@ const ProjectRoutes = () => {
                                     user?.role == 'seller' ?
                                         <>
                                             <Route path='/' element={<VendorDashbaord />} />
+                                            <Route path="/profile" element={<UserProfile />} />
                                             <Route path='/vendor-orders' element={<VendorOrders />} />
                                             <Route path='/vendor-orders/order-detail/:id' element={<ViewOrder />} />
                                             <Route path='/product-list' element={<VendorProduct />} />
@@ -116,6 +117,7 @@ const ProjectRoutes = () => {
                                         </> :
                                         user?.role == 'franchise' ? <>
                                             <Route path='/' element={<FranchiseeDashboard />} />
+                                            <Route path="/profile" element={<UserProfile />} />
                                             <Route path='/analytics' element={<FranchiseeDashboard />} />
                                             <Route path='/menu' element={<Menu />} />
                                             <Route path='/orders' element={<Order />} />

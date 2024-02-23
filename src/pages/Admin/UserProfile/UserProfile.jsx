@@ -10,15 +10,18 @@ import { editUser } from '../../../api';
 import { toast } from 'react-toastify';
 import { setLoggedUserDetails } from '../../../redux/Slices/loginSlice';
 // import { profileUpload, profileLink } from '../../../env';
+import { ImageUpload, categoryLink, profileImage } from "../../../env";
 import PathName from '../../../components/PathName/PathName';
 
 const UserProfile = () => {
     const user = useSelector(state => state?.user?.loggedUserDetails)
-
+    console.log(user)
+    
     const {
         register,
         handleSubmit,
         reset,
+        setValue,
         formState: { errors },
     } = useForm();
     const [open, setOpen] = useState(true)
@@ -28,19 +31,27 @@ const UserProfile = () => {
 
 
     const handleChange = (e) => {
+        console.log('file = ', e)
         setUpload(e.target.files[0]);
         setFile(URL.createObjectURL(e.target.files[0]));
     }
+
+    
     // ================================ Submit form data ===========================
-    const onSubmit = (data) => {
-        if (upload) {
-            profileUpload(upload, data?.first_name)
-            data.profile = `${profileLink}${data?.first_name}_${upload?.name}`
-        } else {
-            data.profile = user?.profile
-        }
+    const onSubmit = async (data) => {
+        console.log('profile pic =', upload)
         data.email = user?.email
         try {
+            if (upload) {
+                data.profile_pic = upload
+                await ImageUpload(
+                    data.profile_pic,
+                    "profileimg",
+                    "profileimg",
+                    data.first_name
+                );
+                data.profile_pic = `${profileImage}${data.first_name}_profileimg_${data.profile_pic.name}`;
+            }
             editUser(user?.userid, data).then(res => {
                 if (res) {
 
@@ -70,8 +81,9 @@ const UserProfile = () => {
             address: user?.address,
             city: user?.city,
             state: user?.state,
+            profile_pic: user?.profile_pic,
         })
-        setFile(user?.profile)
+        setFile(user?.profile_pic)
     }, [])
 
     
@@ -91,7 +103,7 @@ const UserProfile = () => {
                         <>
                             <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-x-6 ">
-                                    <img className="h-[120px] w-[120px] rounded-full border object-contain" src={user?.profile ? user?.profile : userImg} alt="User_Profile" />
+                                    <img className="h-[120px] w-[120px] rounded-full border object-contain" src={user?.profile_pic ? user?.profile_pic : userImg} alt="User_Profile" />
                                     <div>
                                         <h2 className="text-xl font-bold leading-7 text-gray-700 capitalize font-tb sm:truncate sm:text-2xl sm:tracking-tight">
                                             {user?.first_name} {user?.last_name}
@@ -150,7 +162,8 @@ const UserProfile = () => {
                                                     id='file-input'
                                                     type="file"
                                                     className='hidden'
-                                                    {...register("profile")}
+                                                    accept="image/jpeg,image/jpg,image/png"
+                                                    {...register("profile_pic")}
                                                     onChange={(e) => handleChange(e)}
                                                 />
                                             </div>
