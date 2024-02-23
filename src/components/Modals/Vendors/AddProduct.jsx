@@ -586,7 +586,7 @@ const AddProduct = (props) => {
                                                                 </label>
                                                                 <input
                                                                     type="number"
-                                                                    placeholder='₹ 0.00'
+                                                                    placeholder='0.00'
                                                                     className={inputClass}
                                                                     {...register('markup_percentage', { required: true })} />
                                                                 {errors.markup_percentage && <Error title='Markup Percentage is required*' />}

@@ -17,6 +17,7 @@ import AddProduct from '../../../../components/Modals/Vendors/AddProduct';
 const AdminProduct = () => {
     const [sellers, setSellers] = useState([]);
     const [shopProducts, setShopProducts] = useState([])
+    console.log('shopProducts', shopProducts)
     const userid = useSelector((state) => state?.user?.loggedUserDetails?.userid);
     const matchedSeller = sellers?.find(seller => seller?.user?.id === userid);
     const storages = useSelector((state) => state?.storage?.list);
@@ -98,20 +99,22 @@ const AdminProduct = () => {
 
     const verifyActions = (row) => {
         const payload = { productId: row?.product_id, product_isverified_byadmin: !row?.product_isverified_byadmin, product_isverified_byfranchise: row?.product_isverified_byfranchise }
-        try {
-            VerifyProductAdmin(payload).then((form) => {
-                console.log(payload)
-                if (form.message == "product is verified successfully") {
-                    toast.success('Product Verification Changed !');
-                    getProducts()
-                }
-                else {
-                    console.log("err");
-                }
-            })
-        }
-        catch (err) {
-            console.log(err);
+        if (row?.markup_percentage != undefined || row.markup_percentage != 0) {
+            try {
+                VerifyProductAdmin(payload).then((form) => {
+                    console.log(payload)
+                    if (form.message == "product is verified successfully") {
+                        toast.success('Product Verification Changed !');
+                        getProducts()
+                    }
+                    else {
+                        console.log("err");
+                    }
+                })
+            }
+            catch (err) {
+                console.log(err);
+            }
         }
     }
     // =============================== verify user switch =============================
@@ -121,6 +124,7 @@ const AdminProduct = () => {
                 <Switch
                     value={row?.product_isverified_byadmin}
                     onChange={() => verifyActions(row)}
+                    disabled={row?.markup_percentage == 0 || row?.markup_percentage == undefined ? true : false}
                     size={50}
                     backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
                     borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
