@@ -73,6 +73,8 @@ const UserProfile = () => {
         })
         setFile(user?.profile)
     }, [])
+
+    
     return (
         <>
             <div className="flex items-center justify-between px-6">

@@ -58,7 +58,7 @@ export default function SubCategoryForm(props) {
           .then((res) => {
             if (res?.status === "success") {
               setTimeout(() => {
-                dispatch(setCategory(res));
+                // dispatch(setCategory(res));
                 reset();
                 toggle(), setLoader(false), subCategoryList();
                 toast.success(res.message);
@@ -85,7 +85,7 @@ export default function SubCategoryForm(props) {
         editSubCategory(props?.data?.subcat_id, data).then((res) => {
           if (res?.message === "subcategory edited successfully") {
             setTimeout(() => {
-              dispatch(setSubCategory(res));
+              // dispatch(setSubCategory(res));
               reset();
               toggle(), setLoader(false), subCategoryList();
               toast.success(res.message);

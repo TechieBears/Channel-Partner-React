@@ -117,20 +117,22 @@ const ProjectRoutes = () => {
                                         user?.role == 'franchise' ? <>
                                             <Route path='/' element={<FranchiseeDashboard />} />
                                             <Route path='/analytics' element={<FranchiseeDashboard />} />
-                                            {/* <Route path='/menu' element={<FranchiseMenu />} /> */}
                                             <Route path='/menu' element={<Menu />} />
-                                            {/* <Route path='/product-list/product-details/:id' element={<ViewAdminProduct />} /> */}
-                                            {/* <Route path='/franchiesee-orders' element={<FranchiseeOrder />} /> */}
                                             <Route path='/orders' element={<Order />} />
-                                            {/* <Route path='/franchise-vendors' element={<FranchiseeVendors />} /> */}
-                                            <Route path='/vendors' element={<Vendors />} />
+                                            <Route path='/vendors' element={<FranchiseeVendors />} />
                                             <Route path="/vendors/vendors-detail/:id" element={<VendorDetails />} />
-                                            {/* <Route path='/franchise-resturants' element={<FranchiseRestaurent />} /> */}
                                             <Route path='/resturants' element={<Restaurant />} />
                                             <Route path='/resturants/restaurant-detail/:id' element={<RestaurantDetail />} />
-                                            {/* <Route path='/delivery' element={<DeliveryBoy />} /> */}
-                                            <Route path='/delivery' element={<Drivers />} />
+                                            <Route path='/delivery' element={<DeliveryBoy />} />
                                             <Route path="/drivers/driver-detail/:id" element={<DriverDetail />} />
+
+                                            {/* <Route path='/delivery' element={<Drivers />} /> */}
+                                            {/* <Route path='/product-list/product-details/:id' element={<ViewAdminProduct />} /> */}
+                                            {/* <Route path='/franchiesee-orders' element={<FranchiseeOrder />} /> */}
+                                            {/* <Route path='/vendors' element={<Vendors />} /> */}
+                                            {/* <Route path='/franchise-resturants' element={<FranchiseRestaurent />} /> */}
+                                            {/* <Route path='/delivery' element={<DeliveryBoy />} /> */}
+                                            {/* <Route path='/menu' element={<FranchiseMenu />} /> */}
                                         </>
                                             : ''}
                             </Routes>

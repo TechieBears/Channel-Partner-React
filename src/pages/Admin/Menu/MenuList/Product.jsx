@@ -70,6 +70,7 @@ const Product = () => {
                       <h1 className='text-xl font-semibold text-gray-900 font-tbPop '>Product List</h1>
                   </div>
                   {/* <AddProduct title='Add Product' getProducts={getProducts} sellerId={matchedSeller?.vendor_id} /> */}
+                  
                   <AddProduct title='Add Product' />
               </div>
               {product?.length > 0 && <Table data={product} columns={columns} />}

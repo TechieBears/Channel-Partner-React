@@ -132,11 +132,11 @@ export const Franchise = [
     //     icon: <Soup size="24" />,
     //     link: '/analytics',
     // },
-    {
-        title: 'Orders',
-        icon: <LayoutList size="24" />,
-        link: '/orders',
-    },
+    // {
+    //     title: 'Orders',
+    //     icon: <LayoutList size="24" />,
+    //     link: '/orders',
+    // },
     {
         title: 'menu',
         icon: <Menu size="24" />,

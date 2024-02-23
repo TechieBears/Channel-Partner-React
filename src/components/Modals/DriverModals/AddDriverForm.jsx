@@ -17,7 +17,7 @@ import { GetFranchisee } from "../../../api";
 
 
 function AddDriverFrom(props) {
-    // console.log('props = ', props);
+    console.log('props = ', props);
 
     const [isOpen, setIsOpen] = useState(false);
     const [loader, setLoader] = useState(false);
@@ -35,7 +35,7 @@ function AddDriverFrom(props) {
 
     // const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails)
     // console.log('Logged Details = ', LoggedDetails);
-    
+
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     // console.log('Logged User Details = ', LoggedUserDetails);
 
@@ -145,7 +145,7 @@ function AddDriverFrom(props) {
             }
         }
         else {          // for edit
-            if (data?.bank_passbook.length != props?.data.bank_passbook ) {
+            if (data?.bank_passbook.length != props?.data.bank_passbook) {
                 await ImageUpload(data?.bank_passbook[0], "deliveryboy", "BankPassbook", data?.first_name)
                 data.bank_passbook = `${deliveryBoylink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
             } else {
@@ -243,16 +243,16 @@ function AddDriverFrom(props) {
     // ============================== Reseting data ======================================
     const fillData = () => {
         reset({
-            "first_name": props?.data?.first_name,
-            "last_name": props?.data?.last_name,
-            "email": props?.data?.email,
-            "pincode": props?.data?.pincode,
-            "phone_no": props?.data?.phone_no,
-            "address": props?.data?.address,
-            "state": props?.data?.state,
-            "city": props?.data?.city,
-            "date_of_birth": props?.data?.date_of_birth,
-            "gender": props?.data?.gender,
+            "first_name": props?.data?.user?.first_name,
+            "last_name": props?.data?.user?.last_name,
+            "email": props?.data?.user?.email,
+            "pincode": props?.data?.user?.pincode,
+            "phone_no": props?.data?.user?.phone_no,
+            "address": props?.data?.user?.address,
+            "state": props?.data?.user?.state,
+            "city": props?.data?.user?.city,
+            "date_of_birth": props?.data?.user?.date_of_birth,
+            "gender": props?.data?.user?.gender,
             "vehicle_type": props?.data?.vehicle_type,
             "driver_license": props?.data?.driver_license,
             "vehicle_rc": props?.data?.vehicle_rc,
@@ -261,6 +261,7 @@ function AddDriverFrom(props) {
             "ifsc_code": props?.data?.ifsc_code,
             "adhar_card": props?.data?.adhar_card,
             "pan_card": props?.data?.pan_card,
+            // 'marital_status': props?.data?.user?.marital_status
         })
     }
 
@@ -281,11 +282,11 @@ function AddDriverFrom(props) {
     //     )
     // }, [pincodeWatch])
 
-    // useEffect(() => {
-    //     if (props.button == "edit") {
-    //         fillData()
-    //     }
-    // }, [])
+    useEffect(() => {
+        if (props.button == "edit") {
+            fillData()
+        }
+    }, [])
 
     return (
         <>
@@ -516,7 +517,7 @@ function AddDriverFrom(props) {
                                                         </select>
                                                         {errors.gender && <Error title="Gender is required*" />}
                                                     </div>
-                                                    <div className="">
+                                                    {/* <div className="">
                                                         <label className={labelClass}>
                                                             Marital Status*
                                                         </label>
@@ -530,7 +531,7 @@ function AddDriverFrom(props) {
                                                             <option value='Married'>Married</option>
                                                         </select>
                                                         {errors.marital_status && <Error title="Marital Status is required*" />}
-                                                    </div>
+                                                    </div> */}
                                                 </div>
 
                                                 <h1 className='pt-4 mx-4 text-xl font-semibold text-gray-900 font-tbPop '>Additional Details:</h1>

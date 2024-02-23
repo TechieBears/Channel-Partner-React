@@ -9,6 +9,8 @@ import { CreateFranchisee, GetFranchisee, editfranchise } from "../../../api";
 import { setFranchise } from "../../../redux/Slices/masterSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { ImageUpload, franchiselink } from '../../../env';
+import { toast } from 'react-toastify';
+
 
 
 

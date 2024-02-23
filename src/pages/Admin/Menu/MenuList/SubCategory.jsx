@@ -11,6 +11,7 @@ import Switch from 'react-js-switch';
 const SubCategory = () => {
   const subcategory = useSelector((state) => state?.master?.SubCategory);
   const category = useSelector((state) => state?.master?.Category);
+  console.log('category', category)
   const dispatch = useDispatch();
 
   // ============== fetch data from api ================
@@ -131,20 +132,30 @@ const SubCategory = () => {
     );
   };
 
-  // ================= columns of the table ===============
-  // ======================= Table Column Definitions =========================
-  const columns = [
-    { field: 'subcat_image', header: 'Image', body: representativeBodyTemplate, sortable: true, style: true },
-    { field: 'subcat_name', header: 'Name', sortable: true },
-    {
-      field: 'category', header: 'Category', body: rowData => {
-        const matchingCategory = rowData.category.length > 0 && category?.find(category => category.id === rowData.category);
-        return matchingCategory ? matchingCategory.category_name : '------------';
+
+ // ================= columns of the table ===============
+       // ======================= Table Column Definitions =========================
+       const columns = [
+        { field: 'subcat_image', header: 'Image', body: representativeBodyTemplate, sortable: true, style: true },
+        { field: 'subcat_name', header: 'Name', sortable: true },
+        { field: 'category', header: 'Category',  
+        // body: rowData => {
+        //   const matchingCategory = category.find(category => category?.id == rowData?.category);
+        //   return matchingCategory ? matchingCategory?.category_name : '';
+        // }
+        body: rowData => {
+          if (Array.isArray(category)) {
+              const matchingCategory = category.find(cat => cat?.id == rowData?.category);
+              return matchingCategory ? matchingCategory?.category_name : '';
+          } else {
+              return 'Category data is not available.';
+          }
       }
-    },
-    // { field: 'isactive', header: 'Active', body: switchActive, sortable: true },
-    // { field: 'isverify', header: 'Verify', body: switchVerify, sortable: true },
-  ];
+      },
+        // { field: 'isactive', header: 'Active', body: switchActive, sortable: true },
+        // { field: 'isverify', header: 'Verify', body: switchVerify, sortable: true },
+        { field: "id", header: "Action", body: actionBodyTemplate, sortable: true },
+    ];
 
 
   return (

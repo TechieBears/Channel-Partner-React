@@ -41,11 +41,13 @@ const EditAdminProduct = (props) => {
     useEffect(() => {
       if (calculateRevenue !=="") {
         var mainPrice = (props?.row?.product_actual_price == null ? 0 : props?.row?.product_actual_price) * (calculateRevenue / 100);
-        var actualprice = (props?.row?.product_actual_price == null ? 0 : props?.row?.product_actual_price) * (props?.row?.vendor?.insta_commison_percentage / 100);
-        var adminfinalprice =  props?.row?.product_actual_price + mainPrice + actualprice;
-        console.log('adminfinalprice = ', adminfinalprice);
+        // var actualprice = (props?.row?.product_actual_price == null ? 0 : props?.row?.product_actual_price) * (props?.row?.vendor?.insta_commison_percentage / 100);
+        // var adminfinalprice =  props?.row?.product_actual_price + mainPrice + actualprice;
+        var adminfinalprice =  props?.row?.product_actual_price + mainPrice;
+        console.log('adminfinalprice = ', adminfinalprice.toFixed(0));
         setFinalPrice(adminfinalprice);
-        setValue('final_price', adminfinalprice)
+        setValue('final_price', adminfinalprice?.toFixed(0));
+        // setValue('final_price', adminfinalprice);
       }
     }, [calculateRevenue])
     
@@ -426,6 +428,7 @@ const EditAdminProduct = (props) => {
                                                         </label>
                                                         <input
                                                             type="number"
+                                                            readOnly
                                                             placeholder='₹ 0.00'
                                                             className={inputClass}
                                                             {...register('final_price', { required: true })}

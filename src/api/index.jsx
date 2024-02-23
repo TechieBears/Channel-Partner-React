@@ -662,7 +662,7 @@ export const getUser = async () => {
 };
 
 export const editUser = async (id, data) => {
-    const url = `${environment.baseUrl}edit-user/${id}`;
+    const url = `${environment.baseUrl}app/edit-profile/${id}`;
     try {
         const response = await axios.put(url, data)
         return response.data
