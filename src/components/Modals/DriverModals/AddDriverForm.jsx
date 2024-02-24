@@ -97,11 +97,11 @@ function AddDriverFrom(props) {
             } else {
                 data.video_url = props?.data?.video_url
             }
-            if (data?.profile_pic.length != props?.data?.profile_pic) {
+            if (data?.profile_pic.length != props?.data?.user?.profile_pic) {
                 await ImageUpload(data?.profile_pic[0], "deliveryboy", "ProfileImage", data?.first_name)
                 data.profile_pic = `${deliveryBoylink}${data?.first_name}_ProfileImage_${data?.profile_pic[0]?.name}`
             } else {
-                data.profile_pic = props?.data?.profile_pic
+                data.profile_pic = props?.data?.user?.profile_pic
             }
         }
         if (props.button != 'edit') {   // for create
