@@ -9,7 +9,7 @@ import Error from '../../../components/Errors/Error';
 import { editUser } from '../../../api';
 import { toast } from 'react-toastify';
 import { setLoggedUserDetails } from '../../../redux/Slices/loginSlice';
-import { ImageUpload, categoryLink, profileImage } from "../../../env";
+import { ImageUpload, categoryLink, bannerLink } from "../../../env";
 import PathName from '../../../components/PathName/PathName';
 
 const UserProfile = () => {
@@ -49,7 +49,7 @@ const UserProfile = () => {
                     "profileimg",
                     data.first_name
                 );
-                data.profile_pic = `${profileImage}${data.first_name}_profileimg_${data.profile_pic.name}`;
+                data.profile_pic = `${bannerLink}${data.first_name}_profileimg_${data.profile_pic.name}`;
             }
             editUser(user?.userid, data).then(res => {
                 if (res) {

@@ -261,8 +261,25 @@ function AddDriverFrom(props) {
             "ifsc_code": props?.data?.ifsc_code,
             "adhar_card": props?.data?.adhar_card,
             "pan_card": props?.data?.pan_card,
+            "created_by":  props?.data?.created_by?.id,
+            "created_by":  props?.data?.created_by?.id,
+            "shift": JSON.parse('{"subTitle": "4 hours", "title": "Afternoon 4PM to Evening 8PM"}')
             // 'marital_status': props?.data?.user?.marital_status
         })
+        const job_type_json = JSON.parse(props?.data?.job_type.replace(/'/g, '"'));
+        console.log(job_type_json)
+        if (job_type_json?.subTitle == "4-5 hours per day"){
+            setValue('job_type', 'Part Time (4-5 Hours/Day)')
+        }else{
+            setValue('job_type', 'Full Time (9 Hours/Day)')
+        }
+        const shift_type = JSON.parse(props?.data?.job_type.replace(/'/g, '"'));
+        console.log(shift_type)
+        if (shift_type?.subTitle == "4-5 hours per day"){
+            setValue('job_type', 'Part Time (4-5 Hours/Day)')
+        }else{
+            setValue('job_type', 'Full Time (9 Hours/Day)')
+        }
     }
 
     // useMemo(() => {
@@ -385,7 +402,7 @@ function AddDriverFrom(props) {
                                                             <label className={labelClass}>Select Franchisee*</label>
                                                             <select
                                                                 className={inputClass}
-                                                                {...register("franchisee_id", { required: true })}
+                                                                {...register("created_by", { required: true })}
                                                             >
                                                                 <option value="" selected>--Select Franchisee--</option>
                                                                 {Franchisee?.map(franchisee => (
@@ -394,7 +411,7 @@ function AddDriverFrom(props) {
                                                                     </option>
                                                                 ))}
                                                             </select>
-                                                            {errors.franchisee_id && (
+                                                            {errors.created_by && (
                                                                 <Error title="Franchisee is Required*" />
                                                             )}
                                                         </div>

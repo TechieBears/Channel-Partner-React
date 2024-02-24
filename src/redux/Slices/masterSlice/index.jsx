@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     banner: [],
+    promotion: [],
     city: [],
     designation: [],
     temperatureRange: [],
@@ -20,6 +21,9 @@ export const masterSlice = createSlice({
     reducers: {
         setBanner: (state, action) => {
             state.banner = action.payload;
+        },
+        setpromotionList: (state, action) => {
+            state.promotion = action.payload;
         },
         setCityNames: (state, action) => {
             state.city = action.payload;
@@ -57,5 +61,5 @@ export const masterSlice = createSlice({
     }
 })
 
-export const { setCityNames, setDesignation, setTempRange, setProductNames, setStoreCategory, setCategory, setSubCategory, setProduct, setBanner, setOrders, setFranchise, setFranchiseVendors } = masterSlice.actions;
+export const { setCityNames, setDesignation, setTempRange, setProductNames, setStoreCategory, setCategory, setSubCategory, setProduct, setBanner, setpromotionList, setOrders, setFranchise, setFranchiseVendors } = masterSlice.actions;
 export default masterSlice.reducer;

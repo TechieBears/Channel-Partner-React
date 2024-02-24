@@ -1222,7 +1222,7 @@ export const editHomeBanners = async (id, data) => {
 };
 
 export const delHomeBanners = async (id) => {
-    const url = `${environment.baseUrl}edit-banner/${id}`;
+    const url = `${environment.baseUrl}app/edithome-slides/${id}`;
     try {
         const response = await axios.delete(url)
         return response.data
@@ -1231,6 +1231,47 @@ export const delHomeBanners = async (id) => {
         console.log(err);
     }
 };
+
+
+//  ------------ Promotions API Start-------------
+export const addHomePromotion = async (data) => {
+    const url = `${environment.baseUrl}app/get-promotions`;
+    try {
+        const response = await axios.post(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+export const editHomePromotion = async (id, data) => {
+    const url = `${environment.baseUrl}app/editpromotions/${id}`;
+    try {
+        const response = await axios.put(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+export const delHomePromotion = async (id) => {
+    const url = `${environment.baseUrl}app/editpromotions/${id}`;
+    try {
+        const response = await axios.delete(url)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+//  ------------ Promotions API Ends-------------
+
+
+
+
+
+
 
 export const addPolicy = async (data) => {
     const url = `${environment.baseUrl}app/privacy-policy`
