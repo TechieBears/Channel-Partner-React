@@ -307,8 +307,8 @@ function AddDriverFrom(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("profile_pic", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data.profile_pic != '' && props?.data.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.data?.profile_pic?.split('/').pop()}
+                                                        {props?.button == 'edit' && props?.data?.user?.profile_pic != '' && props?.data?.user?.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.data?.user?.profile_pic?.split('/').pop()}
                                                         </label>}
                                                         {errors.profile_pic && <Error title='Profile Image is required*' />}
                                                     </div>
@@ -568,11 +568,9 @@ function AddDriverFrom(props) {
                                                             {...register("video_url", { required: props.button === 'edit' ? false : true })}
                                                             onChange={handleFileChange}
                                                         />
-                                                        {props?.button === 'edit' && props?.data.video_url && (
-                                                            <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                                {props?.data?.video_url?.name}
-                                                            </label>
-                                                        )}
+                                                        {props?.button == 'edit' && props?.data?.video_url != '' && props?.data?.video_url != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.data?.video_url?.split('/').pop()}
+                                                        </label>}
                                                         {errors.video_url && <Error title='Video file is required*' />}
                                                     </div>
                                                 </div>
