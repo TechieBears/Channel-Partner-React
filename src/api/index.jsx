@@ -1357,16 +1357,6 @@ export const getDeliveryBoy = async (data) => {
     }
 }
 
-export const getDeliveryBoys = async (data) => {
-    const url = `${environment.baseUrl}delivery/create_deliveryboy`
-    try {
-        const response = await axios.get(url, data);
-        return response.data;
-    } catch (error) {
-        console.log(error)
-    }
-}
-
 export const getDeliveryBoysByID = async (id) => {
     const url = `${environment.baseUrl}franchise/all_deliveryboy_byfranchise/${id}`
     try {
