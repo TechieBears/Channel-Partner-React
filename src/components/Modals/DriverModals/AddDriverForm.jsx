@@ -109,13 +109,13 @@ function AddDriverFrom(props) {
                 // setLoader(true)
                 if (data.job_type === "Part Time (4-5 Hours/Day)") {
                     data.job_type = {
-                        subTitle: "4-5 hours per day",
-                        title: "Part Time"
+                        "subTitle": "4-5 hours per day",
+                        "title": "Part Time"
                     };
                 } else if (data.job_type === "Full Time (9 Hours/Day)") {
                     data.job_type = {
-                        subTitle: "9 hours per day",
-                        title: "Full Time"
+                        "subTitle": "9 hours per day",
+                        "title": "Full Time"
                     };
                 }
                 if (data.shift === "Morning 9AM to Afternoon 1PM 4 Hours") {
@@ -189,10 +189,14 @@ function AddDriverFrom(props) {
             "driver_license": props?.data?.driver_license,
             "vehicle_rc": props?.data?.vehicle_rc,
             "bank_name": props?.data?.bank_name,
-            "accounr_number": props?.data?.accounr_number,
+            "account_number": props?.data?.account_number,
             "ifsc_code": props?.data?.ifsc_code,
             "adhar_card": props?.data?.adhar_card,
             "pan_card": props?.data?.pan_card,
+            "week_off": props?.data?.week_off,
+            // "shift": shift?.title,
+            // "job_type": jobType?.title,
+            "franchisee_id": props?.data?.created_by?.id,
         })
     }
 
