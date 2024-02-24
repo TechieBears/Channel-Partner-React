@@ -109,13 +109,13 @@ function AddDriverFrom(props) {
                 // setLoader(true)
                 if (data.job_type === "Part Time (4-5 Hours/Day)") {
                     data.job_type = {
-                        subTitle: "4-5 hours per day",
-                        title: "Part Time"
+                        "subTitle": "4-5 hours per day",
+                        "title": "Part Time"
                     };
                 } else if (data.job_type === "Full Time (9 Hours/Day)") {
                     data.job_type = {
-                        subTitle: "9 hours per day",
-                        title: "Full Time"
+                        "subTitle": "9 hours per day",
+                        "title": "Full Time"
                     };
                 }
                 if (data.shift === "Morning 9AM to Afternoon 1PM 4 Hours") {
@@ -189,24 +189,27 @@ function AddDriverFrom(props) {
             "driver_license": props?.data?.driver_license,
             "vehicle_rc": props?.data?.vehicle_rc,
             "bank_name": props?.data?.bank_name,
-            "accounr_number": props?.data?.accounr_number,
+            "account_number": props?.data?.account_number,
             "ifsc_code": props?.data?.ifsc_code,
             "adhar_card": props?.data?.adhar_card,
             "pan_card": props?.data?.pan_card,
-            "created_by":  props?.data?.created_by?.id,
+            "week_off": props?.data?.week_off,
+            // "shift": shift?.title,
+            // "job_type": jobType?.title,
+            "created_by": props?.data?.created_by?.id,
         })
         const job_type_json = JSON.parse(props?.data?.job_type.replace(/'/g, '"'));
         console.log(job_type_json)
-        if (job_type_json?.subTitle == "4-5 hours per day"){
+        if (job_type_json?.subTitle == "4-5 hours per day") {
             setValue('job_type', 'Part Time (4-5 Hours/Day)')
-        }else{
+        } else {
             setValue('job_type', 'Full Time (9 Hours/Day)')
         }
         const shift_type = JSON.parse(props?.data?.job_type.replace(/'/g, '"'));
         console.log(shift_type)
-        if (shift_type?.subTitle == "Morning 9AM to Afternoon 1PM"){
+        if (shift_type?.subTitle == "Morning 9AM to Afternoon 1PM") {
             setValue('shift', 'Morning 9AM to Afternoon 1PM 4 Hours')
-        }else{
+        } else {
             setValue('shift', 'Afternoon 4PM to Evening 8PM 4 Hours')
         }
     }
@@ -304,8 +307,8 @@ function AddDriverFrom(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("profile_pic", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data.profile_pic != '' && props?.data.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.data?.profile_pic?.split('/').pop()}
+                                                        {props?.button == 'edit' && props?.data?.user?.profile_pic != '' && props?.data?.user?.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.data?.user?.profile_pic?.split('/').pop()}
                                                         </label>}
                                                         {errors.profile_pic && <Error title='Profile Image is required*' />}
                                                     </div>
@@ -565,11 +568,9 @@ function AddDriverFrom(props) {
                                                             {...register("video_url", { required: props.button === 'edit' ? false : true })}
                                                             onChange={handleFileChange}
                                                         />
-                                                        {props?.button === 'edit' && props?.data.video_url && (
-                                                            <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                                {props?.data?.video_url?.name}
-                                                            </label>
-                                                        )}
+                                                        {props?.button == 'edit' && props?.data?.video_url != '' && props?.data?.video_url != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.data?.video_url?.split('/').pop()}
+                                                        </label>}
                                                         {errors.video_url && <Error title='Video file is required*' />}
                                                     </div>
                                                 </div>
