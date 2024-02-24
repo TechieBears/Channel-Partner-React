@@ -31,11 +31,11 @@ export default function BannerForm(props) {
         console.log('data = ', data)
         if (props?.button != 'edit') {
             try {
-                if (data.image.length != 0) {
-                    await ImageUpload(data.image[0], "banner", "banner", data.image[0].name)
-                    data.image = `${bannerLink}${data.image[0].name}_banner_${data.image[0].name}`
+                if (data.slide_url.length != 0) {
+                    await ImageUpload(data.slide_url[0], "banner", "banner", data.slide_url[0].name)
+                    data.slide_url = `${bannerLink}${data.slide_url[0].name}_banner_${data.slide_url[0].name}`
                 } else {
-                    data.image = ''
+                    data.slide_url = ''
                 }
                 setLoader(true)
                 addHomeBanners(data).then((res) => {
@@ -56,11 +56,11 @@ export default function BannerForm(props) {
             }
         } else {
             try {
-                if (data?.image != props?.data?.slide_url) {
-                    await ImageUpload(data.image[0], "banner", "banner", data.image[0].name)
-                    data.image = `${bannerLink}${data.image[0].name}_banner_${data.image[0].name}`
+                if (data?.slide_url != props?.data?.slide_url) {
+                    await ImageUpload(data.slide_url[0], "banner", "banner", data.slide_url[0].name)
+                    data.slide_url = `${bannerLink}${data.slide_url[0].name}_banner_${data.slide_url[0].name}`
                 } else {
-                    data.image = props?.data?.slide_url
+                    data.slide_url = props?.data?.slide_url
                 }
                 setLoader(true);
                 editHomeBanners(props?.data?.slide_id, data).then((res) => {
@@ -159,11 +159,11 @@ export default function BannerForm(props) {
                                                         multiple
                                                         accept='image/jpeg,image/jpg,image/png'
                                                         placeholder='Upload Images...'
-                                                        {...register("image", { required: props.button == 'edit' ? false : true })} />
-                                                    {props?.button == 'edit' && props?.data.image != '' && props?.data.image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                        {props?.data?.image?.split('/').pop()}
+                                                        {...register("slide_url", { required: props.button == 'edit' ? false : true })} />
+                                                    {props?.button == 'edit' && props?.data.slide_url != '' && props?.data.slide_url != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                        {props?.data?.slide_url?.split('/').pop()}
                                                     </label>}
-                                                    {errors.image && <Error title='Main Image is required*' />}
+                                                    {errors.slide_url && <Error title='Main Image is required*' />}
                                                 </div>
                                             </div>
 

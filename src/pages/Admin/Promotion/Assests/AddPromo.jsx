@@ -3,13 +3,14 @@ import { Fragment, useState } from 'react';
 import { useForm } from "react-hook-form";
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../../utils/CustomClass';
 import { Edit } from 'iconsax-react';
-import {  addHomePromotion , editHomePromotion} from '../../../../api';
+import {  addHomePromotion , editHomePromotion, postHomePromotion} from '../../../../api';
 import { useDispatch } from 'react-redux';
-import { setBanner } from '../../../../redux/Slices/masterSlice';
 import { toast } from 'react-toastify';
 import Error from '../../../../components/Errors/Error';
 import { ImageUpload, promotionLink } from '../../../../env';
 import LoadBox from '../../../../components/Loader/LoadBox';
+import { setPromotions } from '../../../../redux/Slices/masterSlice';
+
 
 
 
@@ -29,24 +30,24 @@ export default function AddPromo(props) {
 
     // ============================ submit data  =====================================
     const onSubmit = async (data) => {
-        console.log('data = ', data)
-        if (props?.button != 'Edit Home Banner') {
+        if (props?.title != 'Edit Promotions') {
             try {
-                if (data.image.length != 0) {
-                    await ImageUpload(data.image[0], "promotion", "promotion", data.image[0].name)
-                    data.image = `${promotionLink}${data.image[0].name}_promotion_${data.image[0].name}`
+                console.log('post called')
+                if (data.slide_url.length != 0) {
+                    await ImageUpload(data.slide_url[0], "promotion", "promotion", data.slide_url[0].name)
+                    data.slide_url = `${promotionLink}${data.slide_url[0].name}_promotion_${data.slide_url[0].name}`
                 } else {
-                    data.image = ''
+                    data.slide_url = ''
                 }
                 setLoader(true)
-                addHomePromotion(data).then((res) => {
+                postHomePromotion(data).then((res) => {
                     if (res?.message === "slide added successfully") {
                         setTimeout(() => {
-                            // dispatch(setBanner(res));
+                            dispatch(setPromotions(res));
                             reset();
                             toggle(),
-                                setLoader(false),
-                                props?.getAllPromotionList()()
+                            setLoader(false),
+                            props?.getAllPromotionList()
                             toast.success(res?.message);
                         }, 1000)
                     }
@@ -57,21 +58,21 @@ export default function AddPromo(props) {
             }
         } else {
             try {
-                if (data?.image != props?.data?.slide_url) {
-                    await ImageUpload(data.image[0], "promotion", "promotion", data.image[0].name)
-                    data.image = `${promotionLink}${data.image[0].name}_promotion_${data.image[0].name}`
+                if (data?.slide_url != props?.data?.slide_url) {
+                    await ImageUpload(data.slide_url[0], "promotion", "promotion", data.slide_url[0].name)
+                    data.slide_url = `${promotionLink}${data.slide_url[0].name}_promotion_${data.slide_url[0].name}`
                 } else {
-                    data.image = props?.data?.slide_url
+                    data.slide_url = props?.data?.slide_url
                 }
                 setLoader(true);
                 editHomePromotion(props?.data?.slide_id, data).then((res) => {
                     if (res?.message === "slide edited successfully") {
                         setTimeout(() => {
-                            // dispatch(setBanner(res));
+                            dispatch(setPromotions(res));
                             reset();
                             toggle(),
-                                setLoader(false),
-                                props?.getAllPromotionList()()
+                            setLoader(false),
+                            props?.getAllPromotionList()
                             toast.success(res?.message);
                         }, 1000)
 
@@ -160,11 +161,11 @@ export default function AddPromo(props) {
                                                         multiple
                                                         accept='image/jpeg,image/jpg,image/png'
                                                         placeholder='Upload Images...'
-                                                        {...register("image", { required: props.button == 'edit' ? false : true })} />
-                                                    {props?.button == 'edit' && props?.data.image != '' && props?.data.image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                        {props?.data?.image?.split('/').pop()}
+                                                        {...register("slide_url", { required: props.button == 'edit' ? false : true })} />
+                                                    {props?.button == 'edit' && props?.data.slide_url != '' && props?.data.slide_url != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                        {props?.data?.slide_url?.split('/').pop()}
                                                     </label>}
-                                                    {errors.image && <Error title='Main Image is required*' />}
+                                                    {errors.slide_url && <Error title='Main Image is required*' />}
                                                 </div>
                                             </div>
 

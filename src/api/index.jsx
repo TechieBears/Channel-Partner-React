@@ -1237,6 +1237,16 @@ export const delHomeBanners = async (id) => {
 export const addHomePromotion = async (data) => {
     const url = `${environment.baseUrl}app/get-promotions`;
     try {
+        const response = await axios.get(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+export const postHomePromotion = async (data) => {
+    const url = `${environment.baseUrl}app/get-promotions`;
+    try {
         const response = await axios.post(url, data)
         return response.data
     }

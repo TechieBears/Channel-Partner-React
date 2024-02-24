@@ -102,7 +102,7 @@ const DashboardBannerPanel = () => {
                     <div className="">
                         <h1 className='font-tbPop text-xl font-semibold text-gray-900 '>Home Banners</h1>
                     </div>
-                    <BannerForm title='Add New Banner' />
+                    <BannerForm title='Add New Banner' getAllBannerList={getAllBannerList}/>
                 </div>
                 {bannerList?.length > 0 && <Table data={bannerList} columns={columns} />}
             </div>

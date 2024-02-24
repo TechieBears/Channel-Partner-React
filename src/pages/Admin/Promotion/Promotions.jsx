@@ -1,19 +1,20 @@
 import { useEffect, useState } from 'react';
 import { Trash } from 'iconsax-react';
 import Table from '../../../components/Table/Table';
-import { addHomePromotion, delHomePromotion, editHomeBanners } from '../../../api';
-import { useDispatch, useSelector } from 'react-redux';
-import { setBanner } from '../../../redux/Slices/masterSlice';
+import { addHomePromotion, delHomePromotion, editHomePromotion } from '../../../api';
+import { setPromotions } from '../../../redux/Slices/masterSlice';
 import { toast } from 'react-toastify';
 import Switch from 'react-js-switch';
-import BannerForm from '../../../components/Modals/MasterModals/AssetsModals/BannerForm';
 import AddPromo from './Assests/AddPromo';
+import { useDispatch, useSelector } from 'react-redux';
+
 
 
 const Promotions = () => {
     const promotions = useSelector((state) => state?.master?.promotion)
     // const dispatch = useDispatch()
     const [promotionList, setpromotionList] = useState([]);
+    const dispatch = useDispatch()
 
     // ============== fetch data from api ================
     const getAllPromotionList = () => {
@@ -21,8 +22,7 @@ const Promotions = () => {
             addHomePromotion().then((res) => {
                 console.log(res.data)
                 setpromotionList(res.data);
-
-                // dispatch(setBanner(res))
+                dispatch(setPromotions(res))
             })
         } catch (error) {
             console.log(error)
@@ -45,7 +45,7 @@ const Promotions = () => {
 
     // ================= action of the table ===============
     const actionBodyTemplate = (row) => <div className="flex items-center gap-2">
-        <AddPromo button='edit' title='Edit Home Banner' data={row} getAllPromotionList={getAllPromotionList} />
+        <AddPromo button='edit' title='Edit Promotions' data={row} getAllPromotionList={getAllPromotionList} />
         <button onClick={() => deleteData(row.slide_id)} className="bg-red-100  px-1.5 py-2 rounded-sm"><Trash size="20" className='text-red-500' /></button>
     </div>
 
@@ -57,7 +57,7 @@ const Promotions = () => {
     const verifyActions = (row) => {
         const payload = { slide_isactive: !row?.slide_isactive, slide_url: row?.slide_url }
         try {
-            editHomeBanners(row?.slide_id, payload).then((form) => {
+            editHomePromotion(row?.slide_id, payload).then((form) => {
                 console.log(payload)
                 if (form.status == "success") {
                     toast.success('Banner Activation Changed !');
@@ -103,7 +103,7 @@ const Promotions = () => {
                     <div className="">
                         <h1 className='font-tbPop text-xl font-semibold text-gray-900 '>Promotions</h1>
                     </div>
-                    <AddPromo title='Add New Promotion' />
+                    <AddPromo title='Add New Promotion' getAllPromotionList={getAllPromotionList}/>
                 </div>
                 {promotionList?.length > 0 && <Table data={promotionList} columns={columns} />}
             </div>

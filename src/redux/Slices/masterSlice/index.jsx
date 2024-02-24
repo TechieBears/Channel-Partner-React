@@ -22,7 +22,7 @@ export const masterSlice = createSlice({
         setBanner: (state, action) => {
             state.banner = action.payload;
         },
-        setpromotionList: (state, action) => {
+        setPromotions: (state, action) => {
             state.promotion = action.payload;
         },
         setCityNames: (state, action) => {
@@ -61,5 +61,5 @@ export const masterSlice = createSlice({
     }
 })
 
-export const { setCityNames, setDesignation, setTempRange, setProductNames, setStoreCategory, setCategory, setSubCategory, setProduct, setBanner, setpromotionList, setOrders, setFranchise, setFranchiseVendors } = masterSlice.actions;
+export const { setCityNames, setDesignation, setTempRange, setProductNames, setStoreCategory, setCategory, setSubCategory, setProduct, setBanner, setPromotions, setOrders, setFranchise, setFranchiseVendors } = masterSlice.actions;
 export default masterSlice.reducer;

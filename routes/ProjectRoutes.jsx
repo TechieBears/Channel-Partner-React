@@ -47,6 +47,7 @@ import FranchiseMenu from '../src/pages/Franchisee/Menu/Menu';
 import FranchiseRestaurent from '../src/pages/Franchisee/Resturants/Resturant';
 import ViewAdminProduct from '../src/pages/Admin/Menu/AdminProduct/ViewAdminProduct';
 import DashboardBannerPanel from '../src/pages/Admin/Master/DashboardAssets/DashAssetsPanel/DashboardBannerPanel';
+import DashboardPromotions from '../src/pages/Admin/Master/DashboardPromotions';
 
 
 
@@ -90,7 +91,7 @@ const ProjectRoutes = () => {
                                         <Route path="/menu/category-detail/:id" element={<CategoryDetail />} />
                                         <Route path="/dashboard/:id" element={<DashboardView />} />
                                         <Route path="/DashboardAssets" element={<DashboardAssets />} />
-                                        <Route path="/promotions" element={<Promotions />} />
+                                        <Route path="/promotions" element={<DashboardPromotions />} />
                                         <Route path="/drivers" element={<Drivers />} />
                                         <Route path="/drivers/driver-detail/:id" element={<DriverDetail />} />
                                         <Route path="/orders" element={<Order />} />
