@@ -10,78 +10,16 @@ import { setFranchise } from "../../../redux/Slices/masterSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { ImageUpload, franchiselink } from '../../../env';
 import { toast } from 'react-toastify';
+import { validateEmail, validateGST, validatePIN, validatePhoneNumber } from "../../Validations.jsx/Validations";
 
 
 
 
 export default function AddFranchiseForm(props) {
-  console.log('props = ', props)
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const dispatch = useDispatch()
   const { register, handleSubmit, reset, watch, control, setValue, formState: { errors }, } = useForm();
-
-
-  // // ========================= fetch data from api ==============================
-  const FranchiseeDetails = () => {
-    try {
-      GetFranchisee().then((res) => {
-        dispatch(setFranchise(res));
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-
-  // ============================ file uplaod watch ===============================
-  // const buscard_watch = watch('bus_card_url')
-  // const cheque_watch = watch('cheque_url')
-  const role = watch('role')
-  const fssai_watch = watch('fssai_url')
-  const gst_watch = watch('gst_url')
-  const odoc_watch = watch('odoc_url')
-  const pan_watch = watch('pan_url')
-  const pincodeWatch = watch('pincode')
-
-
-  // ===================== Custom validation function for a 6-digit PIN code ================
-  const validatePIN = (value) => {
-    const pattern = /^[0-9]{6}$/;
-    if (pattern.test(value)) {
-      return true;
-    }
-    return 'Pincode must be 6-digit';
-  };
-
-  // =================== Custom validation function for a 10-digit US phone number ============
-  const validatePhoneNumber = (value) => {
-    const pattern = /^\d{10}$/;
-    if (pattern.test(value)) {
-      return true;
-    }
-    return 'Phone Number must be 10-digit';
-  };
-  // ==================== Custom validation function for email ========================
-  const validateEmail = (value) => {
-    const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-    if (emailPattern.test(value)) {
-      return true;
-    }
-    return 'Invalid email address';
-  };
-  const validateGST = (value) => {
-    // GST pattern for India
-    const gstPattern = /^\d{2}[A-Z]{5}\d{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$/;
-
-    if (gstPattern.test(value)) {
-      return true;
-    }
-
-    return 'Invalid GST number*';
-  };
-
-
 
   // ============================= form submiting ======================================
   const onSubmit = async (data) => {
@@ -307,10 +245,10 @@ export default function AddFranchiseForm(props) {
                               type="email"
                               placeholder="Email"
                               className={inputClass}
-                              {...register("email", { required: true })}
+                              {...register("email", { required: true, validate: validateEmail })}
                             />
                             {errors.email && (
-                              <Error title="Email is Required*" />
+                              <Error title={errors?.email?.message} />
                             )}
                           </div>
                           <div className="">
@@ -319,10 +257,10 @@ export default function AddFranchiseForm(props) {
                               type="tel"
                               placeholder="+91"
                               className={inputClass}
-                              {...register("phone_no", { required: true })}
+                              {...register("phone_no", { required: true, validate: validatePhoneNumber })}
                             />
                             {errors.phone_no && (
-                              <Error title="Phone is Required*" />
+                              <Error title={errors?.phone_no?.message} />
                             )}
                           </div>
                           {
@@ -379,10 +317,10 @@ export default function AddFranchiseForm(props) {
                               maxLength={6}
                               placeholder="PINCODE"
                               className={inputClass}
-                              {...register("pincode", { required: true })}
+                              {...register("pincode", { required: true, validate: validatePIN })}
                             />
                             {errors.pincode && (
-                              <Error title="PINCODE is Required*" />
+                              <Error title={errors?.pincode?.message} />
                             )}
                           </div>
                           <div className="">
@@ -462,12 +400,11 @@ export default function AddFranchiseForm(props) {
                                 className={inputClass}
                                 {...register('gst_number', {
                                   required: 'GST is required',
-                                  // validate: validateGST
+                                  validate: validateGST
                                 })}
                               />
                             </div>
-                            {/* {errors.profile_pic && <Error title='Profile Image is required*' />} */}
-                            {errors?.gst_number && <Error title={errors?.gst?.message} />}
+                            {errors?.gst_number && <Error title={errors?.gst_number?.message} />}
                           </div>
                           <div className="">
                             <label className={labelClass}>

@@ -14,22 +14,16 @@ import { setLoggedUser, setLoggedUserDetails, setRoleIs, setFranchiseeDetails } 
 import { useDispatch, useSelector } from "react-redux";
 import { ImageUpload, vendorlink } from "../../../../env";
 import { toast } from 'react-toastify';
+import { validateEmail, validateGST, validatePIN, validatePhoneNumber } from '../../../Validations.jsx/Validations';
 
 
 
 export default function AddVendors(props) {
-    // console.log('props = ', props)
-    const categories = useSelector((state) => state?.master?.Category);
-    const user = useSelector((state) => state?.user?.FranchiseeDetails);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
-    // console.log('logged User details = ', LoggedUserDetails)
-
     const Franchisee = useSelector((state) => state?.master?.Franchise);
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
     const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const cancelButtonRef = useRef(null)
     const { register, handleSubmit, control, watch, reset, formState: { errors }, setValue } = useForm();
     const toggle = () => setOpen(!isOpen)
     const closeBtn = () => {
@@ -39,7 +33,6 @@ export default function AddVendors(props) {
     const FranchiseeVendors = () => {
         try {
             GetFranchiseeVendors().then((res) => {
-                // console.log('vendors data = ', res);
                 dispatch(setFranchiseVendors(res));
             });
         } catch (error) {
@@ -115,14 +108,14 @@ export default function AddVendors(props) {
                 if (response?.message == "seller added successfully") {
                     setTimeout(() => {
                         // dispatch(setFranchiseVendors(res));
+                        toast.success(response?.message);
                         reset();
                         props?.FranchiseeVendors()
                         toggle(), setLoader(false), FranchiseeVendors();
-                        toast.success(response?.Message);
                     }, 1000);
                 } else {
                     setLoader(false)
-                    toast.error(response?.Message);
+                    toast.error(response?.message);
                     console.log('failed to create user')
                 }
             } catch (error) {
@@ -132,7 +125,6 @@ export default function AddVendors(props) {
         } else {
             try {      // for edit
                 setLoader(true)
-
                 let additionalPayload = {};
                 if (LoggedUserDetails?.role == 'franchise') {
                     additionalPayload = { created_by: LoggedUserDetails?.userid };
@@ -191,19 +183,9 @@ export default function AddVendors(props) {
             hawker_shop_photo: props?.data?.hawker_shop_photo,
             shop_start_time: props?.data?.shop_start_time,
             shop_end_time: props?.data?.shop_end_time,
-            // vendor_type: props?.data?.vendor_type,
         });
         setValue('created_by', props?.data?.created_by?.id)
     }, [props.data]);
-
-    // useEffect(() => {
-    //   if (props.button == "edit") {
-    //       fillData()
-    //   }
-    // }, [])
-
-
-
     return (
         <>
             {props.button !== "edit" ? (
@@ -325,10 +307,10 @@ export default function AddVendors(props) {
                                                             type="email"
                                                             placeholder="Email"
                                                             className={inputClass}
-                                                            {...register("email", { required: true })}
+                                                            {...register("email", { required: true, validate: validateEmail })}
                                                         />
                                                         {errors.email && (
-                                                            <Error title="Email is Required*" />
+                                                            <Error title={errors?.email?.message} />
                                                         )}
                                                     </div>
                                                     <div className="">
@@ -337,10 +319,10 @@ export default function AddVendors(props) {
                                                             type="tel"
                                                             placeholder="Phone"
                                                             className={inputClass}
-                                                            {...register("phone_no", { required: true })}
+                                                            {...register("phone_no", { required: true, validate: validatePhoneNumber })}
                                                         />
                                                         {errors.phone_no && (
-                                                            <Error title="Phone is Required*" />
+                                                            <Error title={errors?.phone_no?.message} />
                                                         )}
                                                     </div>
                                                     {props.button != 'edit' &&
@@ -463,10 +445,10 @@ export default function AddVendors(props) {
                                                             maxLength={6}
                                                             placeholder="PINCODE"
                                                             className={inputClass}
-                                                            {...register("pincode", { required: true })}
+                                                            {...register("pincode", { required: true, validate: validatePIN })}
                                                         />
                                                         {errors.pincode && (
-                                                            <Error title="PINCODE is Required*" />
+                                                            <Error title={errors?.pincode?.message} />
                                                         )}
                                                     </div>
                                                     <div className="">
@@ -554,10 +536,10 @@ export default function AddVendors(props) {
                                                             className={inputClass}
                                                             {...register('gst_number', {
                                                                 required: 'GST is required*',
-                                                                // validate: validateGST
+                                                                validate: validateGST
                                                             })}
                                                         />
-                                                        {/* {errors?.gst && <Error title={errors?.gst?.message} />} */}
+                                                        {errors?.gst && <Error title={errors?.gst?.message} />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>

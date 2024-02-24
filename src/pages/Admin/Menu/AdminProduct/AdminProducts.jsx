@@ -15,11 +15,7 @@ import AddProduct from '../../../../components/Modals/Vendors/AddProduct';
 
 
 const AdminProduct = () => {
-    const [sellers, setSellers] = useState([]);
     const [shopProducts, setShopProducts] = useState([])
-    console.log('shopProducts', shopProducts)
-    const userid = useSelector((state) => state?.user?.loggedUserDetails?.userid);
-    const matchedSeller = sellers?.find(seller => seller?.user?.id === userid);
     const storages = useSelector((state) => state?.storage?.list);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     const getProducts = () => {
@@ -50,7 +46,6 @@ const AdminProduct = () => {
 
     const onSubmit = async (data) => {
         var updatedData = { ...data, vendor: props?.row?.vendor }
-        console.log('called')
         editVendorProduct(props?.row?.product_id, updatedData).then(res => {
             if (res?.status == 'success') {
                 props?.getProducts()

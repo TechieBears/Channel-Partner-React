@@ -35,7 +35,6 @@ function Vendors() {
     const FranchiseeVendors = () => {
         try {
             GetFranchiseeVendors().then((res) => {
-                console.log('Admin vendors = ', res);
                 SetVendors(res);
                 dispatch(setFranchiseVendors(res));
             });
