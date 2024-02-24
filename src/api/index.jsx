@@ -1347,6 +1347,16 @@ export const createDeliveryBoy = async (data) => {
     }
 }
 
+export const editDriverBoy = async (id, data) => {
+    const url = `${environment.baseUrl}delivery/edit-deliveryboy/${id}`
+    try {
+        const response = await axios.post(url, data);
+        return response.data;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export const getDeliveryBoy = async (data) => {
     const url = `${environment.baseUrl}delivery/create_deliveryboy`
     try {

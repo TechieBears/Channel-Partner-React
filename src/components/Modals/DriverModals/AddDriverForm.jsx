@@ -2,7 +2,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../utils/CustomClass';
 import { useForm } from 'react-hook-form';
-import { editUser, createDeliveryBoy } from '../../../api';
+import { editUser, createDeliveryBoy, editDriverBoy } from '../../../api';
 import { Edit } from 'iconsax-react';
 import { useDispatch, useSelector } from 'react-redux';
 import Error from '../../Errors/Error';
@@ -158,7 +158,7 @@ function AddDriverFrom(props) {
             }
         } else {            // for edit
             setLoader(true)
-            const response = await editUser(props?.data?.user?.id, data)
+            const response = await editDriverBoy(props?.data?.user?.id, data)
             if (response?.message == "franchise edited successfully") {
                 setTimeout(() => {
                     toggle();
