@@ -9,10 +9,11 @@ import { setBanner } from '../../../../redux/Slices/masterSlice';
 import { toast } from 'react-toastify';
 import LoadBox from '../../../Loader/LoadBox';
 import Error from '../../../Errors/Error';
-// import { ImageUpload, bannerLink } from '../../../../env';
+import { ImageUpload, bannerLink } from '../../../../env';
 
 
 export default function BannerForm(props) {
+    console.log('props = ', props)
     const [isOpen, setIsOpen] = useState(false)
     const [loader, setLoader] = useState(false)
     const dispatch = useDispatch()
@@ -25,71 +26,61 @@ export default function BannerForm(props) {
     } = useForm();
 
 
-    // ========================= fetch data from api ==============================
-    const getAllBannerList = () => {
-        try {
-            getHomeBanners().then((res) => {
-                dispatch(setBanner(res))
-            })
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
     // ============================ submit data  =====================================
     const onSubmit = async (data) => {
-        // if (props?.button !== 'edit') {
-        //     try {
-        //         if (data.image.length != 0) {
-        //             await ImageUpload(data.image[0], "banner", "banner", data.image[0].name)
-        //             data.image = `${bannerLink}${data.image[0].name}_banner_${data.image[0].name}`
-        //         } else {
-        //             data.image = ''
-        //         }
-        //         setLoader(true)
-        //         addHomeBanners(data).then((res) => {
-        //             if (res?.message === "Data added successfully") {
-        //                 setTimeout(() => {
-        //                     dispatch(setBanner(res));
-        //                     reset();
-        //                     toggle(),
-        //                         setLoader(false),
-        //                         getAllBannerList()
-        //                     toast.success(res.message);
-        //                 }, 1000)
-        //             }
-        //         })
-        //     } catch (error) {
-        //         setLoader(false);
-        //         console.log('error', error);
-        //     }
-        // } else {
-        //     try {
-        //         if (data.image.length != 0) {
-        //             await ImageUpload(data.image[0], "banner", "banner", data.image[0].name)
-        //             data.image = `${bannerLink}${data.image[0].name}_banner_${data.image[0].name}`
-        //         } else {
-        //             data.image = props.data.image
-        //         }
-        //         setLoader(true);
-        //         editHomeBanners(props?.data?.id, data).then((res) => {
-        //             if (res?.message === "Data edited successfully") {
-        //                 setTimeout(() => {
-        //                     dispatch(setBanner(res));
-        //                     reset();
-        //                     toggle(),
-        //                         setLoader(false),
-        //                         getAllBannerList()
-        //                     toast.success(res.message);
-        //                 }, 1000)
+        console.log('data = ', data)
+        if (props?.button != 'edit') {
+            try {
+                if (data.slide_url.length != 0) {
+                    await ImageUpload(data.slide_url[0], "banner", "banner", data.slide_url[0].name)
+                    data.slide_url = `${bannerLink}${data.slide_url[0].name}_banner_${data.slide_url[0].name}`
+                } else {
+                    data.slide_url = ''
+                }
+                setLoader(true)
+                addHomeBanners(data).then((res) => {
+                    if (res?.message === "slide added successfully") {
+                        setTimeout(() => {
+                            dispatch(setBanner(res));
+                            reset();
+                            toggle(),
+                                setLoader(false),
+                                props?.getAllBannerList()
+                            toast.success(res?.message);
+                        }, 1000)
+                    }
+                })
+            } catch (error) {
+                setLoader(false);
+                console.log('error', error);
+            }
+        } else {
+            try {
+                if (data?.slide_url != props?.data?.slide_url) {
+                    await ImageUpload(data.slide_url[0], "banner", "banner", data.slide_url[0].name)
+                    data.slide_url = `${bannerLink}${data.slide_url[0].name}_banner_${data.slide_url[0].name}`
+                } else {
+                    data.slide_url = props?.data?.slide_url
+                }
+                setLoader(true);
+                editHomeBanners(props?.data?.slide_id, data).then((res) => {
+                    if (res?.message === "slide edited successfully") {
+                        setTimeout(() => {
+                            dispatch(setBanner(res));
+                            reset();
+                            toggle(),
+                                setLoader(false),
+                                props?.getAllBannerList()
+                            toast.success(res?.message);
+                        }, 1000)
 
-        //             }
-        //         })
-        //     } catch (error) {
-        //         setLoader(false);
-        //         console.log('error', error);
-        //     }
-        // }
+                    }
+                })
+            } catch (error) {
+                setLoader(false);
+                console.log('error', error);
+            }
+        }
 
     }
 
@@ -147,7 +138,7 @@ export default function BannerForm(props) {
                                         {/* React Hook Form */}
                                         <form onSubmit={handleSubmit(onSubmit)} >
                                             <div className="py-4 mx-4 customBox">
-                                                <div className="">
+                                                {/* <div className="">
                                                     <label className={labelClass} >Type*</label>
                                                     <select
                                                         className={inputClass}
@@ -159,7 +150,7 @@ export default function BannerForm(props) {
                                                         <option value='search_panel'>Show in search tab</option>
                                                     </select>
                                                     {errors.promo_type && <Error title='Promo Type is required*' />}
-                                                </div>
+                                                </div> */}
                                                 <div className="">
                                                     <label className={labelClass} htmlFor="main_input">Image*</label>
                                                     <input className={fileinput}
@@ -168,11 +159,11 @@ export default function BannerForm(props) {
                                                         multiple
                                                         accept='image/jpeg,image/jpg,image/png'
                                                         placeholder='Upload Images...'
-                                                        {...register("image", { required: props.button == 'edit' ? false : true })} />
-                                                    {props?.button == 'edit' && props?.data.image != '' && props?.data.image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                        {props?.data?.image?.split('/').pop()}
+                                                        {...register("slide_url", { required: props.button == 'edit' ? false : true })} />
+                                                    {props?.button == 'edit' && props?.data.slide_url != '' && props?.data.slide_url != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                        {props?.data?.slide_url?.split('/').pop()}
                                                     </label>}
-                                                    {errors.image && <Error title='Main Image is required*' />}
+                                                    {errors.slide_url && <Error title='Main Image is required*' />}
                                                 </div>
                                             </div>
 

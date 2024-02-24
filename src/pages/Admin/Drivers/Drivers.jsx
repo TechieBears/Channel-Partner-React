@@ -28,7 +28,7 @@ function Drivers() {
     const [open, setOpen] = React.useState(false);
     const [delId, setDelId] = React.useState(0);
     const DeliveryList = useSelector((state) => state?.delivery?.deliveryList);
-
+    console.log(DeliveryList)
     // =================== filter data ========================
     const onSubmit = async (data) => {
         if (data?.name != '' || data?.email != '' || data?.city != '' || data?.role != '') {

@@ -48,11 +48,11 @@ export const Admin = [
         icon: <Book size="24" />,
         link: '/orders',
     },
-    // {
-    //     title: 'Banners',
-    //     icon: <TicketDiscount size="24" />,
-    //     link: '/DashboardAssets',
-    // },
+    {
+        title: 'Banners',
+        icon: <TicketDiscount size="24" />,
+        link: '/DashboardAssets',
+    },
     {
         title: 'Promotions',
         icon: <Megaphone size="24" />,
