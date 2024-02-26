@@ -8,8 +8,8 @@ import Error from '../../Errors/Error';
 import { Add, Edit } from 'iconsax-react';
 import { addRestaurant, editRestaurant } from '../../../api';
 import { toast } from 'react-toastify';
-import {restaurantLink, ImageUpload} from '../../../env';
-import { validateEmail, validateGST, validatePIN, validatePhoneNumber } from '../../Validations.jsx/Validations';
+import { restaurantLink, ImageUpload } from '../../../env';
+import { validateCommision, validateEmail, validateGST, validatePIN, validatePhoneNumber } from '../../Validations.jsx/Validations';
 
 export default function AddRestaurant(props) {
     const [isOpen, setOpen] = useState(false);
@@ -436,7 +436,7 @@ export default function AddRestaurant(props) {
                                                             type="number"
                                                             placeholder='Insta Commision (%)'
                                                             className={inputClass}
-                                                            {...register('insta_commison_percentage', { required: true })}
+                                                            {...register('insta_commison_percentage', { required: true, validate: validateCommision })}
                                                         />
                                                         {errors.insta_commison_percentage && <Error title='Restaurant Closing is Required*' />}
                                                     </div>
