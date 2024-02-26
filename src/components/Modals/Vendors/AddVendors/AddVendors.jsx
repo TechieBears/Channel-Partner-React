@@ -178,7 +178,6 @@ export default function AddVendors(props) {
             gender: props?.data?.user?.gender,
             insta_commison_percentage: props?.data?.insta_commison_percentage,
             created_by: props?.data?.created_by?.id,
-
             shop_name: props?.data?.shop_name,
             hawker_shop_photo: props?.data?.hawker_shop_photo,
             shop_start_time: props?.data?.shop_start_time,

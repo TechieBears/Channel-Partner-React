@@ -133,9 +133,10 @@ export default function Restaurant() {
             <div className="p-4 bg-white sm:m-5 rounded-xl" >
                 <div className="flex flex-col items-start justify-between mb-6 sm:flex-row sm:items-center sm:space-y-0">
                     <div className="">
-                        <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>  Restaurent Details</h1>
+                        <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>  Restaurant Details</h1>
                     </div>
                     <AddRestaurant title='Add Restaurant' getAllRestaurant={getAllRestaurant} id={user?.userid} />
+
                     {/* <AddItem title='Add Item' /> */}
                 </div>
                 {

@@ -26,39 +26,39 @@ export default function AddRestaurant(props) {
     }
     const categories = ['Asian', 'Mexican', 'Italian', 'Russian cussion', 'Spanish', 'Comfort', 'American', 'North Indian', 'South Indian']
     const onSubmit = async (data) => {
-        if (props.button != 'edit') {    // for create
-            if (data?.profile_pic.length != 0) {
-                await ImageUpload(data?.profile_pic[0], "restaurant", "profileimg", data?.first_name)
-                data.profile_pic = `${restaurantLink}${data?.first_name}_profileimg_${data?.profile_pic[0].name}`
-            } else {
-                data.profile_pic = ''
-            }
-            if (data?.shop_image.length != 0) {
-                await ImageUpload(data?.shop_image[0], "restaurant", "restaurantimg", data?.first_name)
-                data.shop_image = `${restaurantLink}${data?.first_name}_restaurantimg_${data?.shop_image[0].name}`
-            } else {
-                data.shop_image = ''
-            }
-        }
-        else {          // for edit
-            if (data?.profile_pic != props?.data?.profile_pic) {
-                await ImageUpload(data?.profile_pic[0], "restaurant", "profileimg", data?.first_name)
-                data.profile_pic = `${restaurantLink}${data?.first_name}_profileimg_${data?.profile_pic[0].name}`
-            } else {
-                data.profile_pic = props?.data?.profile_pic
-            }
-            if (data?.shop_image != props?.data?.shop_image) {
-                await ImageUpload(data?.shop_image[0], "restaurant", "restaurantimg", data?.first_name)
-                data.shop_image = `${restaurantLink}${data?.first_name}_restaurantimg_${data?.shop_image[0].name}`
-            } else {
-                data.shop_image = props?.data?.shop_image
-            }
-        }
+        // if (props.button != 'edit') {    // for create
+        //     if (data?.profile_pic.length != 0) {
+        //         await ImageUpload(data?.profile_pic[0], "restaurant", "profileimg", data?.first_name)
+        //         data.profile_pic = `${restaurantLink}${data?.first_name}_profileimg_${data?.profile_pic[0].name}`
+        //     } else {
+        //         data.profile_pic = ''
+        //     }
+        //     if (data?.shop_image.length != 0) {
+        //         await ImageUpload(data?.shop_image[0], "restaurant", "restaurantimg", data?.first_name)
+        //         data.shop_image = `${restaurantLink}${data?.first_name}_restaurantimg_${data?.shop_image[0].name}`
+        //     } else {
+        //         data.shop_image = ''
+        //     }
+        // }
+        // else {          // for edit
+        //     if (data?.profile_pic != props?.data?.profile_pic) {
+        //         await ImageUpload(data?.profile_pic[0], "restaurant", "profileimg", data?.first_name)
+        //         data.profile_pic = `${restaurantLink}${data?.first_name}_profileimg_${data?.profile_pic[0].name}`
+        //     } else {
+        //         data.profile_pic = props?.data?.profile_pic
+        //     }
+        //     if (data?.shop_image != props?.data?.shop_image) {
+        //         await ImageUpload(data?.shop_image[0], "restaurant", "restaurantimg", data?.first_name)
+        //         data.shop_image = `${restaurantLink}${data?.first_name}_restaurantimg_${data?.shop_image[0].name}`
+        //     } else {
+        //         data.shop_image = props?.data?.shop_image
+        //     }
+        // }
         if (props?.button == 'edit') {
             let updateData = {
                 ...data,
                 'created_by': props?.id,
-                // "vendor_type": 'restaurant'
+                "vendor_type": 'restaurant'
             }
             editRestaurant(props?.id, updateData).then(res => {
                 if (res?.status == 'success') {
@@ -71,7 +71,7 @@ export default function AddRestaurant(props) {
             let updateData = {
                 ...data,
                 'created_by': props?.id,
-                // "vendor_type": 'restaurant'
+                "vendor_type": 'restaurant'
             }
             addRestaurant(updateData).then(res => {
                 if (res.status == 'success') {
@@ -89,26 +89,26 @@ export default function AddRestaurant(props) {
             reset({
                 'first_name': props?.data?.user?.first_name,
                 'last_name': props?.data?.user?.last_name,
-                'date_of_birth': props?.data?.user?.date_of_birth,
-                'gender': props?.data?.user?.gender,
-                'email': props?.data?.user?.email,
-                'shop_name': props?.data?.shop_name,
-                'restaurant_phone': props?.data?.user?.phone_no,
                 'address': props?.data?.user?.address,
                 'city': props?.data?.user?.city,
                 'state': props?.data?.user?.state,
                 'pincode': props?.data?.user?.pincode,
-                'shop_start_time': props?.data?.shop_start_time,
-                'shop_end_time': props?.data?.shop_end_time,
-                'veg_or_nonveg': props?.data?.veg_or_nonveg,
-                'short_description': props?.data?.short_description,
-                'selectedCategory': props?.data?.selectedCategory,
-                'bank_name': props?.data?.bank_name,
-                'account_number': props?.data?.account_number,
-                'ifsc_code': props?.data?.ifsc_code,
-                'adhar_card': props?.data?.adhar_card,
-                'pan_card': props?.data?.pan_card,
-                'gst_number': props?.data?.gst_number,
+                'email': props?.data?.user?.email,
+                // 'date_of_birth': props?.data?.user?.date_of_birth,
+                // 'gender': props?.data?.user?.gender,
+                // 'shop_name': props?.data?.shop_name,
+                // 'restaurant_phone': props?.data?.user?.phone_no,
+                // 'shop_start_time': props?.data?.shop_start_time,
+                // 'shop_end_time': props?.data?.shop_end_time,
+                // 'veg_or_nonveg': props?.data?.veg_or_nonveg,
+                // 'short_description': props?.data?.short_description,
+                // 'selectedCategory': props?.data?.selectedCategory,
+                // 'bank_name': props?.data?.bank_name,
+                // 'account_number': props?.data?.account_number,
+                // 'ifsc_code': props?.data?.ifsc_code,
+                // 'adhar_card': props?.data?.adhar_card,
+                // 'pan_card': props?.data?.pan_card,
+                // 'gst_number': props?.data?.gst_number,
             });
         }
     }, []);
@@ -184,7 +184,7 @@ export default function AddRestaurant(props) {
                                                         />
                                                         {errors.last_name && <Error title='Last Name is Required*' />}
                                                     </div>
-                                                    <div className="">
+                                                    {/* <div className="">
                                                         <label className={labelClass}>
                                                             Date of birth (DOB)*
                                                         </label>
@@ -223,7 +223,7 @@ export default function AddRestaurant(props) {
                                                             {props?.data?.user?.profile_pic?.split('/').pop()}
                                                         </label>}
                                                         {errors.profile_pic && <Error title='Profile Image is required*' />}
-                                                    </div>
+                                                    </div> */}
                                                     {
                                                         LoggedUserDetails?.role == 'admin' &&
                                                         <div className="">
@@ -272,7 +272,7 @@ export default function AddRestaurant(props) {
                                                         </div>
                                                     }
                                                 
-                                                    <h3 className='col-span-4 font-semibold text-xl'>Restaurant Details</h3>
+                                                    {/* <h3 className='col-span-4 font-semibold text-xl'>Restaurant Details</h3>
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             Restaurant Name*
@@ -309,7 +309,7 @@ export default function AddRestaurant(props) {
                                                         />
                                                         {errors.address && <Error title='Restaurant Address is Required*' />}
                                                     </div>
-                                                    {/* <div className="">
+                                                    <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Restaurant Image*</label>
                                                         <input className={fileinput}
                                                             id="main_input"
@@ -349,6 +349,18 @@ export default function AddRestaurant(props) {
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
+                                                            Address*
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder='Restaurant Address'
+                                                            className={inputClass}
+                                                            {...register('address', { required: true })}
+                                                        />
+                                                        {errors.address && <Error title='Restaurant Address is Required*' />}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
                                                             PIN Code*
                                                         </label>
                                                         <input
@@ -359,7 +371,7 @@ export default function AddRestaurant(props) {
                                                         />
                                                         {errors.pincode && <Error title={errors?.pincode?.message} />}
                                                     </div>
-                                                    <div className="">
+                                                    {/* <div className="">
                                                         <label className={labelClass}>
                                                             Opening Hours*
                                                         </label>
@@ -382,8 +394,8 @@ export default function AddRestaurant(props) {
                                                             {...register('shop_end_time', { required: true })}
                                                         />
                                                         {errors.shop_end_time && <Error title='Restaurant Closing is Required*' />}
-                                                    </div>
-                                                    <div className="">
+                                                    </div> */}
+                                                    {/* <div className="">
                                                         <label className={labelClass}>Closing Day*</label>
                                                         <select
                                                             className={inputClass}
@@ -401,8 +413,8 @@ export default function AddRestaurant(props) {
                                                         {errors.closing_day && (
                                                             <Error title="Clsoing day is Required*" />
                                                         )}
-                                                    </div>
-                                                    <div className="">
+                                                    </div> */}
+                                                    {/* <div className="">
                                                         <label className={labelClass}>
                                                             Type *
                                                         </label>
@@ -416,7 +428,7 @@ export default function AddRestaurant(props) {
                                                             <option value='Non Veg'>Non Veg</option>
                                                         </select>
                                                         {errors.veg_or_nonveg && <Error title='Type is Required*' />}
-                                                    </div>
+                                                    </div> */}
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             Insta Commision (%)*
@@ -439,7 +451,7 @@ export default function AddRestaurant(props) {
                                                             {...register('short_description',)}
                                                         />
                                                     </div> */}
-                                                    <h3 className='col-span-4 text-xl font-semibold'>Banking Details</h3>
+                                                    {/* <h3 className='col-span-4 text-xl font-semibold'>Banking Details</h3>
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             Bank Name*
@@ -475,8 +487,8 @@ export default function AddRestaurant(props) {
                                                             {...register('ifsc_code', { required: true })}
                                                         />
                                                         {errors.ifsc_code && <Error title='IFSC Code is Required*' />}
-                                                    </div>
-                                                    <h3 className='text-xl font-semibold col-span-4'>Additional Details</h3>
+                                                    </div> */}
+                                                    {/* <h3 className='text-xl font-semibold col-span-4'>Additional Details</h3>
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             Aadhar Card Number*
@@ -512,7 +524,7 @@ export default function AddRestaurant(props) {
                                                             {...register('gst_number', { required: true, })}
                                                         />
                                                         {errors.gst_number && <Error title={errors?.gst_number?.message} />}
-                                                    </div>
+                                                    </div> */}
                                                 </div>
                                             </div>
                                             <footer className="py-2 flex bg-white justify-end px-4 space-x-3">
