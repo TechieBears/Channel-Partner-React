@@ -49,3 +49,4 @@ export const promotionLink = 'https://channel-partner-media.s3.ap-south-1.amazon
 export const franchiselink  = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/franchisee/'
 export const deliveryBoylink  = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/deliveryboy/'
 export const vendorlink  = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/vendor/'
+export const restaurantLink  = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/restaurant/'

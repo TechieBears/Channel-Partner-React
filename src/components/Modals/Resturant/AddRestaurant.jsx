@@ -8,6 +8,7 @@ import Error from '../../Errors/Error';
 import { Add, Edit } from 'iconsax-react';
 import { addRestaurant, editRestaurant } from '../../../api';
 import { toast } from 'react-toastify';
+import {restaurantLink, ImageUpload} from '../../../env';
 import { validateEmail, validateGST, validatePIN, validatePhoneNumber } from '../../Validations.jsx/Validations';
 
 export default function AddRestaurant(props) {
@@ -24,12 +25,40 @@ export default function AddRestaurant(props) {
         reset()
     }
     const categories = ['Asian', 'Mexican', 'Italian', 'Russian cussion', 'Spanish', 'Comfort', 'American', 'North Indian', 'South Indian']
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
+        if (props.button != 'edit') {    // for create
+            if (data?.profile_pic.length != 0) {
+                await ImageUpload(data?.profile_pic[0], "restaurant", "profileimg", data?.first_name)
+                data.profile_pic = `${restaurantLink}${data?.first_name}_profileimg_${data?.profile_pic[0].name}`
+            } else {
+                data.profile_pic = ''
+            }
+            if (data?.restaurant_image.length != 0) {
+                await ImageUpload(data?.restaurant_image[0], "restaurant", "restaurantimg", data?.first_name)
+                data.restaurant_image = `${restaurantLink}${data?.first_name}_restaurantimg_${data?.restaurant_image[0].name}`
+            } else {
+                data.restaurant_image = ''
+            }
+        }
+        else {          // for edit
+            if (data?.profile_pic != props?.data?.profile_pic) {
+                await ImageUpload(data?.profile_pic[0], "restaurant", "profileimg", data?.first_name)
+                data.profile_pic = `${restaurantLink}${data?.first_name}_profileimg_${data?.profile_pic[0].name}`
+            } else {
+                data.profile_pic = props?.data?.profile_pic
+            }
+            if (data?.restaurant_image != props?.data?.restaurant_image) {
+                await ImageUpload(data?.restaurant_image[0], "restaurant", "restaurantimg", data?.first_name)
+                data.restaurant_image = `${restaurantLink}${data?.first_name}_restaurantimg_${data?.restaurant_image[0].name}`
+            } else {
+                data.restaurant_image = props?.data?.restaurant_image
+            }
+        }
         if (props?.button == 'edit') {
             let updateData = {
                 ...data,
                 'created_by': props?.id,
-                "vendor_type": 'restaurant'
+                // "vendor_type": 'restaurant'
             }
             editRestaurant(props?.id, updateData).then(res => {
                 if (res?.status == 'success') {
@@ -42,7 +71,7 @@ export default function AddRestaurant(props) {
             let updateData = {
                 ...data,
                 'created_by': props?.id,
-                "vendor_type": 'restaurant'
+                // "vendor_type": 'restaurant'
             }
             addRestaurant(updateData).then(res => {
                 if (res.status == 'success') {
