@@ -10,6 +10,7 @@ import { getRestarant } from '../../../api';
 import { useForm } from 'react-hook-form';
 import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
 import axios from 'axios';
+import AddItem from '../../../components/Modals/Resturant/AddItem';
 
 
 
@@ -134,7 +135,8 @@ export default function Restaurant() {
                     <div className="">
                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>  Restaurent Details</h1>
                     </div>
-                    <AddRestaurant title='Add Restaurant' getAllRestaurant={getAllRestaurant} id={user?.userid} />
+                    {/* <AddRestaurant title='Add Restaurant' getAllRestaurant={getAllRestaurant} id={user?.userid} /> */}
+                    <AddItem title='Add Item' />
                 </div>
                 {
                     <Table columns={columns} data={data} />
