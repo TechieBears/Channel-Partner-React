@@ -103,7 +103,6 @@ const ProjectRoutes = () => {
                                         <Route path="/subadmin" element={<SubAdmin />} />
                                         <Route path="/subadmin/subadmin-detail/:id" element={<SubAdminDetail />} />
                                         <Route path="/settings" element={<Settings />} />
-                                        {/* <Route path='/product-list/product-details/:id' element={<ViewProduct />} /> */}
                                     </> :
                                     user?.role == 'seller' ?
                                         <>
@@ -112,7 +111,6 @@ const ProjectRoutes = () => {
                                             <Route path='/vendor-orders' element={<VendorOrders />} />
                                             <Route path='/vendor-orders/order-detail/:id' element={<ViewOrder />} />
                                             <Route path='/product-list' element={<VendorProduct />} />
-                                            {/* <Route path='/product-list/product-details/:id' element={<ViewProduct />} /> */}
                                             <Route path='/product-list/product-details/:id' element={<ViewAdminProduct />} />
                                             <Route path='/complaints' element={<Complaints />} />
                                         </> :
@@ -128,14 +126,6 @@ const ProjectRoutes = () => {
                                             <Route path='/resturants/restaurant-detail/:id' element={<RestaurantDetail />} />
                                             <Route path='/delivery' element={<DeliveryBoy />} />
                                             <Route path="/drivers/driver-detail/:id" element={<DriverDetail />} />
-
-                                            {/* <Route path='/delivery' element={<Drivers />} /> */}
-                                            {/* <Route path='/product-list/product-details/:id' element={<ViewAdminProduct />} /> */}
-                                            {/* <Route path='/franchiesee-orders' element={<FranchiseeOrder />} /> */}
-                                            {/* <Route path='/vendors' element={<Vendors />} /> */}
-                                            {/* <Route path='/franchise-resturants' element={<FranchiseRestaurent />} /> */}
-                                            {/* <Route path='/delivery' element={<DeliveryBoy />} /> */}
-                                            {/* <Route path='/menu' element={<FranchiseMenu />} /> */}
                                         </>
                                             : ''}
                             </Routes>
