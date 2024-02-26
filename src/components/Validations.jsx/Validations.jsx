@@ -36,3 +36,10 @@ export const validateGST = (value) => {
 
     return 'Invalid GST number*';
 };
+
+export const validateCommision = (value) => {
+    if (isNaN(value) || value.toString().length > 2) {
+        return "Please enter a number with maximum 2 digits";
+    }
+    return true;
+};
