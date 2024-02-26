@@ -22,7 +22,6 @@ import Menu from '../src/pages/Admin/Menu/Menu';
 import RestaurantDetail from '../src/pages/Restaurants/RestaurantDetail/RestaurantDetail';
 import Drivers from '../src/pages/Admin/Drivers/Drivers';
 import Order from '../src/pages/Admin/Order/Order';
-import Banner from '../src/pages/Admin/Banner/Banner';
 import Reports from '../src/pages/Admin/Reports/Reports';
 import CategoryDetail from '../src/pages/Admin/Menu/CategoryDetail/CategoryDetail';
 import SubAdmin from '../src/pages/Admin/SubAdmin/SubAdmin';
@@ -47,6 +46,8 @@ import DriverDetail from '../src/pages/Admin/Drivers/DriverDetail';
 import FranchiseMenu from '../src/pages/Franchisee/Menu/Menu';
 import FranchiseRestaurent from '../src/pages/Franchisee/Resturants/Resturant';
 import ViewAdminProduct from '../src/pages/Admin/Menu/AdminProduct/ViewAdminProduct';
+import DashboardBannerPanel from '../src/pages/Admin/Master/DashboardAssets/DashAssetsPanel/DashboardBannerPanel';
+import DashboardPromotions from '../src/pages/Admin/Master/DashboardPromotions';
 
 
 
@@ -90,11 +91,11 @@ const ProjectRoutes = () => {
                                         <Route path="/menu/category-detail/:id" element={<CategoryDetail />} />
                                         <Route path="/dashboard/:id" element={<DashboardView />} />
                                         <Route path="/DashboardAssets" element={<DashboardAssets />} />
-                                        <Route path="/promotions" element={<Promotions />} />
+                                        <Route path="/promotions" element={<DashboardPromotions />} />
                                         <Route path="/drivers" element={<Drivers />} />
                                         <Route path="/drivers/driver-detail/:id" element={<DriverDetail />} />
                                         <Route path="/orders" element={<Order />} />
-                                        <Route path="/banners" element={<Banner />} />
+                                        <Route path="/banners" element={<DashboardBannerPanel />} />
                                         <Route path="/user" element={<User />} />
                                         <Route path="/user/:id" element={<UserView />} />
                                         <Route path="/profile" element={<UserProfile />} />
@@ -107,6 +108,7 @@ const ProjectRoutes = () => {
                                     user?.role == 'seller' ?
                                         <>
                                             <Route path='/' element={<VendorDashbaord />} />
+                                            <Route path="/profile" element={<UserProfile />} />
                                             <Route path='/vendor-orders' element={<VendorOrders />} />
                                             <Route path='/vendor-orders/order-detail/:id' element={<ViewOrder />} />
                                             <Route path='/product-list' element={<VendorProduct />} />
@@ -116,6 +118,7 @@ const ProjectRoutes = () => {
                                         </> :
                                         user?.role == 'franchise' ? <>
                                             <Route path='/' element={<FranchiseeDashboard />} />
+                                            <Route path="/profile" element={<UserProfile />} />
                                             <Route path='/analytics' element={<FranchiseeDashboard />} />
                                             <Route path='/menu' element={<Menu />} />
                                             <Route path='/orders' element={<Order />} />

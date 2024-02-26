@@ -48,11 +48,11 @@ export const Admin = [
         icon: <Book size="24" />,
         link: '/orders',
     },
-    // {
-    //     title: 'Banners',
-    //     icon: <TicketDiscount size="24" />,
-    //     link: '/DashboardAssets',
-    // },
+    {
+        title: 'Banners',
+        icon: <TicketDiscount size="24" />,
+        link: '/DashboardAssets',
+    },
     {
         title: 'Promotions',
         icon: <Megaphone size="24" />,
@@ -107,16 +107,16 @@ export const Seller = [
     //     icon: <ShoppingCart size="24" />,
     //     link: '/market-place',
     // },
-    {
-        title: 'Support',
-        icon: <Headphone size="24" />,
-        link: '/support',
-    },
-    {
-        title: 'Complaints',
-        icon: <AlertTriangle size="24" />,
-        link: '/complaints',
-    },
+    // {
+    //     title: 'Support',
+    //     icon: <Headphone size="24" />,
+    //     link: '/support',
+    // },
+    // {
+    //     title: 'Complaints',
+    //     icon: <AlertTriangle size="24" />,
+    //     link: '/complaints',
+    // },
 ]
 
 

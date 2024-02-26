@@ -2,7 +2,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../utils/CustomClass';
 import { useForm } from 'react-hook-form';
-import { editUser, getDeliveryBoys, createDeliveryBoy } from '../../../api';
+import { editUser, createDeliveryBoy, editDriverBoy } from '../../../api';
 import { Edit } from 'iconsax-react';
 import { useDispatch, useSelector } from 'react-redux';
 import Error from '../../Errors/Error';
@@ -12,34 +12,18 @@ import { ImageUpload, deliveryBoylink } from '../../../env';
 import { setFranchise } from "../../../redux/Slices/masterSlice";
 import "../../../redux/Slices/loginSlice";
 import { GetFranchisee } from "../../../api";
+import { validateEmail, validatePIN, validatePhoneNumber } from '../../Validations.jsx/Validations';
 
 
 
 
 function AddDriverFrom(props) {
-    console.log('props = ', props);
-
     const [isOpen, setIsOpen] = useState(false);
     const [loader, setLoader] = useState(false);
-    const getFranchiseDetail = useSelector((state) => state?.user?.FranchiseeDetails);
-    // console.log('getFranchiseDetail', getFranchiseDetail)
-
     const Franchisee = useSelector((state) => state?.master?.Franchise);
-    // console.log('franchisee Table data = ', Franchisee);
-
-    // const RoleIs = useSelector((state) => state?.user?.roleIs);
-    // console.log('RoleIs = ', RoleIs);
-
     const toggle = () => setIsOpen(!isOpen);
     const user = useSelector((state) => state?.user?.FranchiseeDetails);
-
-    // const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails)
-    // console.log('Logged Details = ', LoggedDetails);
-
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
-    // console.log('Logged User Details = ', LoggedUserDetails);
-
-
     // // ========================= fetch data from api ==============================
     const FranchiseeDetails = () => {
         try {
@@ -50,14 +34,14 @@ function AddDriverFrom(props) {
             console.log(error);
         }
     };
-
-    useEffect(() => {
-        FranchiseeDetails()
-    }, [])
-
+    // ============================== close modals ======================================
+    const closeBtn = () => {
+        toggle();
+        reset();
+        setLoader(false);
+    }
 
     const handleFileChange = (event) => {
-        console.log("file", event.target.files[0]);
         const file = event.target.files[0];
         if (file.size > 100 * 1024 * 1024) {
             event.target.value = null;
@@ -75,50 +59,6 @@ function AddDriverFrom(props) {
         setValue,
         formState: { errors },
     } = useForm();
-    // ============================ file uplaod watch ===============================
-    const role = watch('role')
-    const fssai_watch = watch('fssai_url')
-    const gst_watch = watch('gst_url')
-    const odoc_watch = watch('odoc_url')
-    const pan_watch = watch('pan_url')
-    const pincodeWatch = watch('pincode')
-
-    // ===================== Custom validation function for a 6-digit PIN code ================
-    const validatePIN = (value) => {
-        const pattern = /^[0-9]{6}$/;
-        if (pattern.test(value)) {
-            return true;
-        }
-        return 'Pincode must be 6-digit';
-    };
-
-    // =================== Custom validation function for a 10-digit US phone number ============
-    const validatePhoneNumber = (value) => {
-        const pattern = /^\d{10}$/;
-        if (pattern.test(value)) {
-            return true;
-        }
-        return 'Phone Number must be 10-digit';
-    };
-    // ==================== Custom validation function for email ========================
-    const validateEmail = (value) => {
-        const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-        if (emailPattern.test(value)) {
-            return true;
-        }
-        return 'Invalid email address';
-    };
-    const validateGST = (value) => {
-        // GST pattern for India
-        const gstPattern = /^\d{2}[A-Z]{5}\d{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$/;
-
-        if (gstPattern.test(value)) {
-            return true;
-        }
-
-        return 'Invalid GST number*';
-    };
-
 
     // ============================= form submiting ======================================
     const onSubmit = async (data) => {
@@ -147,21 +87,21 @@ function AddDriverFrom(props) {
         else {          // for edit
             if (data?.bank_passbook.length != props?.data.bank_passbook) {
                 await ImageUpload(data?.bank_passbook[0], "deliveryboy", "BankPassbook", data?.first_name)
-                data.bank_passbook = `${deliveryBoylink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
+                data.bank_passbook = `${deliveryBoylink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0]?.name}`
             } else {
                 data.bank_passbook = props?.data.bank_passbook
             }
             if (data?.video_url.length != props?.data?.video_url) {
                 await ImageUpload(data?.video_url[0], "deliveryboy", "AddressProof", data?.first_name)
-                data.video_url = `${deliveryBoylink}${data?.first_name}_AddressProof_${data?.video_url[0].name}`
+                data.video_url = `${deliveryBoylink}${data?.first_name}_AddressProof_${data?.video_url[0]?.name}`
             } else {
                 data.video_url = props?.data?.video_url
             }
-            if (data?.profile_pic.length != props?.data?.profile_pic) {
+            if (data?.profile_pic.length != props?.data?.user?.profile_pic) {
                 await ImageUpload(data?.profile_pic[0], "deliveryboy", "ProfileImage", data?.first_name)
-                data.profile_pic = `${deliveryBoylink}${data?.first_name}_ProfileImage_${data?.profile_pic[0].name}`
+                data.profile_pic = `${deliveryBoylink}${data?.first_name}_ProfileImage_${data?.profile_pic[0]?.name}`
             } else {
-                data.profile_pic = props?.data?.profile_pic
+                data.profile_pic = props?.data?.user?.profile_pic
             }
         }
         if (props.button != 'edit') {   // for create
@@ -169,13 +109,13 @@ function AddDriverFrom(props) {
                 // setLoader(true)
                 if (data.job_type === "Part Time (4-5 Hours/Day)") {
                     data.job_type = {
-                        subTitle: "4-5 hours per day",
-                        title: "Part Time"
+                        "subTitle": "4-5 hours per day",
+                        "title": "Part Time"
                     };
                 } else if (data.job_type === "Full Time (9 Hours/Day)") {
                     data.job_type = {
-                        subTitle: "9 hours per day",
-                        title: "Full Time"
+                        "subTitle": "9 hours per day",
+                        "title": "Full Time"
                     };
                 }
                 if (data.shift === "Morning 9AM to Afternoon 1PM 4 Hours") {
@@ -195,7 +135,7 @@ function AddDriverFrom(props) {
                     const additionalPayload = { created_by: user?.user?.id };
                     requestData = { ...data, ...additionalPayload };
                 } else if (LoggedUserDetails?.role == 'admin') {
-                    requestData = { ...data };
+                    requestData = { ...data, created_by: user?.user?.id };
                 }
 
                 const response = await createDeliveryBoy(requestData);
@@ -218,7 +158,7 @@ function AddDriverFrom(props) {
             }
         } else {            // for edit
             setLoader(true)
-            const response = await editUser(props?.data?.user?.id, data)
+            const response = await editDriverBoy(props?.data?.user?.id, data)
             if (response?.message == "franchise edited successfully") {
                 setTimeout(() => {
                     toggle();
@@ -232,14 +172,6 @@ function AddDriverFrom(props) {
         }
     }
 
-
-
-    // ============================== close modals ======================================
-    const closeBtn = () => {
-        toggle();
-        reset();
-        setLoader(false);
-    }
     // ============================== Reseting data ======================================
     const fillData = () => {
         reset({
@@ -257,35 +189,36 @@ function AddDriverFrom(props) {
             "driver_license": props?.data?.driver_license,
             "vehicle_rc": props?.data?.vehicle_rc,
             "bank_name": props?.data?.bank_name,
-            "accounr_number": props?.data?.accounr_number,
+            "account_number": props?.data?.account_number,
             "ifsc_code": props?.data?.ifsc_code,
             "adhar_card": props?.data?.adhar_card,
             "pan_card": props?.data?.pan_card,
-            // 'marital_status': props?.data?.user?.marital_status
+            "week_off": props?.data?.week_off,
+            // "shift": shift?.title,
+            // "job_type": jobType?.title,
+            "created_by": props?.data?.created_by?.id,
         })
+        const job_type_json = JSON.parse(props?.data?.job_type.replace(/'/g, '"'));
+        console.log(job_type_json)
+        if (job_type_json?.subTitle == "4-5 hours per day") {
+            setValue('job_type', 'Part Time (4-5 Hours/Day)')
+        } else {
+            setValue('job_type', 'Full Time (9 Hours/Day)')
+        }
+        const shift_type = JSON.parse(props?.data?.job_type.replace(/'/g, '"'));
+        console.log(shift_type)
+        if (shift_type?.subTitle == "Morning 9AM to Afternoon 1PM") {
+            setValue('shift', 'Morning 9AM to Afternoon 1PM 4 Hours')
+        } else {
+            setValue('shift', 'Afternoon 4PM to Evening 8PM 4 Hours')
+        }
     }
-
-    // useMemo(() => {
-    //     if (pincodeWatch != undefined && pincodeWatch?.length == 6) {
-    //         const pincode = query?.search(pincodeWatch);
-    //         if (pincode.length > 0) {
-    //             setValue('city', pincode[0]?.city)
-    //             setValue('state', pincode[0]?.state)
-    //         } else {
-    //             setValue('city', '')
-    //             setValue('state', '');
-    //         }
-
-    //     } else (
-    //         setValue('city', ''),
-    //         setValue('state', '')
-    //     )
-    // }, [pincodeWatch])
 
     useEffect(() => {
         if (props.button == "edit") {
             fillData()
         }
+        FranchiseeDetails()
     }, [])
 
     return (
@@ -374,8 +307,8 @@ function AddDriverFrom(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("profile_pic", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data.profile_pic != '' && props?.data.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.data?.profile_pic?.split('/').pop()}
+                                                        {props?.button == 'edit' && props?.data?.user?.profile_pic != '' && props?.data?.user?.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.data?.user?.profile_pic?.split('/').pop()}
                                                         </label>}
                                                         {errors.profile_pic && <Error title='Profile Image is required*' />}
                                                     </div>
@@ -385,7 +318,7 @@ function AddDriverFrom(props) {
                                                             <label className={labelClass}>Select Franchisee*</label>
                                                             <select
                                                                 className={inputClass}
-                                                                {...register("franchisee_id", { required: true })}
+                                                                {...register("created_by", { required: true })}
                                                             >
                                                                 <option value="" selected>--Select Franchisee--</option>
                                                                 {Franchisee?.map(franchisee => (
@@ -394,7 +327,7 @@ function AddDriverFrom(props) {
                                                                     </option>
                                                                 ))}
                                                             </select>
-                                                            {errors.franchisee_id && (
+                                                            {errors.created_by && (
                                                                 <Error title="Franchisee is Required*" />
                                                             )}
                                                         </div>
@@ -410,7 +343,8 @@ function AddDriverFrom(props) {
                                                             className={inputClass}
                                                             {...register('email', { required: true, validate: validateEmail })}
                                                         />
-                                                        {errors.email && <Error title="Email is required*" />}
+                                                        {errors.email && <Error title={errors?.email?.message} />
+                                                        }
                                                     </div>
                                                     {/* <div className="">
                                                         <label className={labelClass}>
@@ -445,9 +379,9 @@ function AddDriverFrom(props) {
                                                             maxLength={6}
                                                             placeholder='Pincode'
                                                             className={inputClass}
-                                                            {...register('pincode', { required: true, })}
+                                                            {...register('pincode', { required: true, validate: validatePIN })}
                                                         />
-                                                        {errors.pincode && <Error title="Pincode is required*" />}
+                                                        {errors.pincode && <Error title={errors?.pincode?.message} />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -484,9 +418,9 @@ function AddDriverFrom(props) {
                                                             maxLength={10}
                                                             placeholder='+91'
                                                             className={inputClass}
-                                                            {...register('phone_no', { required: true, })}
+                                                            {...register('phone_no', { required: true, validate: validatePhoneNumber })}
                                                         />
-                                                        {errors.phone_no && <Error title="Phone number is required*" />}
+                                                        {errors.phone_no && <Error title={errors?.phone_no?.message} />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -634,11 +568,9 @@ function AddDriverFrom(props) {
                                                             {...register("video_url", { required: props.button === 'edit' ? false : true })}
                                                             onChange={handleFileChange}
                                                         />
-                                                        {props?.button === 'edit' && props?.data.video_url && (
-                                                            <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                                {props?.data?.video_url?.name}
-                                                            </label>
-                                                        )}
+                                                        {props?.button == 'edit' && props?.data?.video_url != '' && props?.data?.video_url != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.data?.video_url?.split('/').pop()}
+                                                        </label>}
                                                         {errors.video_url && <Error title='Video file is required*' />}
                                                     </div>
                                                 </div>

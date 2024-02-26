@@ -94,7 +94,7 @@ const SellerLogin = () => {
                                 Hello, <span className='text-sky-400'>Again!</span>
                             </h2>
                             <h5 className="text-sm font-medium text-gray-400 lg:mx-3 sm:text-base font-tbPop">
-                                Please SignIn to Dashboard!
+                                Please SignIn To Seller Dashboard!
                             </h5>
                         </div>
 
@@ -170,7 +170,7 @@ const SellerLogin = () => {
                                     Sign in
                                 </button>}
                             </div>
-                            <div className=''><NavLink className='w-full' to='/admin'>Sign-in as a <span className='text-sky-400'>Admin</span></NavLink></div>
+                            {/* <div className=''><NavLink className='w-full' to='/admin'>Sign-in as a <span className='text-sky-400'>Admin</span></NavLink></div> */}
                         </div>
                     </div>
                 </form>

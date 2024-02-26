@@ -20,13 +20,6 @@ export default function VendorDetails() {
     const [products, setProducts] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedSubCategory, setSelectedSubCategory] = useState([]);
-    const [mondayOn, setMondayOn] = useState(true);
-    const [tuesdayOn, setTuesdayOn] = useState(true);
-    const [wedenesdayOn, setWedenesdayOn] = useState(true);
-    const [thursdayOn, setThursdayOn] = useState(true);
-    const [fridayOn, setFridayOn] = useState(true);
-    const [saturdyaOn, setSaturdyaOn] = useState(true);
-    const [sundayOn, setSundayOn] = useState(true);
     const [isRecommanded, setIsRecommanded] = useState(true);
     const location = useLocation();
     const data = location.state;
@@ -95,12 +88,12 @@ export default function VendorDetails() {
     }, [])
     return (
         <>
+            <button className=' flex m-4 text-black' onClick={() => navigate(-1)}>
+                <ArrowLeft className='text-black' /> Back
+            </button>
             <div className='relative'>
-                <button className='absolute flex mt-4 text-white border-2 rounded-full left-3' onClick={() => navigate(-1)}>
-                    <ArrowLeft className='text-white' /> Back
-                </button>
                 <img src={CoverPic} className='w-full h-60' alt='cover-pic' />
-                <img src={data?.user?.profile_pic == null || data?.user?.profile_pic == undefined || data?.user?.profile_pic == '' ? ProfilePic : data?.user?.profile_pic } alt='profile-pic' className='absolute w-1/12 border-4 rounded-full border-sky-400 left-14 bottom-1 top-44' />
+                <img src={data?.user?.profile_pic == null || data?.user?.profile_pic == undefined || data?.user?.profile_pic == '' ? ProfilePic : data?.user?.profile_pic} alt='profile-pic' className='absolute w-1/12 border-4 rounded-full border-sky-400 left-14 bottom-1 top-44' />
             </div>
             <div className='p-4 space-y-4'>
                 <div className='my-10'>
@@ -239,7 +232,7 @@ export default function VendorDetails() {
                                     <div className='p-2 border-2 border-gray-200'>
                                         <div className='grid grid-cols-4 mx-2 mt-2'>
                                             <h4 className='text-xl font-semibold'>Shop Info.</h4>
-                                            <div className="flex items-center space-x-4">
+                                            {/* <div className="flex items-center space-x-4">
                                                 <h6>Is Recommanded</h6>
                                                 <Switch checked={isRecommanded} onChange={() => setIsRecommanded(!isRecommanded)} />
                                             </div>
@@ -250,7 +243,7 @@ export default function VendorDetails() {
                                             <div className="flex items-center space-x-4">
                                                 <h6>Is Active</h6>
                                                 <Switch checked={data?.is_activated} onChange={() => setIsRecommanded(!isRecommanded)} />
-                                            </div>
+                                            </div> */}
                                         </div>
 
                                         <div className="p-4 overflow-y-scroll scrollbars " >
@@ -344,11 +337,11 @@ export default function VendorDetails() {
                                                 </div>
                                                 <div className="">
                                                     <label className={labelClass}>
-                                                       Fssai License Number
+                                                        Fssai License Number
                                                     </label>
                                                     <h3
                                                         className={inputClass}
-                                                    >{data?.fssai_license == null || data?.fssai_license == undefined || data?.fssai_license == '' ? '-----' : data?.fssai_license }</h3>
+                                                    >{data?.fssai_license == null || data?.fssai_license == undefined || data?.fssai_license == '' ? '-----' : data?.fssai_license}</h3>
                                                 </div>
                                             </div>
                                         </div>

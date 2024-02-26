@@ -15,12 +15,8 @@ export default function SubCategoryForm(props) {
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const categories = useSelector((state) => state?.master?.Category);
-  console.log('categories', categories)
-
   const { register, handleSubmit, control, watch, reset, formState: { errors } } = useForm();
-
   const dispatch = useDispatch();
-
   const toggle = async () => {
     setIsOpen(!isOpen);
   };
@@ -39,7 +35,6 @@ export default function SubCategoryForm(props) {
 
   // ============================ submit data  =====================================
   const onSubmit = async (data) => {
-    console.log("data", data);
     if (props?.button !== "edit") {
       try {
         if (data.subcat_image.length != 0) {

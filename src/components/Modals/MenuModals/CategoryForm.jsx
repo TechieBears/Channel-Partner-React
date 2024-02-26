@@ -47,6 +47,7 @@ export default function CategoryForm(props) {
 
   // ============================ submit data  =====================================
   const onSubmit = async (data) => {
+    console.log('data = ', data)
     if (props?.button !== "edit") {
       try {
         if (data.category_image.length != 0) {

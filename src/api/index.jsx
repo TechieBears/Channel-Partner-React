@@ -48,7 +48,6 @@ export const getSubCategory = async () => {
     const url = `${environment.baseUrl}app/get-subcategory`;
     try {
         const response = await axios.get(url)
-        console.log('subcategory data == ', response.data.data);
         return response.data.data
     }
     catch (err) {
@@ -62,7 +61,6 @@ export const getProducts = async () => {
     const url = `${environment.baseUrl}app/product-list`;
     try {
         const response = await axios.get(url)
-        console.log('products data == ', response.data);
         return response.data
     }
     catch (err) {
@@ -75,7 +73,6 @@ export const getProductsAdmin = async () => {
     const url = `${environment.baseUrl}vendor/add_shop_product`;
     try {
         const response = await axios.get(url)
-        console.log('products data == ', response.data);
         return response.data
     }
     catch (err) {
@@ -90,7 +87,6 @@ export const getSubCategorybyCatId = async (id) => {
     const url = `${environment.baseUrl}app/get-subcategory/${id}`;
     try {
         const response = await axios.get(url)
-        console.log('data == ', response.data);
         return response.data
     }
     catch (err) {
@@ -104,7 +100,6 @@ export const getProductsbySubCat = async (id) => {
     const url = `${environment.baseUrl}app/get-subcategoryproducts/${id}`;
     try {
         const response = await axios.get(url)
-        console.log('products = ', response.data);
         return response.data
     }
     catch (err) {
@@ -176,7 +171,6 @@ export const getAllOrders = async (id) => {
     const url = `${environment.baseUrl}app/get_orderedetails`;
     try {
         const response = await axios.get(url)
-        console.log('orders = ', response.data.data);
         return response.data.data
     }
     catch (err) {
@@ -299,8 +293,6 @@ export const getRestarant = async () => {
     const url = `${environment.baseUrl}vendor/create_restaurant`;
     try {
         const response = await axios.get(url);
-
-        console.log('response.data ========== restaurant', response.data);
         return response.data;
     }
     catch (err) {
@@ -1230,7 +1222,7 @@ export const editHomeBanners = async (id, data) => {
 };
 
 export const delHomeBanners = async (id) => {
-    const url = `${environment.baseUrl}edit-banner/${id}`;
+    const url = `${environment.baseUrl}app/edithome-slides/${id}`;
     try {
         const response = await axios.delete(url)
         return response.data
@@ -1239,6 +1231,57 @@ export const delHomeBanners = async (id) => {
         console.log(err);
     }
 };
+
+
+//  ------------ Promotions API Start-------------
+export const addHomePromotion = async (data) => {
+    const url = `${environment.baseUrl}app/get-promotions`;
+    try {
+        const response = await axios.get(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+export const postHomePromotion = async (data) => {
+    const url = `${environment.baseUrl}app/get-promotions`;
+    try {
+        const response = await axios.post(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+export const editHomePromotion = async (id, data) => {
+    const url = `${environment.baseUrl}app/editpromotions/${id}`;
+    try {
+        const response = await axios.put(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+export const delHomePromotion = async (id) => {
+    const url = `${environment.baseUrl}app/editpromotions/${id}`;
+    try {
+        const response = await axios.delete(url)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+//  ------------ Promotions API Ends-------------
+
+
+
+
+
+
 
 export const addPolicy = async (data) => {
     const url = `${environment.baseUrl}app/privacy-policy`
@@ -1304,17 +1347,17 @@ export const createDeliveryBoy = async (data) => {
     }
 }
 
-export const getDeliveryBoy = async (data) => {
-    const url = `${environment.baseUrl}delivery/create_deliveryboy`
+export const editDriverBoy = async (id, data) => {
+    const url = `${environment.baseUrl}delivery/edit-deliveryboy/${id}`
     try {
-        const response = await axios.get(url, data);
+        const response = await axios.post(url, data);
         return response.data;
     } catch (error) {
         console.log(error)
     }
 }
 
-export const getDeliveryBoys = async (data) => {
+export const getDeliveryBoy = async (data) => {
     const url = `${environment.baseUrl}delivery/create_deliveryboy`
     try {
         const response = await axios.get(url, data);

@@ -7,7 +7,7 @@ import { setLoggedUser, setLoggedUserDetails, setRoleIs, setFranchiseeDetails } 
 import LoadBox from '../../components/Loader/LoadBox';
 import { toast } from 'react-toastify';
 import Error from '../../components/Errors/Error';
-import { login , getFranchiseDetails} from '../../api/index';
+import { login, getFranchiseDetails } from '../../api/index';
 import { useDispatch, useSelector } from "react-redux";
 
 
@@ -42,13 +42,13 @@ const Login = () => {
                     dispatch(setRoleIs(res?.is_subadmin))
                     setLoader(false)
                     dispatch(setLoggedUser(true))
-                    if(res?.userid && res?.role == 'franchise'){
+                    if (res?.userid && res?.role == 'franchise') {
                         getFranchiseDetailsById(res?.userid);
                     }
-                    } else {
-                        setLoader(false)
-                        toast.error(res?.message)
-                    }
+                } else {
+                    setLoader(false)
+                    toast.error(res?.message)
+                }
             })
         } catch (error) {
             setLoader(false)
@@ -89,11 +89,11 @@ const Login = () => {
                 <form onSubmit={handleSubmit(onSubmit)} >
                     <div className="w-[20rem] md:w-[22rem] lg:w-[27rem] xl:w-[27rem] md:p-3 py-5 space-y-3">
                         <div className="">
-                            <h2 className="text-xl font-bold tracking-tight text-black lg:mx-3 sm:text-3xl font-tbPop">
-                                Hello, <span className='text-sky-400'>Again!</span>
+                            <h2 className="text-xl font-bold tracking-tight text-black lg:mx-3 sm:text-3xl font-tbPop ">
+                                Welcome, <span className='text-sky-400'>Admin!</span>
                             </h2>
                             <h5 className="text-sm font-medium text-gray-400 lg:mx-3 sm:text-base font-tbPop">
-                                Please SignIn to Dashboard!
+                                Please SignIn to Admin Dashboard!
                             </h5>
                         </div>
 

@@ -10,6 +10,7 @@ import AddProduct from '../../../components/Modals/Vendors/AddProduct';
 import { Edit, Eye, Trash } from 'iconsax-react';
 import ViewProduct from '../../../components/Modals/Vendors/ViewProduct';
 import { getAllSeller, getAllShopProduct } from '../../../api';
+import Switch from 'react-js-switch';
 
 const VendorProduct = () => {
     const [sellers, setSellers] = useState([]);
@@ -52,41 +53,6 @@ const VendorProduct = () => {
     };
 
     //======================= Table =======================
-
-    const restaurantData = [
-        {
-            "productId": "001",
-            "name": "Product A",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-            "category": "Breakfast",
-            "subcategory": "South Indian",
-            "createdDate": "2024-02-12",
-            "MRP": 50,
-            "quantity": 100
-        },
-        {
-            "productId": "002",
-            "name": "Product B",
-            "description": "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-            "category": "Lunch",
-            "subcategory": "Thali",
-            "createdDate": "2024-02-10",
-            "MRP": 100,
-            "quantity": 80
-        },
-        {
-            "productId": "003",
-            "name": "Product C",
-            "description": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-            "category": "Drinks",
-            "subcategory": "Soft Drink",
-            "createdDate": "2024-02-08",
-            "MRP": 75,
-            "quantity": 120
-        }
-    ];
-
-
     const action = (row) => <div className='flex space-x-2'>
         <Link to={`/product-list/product-details/${row?.product_id}`} state={row} className='items-center p-1 bg-sky-100 rounded-xl hover:bg-sky-200'>
             <Eye size={24} className='text-sky-400' />
@@ -98,8 +64,6 @@ const VendorProduct = () => {
         </button>
     </div>
 
-
-
     const representativeBodyTemplate = (row) => {
         return (
             <div className="rounded-full w-11 h-11">
@@ -108,6 +72,26 @@ const VendorProduct = () => {
         );
     };
 
+    const adminVerification = (row) =>
+    (<div className="flex items-center justify-center gap-2">
+        <Switch
+            value={row?.product_isverified_byadmin}
+            disabled={true}
+            size={50}
+            backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
+            borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
+    </div>)
+
+
+    const franchiseVerification = (row) =>
+    (<div className="flex items-center justify-center gap-2">
+        <Switch
+            value={row?.product_isverified_byfranchise}
+            disabled={true}
+            size={50}
+            backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
+            borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
+    </div>)
 
 
     const shopColumns = [
@@ -120,9 +104,11 @@ const VendorProduct = () => {
         { field: 'product_available_qty', header: 'Quantity', sortable: true },
         { field: 'product_brand', header: 'Brand', sortable: true },
         { field: 'product_shelflife', header: 'Self Life', sortable: true },
-        { field: 'product_description', header: 'Description', sortable: true },
         { field: 'product_Manufacturer_Name', header: 'Manufacturer Name', sortable: true },
         { field: 'product_country_of_origin', header: 'Country Of Origin', sortable: true },
+        { field: 'product_country_of_origin', header: 'Status', body: (row) => <h6>{row?.product_isactive == true ? 'Available' : 'Out Of Stock'}</h6>, sortable: true },
+        { field: 'product_isverified_byadmin', header: 'Admin Verification', body: adminVerification, sortable: true },
+        { field: 'product_isverified_byfranchise', header: 'Franchise Verification', body: franchiseVerification, sortable: true },
         { filed: 'action', header: 'Action', body: action, sortable: true },
     ]
 
@@ -214,12 +200,6 @@ const VendorProduct = () => {
                 </div>
                 <div className='mt-4'>
                     <Table data={shopProducts} columns={shopColumns} />
-
-
-                    {/* {user?.isShop == true ? */}
-                    {/* // <Table data={shopProducts} columns={shopColumns} /> : */}
-                    {/* // <Table data={restaurantData} columns={restaurantColumns} /> */}
-                    {/* } */}
                 </div>
             </div>
         </>
