@@ -23,11 +23,11 @@ export const Admin = [
         icon: <Bank size="24" />,
         link: '/vendors',
     },
-    // {
-    //     title: 'Resturants',
-    //     icon: <ChefHat />,
-    //     link: '/resturants',
-    // },
+    {
+        title: 'Resturants',
+        icon: <ChefHat />,
+        link: '/resturants',
+    },
     {
         title: 'Drivers',
         icon: <Bike size="24" />,
