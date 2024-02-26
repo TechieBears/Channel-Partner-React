@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import Table from '../../../../components/Table/Table';
 import { Link } from 'react-router-dom';
 import { Eye, Trash } from 'iconsax-react';
-import { editVendorProduct, getProductsByAdmin, VerifyProductAdmin } from '../../../../api';
+import { editVendorProduct, getProductsByAdmin, VerifyProductAdmin, makeFeatureProduct} from '../../../../api';
 import Switch from 'react-js-switch';
 import userImg from '../../../../assets/user.jpg';
 import AddProduct from '../../../../components/Modals/Vendors/AddProduct';
@@ -112,6 +112,27 @@ const AdminProduct = () => {
             }
         }
     }
+
+    const verifyFeatured = (row) => {
+        const payload = { productId: row?.product_id, featured : !row?.featured}
+        if (row?.markup_percentage != undefined || row?.markup_percentage != 0) {
+            try {
+                makeFeatureProduct(payload).then((form) => {
+                    console.log(payload)
+                    if (form.message == "product status changed to featured") {
+                        toast.success(form.message);
+                        getProducts()
+                    }
+                    else {
+                        console.log("err");
+                    }
+                })
+            }
+            catch (err) {
+                console.log(err);
+            }
+        }
+    };
     // =============================== verify user switch =============================
     const switchVerify = (row) => {
         return (
@@ -119,6 +140,22 @@ const AdminProduct = () => {
                 <Switch
                     value={row?.product_isverified_byadmin}
                     onChange={() => verifyActions(row)}
+                    disabled={row?.markup_percentage == 0 || row?.markup_percentage == undefined ? true : false}
+                    size={50}
+                    backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
+                    borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
+            </div>
+        )
+    }
+
+
+    // =============================== verify user switch =============================
+    const switchFeatured = (row) => {
+        return (
+            <div className="flex items-center justify-center gap-2 ">
+                <Switch
+                    value={row?.featured}
+                    onChange={() => verifyFeatured(row)}
                     disabled={row?.markup_percentage == 0 || row?.markup_percentage == undefined ? true : false}
                     size={50}
                     backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
@@ -153,6 +190,7 @@ const AdminProduct = () => {
         { field: 'product_country_of_origin', header: 'Country Of Origin', sortable: true },
         { filed: 'action', header: 'Action', body: action, sortable: true },
         { field: 'isverify', header: 'Admin Verify', body: switchVerify, sortable: true },
+        { field: 'featured', header: 'Featured Products', body: switchFeatured, sortable: true },
     ]
 
     const restaurantColumns = [

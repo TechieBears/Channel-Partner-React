@@ -258,7 +258,6 @@ function Drivers() {
                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>Drivers</h1>
                     </div>
                     <div className='flex gap-4'>
-                        {/* <DriverTipForm title='Driver Tip'/> */}
                         <AddDriverFrom title='Add Driver' DeliveryBoyDetails={DeliveryBoyDetails} />
                     </div>
                 </div>

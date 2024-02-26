@@ -387,6 +387,18 @@ export const VerifyProductAdmin = async (data) => {
 };
 
 //  ===================  Approve/Reject  Products for Admin Api ===============
+export const makeFeatureProduct = async (data) => {
+    const url = `${environment.baseUrl}vendor/make_product_featured`;
+    try {
+        const response = await axios.post(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+//  ===================  Approve/Reject  Products for Admin Api ===============
 export const ConfigurationCharges = async (id, data) => {
     const url = `${environment.baseUrl}app/edit_config_charges/${id}`;
     try {
@@ -1350,7 +1362,7 @@ export const createDeliveryBoy = async (data) => {
 export const editDriverBoy = async (id, data) => {
     const url = `${environment.baseUrl}delivery/edit-deliveryboy/${id}`
     try {
-        const response = await axios.post(url, data);
+        const response = await axios.put(url, data);
         return response.data;
     } catch (error) {
         console.log(error)

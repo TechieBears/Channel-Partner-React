@@ -18,11 +18,12 @@ import { validateEmail, validatePIN, validatePhoneNumber } from '../../Validatio
 
 
 function AddDriverFrom(props) {
-    // console.log('props', props)
+    console.log('props', props)
     const [isOpen, setIsOpen] = useState(false);
     const [loader, setLoader] = useState(false);
     const Franchisee = useSelector((state) => state?.master?.Franchise);
     const toggle = () => setIsOpen(!isOpen);
+    console.log('isOpen = ', isOpen)
     const user = useSelector((state) => state?.user?.FranchiseeDetails);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     // // ========================= fetch data from api ==============================
@@ -151,7 +152,6 @@ function AddDriverFrom(props) {
                 } else {
                     setLoader(false)
                     toast.error(response?.message);
-                    // console.log('failed to create Delivery boy')
                 }
             } catch (error) {
                 setLoader(false)
@@ -160,7 +160,7 @@ function AddDriverFrom(props) {
         } else {            // for edit
             setLoader(true)
             const response = await editDriverBoy(props?.data?.user?.id, data)
-            if (response?.message == "franchise edited successfully") {
+            if (response?.message == "delivery boy edited successfully") {
                 setTimeout(() => {
                     toggle();
                     setLoader(false)
@@ -168,59 +168,60 @@ function AddDriverFrom(props) {
                     toast.success(response?.message);
                 }, 1000);
             } else {
+                setLoader(false)
                 console.log('failed to update user')
             }
         }
     }
 
-    // ============================== Reseting data ======================================
-    const fillData = () => {
-        reset({
-            "first_name": props?.data?.user?.first_name,
-            "last_name": props?.data?.user?.last_name,
-            "email": props?.data?.user?.email,
-            "pincode": props?.data?.user?.pincode,
-            "phone_no": props?.data?.user?.phone_no,
-            "address": props?.data?.user?.address,
-            "state": props?.data?.user?.state,
-            "city": props?.data?.user?.city,
-            "date_of_birth": props?.data?.user?.date_of_birth,
-            "gender": props?.data?.user?.gender,
-            "vehicle_type": props?.data?.vehicle_type,
-            "driver_license": props?.data?.driver_license,
-            "vehicle_rc": props?.data?.vehicle_rc,
-            "bank_name": props?.data?.bank_name,
-            "account_number": props?.data?.account_number,
-            "ifsc_code": props?.data?.ifsc_code,
-            "adhar_card": props?.data?.adhar_card,
-            "pan_card": props?.data?.pan_card,
-            "week_off": props?.data?.week_off,
-            // "shift": shift?.title,
-            // "job_type": jobType?.title,
-            "created_by": props?.data?.created_by?.id,
-        })
-        const job_type_json = JSON.parse(props?.data?.job_type.replace(/'/g, '"'));
-        // console.log(job_type_json)
-        if (job_type_json?.subTitle == "4-5 hours per day") {
-            setValue('job_type', 'Part Time (4-5 Hours/Day)')
-        } else {
-            setValue('job_type', 'Full Time (9 Hours/Day)')
-        }
-        const shift_type = JSON.parse(props?.data?.job_type.replace(/'/g, '"'));
-        // console.log(shift_type)
-        if (shift_type?.subTitle == "Morning 9AM to Afternoon 1PM") {
-            setValue('shift', 'Morning 9AM to Afternoon 1PM 4 Hours')
-        } else {
-            setValue('shift', 'Afternoon 4PM to Evening 8PM 4 Hours')
-        }
+  // ============================== Reseting data ======================================
+  const fillData = () => {
+    reset({
+        "first_name": props?.data?.user?.first_name,
+        "last_name": props?.data?.user?.last_name,
+        "email": props?.data?.user?.email,
+        "pincode": props?.data?.user?.pincode,
+        "phone_no": props?.data?.user?.phone_no,
+        "address": props?.data?.user?.address,
+        "state": props?.data?.user?.state,
+        "city": props?.data?.user?.city,
+        "date_of_birth": props?.data?.user?.date_of_birth,
+        "gender": props?.data?.user?.gender,
+        "vehicle_type": props?.data?.vehicle_type,
+        "driver_license": props?.data?.driver_license,
+        "vehicle_rc": props?.data?.vehicle_rc,
+        "bank_name": props?.data?.bank_name,
+        "account_number": props?.data?.account_number,
+        "ifsc_code": props?.data?.ifsc_code,
+        "adhar_card": props?.data?.adhar_card,
+        "pan_card": props?.data?.pan_card,
+        "week_off": props?.data?.week_off,
+        // "shift": shift?.title,
+        // "job_type": jobType?.title,
+        "created_by": props?.data?.created_by?.id,
+    })
+    const job_type_json = JSON.parse(props?.data?.job_type.replace(/'/g, '"'));
+    console.log(job_type_json)
+    if (job_type_json?.subTitle == "4-5 hours per day") {
+        setValue('job_type', 'Part Time (4-5 Hours/Day)')
+    } else {
+        setValue('job_type', 'Full Time (9 Hours/Day)')
     }
+    const shift_type = JSON.parse(props?.data?.job_type.replace(/'/g, '"'));
+    console.log(shift_type)
+    if (shift_type?.subTitle == "Morning 9AM to Afternoon 1PM") {
+        setValue('shift', 'Morning 9AM to Afternoon 1PM 4 Hours')
+    } else {
+        setValue('shift', 'Afternoon 4PM to Evening 8PM 4 Hours')
+    }
+}
 
-    useEffect(() => {
-        if (props.button == "edit") {
-            fillData()
-        }
-        FranchiseeDetails()
-    }, [])
+useEffect(() => {
+    if (props.button == "edit") {
+        fillData()
+    }
+    FranchiseeDetails()
+ }, [])
 
     return (
         <>
@@ -321,7 +322,7 @@ function AddDriverFrom(props) {
                                                                 className={inputClass}
                                                                 {...register("created_by", { required: true })}
                                                             >
-                                                                <option value="" selected>--Select Franchisee--</option>
+                                                                <option value="">--Select Franchisee--</option>
                                                                 {Franchisee?.map(franchisee => (
                                                                     <option key={franchisee?.user?.id} value={franchisee?.user?.id}>
                                                                         {franchisee?.user?.first_name + " (" + franchisee?.user?.pincode + ")"}
@@ -489,7 +490,7 @@ function AddDriverFrom(props) {
                                                             className={inputClass}
                                                             {...register("vehicle_type", { required: true })}
                                                         >
-                                                            <option value="" selected>--Select Type--</option>
+                                                            <option value="">--Select Type--</option>
                                                             <option value="Cycle">Cycle</option>
                                                             <option value="Bike">Bike</option>
                                                             <option value="Electric Bike">Electric Bike</option>
@@ -517,7 +518,7 @@ function AddDriverFrom(props) {
                                                             className={inputClass}
                                                             {...register("job_type", { required: true })}
                                                         >
-                                                            <option value="" selected>--Select Type--</option>
+                                                            <option value="">--Select Type--</option>
                                                             <option value="Part Time (4-5 Hours/Day)">Part Time (4-5 Hours/Day)</option>
                                                             <option value="Full Time (9 Hours/Day)">Full Time (9 Hours/Day)</option>
                                                         </select>
@@ -531,7 +532,7 @@ function AddDriverFrom(props) {
                                                             className={inputClass}
                                                             {...register("shift", { required: true })}
                                                         >
-                                                            <option value="" selected>--Select Type--</option>
+                                                            <option value="">--Select Type--</option>
                                                             <option value="Morning 9AM to Afternoon 1PM 4 Hours">Morning 9AM to Afternoon 1PM (4 Hours)</option>
                                                             <option value="Afternoon 4PM to Evening 8PM 4 Hours">Afternoon 4PM to Evening 8PM (4 Hours)</option>
                                                         </select>
@@ -545,7 +546,7 @@ function AddDriverFrom(props) {
                                                             className={inputClass}
                                                             {...register("week_off", { required: true })}
                                                         >
-                                                            <option value="" selected>--Select Type--</option>
+                                                            <option value="">--Select Type--</option>
                                                             <option value="Monday">Monday</option>
                                                             <option value="Tuesday">Tuesday</option>
                                                             <option value="Wednesday">Wednesday</option>
