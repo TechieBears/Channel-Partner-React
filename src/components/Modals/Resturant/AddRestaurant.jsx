@@ -520,7 +520,7 @@ export default function AddRestaurant(props) {
                                                             type="text"
                                                             placeholder='GST Number'
                                                             className={inputClass}
-                                                            {...register('gst_number', { required: true, validate: validateGST })}
+                                                            {...register('gst_number', { required: true, })}
                                                         />
                                                         {errors.gst_number && <Error title={errors?.gst_number?.message} />}
                                                     </div>

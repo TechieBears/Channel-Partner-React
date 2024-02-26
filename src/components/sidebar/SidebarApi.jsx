@@ -92,6 +92,11 @@ export const Seller = [
         icon: <LayoutList size="24" />,
         link: '/product-list',
     },
+    {
+        title: 'Menu',
+        icon: <Menu size="24" />,
+        link: '/menu',
+    },
     // {
     //     title: 'Paid Plans',
     //     icon: <Notebook size="24" />,
