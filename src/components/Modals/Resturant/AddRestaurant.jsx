@@ -33,11 +33,11 @@ export default function AddRestaurant(props) {
             } else {
                 data.profile_pic = ''
             }
-            if (data?.restaurant_image.length != 0) {
-                await ImageUpload(data?.restaurant_image[0], "restaurant", "restaurantimg", data?.first_name)
-                data.restaurant_image = `${restaurantLink}${data?.first_name}_restaurantimg_${data?.restaurant_image[0].name}`
+            if (data?.shop_image.length != 0) {
+                await ImageUpload(data?.shop_image[0], "restaurant", "restaurantimg", data?.first_name)
+                data.shop_image = `${restaurantLink}${data?.first_name}_restaurantimg_${data?.shop_image[0].name}`
             } else {
-                data.restaurant_image = ''
+                data.shop_image = ''
             }
         }
         else {          // for edit
@@ -47,11 +47,11 @@ export default function AddRestaurant(props) {
             } else {
                 data.profile_pic = props?.data?.profile_pic
             }
-            if (data?.restaurant_image != props?.data?.restaurant_image) {
-                await ImageUpload(data?.restaurant_image[0], "restaurant", "restaurantimg", data?.first_name)
-                data.restaurant_image = `${restaurantLink}${data?.first_name}_restaurantimg_${data?.restaurant_image[0].name}`
+            if (data?.shop_image != props?.data?.shop_image) {
+                await ImageUpload(data?.shop_image[0], "restaurant", "restaurantimg", data?.first_name)
+                data.shop_image = `${restaurantLink}${data?.first_name}_restaurantimg_${data?.shop_image[0].name}`
             } else {
-                data.restaurant_image = props?.data?.restaurant_image
+                data.shop_image = props?.data?.shop_image
             }
         }
         if (props?.button == 'edit') {
@@ -94,12 +94,12 @@ export default function AddRestaurant(props) {
                 'email': props?.data?.user?.email,
                 'shop_name': props?.data?.shop_name,
                 'restaurant_phone': props?.data?.user?.phone_no,
-                'restaurant_address': props?.data?.user?.address,
-                'restaurant_city': props?.data?.user?.city,
-                'restaurant_state': props?.data?.user?.state,
+                'address': props?.data?.user?.address,
+                'city': props?.data?.user?.city,
+                'state': props?.data?.user?.state,
                 'pincode': props?.data?.user?.pincode,
-                'restaurant_opening_time': props?.data?.shop_start_time,
-                'restaurant_closing_time': props?.data?.shop_end_time,
+                'shop_start_time': props?.data?.shop_start_time,
+                'shop_end_time': props?.data?.shop_end_time,
                 'veg_or_nonveg': props?.data?.veg_or_nonveg,
                 'short_description': props?.data?.short_description,
                 'selectedCategory': props?.data?.selectedCategory,
@@ -271,18 +271,7 @@ export default function AddRestaurant(props) {
                                                             {errors.password && <Error title='Password is Required*' />}
                                                         </div>
                                                     }
-                                                    <div className="">
-                                                        <label className={labelClass}>Mobile Number*</label>
-                                                        <input
-                                                            type="tel"
-                                                            placeholder="Phone"
-                                                            className={inputClass}
-                                                            {...register("phone_no", { required: true, validate: validatePhoneNumber })}
-                                                        />
-                                                        {errors.phone_no && (
-                                                            <Error title={errors?.phone_no?.message} />
-                                                        )}
-                                                    </div>
+                                                
                                                     <h3 className='col-span-4 font-semibold text-xl'>Restaurant Details</h3>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -304,9 +293,9 @@ export default function AddRestaurant(props) {
                                                             type="tel"
                                                             placeholder='Restaurant Phone'
                                                             className={inputClass}
-                                                            {...register('restaurant_phone', { required: true, validate: validatePhoneNumber })}
+                                                            {...register('phone_no', { required: true, validate: validatePhoneNumber })}
                                                         />
-                                                        {errors.restaurant_phone && <Error title={errors?.restaurant_phone?.message} />}
+                                                        {errors.phone_no && <Error title={errors?.phone_no?.message} />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -316,11 +305,11 @@ export default function AddRestaurant(props) {
                                                             type="text"
                                                             placeholder='Restaurant Address'
                                                             className={inputClass}
-                                                            {...register('restaurant_address', { required: true })}
+                                                            {...register('address', { required: true })}
                                                         />
-                                                        {errors.restaurant_address && <Error title='Restaurant Address is Required*' />}
+                                                        {errors.address && <Error title='Restaurant Address is Required*' />}
                                                     </div>
-                                                    <div className="">
+                                                    {/* <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Restaurant Image*</label>
                                                         <input className={fileinput}
                                                             id="main_input"
@@ -328,12 +317,12 @@ export default function AddRestaurant(props) {
                                                             multiple
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            {...register("restaurant_image", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data?.user?.restaurant_image != '' && props?.data?.user?.restaurant_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.data?.user?.restaurant_image?.split('/').pop()}
+                                                            {...register("shop_image", { required: props.button == 'edit' ? false : true })} />
+                                                        {props?.button == 'edit' && props?.data?.user?.shop_image != '' && props?.data?.user?.shop_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.data?.user?.shop_image?.split('/').pop()}
                                                         </label>}
-                                                        {errors.restaurant_image && <Error title='Restaurnat Image is required*' />}
-                                                    </div>
+                                                        {errors.shop_image && <Error title='Restaurnat Image is required*' />}
+                                                    </div> */}
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             City*
@@ -342,9 +331,9 @@ export default function AddRestaurant(props) {
                                                             type="text"
                                                             placeholder='City'
                                                             className={inputClass}
-                                                            {...register('restaurant_city', { required: true })}
+                                                            {...register('city', { required: true })}
                                                         />
-                                                        {errors.restaurant_city && <Error title='Restaurant City is Required*' />}
+                                                        {errors.city && <Error title='Restaurant City is Required*' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -354,9 +343,9 @@ export default function AddRestaurant(props) {
                                                             type="text"
                                                             placeholder='State'
                                                             className={inputClass}
-                                                            {...register('restaurant_state', { required: true })}
+                                                            {...register('state', { required: true })}
                                                         />
-                                                        {errors.restaurant_state && <Error title='Restaurant State is Required*' />}
+                                                        {errors.state && <Error title='Restaurant State is Required*' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -378,9 +367,9 @@ export default function AddRestaurant(props) {
                                                             type="time"
                                                             placeholder='PIN Code'
                                                             className={inputClass}
-                                                            {...register('restaurant_opening_time', { required: true })}
+                                                            {...register('shop_start_time', { required: true })}
                                                         />
-                                                        {errors.restaurant_opening_time && <Error title='Restaurant Opening is Required*' />}
+                                                        {errors.shop_start_time && <Error title='Restaurant Opening is Required*' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -390,9 +379,9 @@ export default function AddRestaurant(props) {
                                                             type="time"
                                                             placeholder='PIN Code'
                                                             className={inputClass}
-                                                            {...register('restaurant_closing_time', { required: true })}
+                                                            {...register('shop_end_time', { required: true })}
                                                         />
-                                                        {errors.restaurant_closing_time && <Error title='Restaurant Closing is Required*' />}
+                                                        {errors.shop_end_time && <Error title='Restaurant Closing is Required*' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>Closing Day*</label>
@@ -400,7 +389,7 @@ export default function AddRestaurant(props) {
                                                             className={inputClass}
                                                             {...register("closing_day", { required: true })}
                                                         >
-                                                            <option value="" selected>--Select Type--</option>
+                                                            <option value="">--Select Type--</option>
                                                             <option value="Monday">Monday</option>
                                                             <option value="Tuesday">Tuesday</option>
                                                             <option value="Wednesday">Wednesday</option>
@@ -440,7 +429,7 @@ export default function AddRestaurant(props) {
                                                         />
                                                         {errors.insta_commison_percentage && <Error title='Restaurant Closing is Required*' />}
                                                     </div>
-                                                    <div className="">
+                                                    {/* <div className="">
                                                         <label className={labelClass}>
                                                             Short Description
                                                         </label>
@@ -449,7 +438,7 @@ export default function AddRestaurant(props) {
                                                             className={inputClass}
                                                             {...register('short_description',)}
                                                         />
-                                                    </div>
+                                                    </div> */}
                                                     <h3 className='col-span-4 text-xl font-semibold'>Banking Details</h3>
                                                     <div className="">
                                                         <label className={labelClass}>

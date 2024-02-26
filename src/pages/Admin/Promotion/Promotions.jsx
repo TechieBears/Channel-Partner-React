@@ -59,8 +59,8 @@ const Promotions = () => {
         try {
             editHomePromotion(row?.slide_id, payload).then((form) => {
                 console.log(payload)
-                if (form.status == "success") {
-                    toast.success('Banner Activation Changed !');
+                if (form.message == "slide edited successfully") {
+                    toast.success('Promotion Activation Changed !');
                     getAllPromotionList()
                 }
                 else {
