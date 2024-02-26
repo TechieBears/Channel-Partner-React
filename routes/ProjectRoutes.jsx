@@ -43,7 +43,6 @@ import ViewProduct from '../src/components/Modals/Vendors/ViewProduct';
 import Complaints from '../src/components/Modals/Complaints/Complaints';
 import FranchiseDetail from '../src/pages/Admin/Franchisees/FranchiseDetail';
 import DriverDetail from '../src/pages/Admin/Drivers/DriverDetail';
-import FranchiseMenu from '../src/pages/Franchisee/Menu/Menu';
 import FranchiseRestaurent from '../src/pages/Franchisee/Resturants/Resturant';
 import ViewAdminProduct from '../src/pages/Admin/Menu/AdminProduct/ViewAdminProduct';
 import DashboardBannerPanel from '../src/pages/Admin/Master/DashboardAssets/DashAssetsPanel/DashboardBannerPanel';
