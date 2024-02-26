@@ -18,6 +18,7 @@ import { validateEmail, validatePIN, validatePhoneNumber } from '../../Validatio
 
 
 function AddDriverFrom(props) {
+    console.log('props', props)
     const [isOpen, setIsOpen] = useState(false);
     const [loader, setLoader] = useState(false);
     const Franchisee = useSelector((state) => state?.master?.Franchise);
@@ -199,14 +200,14 @@ function AddDriverFrom(props) {
             "created_by": props?.data?.created_by?.id,
         })
         const job_type_json = JSON.parse(props?.data?.job_type.replace(/'/g, '"'));
-        console.log(job_type_json)
+        // console.log(job_type_json)
         if (job_type_json?.subTitle == "4-5 hours per day") {
             setValue('job_type', 'Part Time (4-5 Hours/Day)')
         } else {
             setValue('job_type', 'Full Time (9 Hours/Day)')
         }
         const shift_type = JSON.parse(props?.data?.job_type.replace(/'/g, '"'));
-        console.log(shift_type)
+        // console.log(shift_type)
         if (shift_type?.subTitle == "Morning 9AM to Afternoon 1PM") {
             setValue('shift', 'Morning 9AM to Afternoon 1PM 4 Hours')
         } else {
