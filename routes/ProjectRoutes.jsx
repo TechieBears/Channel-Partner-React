@@ -107,6 +107,7 @@ const ProjectRoutes = () => {
                                         <>
                                             <Route path='/' element={<VendorDashbaord />} />
                                             <Route path="/profile" element={<UserProfile />} />
+                                            <Route path='/menu' element={<Menu />} />
                                             <Route path='/vendor-orders' element={<VendorOrders />} />
                                             <Route path='/vendor-orders/order-detail/:id' element={<ViewOrder />} />
                                             <Route path='/product-list' element={<VendorProduct />} />
