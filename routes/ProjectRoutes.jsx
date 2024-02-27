@@ -46,6 +46,7 @@ import ViewAdminProduct from '../src/pages/Admin/Menu/AdminProduct/ViewAdminProd
 import DashboardBannerPanel from '../src/pages/Admin/Master/DashboardAssets/DashAssetsPanel/DashboardBannerPanel';
 import DashboardPromotions from '../src/pages/Admin/Master/DashboardPromotions';
 import DashboardForm from '../src/components/modals/DashboardModals/DashboardForm';
+import Coupon from '../src/pages/Admin/Coupon/Coupon';
 
 
 
@@ -78,7 +79,7 @@ const ProjectRoutes = () => {
                                 {user?.role == 'admin' ?
                                     <>
                                         <Route path="/admin" element={<Dashboard />} />
-                                        
+
                                         {/* Restaurant In detail Form */}
                                         <Route path="/restaurant" element={<DashboardForm />} />
                                         {/* Restaurant In detail Form */}
@@ -93,6 +94,7 @@ const ProjectRoutes = () => {
                                         <Route path="/vendors/vendors-detail/:id" element={<VendorDetails />} />
                                         <Route path="/menu/category-detail/:id" element={<CategoryDetail />} />
                                         <Route path="/dashboard/:id" element={<DashboardView />} />
+                                        <Route path="/coupon" element={<Coupon />} />
                                         <Route path="/DashboardAssets" element={<DashboardAssets />} />
                                         <Route path="/promotions" element={<DashboardPromotions />} />
                                         <Route path="/drivers" element={<Drivers />} />
@@ -130,12 +132,12 @@ const ProjectRoutes = () => {
                                             <Route path='/resturants/restaurant-detail/:id' element={<RestaurantDetail />} />
                                             <Route path='/delivery' element={<DeliveryBoy />} />
                                             <Route path="/drivers/driver-detail/:id" element={<DriverDetail />} />
-                                        </> : 
-                                           user?.role == 'restaurant' ?
-                                           <>
-                                               <Route path='/' element={<VendorDashbaord />} />
-                                             
-                                           </> : ''}
+                                        </> :
+                                            user?.role == 'restaurant' ?
+                                                <>
+                                                    <Route path='/' element={<VendorDashbaord />} />
+
+                                                </> : ''}
                             </Routes>
                         </Sidebar>
                     }
