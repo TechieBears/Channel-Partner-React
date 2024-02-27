@@ -12,6 +12,7 @@ import { restaurantLink, ImageUpload } from '../../../env';
 import { validateCommision, validateEmail, validateGST, validatePIN, validatePhoneNumber } from '../../Validations.jsx/Validations';
 
 export default function AddRestaurant(props) {
+    console.log('props = ', props)
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
@@ -25,41 +26,10 @@ export default function AddRestaurant(props) {
         reset()
     }
     const categories = ['Asian', 'Mexican', 'Italian', 'Russian cussion', 'Spanish', 'Comfort', 'American', 'North Indian', 'South Indian']
+
     const onSubmit = async (data) => {
-        // if (props.button != 'edit') {    // for create
-        //     if (data?.profile_pic.length != 0) {
-        //         await ImageUpload(data?.profile_pic[0], "restaurant", "profileimg", data?.first_name)
-        //         data.profile_pic = `${restaurantLink}${data?.first_name}_profileimg_${data?.profile_pic[0].name}`
-        //     } else {
-        //         data.profile_pic = ''
-        //     }
-        //     if (data?.shop_image.length != 0) {
-        //         await ImageUpload(data?.shop_image[0], "restaurant", "restaurantimg", data?.first_name)
-        //         data.shop_image = `${restaurantLink}${data?.first_name}_restaurantimg_${data?.shop_image[0].name}`
-        //     } else {
-        //         data.shop_image = ''
-        //     }
-        // }
-        // else {          // for edit
-        //     if (data?.profile_pic != props?.data?.profile_pic) {
-        //         await ImageUpload(data?.profile_pic[0], "restaurant", "profileimg", data?.first_name)
-        //         data.profile_pic = `${restaurantLink}${data?.first_name}_profileimg_${data?.profile_pic[0].name}`
-        //     } else {
-        //         data.profile_pic = props?.data?.profile_pic
-        //     }
-        //     if (data?.shop_image != props?.data?.shop_image) {
-        //         await ImageUpload(data?.shop_image[0], "restaurant", "restaurantimg", data?.first_name)
-        //         data.shop_image = `${restaurantLink}${data?.first_name}_restaurantimg_${data?.shop_image[0].name}`
-        //     } else {
-        //         data.shop_image = props?.data?.shop_image
-        //     }
-        // }
+        let updateData = {...data, "vendor_type": 'restaurant'}
         if (props?.button == 'edit') {
-            let updateData = {
-                ...data,
-                'created_by': props?.id,
-                "vendor_type": 'restaurant'
-            }
             editRestaurant(props?.id, updateData).then(res => {
                 if (res?.status == 'success') {
                     toast.success('Restaurant Updated Successfully')
@@ -68,13 +38,8 @@ export default function AddRestaurant(props) {
                 }
             })
         } else {
-            let updateData = {
-                ...data,
-                'created_by': props?.id,
-                "vendor_type": 'restaurant'
-            }
             addRestaurant(updateData).then(res => {
-                if (res.status == 'success') {
+                if (res.message == 'restaurant added successfully') {
                     toast.success('Resuraurant added successfully')
                     toggle();
                     props?.getAllRestaurant()
@@ -94,10 +59,12 @@ export default function AddRestaurant(props) {
                 'state': props?.data?.user?.state,
                 'pincode': props?.data?.user?.pincode,
                 'email': props?.data?.user?.email,
+                'phone_no': props?.data?.user?.phone_no,
+                'created_by' : props?.data?.created_by?.id,
+                'insta_commison_percentage': props?.data?.insta_commison_percentage
                 // 'date_of_birth': props?.data?.user?.date_of_birth,
                 // 'gender': props?.data?.user?.gender,
                 // 'shop_name': props?.data?.shop_name,
-                // 'restaurant_phone': props?.data?.user?.phone_no,
                 // 'shop_start_time': props?.data?.shop_start_time,
                 // 'shop_end_time': props?.data?.shop_end_time,
                 // 'veg_or_nonveg': props?.data?.veg_or_nonveg,
@@ -118,7 +85,7 @@ export default function AddRestaurant(props) {
                 props?.button == 'edit' ? <button className={`bg-yellow-100 p-1 rounded-lg`} onClick={() => setOpen(true)}>
                     <Edit size={20} className='text-yellow-500' />
                 </button> : <button className={`${formBtn1} flex`} onClick={() => setOpen(true)}>
-                    <Add className='text-white' />
+                    {/* <Add className='text-white' /> */}
                     {props?.title}
                 </button>
             }
@@ -233,10 +200,10 @@ export default function AddRestaurant(props) {
 
                                                                 {...register("created_by", { required: true })}
                                                             >
-                                                                <option value="" selected>--Select Franchisee--</option>
+                                                                <option value="">Select Franchisee</option>
                                                                 {Franchisee?.map(franchisee => (
                                                                     <option key={franchisee?.user?.id} value={franchisee?.user?.id}>
-                                                                        {franchisee?.user?.first_name + " (" + franchisee?.user?.pincode + ")"}
+                                                                      {franchisee?.user?.id}   {franchisee?.user?.first_name + " (" + franchisee?.user?.pincode + ")"}
                                                                     </option>
                                                                 ))}
                                                             </select>
@@ -271,6 +238,18 @@ export default function AddRestaurant(props) {
                                                             {errors.password && <Error title='Password is Required*' />}
                                                         </div>
                                                     }
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Phone Number*
+                                                        </label>
+                                                        <input
+                                                            type="tel"
+                                                            placeholder='+91'
+                                                            className={inputClass}
+                                                            {...register('phone_no', { required: true, validate: validatePhoneNumber })}
+                                                        />
+                                                        {errors.phone_no && <Error title={errors?.phone_no?.message} />}
+                                                    </div>
                                                 
                                                     {/* <h3 className='col-span-4 font-semibold text-xl'>Restaurant Details</h3>
                                                     <div className="">

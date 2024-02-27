@@ -18,12 +18,12 @@ import { validateEmail, validatePIN, validatePhoneNumber } from '../../Validatio
 
 
 function AddDriverFrom(props) {
-    console.log('props', props)
+    // console.log('props', props)
     const [isOpen, setIsOpen] = useState(false);
     const [loader, setLoader] = useState(false);
     const Franchisee = useSelector((state) => state?.master?.Franchise);
     const toggle = () => setIsOpen(!isOpen);
-    console.log('isOpen = ', isOpen)
+    // console.log('isOpen = ', isOpen)
     const user = useSelector((state) => state?.user?.FranchiseeDetails);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     // // ========================= fetch data from api ==============================

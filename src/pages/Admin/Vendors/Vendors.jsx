@@ -226,11 +226,10 @@ function Vendors() {
                                 {...register("role")}
                             >
                                 <option value="" >
-                                    Select by Role
+                                    Select by Status
                                 </option>
-                                <option value="user">User</option>
-                                <option value="admin">Admin</option>
-                                <option value="provider">Provider</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">InActive</option>
                             </select>
                         </div>
                         <div className="">
