@@ -57,7 +57,7 @@ const AddProduct = (props) => {
                     setValue('product_revenue', final_price);
                 }
 
-                console.log('final_price = ', final_price);
+                // console.log('final_price = ', final_price);
             }
         }
     }, [calculateRevenueSeller])
@@ -75,7 +75,7 @@ const AddProduct = (props) => {
                 // var actualprice = (props?.row?.product_actual_price == null ? 0 : props?.row?.product_actual_price) * (props?.row?.vendor?.insta_commison_percentage / 100);
                 // var adminfinalprice =  props?.row?.product_actual_price + mainPrice + actualprice;
                 var adminfinalprice = props?.row?.product_actual_price + mainPrice;
-                console.log('adminfinalprice = ', adminfinalprice.toFixed(0));
+                // console.log('adminfinalprice = ', adminfinalprice.toFixed(0));
                 setFinalPriceAdmin(adminfinalprice);
                 setValue('final_price', adminfinalprice?.toFixed(0));
                 // setValue('final_price', adminfinalprice);

@@ -239,7 +239,7 @@ function Vendors() {
                                 {...register("city")}
                             >
                                 <option value="" >
-                                    Select by city name
+                                    Select by pincode
                                 </option>
                                 <option value="Mumbai">Mumbai</option>
                                 <option value="Bangalore">Bangalore</option>

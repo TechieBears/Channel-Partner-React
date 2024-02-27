@@ -30,9 +30,9 @@ export default function AddRestaurant(props) {
     const onSubmit = async (data) => {
         let updateData = {...data, "vendor_type": 'restaurant'}
         if (props?.button == 'edit') {
-            editRestaurant(props?.id, updateData).then(res => {
-                if (res?.status == 'success') {
-                    toast.success('Restaurant Updated Successfully')
+            editRestaurant(props?.data?.user?.id, updateData).then(res => {
+                if (res?.message == 'restaurant edited successfully') {
+                    toast.success('Restaurant edited Successfully')
                     props?.getAllRestaurant()
                     toggle()
                 }
