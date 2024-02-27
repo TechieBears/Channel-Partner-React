@@ -13,11 +13,9 @@ import UserView from '../src/pages/Admin/User/UserView';
 import UserProfile from '../src/pages/Admin/UserProfile/UserProfile';
 import Login from '../src/pages/Auth/Login';
 import { useSelector } from 'react-redux';
-
 import VendorDashbaord from '../src/pages/Seller/VendorDashbaord/VendorDashbaord';
 import VendorProduct from '../src/pages/Seller/VendorProduct/VendorProduct';
 import VendorOrders from '../src/pages/Seller/VendorOrders/VendorOrders';
-
 import Menu from '../src/pages/Admin/Menu/Menu';
 import RestaurantDetail from '../src/pages/Restaurants/RestaurantDetail/RestaurantDetail';
 import Drivers from '../src/pages/Admin/Drivers/Drivers';
@@ -47,6 +45,7 @@ import FranchiseRestaurent from '../src/pages/Franchisee/Resturants/Resturant';
 import ViewAdminProduct from '../src/pages/Admin/Menu/AdminProduct/ViewAdminProduct';
 import DashboardBannerPanel from '../src/pages/Admin/Master/DashboardAssets/DashAssetsPanel/DashboardBannerPanel';
 import DashboardPromotions from '../src/pages/Admin/Master/DashboardPromotions';
+import DashboardForm from '../src/components/modals/DashboardModals/DashboardForm';
 
 
 
@@ -79,7 +78,8 @@ const ProjectRoutes = () => {
                                 {user?.role == 'admin' ?
                                     <>
                                         <Route path="/admin" element={<Dashboard />} />
-                                        <Route path="/menu" element={<Menu />} />
+                                        <Route path="/restaurant" element={<DashboardForm />} />
+                                        {/* <Route path="/menu" element={<Menu />} />
                                         <Route path='/product-list/product-details/:id' element={<ViewAdminProduct />} />
                                         <Route path="/resturants" element={<Restaurant />} />
                                         <Route path="/resturants/restaurant-detail/:id" element={<RestaurantDetail />} />
@@ -101,7 +101,7 @@ const ProjectRoutes = () => {
                                         <Route path="/reports" element={<Reports />} />
                                         <Route path="/subadmin" element={<SubAdmin />} />
                                         <Route path="/subadmin/subadmin-detail/:id" element={<SubAdminDetail />} />
-                                        <Route path="/settings" element={<Settings />} />
+                                        <Route path="/settings" element={<Settings />} /> */}
                                     </> :
                                     user?.role == 'seller' ?
                                         <>
@@ -126,8 +126,12 @@ const ProjectRoutes = () => {
                                             <Route path='/resturants/restaurant-detail/:id' element={<RestaurantDetail />} />
                                             <Route path='/delivery' element={<DeliveryBoy />} />
                                             <Route path="/drivers/driver-detail/:id" element={<DriverDetail />} />
-                                        </>
-                                            : ''}
+                                        </> : 
+                                           user?.role == 'restaurant' ?
+                                           <>
+                                               <Route path='/' element={<VendorDashbaord />} />
+                                             
+                                           </> : ''}
                             </Routes>
                         </Sidebar>
                     }
