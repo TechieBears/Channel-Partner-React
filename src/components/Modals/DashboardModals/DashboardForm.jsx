@@ -1,7 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react';
 import { useForm, Controller, FormProvider, useFormContext } from "react-hook-form";
-import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../utils/CustomClass';
+import { fileinput, formBtn1, formBtn2, formBtn3, inputClass, labelClass, tableBtn } from '../../../utils/CustomClass';
 import Switch from 'react-switch'
 import { Edit } from 'iconsax-react';
 import { createStorage } from '../../../api';
@@ -14,273 +14,191 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Error from '../../Errors/Error';
 import LoadBox from '../../Loader/LoadBox';
+import { validateEmail, validatePhoneNumber } from '../../Validations.jsx/Validations';
 
 
 // =================== form steps 1 =================
 
 const Step1 = () => {
+    const [manually, setManally] = useState(false);
+    const [verifyPhone, setVerifyPhone] = useState(false);
+    const [verifyEmail, setVerifyEmail] = useState(false);
     const { register, control, formState: { errors }, } = useFormContext()
     const cityNames = useSelector((state) => state?.master?.city)
     const tempretureRangeList = useSelector(state => state?.master?.temperatureRange)
+    const OTPInput = () => {
+        const inputs = document.querySelectorAll('#otp > *[id]');
+        for (let i = 0; i < inputs.length; i++) { inputs[i].addEventListener('keydown', function (event) { if (event.key === "Backspace") { inputs[i].value = ''; if (i !== 0) inputs[i - 1].focus(); } else { if (i === inputs.length - 1 && inputs[i].value !== '') { return true; } else if (event.keyCode > 47 && event.keyCode < 58) { inputs[i].value = event.key; if (i !== inputs.length - 1) inputs[i + 1].focus(); event.preventDefault(); } else if (event.keyCode > 64 && event.keyCode < 91) { inputs[i].value = String.fromCharCode(event.keyCode); if (i !== inputs.length - 1) inputs[i + 1].focus(); event.preventDefault(); } } }); }
+        OTPInput()
+    }
     return (
-        <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
-            <div className="">
-                <label className={labelClass}>
-                    Name*
-                </label>
-                <input
-                    type="text"
-                    placeholder='Name'
-                    className={inputClass}
-                    {...register('name', { required: true })}
-                />
-                {errors.name && <Error title='Name is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Operational Year*
-                </label>
-                <input
-                    type="month"
-                    placeholder='year'
-                    className={inputClass}
-                    {...register('operational_year', { required: true })}
-                />
-                {errors.operational_year && <Error title='Year is required*' />}
-            </div>
+        <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-5 gap-x-3 gap-y-3 ">
+            <div className='col-span-3 gap-x-3'>
+                <div className='grid grid-cols-2 gap-3'>
+                    <div className="">
+                        <label className={labelClass}>
+                            Restaurant Name*
+                        </label>
+                        <input
+                            type="text"
+                            placeholder='Name'
+                            className={inputClass}
+                            {...register('name', { required: true })}
+                        />
+                        {errors.name && <Error title='Name is required*' />}
+                    </div>
+                    <div className="">
+                        <label className={labelClass}>
+                            Restaurant Complete Address*
+                        </label>
+                        <input
+                            type="text"
+                            placeholder='Restaurant Address'
+                            className={inputClass}
+                            {...register('address', { required: true })}
+                        />
+                        {errors.address && <Error title='Year is required*' />}
+                    </div>
+                    {manually &&
+                        // <div className=' col-span-3 pt-3 grid grid-cols-2 gap-2'>
+                        <>
+                            <p className={`col-span-2 text-center`}>--or enter coordinates manually--</p>
+                            <div className="">
+                                <label className={labelClass}>
+                                    Latitude*
+                                </label>
+                                <input
+                                    type="text"
+                                    placeholder='Latitude'
+                                    className={inputClass}
+                                    {...register('lat', { required: manually })}
+                                />
+                                {errors.lat && <Error title={errors?.lat?.message} />}
+                            </div>
+                            <div className="">
+                                <label className={labelClass}>
+                                    Longitutde*
+                                </label>
+                                <input
+                                    type="text"
+                                    placeholder='Longitutde'
+                                    className={inputClass}
+                                    {...register('long', { required: manually })}
+                                />
+                                {errors.long && <Error title={errors?.long?.message} />}
+                            </div>
 
-            <div className="">
-                <label className={labelClass}>
-                    City Name*
-                </label>
-                <select
-                    name="City"
-                    className={inputClass}
-                    {...register("location", { required: true })}
-                >
-                    <option value="" >
-                        Select City*
-                    </option>
-                    {cityNames?.map((city) => <option value={city?.name} key={city?.name}>{city?.name}</option>)}
-                </select>
-                {errors.location && <Error title='City is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Storage Type*
-                </label>
-                <select
-                    name="Storage Type"
-                    className={inputClass}
-                    {...register("storage_type", { required: true })}
-                >
-                    <option value="" >
-                        Select Storage Type
-                    </option>
-                    <option value="Mezzanine">Mezzanine</option>
-                    <option value="Palletized - Racks">Palletized - Racks</option>
-                </select>
-                {errors.storage_type && <Error title='Storage type is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Temperature Compliance*
-                </label>
-                <select
-                    name="Temperature Compliance"
-                    className={inputClass}
-                    {...register("temp_compliance", { required: true })}
-                >
-                    <option value="" >
-                        Select Temperature Compliance
-                    </option>
-                    <option value="High">High</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Low">Low</option>
-                </select>
-                {errors.temp_compliance && <Error title='Temperature compliance is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Type of Chambar*
-                </label>
-                <select
-                    name="type of chambar"
-                    className={inputClass}
-                    {...register("chamber_type", { required: true })}
-                >
-                    <option value="" >
-                        Select Chamber Type
-                    </option>
-                    <option value="Fixed Temperature">Fixed Temperature</option>
-                    <option value="Convertible">Convertible</option>
-                </select>
-                {errors.chamber_type && <Error title='Chamber Type is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Rating*
-                </label>
-                <select
-                    name="Rating"
-                    className={inputClass}
-                    {...register("rating", { required: true })}
-                >
-                    <option value="" >
-                        Select Rating
-                    </option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-                {errors.rating && <Error title='Rating is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Warehouse Management Software*
-                </label>
-                <input
-                    type="text"
-                    placeholder='Manual / Excel / Software Name'
-                    className={inputClass}
-                    {...register('manage_software', { required: true })}
-                />
-                {errors.manage_software && <Error title='Management software is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Operating Hours*
-                </label>
-                <input
-                    type="text"
-                    placeholder='Operating Hours'
-                    className={inputClass}
-                    {...register('operating_hrs', { required: true })}
-                />
-                {errors.operating_hrs && <Error title='Operating hours is required*' />}
-            </div>
-
-            <div className="">
-                <label className={labelClass}>
-                    Address*
-                </label>
-                <textarea placeholder='Please enter address'
-                    className={inputClass}
-                    maxLength={980}
-                    {...register('address', { required: true })}></textarea>
-                {errors.address && <Error title='Address is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Description*
-                </label>
-                <textarea
-                    placeholder='Plase enter description'
-                    className={inputClass}
-                    maxLength={1980}
-                    {...register('description', { required: true })}>
-                </textarea>
-                {errors.description && <Error title='Description is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Door sensor
-                </label>
-                <Controller
-                    name="door_sensor"
-                    control={control}
-                    defaultValue={false}
-                    render={({ field }) => (
-                        <Switch
-                            onChange={(checked) => field.onChange(checked)}
-                            checked={field.value}
+                            <div className="">
+                                <label className={labelClass}>
+                                    State*
+                                </label>
+                                <input
+                                    type="text"
+                                    readOnly
+                                    placeholder='State'
+                                    className={inputClass}
+                                    {...register('state',)}
+                                />
+                            </div>
+                            <div className="">
+                                <label className={labelClass}>
+                                    Pincode*
+                                </label>
+                                <input
+                                    type="text"
+                                    readOnly
+                                    placeholder='Pincode'
+                                    className={inputClass}
+                                    {...register('pinocde',)}
+                                />
+                            </div>
+                            <div className="">
+                                <label className={labelClass}>
+                                    City*
+                                </label>
+                                <input
+                                    type="text"
+                                    readOnly
+                                    placeholder='City'
+                                    className={inputClass}
+                                    {...register('city',)}
+                                />
+                            </div>
+                            <div></div>
+                        </>
+                        // </div>
+                    }
+                    <div className="">
+                        <label className={labelClass}>
+                            Restaurant Number*
+                        </label>
+                        <input
+                            type="tel"
+                            placeholder='Restaurant Number'
+                            className={inputClass}
+                            {...register('rest_num', { required: true })}
                         />
-                    )}
-                />
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Temperature Display System
-                </label>
-                <Controller
-                    name="temp_system"
-                    control={control}
-                    defaultValue={false}
-                    render={({ field }) => (
-                        <Switch
-                            onChange={(checked) => field.onChange(checked)}
-                            checked={field.value}
+                        {errors.rest_num && <Error title='Restaurant Number is required*' />}
+                        {/* {verifyPhone &&
+                            <div id="otp" class="flex flex-row justify-center text-center px-2 mt-2">
+                                <input class="m-2 border focus:border-sky-400 h-10 w-10 text-center form-control rounded" type="text" id="first" maxlength="1" />
+                                <input class="m-2 border focus:border-sky-400 h-10 w-10 text-center form-control rounded" type="text" id="second" maxlength="1" />
+                                <input class="m-2 border focus:border-sky-400 h-10 w-10 text-center form-control rounded" type="text" id="third" maxlength="1" />
+                                <input class="m-2 border focus:border-sky-400 h-10 w-10 text-center form-control rounded" type="text" id="fourth" maxlength="1" />
+                                <input class="m-2 border focus:border-sky-400 h-10 w-10 text-center form-control rounded" type="text" id="fifth" maxlength="1" />
+                                <input class="m-2 border focus:border-sky-400 h-10 w-10 text-center form-control rounded" type="text" id="sixth" maxlength="1" />
+                            </div>}
+                        <div className='grid grid-cols-2 gap-10'>
+                            <button type='button' onClick={() => setVerifyPhone(!verifyPhone)} className={`${formBtn1} mt-2`}>Verify</button>
+                            {verifyPhone && <button type='button' className={` mt-2`}>Resend</button>}
+                        </div> */}
+                    </div>
+                    <div className=''>
+                        <label className={labelClass}>
+                            Personal Number*
+                        </label>
+                        <input
+                            type="tel"
+                            placeholder='Restaurant Number'
+                            className={inputClass}
+                            {...register('personal_num', {})}
                         />
-                    )}
-                />
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Remote Temperature Monitoring System
-                </label>
-                <Controller
-                    name="remote_temp_sys"
-                    control={control}
-                    defaultValue={false}
-                    render={({ field }) => (
-                        <Switch
-                            onChange={(checked) => field.onChange(checked)}
-                            checked={field.value}
+                    </div>
+                    <div className="">
+                        <label className={labelClass}>
+                            Restaurant Mail*
+                        </label>
+                        <input
+                            type="email"
+                            placeholder='Restaurant Mail'
+                            className={inputClass}
+                            {...register('mail', { required: true })}
                         />
-                    )}
-                />
+                        {/* {errors.address && <Error title='Year is required*' />} */}
+                        {/* {verifyEmail &&
+                            <div id="otp" class="flex flex-row justify-center text-center px-2 mt-2">
+                                <input class="m-2 border focus:border-sky-400 h-10 w-10 text-center form-control rounded" type="text" id="first" maxlength="1" />
+                                <input class="m-2 border focus:border-sky-400 h-10 w-10 text-center form-control rounded" type="text" id="second" maxlength="1" />
+                                <input class="m-2 border focus:border-sky-400 h-10 w-10 text-center form-control rounded" type="text" id="third" maxlength="1" />
+                                <input class="m-2 border focus:border-sky-400 h-10 w-10 text-center form-control rounded" type="text" id="fourth" maxlength="1" />
+                                <input class="m-2 border focus:border-sky-400 h-10 w-10 text-center form-control rounded" type="text" id="fifth" maxlength="1" />
+                                <input class="m-2 border focus:border-sky-400 h-10 w-10 text-center form-control rounded" type="text" id="sixth" maxlength="1" />
+                            </div>}
+                        <div className='grid grid-cols-2 gap-10'>
+                            <button type='button' onClick={() => setVerifyEmail(!verifyEmail)} className={`${formBtn1} mt-2`}>Verify</button>
+                            {verifyEmail && <button type='button' className={` mt-2`}>Resend</button>}
+                        </div> */}
+                    </div>
+                </div>
             </div>
-            <div className="">
-                <label className={labelClass}>
-                    Electricity back Up
-                </label>
-                <Controller
-                    name="electricity_bckup"
-                    control={control}
-                    defaultValue={false}
-                    render={({ field }) => (
-                        <Switch
-                            onChange={(checked) => field.onChange(checked)}
-                            checked={field.value}
-                        />
-                    )}
-                />
+            <div className='col-span-2'>
+                {/* ============================= Maps start ============================= */}
+                <div className=''>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d30128.960774986183!2d73.0314032258855!3d19.27714285590321!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7bda4c2cb3497%3A0x65c3365426378045!2sKamatghar%2C%20Bhiwandi%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1709017397432!5m2!1sen!2sin" width="100%" height="450" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+                {/* ============================= Maps end ============================= */}
+                <p onClick={() => setManally(!manually)} className={`cursor-pointer ${manually ? 'text-black' : 'text-sky-400'}`}>or enter coordinates manually</p>
             </div>
-            <div className="">
-                <label className={labelClass}>
-                    Surveillance CCTV
-                </label>
-                <Controller
-                    name="cctv"
-                    control={control}
-                    defaultValue={false}
-                    render={({ field }) => (
-                        <Switch
-                            onChange={(checked) => field.onChange(checked)}
-                            checked={field.value}
-                        />
-                    )}
-                />
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Blast Frezzing
-                </label>
-                <Controller
-                    name="blast_frezzing"
-                    control={control}
-                    defaultValue={false}
-                    render={({ field }) => (
-                        <Switch
-                            onChange={(checked) => field.onChange(checked)}
-                            checked={field.value}
-                        />
-                    )}
-                />
-            </div>
-
         </div>
     )
 }
@@ -417,258 +335,258 @@ const Step3 = () => {
 }
 // =================== form steps 4 =================
 
-const Step4 = (props) => {
-    const { register, formState: { errors }, setError } = useFormContext()
-    const validateVideoSize = (file) => {
-        if (file[0].size > 30 * 1024 * 1024) {
-            setError('video', {
-                type: 'manual',
-                message: 'Video file size should be less than 10MB',
-            });
-        } else {
-            return true;
-        }
-    };
-    return (
-        <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
-            <div className="">
-                <label className={labelClass} htmlFor="main_input">Main Image*</label>
-                <input className={fileinput}
-                    id="main_input"
-                    type='file'
-                    multiple
-                    accept='image/jpeg,image/jpg,image/png,application/pdf'
-                    placeholder='Upload Images...'
-                    {...register("image", { required: props.button == 'edit' ? false : true })} />
-                {props?.button == 'edit' && props?.data.image != '' && props?.data.image != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
-                    {props?.data.image.split('storage')[1].split('/')[1].split('_')[2]}
-                </label>}
-                {errors.image && <Error title='Main Image is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass} htmlFor="Outside">Outside Image*</label>
-                <input className={fileinput}
-                    id="Outside"
-                    type='file'
-                    multiple
-                    accept='image/jpeg,image/jpg,image/png,application/pdf'
-                    placeholder='Upload Images...'
-                    {...register("outside_img", { required: props.button == 'edit' ? false : true })} />
-                {props?.button == 'edit' && props?.data.outside_img != '' && props?.data.outside_img != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
-                    {props?.data.outside_img.split('storage')[1].split('/')[1].split('_')[2]}
-                </label>}
-                {errors.outside_img && <Error title=' Outside Image is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass} htmlFor="Other">Other Images</label>
-                <input className={fileinput}
-                    id="Other"
-                    type='file'
-                    multiple
-                    accept='image/jpeg,image/jpg,image/png,application/pdf'
-                    placeholder='Upload Images...'
-                    {...register("other_img")} />
-                {props?.button == 'edit' && props?.data.other_img != '' && props?.data.other_img != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
-                    {props?.data.other_img.split('storage')[1].split('/')[1].split('_')[2]}
-                </label>}
-            </div>
-            <div className="">
-                <label className={labelClass} htmlFor="Loading">Loading / Unloading Bays</label>
-                <input className={fileinput}
-                    id="Loading"
-                    type='file'
-                    multiple
-                    accept='image/jpeg,image/jpg,image/png,application/pdf'
-                    placeholder='Upload Images...'
-                    {...register("loading_img")} />
-                {props?.button == 'edit' && props?.data.loading_img != '' && props?.data.loading_img != undefined &&
-                    <>
-                        <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
-                            {props?.data.loading_img.split('storage')[1].split('/')[1].split('_')[2]}
-                        </label>
-                    </>
-                }
-            </div>
-            <div className="">
-                <label className={labelClass} htmlFor="Staging">Staging Area / Ante Room</label>
-                <input className={fileinput}
-                    id="Staging"
-                    type='file'
-                    multiple
-                    accept='image/jpeg,image/jpg,image/png,application/pdf'
-                    placeholder='Upload Images...'
-                    {...register("staging_img")} />
-                {props?.button == 'edit' && props?.data.staging_img != '' && props?.data.staging_img != undefined &&
-                    <>
-                        <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
-                            {props?.data.staging_img.split('storage')[1].split('/')[1].split('_')[2]}
-                        </label>
-                    </>
-                }
-            </div>
-            <div className="">
-                <label className={labelClass} htmlFor="Storage">Storage Area</label>
-                <input className={fileinput}
-                    id="Storage"
-                    type='file'
-                    multiple
-                    accept='image/jpeg,image/jpg,image/png,application/pdf'
-                    placeholder='Upload Images...'
-                    {...register("storage_img")} />
-                {props?.button == 'edit' && props?.data.storage_img != '' && props?.data.storage_img != undefined &&
-                    <>
-                        <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
-                            {props?.data.storage_img.split('storage')[1].split('/')[1].split('_')[2]}
-                        </label>
-                    </>
-                }
-            </div>
-            <div className="">
-                <label className={labelClass} htmlFor="evideo">E-Demo Video*</label>
-                <input className={fileinput}
-                    id="evideo"
-                    type='file'
-                    multiple
-                    accept='video/mp4,video/x-m4v,video/*,video/quicktime,video/x-ms-wmv,video/x-msvideo'
-                    placeholder='Upload Video...'
-                    {...register("video_url", {
-                        required: props.button == 'edit' ? false : 'Video is required*',
-                        onChange: (e) => {
-                            validateVideoSize(e.target.files);
-                        }
-                    })} />
-                {props?.button == 'edit' && props?.data.video_url != '' && props?.data.video_url != undefined &&
-                    <>
-                        <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
-                            {props?.data.video_url.split('demovideo')[1].split('/')[1].split('_')[2]}
-                        </label>
-                    </>
-                }
-                {errors.video_url && <Error title={`${errors.video_url.message}`} />}
-            </div>
-        </div>
-    )
-}
-// =================== form steps 5 =================
+// const Step4 = (props) => {
+//     const { register, formState: { errors }, setError } = useFormContext()
+//     const validateVideoSize = (file) => {
+//         if (file[0].size > 30 * 1024 * 1024) {
+//             setError('video', {
+//                 type: 'manual',
+//                 message: 'Video file size should be less than 10MB',
+//             });
+//         } else {
+//             return true;
+//         }
+//     };
+//     return (
+//         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
+//             <div className="">
+//                 <label className={labelClass} htmlFor="main_input">Main Image*</label>
+//                 <input className={fileinput}
+//                     id="main_input"
+//                     type='file'
+//                     multiple
+//                     accept='image/jpeg,image/jpg,image/png,application/pdf'
+//                     placeholder='Upload Images...'
+//                     {...register("image", { required: props.button == 'edit' ? false : true })} />
+//                 {props?.button == 'edit' && props?.data.image != '' && props?.data.image != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
+//                     {props?.data.image.split('storage')[1].split('/')[1].split('_')[2]}
+//                 </label>}
+//                 {errors.image && <Error title='Main Image is required*' />}
+//             </div>
+//             <div className="">
+//                 <label className={labelClass} htmlFor="Outside">Outside Image*</label>
+//                 <input className={fileinput}
+//                     id="Outside"
+//                     type='file'
+//                     multiple
+//                     accept='image/jpeg,image/jpg,image/png,application/pdf'
+//                     placeholder='Upload Images...'
+//                     {...register("outside_img", { required: props.button == 'edit' ? false : true })} />
+//                 {props?.button == 'edit' && props?.data.outside_img != '' && props?.data.outside_img != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
+//                     {props?.data.outside_img.split('storage')[1].split('/')[1].split('_')[2]}
+//                 </label>}
+//                 {errors.outside_img && <Error title=' Outside Image is required*' />}
+//             </div>
+//             <div className="">
+//                 <label className={labelClass} htmlFor="Other">Other Images</label>
+//                 <input className={fileinput}
+//                     id="Other"
+//                     type='file'
+//                     multiple
+//                     accept='image/jpeg,image/jpg,image/png,application/pdf'
+//                     placeholder='Upload Images...'
+//                     {...register("other_img")} />
+//                 {props?.button == 'edit' && props?.data.other_img != '' && props?.data.other_img != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
+//                     {props?.data.other_img.split('storage')[1].split('/')[1].split('_')[2]}
+//                 </label>}
+//             </div>
+//             <div className="">
+//                 <label className={labelClass} htmlFor="Loading">Loading / Unloading Bays</label>
+//                 <input className={fileinput}
+//                     id="Loading"
+//                     type='file'
+//                     multiple
+//                     accept='image/jpeg,image/jpg,image/png,application/pdf'
+//                     placeholder='Upload Images...'
+//                     {...register("loading_img")} />
+//                 {props?.button == 'edit' && props?.data.loading_img != '' && props?.data.loading_img != undefined &&
+//                     <>
+//                         <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
+//                             {props?.data.loading_img.split('storage')[1].split('/')[1].split('_')[2]}
+//                         </label>
+//                     </>
+//                 }
+//             </div>
+//             <div className="">
+//                 <label className={labelClass} htmlFor="Staging">Staging Area / Ante Room</label>
+//                 <input className={fileinput}
+//                     id="Staging"
+//                     type='file'
+//                     multiple
+//                     accept='image/jpeg,image/jpg,image/png,application/pdf'
+//                     placeholder='Upload Images...'
+//                     {...register("staging_img")} />
+//                 {props?.button == 'edit' && props?.data.staging_img != '' && props?.data.staging_img != undefined &&
+//                     <>
+//                         <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
+//                             {props?.data.staging_img.split('storage')[1].split('/')[1].split('_')[2]}
+//                         </label>
+//                     </>
+//                 }
+//             </div>
+//             <div className="">
+//                 <label className={labelClass} htmlFor="Storage">Storage Area</label>
+//                 <input className={fileinput}
+//                     id="Storage"
+//                     type='file'
+//                     multiple
+//                     accept='image/jpeg,image/jpg,image/png,application/pdf'
+//                     placeholder='Upload Images...'
+//                     {...register("storage_img")} />
+//                 {props?.button == 'edit' && props?.data.storage_img != '' && props?.data.storage_img != undefined &&
+//                     <>
+//                         <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
+//                             {props?.data.storage_img.split('storage')[1].split('/')[1].split('_')[2]}
+//                         </label>
+//                     </>
+//                 }
+//             </div>
+//             <div className="">
+//                 <label className={labelClass} htmlFor="evideo">E-Demo Video*</label>
+//                 <input className={fileinput}
+//                     id="evideo"
+//                     type='file'
+//                     multiple
+//                     accept='video/mp4,video/x-m4v,video/*,video/quicktime,video/x-ms-wmv,video/x-msvideo'
+//                     placeholder='Upload Video...'
+//                     {...register("video_url", {
+//                         required: props.button == 'edit' ? false : 'Video is required*',
+//                         onChange: (e) => {
+//                             validateVideoSize(e.target.files);
+//                         }
+//                     })} />
+//                 {props?.button == 'edit' && props?.data.video_url != '' && props?.data.video_url != undefined &&
+//                     <>
+//                         <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
+//                             {props?.data.video_url.split('demovideo')[1].split('/')[1].split('_')[2]}
+//                         </label>
+//                     </>
+//                 }
+//                 {errors.video_url && <Error title={`${errors.video_url.message}`} />}
+//             </div>
+//         </div>
+//     )
+// }
+// // =================== form steps 5 =================
 
-const Step5 = (props) => {
-    const { register, formState: { errors }, } = useFormContext()
-    return (
-        <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
-            <div className="">
-                <label className={labelClass}>
-                    Fassai license*
-                </label>
-                <input
-                    type="text"
-                    placeholder='Fassai License'
-                    className={inputClass}
-                    {...register('fassai_license', { required: true })}
-                />
-                {errors.fassai_license && <Error title=' License is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    GST No*
-                </label>
-                <input
-                    type="text"
-                    placeholder='GST No'
-                    className={inputClass}
-                    {...register('gst_no', { required: true })}
-                />
-                {errors.gst_no && <Error title='GST No is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Any Other licenses
-                </label>
-                <input
-                    type="text"
-                    placeholder='Any Other Licenses'
-                    className={inputClass}
-                    {...register('other_license')}
-                />
-            </div>
-            <div className="">
-                <label className={labelClass} htmlFor="main_input">Fassai license  Doc*</label>
-                <input className={fileinput}
-                    id="main_input"
-                    type='file'
-                    multiple
-                    accept='image/jpeg,image/jpg,image/png,application/pdf'
-                    placeholder='Upload Images...'
-                    {...register("fassai_doc", { required: props.button == 'edit' ? false : true })} />
-                {props?.button == 'edit' && props?.data?.fassai_doc != '' && props?.data?.fassai_doc != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
-                    {props?.data?.fassai_doc.split('storage')[1].split('/')[1].split('_')[2]}
-                </label>}
-                {errors.fassai_doc && <Error title='Fassai license Docx*' />}
-            </div>
-            <div className="">
-                <label className={labelClass} htmlFor="main_input">Gst Doc*</label>
-                <input className={fileinput}
-                    id="main_input"
-                    type='file'
-                    multiple
-                    accept='image/jpeg,image/jpg,image/png,application/pdf'
-                    placeholder='Upload Images...'
-                    {...register("gst_doc", { required: props.button == 'edit' ? false : true })} />
-                {props?.button == 'edit' && props?.data?.gst_doc != '' && props?.data?.gst_doc != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
-                    {props?.data?.gst_doc.split('storage')[1].split('/')[1].split('_')[2]}
-                </label>}
-                {errors.gst_doc && <Error title='Gst Image docx is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass} htmlFor="other_lic_doc">Other licenses Doc</label>
-                <input className={fileinput}
-                    id="other_lic_doc"
-                    type='file'
-                    multiple
-                    accept='image/jpeg,image/jpg,image/png,application/pdf'
-                    placeholder='Upload Images...'
-                    {...register("other_lic_doc")} />
-                {props?.button == 'edit' && props?.data?.other_lic_doc != '' && props?.data?.other_lic_doc != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
-                    {props?.data?.other_lic_doc.split('storage')[1].split('/')[1].split('_')[2]}
-                </label>}
-                {errors.other_lic_doc && <Error title='Other licenses Docx is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass} htmlFor="electricity_url">Electricity Doc</label>
-                <input className={fileinput}
-                    id="electricity_url"
-                    type='file'
-                    multiple
-                    accept='image/jpeg,image/jpg,image/png,application/pdf'
-                    placeholder='Upload Doc...'
-                    {...register("electricity_url")} />
-                {props?.button == 'edit' && props?.data.electricity_url != '' && props?.data.electricity_url != undefined &&
-                    <>
-                        <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
-                            {props?.data.electricity_url.split('storage')[1].split('/')[1].split('_')[2]}
-                        </label>
-                    </>
-                }
-            </div>
-            <div className="">
-                <label className={labelClass} htmlFor="noc_url">NOC Doc</label>
-                <input className={fileinput}
-                    id="noc_url"
-                    type='file'
-                    multiple
-                    accept='image/jpeg,image/jpg,image/png,application/pdf'
-                    placeholder='Upload Doc...'
-                    {...register("noc_url")} />
-                {props?.button == 'edit' && props?.data.noc_url != '' && props?.data.noc_url != undefined &&
-                    <>
-                        <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
-                            {props?.data.noc_url.split('storage')[1].split('/')[1].split('_')[2]}
-                        </label>
-                    </>
-                }
-            </div>
-        </div>
-    )
-}
+// const Step5 = (props) => {
+//     const { register, formState: { errors }, } = useFormContext()
+//     return (
+//         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
+//             <div className="">
+//                 <label className={labelClass}>
+//                     Fassai license*
+//                 </label>
+//                 <input
+//                     type="text"
+//                     placeholder='Fassai License'
+//                     className={inputClass}
+//                     {...register('fassai_license', { required: true })}
+//                 />
+//                 {errors.fassai_license && <Error title=' License is required*' />}
+//             </div>
+//             <div className="">
+//                 <label className={labelClass}>
+//                     GST No*
+//                 </label>
+//                 <input
+//                     type="text"
+//                     placeholder='GST No'
+//                     className={inputClass}
+//                     {...register('gst_no', { required: true })}
+//                 />
+//                 {errors.gst_no && <Error title='GST No is required*' />}
+//             </div>
+//             <div className="">
+//                 <label className={labelClass}>
+//                     Any Other licenses
+//                 </label>
+//                 <input
+//                     type="text"
+//                     placeholder='Any Other Licenses'
+//                     className={inputClass}
+//                     {...register('other_license')}
+//                 />
+//             </div>
+//             <div className="">
+//                 <label className={labelClass} htmlFor="main_input">Fassai license  Doc*</label>
+//                 <input className={fileinput}
+//                     id="main_input"
+//                     type='file'
+//                     multiple
+//                     accept='image/jpeg,image/jpg,image/png,application/pdf'
+//                     placeholder='Upload Images...'
+//                     {...register("fassai_doc", { required: props.button == 'edit' ? false : true })} />
+//                 {props?.button == 'edit' && props?.data?.fassai_doc != '' && props?.data?.fassai_doc != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
+//                     {props?.data?.fassai_doc.split('storage')[1].split('/')[1].split('_')[2]}
+//                 </label>}
+//                 {errors.fassai_doc && <Error title='Fassai license Docx*' />}
+//             </div>
+//             <div className="">
+//                 <label className={labelClass} htmlFor="main_input">Gst Doc*</label>
+//                 <input className={fileinput}
+//                     id="main_input"
+//                     type='file'
+//                     multiple
+//                     accept='image/jpeg,image/jpg,image/png,application/pdf'
+//                     placeholder='Upload Images...'
+//                     {...register("gst_doc", { required: props.button == 'edit' ? false : true })} />
+//                 {props?.button == 'edit' && props?.data?.gst_doc != '' && props?.data?.gst_doc != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
+//                     {props?.data?.gst_doc.split('storage')[1].split('/')[1].split('_')[2]}
+//                 </label>}
+//                 {errors.gst_doc && <Error title='Gst Image docx is required*' />}
+//             </div>
+//             <div className="">
+//                 <label className={labelClass} htmlFor="other_lic_doc">Other licenses Doc</label>
+//                 <input className={fileinput}
+//                     id="other_lic_doc"
+//                     type='file'
+//                     multiple
+//                     accept='image/jpeg,image/jpg,image/png,application/pdf'
+//                     placeholder='Upload Images...'
+//                     {...register("other_lic_doc")} />
+//                 {props?.button == 'edit' && props?.data?.other_lic_doc != '' && props?.data?.other_lic_doc != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
+//                     {props?.data?.other_lic_doc.split('storage')[1].split('/')[1].split('_')[2]}
+//                 </label>}
+//                 {errors.other_lic_doc && <Error title='Other licenses Docx is required*' />}
+//             </div>
+//             <div className="">
+//                 <label className={labelClass} htmlFor="electricity_url">Electricity Doc</label>
+//                 <input className={fileinput}
+//                     id="electricity_url"
+//                     type='file'
+//                     multiple
+//                     accept='image/jpeg,image/jpg,image/png,application/pdf'
+//                     placeholder='Upload Doc...'
+//                     {...register("electricity_url")} />
+//                 {props?.button == 'edit' && props?.data.electricity_url != '' && props?.data.electricity_url != undefined &&
+//                     <>
+//                         <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
+//                             {props?.data.electricity_url.split('storage')[1].split('/')[1].split('_')[2]}
+//                         </label>
+//                     </>
+//                 }
+//             </div>
+//             <div className="">
+//                 <label className={labelClass} htmlFor="noc_url">NOC Doc</label>
+//                 <input className={fileinput}
+//                     id="noc_url"
+//                     type='file'
+//                     multiple
+//                     accept='image/jpeg,image/jpg,image/png,application/pdf'
+//                     placeholder='Upload Doc...'
+//                     {...register("noc_url")} />
+//                 {props?.button == 'edit' && props?.data.noc_url != '' && props?.data.noc_url != undefined &&
+//                     <>
+//                         <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
+//                             {props?.data.noc_url.split('storage')[1].split('/')[1].split('_')[2]}
+//                         </label>
+//                     </>
+//                 }
+//             </div>
+//         </div>
+//     )
+// }
 
 export default function DashboardForm(props) {
     const user = useSelector((state) => state.user.loggedUserDetails)
@@ -677,7 +595,7 @@ export default function DashboardForm(props) {
     const [activeStep, setActiveStep] = useState(0);
     const toggle = () => setIsOpen(!isOpen);
     const dispatch = useDispatch();
-    const steps = ['Storage', 'SPOC', 'Decision Maker', 'Compliances', 'Facility Images'];
+    const steps = ['Restaurant Information', 'Restaurant Type and Timing', 'Upload Images'];
     var methods = useForm({
         defaultValues: {
             "name": "",
@@ -782,10 +700,10 @@ export default function DashboardForm(props) {
                 return <Step2 />
             case 2:
                 return <Step3 />
-            case 3:
-                return <Step5 {...props} />
-            case 4:
-                return <Step4 {...props} />
+            // case 3:
+            //     return <Step5 {...props} />
+            // case 4:
+            //     return <Step4 {...props} />
             default:
                 return (
                     <h1>
@@ -997,6 +915,7 @@ export default function DashboardForm(props) {
         setActiveStep(0)
         methods.reset();
         setLoader(false);
+        // setIsOpen(true)
     }
     return (
         <>
@@ -1034,19 +953,19 @@ export default function DashboardForm(props) {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-5xl overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl">
+                                <Dialog.Panel className="w-full max-w-8xl overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl">
 
                                     <Dialog.Title
                                         as="h2"
                                         className="w-full px-3 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
                                     >
-                                        {props?.title}
+                                        Register Restaurant
                                     </Dialog.Title>
                                     <div className=" bg-gray-200/70">
                                         {/* React Hook Form */}
                                         <FormProvider {...methods}>
                                             <form onSubmit={methods.handleSubmit(onSubmit)} >
-                                                <div className="py-4 overflow-y-scroll scrollbars h-[24rem] lg:h-[30rem]" >
+                                                <div className="py-4 overflow-y-scroll scrollbars h-[24rem] lg:h-[34rem]" >
                                                     <Stepper activeStep={activeStep} className='p-2' alternativeLabel>
                                                         {
                                                             steps?.map((step, index) => {
