@@ -24,8 +24,6 @@ const Step1 = () => {
     const [verifyPhone, setVerifyPhone] = useState(false);
     const [verifyEmail, setVerifyEmail] = useState(false);
     const { register, control, formState: { errors }, } = useFormContext()
-    const cityNames = useSelector((state) => state?.master?.city)
-    const tempretureRangeList = useSelector(state => state?.master?.temperatureRange)
     const OTPInput = () => {
         const inputs = document.querySelectorAll('#otp > *[id]');
         for (let i = 0; i < inputs.length; i++) { inputs[i].addEventListener('keydown', function (event) { if (event.key === "Backspace") { inputs[i].value = ''; if (i !== 0) inputs[i - 1].focus(); } else { if (i === inputs.length - 1 && inputs[i].value !== '') { return true; } else if (event.keyCode > 47 && event.keyCode < 58) { inputs[i].value = event.key; if (i !== inputs.length - 1) inputs[i + 1].focus(); event.preventDefault(); } else if (event.keyCode > 64 && event.keyCode < 91) { inputs[i].value = String.fromCharCode(event.keyCode); if (i !== inputs.length - 1) inputs[i + 1].focus(); event.preventDefault(); } } }); }
@@ -206,64 +204,133 @@ const Step1 = () => {
 
 const Step2 = () => {
     const { register, formState: { errors }, } = useFormContext()
-    const designationList = useSelector(state => state?.master?.designation)
+    const cuision = [
+        "Italian Cuisine",
+        "French Cuisine",
+        "Chinese Cuisine",
+        "Japanese Cuisine",
+        "Mexican Cuisine",
+        "Thai Cuisine",
+        "Spanish Cuisine",
+        "Greek Cuisine",
+        "Lebanese Cuisine",
+        "Turkish Cuisine",
+        "North Indian Cuisine",
+        "South Indian Cuisine",
+        "East Indian Cuisine",
+        "West Indian Cuisine",
+        "Central Indian Cuisine",
+        "Northeast Indian Cuisine",
+        "Kashmiri Cuisine",
+        "Punjabi Cuisine",
+        "Rajasthani Cuisine",
+        "Gujarati Cuisine",
+        "Maharashtrian Cuisine",
+        "Goan Cuisine",
+        "Bengali Cuisine",
+        "Odia Cuisine",
+        "Assamese Cuisine",
+        "Manipuri Cuisine",
+        "Tripuri Cuisine",
+        "Arunachali Cuisine",
+        "Sikkimese Cuisine",
+        "Naga Cuisine"
+    ]
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
+            <p className='md:col-span-2 lg:col-span-3 font-semibold text-lg'>Establishment Type</p>
             <div className="">
                 <label className={labelClass}>
-                    Contact person name*
-                </label>
-                <input
-                    type="text"
-                    placeholder='Contact Person Name'
-                    className={inputClass}
-                    {...register('spoc_name', { required: true })}
-                />
-                {errors.spoc_name && <Error title='Name is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Desgination*
+                    Type*
                 </label>
                 <select
-                    placeholder='Desgination'
                     className={inputClass}
-                    {...register('spoc_desgination', { required: true })}
+                    {...register('type', { required: true })}
                 >
-                    <option value=''>Select Desgination</option>
-                    {designationList?.map((curElm) => <option value={curElm?.name} key={curElm?.name}>{curElm?.name}</option>)}
-
+                    <option value=''>select</option>
+                    <option value='Both'>Both</option>
+                    <option value='Delivery only'>Delivery only</option>
+                    <option value='Dine-in only'>Dine-in only</option>
                 </select>
-                {errors.spoc_desgination && <Error title='Desgination is required*' />}
+                {errors.type && <Error title='Name is required*' />}
             </div>
             <div className="">
                 <label className={labelClass}>
-                    Contact no*
+                    Selct Option which best describe your outlet*
                 </label>
-                <input
-                    type="text"
-                    placeholder='Contact no'
+                <select
                     className={inputClass}
-                    {...register('spoc_contact', { required: true })}
-                />
-                {errors.spoc_contact && <Error title='Contact is required*' />}
+                    {...register('outlet_type', { required: true })}
+                >
+                    <option value=''>select</option>
+                    <option value='Bakery'>Bakery</option>
+                    <option value='Casual Dining'>Casual Dining</option>
+                    <option value='Quick Bites'>Quick Bites</option>
+                    <option value='Beverage Shop'>Beverage Shop</option>
+                    <option value='Dessert Parlour'>Dessert Parlour</option>
+                    <option value='Sweet Shop'>Sweet Shop</option>
+                    <option value='Cafe'>Cafe</option>
+                    <option value='Food Court'>Food Court</option>
+                </select>
+                {errors.outlet_type && <Error title='Name is required*' />}
             </div>
             <div className="">
                 <label className={labelClass}>
-                    Email id
+                    Cuisines Type*
+                </label>
+                <select
+                    className={inputClass}
+                    {...register('cuisines_type', { required: true })}
+                >
+                    <option value=''>select</option>
+                    {cuision.map((cuisine, index) => (
+                        <option key={index} value={cuisine}>{cuisine}</option>
+                    ))}
+                </select>
+                {errors.cuisines_type && <Error title='Name is required*' />}
+            </div>
+            <div className="">
+                <label className={labelClass}>
+                    Opening Hour*
                 </label>
                 <input
-                    type="email"
-                    placeholder='Email id'
+                    type="time"
+                    placeholder=''
                     className={inputClass}
-                    {...register('spoc_email', {
-                        pattern: {
-                            value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-                            message: "Enter Valid Email"
-                        }
-                    })}
+                    {...register('opening_hour', { required: true })}
                 />
-                {errors.spoc_email && <Error title={`${errors?.spoc_email?.message}`} />}
+                {errors.opening_hour && <Error title='Opening Hour is required*' />}
+            </div>
+            <div className="">
+                <label className={labelClass}>
+                    Closing Hour
+                </label>
+                <input
+                    type="time"
+                    placeholder='Closing Hour'
+                    className={inputClass}
+                    {...register('closing_hour', { required: true })}
+                />
+                {errors.closing_hour && <Error title={'Closing Hour is required'} />}
+            </div>
+            <div className="">
+                <label className={labelClass}>
+                    Week Off
+                </label>
+                <select
+                    className={inputClass}
+                    {...register('week_off', { required: true })}
+                >
+                    <option value=''>Select</option>
+                    <option value='Monday'>Monday</option>
+                    <option value='Tuesday'>Tuesday</option>
+                    <option value='Wednesday'>Wednessday</option>
+                    <option value='Thursday'>Thursday</option>
+                    <option value='Friday'>Friday</option>
+                    <option value='Saturday'>Saturday</option>
+                    <option value='Sunday'>Sunday</option>
+                </select>
+                {errors.week_off && <Error title={'Closing Hour is required'} />}
             </div>
         </div>
     );
