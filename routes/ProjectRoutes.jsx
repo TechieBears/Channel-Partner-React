@@ -78,8 +78,12 @@ const ProjectRoutes = () => {
                                 {user?.role == 'admin' ?
                                     <>
                                         <Route path="/admin" element={<Dashboard />} />
+                                        
+                                        {/* Restaurant In detail Form */}
                                         <Route path="/restaurant" element={<DashboardForm />} />
-                                        {/* <Route path="/menu" element={<Menu />} />
+                                        {/* Restaurant In detail Form */}
+
+                                        <Route path="/menu" element={<Menu />} />
                                         <Route path='/product-list/product-details/:id' element={<ViewAdminProduct />} />
                                         <Route path="/resturants" element={<Restaurant />} />
                                         <Route path="/resturants/restaurant-detail/:id" element={<RestaurantDetail />} />
@@ -101,7 +105,7 @@ const ProjectRoutes = () => {
                                         <Route path="/reports" element={<Reports />} />
                                         <Route path="/subadmin" element={<SubAdmin />} />
                                         <Route path="/subadmin/subadmin-detail/:id" element={<SubAdminDetail />} />
-                                        <Route path="/settings" element={<Settings />} /> */}
+                                        <Route path="/settings" element={<Settings />} />
                                     </> :
                                     user?.role == 'seller' ?
                                         <>
