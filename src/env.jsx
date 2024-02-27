@@ -43,6 +43,8 @@ export const productLink = 'https://channel-partner-media.s3.ap-south-1.amazonaw
 export const profileImageLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/profileimg/'
 export const bannerLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/banner/'
 export const promotionLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/promotion/'
+export const mediaGallery = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/mediagallery/'
+
 
 
 // ---- Franchisee Links ----

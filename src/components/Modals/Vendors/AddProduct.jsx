@@ -37,7 +37,19 @@ const AddProduct = (props) => {
         reset()
     }
 
-
+    const handleImageChange = async (e) => {
+        console.log('e', e)
+        const file = e.target.files[0];
+        const { width, height } = await getImageDimensions(file);
+    
+        if (width === 200 && height === 200) {
+          console.log('Image dimensions are valid (200x200).');
+          // Proceed with upload or any other action
+        } else {
+          console.log('Please upload an image with dimensions 200x200.');
+          // Notify user or handle validation failure
+        }
+      };
 
     //  ------------   Seller Calculations SetPrice --------------------------------
     const calculateRevenueSeller = watch('product_actual_price')
@@ -747,6 +759,7 @@ const AddProduct = (props) => {
                                                             multiple
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
+                                                            onChange={(e) => handleImageChange(e)}
                                                             {...register("product_image_1",
                                                                 { required: props.title == 'Edit Product' ? false : true })} />
                                                         {props?.title == 'Edit Product' && props?.row?.product_image_1 != '' && props?.row?.product_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
