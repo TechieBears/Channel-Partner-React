@@ -152,7 +152,7 @@ export default function Restaurant() {
     </div>
 
     const columns = [
-        { field: 'id', header: 'ID', body: (row) => <h6>{row?.user?.id}</h6>, sortable: false },
+        { field: 'id', header: 'ID',  body: (row) => <h6>{row?.user?.id}</h6>, sortable: false },
         // { field: 'profile_pic', header: 'Profile', body: representativeBodyTemplate, sortable: false, style: true },
         { field: 'msb_code', header: 'MSB', sortable: false },
         { field: 'first_name', body: (row) => <div className="capitalize">{row?.user?.first_name + " " + row?.user?.last_name}</div>, header: 'Name' },
