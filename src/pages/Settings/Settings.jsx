@@ -8,7 +8,7 @@ import MediaGallery from './MediaGallery/MediaGallery';
 import CustomFileUpload from './MediaGallery/CustomFileUpload';
 
 export default function Settings() {
-    const [selectedTab, setSelectedTab] = useState(1);
+    const [selectedTab, setSelectedTab] = useState(0);
     return (
         <div>
             <Tabs selectedIndex={selectedTab} onSelect={index => setSelectedTab(index)}>

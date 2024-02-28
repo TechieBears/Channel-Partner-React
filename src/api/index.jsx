@@ -433,6 +433,15 @@ export const addGalleryImages = async (data) => {
         console.log('error creating product', error)
     }
 }
+export const getGalleryImages = async (data) => {
+    const url = `${environment.baseUrl}app/create_media`
+    try {
+        const response = await axios.get(url, data);
+        return response.data;
+    } catch (error) {
+        console.log('error creating product', error)
+    }
+}
 
 
 
