@@ -4,6 +4,8 @@ import { Dialog, Transition } from "@headlessui/react";
 import { formBtn1, formBtn2, inputClass, labelClass, tableBtn} from "../../../utils/CustomClass";
 import { CloseCircle } from "iconsax-react";
 import { getGalleryImages } from "../../../api";
+import { useForm } from "react-hook-form";
+
 
 const MediaGallaryModal = (props) => {
   // console.log("props = ", props);
@@ -13,6 +15,14 @@ const MediaGallaryModal = (props) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const toggle = () => setIsOpen(!isOpen);
   console.log('selectedImage', selectedImage)
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm();
 
   useEffect(() => {
     setImageDetails(props?.mediaModal?.mediaModalData);
@@ -31,11 +41,14 @@ const MediaGallaryModal = (props) => {
     setSelectedImage(selectedImage?.media_url)
     console.log('media_name = ', selectedImage?.media_url);
     props?.sendDataToParent(selectedImage?.media_url);
-    closeBtn();
+    toggle();
+    reset();
+    // setIsOpen(!isOpen);
   }
 
   // ===================== close modals ===============================
   const closeBtn = () => {
+    reset();
     toggle();
     setIsOpen(!isOpen)
     setLoader(false);

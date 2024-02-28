@@ -77,6 +77,7 @@ export default function BannerForm(props) {
 
   // ============================ submit data  =====================================
   const onSubmit = async (data) => {
+    
     if (props?.button != "edit") {
       try {
         if (data.slide_url.length != 0) {
