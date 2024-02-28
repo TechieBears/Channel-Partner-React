@@ -4,11 +4,12 @@ import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import { formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../../utils/CustomClass'
 import { Edit } from 'iconsax-react'
+import { addCoupon, editCoupon } from '../../../../api'
+import { toast } from 'react-toastify'
 
 export default function AddCoupon(props) {
     const [isOpen, setIsOpen] = useState(false)
     const [loader, setLoader] = useState(false)
-    const dispatch = useDispatch()
     const toggle = () => setIsOpen(!isOpen);
     const {
         register,
@@ -19,6 +20,27 @@ export default function AddCoupon(props) {
 
     const onSubmit = (data) => {
         console.log('data', data);
+        if (props?.button == 'edit') {
+            editCoupon(data, props?.data?.coupon_id).then(res => {
+                if (res?.status == 'success') {
+                    props?.fetchCoupon();
+                    toast?.success('Coupon Edited Successfully')
+                    toggle();
+                } else {
+                    toast?.error('Error While Editing Coupon')
+                }
+            })
+        } else {
+            addCoupon(data).then(res => {
+                if (res?.status == 'success') {
+                    props?.fetchCoupon();
+                    toast?.success('Coupon Added Successfully')
+                    toggle();
+                } else {
+                    toast?.error('Error While Adding Coupon')
+                }
+            })
+        }
     }
 
     // ===================== close modals ===============================
@@ -31,8 +53,7 @@ export default function AddCoupon(props) {
         if (props?.button == 'edit') {
             reset({
                 'coupon_name': props?.data?.coupon_name,
-                'coupon_percentage': props?.data?.coupon_percentage,
-                'coupon_percentage': props?.data?.coupon_percentage,
+                'discount_percent': props?.data?.discount_percent,
                 'expiry_date': props?.data?.expiry_date,
                 'coupon_type': props?.data?.coupon_type,
 
@@ -90,6 +111,7 @@ export default function AddCoupon(props) {
                                                 <div className="">
                                                     <label className={labelClass} >Coupon Name*</label>
                                                     <input
+                                                        placeholder='Coupon Name'
                                                         type='text'
                                                         className={inputClass}
                                                         {...register('coupon_name', { required: true })}
@@ -97,22 +119,23 @@ export default function AddCoupon(props) {
                                                     {errors.coupon_name && <Error title='Coupon Name is required*' />}
                                                 </div>
                                                 <div className="">
-                                                    <label className={labelClass} >Percentage*</label>
+                                                    <label className={labelClass} >Percentage(%)*</label>
                                                     <input
+                                                        placeholder='Percentage(%)'
                                                         type='number'
                                                         className={inputClass}
-                                                        {...register('coupon_percentage', { required: true })}
+                                                        {...register('discount_percent', { required: true })}
                                                     />
-                                                    {errors.coupon_percentage && <Error title='Percentage is required*' />}
+                                                    {errors.discount_percent && <Error title='Percentage is required*' />}
                                                 </div>
                                                 <div className="">
                                                     <label className={labelClass} >Expiry Date*</label>
                                                     <input
                                                         type='date'
                                                         className={inputClass}
-                                                        {...register('coupon_percentage', { required: true })}
+                                                        {...register('expiry_date', { required: true })}
                                                     />
-                                                    {errors.coupon_percentage && <Error title='Percentage is required*' />}
+                                                    {errors.expiry_date && <Error title='Percentage is required*' />}
                                                 </div>
                                                 <div className="">
                                                     <label className={labelClass} >Coupon Type*</label>
@@ -121,10 +144,10 @@ export default function AddCoupon(props) {
                                                         {...register('coupon_type', { required: true })}
                                                     >
                                                         <option value=''>Select</option>
-                                                        <option value='Seller'>Seller</option>
+                                                        <option value='Restaurant'>Restaurant</option>
                                                         <option value='Vendor'>Vendor</option>
                                                     </select>
-                                                    {errors.coupon_percentage && <Error title='Percentage is required*' />}
+                                                    {errors.discount_percent && <Error title='Percentage is required*' />}
                                                 </div>
                                             </div>
 

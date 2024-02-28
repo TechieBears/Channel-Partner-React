@@ -50,7 +50,7 @@ export default function Restaurant() {
 
     const columns = [
         { field: 'vendor_id', header: 'ID', sortable: false },
-        { field: 'isb_code', header: 'ISB Code', sortable: false },
+        { field: 'msb_code', header: 'MSB Code', sortable: false },
         { field: 'shop_name', header: 'Restaurant Name', sortable: true },
         { field: 'veg_or_nonveg', header: 'Type', body: (row) => <h6>{row?.veg_or_nonveg == '' || row?.veg_or_nonveg == null || row?.veg_or_nonveg == undefined ? '-------' : row?.veg_or_nonveg}</h6>, sortable: true },
         { field: 'address', header: 'Address', body: (row) => <h6>{row?.user?.address}</h6>, sortable: true },

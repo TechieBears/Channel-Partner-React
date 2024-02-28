@@ -1469,3 +1469,47 @@ export const editAdminFinalProduct = async (id, data) => {
         console.log('error while getting vendor by id', err)
     }
 }
+
+
+// =================== Coupons =================
+
+export const addCoupon = async (data) => {
+    const url = `${environment.baseUrl}app/create_coupon`;
+    try {
+        const response = await axios.post(url, data);
+        return response.data;
+    } catch (err) {
+        console.log('error while posting data', err)
+    }
+}
+
+export const getCoupon = async () => {
+    const url = `${environment.baseUrl}app/create_coupon`;
+    try {
+        const response = await axios.get(url);
+        return response.data;
+    } catch (err) {
+        console.log('error while fetching data', err)
+    }
+}
+
+export const editCoupon = async (data, id) => {
+    const url = `${environment.baseUrl}app/edit_coupon/${id}`;
+    try {
+        const response = await axios.put(url, data);
+        return response.data;
+    } catch (err) {
+        console.log('error while posting data', err)
+    }
+}
+
+export const deleteRow = async (id) => {
+    const url = `${environment.baseUrl}app/edit_coupon/${id}`;
+    try {
+        const response = await axios.delete(url);
+        console.log('response', response)
+        // return response.data;
+    } catch (err) {
+        console.log('error while posting data', err)
+    }
+}
