@@ -4,6 +4,8 @@ import PrivacyPolicy from './PrivacyPolicy/PrivacyPolicy'
 import Basic from './PrivacyPolicy/Basic';
 import Custom from './PrivacyPolicy/Custom';
 import Tax from './PrivacyPolicy/Tax';
+import MediaGallery from './MediaGallery/MediaGallery';
+import CustomFileUpload from './MediaGallery/CustomFileUpload';
 
 export default function Settings() {
     const [selectedTab, setSelectedTab] = useState(0);
@@ -15,6 +17,10 @@ export default function Settings() {
                         className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 0 ? 'text-sky-500  border-b-2 border-sky-400 outline-0' : 'text-gray-500 border-b'
                             }`}
                     >Tax / Commission</Tab>
+                    <Tab
+                        className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 1 ? 'text-sky-500  border-b-2 border-sky-400 outline-0' : 'text-gray-500 border-b'
+                            }`}
+                    >Media gallery</Tab>
                     {/* <Tab
                         className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 1 ? 'text-sky-500  border-b-2 border-sky-400 outline-0' : 'text-gray-500 border-b'
                             }`}
@@ -29,6 +35,9 @@ export default function Settings() {
                     >Custom</Tab> */}
                 </TabList>
                 <TabPanel><Tax /></TabPanel>
+                <TabPanel><CustomFileUpload /></TabPanel>
+
+
                 {/* <TabPanel><Basic /></TabPanel>
                 <TabPanel><PrivacyPolicy /></TabPanel>
                 <TabPanel><Custom /></TabPanel> */}

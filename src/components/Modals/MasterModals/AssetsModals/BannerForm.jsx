@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import LoadBox from '../../../Loader/LoadBox';
 import Error from '../../../Errors/Error';
 import { ImageUpload, bannerLink } from '../../../../env';
+import MediaGallaryModal from '../../../../pages/Settings/MediaGallery/MediaGallery';
 
 
 export default function BannerForm(props) {
@@ -25,6 +26,15 @@ export default function BannerForm(props) {
         formState: { errors },
     } = useForm();
 
+    const [showModal, setShowModal] = useState(false);
+
+    const openModal = () => {
+        setShowModal(true);
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+    };
 
     // ============================ submit data  =====================================
     const onSubmit = async (data) => {
@@ -165,6 +175,21 @@ export default function BannerForm(props) {
                                                     </label>}
                                                     {errors.slide_url && <Error title='Main Image is required*' />}
                                                 </div>
+
+
+                                                <div>
+                                                    <button onClick={openModal}>Open Media Gallery</button>
+                                                    {showModal && (
+                                                        <MediaGallaryModal
+                                                            onClose={closeModal}
+                                                            onSelectImage={(selectedImage) => {
+                                                                // Handle selected image
+                                                                console.log('Selected image:', selectedImage);
+                                                            }}
+                                                        />
+                                                    )}
+                                                </div>
+
                                             </div>
 
                                             <footer className="flex justify-end px-4 py-2 space-x-3 bg-white">

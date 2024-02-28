@@ -423,6 +423,26 @@ export const GetConfigurationCharges = async (data) => {
 };
 
 
+// ================= Add Gallery Images =================
+export const addGalleryImages = async (data) => {
+    const url = `${environment.baseUrl}app/create_media`
+    try {
+        const response = await axios.post(url, data);
+        return response.data;
+    } catch (error) {
+        console.log('error creating product', error)
+    }
+}
+export const getGalleryImages = async (data) => {
+    const url = `${environment.baseUrl}app/create_media`
+    try {
+        const response = await axios.get(url, data);
+        return response.data;
+    } catch (error) {
+        console.log('error creating product', error)
+    }
+}
+
 
 
 

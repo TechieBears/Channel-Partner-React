@@ -19,6 +19,7 @@ import { validateEmail, validateGST, validatePIN, validatePhoneNumber } from '..
 
 
 export default function AddVendors(props) {
+    console.log('props = ', props)
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     const Franchisee = useSelector((state) => state?.master?.Franchise);
     const [isOpen, setOpen] = useState(false);
@@ -291,7 +292,7 @@ export default function AddVendors(props) {
                                                                 <option value="" selected>--Select Franchisee--</option>
                                                                 {Franchisee?.map(franchisee => (
                                                                     <option key={franchisee?.user?.id} value={franchisee?.user?.id}>
-                                                                        {franchisee?.user?.first_name + " (" + franchisee?.user?.pincode + ")"}
+                                                                        {franchisee?.user?.id} {franchisee?.user?.first_name + " (" + franchisee?.user?.pincode + ")"}
                                                                     </option>
                                                                 ))}
                                                             </select>
