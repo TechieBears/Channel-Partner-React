@@ -1,6 +1,7 @@
 import React from 'react'
 import AddCoupon from './Assest/AddCoupon'
 import Table from '../../../components/Table/Table'
+import { Trash } from 'iconsax-react'
 
 export default function Coupon() {
     const couponData = [
@@ -23,11 +24,22 @@ export default function Coupon() {
             "coupon_type": "Seller"
         }
     ]
+
+    const action = (row) =>
+        <div className='flex items-center space-x-2'>
+            <AddCoupon title='Edit Coupon' button='edit' data={row} />
+            <div className='bg-red-100 p-1 cursor-pointer '>
+                <Trash className='text-red-500' />
+            </div>
+        </div>
+
+
     const columns = [
         { field: 'coupon_name', header: 'Coupon Name', },
         { field: 'coupon_percentage', header: 'Coupon Percentage', },
         { field: 'expiry_date', header: 'Expiry Date', },
         { field: 'coupon_type', header: 'Coupon Type', },
+        { field: 'action', header: 'Action', body: action, },
     ]
     return (
         <>

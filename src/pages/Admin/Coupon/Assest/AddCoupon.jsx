@@ -1,8 +1,9 @@
 import { Dialog, Transition } from '@headlessui/react'
-import React, { useState, Fragment } from 'react'
+import React, { useState, Fragment, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import { formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../../utils/CustomClass'
+import { Edit } from 'iconsax-react'
 
 export default function AddCoupon(props) {
     const [isOpen, setIsOpen] = useState(false)
@@ -25,6 +26,19 @@ export default function AddCoupon(props) {
         toggle();
         setLoader(false);
     }
+
+    useEffect(() => {
+        if (props?.button == 'edit') {
+            reset({
+                'coupon_name': props?.data?.coupon_name,
+                'coupon_percentage': props?.data?.coupon_percentage,
+                'coupon_percentage': props?.data?.coupon_percentage,
+                'expiry_date': props?.data?.expiry_date,
+                'coupon_type': props?.data?.coupon_type,
+
+            })
+        }
+    }, [])
     return (
         <>
             {props.button !== "edit" ? (
