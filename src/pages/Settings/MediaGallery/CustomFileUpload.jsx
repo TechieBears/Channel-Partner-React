@@ -130,7 +130,7 @@ const CustomFileUpload = () => {
                   <img
                     src={data?.media_url}
                     alt={data?.media_name}
-                    className="min-w-full h-40 object-cover"
+                    className="min-w-full h-40 object-cover bg-slate-100"
                   />
                   <div className="text-xs font-semibold py-2">
                     {data?.media_name}
