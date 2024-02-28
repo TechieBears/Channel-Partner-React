@@ -1,11 +1,11 @@
 export const environment = {
     // --------------------Local Server Api URL--------------------
-    baseUrl: 'http://192.168.0.151:8005/',
+    // baseUrl: 'http://192.168.0.151:8005/',
     // baseUrl: 'http://127.0.0.1:8000/',
 
 
     // --------------------Live Server Api URL--------------------
-    // baseUrl: 'https://cpapi.techiebears.com/',
+    baseUrl: 'https://cpapi.techiebears.com/',
 }
 
 // ====================== AWS S3 Image/File Upload =========================
@@ -43,7 +43,7 @@ export const productLink = 'https://channel-partner-media.s3.ap-south-1.amazonaw
 export const profileImageLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/profileimg/'
 export const bannerLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/banner/'
 export const promotionLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/promotion/'
-export const mediaGallery = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/mediagallery/'
+export const mediaGalleryLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/mediagallery/'
 
 
 
