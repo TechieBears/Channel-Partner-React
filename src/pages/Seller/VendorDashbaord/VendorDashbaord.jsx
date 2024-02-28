@@ -32,8 +32,7 @@ import ViewProduct from "../../../components/Modals/Vendors/ViewProduct";
 
 
 const Dashboard = () => {
-    const [selectedTab, setSelectedTab] = useState(0);
-
+    const [modelOpen, setAddCouponOpen] = useState(true);
     const user = useSelector((state) => state.user.loggedUserDetails);
     const storages = useSelector((state) => state?.storage?.list);
     const cityNames = useSelector((state) => state?.master?.city);
@@ -181,8 +180,13 @@ const Dashboard = () => {
         }
     ]
 
+    useEffect(() => {
+
+    })
+
     return (
         <>
+            {user?.isactive == true && <DashboardForm isOpen={modelOpen} />}
             <DeleteModal
                 title="Delete Stroage"
                 deleteBtn={deleteData}

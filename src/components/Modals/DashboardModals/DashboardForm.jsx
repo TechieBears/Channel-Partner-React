@@ -503,18 +503,17 @@ const Step5 = (props) => {
                 />
             </div>
             <div className="">
-                <label className={labelClass} htmlFor="main_input">Fassai license  Doc*</label>
+                <label className={labelClass} htmlFor="main_input">Fassai license  Doc</label>
                 <input className={fileinput}
                     id="main_input"
                     type='file'
                     multiple
                     accept='image/jpeg,image/jpg,image/png,application/pdf'
                     placeholder='Upload Images...'
-                    {...register("fassai_doc", { required: false })} />
+                    {...register("fassai_doc", {})} />
                 {props?.button == 'edit' && props?.data?.fassai_doc != '' && props?.data?.fassai_doc != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
                     {props?.data?.fassai_doc.split('storage')[1].split('/')[1].split('_')[2]}
                 </label>}
-                {errors.fassai_doc && <Error title='Fassai license Docx*' />}
             </div>
             <p className='col-span-3 text-lg font-semibold'>Banking Details</p>
             <div className="">
@@ -583,14 +582,12 @@ const Step5 = (props) => {
 
 export default function DashboardForm(props) {
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
-    console.log('loggedUserDetails', LoggedUserDetails)
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(props?.isOpen)
     const [loader, setLoader] = useState(false)
     const [selectedRestType, setSelectedRestType] = useState([])
     const [selectedCuisines, setSelectedCuisines] = useState([])
     const [activeStep, setActiveStep] = useState(0);
     const toggle = () => setIsOpen(!isOpen);
-    const dispatch = useDispatch();
     const steps = ['Restaurant Information', 'Restaurant Type and Timing', 'Upload Images', 'General Information', 'Legal Documentation',];
     var methods = useForm({
         defaultValues: {
@@ -693,8 +690,6 @@ export default function DashboardForm(props) {
 
     // ================= submit data  ===============================
     const onSubmit = async (data) => {
-
-        console.log('data=================', data)
         isStepFalied()
         setLoader(true)
         if (activeStep == steps.length - 1) {
@@ -726,8 +721,7 @@ export default function DashboardForm(props) {
                 ...data,
                 "type_of_cuisine": selectedCuisines,
                 "restaurant_type": selectedRestType,
-                // "vendor_id": 
-
+                "vendor_id": LoggedUserDetails?.sellerId
             }
             registerRestaurant(updatedData)
         } else {
@@ -746,16 +740,9 @@ export default function DashboardForm(props) {
     }
     return (
         <>
-            {props.button !== "edit" ? (
-                <button onClick={toggle} className={tableBtn}>
-                    Add Storage
-                </button>
-            ) : (
-                <button
-                    onClick={toggle}
-                    className="bg-yellow-100 px-1.5 py-2 rounded-sm"><Edit size="20" className='text-yellow-500' />
-                </button>
-            )}
+            <button onClick={toggle} className={tableBtn}>
+                Add Storage
+            </button>
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-[100]" onClose={() => toggle}>
                     <Transition.Child
@@ -814,7 +801,7 @@ export default function DashboardForm(props) {
                                                     <button type='button' className={formBtn1} disabled={activeStep == 0} onClick={handleBack}>Back</button>
                                                     {/* <button type='submit' className={formBtn1}>{activeStep == 4 ? "Submit" : "Next"}</button> */}
                                                     {loader ? <LoadBox className="relative block w-auto px-5 transition-colors font-tb tracking-wide duration-200 py-2.5 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize" /> : <button type='submit' className={formBtn1}>{activeStep == 4 ? "Submit" : "Next"}</button>}
-                                                    <button type='button' className={formBtn2} onClick={closeBtn}>close</button>
+                                                    {/* <button type='button' className={formBtn2} onClick={closeBtn}>close</button> */}
                                                 </footer>
                                             </form>
                                         </FormProvider>
