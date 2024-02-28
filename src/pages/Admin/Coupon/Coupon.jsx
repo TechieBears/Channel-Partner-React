@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import AddCoupon from './Assest/AddCoupon'
 import Table from '../../../components/Table/Table'
 import { Trash } from 'iconsax-react'
-import { deleteRow, getCoupon } from '../../../api';
+import { deleteCoupon, getCoupon } from '../../../api';
 import { toast } from 'react-toastify';
 
 export default function Coupon() {
@@ -15,7 +15,7 @@ export default function Coupon() {
     }
 
     const deleteRowFunc = (row) => {
-        deleteRow(row?.coupon_id).then(res => {
+        deleteCoupon(row?.coupon_id).then(res => {
             if (res?.status == 'success') {
                 toast?.success('Coupon Deleted Successfully');
                 fetchCoupon();

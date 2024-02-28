@@ -1523,10 +1523,23 @@ export const editCoupon = async (data, id) => {
     }
 }
 
-export const deleteRow = async (id) => {
+export const deleteCoupon = async (id) => {
     const url = `${environment.baseUrl}app/edit_coupon/${id}`;
     try {
         const response = await axios.delete(url);
+        console.log('response', response)
+        // return response.data;
+    } catch (err) {
+        console.log('error while posting data', err)
+    }
+}
+
+// ================ Restaurant On Boarding ================
+
+export const registerRestaurant = async (data) => {
+    const url = `${environment.baseUrl}vendor/onboard_restaurant`;
+    try {
+        const response = await axios.post(url, data);
         console.log('response', response)
         // return response.data;
     } catch (err) {

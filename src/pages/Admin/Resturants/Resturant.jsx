@@ -154,7 +154,7 @@ export default function Restaurant() {
     const columns = [
         { field: 'id', header: 'ID', body: (row) => <h6>{row?.user?.id}</h6>, sortable: false },
         // { field: 'profile_pic', header: 'Profile', body: representativeBodyTemplate, sortable: false, style: true },
-        { field: 'isb_code', header: 'ISB', sortable: false },
+        { field: 'msb_code', header: 'MSB', sortable: false },
         { field: 'first_name', body: (row) => <div className="capitalize">{row?.user?.first_name + " " + row?.user?.last_name}</div>, header: 'Name' },
         { field: 'email', header: 'Email', body: (row) => <h6>{row?.user?.email}</h6>, sortable: false },
         { field: 'insta_commison_percentage', header: 'Comission(%)', body: (row) => <h6>{row?.insta_commison_percentage}%</h6>, sortable: false },
