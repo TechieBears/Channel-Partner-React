@@ -35,11 +35,11 @@ export default function Coupon() {
 
 
     const columns = [
-        { field: 'coupon_name', header: 'Coupon Name', },
-        { field: 'coupon_percentage', header: 'Coupon Percentage', },
+        { field: 'coupon_name', header: 'Coupon Name', sortable: true },
+        { field: 'coupon_percentage', header: 'Coupon Percentage', sortable: true },
         { field: 'expiry_date', header: 'Expiry Date', },
-        { field: 'coupon_type', header: 'Coupon Type', },
-        { field: 'action', header: 'Action', body: action, },
+        { field: 'coupon_type', header: 'Coupon Type', sortable: true },
+        { field: 'action', header: 'Action', body: action, sortable: true },
     ]
     return (
         <>
