@@ -71,8 +71,8 @@ function ViewProduct() {
                 </div>
                 <div className='space-y-4'>
                     <div>
-                        <p className='text-lg font-semibold'>ISB</p>
-                        <p className='text-sm text-gray-600'>{product?.vendor?.isb_code ? product?.vendor?.isb_code : '------------'}</p>
+                        <p className='text-lg font-semibold'>MSB</p>
+                        <p className='text-sm text-gray-600'>{product?.vendor?.msb_code ? product?.vendor?.msb_code : '------------'}</p>
                     </div>
                     <div>
                         <p className='text-lg font-semibold'>Shop Name</p>

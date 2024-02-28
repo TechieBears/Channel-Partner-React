@@ -58,7 +58,6 @@ const Step1 = () => {
                         {errors.address && <Error title='Year is required*' />}
                     </div>
                     {manually &&
-                        // <div className=' col-span-3 pt-3 grid grid-cols-2 gap-2'>
                         <>
                             <p className={`col-span-2 text-center`}>--or enter coordinates manually--</p>
                             <div className="">
@@ -124,7 +123,6 @@ const Step1 = () => {
                             </div>
                             <div></div>
                         </>
-                        // </div>
                     }
                     <div className="">
                         <label className={labelClass}>
@@ -134,33 +132,9 @@ const Step1 = () => {
                             type="tel"
                             placeholder='Restaurant Number'
                             className={inputClass}
-                            {...register('rest_num', { required: true })}
+                            {...register('rest_num', { required: true, validate: validatePhoneNumber })}
                         />
                         {errors.rest_num && <Error title='Restaurant Number is required*' />}
-                        {/* {verifyPhone &&
-                            <div id="otp" class="flex flex-row justify-center text-center px-2 mt-2">
-                                <input class="m-2 border focus:border-sky-400 h-10 w-10 text-center form-control rounded" type="text" id="first" maxlength="1" />
-                                <input class="m-2 border focus:border-sky-400 h-10 w-10 text-center form-control rounded" type="text" id="second" maxlength="1" />
-                                <input class="m-2 border focus:border-sky-400 h-10 w-10 text-center form-control rounded" type="text" id="third" maxlength="1" />
-                                <input class="m-2 border focus:border-sky-400 h-10 w-10 text-center form-control rounded" type="text" id="fourth" maxlength="1" />
-                                <input class="m-2 border focus:border-sky-400 h-10 w-10 text-center form-control rounded" type="text" id="fifth" maxlength="1" />
-                                <input class="m-2 border focus:border-sky-400 h-10 w-10 text-center form-control rounded" type="text" id="sixth" maxlength="1" />
-                            </div>}
-                        <div className='grid grid-cols-2 gap-10'>
-                            <button type='button' onClick={() => setVerifyPhone(!verifyPhone)} className={`${formBtn1} mt-2`}>Verify</button>
-                            {verifyPhone && <button type='button' className={` mt-2`}>Resend</button>}
-                        </div> */}
-                    </div>
-                    <div className=''>
-                        <label className={labelClass}>
-                            Personal Number*
-                        </label>
-                        <input
-                            type="tel"
-                            placeholder='Restaurant Number'
-                            className={inputClass}
-                            {...register('personal_num', {})}
-                        />
                     </div>
                     <div className="">
                         <label className={labelClass}>
@@ -170,22 +144,8 @@ const Step1 = () => {
                             type="email"
                             placeholder='Restaurant Mail'
                             className={inputClass}
-                            {...register('mail', { required: true })}
+                            {...register('mail', { required: true, validate: validateEmail })}
                         />
-                        {/* {errors.address && <Error title='Year is required*' />} */}
-                        {/* {verifyEmail &&
-                            <div id="otp" class="flex flex-row justify-center text-center px-2 mt-2">
-                                <input class="m-2 border focus:border-sky-400 h-10 w-10 text-center form-control rounded" type="text" id="first" maxlength="1" />
-                                <input class="m-2 border focus:border-sky-400 h-10 w-10 text-center form-control rounded" type="text" id="second" maxlength="1" />
-                                <input class="m-2 border focus:border-sky-400 h-10 w-10 text-center form-control rounded" type="text" id="third" maxlength="1" />
-                                <input class="m-2 border focus:border-sky-400 h-10 w-10 text-center form-control rounded" type="text" id="fourth" maxlength="1" />
-                                <input class="m-2 border focus:border-sky-400 h-10 w-10 text-center form-control rounded" type="text" id="fifth" maxlength="1" />
-                                <input class="m-2 border focus:border-sky-400 h-10 w-10 text-center form-control rounded" type="text" id="sixth" maxlength="1" />
-                            </div>}
-                        <div className='grid grid-cols-2 gap-10'>
-                            <button type='button' onClick={() => setVerifyEmail(!verifyEmail)} className={`${formBtn1} mt-2`}>Verify</button>
-                            {verifyEmail && <button type='button' className={` mt-2`}>Resend</button>}
-                        </div> */}
                     </div>
                 </div>
             </div>
@@ -232,18 +192,6 @@ const Step2 = () => {
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
             <p className='md:col-span-2 lg:col-span-3 font-semibold text-lg'>Establishment Type</p>
-            <div className=''>
-                <lable className={labelClass}>Establishment Type</lable>
-                <select
-                    className={inputClass}
-                    {...register('setting_type', { required: true })}
-                >
-                    <option value=''>Select</option>
-                    <option value='Both'>Both</option>
-                    <option value='Dine-In Only'>Dine-In Only</option>
-                    <option value='Delivery Only'>Delivery Only</option>
-                </select>
-            </div>
             <div className="">
                 <label className={labelClass}>
                     Select What Describe you the best*
@@ -290,26 +238,6 @@ const Step2 = () => {
                 />
                 {errors?.closing_hour && <Error title='Closing Hour is required' />}
             </div>
-            <div>
-                <label className={labelClass}>
-                    Week Off*
-                </label>
-                <select
-                    type='time'
-                    className={inputClass}
-                    {...register('weeek_off', { required: true })}
-                >
-                    <option value=''>Select</option>
-                    <option value='Monday'>Monday</option>
-                    <option value='Tuesday'>Tuesday</option>
-                    <option value='Wednesday'>Wednesday</option>
-                    <option value='Thursday'>Thursday</option>
-                    <option value='Friday'>Friday</option>
-                    <option value='Saturday'>Saturday</option>
-                    <option value='Sunday'>Sunday</option>
-                </select>
-                {errors?.week_off && <Error title='Week Off is required' />}
-            </div>
         </div>
     );
 };
@@ -322,22 +250,23 @@ const Step3 = (props) => {
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
             <p className='md:col-span-2 lg:col-span-3 font-semibold text-lg'>Upload Images</p>
+            <p className='md:col-span-2 lg:col-span-3 font-normal text-base'>Ambience Images</p>
             <div className="">
-                <label className={labelClass} htmlFor="main_input">Menu Image 1 *</label>
+                <label className={labelClass} htmlFor="main_input">Image 1 *</label>
                 <input className={fileinput}
                     id="main_input"
                     type='file'
                     multiple
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("menu_image", { required: props.button == 'edit' ? false : true })} />
+                    {...register("menu_image", { required: true })} />
                 {props?.button == 'edit' && props?.data.menu_image != '' && props?.data.menu_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                     {props?.data?.menu_image?.split('/').pop()}
                 </label>}
                 {errors.menu_image && <Error title='Menu Image is required*' />}
             </div>
             <div className="">
-                <label className={labelClass} htmlFor="main_input">Menu Image 2</label>
+                <label className={labelClass} htmlFor="main_input">Image 2</label>
                 <input className={fileinput}
                     id="main_input"
                     type='file'
@@ -351,18 +280,32 @@ const Step3 = (props) => {
                 {errors.menu_image2 && <Error title='Menu Image is required*' />}
             </div>
             <div className="">
-                <label className={labelClass} htmlFor="main_input">Restaurant Image*</label>
+                <label className={labelClass} htmlFor="main_input">Image 3</label>
                 <input className={fileinput}
                     id="main_input"
                     type='file'
                     multiple
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("main_img", { required: true })} />
-                {props?.button == 'edit' && props?.data.main_img != '' && props?.data.main_img != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                    {props?.data?.main_img?.split('/').pop()}
+                    {...register("res_img3", {})} />
+                {props?.button == 'edit' && props?.data.res_img3 != '' && props?.data.res_img3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                    {props?.data?.res_img3?.split('/').pop()}
                 </label>}
-                {errors.main_img && <Error title='Restaurant Image is required*' />}
+                {errors.res_img3 && <Error title='Restaurant Image is required*' />}
+            </div>
+            <p className='md:col-span-2 lg:col-span-3 font-normal text-base'>Dish Images</p>
+            <div className="">
+                <label className={labelClass} htmlFor="main_input">Image 1*</label>
+                <input className={fileinput}
+                    id="main_input"
+                    type='file'
+                    multiple
+                    accept='image/jpeg,image/jpg,image/png'
+                    placeholder='Upload Images...'
+                    {...register("img2", { required: true })} />
+                {props?.button == 'edit' && props?.data.img2 != '' && props?.data.img2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                    {props?.data?.img2?.split('/').pop()}
+                </label>}
             </div>
             <div className="">
                 <label className={labelClass} htmlFor="main_input">Image 2</label>
@@ -372,9 +315,9 @@ const Step3 = (props) => {
                     multiple
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("img2", {})} />
-                {props?.button == 'edit' && props?.data.img2 != '' && props?.data.img2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                    {props?.data?.img2?.split('/').pop()}
+                    {...register("img3", {})} />
+                {props?.button == 'edit' && props?.data.img3 != '' && props?.data.img3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                    {props?.data?.img3?.split('/').pop()}
                 </label>}
             </div>
             <div className="">
@@ -400,52 +343,6 @@ const Step4 = (props) => {
     const deliveryTime = watch('delivery_time')
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
-            <div className=''>
-                <lable>Did Our representative refer you this platform</lable>
-                <select
-                    className={inputClass}
-                    {...register('referance', { require: true })}
-                >
-                    <option value=''>Select</option>
-                    <option value='Yes'>Yes</option>
-                    <option value='No'>No</option>
-                </select>
-            </div>
-            <div className=''>
-                <lable>Order Timing</lable>
-                <select
-                    className={inputClass}
-                    {...register('delivery_time', { require: true })}
-                >
-                    <option value=''>Select</option>
-                    <option value='Same'>Delivery and Restaurant timings are same</option>
-                    <option value='Delivery Different'>Delivery timing is different than restaurant</option>
-                </select>
-            </div>
-            <div></div>
-            {
-                deliveryTime == 'Delivery Different' && <>
-                    <p className='col-span-3 text-lg font-semibold'>Please provide spefic timings</p>
-                    <div>
-                        <label>Restaurant Timing</label>
-                        <input
-                            type='time'
-                            className={inputClass}
-                            {...register('rest_timing', { required: deliveryTime == 'Delivery Different' ? true : false })}
-                        />
-                        {errors.rest_timing && <Error title='This is required*' />}
-                    </div>
-                    <div>
-                        <label>Delivery Timing</label>
-                        <input
-                            type='time'
-                            className={inputClass}
-                            {...register('delivery_timing', { required: deliveryTime == 'Delivery Different' ? true : false })}
-                        />
-                        {errors.delivery_timing && <Error title='This is required*' />}
-                    </div>
-                </>
-            }
             <p className='col-span-3 text-lg font-semibold'>Ordering Menu Photos</p>
             <div className="">
                 <label className={labelClass} htmlFor="main_input">Image 1</label>
@@ -539,7 +436,7 @@ const Step5 = (props) => {
                 <label>Is Your Restaurant GST registered</label>
                 <select
                     className={inputClass}
-                    {...register('gst_registered', { required: true })}
+                    {...register('gst_registered', {})}
                 >
                     <option value='Yes'>Yes</option>
                     <option value='No'>No</option>
@@ -611,7 +508,7 @@ const Step5 = (props) => {
                     multiple
                     accept='image/jpeg,image/jpg,image/png,application/pdf'
                     placeholder='Upload Images...'
-                    {...register("fassai_doc", { required: props.button == 'edit' ? false : true })} />
+                    {...register("fassai_doc", { required: false })} />
                 {props?.button == 'edit' && props?.data?.fassai_doc != '' && props?.data?.fassai_doc != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
                     {props?.data?.fassai_doc.split('storage')[1].split('/')[1].split('_')[2]}
                 </label>}
@@ -620,13 +517,13 @@ const Step5 = (props) => {
             <p className='col-span-3 text-lg font-semibold'>Banking Details</p>
             <div className="">
                 <label className={labelClass}>
-                    Bank Account Number
+                    Bank Account Number*
                 </label>
                 <input
                     type="text"
                     placeholder='Bank Account Number'
                     className={inputClass}
-                    {...register('account_number')}
+                    {...register('account_number', { required: true })}
                 />
             </div>
             <div className="">
@@ -651,6 +548,32 @@ const Step5 = (props) => {
                     className={inputClass}
                     {...register('ifsc_code')}
                 />
+            </div>
+            <p className='col-span-3 text-lg font-semibold'>Adhar Details</p>
+            <div className="">
+                <label className={labelClass}>
+                    Adhar Number*
+                </label>
+                <input
+                    type="text"
+                    placeholder='Adhar Number'
+                    className={inputClass}
+                    {...register('adhar_no', { required: true })}
+                />
+            </div>
+            <div className="">
+                <label className={labelClass} htmlFor="main_input">Adhar Photo*</label>
+                <input className={fileinput}
+                    id="main_input"
+                    type='file'
+                    multiple
+                    accept='image/jpeg,image/jpg,image/png,application/pdf'
+                    placeholder='Upload Images...'
+                    {...register("adhar_img", { required: true })} />
+                {props?.button == 'edit' && props?.data?.adhar_img != '' && props?.data?.adhar_img != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
+                    {props?.data?.adhar_img.split('storage')[1].split('/')[1].split('_')[2]}
+                </label>}
+                {errors.adhar_img && <Error title='Adhar Card Image is required*' />}
             </div>
         </div>
     )
@@ -764,7 +687,6 @@ export default function DashboardForm(props) {
         switch (step) {
             case 0:
                 return <Step1 />
-            // return <Step5 {...props} />
             case 1:
                 return <Step2 />
             case 2:

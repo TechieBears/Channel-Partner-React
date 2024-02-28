@@ -146,20 +146,20 @@ const SellerLogin = () => {
                             </div>
                             <div>
                                 <label htmlFor="email" className="block text-base font-medium leading-6 text-gray-500 font-tbPop">
-                                    ISB*
+                                    MSB*
                                 </label>
                                 <div className="mt-1">
                                     <input
-                                        id="isb"
-                                        name="isb"
+                                        id="msb"
+                                        name="msb"
                                         type="text"
-                                        placeholder='ISB Code'
-                                        autoComplete="isb_code"
+                                        placeholder='MSB Code'
+                                        autoComplete="msb_code"
                                         required
                                         className={`${inputClass} bg-neutral-100 border border-gray-200/50`}
-                                        {...register('isb_code', { required: true })}
+                                        {...register('msb_code', { required: true })}
                                     />
-                                    {errors.isb_code && <Error title={'ISB code is required*'} />}
+                                    {errors.msb_code && <Error title={'MSB code is required*'} />}
                                 </div>
                             </div>
                             <div className='pt-3'>

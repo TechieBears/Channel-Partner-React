@@ -147,11 +147,11 @@ export default function VendorDetails() {
                                             <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-2 gap-x-3 gap-y-3 customBox">
                                                 <div className="">
                                                     <label className={labelClass}>
-                                                        Vendor ISB Code*
+                                                        Vendor MSB Code*
                                                     </label>
                                                     <h3
                                                         className={inputClass}
-                                                    >{data?.isb_code}</h3>
+                                                    >{data?.msb_code}</h3>
                                                 </div>
                                                 <div className="">
                                                     <label className={labelClass}>
