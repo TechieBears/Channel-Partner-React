@@ -148,7 +148,7 @@ const DashboardBannerPanel = () => {
             </h1>
           </div>
           {/* <button onClick={openMediaModal}>Open Media gallery</button> */}
-          <MediaGallaryModal title="Media Gallery" showModal={showModal} imageDetails={imageDetails} />
+          {/* <MediaGallaryModal title="Media Gallery" showModal={showModal} imageDetails={imageDetails} /> */}
 
           <BannerForm
             title="Add New Banner"
