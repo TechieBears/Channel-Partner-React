@@ -18,35 +18,50 @@ export default function AddCoupon(props) {
         formState: { errors },
     } = useForm();
 
+    const [username, setUsername] = useState("");
+    const handleInput = (event) => {
+        event.preventDefault();
+        setUsername(event.target.value);
+    };
+    const changeCase = (event) => {
+        event.preventDefault();
+        setUsername(event.target.value.toUpperCase());
+    };
+
     const onSubmit = (data) => {
+        const payload= {...data, coupon_name: data?.coupon_name?.toUpperCase() }
         console.log('data', data);
         if (props?.button == 'edit') {
-            editCoupon(data, props?.data?.coupon_id).then(res => {
+            editCoupon(payload, props?.data?.coupon_id).then(res => {
                 if (res?.status == 'success') {
                     props?.fetchCoupon();
                     toast?.success('Coupon Edited Successfully')
                     toggle();
+                    reset()
                 } else {
                     toast?.error('Error While Editing Coupon')
                 }
             })
         } else {
-            addCoupon(data).then(res => {
+            addCoupon(payload).then(res => {
                 if (res?.status == 'success') {
                     props?.fetchCoupon();
                     toast?.success('Coupon Added Successfully')
                     toggle();
+                    reset()
                 } else {
                     toast?.error('Error While Adding Coupon')
                 }
             })
         }
-    }
+    } 
+    
 
     // ===================== close modals ===============================
     const closeBtn = () => {
         toggle();
         setLoader(false);
+        reset()
     }
 
     useEffect(() => {
@@ -107,13 +122,13 @@ export default function AddCoupon(props) {
                                     <div className=" bg-gray-200/70">
                                         {/* React Hook Form */}
                                         <form onSubmit={handleSubmit(onSubmit)} >
-                                            <div className="py-4 mx-4 customBox">
+                                            <div className="py-4 mx-4 customBox space-y-2">
                                                 <div className="">
                                                     <label className={labelClass} >Coupon Name*</label>
                                                     <input
                                                         placeholder='Coupon Name'
                                                         type='text'
-                                                        className={inputClass}
+                                                        className={`${inputClass} uppercase`}
                                                         {...register('coupon_name', { required: true })}
                                                     />
                                                     {errors.coupon_name && <Error title='Coupon Name is required*' />}
@@ -121,7 +136,7 @@ export default function AddCoupon(props) {
                                                 <div className="">
                                                     <label className={labelClass} >Percentage(%)*</label>
                                                     <input
-                                                        placeholder='Percentage(%)'
+                                                        placeholder='Percentage (%) '
                                                         type='number'
                                                         className={inputClass}
                                                         {...register('discount_percent', { required: true })}
@@ -132,6 +147,8 @@ export default function AddCoupon(props) {
                                                     <label className={labelClass} >Expiry Date*</label>
                                                     <input
                                                         type='date'
+                                                        // min={new Date()}
+                                                        min={new Date().toISOString().split('T')[0]}
                                                         className={inputClass}
                                                         {...register('expiry_date', { required: true })}
                                                     />
