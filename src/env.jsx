@@ -5,7 +5,7 @@ export const environment = {
 
 
     // --------------------Live Server Api URL--------------------
-    // baseUrl: 'https://cpapi.techiebears.com/',
+    baseUrl: 'https://cpapi.techiebears.com/',
 }
 
 // ====================== AWS S3 Image/File Upload =========================
