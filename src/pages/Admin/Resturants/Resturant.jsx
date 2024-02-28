@@ -30,8 +30,8 @@ export default function Restaurant() {
     }
 
 
-      // =================== filter data ========================
-      const onSubmit = async (data) => {
+    // =================== filter data ========================
+    const onSubmit = async (data) => {
         if (data?.name != '' || data?.email != '' || data?.city != '' || data?.role != '') {
             let url = `${environment.baseUrl}user-filter/?first_name=${data?.name}&email=${data?.email}&city=${data?.city}&role=${data?.role}`
             await axios.get(url).then((res) => {
@@ -117,7 +117,7 @@ export default function Restaurant() {
     const actionBodyTemplate = (row) => (
         <div className="flex items-center gap-2">
             <NavLink to={`/resturants/restaurant-detail/${row?.vendor_id}`} state={row} className="bg-green-100 px-1.5 py-1 rounded-lg">
-            <Eye size="20" className='text-green-500' />
+                <Eye size="20" className='text-green-500' />
             </NavLink>
             <AddRestaurant button='edit' title='Edit User' id={row?.user?.id} data={row} getAllRestaurant={getAllRestaurant} />
         </div>

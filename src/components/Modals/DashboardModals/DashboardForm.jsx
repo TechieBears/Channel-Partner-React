@@ -3,7 +3,7 @@ import { Fragment, useState } from 'react';
 import { useForm, Controller, FormProvider, useFormContext } from "react-hook-form";
 import { fileinput, formBtn1, formBtn2, formBtn3, inputClass, labelClass, tableBtn } from '../../../utils/CustomClass';
 import { Edit } from 'iconsax-react';
-import { createStorage } from '../../../api';
+import { createStorage, registerRestaurant } from '../../../api';
 import { setStorageList } from '../../../redux/slices/storageSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -15,6 +15,7 @@ import LoadBox from '../../Loader/LoadBox';
 import Select from 'react-select'
 import { validateEmail, validatePhoneNumber } from '../../Validations.jsx/Validations';
 import { inputClasses } from '@mui/material';
+import { ImageUpload, restaurantLink } from '../../../env';
 
 
 // =================== form steps 1 =================
@@ -41,9 +42,9 @@ const Step1 = () => {
                             type="text"
                             placeholder='Name'
                             className={inputClass}
-                            {...register('name', { required: true })}
+                            {...register('shop_name', { required: true })}
                         />
-                        {errors.name && <Error title='Name is required*' />}
+                        {errors.shop_name && <Error title='Restaurant Name is required*' />}
                     </div>
                     <div className="">
                         <label className={labelClass}>
@@ -53,9 +54,9 @@ const Step1 = () => {
                             type="text"
                             placeholder='Restaurant Address'
                             className={inputClass}
-                            {...register('address', { required: true })}
+                            {...register('shop_address', { required: true })}
                         />
-                        {errors.address && <Error title='Year is required*' />}
+                        {errors.shop_address && <Error title='Year is required*' />}
                     </div>
                     {manually &&
                         <>
@@ -132,11 +133,11 @@ const Step1 = () => {
                             type="tel"
                             placeholder='Restaurant Number'
                             className={inputClass}
-                            {...register('rest_num', { required: true, validate: validatePhoneNumber })}
+                            {...register('shop_contact_number', { required: true, validate: validatePhoneNumber })}
                         />
-                        {errors.rest_num && <Error title='Restaurant Number is required*' />}
+                        {errors.shop_contact_number && <Error title='Restaurant Number is required*' />}
                     </div>
-                    <div className="">
+                    {/* <div className="">
                         <label className={labelClass}>
                             Restaurant Mail*
                         </label>
@@ -146,7 +147,7 @@ const Step1 = () => {
                             className={inputClass}
                             {...register('mail', { required: true, validate: validateEmail })}
                         />
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <div className='col-span-2'>
@@ -160,8 +161,9 @@ const Step1 = () => {
         </div>
     )
 }
+
 // =================== form steps 2 =================
-const Step2 = () => {
+const Step2 = (props) => {
     const { register, formState: { errors }, } = useFormContext()
     const [allCuisines, setAllCuisines] = useState([
         { value: "Italian Cuisine", label: "Italian Cuisine" },
@@ -187,8 +189,6 @@ const Step2 = () => {
         { value: "Pop-Up Restaurants", label: "Pop-Up Restaurants" },
         { value: "Vegetarian/Vegan Restaurants", label: "Vegetarian/Vegan Restaurants" },
     ]);
-    const [selectedRestType, setSelectedRestType] = useState([])
-    const [selectedCuisines, setSelectedCuisines] = useState([])
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
             <p className='md:col-span-2 lg:col-span-3 font-semibold text-lg'>Establishment Type</p>
@@ -199,10 +199,11 @@ const Step2 = () => {
                 <Select
                     options={allRestaurantTypes}
                     isMulti
-                    value={selectedRestType}
-                    onChange={(selectedOption) => setSelectedRestType(selectedOption)}
+                    value={props?.selectedRestType}
+                    onChange={(selectedOption) => props?.setSelectedRestType(selectedOption)}
+                // {...register('restaurant_type', { required: true })}
                 />
-                {selectedRestType.length <= 0 && <Error title='This is required' />}
+                {errors?.restaurant_type && <Error title='This is required' />}
             </div>
             <div className="">
                 <label className={labelClass}>
@@ -211,10 +212,11 @@ const Step2 = () => {
                 <Select
                     options={allCuisines}
                     isMulti
-                    value={selectedCuisines}
-                    onChange={(selectedOption) => setSelectedCuisines(selectedOption)}
+                    value={props?.selectedCuisines}
+                    onChange={(selectedOption) => props?.setSelectedCuisines(selectedOption)}
+                // {...register('type_of_cuisine', { required: true })}
                 />
-                {selectedCuisines.length <= 0 && <Error title='This is required' />}
+                {errors?.type_of_cuisine && <Error title='This is required' />}
             </div>
             <div>
                 <label className={labelClass}>
@@ -223,9 +225,9 @@ const Step2 = () => {
                 <input
                     type='time'
                     className={inputClass}
-                    {...register('opening_hour', { required: true })}
+                    {...register('shop_start_time', { required: true })}
                 />
-                {errors?.opening_hour && <Error title='Opening Hour is required' />}
+                {errors?.shop_start_time && <Error title='Opening Hour is required' />}
             </div>
             <div>
                 <label className={labelClass}>
@@ -234,16 +236,15 @@ const Step2 = () => {
                 <input
                     type='time'
                     className={inputClass}
-                    {...register('closing_hour', { required: true })}
+                    {...register('shop_closing_time', { required: true })}
                 />
-                {errors?.closing_hour && <Error title='Closing Hour is required' />}
+                {errors?.shop_closing_time && <Error title='Closing Hour is required' />}
             </div>
         </div>
     );
 };
 
 // =================== form steps 3 =================
-
 const Step3 = (props) => {
     const { register, formState: { errors }, } = useFormContext()
     // const designationList = useSelector(state => state?.master?.designation)
@@ -259,11 +260,11 @@ const Step3 = (props) => {
                     multiple
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("menu_image", { required: true })} />
-                {props?.button == 'edit' && props?.data.menu_image != '' && props?.data.menu_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                    {props?.data?.menu_image?.split('/').pop()}
+                    {...register("ambience_image", { required: true })} />
+                {props?.button == 'edit' && props?.data.ambience_image != '' && props?.data.ambience_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                    {props?.data?.ambience_image?.split('/').pop()}
                 </label>}
-                {errors.menu_image && <Error title='Menu Image is required*' />}
+                {errors.ambience_image && <Error title='Menu Image is required*' />}
             </div>
             <div className="">
                 <label className={labelClass} htmlFor="main_input">Image 2</label>
@@ -302,9 +303,9 @@ const Step3 = (props) => {
                     multiple
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("img2", { required: true })} />
-                {props?.button == 'edit' && props?.data.img2 != '' && props?.data.img2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                    {props?.data?.img2?.split('/').pop()}
+                    {...register("food_image1", { required: true })} />
+                {props?.button == 'edit' && props?.data.food_image1 != '' && props?.data.food_image1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                    {props?.data?.food_image1?.split('/').pop()}
                 </label>}
             </div>
             <div className="">
@@ -315,9 +316,9 @@ const Step3 = (props) => {
                     multiple
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("img3", {})} />
-                {props?.button == 'edit' && props?.data.img3 != '' && props?.data.img3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                    {props?.data?.img3?.split('/').pop()}
+                    {...register("food_image2", {})} />
+                {props?.button == 'edit' && props?.data.food_image2 != '' && props?.data.food_image2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                    {props?.data?.food_image2?.split('/').pop()}
                 </label>}
             </div>
             <div className="">
@@ -328,16 +329,16 @@ const Step3 = (props) => {
                     multiple
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("img3", {})} />
-                {props?.button == 'edit' && props?.data.img3 != '' && props?.data.img3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                    {props?.data?.img3?.split('/').pop()}
+                    {...register("food_image3", {})} />
+                {props?.button == 'edit' && props?.data.food_image3 != '' && props?.data.food_image3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                    {props?.data?.food_image3?.split('/').pop()}
                 </label>}
             </div>
         </div>
     );
 }
-// =================== form steps 4 =================
 
+// =================== form steps 4 =================
 const Step4 = (props) => {
     const { register, formState: { errors }, setError, watch } = useFormContext()
     const deliveryTime = watch('delivery_time')
@@ -402,9 +403,9 @@ const Step5 = (props) => {
                     type="text"
                     placeholder='PAN No'
                     className={inputClass}
-                    {...register('pan_no', { required: true })}
+                    {...register('pan_card', { required: true })}
                 />
-                {errors.pan_no && <Error title='PAN No is required*' />}
+                {errors.pan_card && <Error title='PAN No is required*' />}
             </div>
             <div className="">
                 <label className={labelClass}>
@@ -448,9 +449,10 @@ const Step5 = (props) => {
                         <label>GST Number</label>
                         <input
                             className={inputClass}
-                            {...register('gst_no', { required: gstRegistered == 'Yes' ? true : false })}
+                            {...register('gst_number', { required: gstRegistered == 'Yes' ? true : false })}
                             placeholder='GST Number'
                         />
+                        {errors?.gst_number && (gstRegistered == 'Yes') ? <Error title='GST Number is required' /> : ''}
                     </div>
                     <div className="">
                         <label className={labelClass} htmlFor="main_input">Upload Image</label>
@@ -517,6 +519,17 @@ const Step5 = (props) => {
             <p className='col-span-3 text-lg font-semibold'>Banking Details</p>
             <div className="">
                 <label className={labelClass}>
+                    Bank Name*
+                </label>
+                <input
+                    type="text"
+                    placeholder='Bank Name'
+                    className={inputClass}
+                    {...register('bank_name', { required: true })}
+                />
+            </div>
+            <div className="">
+                <label className={labelClass}>
                     Bank Account Number*
                 </label>
                 <input
@@ -525,18 +538,6 @@ const Step5 = (props) => {
                     className={inputClass}
                     {...register('account_number', { required: true })}
                 />
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Bank Account Type
-                </label>
-                <select
-                    className={inputClass}
-                    {...register('bank_account_type', { required: true })}
-                >
-                    <option value='Current'>Current</option>
-                    <option value='Savings'>Savings</option>
-                </select>
             </div>
             <div className="">
                 <label className={labelClass}>
@@ -558,8 +559,9 @@ const Step5 = (props) => {
                     type="text"
                     placeholder='Adhar Number'
                     className={inputClass}
-                    {...register('adhar_no', { required: true })}
+                    {...register('adhar_card', { required: true })}
                 />
+                {errors?.adhar_card && <Error title='Adhar number is required' />}
             </div>
             <div className="">
                 <label className={labelClass} htmlFor="main_input">Adhar Photo*</label>
@@ -580,9 +582,12 @@ const Step5 = (props) => {
 }
 
 export default function DashboardForm(props) {
-    const user = useSelector((state) => state.user.loggedUserDetails)
+    const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
+    console.log('loggedUserDetails', LoggedUserDetails)
     const [isOpen, setIsOpen] = useState(false)
     const [loader, setLoader] = useState(false)
+    const [selectedRestType, setSelectedRestType] = useState([])
+    const [selectedCuisines, setSelectedCuisines] = useState([])
     const [activeStep, setActiveStep] = useState(0);
     const toggle = () => setIsOpen(!isOpen);
     const dispatch = useDispatch();
@@ -656,24 +661,6 @@ export default function DashboardForm(props) {
     } else {
         methods = useForm()
     }
-
-    // ============== fetch data from api ================
-    const StorageList = () => {
-        if (user.role == 'admin') {
-            getStorages().then(res => {
-                dispatch(setStorageList(res))
-            }).catch(err => {
-                console.error('Error', err);
-            })
-        } else {
-            getPartnerStorage(user?.userid).then(res => {
-                dispatch(setStorageList(res))
-            }).catch(err => {
-                console.error('Error', err);
-            })
-        }
-
-    }
     // =========================== back button =========================
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -688,7 +675,7 @@ export default function DashboardForm(props) {
             case 0:
                 return <Step1 />
             case 1:
-                return <Step2 />
+                return <Step2 selectedCuisines={selectedCuisines} setSelectedCuisines={setSelectedCuisines} selectedRestType={selectedRestType} setSelectedRestType={setSelectedRestType} />
             case 2:
                 return <Step3 />
             case 3:
@@ -706,196 +693,43 @@ export default function DashboardForm(props) {
 
     // ================= submit data  ===============================
     const onSubmit = async (data) => {
+
         console.log('data=================', data)
-        // return
         isStepFalied()
         setLoader(true)
         if (activeStep == steps.length - 1) {
-            if (props.button != 'edit') {
-                if (data.image.length != 0) {
-                    await ImageUpload(data.image[0], "storage", "mainImage", data.name)
-                    data.image = `${link}${data.name}_mainImage_${data.image[0].name}`
-                } else {
-                    data.image = ''
-                }
-                if (data.outside_img.length != 0) {
-                    await ImageUpload(data.outside_img[0], "storage", "outSideImage", data.name)
-                    data.outside_img = `${link}${data.name}_outSideImage_${data.outside_img[0].name}`
-                } else {
-                    data.outside_img = ''
-                }
-                if (data.loading_img.length != 0) {
-                    await ImageUpload(data.loading_img[0], "storage", "loadingImage", data.name)
-                    data.loading_img = `${link}${data.name}_loadingImage_${data.loading_img[0].name}`
-                } else {
-                    data.loading_img = ''
-                }
-                if (data.staging_img.length != 0) {
-                    await ImageUpload(data.staging_img[0], "storage", "stagingImage", data.name)
-                    data.staging_img = `${link}${data.name}_stagingImage_${data.staging_img[0].name}`
-                } else {
-                    data.staging_img = ''
-                }
-                if (data.storage_img.length != 0) {
-                    await ImageUpload(data.storage_img[0], "storage", "storageImage", data.name)
-                    data.storage_img = `${link}${data.name}_storageImage_${data.storage_img[0].name}`
-                } else {
-                    data.storage_img = ''
-                }
-                if (data.other_img.length != 0) {
-                    await ImageUpload(data.other_img[0], "storage", "otherImage", data.name)
-                    data.other_img = `${link}${data.name}_otherImage_${data.other_img[0].name}`
-                } else {
-                    data.other_img = ''
-                }
-                if (data.fassai_doc.length != 0) {
-                    await ImageUpload(data.fassai_doc[0], "storage", "fassaiImage", data.name)
-                    data.fassai_doc = `${link}${data.name}_fassaiImage_${data.fassai_doc[0].name}`
-                } else {
-                    data.fassai_doc = ''
-                }
-                if (data.gst_doc.length != 0) {
-                    await ImageUpload(data.gst_doc[0], "storage", "gstImage", data.name)
-                    data.gst_doc = `${link}${data.name}_gstImage_${data.gst_doc[0].name}`
-                } else {
-                    data.gst_doc = ''
-                }
-                if (data.other_lic_doc.length != 0) {
-                    await ImageUpload(data.other_lic_doc[0], "storage", "otherImage", data.name)
-                    data.other_lic_doc = `${link}${data.name}_otherImage_${data.other_lic_doc[0].name}`
-                } else {
-                    data.other_lic_doc = ''
-                }
-                if (data.video_url.length != 0) {
-                    await ImageUpload(data.video_url[0], "demovideo", "edemo", data.name)
-                    data.video_url = `${demovideoLink}${data.name}_edemo_${data.video_url[0].name}`
-                } else {
-                    data.video_url = ''
-                }
-                if (data.electricity_url.length != 0) {
-                    await ImageUpload(data.electricity_url[0], "storage", "electricity", data.name)
-                    data.electricity_url = `${link}${data.name}_electricity_${data.electricity_url[0].name}`
-                } else {
-                    data.electricity_url = ''
-                }
-                if (data.noc_url.length != 0) {
-                    await ImageUpload(data.noc_url[0], "storage", "noc", data.name)
-                    data.noc_url = `${link}${data.name}_noc_${data.noc_url[0].name}`
-                } else {
-                    data.noc_url = ''
-                }
+            if (data.ambience_image.length != 0) {
+                await ImageUpload(data.ambience_image[0], "storage", "mainImage", data.name)
+                data.ambience_image = `${restaurantLink}${data.name}_mainImage_${data.ambience_image[0].name}`
+            } else {
+                data.ambience_image = ''
             }
-            else {
-                if (data.image.length != 0) {
-                    ImageUpload(data.image[0], "storage", "mainImage", data.name)
-                    data.image = `${link}${data.name}_mainImage_${data.image[0].name}`
-                } else {
-                    data.image = props.data.image
-                }
-                if (data.outside_img.length != 0) {
-                    await ImageUpload(data.outside_img[0], "storage", "outSideImage", data.name)
-                    data.outside_img = `${link}${data.name}_outSideImage_${data.outside_img[0].name}`
-                } else {
-                    data.outside_img = props.data.outside_img
-                }
-                if (data.loading_img.length != 0) {
-                    await ImageUpload(data.loading_img[0], "storage", "loadingImage", data.name)
-                    data.loading_img = `${link}${data.name}_loadingImage_${data.loading_img[0].name}`
-                } else {
-                    data.loading_img = props.data.loading_img
-                }
-                if (data.staging_img.length != 0) {
-                    await ImageUpload(data.staging_img[0], "storage", "stagingImage", data.name)
-                    data.staging_img = `${link}${data.name}_stagingImage_${data.staging_img[0].name}`
-                } else {
-                    data.staging_img = props.data.staging_img
-                }
-                if (data.storage_img.length != 0) {
-                    await ImageUpload(data.storage_img[0], "storage", "storageImage", data.name)
-                    data.storage_img = `${link}${data.name}_storageImage_${data.storage_img[0].name}`
-                } else {
-                    data.storage_img = props.data.storage_img
-                }
-                if (data.other_img.length != 0) {
-                    await ImageUpload(data.other_img[0], "storage", "otherImage", data.name)
-                    data.other_img = `${link}${data.name}_otherImage_${data.other_img[0].name}`
-                } else {
-                    data.other_img = props.data.other_img
-                }
-                if (data.fassai_doc.length != 0) {
-                    await ImageUpload(data.fassai_doc[0], "storage", "fassaiImage", data.name)
-                    data.fassai_doc = `${link}${data.name}_fassaiImage_${data.fassai_doc[0].name}`
-                } else {
-                    data.fassai_doc = props.data.fassai_doc
-                }
-                if (data.gst_doc.length != 0) {
-                    await ImageUpload(data.gst_doc[0], "storage", "gstImage", data.name)
-                    data.gst_doc = `${link}${data.name}_gstImage_${data.gst_doc[0].name}`
-                } else {
-                    data.gst_doc = props.data.gst_doc
-                }
-                if (data.other_lic_doc.length != 0) {
-                    await ImageUpload(data.other_lic_doc[0], "storage", "otherImage", data.name)
-                    data.other_lic_doc = `${link}${data.name}_otherImage_${data.other_lic_doc[0].name}`
-                } else {
-                    data.other_lic_doc = props.data.other_lic_doc
-                }
+            if (data.food_image1.length != 0) {
+                await ImageUpload(data.food_image1[0], "storage", "outSideImage", data.name)
+                data.food_image1 = `${restaurantLink}${data.name}_outSideImage_${data.food_image1[0].name}`
+            } else {
+                data.food_image1 = ''
+            }
+            if (data.food_image2.length != 0) {
+                await ImageUpload(data.food_image2[0], "storage", "loadingImage", data.name)
+                data.food_image2 = `${restaurantLink}${data.name}_loadingImage_${data.food_image2[0].name}`
+            } else {
+                data.food_image2 = ''
+            }
+            if (data.food_image3.length != 0) {
+                await ImageUpload(data.food_image3[0], "storage", "stagingImage", data.name)
+                data.food_image3 = `${restaurantLink}${data.name}_stagingImage_${data.food_image3[0].name}`
+            } else {
+                data.food_image3 = ''
+            }
+            let updatedData = {
+                ...data,
+                "type_of_cuisine": selectedCuisines,
+                "restaurant_type": selectedRestType,
+                // "vendor_id": 
 
-                if (data.video_url.length != 0) {
-                    await ImageUpload(data.video_url[0], "demovideo", "edemo", data.name)
-                    data.video_url = `${demovideoLink}${data.name}_edemo_${data.video_url[0].name}`
-                } else {
-                    data.video_url = props.data.video_url
-                }
-                if (data.electricity_url.length != 0) {
-                    await ImageUpload(data.electricity_url[0], "storage", "electricity", data.name)
-                    data.electricity_url = `${link}${data.name}_electricity_${data.electricity_url[0].name}`
-                } else {
-                    data.electricity_url = props.data.electricity_url
-                }
-                if (data.noc_url.length != 0) {
-                    await ImageUpload(data.noc_url[0], "storage", "noc", data.name)
-                    data.noc_url = `${link}${data.name}_noc_${data.noc_url[0].name}`
-                } else {
-                    data.noc_url = props.data.noc_url
-                }
             }
-
-            try {
-                if (props.button == 'edit') {
-                    updateStorage(props?.data?.id, data).then((res) => {
-                        if (res?.message === 'Data edited successfully') {
-                            StorageList()
-                            setLoader(false)
-                            toggle();
-                            toast.success(res?.message);
-                        }
-                    })
-                } else {
-                    if (user.role == 'partner') {
-                        data.user = user?.userid
-                        createStorage(data).then((res) => {
-                            if (res?.message === 'Data added successfully') {
-                                StorageList()
-                                setLoader(false)
-                                toggle();
-                                toast.success(res?.message);
-                            }
-                        })
-                    } else {
-                        createStorage(data).then((res) => {
-                            if (res?.message === 'Data added successfully') {
-                                StorageList()
-                                setLoader(false)
-                                toggle();
-                                toast.success(res?.message);
-                            }
-                        })
-                    }
-                }
-            } catch (error) {
-                console.log(error);
-            }
+            registerRestaurant(updatedData)
         } else {
             setLoader(false)
             setActiveStep((prevActiveStep) => prevActiveStep + 1);
