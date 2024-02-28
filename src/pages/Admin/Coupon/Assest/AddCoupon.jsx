@@ -147,7 +147,7 @@ export default function AddCoupon(props) {
                                                     <label className={labelClass} >Expiry Date*</label>
                                                     <input
                                                         type='date'
-                                                        // min={new Date().toISOString().split('T')[0]}
+                                                        min={new Date().toISOString().split('T')[0]}
                                                         className={inputClass}
                                                         {...register('expiry_date', { required: true })}
                                                     />
