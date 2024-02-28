@@ -1,21 +1,9 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
-import {
-  fileinput,
-  formBtn1,
-  formBtn2,
-  inputClass,
-  labelClass,
-  tableBtn,
-} from "../../../../utils/CustomClass";
+import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn} from "../../../../utils/CustomClass";
 import { Edit } from "iconsax-react";
-import {
-  addHomeBanners,
-  editHomeBanners,
-  getHomeBanners,
-  getGalleryImages
-} from "../../../../api";
+import { addHomeBanners, editHomeBanners, getHomeBanners, getGalleryImages} from "../../../../api";
 import { useDispatch } from "react-redux";
 import { setBanner } from "../../../../redux/Slices/masterSlice";
 import { toast } from "react-toastify";
@@ -25,11 +13,11 @@ import { ImageUpload, bannerLink } from "../../../../env";
 import MediaGallaryModal from "../../../../pages/Settings/MediaGallery/MediaGallery";
 
 export default function BannerForm(props) {
-  console.log("props = ", props);
+  // console.log("props = ", props);
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const [showSampleImageUpload, setShowSampleImageUpload] = useState(false);
-  console.log('showSampleImageUpload', showSampleImageUpload) 
+  // console.log('showSampleImageUpload', showSampleImageUpload) 
 
   const dispatch = useDispatch();
   const toggle = () => setIsOpen(!isOpen);
@@ -44,27 +32,39 @@ export default function BannerForm(props) {
   const [showModal, setShowModal] = useState(false);
   const [imageDetails, setImageDetails] = useState([]);
   const [childData, setChildData] = useState('');
-  console.log('imageDetails = = ', imageDetails)
+  // console.log('imageDetails = = ', imageDetails)
+  const mediaGalleryModalRef = useRef(null);
 
-  const openModal = () => {
+  const handleDivClick = () => {
+    // Open the MediaGallaryModal
     setShowModal(true);
   };
 
+  const openModal = () => {
+    if (mediaGalleryModalRef.current) {
+      mediaGalleryModalRef.current.openModal();
+    }else{
+      mediaGalleryModalRef.current.openModal();
+    }
+    // setShowModal(true);
+  };
+  
+  const closeModal = () => {
+    setShowModal(false);
+  };
+  
   const handleChildData = (data) => {
     setChildData(data);
     console.log('childData = ', childData)
     setValue("slide_url", childData);
   };
 
-  const closeModal = () => {
-    setShowModal(false);
-  };
 
   // ============== fetch data from api ================
   const fetchData = () => {
     try {
       getGalleryImages().then((res) => {
-        console.log("media gallery data = ", res);
+        // console.log("media gallery data = ", res);
         setImageDetails(res);
       });
     } catch (err) {
@@ -77,7 +77,6 @@ export default function BannerForm(props) {
 
   // ============================ submit data  =====================================
   const onSubmit = async (data) => {
-    console.log("data = ", data);
     if (props?.button != "edit") {
       try {
         if (data.slide_url.length != 0) {
@@ -137,16 +136,65 @@ export default function BannerForm(props) {
     }
   };
 
+
+
+  
+  const GallerySubmit = async (data) => {
+    if (props?.button != "edit") {
+      try {
+        setLoader(true);
+        addHomeBanners(data).then((res) => {
+          if (res?.message === "slide added successfully") {
+            setTimeout(() => {
+              dispatch(setBanner(res));
+              reset();
+              toggle(), setLoader(false), props?.getAllBannerList();
+              toast.success(res?.message);
+            }, 1000);
+          }
+        });
+      } catch (error) {
+        setLoader(false);
+        console.log("error", error);
+      }
+    } else {
+      try {
+        setLoader(true);
+        editHomeBanners(props?.data?.slide_id, data).then((res) => {
+          if (res?.message === "slide edited successfully") {
+            setTimeout(() => {
+              dispatch(setBanner(res));
+              reset();
+              toggle(), setLoader(false), props?.getAllBannerList();
+              toast.success(res?.message);
+            }, 1000);
+          }
+        });
+      } catch (error) {
+        setLoader(false);
+        console.log("error", error);
+      }
+    }
+  };
+
   // ===================== close modals ===============================
   const closeBtn = () => {
+    reset();
     toggle();
     setLoader(false);
     setShowSampleImageUpload(false);
   };
 
   const handleSelectChange = (e) => {
-    setShowSampleImageUpload(e.target.value === "I Don't have a Images");
-    // setShowSampleImageUpload(true);
+    if (e.target.value === 'I have a own Images') {
+        setShowSampleImageUpload(false);
+        setShowModal(false)
+    } else {
+      console.log('showModal == ', showModal)
+      console.log('showSampleImageUpload == ', showSampleImageUpload)
+        setShowSampleImageUpload(true);
+        setShowModal(true)
+    }
   };
 
   return (
@@ -196,18 +244,20 @@ export default function BannerForm(props) {
                   </Dialog.Title>
                   <div className=" bg-gray-200/70">
                     {/* React Hook Form */}
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <form onSubmit={childData == '' ? handleSubmit(onSubmit) : handleSubmit(GallerySubmit)}>
                       <div className="py-4 mx-4 customBox">
                         <div className="mb-3">
                           <select
                             name=""
                             onChange={handleSelectChange}
                             className={`${inputClass} !bg-slate-100`}
-                          >
+                            >
                             <option value="I have a own Images" selected>I have a own Images</option>
                             <option value="I Don't have a Images">I Don't have a Images</option>
                           </select>
                         </div>
+
+
                         {!showSampleImageUpload &&  (
                         <div className="">
                           <label className={labelClass} htmlFor="main_input">
@@ -237,37 +287,40 @@ export default function BannerForm(props) {
                         </div>
                         )}
 
-                      {showSampleImageUpload && (
-                            <div className="mt-3">
-                              <label className={labelClass} >
-                                  Upload Sample Image*
-                              </label>
-                              <MediaGallaryModal title="Upload Image" showModal={showModal} imageDetails={imageDetails}  sendDataToParent={handleChildData} />
-                                {props?.button == "edit" &&
-                                  props?.data.slide_url != "" &&
-                                  props?.data.slide_url != undefined && (
-                                    <label className="block mb-1 font-medium text-blue-800 text-md font-tb">
-                                      {childData?.split("/").pop()}
-                                    </label>
-                                  )}
-                                
-                              {errors.slide_url && (
-                                <Error title="Main Image is required*" />
-                              )}
+                        {showModal &&
+                        <div className="" onClick={handleDivClick}>
+                            <label className={labelClass} htmlFor="main_input">
+                              Image*
+                            </label>
+                            {/* You may add other content here, e.g., a message or an icon */}
                           </div>
-                        )}
+                          }
+
+                         {/* MediaGallaryModal */}
+                          {/* <div className="hidden"> */}
+                            {showModal && <MediaGallaryModal
+                              // ref={mediaGalleryModalRef}
+                              // id="mediaGalleryModal"
+                              className="hidden"
+                              title="Upload Image"
+                              // showModal={showModal}
+                              imageDetails={imageDetails}
+                              sendDataToParent={handleChildData}
+                            />}
+                            {childData && <span>{childData.split("/").pop()}</span>}
+                          {/* </div> */}
                       </div>
-                      
-                      {/* <MediaGallaryModal title="Media Gallery" showModal={showModal} imageDetails={imageDetails} /> */}
 
                       <footer className="flex justify-end px-4 py-2 space-x-3 bg-white">
                         {loader ? (
                           <LoadBox className="relative block w-auto px-5 transition-colors font-tb tracking-wide duration-200 py-2.5 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize" />
-                        ) : (
-                          <button type="submit" className={formBtn1}>
+                        ) : 
+                        (
+                          <button type="submit" className={formBtn1} >
                             submit
                           </button>
-                        )}
+                        )
+                        }
                         <button
                           type="button"
                           className={formBtn2}
@@ -276,7 +329,19 @@ export default function BannerForm(props) {
                           close
                         </button>
                       </footer>
+
                     </form>
+                        {/* <div className="hidden">
+                          <MediaGallaryModal
+                              ref={mediaGalleryModalRef}
+                              id="mediaGalleryModal"
+                              className="hidden"
+                              title="Upload Image"
+                              showModal={showModal}
+                              imageDetails={imageDetails}
+                              sendDataToParent={handleChildData}
+                          />
+                        </div> */}
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

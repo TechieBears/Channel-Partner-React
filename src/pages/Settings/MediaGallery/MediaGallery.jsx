@@ -1,19 +1,13 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 // import Button from '../buttons/Button';
-import {
-  formBtn1,
-  formBtn2,
-  inputClass,
-  labelClass,
-  tableBtn,
-} from "../../../utils/CustomClass";
+import { formBtn1, formBtn2, inputClass, labelClass, tableBtn} from "../../../utils/CustomClass";
 import { CloseCircle } from "iconsax-react";
 import { getGalleryImages } from "../../../api";
 
 const MediaGallaryModal = (props) => {
-  console.log("props = ", props);
-  const [isOpen, setIsOpen] = useState(false);
+  // console.log("props = ", props);
+  const [isOpen, setIsOpen] = useState();
   const [loader, setLoader] = useState(false);
   const [imageDetails, setImageDetails] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -43,6 +37,7 @@ const MediaGallaryModal = (props) => {
   // ===================== close modals ===============================
   const closeBtn = () => {
     toggle();
+    setIsOpen(!isOpen)
     setLoader(false);
   };
 
