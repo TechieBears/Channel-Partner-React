@@ -99,6 +99,7 @@ export default function AddRestItem(props) {
     const calculateRevenueSeller = watch('food_actual_price')
 
     useEffect(() => {
+        console.log('user+', user)
         if (user?.role == 'seller') {
             if (calculateRevenueSeller !== "") {
                 var mainUserPrice = calculateRevenueSeller * (user?.insta_commission == null ? 0 : user?.insta_commission / 100);
@@ -225,14 +226,14 @@ export default function AddRestItem(props) {
                                                             </div>
                                                             <div className="">
                                                                 <label className={labelClass}>
-                                                                    Product Revenue*
+                                                                    Item Revenue*
                                                                 </label>
                                                                 <input
                                                                     type="text"
                                                                     readOnly
                                                                     placeholder='₹ 0.00'
                                                                     className={inputClass}
-                                                                    {...register('product_revenue')}
+                                                                    {...register('food_revenue')}
                                                                 />
                                                             </div>
                                                         </>
@@ -339,6 +340,7 @@ export default function AddRestItem(props) {
                                                             className={inputClass}
                                                             {...register('food_isactive', { required: true })}
                                                         >
+                                                            <option value="">select</option>
                                                             <option value={true}>Active</option>
                                                             <option value={false}>In-Active</option>
                                                         </select>
