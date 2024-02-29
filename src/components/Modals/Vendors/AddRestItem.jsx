@@ -310,6 +310,8 @@ export default function AddRestItem(props) {
                                                             className={inputClass}
                                                             {...register('food_veg_nonveg', { required: true })}
                                                         >
+                                                            <option value='' selected>Select</option>
+                                                            <option value='Both'>Both</option>
                                                             <option value='Veg'>Veg</option>
                                                             <option value='Non-Veg'>Non-Veg</option>
                                                         </select>
