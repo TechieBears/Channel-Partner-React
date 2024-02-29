@@ -114,7 +114,7 @@ export default function AddRestItem(props) {
             editFoodItem(updatedData).then(res => {
                 if (res?.status == 'success') {
                     toast?.success('Food item updated successfully')
-                    props?.getrestaurantProducts()
+                    props?.getRestFood()
                     toggle();
                 }
             })
@@ -122,7 +122,7 @@ export default function AddRestItem(props) {
             addFoodItem(updatedData).then(res => {
                 if (res?.status == 'success') {
                     toast.success('Food Item Added Successfully')
-                    props?.getrestaurantProducts()
+                    props?.getRestFood()
                     toggle()
                 }
             })

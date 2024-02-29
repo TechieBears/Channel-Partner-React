@@ -9,7 +9,7 @@ import { Link, NavLink } from 'react-router-dom';
 import AddProduct from '../../../components/Modals/Vendors/AddProduct';
 import { Edit, Eye, Trash } from 'iconsax-react';
 import ViewProduct from '../../../components/Modals/Vendors/ViewProduct';
-import { deleteFoodItem, getAllSeller, getAllShopProduct, getFoodItem, getRestaurantFood } from '../../../api';
+import { deleteFoodItem, getAllSeller, getAllShopProduct, getRestaurantFood } from '../../../api';
 import Switch from 'react-js-switch';
 import AddRestItem from '../../../components/Modals/Vendors/AddRestItem';
 
@@ -42,11 +42,23 @@ const VendorProduct = () => {
         toast.success("Filters clear");
     };
 
+    const getRestFood = () => {
+        try {
+            getRestaurantFood().then(res => {
+                setData(res)
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const deleteItem = (row) => {
         try {
             deleteFoodItem(row?.food_id).then(res => {
-                toast?.success('Food Items deleted successfully')
-                getrestaurantProducts()
+                if (res?.status == 'success') {
+                    toast?.success('Food Items deleted successfully')
+                    getRestFood()
+                }
             })
         } catch (e) {
             console.log('error occured while deleting food item')
@@ -68,7 +80,7 @@ const VendorProduct = () => {
         <Link to={`/product-list/product-details/${row?.product_id}`} state={row} className='items-center p-1 bg-sky-100 rounded-xl hover:bg-sky-200'>
             <Eye size={24} className='text-sky-400' />
         </Link>
-        <AddRestItem title='Edit Product' button='edit' data={row} getrestaurantProducts={getrestaurantProducts} />
+        <AddRestItem title='Edit Product' button='edit' data={row} getRestFood={getRestFood} />
         <button onClick={(row) => deleteItem(row)} className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
             <Trash size={24} className='text-red-400' />
         </button>
@@ -129,7 +141,6 @@ const VendorProduct = () => {
         { field: 'food_subcategory', header: 'Sub-Category', body: (row) => <h6>{row?.food_subcategory?.subcat_name}</h6>, sortable: false },
         { field: 'food_veg_nonveg', header: 'Type', sortable: false },
         { field: 'food_details', header: 'Details', sortable: false },
-        { field: 'createdDate', header: 'Create Date', sortable: true },
         { field: 'food_actual_price', header: 'MRP', sortable: true },
         { filed: 'action', header: 'Action', body: restAction, sortable: true }
     ]
@@ -151,7 +162,7 @@ const VendorProduct = () => {
         // }
 
         if (user?.vendor_type == 'restaurant') {
-            getrestaurantProducts()
+            getRestFood()
         }
     }, []);
 
@@ -215,7 +226,7 @@ const VendorProduct = () => {
             <div className='p-4 m-4 bg-white sm:m-5 rounded-xl'>
                 <div className='grid items-center grid-cols-6'>
                     <h2 className='col-span-5 text-xl font-semibold'>{user?.vendor_type == 'restaurant' ? 'Item List' : 'Product List'}</h2>
-                    {user?.isverified_byadmin == true && user?.vendor_type == 'restaurant' ? <AddRestItem title='Add Item' button='add' getrestaurantProducts={getrestaurantProducts} /> : user?.vendor_type == 'seller' ? <AddProduct title='Add Product' getProducts={getProducts} /> : ''}
+                    {user?.isverified_byadmin == true && user?.vendor_type == 'restaurant' ? <AddRestItem title='Add Item' button='add' getRestFood={getRestFood} /> : user?.vendor_type == 'seller' ? <AddProduct title='Add Product' getProducts={getProducts} /> : ''}
                     {/* <AddRestItem title='Add Item' button='add'  /> */}
                     {/* <AddProduct title='Add Product' getProducts={getProducts} />  */}
                 </div>
