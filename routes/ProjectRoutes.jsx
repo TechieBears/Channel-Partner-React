@@ -132,7 +132,6 @@ const ProjectRoutes = () => {
                                             user?.role == 'restaurant' ?
                                                 <>
                                                     <Route path='/' element={<VendorDashbaord />} />
-
                                                 </> : ''}
                             </Routes>
                         </Sidebar>
