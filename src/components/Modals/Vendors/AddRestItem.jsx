@@ -6,7 +6,7 @@ import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../
 import { useForm } from 'react-hook-form';
 import LoadBox from '../../Loader/LoadBox';
 import { useSelector } from 'react-redux';
-import { addFoodItem, addRestaurant, getCategory, getRestaurantCategory, getRestaurantSubCategory, getSubCategory } from '../../../api';
+import { addFoodItem, addRestaurant, editFoodItem, editRestaurantFood, getCategory, getRestaurantCategory, getRestaurantSubCategory, getSubCategory } from '../../../api';
 import { ImageUpload, restaurantLink } from '../../../env';
 import { toast } from 'react-toastify';
 
@@ -18,7 +18,6 @@ export default function AddRestItem(props) {
     const [FinalPriceSeller, setFinalPriceSeller] = useState([]);
     const { register, handleSubmit, control, watch, reset, setValue, formState: { errors } } = useForm();
     const user = useSelector((state) => state?.user?.loggedUserDetails);
-    console.log('user', user);
     const toggle = () => setOpen(!isOpen)
     const closeBtn = () => {
         toggle();
@@ -34,52 +33,100 @@ export default function AddRestItem(props) {
         }
     };
     const onSellerSubmit = async (data) => {
-        if (data.food_image_1.length != 0) {
-            await ImageUpload(data.food_image_1[0], "restaurant", "mainImage", data?.food_name)
-            data.food_image_1 = `${restaurantLink}${data?.food_name}_mainImage_${data.food_image_1[0].name}`
+        if (props?.button == 'edit') {
+            if (data.food_image_1 != props?.data?.food_image_1) {
+                await ImageUpload(data.food_image_1[0], "restaurant", "mainImage", data?.food_name)
+                data.food_image_1 = `${restaurantLink}${data?.food_name}_mainImage_${data.food_image_1[0].name}`
+            } else {
+                data.food_image_1 = props?.data?.food_image_1
+            }
+            if (data.food_image_2 != props?.data?.food_image_2) {
+                await ImageUpload(data.food_image_2[0], "restaurant", "img2", data?.food_name)
+                data.food_image_2 = `${restaurantLink}${data?.food_name}_img2_${data.food_image_2[0].name}`
+            } else {
+                data.food_image_2 = props?.data.food_image_2
+            }
+            if (data.food_image_3 != props?.data?.food_image_3) {
+                await ImageUpload(data.food_image_3[0], "restaurant", "img3", data?.food_name)
+                data.food_image_3 = `${restaurantLink}${data?.food_name}_img3_${data.food_image_3[0].name}`
+            } else {
+                data.food_image_3 = props?.data.food_image_3
+            }
+            if (data.food_image_4 != props?.data?.food_image_4) {
+                await ImageUpload(data.food_image_4[0], "restaurant", "img4", data?.food_name)
+                data.food_image_4 = `${restaurantLink}${data?.food_name}_img4_${data.food_image_4[0].name}`
+            } else {
+                data.food_image_4 = props?.data.food_image_4
+            }
+            if (data.food_image_5 != props?.data?.food_image_5) {
+                await ImageUpload(data.food_image_5[0], "restaurant", "img5", data?.food_name)
+                data.food_image_5 = `${restaurantLink}${data?.food_name}_img5_${data.food_image_5[0].name}`
+            } else {
+                data.food_image_5 = props?.data?.food_image_5
+            }
+            if (data.food_video_url != props?.data?.food_video_url) {
+                await ImageUpload(data.food_video_url[0], "restaurant", "img5", data?.food_name)
+                data.food_video_url = `${restaurantLink}${data?.food_name}_img5_${data.food_video_url[0].name}`
+            } else {
+                data.food_video_url = props?.data?.food_video_url
+            }
         } else {
-            data.food_image_1 = ''
-        }
-        if (data.food_image_2.length != 0) {
-            await ImageUpload(data.food_image_2[0], "restaurant", "img2", data?.food_name)
-            data.food_image_2 = `${restaurantLink}${data?.food_name}_img2_${data.food_image_2[0].name}`
-        } else {
-            data.food_image_2 = ''
-        }
-        if (data.food_image_3.length != 0) {
-            await ImageUpload(data.food_image_3[0], "restaurant", "img3", data?.food_name)
-            data.food_image_3 = `${restaurantLink}${data?.food_name}_img3_${data.food_image_3[0].name}`
-        } else {
-            data.food_image_3 = ''
-        }
-        if (data.food_image_4.length != 0) {
-            await ImageUpload(data.food_image_4[0], "restaurant", "img4", data?.food_name)
-            data.food_image_4 = `${restaurantLink}${data?.food_name}_img4_${data.food_image_4[0].name}`
-        } else {
-            data.food_image_4 = ''
-        }
-        if (data.food_image_5.length != 0) {
-            await ImageUpload(data.food_image_5[0], "restaurant", "img5", data?.food_name)
-            data.food_image_5 = `${restaurantLink}${data?.food_name}_img5_${data.food_image_5[0].name}`
-        } else {
-            data.food_image_5 = ''
-        }
-        if (data.food_video_url.length != 0) {
-            await ImageUpload(data.food_video_url[0], "restaurant", "img5", data?.food_name)
-            data.food_video_url = `${restaurantLink}${data?.food_name}_img5_${data.food_video_url[0].name}`
-        } else {
-            data.food_video_url = ''
+            if (data.food_image_1.length != 0) {
+                await ImageUpload(data.food_image_1[0], "restaurant", "mainImage", data?.food_name)
+                data.food_image_1 = `${restaurantLink}${data?.food_name}_mainImage_${data.food_image_1[0].name}`
+            } else {
+                data.food_image_1 = ''
+            }
+            if (data.food_image_2.length != 0) {
+                await ImageUpload(data.food_image_2[0], "restaurant", "img2", data?.food_name)
+                data.food_image_2 = `${restaurantLink}${data?.food_name}_img2_${data.food_image_2[0].name}`
+            } else {
+                data.food_image_2 = ''
+            }
+            if (data.food_image_3.length != 0) {
+                await ImageUpload(data.food_image_3[0], "restaurant", "img3", data?.food_name)
+                data.food_image_3 = `${restaurantLink}${data?.food_name}_img3_${data.food_image_3[0].name}`
+            } else {
+                data.food_image_3 = ''
+            }
+            if (data.food_image_4.length != 0) {
+                await ImageUpload(data.food_image_4[0], "restaurant", "img4", data?.food_name)
+                data.food_image_4 = `${restaurantLink}${data?.food_name}_img4_${data.food_image_4[0].name}`
+            } else {
+                data.food_image_4 = ''
+            }
+            if (data.food_image_5.length != 0) {
+                await ImageUpload(data.food_image_5[0], "restaurant", "img5", data?.food_name)
+                data.food_image_5 = `${restaurantLink}${data?.food_name}_img5_${data.food_image_5[0].name}`
+            } else {
+                data.food_image_5 = ''
+            }
+            if (data.food_video_url.length != 0) {
+                await ImageUpload(data.food_video_url[0], "restaurant", "img5", data?.food_name)
+                data.food_video_url = `${restaurantLink}${data?.food_name}_img5_${data.food_video_url[0].name}`
+            } else {
+                data.food_video_url = ''
+            }
         }
 
         let updatedData = { ...data, vendor: user?.sellerId }
-
-        addFoodItem(updatedData).then(res => {
-            if (res?.status == 'success') {
-                toast.success('Food Item Added Successfully')
-                toggle()
-            }
-        })
-
+        if (props?.button == 'edit') {
+            editFoodItem(updatedData).then(res => {
+                if (res?.status == 'success') {
+                    toast?.success('Food item updated successfully')
+                    props?.getRestFood()
+                    toggle();
+                }
+            })
+        } else {
+            addFoodItem(updatedData).then(res => {
+                if (res?.status == 'success') {
+                    toast.success('Food Item Added Successfully')
+                    props?.getRestFood()
+                    toggle()
+                }
+            })
+        }
     }
 
     const onAdminSubmit = (data) => {
@@ -93,13 +140,19 @@ export default function AddRestItem(props) {
         getRestaurantSubCategory().then(res => {
             setsubCategory(res)
         })
+        reset({
+            'food_name': props?.data?.food_name,
+            'food_category': props?.data?.food_category,
+            'food_subcategory': props?.data?.food_subcategory,
+            'food_details': props?.data?.food_details,
+            'food_isactive': props?.data?.food_isactive,
+        })
     }, [])
 
     //  ------------   Seller Calculations SetPrice --------------------------------
     const calculateRevenueSeller = watch('food_actual_price')
 
     useEffect(() => {
-        console.log('user+', user)
         if (user?.role == 'seller') {
             if (calculateRevenueSeller !== "") {
                 var mainUserPrice = calculateRevenueSeller * (user?.insta_commission == null ? 0 : user?.insta_commission / 100);
