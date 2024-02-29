@@ -209,7 +209,8 @@ const VendorProduct = () => {
                 <div className='grid items-center grid-cols-6'>
                 <h2 className='col-span-5 text-xl font-semibold'>{user?.vendor_type == 'restaurant' ? 'Item List' : 'Product List'}</h2>
                     {/* {user?.isverified_byadmin == true && user?.vendor_type == 'restaurant' ? <AddRestItem title='Add Item' button='add' /> : user?.vendor_type == 'seller' ? <AddProduct title='Add Product' getProducts={getProducts} /> : ''} */}
-                    <AddRestItem title='Add Item' button='add'  />
+                    {/* <AddRestItem title='Add Item' button='add'  /> */}
+                    <AddProduct title='Add Product' getProducts={getProducts} /> 
                 </div>
                 <div className='mt-4'>
                     <Table data={shopProducts} columns={shopColumns} />

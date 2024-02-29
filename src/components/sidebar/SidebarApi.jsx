@@ -9,12 +9,11 @@ export const Admin = [
         link: '/admin',
     },
 
-    {
-        title: 'Restaurant',
-        icon: <ClipboardTick size="24" />,
-        link: '/restaurant',
-    },
-
+    // {
+    //     title: 'Restaurant',
+    //     icon: <ClipboardTick size="24" />,
+    //     link: '/restaurant',
+    // },
    
     {
         title: 'Menus',

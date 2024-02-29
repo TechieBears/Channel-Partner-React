@@ -68,7 +68,7 @@ const Category = (props) => {
   // ================= action of the table ===============
   const actionBodyTemplate = (row) => (
     <div className="flex items-center gap-2">
-      <CategoryForm button="edit" title="Edit Category" data={row} />
+      <CategoryForm button="edit" title="Edit Category" data={row} isrestaurant={props?.isrestaurant} productCategories={productCategories} restaurantCategories={restaurantCategories}/>
       <button
         onClick={() => deleteData(row.id)}
         className="bg-red-100  px-1.5 py-2 rounded-sm"

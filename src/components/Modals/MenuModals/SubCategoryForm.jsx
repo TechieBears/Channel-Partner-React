@@ -76,11 +76,12 @@ export default function SubCategoryForm(props) {
         setLoader(true);
         createSubCategory(data)
           .then((res) => {
-            if (res?.status == "success") {
+            if (res?.message == "subcategory added successfully") {
               setTimeout(() => {
                 // dispatch(setCategory(res));
                 reset();
-                toggle(), setLoader(false), 
+                toggle(), 
+                setLoader(false), 
                 props?.isrestaurant ? props?.restaurantSubCategories() : props?.fetchData();
                 toast.success(res.message);
               }, 1000);
@@ -139,7 +140,7 @@ export default function SubCategoryForm(props) {
                 // dispatch(setCategory(res));
                 reset();
                 toggle(), setLoader(false), 
-                props?.isrestaurant ? restaurantCategories() : fetchData2();
+                props?.isrestaurant ? props?.restaurantSubCategories() : props?.fetchData();
                 toast.success(res.message);
               }, 1000);
             }
@@ -167,7 +168,7 @@ export default function SubCategoryForm(props) {
               // dispatch(setSubCategory(res));
               reset();
               toggle(), setLoader(false), 
-              props?.isrestaurant ? restaurantCategories() : fetchData2();
+              props?.isrestaurant ? props?.restaurantSubCategories() : props?.fetchData();
               toast.success(res.message);
             }, 1000);
           }
@@ -289,7 +290,7 @@ export default function SubCategoryForm(props) {
                             className={inputClass}
                             {...register("category", { required: true })}
                           >
-                            <option value="" disabled>Select Type</option>
+                            <option value="" selected>Select Type</option>
                             {categories?.length > 0 && categories.map(category => (
                               <option key={category.id} value={category.id} selected={props?.data?.category === category.id}>
                                 {category.category_name}

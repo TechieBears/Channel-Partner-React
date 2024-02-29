@@ -8,12 +8,12 @@ import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn} from "
 import { setCategory } from "../../../redux/Slices/masterSlice";
 import LoadBox from "../../Loader/LoadBox";
 import Error from "../../Errors/Error";
-
 import { createCategory, editCategory, getCategory, createRestaurantCategory, editRestaurantCategory } from "../../../api";
 import { ImageUpload, categoryLink, restaurantcategoryLink } from "../../../env";
 
 
 export default function CategoryForm(props) {
+  console.log('props = ', props)
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const {
@@ -101,7 +101,7 @@ export default function CategoryForm(props) {
    // ============================ submit data  =====================================
    const onRestaurantSubmit = async (data) => {
     console.log('data = ', data)
-    if (props?.button !== "edit") {
+    if (props?.button != "edit") {
       try {
         if (data.category_image.length != 0) {
           await ImageUpload( data.category_image[0], "restaurantcategory", "restaurantcategory", data.category_name);
@@ -112,13 +112,14 @@ export default function CategoryForm(props) {
         setLoader(true);
         createRestaurantCategory(data)
           .then((res) => {
-            if (res?.code == 2002) {
+            console.log('category data = ', res)
+            if (res?.message == "Category Created Successfully") {
               setTimeout(() => {
                 dispatch(setCategory(res));
                 reset();
                 toggle(),
                   setLoader(false),
-                  categoryList();
+                  props?.isrestaurant ? props?.restaurantCategories() : props?.productCategories(); 
                 toast.success(res.message);
               }, 1000);
             }
@@ -141,11 +142,12 @@ export default function CategoryForm(props) {
         }
         setLoader(true);
         editRestaurantCategory(props?.data?.id, data).then((res) => {
-          if (res?.message === "category edited successfully") {
+          if (res?.message == "category edited successfully") {
             setTimeout(() => {
               dispatch(setCategory(res));
               reset();
-              toggle(), setLoader(false), categoryList();
+              toggle(), setLoader(false), 
+              props?.isrestaurant ? props?.restaurantCategories() : props?.productCategories(); 
               toast.success(res.message);
             }, 1000);
           }
