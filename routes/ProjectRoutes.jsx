@@ -79,11 +79,6 @@ const ProjectRoutes = () => {
                                 {user?.role == 'admin' ?
                                     <>
                                         <Route path="/admin" element={<Dashboard />} />
-
-                                        {/* Restaurant In detail Form */}
-                                        <Route path="/restaurant" element={<DashboardForm />} />
-                                        {/* Restaurant In detail Form */}
-
                                         <Route path="/menu" element={<Menu />} />
                                         <Route path='/product-list/product-details/:id' element={<ViewAdminProduct />} />
                                         <Route path="/resturants" element={<Restaurant />} />

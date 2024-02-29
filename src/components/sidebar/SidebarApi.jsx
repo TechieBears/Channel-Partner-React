@@ -1,5 +1,5 @@
 import { Notebook } from "@phosphor-icons/react";
-import { Element4, ElementPlus, Trade, Truck, User, Settings, Menu, Shop, SecurityUser, Book, TicketExpired, TicketDiscount, Profile2User, ClipboardTick, Bank, Setting2, Wallet, ShoppingCart, Headphone, Ticket } from "iconsax-react";
+import { Element4, ElementPlus, Trade, Truck, User, Settings, Menu, Shop, SecurityUser, Book, TicketExpired, TicketDiscount, Profile2User, ClipboardTick, Bank, Setting2, Wallet, ShoppingCart, Headphone, Ticket, UserAdd } from "iconsax-react";
 import { AlertTriangle, Bike, ChefHat, LayoutList, Megaphone, Settings2, Soup, User2 } from "lucide-react";
 
 export const Admin = [
@@ -70,28 +70,6 @@ export const Admin = [
         icon: <Setting2 size="24" />,
         link: '/settings',
     },
-
-
-
-
-
-
-
-    // {
-    //     title: 'Reports',
-    //     icon: <ClipboardTick size="24" />,
-    //     link: '/reports',
-    // },
-    // {
-    //     title: 'Account Statement',
-    //     icon: <Bank size="24" />,
-    //     link: '/accountStatement',
-    // },
-    // {
-    //     title: 'Sub-Admin',
-    //     icon: <SecurityUser size="24" />,
-    //     link: '/subadmin',
-    // },
 ]
 
 

@@ -1540,8 +1540,7 @@ export const registerRestaurant = async (data) => {
     const url = `${environment.baseUrl}vendor/onboard_restaurant`;
     try {
         const response = await axios.post(url, data);
-        console.log('response', response)
-        // return response.data;
+        return response.data;
     } catch (err) {
         console.log('error while posting data', err)
     }
