@@ -6,7 +6,7 @@ import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../
 import { useForm } from 'react-hook-form';
 import LoadBox from '../../Loader/LoadBox';
 import { useSelector } from 'react-redux';
-import { addFoodItem, addRestaurant, getCategory, getSubCategory } from '../../../api';
+import { addFoodItem, addRestaurant, getCategory, getRestaurantCategory, getRestaurantSubCategory, getSubCategory } from '../../../api';
 import { ImageUpload, restaurantLink } from '../../../env';
 import { toast } from 'react-toastify';
 
@@ -87,10 +87,10 @@ export default function AddRestItem(props) {
     }
 
     useEffect(() => {
-        getCategory().then(res => {
+        getRestaurantCategory().then(res => {
             setCategory(res)
         })
-        getSubCategory().then(res => {
+        getRestaurantSubCategory().then(res => {
             setsubCategory(res)
         })
     }, [])
@@ -305,7 +305,7 @@ export default function AddRestItem(props) {
                                                         {errors.food_details && <Error title='Food Details is Required*' />}
                                                     </div>
                                                     <div>
-                                                        <label className={labelClass}>Veg or Non-Veg</label>
+                                                        <label className={labelClass}>Veg or Non-Veg*</label>
                                                         <select
                                                             className={inputClass}
                                                             {...register('food_veg_nonveg', { required: true })}
@@ -335,7 +335,7 @@ export default function AddRestItem(props) {
                                                         )}
                                                     </div>
                                                     <div>
-                                                        <label className={labelClass}>Is Active</label>
+                                                        <label className={labelClass}>Is Active*</label>
                                                         <select
                                                             className={inputClass}
                                                             {...register('food_isactive', { required: true })}
