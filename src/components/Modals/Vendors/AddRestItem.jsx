@@ -95,41 +95,38 @@ export default function AddRestItem(props) {
                                                     <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Basic Information</p>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Product Name*
+                                                            Food Name*
                                                         </label>
                                                         <input
                                                             type="text"
-                                                            placeholder='Product Name'
+                                                            placeholder='Food Name'
                                                             className={inputClass}
-                                                            {...register('product_name', { required: true })}
+                                                            {...register('food_name', { required: true })}
                                                         />
-                                                        {errors.product_name && <Error title='Product Name is Required*' />}
+                                                        {errors.food_name && <Error title='Food Name is Required*' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Product Category*
+                                                            Food Category*
                                                         </label>
                                                         <select
                                                             className={inputClass}
-                                                            {...register('product_category', { required: true })}
+                                                            {...register('food_category', { required: true })}
                                                         >
                                                             <option value=''>Select</option>
                                                             {category?.map(item =>
-                                                                // {
-                                                                // console.log(item?.id)
                                                                 <option key={item?.id} value={item?.id}>{item?.category_name}</option>
-                                                                // }
                                                             )}
                                                         </select>
-                                                        {errors.product_category && <Error title='Category is Required*' />}
+                                                        {errors.good_category && <Error title='Category is Required*' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Product Sub-Category*
+                                                            Food Sub-Category*
                                                         </label>
                                                         <select
                                                             className={inputClass}
-                                                            {...register('product_subcategory', { required: true })}
+                                                            {...register('food_subcategory', { required: true })}
                                                         >
                                                             <option value=''>Select</option>
                                                             {
@@ -138,88 +135,7 @@ export default function AddRestItem(props) {
                                                                 ))
                                                             }
                                                         </select>
-                                                        {errors.product_subcategory && <Error title='Sub Category is Required*' />}
-                                                    </div>
-                                                    {
-                                                        LoggedUserDetails?.role == 'seller' &&
-                                                        <div className="">
-                                                            <label className={labelClass}>
-                                                                Product MRP*
-                                                            </label>
-                                                            <input
-                                                                type="number"
-                                                                placeholder='Product MRP'
-                                                                className={inputClass}
-                                                                {...register('product_actual_price', { required: true })}
-                                                            />
-                                                            {errors.product_actual_price && <Error title='MRP is Required*' />}
-                                                        </div>
-                                                    }
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Product Status*
-                                                        </label>
-                                                        <select
-                                                            className={inputClass}
-                                                            {...register('product_isactive', { required: true })}
-                                                        >
-                                                            <option value=''>Select</option>
-                                                            <option value={true}>Available</option>
-                                                            <option value={false}>Out Of Stock</option>
-                                                        </select>
-                                                        {errors.product_isactive && <Error title='Status is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Country of Origin*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='India'
-                                                            className={inputClass}
-                                                            {...register('product_country_of_origin', { required: true })}
-                                                        />
-                                                        {errors.product_country_of_origin && <Error title='Country of Origin is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Product Available Quantity*
-                                                        </label>
-                                                        <input
-                                                            type="number"
-                                                            placeholder='150'
-                                                            className={inputClass}
-                                                            {...register('product_available_qty', { required: true })}
-                                                        />
-                                                        {errors.product_available_qty && <Error title='Available Quantity is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Product Unit Type *
-                                                        </label>
-                                                        <select
-                                                            className={inputClass}
-                                                            {...register('product_unit_type', { required: true })}
-                                                        >
-                                                            <option value=''>Select</option>
-                                                            <option key="" value="(kg)">Kilograms (kg)</option>
-                                                            <option key="" value="(g)">grams (g)</option>
-                                                            <option key="" value="(ltr)">Liters (ltr)</option>
-                                                            <option key="" value="(pcs)">Pieces (pcs)</option>
-                                                        </select>
-                                                        {errors.product_unit_type && <Error title='Product Unit Type is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Product Unit*
-                                                        </label>
-                                                        <input
-                                                            type="number"
-                                                            placeholder='50g'
-                                                            className={inputClass}
-                                                            {...register('product_unit', { required: true })}
-                                                        />
-                                                        {errors.product_unit && <Error title='Product Unit is Required*' />}
+                                                        {errors.food_subcategory && <Error title='Sub Category is Required*' />}
                                                     </div>
                                                     {
                                                         LoggedUserDetails?.role == 'admin' &&
@@ -228,16 +144,16 @@ export default function AddRestItem(props) {
 
                                                             <div className="">
                                                                 <label className={labelClass}>
-                                                                    Product MRP*
+                                                                    Food MRP*
                                                                 </label>
                                                                 <input
                                                                     type="number"
                                                                     readOnly
-                                                                    placeholder='Product MRP'
+                                                                    placeholder='Food MRP'
                                                                     className={inputClass}
-                                                                    {...register('product_actual_price', { required: true })}
+                                                                    {...register('food_actual_price', { required: true })}
                                                                 />
-                                                                {errors.product_actual_price && <Error title='MRP is Required*' />}
+                                                                {errors.food_actual_price && <Error title='MRP is Required*' />}
                                                             </div>
                                                             <div className="">
                                                                 <label className={labelClass}>
@@ -278,96 +194,55 @@ export default function AddRestItem(props) {
                                                     <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Additional Information</p>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Description*
+                                                            Food Details*
                                                         </label>
                                                         <input
                                                             type="text"
-                                                            placeholder='Description'
+                                                            placeholder='Food Details'
                                                             className={inputClass}
-                                                            {...register('product_description', { required: true })}
+                                                            {...register('food_details', { required: true })}
                                                         />
-                                                        {errors.product_description && <Error title='Description is Required*' />}
+                                                        {errors.food_details && <Error title='Food Details is Required*' />}
+                                                    </div>
+                                                    <div>
+                                                        <label className={labelClass}>Veg or Non-Veg</label>
+                                                        <select
+                                                            className={inputClass}
+                                                            {...register('food_veg_nonveg', { required: true })}
+                                                        >
+                                                            <option value='Veg'>Veg</option>
+                                                            <option value='Non-Veg'>Non-Veg</option>
+                                                        </select>
+                                                        {errors?.food_veg_nonveg && <Error title='This is required' />}
                                                     </div>
                                                     <div className="">
-                                                        <label className={labelClass}>
-                                                            Shelf Life*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Shelf Life'
-                                                            className={inputClass}
-                                                            {...register('product_shelflife', { required: true })}
-                                                        />
-                                                        {errors.product_shelflife && <Error title='Shelf Life is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass} htmlFor="video_input">Product Video</label>
+                                                        <label className={labelClass} htmlFor="video_input">Food Video</label>
                                                         <input
                                                             className={fileinput}
                                                             id="video_input"
                                                             type='file'
                                                             accept='video/mp4,video/x-m4v,video/*'
                                                             placeholder='Upload Video...'
-                                                            {...register("product_video_url")}
+                                                            {...register("food_video_url")}
                                                             onChange={handleFileChange}
                                                         />
-                                                        {props?.button === 'edit' && props?.data.product_video_url && (
+                                                        {props?.button === 'edit' && props?.data.food_video_url && (
                                                             <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                                {props?.data?.product_video_url?.name}
+                                                                {props?.data?.food_video_url?.name}
                                                             </label>
                                                         )}
                                                     </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Manufacturer Name*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Manufacturer Name'
+                                                    <div>
+                                                        <label className={labelClass}>Is Active</label>
+                                                        <select
                                                             className={inputClass}
-                                                            {...register('product_Manufacturer_Name', { required: true })}
-                                                        />
-                                                        {errors.product_Manufacturer_Name && <Error title='Manufacturer Name is Required*' />}
+                                                            {...register('food_isactive', { required: true })}
+                                                        >
+                                                            <option value={true}>Active</option>
+                                                            <option value={false}>In-Active</option>
+                                                        </select>
+                                                        {errors?.food_isactive && <Error title='This is required' />}
                                                     </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Nutritional Info*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Nutritional Info'
-                                                            className={inputClass}
-                                                            {...register('product_nutritional_info', { required: true })}
-                                                        />
-                                                        {errors.product_nutritional_info && <Error title='Nutritional Info is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Brand*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Brand'
-                                                            className={inputClass}
-                                                            {...register('product_brand', { required: true })}
-                                                        />
-                                                        {errors.product_brand && <Error title='Brand is Required*' />}
-                                                    </div>
-                                                    {
-                                                        LoggedUserDetails?.role == 'seller' &&
-                                                        <div className="">
-                                                            <label className={labelClass}>
-                                                                Product Revenue*
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                readOnly
-                                                                placeholder='₹ 0.00'
-                                                                className={inputClass}
-                                                                {...register('product_revenue')}
-                                                            />
-                                                        </div>
-                                                    }
                                                     <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Product Images</p>
                                                     <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Main Image*</label>
@@ -378,12 +253,12 @@ export default function AddRestItem(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             onChange={(e) => handleImageChange(e)}
-                                                            {...register("product_image_1",
+                                                            {...register("food_image_1",
                                                                 { required: props.title == 'Edit Product' ? false : true })} />
-                                                        {props?.title == 'Edit Product' && props?.row?.product_image_1 != '' && props?.row?.product_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.row?.product_image_1?.split('/').pop()}
+                                                        {props?.title == 'Edit Product' && props?.row?.food_image_1 != '' && props?.row?.food_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.row?.food_image_1?.split('/').pop()}
                                                         </label>}
-                                                        {errors.product_image_1 && <Error title='Main Image is required*' />}
+                                                        {errors.food_image_1 && <Error title='Main Image is required*' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Image 2</label>
@@ -393,11 +268,11 @@ export default function AddRestItem(props) {
                                                             multiple
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            {...register("product_image_2",
+                                                            {...register("food_image_2",
                                                             )}
                                                         />
-                                                        {props?.title == 'Edit Product' && props?.row?.product_image_2 != '' && props?.row?.product_image_2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.row?.product_image_2?.split('/').pop()}
+                                                        {props?.title == 'Edit Product' && props?.row?.food_image_2 != '' && props?.row?.food_image_2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.row?.food_image_2?.split('/').pop()}
                                                         </label>}
                                                     </div>
                                                     <div className="">
@@ -408,9 +283,9 @@ export default function AddRestItem(props) {
                                                             multiple
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            {...register("product_image_3")} />
-                                                        {props?.title == 'edit' && props?.row?.product_image_3 != '' && props?.row?.product_image_3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.row?.product_image_3?.split('/').pop()}
+                                                            {...register("food_image_3")} />
+                                                        {props?.title == 'edit' && props?.row?.food_image_3 != '' && props?.row?.food_image_3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.row?.food_image_3?.split('/').pop()}
                                                         </label>}
                                                     </div>
                                                     <div className="">
@@ -421,9 +296,9 @@ export default function AddRestItem(props) {
                                                             multiple
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            {...register("product_image_4")} />
-                                                        {props?.title == 'Edit Product' && props?.row?.product_image_4 != '' && props?.row?.product_image_4 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.row?.product_image_4?.split('/').pop()}
+                                                            {...register("food_image_4")} />
+                                                        {props?.title == 'Edit Product' && props?.row?.food_image_4 != '' && props?.row?.food_image_4 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.row?.food_image_4?.split('/').pop()}
                                                         </label>}
                                                     </div>
                                                     <div className="">
@@ -434,11 +309,10 @@ export default function AddRestItem(props) {
                                                             multiple
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            {...register("product_image_5")} />
-                                                        {props?.title == 'Edit Product' && props?.row?.product_image_5 != '' && props?.row?.product_image_5 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.row?.product_image_5?.split('/').pop()}
+                                                            {...register("food_image_5")} />
+                                                        {props?.title == 'Edit Product' && props?.row?.food_image_5 != '' && props?.row?.food_image_5 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.row?.food_image_5?.split('/').pop()}
                                                         </label>}
-                                                        {/* {errors.product_image_5 && <Error title='Profile Image is required*' />} */}
                                                     </div>
                                                 </div>
                                             </div>
