@@ -133,7 +133,7 @@ export default function AddRestItem(props) {
     }
 
     const onAdminSubmit = (data) => {
-         
+        console.log(data)
     }
 
     useEffect(() => {
@@ -237,6 +237,31 @@ export default function AddRestItem(props) {
                                                         </select>
                                                         {errors.food_subcategory && <Error title='Sub Category is Required*' />}
                                                     </div>
+                                                    <div className="">
+                                                                <label className={labelClass}>
+                                                                    Food MRP*
+                                                                </label>
+                                                                <input
+                                                                    type="number"
+                                                                    readOnly
+                                                                    placeholder='Food MRP'
+                                                                    className={inputClass}
+                                                                    {...register('food_actual_price', { required: true })}
+                                                                />
+                                                                {errors.food_actual_price && <Error title='MRP is Required*' />}
+                                                            </div>
+                                                        <div className="">
+                                                                <label className={labelClass}>
+                                                                    Product Final Price* <span className='text-red-500'>(App View)</span>
+                                                                </label>
+                                                                <input
+                                                                    type="number"
+                                                                    readOnly
+                                                                    placeholder='₹ 0.00'
+                                                                    className={inputClass}
+                                                                    {...register('final_price', { required: true })} />
+                                                                {errors.final_price && <Error title='Product Final Price is required*' />}
+                                                            </div>
                                                     {
                                                         LoggedUserDetails?.role == 'admin' &&
                                                         <>
