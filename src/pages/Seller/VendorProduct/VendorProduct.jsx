@@ -11,6 +11,7 @@ import { Edit, Eye, Trash } from 'iconsax-react';
 import ViewProduct from '../../../components/Modals/Vendors/ViewProduct';
 import { getAllSeller, getAllShopProduct } from '../../../api';
 import Switch from 'react-js-switch';
+import AddRestItem from '../../../components/Modals/Vendors/AddRestItem';
 
 const VendorProduct = () => {
     const [sellers, setSellers] = useState([]);
@@ -52,7 +53,6 @@ const VendorProduct = () => {
         <Link to={`/product-list/product-details/${row?.product_id}`} state={row} className='items-center p-1 bg-sky-100 rounded-xl hover:bg-sky-200'>
             <Eye size={24} className='text-sky-400' />
         </Link>
-        {/* <ViewProduct /> */}
         <AddProduct title='Edit Product' row={row} getProducts={getProducts} />
         <button className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
             <Trash size={24} className='text-red-400' />
@@ -191,7 +191,7 @@ const VendorProduct = () => {
             <div className='p-4 m-4 bg-white sm:m-5 rounded-xl'>
                 <div className='grid items-center grid-cols-6'>
                     <h2 className='col-span-5 text-xl font-semibold'>Product List</h2>
-                    {user?.isverified_byadmin == true && <AddProduct title='Add Product' getProducts={getProducts} />}
+                    {user?.isverified_byadmin == true && user?.vendor_type == 'restaurant' ? <AddRestItem title='Add Item' button='add' /> : <AddProduct title='Add Product' getProducts={getProducts} />}
                 </div>
                 <div className='mt-4'>
                     <Table data={shopProducts} columns={shopColumns} />
