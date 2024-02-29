@@ -14,7 +14,7 @@ import AddProduct from '../../../../components/Modals/Vendors/AddProduct';
 
 
 
-const AdminProduct = () => {
+const AdminProduct = (props) => {
     const [shopProducts, setShopProducts] = useState([])
     const storages = useSelector((state) => state?.storage?.list);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
@@ -28,7 +28,7 @@ const AdminProduct = () => {
         }
     }
 
-    const getRestaurantFood = () => {
+    const getRestaurantFoodItems = () => {
         try {
             getRestaurantFood().then(res => {
                 setShopProducts(res)
@@ -43,7 +43,7 @@ const AdminProduct = () => {
             getProducts()
         }
         if (props?.isrestaurant){
-            getRestaurantFood();
+            getRestaurantFoodItems();
         }
     }, [props.isrestaurant]);
 
@@ -290,7 +290,7 @@ const AdminProduct = () => {
             </div>
             <div className='p-4 m-4 bg-white sm:m-5 rounded-xl'>
                 <div className='grid items-center grid-cols-6'>
-                    <h2 className='col-span-5 text-xl font-semibold'>Product List</h2>
+                    <h2 className='col-span-5 text-xl font-semibold'>{props?.isrestaurant ? "Food Items" : "Product List"}</h2>
                 </div>
                 <div className='mt-4'>
                     <Table data={shopProducts} columns={LoggedUserDetails?.role == 'franchise' ? restaurantColumns : Columns} />

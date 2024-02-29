@@ -44,7 +44,7 @@ const Menu = (props) => {
                 </TabPanel>
                 {/* ================= Product component ============== */}
                 {LoggedUserDetails?.role != 'seller' && <TabPanel>
-                    <AdminProduct />
+                    <AdminProduct  isrestaurant={props?.isrestaurant} />
                 </TabPanel>}
             </Tabs>
         </div>

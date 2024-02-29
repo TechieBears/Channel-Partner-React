@@ -12,7 +12,7 @@ import Error from "../../Errors/Error";
 import { ImageUpload, subcategoryLink , restaurantsubcatLink} from "../../../env";
 
 export default function SubCategoryForm(props) {
-  console.log('props = ', props)
+  // console.log('props = ', props)
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   // const categories = useSelector((state) => state?.master?.Category);
