@@ -1487,6 +1487,28 @@ export const addProduct = async (data) => {
     }
 }
 
+// ================= Add Product =================
+export const addRestaurantFood = async (data) => {
+    const url = `${environment.baseUrl}vendor/add_restaurant_food`
+    try {
+        const response = await axios.post(url, data);
+        return response.data;
+    } catch (error) {
+        console.log('error creating product', error)
+    }
+}
+
+// ================= Add Product =================
+export const getRestaurantFood = async (data) => {
+    const url = `${environment.baseUrl}vendor/add_restaurant_food`
+    try {
+        const response = await axios.get(url, data);
+        return response.data;
+    } catch (error) {
+        console.log('error creating product', error)
+    }
+}
+
 // ======================== Get All Product ===============
 export const getAllShopProduct = async (id) => {
     const url = `${environment.baseUrl}vendor/product_by_vendor/${id}`
@@ -1543,6 +1565,18 @@ export const editVendorProduct = async (id, data) => {
         console.log('error while getting vendor by id', err)
     }
 }
+
+export const editRestaurantFood = async (id, data) => {
+    const url = `${environment.baseUrl}vendor/edit_restaurant_food/${id}`;
+    try {
+        const response = await axios.put(url, data);
+        // console.log('responseeeeeeeeeeeeeeeeeeeeeeeee', response)
+        return response.data
+    } catch (err) {
+        console.log('error while getting vendor by id', err)
+    }
+}
+
 
 
 

@@ -279,7 +279,7 @@ const Dashboard = () => {
                     </form>
                 </div>
                 {/* ===================== New Order Section ===================== */}
-                <div className="grid gap-6 m-4 bg-white p-4 rounded-xl md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
+                <div className="grid gap-6 p-4 m-4 bg-white rounded-xl md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
                     {data.map(product => (
                         <NavLink
                             to={`/vendor-orders/order-detail/:${product?.id}`}
@@ -299,12 +299,12 @@ const Dashboard = () => {
                                     </p>
                                 </div>
                                 <div className="flex-1 p-4 my-2">
-                                    <div className="grid grid-cols-2 items-center">
+                                    <div className="grid items-center grid-cols-2">
                                         <div className="grid grid-cols-2">
                                             {product?.items?.map(item => (
                                                 <div key={item?.name} className="">
                                                     <img
-                                                        className="w-16 border-2 p-1 rounded-xl"
+                                                        className="w-16 p-1 border-2 rounded-xl"
                                                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU"
                                                         alt=""
                                                     />
@@ -317,7 +317,7 @@ const Dashboard = () => {
                                             ))}
                                         </div>
 
-                                        <p className=" col-span-1 mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 ">
+                                        <p className="col-span-1 mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 ">
                                             Payment - {product?.paymentMethod}
                                         </p>
                                     </div>

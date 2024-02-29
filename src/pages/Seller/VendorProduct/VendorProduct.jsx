@@ -9,7 +9,7 @@ import { Link, NavLink } from 'react-router-dom';
 import AddProduct from '../../../components/Modals/Vendors/AddProduct';
 import { Edit, Eye, Trash } from 'iconsax-react';
 import ViewProduct from '../../../components/Modals/Vendors/ViewProduct';
-import { getAllSeller, getAllShopProduct } from '../../../api';
+import { getAllSeller, getAllShopProduct, getRestaurantFood} from '../../../api';
 import Switch from 'react-js-switch';
 import AddRestItem from '../../../components/Modals/Vendors/AddRestItem';
 
@@ -17,15 +17,10 @@ const VendorProduct = () => {
     const [sellers, setSellers] = useState([]);
     const [shopProducts, setShopProducts] = useState([])
     const user = useSelector((state) => state?.user?.loggedUserDetails);
+    console.log('user', user)
     const storages = useSelector((state) => state?.storage?.list);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
-    const {
-        register,
-        handleSubmit,
-        control,
-        formState: { errors },
-        reset,
-    } = useForm();
+    const { register, handleSubmit, control, formState: { errors }, reset} = useForm();
     const loadOptions = (_, callback) => {
         const uniqueNames = new Set();
         const uniqueProducts = storages
@@ -125,12 +120,34 @@ const VendorProduct = () => {
         })
     }
 
+
+    
+    // ============== Restaurant API ================
+    const getrestaurantProducts = () => {
+        try {
+            getRestaurantFood().then((res) => {
+            console.log(res)
+            setShopProducts(res)
+            // setCategory(res)
+            // dispatch(setCategory(res));
+          });
+        } catch (error) {
+          console.log(error);
+        }
+    };
+  
+
     useEffect(() => {
-        getAllSeller().then(res => {
-            setSellers(res)
-        })
-        getProducts()
-    }, [])
+        // if (user?.vendor_type != "restaurant"){
+        //     getAllSeller().then(res => {
+        //         setSellers(res)
+        //     })
+        //     getProducts()
+        // }else{
+        //     getrestaurantProducts();
+        // }
+    }, []);
+
 
     return (
         <>
@@ -190,8 +207,9 @@ const VendorProduct = () => {
             </div>
             <div className='p-4 m-4 bg-white sm:m-5 rounded-xl'>
                 <div className='grid items-center grid-cols-6'>
-                    <h2 className='col-span-5 text-xl font-semibold'>Product List</h2>
-                    {user?.isverified_byadmin == true && user?.vendor_type == 'restaurant' ? <AddRestItem title='Add Item' button='add' /> : <AddProduct title='Add Product' getProducts={getProducts} />}
+                <h2 className='col-span-5 text-xl font-semibold'>{user?.vendor_type == 'restaurant' ? 'Item List' : 'Product List'}</h2>
+                    {/* {user?.isverified_byadmin == true && user?.vendor_type == 'restaurant' ? <AddRestItem title='Add Item' button='add' /> : user?.vendor_type == 'seller' ? <AddProduct title='Add Product' getProducts={getProducts} /> : ''} */}
+                    <AddRestItem title='Add Item' button='add'  />
                 </div>
                 <div className='mt-4'>
                     <Table data={shopProducts} columns={shopColumns} />
