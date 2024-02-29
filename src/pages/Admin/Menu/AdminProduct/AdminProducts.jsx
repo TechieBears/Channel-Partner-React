@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import Table from '../../../../components/Table/Table';
 import { Link } from 'react-router-dom';
 import { Eye, Trash } from 'iconsax-react';
-import { editVendorProduct, getProductsByAdmin, VerifyProductAdmin, makeFeatureProduct} from '../../../../api';
+import { editVendorProduct, getProductsByAdmin, VerifyProductAdmin, makeFeatureProduct, getRestaurantFood} from '../../../../api';
 import Switch from 'react-js-switch';
 import userImg from '../../../../assets/user.jpg';
 import AddProduct from '../../../../components/Modals/Vendors/AddProduct';
@@ -19,13 +19,36 @@ const AdminProduct = () => {
     const storages = useSelector((state) => state?.storage?.list);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     const getProducts = () => {
-        getProductsByAdmin().then(res => {
-            setShopProducts(res)
-        })
+        try {
+            getProductsByAdmin().then(res => {
+                setShopProducts(res)
+            });
+          } catch (error) {
+            console.log(error);
+        }
     }
+
+    const getRestaurantFood = () => {
+        try {
+            getRestaurantFood().then(res => {
+                setShopProducts(res)
+            });
+          } catch (error) {
+            console.log(error);
+        }
+    }
+  
     useEffect(() => {
-        getProducts()
-    }, [])
+        if (!props?.isrestaurant){
+            getProducts()
+        }
+        if (props?.isrestaurant){
+            getRestaurantFood();
+        }
+    }, [props.isrestaurant]);
+
+
+
     const {
         register,
         handleSubmit,
