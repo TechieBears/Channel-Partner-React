@@ -1658,3 +1658,25 @@ export const addFoodItem = async (data) => {
         console.log('error while posting data', err)
     }
 }
+
+export const editFoodItem = async (id, data) => {
+    const url = `${environment.baseUrl}vendor/edit_restaurant_food/${id}`;
+    try {
+        const response = await axios.put(url, data);
+        // console.log('response', response)
+        return response.data;
+    } catch (err) {
+        console.log('error while posting data', err)
+    }
+}
+
+export const deleteFoodItem = async (id) => {
+    const url = `${environment.baseUrl}vendor/edit_restaurant_food/${id}`;
+    try {
+        const response = await axios.delete(url);
+        // console.log('response', response)
+        return response.data;
+    } catch (err) {
+        console.log('error while posting data', err)
+    }
+}
