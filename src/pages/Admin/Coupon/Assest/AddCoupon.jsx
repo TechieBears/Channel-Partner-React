@@ -71,7 +71,7 @@ export default function AddCoupon(props) {
                 'discount_percent': props?.data?.discount_percent,
                 'expiry_date': props?.data?.expiry_date,
                 'coupon_type': props?.data?.coupon_type,
-
+                'discount_price': props?.data?.discount_price,
             })
         }
     }, [])
@@ -122,7 +122,7 @@ export default function AddCoupon(props) {
                                     <div className=" bg-gray-200/70">
                                         {/* React Hook Form */}
                                         <form onSubmit={handleSubmit(onSubmit)} >
-                                            <div className="py-4 mx-4 customBox space-y-2">
+                                            <div className="py-4 mx-4 space-y-2 customBox">
                                                 <div className="">
                                                     <label className={labelClass} >Coupon Name*</label>
                                                     <input
@@ -142,6 +142,16 @@ export default function AddCoupon(props) {
                                                         {...register('discount_percent', { required: true })}
                                                     />
                                                     {errors.discount_percent && <Error title='Percentage is required*' />}
+                                                </div>
+                                                <div className="">
+                                                    <label className={labelClass} >Discount Price (₹)*</label>
+                                                    <input
+                                                        placeholder='Discount Price (₹)'
+                                                        type='number'
+                                                        className={inputClass}
+                                                        {...register('discount_price', { required: true })}
+                                                    />
+                                                    {errors.discount_price && <Error title='Percentage is required*' />}
                                                 </div>
                                                 <div className="">
                                                     <label className={labelClass} >Expiry Date*</label>
