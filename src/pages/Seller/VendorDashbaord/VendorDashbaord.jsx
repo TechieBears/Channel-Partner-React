@@ -158,7 +158,7 @@ const Dashboard = () => {
 
     return (
         <>
-            {user?.isverified_byadmin != true && <DashboardForm dashBoard={false} isOpen={modelOpen} />}
+            {user?.isverified_byadmin != true && user?.vendor_type == 'restaurant' ? <DashboardForm dashBoard={false} isOpen={modelOpen} /> : ''}
             <DeleteModal
                 title="Delete Stroage"
                 deleteBtn={deleteData}

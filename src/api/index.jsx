@@ -1647,3 +1647,14 @@ export const registerRestaurant = async (data) => {
         console.log('error while posting data', err)
     }
 }
+
+export const addFoodItem = async (data) => {
+    const url = `${environment.baseUrl}vendor/add_restaurant_food`;
+    try {
+        const response = await axios.post(url, data);
+        // console.log('response', response)
+        return response.data;
+    } catch (err) {
+        console.log('error while posting data', err)
+    }
+}

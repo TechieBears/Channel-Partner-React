@@ -6,20 +6,25 @@ import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../
 import { useForm } from 'react-hook-form';
 import LoadBox from '../../Loader/LoadBox';
 import { useSelector } from 'react-redux';
-import { getCategory, getSubCategory, addRestaurantFood, editRestaurantFood } from '../../../api';
+import { addFoodItem, addRestaurant, getCategory, getSubCategory } from '../../../api';
+import { ImageUpload, restaurantLink } from '../../../env';
+import { toast } from 'react-toastify';
 
 export default function AddRestItem(props) {
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false);
     const [category, setCategory] = useState([]);
     const [subCategory, setsubCategory] = useState([])
+    const [FinalPriceSeller, setFinalPriceSeller] = useState([]);
     const { register, handleSubmit, control, watch, reset, setValue, formState: { errors } } = useForm();
-    const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
+    const user = useSelector((state) => state?.user?.loggedUserDetails);
+    console.log('user', user);
     const toggle = () => setOpen(!isOpen)
     const closeBtn = () => {
         toggle();
         reset()
     }
+
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file.size > 100 * 1024 * 1024) {
@@ -28,108 +33,53 @@ export default function AddRestItem(props) {
             return;
         }
     };
-
-    
     const onSellerSubmit = async (data) => {
-        console.log('seller payload = ', data);
-        if (props?.title == 'Edit Product') {
-            if (data?.product_image_1 != props?.row?.product_image_1) {
-                await ImageUpload(data?.product_image_1[0], "shopProduct", "MainImage", data?.product_name)
-                data.product_image_1 = `${productLink}${data?.product_name}_MainImage_${data?.product_image_1[0]?.name}`
-            } else {
-                data.product_image_1 = props?.row?.product_image_1
-            }
-            if (data?.product_image_2 != props?.row?.product_image_2) {
-                await ImageUpload(data?.product_image_2[0], "shopProduct", "Image2", data?.product_name)
-                data.product_image_2 = `${productLink}${data?.product_name}_Image2_${data?.product_image_2[0]?.name}`
-            } else {
-                data.product_image_2 = props?.row?.product_image_2
-            }
-            if (data?.product_image_3 != props?.row?.product_image_3) {
-                await ImageUpload(data?.product_image_3[0], "shopProduct", "Image3", data?.product_name)
-                data.product_image_3 = `${productLink}${data?.product_name}_Image3_${data?.product_image_3[0]?.name}`
-            } else {
-                data.product_image_3 = props?.row?.product_image_3
-            }
-            if (data?.product_image_4 != props?.row?.product_image_4) {
-                await ImageUpload(data?.product_image_4[0], "shopProduct", "Image4", data?.product_name)
-                data.product_image_4 = `${productLink}${data?.product_name}_Image4_${data?.product_image_4[0]?.name}`
-            } else {
-                data.product_image_4 = props?.row?.product_image_4
-            }
-            if (data?.product_image_5 != props?.row?.product_image_5) {
-                await ImageUpload(data?.product_image_5[0], "shopProduct", "Image5", data?.product_name)
-                data.product_image_5 = `${productLink}${data?.product_name}_Image5_${data?.product_image_5[0]?.name}`
-            } else {
-                data.product_image_5 = props?.row?.product_image_5
-            }
-            if (data?.product_video_url != props?.row?.product_video_url) {
-                await ImageUpload(data?.product_video_url[0], "shopProduct", "Image5", data?.product_name)
-                data.product_video_url = `${productLink}${data?.product_name}_Image5_${data?.product_video_url[0]?.name}`
-            } else {
-                data.product_video_url = props?.row?.product_video_url
-            }
+        if (data.food_image_1.length != 0) {
+            await ImageUpload(data.food_image_1[0], "restaurant", "mainImage", data?.food_name)
+            data.food_image_1 = `${restaurantLink}${data?.food_name}_mainImage_${data.food_image_1[0].name}`
         } else {
-            if (data?.product_image_1.length != 0) {
-                await ImageUpload(data?.product_image_1[0], "shopProduct", "MainImage", data?.product_name)
-                data.product_image_1 = `${productLink}${data?.product_name}_MainImage_${data?.product_image_1[0]?.name}`
-            } else {
-                data.product_image_1 = ''
-            }
-            if (data?.product_image_2.length != 0) {
-                await ImageUpload(data?.product_image_2[0], "shopProduct", "Image2", data?.product_name)
-                data.product_image_2 = `${productLink}${data?.product_name}_Image2_${data?.product_image_2[0]?.name}`
-            } else {
-                data.product_image_2 = ''
-            }
-            if (data?.product_image_3.length != 0) {
-                await ImageUpload(data?.product_image_3[0], "shopProduct", "Image3", data?.product_name)
-                data.product_image_3 = `${productLink}${data?.product_name}_Image3_${data?.product_image_3[0]?.name}`
-            } else {
-                data.product_image_3 = ''
-            }
-            if (data?.product_image_4.length != 0) {
-                await ImageUpload(data?.product_image_4[0], "shopProduct", "Image4", data?.product_name)
-                data.product_image_4 = `${productLink}${data?.product_name}_Image4_${data?.product_image_4[0]?.name}`
-            } else {
-                data.product_image_4 = ''
-            }
-            if (data?.product_image_5.length != 0) {
-                await ImageUpload(data?.product_image_5[0], "shopProduct", "Image5", data?.product_name)
-                data.product_image_5 = `${productLink}${data?.product_name}_Image5_${data?.product_image_5[0]?.name}`
-            } else {
-                data.product_image_5 = ''
-            }
-            if (data?.product_video_url.length != 0) {
-                await ImageUpload(data?.product_video_url[0], "shopProduct", "Image5", data?.product_name)
-                data.product_video_url = `${productLink}${data?.product_name}_Image5_${data?.product_video_url[0]?.name}`
-            } else {
-                data.product_video_url = ''
-            }
+            data.food_image_1 = ''
         }
-        if (props?.title == 'Edit Product') {
-            var updatedData = { ...data, vendor: props?.row?.vendor?.vendor_id }
-            editRestaurantFood(props?.row?.product_id, updatedData).then(res => {
-                if (res?.status == 'success') {
-                    // props?.getProducts()
-                    toast.success('Product updated successfully')
-                    toggle();
-                }
-            })
+        if (data.food_image_2.length != 0) {
+            await ImageUpload(data.food_image_2[0], "restaurant", "img2", data?.food_name)
+            data.food_image_2 = `${restaurantLink}${data?.food_name}_img2_${data.food_image_2[0].name}`
         } else {
-            var updatedData = { ...data, vendor: LoggedUserDetails?.sellerId, final_price: FinalPriceSeller }
-            console.log(updatedData)
-            addRestaurantFood(updatedData).then((res) => {
-                if (res?.status == 'success') {
-                    // props?.getProducts()
-                    toast.success('Product Added Successfully')
-                    toggle();
-                    // props?.getProducts()
-                } else {
-                    toast.error('Error while creating product')
-                }
-            })
+            data.food_image_2 = ''
         }
+        if (data.food_image_3.length != 0) {
+            await ImageUpload(data.food_image_3[0], "restaurant", "img3", data?.food_name)
+            data.food_image_3 = `${restaurantLink}${data?.food_name}_img3_${data.food_image_3[0].name}`
+        } else {
+            data.food_image_3 = ''
+        }
+        if (data.food_image_4.length != 0) {
+            await ImageUpload(data.food_image_4[0], "restaurant", "img4", data?.food_name)
+            data.food_image_4 = `${restaurantLink}${data?.food_name}_img4_${data.food_image_4[0].name}`
+        } else {
+            data.food_image_4 = ''
+        }
+        if (data.food_image_5.length != 0) {
+            await ImageUpload(data.food_image_5[0], "restaurant", "img5", data?.food_name)
+            data.food_image_5 = `${restaurantLink}${data?.food_name}_img5_${data.food_image_5[0].name}`
+        } else {
+            data.food_image_5 = ''
+        }
+        if (data.food_video_url.length != 0) {
+            await ImageUpload(data.food_video_url[0], "restaurant", "img5", data?.food_name)
+            data.food_video_url = `${restaurantLink}${data?.food_name}_img5_${data.food_video_url[0].name}`
+        } else {
+            data.food_video_url = ''
+        }
+
+        let updatedData = { ...data, vendor: user?.sellerId }
+
+        addFoodItem(updatedData).then(res => {
+            if (res?.status == 'success') {
+                toast.success('Food Item Added Successfully')
+                toggle()
+            }
+        })
+
     }
 
     const onAdminSubmit = (data) => {
@@ -144,6 +94,26 @@ export default function AddRestItem(props) {
             setsubCategory(res)
         })
     }, [])
+
+    //  ------------   Seller Calculations SetPrice --------------------------------
+    const calculateRevenueSeller = watch('food_actual_price')
+
+    useEffect(() => {
+        if (user?.role == 'seller') {
+            if (calculateRevenueSeller !== "") {
+                var mainUserPrice = calculateRevenueSeller * (user?.insta_commission == null ? 0 : user?.insta_commission / 100);
+                console.log('mainUserPrice = ', (calculateRevenueSeller - mainUserPrice));
+                const final_price = (calculateRevenueSeller - mainUserPrice);
+
+                if (isNaN(final_price)) {
+                    setValue('food_revenue', 0);
+                } else {
+                    setFinalPriceSeller(parseFloat(final_price));
+                    setValue('food_revenue', final_price);
+                }
+            }
+        }
+    }, [calculateRevenueSeller])
 
     return (
         <>
@@ -189,7 +159,7 @@ export default function AddRestItem(props) {
                                     </Dialog.Title>
                                     <div className=" bg-gray-200/70">
                                         {/* React Hook Form */}
-                                        <form onSubmit={LoggedUserDetails?.role == 'admin' ? handleSubmit(onAdminSubmit) : handleSubmit(onSellerSubmit)}>
+                                        <form onSubmit={user?.role == 'admin' ? handleSubmit(onAdminSubmit) : handleSubmit(onSellerSubmit)}>
                                             <div className="p-4 overflow-y-scroll scrollbars " >
                                                 <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-4 gap-x-3 gap-y-3 customBox">
                                                     <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Basic Information</p>
@@ -237,36 +207,40 @@ export default function AddRestItem(props) {
                                                         </select>
                                                         {errors.food_subcategory && <Error title='Sub Category is Required*' />}
                                                     </div>
-                                                    <div className="">
+                                                    {user?.role == 'seller' &&
+                                                        <>
+                                                            <div className="">
                                                                 <label className={labelClass}>
                                                                     Food MRP*
                                                                 </label>
                                                                 <input
                                                                     type="number"
-                                                                    readOnly
                                                                     placeholder='Food MRP'
+                                                                    step={1}
+                                                                    min={1}
                                                                     className={inputClass}
                                                                     {...register('food_actual_price', { required: true })}
                                                                 />
                                                                 {errors.food_actual_price && <Error title='MRP is Required*' />}
                                                             </div>
-                                                        <div className="">
+                                                            <div className="">
                                                                 <label className={labelClass}>
-                                                                    Product Final Price* <span className='text-red-500'>(App View)</span>
+                                                                    Product Revenue*
                                                                 </label>
                                                                 <input
-                                                                    type="number"
+                                                                    type="text"
                                                                     readOnly
                                                                     placeholder='₹ 0.00'
                                                                     className={inputClass}
-                                                                    {...register('final_price', { required: true })} />
-                                                                {errors.final_price && <Error title='Product Final Price is required*' />}
+                                                                    {...register('product_revenue')}
+                                                                />
                                                             </div>
+                                                        </>
+                                                    }
                                                     {
-                                                        LoggedUserDetails?.role == 'admin' &&
+                                                        user?.role == 'admin' &&
                                                         <>
                                                             <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Price Calculation</p>
-
                                                             <div className="">
                                                                 <label className={labelClass}>
                                                                     Food MRP*
