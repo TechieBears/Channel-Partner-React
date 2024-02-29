@@ -15,14 +15,9 @@ import Switch from 'react-js-switch';
 const VendorProduct = () => {
     const [sellers, setSellers] = useState([]);
     const [shopProducts, setShopProducts] = useState([])
-    console.log('shopProducts', shopProducts)
-    const userid = useSelector((state) => state?.user?.loggedUserDetails?.userid);
-    const matchedSeller = sellers?.find(seller => seller?.user?.id === userid);
+    const user = useSelector((state) => state?.user?.loggedUserDetails);
     const storages = useSelector((state) => state?.storage?.list);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
-    const user = {
-        isShop: true,
-    }
     const {
         register,
         handleSubmit,
@@ -196,7 +191,7 @@ const VendorProduct = () => {
             <div className='p-4 m-4 bg-white sm:m-5 rounded-xl'>
                 <div className='grid items-center grid-cols-6'>
                     <h2 className='col-span-5 text-xl font-semibold'>Product List</h2>
-                    <AddProduct title='Add Product' getProducts={getProducts} />
+                    {user?.isverified_byadmin == true && <AddProduct title='Add Product' getProducts={getProducts} />}
                 </div>
                 <div className='mt-4'>
                     <Table data={shopProducts} columns={shopColumns} />

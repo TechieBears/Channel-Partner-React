@@ -53,28 +53,6 @@ const Dashboard = () => {
         console.log('data', data);
     };
 
-    // ====================== fetch data api ==================================
-
-    // const StorageList = () => {
-    //     if (user.role == "admin") {
-    //         getStorages()
-    //             .then((res) => {
-    //                 console.log(res);
-    //                 dispatch(setStorageList(res));
-    //             })
-    //             .catch((err) => {
-    //                 console.error("Error", err);
-    //             });
-    //     } else {
-    //         getPartnerStorage(user?.userid)
-    //             .then((res) => {
-    //                 dispatch(setStorageList(res));
-    //             })
-    //             .catch((err) => {
-    //                 console.error("Error", err);
-    //             });
-    //     }
-    // };
 
     // ================================ Dropdown List =========================
 
@@ -101,7 +79,6 @@ const Dashboard = () => {
             name: null,
             location: "",
         });
-        // StorageList();
         toast.success("Filters clear");
     };
 
@@ -119,7 +96,6 @@ const Dashboard = () => {
             }
         });
     };
-    // ======================== table action =========================
 
     // ====================== table columns ======================
 
@@ -180,13 +156,9 @@ const Dashboard = () => {
         }
     ]
 
-    useEffect(() => {
-
-    })
-
     return (
         <>
-            {user?.isactive == true && <DashboardForm isOpen={modelOpen} />}
+            {user?.isverified_byadmin != true && <DashboardForm dashBoard={false} isOpen={modelOpen} />}
             <DeleteModal
                 title="Delete Stroage"
                 deleteBtn={deleteData}
@@ -306,26 +278,6 @@ const Dashboard = () => {
                         </div>
                     </form>
                 </div>
-                {/* <div className="mx-auto mt-8 sm:m-5">
-                    <Tabs
-                        selectedIndex={selectedTab}
-                        onSelect={(index) => setSelectedTab(index)}
-                    >
-                        <TabList className="flex mx-6 space-x-4 border-b">
-                            <Tab
-                                className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 0
-                                    ? "text-sky-500  border-b-2 border-sky-400 outline-0"
-                                    : "text-gray-500 border-b"
-                                    }`}
-                            >
-                                New Order's
-                            </Tab>
-                        </TabList>
-                        <TabPanel className='mt-5'>
-                            <Table data={data} columns={columns} />
-                        </TabPanel>
-                    </Tabs>
-                </div> */}
                 {/* ===================== New Order Section ===================== */}
                 <div className="grid gap-6 m-4 bg-white p-4 rounded-xl md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
                     {data.map(product => (
@@ -360,7 +312,6 @@ const Dashboard = () => {
                                                         <h2 className="text-sm font-semibold tracking-wide text-gray-800 ">
                                                             Butter Milk x {item?.quantity} more
                                                         </h2>
-                                                        {/* <p>Lorem ipsum dolor, sit amet </p> */}
                                                     </div>
                                                 </div>
                                             ))}

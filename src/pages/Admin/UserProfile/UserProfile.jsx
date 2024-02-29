@@ -14,8 +14,6 @@ import PathName from '../../../components/PathName/PathName';
 
 const UserProfile = () => {
     const user = useSelector(state => state?.user?.loggedUserDetails)
-    console.log(user)
-    
     const {
         register,
         handleSubmit,
@@ -30,15 +28,13 @@ const UserProfile = () => {
 
 
     const handleChange = (e) => {
-        console.log('file = ', e)
         setUpload(e.target.files[0]);
         setFile(URL.createObjectURL(e.target.files[0]));
     }
 
-    
+
     // ================================ Submit form data ===========================
     const onSubmit = async (data) => {
-        console.log('profile pic =', upload)
         data.email = user?.email
         try {
             if (upload) {
@@ -85,7 +81,7 @@ const UserProfile = () => {
         setFile(user?.profile_pic)
     }, [])
 
-    
+
     return (
         <>
             <div className="flex items-center justify-between px-6">

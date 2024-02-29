@@ -2,7 +2,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react';
 import { useForm, Controller, FormProvider, useFormContext } from "react-hook-form";
 import { fileinput, formBtn1, formBtn2, formBtn3, inputClass, labelClass, tableBtn } from '../../../utils/CustomClass';
-import { Edit } from 'iconsax-react';
+import { Edit, UserAdd } from 'iconsax-react';
 import { createStorage, registerRestaurant } from '../../../api';
 import { setStorageList } from '../../../redux/slices/storageSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -137,17 +137,6 @@ const Step1 = () => {
                         />
                         {errors.shop_contact_number && <Error title='Restaurant Number is required*' />}
                     </div>
-                    {/* <div className="">
-                        <label className={labelClass}>
-                            Restaurant Mail*
-                        </label>
-                        <input
-                            type="email"
-                            placeholder='Restaurant Mail'
-                            className={inputClass}
-                            {...register('mail', { required: true, validate: validateEmail })}
-                        />
-                    </div> */}
                 </div>
             </div>
             <div className='col-span-2'>
@@ -214,7 +203,6 @@ const Step2 = (props) => {
                     isMulti
                     value={props?.selectedCuisines}
                     onChange={(selectedOption) => props?.setSelectedCuisines(selectedOption)}
-                // {...register('type_of_cuisine', { required: true })}
                 />
                 {errors?.type_of_cuisine && <Error title='This is required' />}
             </div>
@@ -247,7 +235,6 @@ const Step2 = (props) => {
 // =================== form steps 3 =================
 const Step3 = (props) => {
     const { register, formState: { errors }, } = useFormContext()
-    // const designationList = useSelector(state => state?.master?.designation)
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
             <p className='md:col-span-2 lg:col-span-3 font-semibold text-lg'>Upload Images</p>
@@ -582,7 +569,7 @@ const Step5 = (props) => {
 
 export default function DashboardForm(props) {
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
-    const [isOpen, setIsOpen] = useState(props?.isOpen)
+    const [isOpen, setIsOpen] = useState(props?.isOpen ? props?.isOpen : false)
     const [loader, setLoader] = useState(false)
     const [selectedRestType, setSelectedRestType] = useState([])
     const [selectedCuisines, setSelectedCuisines] = useState([])
@@ -717,13 +704,60 @@ export default function DashboardForm(props) {
             } else {
                 data.food_image3 = ''
             }
+            if (data.adhar_img.length != 0) {
+                await ImageUpload(data.adhar_img[0], "storage", "stagingImage", data.name)
+                data.adhar_img = `${restaurantLink}${data.name}_stagingImage_${data.adhar_img[0].name}`
+            } else {
+                data.adhar_img = ''
+            }
+            if (data.fassai_doc.length != 0) {
+                await ImageUpload(data.fassai_doc[0], "storage", "stagingImage", data.name)
+                data.fassai_doc = `${restaurantLink}${data.name}_stagingImage_${data.fassai_doc[0].name}`
+            } else {
+                data.fassai_doc = ''
+            }
+            if (data.menu_image2.length != 0) {
+                await ImageUpload(data.menu_image2[0], "storage", "stagingImage", data.name)
+                data.menu_image2 = `${restaurantLink}${data.name}_stagingImage_${data.menu_image2[0].name}`
+            } else {
+                data.menu_image2 = ''
+            }
+            if (data.order_img1.length != 0) {
+                await ImageUpload(data.order_img1[0], "storage", "stagingImage", data.name)
+                data.order_img1 = `${restaurantLink}${data.name}_stagingImage_${data.order_img1[0].name}`
+            } else {
+                data.order_img1 = ''
+            }
+            if (data.order_img2.length != 0) {
+                await ImageUpload(data.order_img2[0], "storage", "stagingImage", data.name)
+                data.order_img2 = `${restaurantLink}${data.name}_stagingImage_${data.order_img2[0].name}`
+            } else {
+                data.order_img2 = ''
+            }
+            if (data.order_img3.length != 0) {
+                await ImageUpload(data.order_img3[0], "storage", "stagingImage", data.name)
+                data.order_img3 = `${restaurantLink}${data.name}_stagingImage_${data.order_img3[0].name}`
+            } else {
+                data.order_img3 = ''
+            }
+            if (data.res_img3.length != 0) {
+                await ImageUpload(data.res_img3[0], "storage", "stagingImage", data.name)
+                data.res_img3 = `${restaurantLink}${data.name}_stagingImage_${data.res_img3[0].name}`
+            } else {
+                data.res_img3 = ''
+            }
             let updatedData = {
                 ...data,
                 "type_of_cuisine": selectedCuisines,
                 "restaurant_type": selectedRestType,
-                "vendor_id": LoggedUserDetails?.sellerId
+                "vendorId": LoggedUserDetails?.sellerId
             }
-            registerRestaurant(updatedData)
+            registerRestaurant(updatedData).then(res => {
+                if (res?.status == 'success') {
+                    toast?.success('Restaurants registered successfully')
+                    toggle();
+                }
+            })
         } else {
             setLoader(false)
             setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -736,13 +770,14 @@ export default function DashboardForm(props) {
         setActiveStep(0)
         methods.reset();
         setLoader(false);
-        // setIsOpen(true)
     }
     return (
         <>
-            <button onClick={toggle} className={tableBtn}>
-                Add Storage
-            </button>
+            {props?.dashBoard &&
+                <button onClick={toggle} className="flex items-center pb-2 space-x-2 transition-all duration-700 group">
+                    <UserAdd size={22} onClick={() => props?.setCard(!props?.card)} className='text-gray-700 group-hover:text-sky-400' />
+                    <h4 className='text-sm font-semibold capitalize font-tbPop lg:text-lg md:text-base group-hover:text-sky-400 text-slate-700'>Register</h4>
+                </button>}
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-[100]" onClose={() => toggle}>
                     <Transition.Child
@@ -801,7 +836,7 @@ export default function DashboardForm(props) {
                                                     <button type='button' className={formBtn1} disabled={activeStep == 0} onClick={handleBack}>Back</button>
                                                     {/* <button type='submit' className={formBtn1}>{activeStep == 4 ? "Submit" : "Next"}</button> */}
                                                     {loader ? <LoadBox className="relative block w-auto px-5 transition-colors font-tb tracking-wide duration-200 py-2.5 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize" /> : <button type='submit' className={formBtn1}>{activeStep == 4 ? "Submit" : "Next"}</button>}
-                                                    {/* <button type='button' className={formBtn2} onClick={closeBtn}>close</button> */}
+                                                    <button type='button' className={formBtn2} onClick={closeBtn}>close</button>
                                                 </footer>
                                             </form>
                                         </FormProvider>
