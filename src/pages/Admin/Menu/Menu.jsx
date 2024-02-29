@@ -7,7 +7,8 @@ import AdminProduct from './AdminProduct/AdminProducts';
 import { useSelector } from 'react-redux';
 
 
-const Menu = () => {
+const Menu = (props) => {
+    console.log('isrestaurant = ', props?.isrestaurant);
     const [selectedTab, setSelectedTab] = useState(0);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     return (
@@ -35,11 +36,11 @@ const Menu = () => {
                 </TabList>
                 {/* ================= Category component ============== */}
                 {LoggedUserDetails?.role != 'seller' && <TabPanel >
-                    <Category />
+                    <Category isrestaurant={props?.isrestaurant} />
                 </TabPanel>}
                 {/* ================= SubCategory component ============== */}
                 <TabPanel >
-                    <SubCategory />
+                    <SubCategory isrestaurant={props?.isrestaurant} />
                 </TabPanel>
                 {/* ================= Product component ============== */}
                 {LoggedUserDetails?.role != 'seller' && <TabPanel>

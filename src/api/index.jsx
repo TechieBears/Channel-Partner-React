@@ -31,9 +31,20 @@ export const vendorlogin = async (data) => {
 };
 
 
-/* ================== Menu Category Api =========== */
+/* ================== Product Category Api =========== */
 export const getCategory = async () => {
     const url = `${environment.baseUrl}app/category-list`;
+    try {
+        const response = await axios.get(url)
+        return response.data.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+/* ================== Restaurant Category Api =========== */
+export const getRestaurantCategory = async () => {
+    const url = `${environment.baseUrl}app/rescategory-list`;
     try {
         const response = await axios.get(url)
         return response.data.data
@@ -46,6 +57,17 @@ export const getCategory = async () => {
 /* ================== Menu SubCategory Api =========== */
 export const getSubCategory = async () => {
     const url = `${environment.baseUrl}app/get-subcategory`;
+    try {
+        const response = await axios.get(url)
+        return response.data.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+/* ================== Menu SubCategory Api =========== */
+export const getRestaurantSubCategory = async () => {
+    const url = `${environment.baseUrl}app/get-ressubcategory`;
     try {
         const response = await axios.get(url)
         return response.data.data
@@ -108,7 +130,7 @@ export const getProductsbySubCat = async (id) => {
 };
 
 
-/* ================== Menu SubCategory by CatId Api =========== */
+/* ================== Product Category Post API =========== */
 export const createCategory = async (data) => {
     // const url = `${environment.baseUrl}movable-category`;
     const url = `${environment.baseUrl}app/category-list`;
@@ -121,10 +143,33 @@ export const createCategory = async (data) => {
     }
 };
 
+/* ================== Restaurant Category Post API =========== */
+export const createRestaurantCategory = async (data) => {
+    // const url = `${environment.baseUrl}movable-category`;
+    const url = `${environment.baseUrl}app/rescategory-list`;
+    try {
+        const response = await axios.post(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
 
 export const createSubCategory = async (data) => {
-    // const url = `${environment.baseUrl}movable-category`;
     const url = `${environment.baseUrl}app/get-subcategory`;
+    try {
+        const response = await axios.post(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+export const createRestaurantSubCategory = async (data) => {
+    // const url = `${environment.baseUrl}movable-category`;
+    const url = `${environment.baseUrl}app/get-ressubcategory`;
     try {
         const response = await axios.post(url, data)
         return response.data
@@ -1185,8 +1230,30 @@ export const editCategory = async (id, data) => {
     }
 };
 
+export const editRestaurantCategory = async (id, data) => {
+    const url = `${environment.baseUrl}app/resedit-category/${id}`;
+    try {
+        const response = await axios.put(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
 export const editSubCategory = async (id, data) => {
     const url = `${environment.baseUrl}app/edit-subcategory/${id}`;
+    try {
+        const response = await axios.put(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+export const editRestaurantSubCategory = async (id, data) => {
+    const url = `${environment.baseUrl}app/edit-ressubcategory/${id}`;
     try {
         const response = await axios.put(url, data)
         return response.data
@@ -1528,7 +1595,7 @@ export const deleteCoupon = async (id) => {
     try {
         const response = await axios.delete(url);
         console.log('response', response)
-        // return response.data;
+        return response.data;
     } catch (err) {
         console.log('error while posting data', err)
     }
@@ -1541,7 +1608,7 @@ export const registerRestaurant = async (data) => {
     try {
         const response = await axios.post(url, data);
         console.log('response', response)
-        // return response.data;
+        return response.data;
     } catch (err) {
         console.log('error while posting data', err)
     }

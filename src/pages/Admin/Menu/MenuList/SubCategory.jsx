@@ -4,22 +4,25 @@ import SubCategoryForm from "../../../../components/Modals/MenuModals/SubCategor
 import Table from "../../../../components/Table/Table";
 import { useDispatch, useSelector } from "react-redux";
 import { setSubCategory, setCategory } from "../../../../redux/Slices/masterSlice";
-import { deleteSubCategory, getSubCategory, getCategory } from "../../../../api";
+import { deleteSubCategory, getSubCategory, getCategory, getRestaurantCategory, getRestaurantSubCategory } from "../../../../api";
 import Switch from 'react-js-switch';
 
 
-const SubCategory = () => {
-  const subcategory = useSelector((state) => state?.master?.SubCategory);
-  const category = useSelector((state) => state?.master?.Category);
+const SubCategory = (props) => {
+  // const subcategory = useSelector((state) => state?.master?.SubCategory);
+  // const category = useSelector((state) => state?.master?.Category);
   // console.log('category', category)
+  const [category, setCategory] = useState([])
+  const [subcategory, setSubcategory] = useState([])
   const dispatch = useDispatch();
 
-  // ============== fetch data from api ================
-
+  
+  // ============== Products API starts================
   const fetchData = () => {
     try {
       getSubCategory().then((res) => {
-        dispatch(setSubCategory(res));
+        setSubcategory(res)
+        // dispatch(setSubCategory(res));
       });
     } catch (error) {
       console.log(error);
@@ -29,12 +32,38 @@ const SubCategory = () => {
   const fetchData2 = () => {
     try {
       getCategory().then((res) => {
-        dispatch(setCategory(res));
+        setCategory(res)
+        // dispatch(setCategory(res));
       });
     } catch (error) {
       console.log(error);
     }
   };
+  // ============== Products API ends================
+
+  // ============== Products API starts================
+  const restaurantSubCategories = () => {
+    try {
+      getRestaurantSubCategory().then((res) => {
+        setSubcategory(res)
+        // dispatch(setSubCategory(res));
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const restaurantCategories = () => {
+    try {
+      getRestaurantCategory().then((res) => {
+        setCategory(res)
+        // dispatch(setCategory(res));
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // ============== Products API ends================
 
 
   // ============== delete data from api ================
@@ -46,9 +75,21 @@ const SubCategory = () => {
     });
   };
 
+
   useEffect(() => {
-    fetchData();
-    fetchData2();
+    if (!props?.isrestaurant){
+      fetchData();
+      fetchData2();
+    }
+    if (props?.isrestaurant){
+      restaurantSubCategories();
+      restaurantCategories();
+    }
+  }, [props.isrestaurant]);
+
+
+  useEffect(() => {
+    
   }, []);
 
   // ================= action of the table ===============
@@ -131,18 +172,15 @@ const SubCategory = () => {
       </div>
     );
   };
-
+  
+  
 
  // ================= columns of the table ===============
        // ======================= Table Column Definitions =========================
-       const columns = [
-        { field: 'subcat_image', header: 'Image', body: representativeBodyTemplate, sortable: true, style: true },
-        { field: 'subcat_name', header: 'Name', sortable: true },
-        { field: 'category', header: 'Category',  
-        // body: rowData => {
-        //   const matchingCategory = category.find(category => category?.id == rowData?.category);
-        //   return matchingCategory ? matchingCategory?.category_name : '';
-        // }
+    const ProductColumns = [
+      { field: 'subcat_image', header: 'Image', body: representativeBodyTemplate, sortable: true, style: true },
+      { field: 'subcat_name', header: 'Name', sortable: true },
+      { field: 'category', header: 'Category',  
         body: rowData => {
           if (Array.isArray(category)) {
               const matchingCategory = category.find(cat => cat?.id == rowData?.category);
@@ -150,10 +188,23 @@ const SubCategory = () => {
           } else {
               return 'Category data is not available.';
           }
-      }
-      },
-        // { field: 'isactive', header: 'Active', body: switchActive, sortable: true },
-        // { field: 'isverify', header: 'Verify', body: switchVerify, sortable: true },
+        }},
+    { field: "id", header: "Action", body: actionBodyTemplate, sortable: true },
+    ];
+
+    // ======================= Table Column Definitions =========================
+    const RestaurantColumns = [
+      { field: 'subcat_image', header: 'Image', body: representativeBodyTemplate, sortable: true, style: true },
+      { field: 'subcat_name', header: 'Name', sortable: true },
+      { field: 'category', header: 'Category',  
+        body: rowData => {
+          if (Array.isArray(category)) {
+              const matchingCategory = category.find(cat => cat?.id == rowData?.category);
+              return matchingCategory ? matchingCategory?.category_name : '';
+          } else {
+              return 'Category data is not available.';
+          }
+      }},
         { field: "id", header: "Action", body: actionBodyTemplate, sortable: true },
     ];
 
@@ -167,11 +218,9 @@ const SubCategory = () => {
               SubCategory List
             </h1>
           </div>
-          <SubCategoryForm title="Add SubCategory" />
+          <SubCategoryForm title="Add SubCategory" isrestaurant={props?.isrestaurant}/>
         </div>
-        {subcategory?.length > 0 && (
-          <Table data={subcategory} columns={columns} />
-        )}
+          {subcategory?.length > 0 && <Table data={subcategory} columns={props?.isrestaurant ? RestaurantColumns : ProductColumns} />}
       </div>
     </>
   );

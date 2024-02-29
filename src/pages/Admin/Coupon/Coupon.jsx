@@ -17,7 +17,8 @@ export default function Coupon() {
 
     const deleteRowFunc = (row) => {
         deleteCoupon(row?.coupon_id).then(res => {
-            if (res?.message == 'deleted successfully') {
+            console.log(res)
+            if (res?.status == 'success') {
                 toast?.success('Coupon Deleted Successfully');
                 fetchCoupon();
             }

@@ -38,7 +38,9 @@ export const ImageUpload = async (data, folder, imgname, name) => {
 
 //  ----------------------- S3 Bucket Links --------------------------
 export const categoryLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/category/'
+export const restaurantcategoryLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/restaurantcategory/'
 export const subcategoryLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/subcategory/'
+export const restaurantsubcatLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/restaurantsubcategory/'
 export const productLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/shopProduct/'
 export const profileImageLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/profileimg/'
 export const bannerLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/banner/'

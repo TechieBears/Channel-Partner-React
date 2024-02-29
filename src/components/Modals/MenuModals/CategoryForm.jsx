@@ -4,20 +4,13 @@ import { useForm } from "react-hook-form";
 import { Edit } from "iconsax-react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import {
-  fileinput,
-  formBtn1,
-  formBtn2,
-  inputClass,
-  labelClass,
-  tableBtn,
-} from "../../../utils/CustomClass";
+import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn} from "../../../utils/CustomClass";
 import { setCategory } from "../../../redux/Slices/masterSlice";
 import LoadBox from "../../Loader/LoadBox";
 import Error from "../../Errors/Error";
 
-import { createCategory, editCategory, getCategory } from "../../../api";
-import { ImageUpload, categoryLink } from "../../../env";
+import { createCategory, editCategory, getCategory, createRestaurantCategory, editRestaurantCategory } from "../../../api";
+import { ImageUpload, categoryLink, restaurantcategoryLink } from "../../../env";
 
 
 export default function CategoryForm(props) {
@@ -114,6 +107,65 @@ export default function CategoryForm(props) {
     }
   };
 
+   // ============================ submit data  =====================================
+   const onRestaurantSubmit = async (data) => {
+    console.log('data = ', data)
+    if (props?.button !== "edit") {
+      try {
+        if (data.category_image.length != 0) {
+          await ImageUpload( data.category_image[0], "restaurantcategory", "restaurantcategory", data.category_name);
+          data.category_image = `${restaurantcategoryLink}${data.category_name}_restaurantcategory_${data.category_image[0].name}`;
+        } else {
+          data.category_image = "";
+        }
+        setLoader(true);
+        createRestaurantCategory(data)
+          .then((res) => {
+            if (res?.code == 2002) {
+              setTimeout(() => {
+                dispatch(setCategory(res));
+                reset();
+                toggle(),
+                  setLoader(false),
+                  categoryList();
+                toast.success(res.message);
+              }, 1000);
+            }
+          })
+          .catch((err) => {
+            setLoader(false);
+            console.error("Error", err);
+          });
+      } catch (error) {
+        setLoader(false);
+        console.log("error", error);
+      }
+    } else {
+      try {
+        if (data.category_image.length != 0) {
+          await ImageUpload( data.category_image[0], "restaurantcategory", "restaurantcategory", data.category_name);
+          data.category_image = `${restaurantcategoryLink}${data.category_name}_restaurantcategory_${data.category_image[0].name}`;
+        } else {
+          data.category_image = props.data.category_image;
+        }
+        setLoader(true);
+        editRestaurantCategory(props?.data?.id, data).then((res) => {
+          if (res?.message === "category edited successfully") {
+            setTimeout(() => {
+              dispatch(setCategory(res));
+              reset();
+              toggle(), setLoader(false), categoryList();
+              toast.success(res.message);
+            }, 1000);
+          }
+        });
+      } catch (error) {
+        setLoader(false);
+        console.log("error", error);
+      }
+    }
+  };
+
   // ======================= close modals ===============================
   const closeBtn = () => {
     toggle();
@@ -174,7 +226,7 @@ export default function CategoryForm(props) {
                   </Dialog.Title>
                   <div className=" bg-gray-200/70">
                     {/* React Hook Form */}
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <form onSubmit={props?.isrestaurant ? handleSubmit(onRestaurantSubmit) : handleSubmit(onSubmit)}>
                       <div className="grid grid-cols-2 py-4 mx-4 gap-x-3 gap-y-3 customBox">
                         <div className="">
                           <label className={labelClass}>Category Name*</label>
