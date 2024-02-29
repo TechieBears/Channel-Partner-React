@@ -22,6 +22,7 @@ const SubCategory = (props) => {
     try {
       getSubCategory().then((res) => {
         setSubcategory(res)
+        fetchData2();
         // dispatch(setSubCategory(res));
       });
     } catch (error) {
@@ -46,6 +47,7 @@ const SubCategory = (props) => {
     try {
       getRestaurantSubCategory().then((res) => {
         setSubcategory(res)
+        restaurantCategories();
         // dispatch(setSubCategory(res));
       });
     } catch (error) {
@@ -79,18 +81,11 @@ const SubCategory = (props) => {
   useEffect(() => {
     if (!props?.isrestaurant){
       fetchData();
-      fetchData2();
     }
     if (props?.isrestaurant){
       restaurantSubCategories();
-      restaurantCategories();
     }
   }, [props.isrestaurant]);
-
-
-  useEffect(() => {
-    
-  }, []);
 
   // ================= action of the table ===============
   const actionBodyTemplate = (row) => (
@@ -218,7 +213,7 @@ const SubCategory = (props) => {
               SubCategory List
             </h1>
           </div>
-          <SubCategoryForm title="Add SubCategory" isrestaurant={props?.isrestaurant}/>
+          <SubCategoryForm title="Add SubCategory" isrestaurant={props?.isrestaurant} fetchData={fetchData} restaurantSubCategories={restaurantSubCategories}/>
         </div>
           {subcategory?.length > 0 && <Table data={subcategory} columns={props?.isrestaurant ? RestaurantColumns : ProductColumns} />}
       </div>

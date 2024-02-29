@@ -111,7 +111,7 @@ const Category = (props) => {
               Category List
             </h1>
           </div>
-          <CategoryForm title="Add Category" isrestaurant={props?.isrestaurant}/>
+          <CategoryForm title="Add Category" isrestaurant={props?.isrestaurant} productCategories={productCategories} restaurantCategories={restaurantCategories} />
         </div>
         {category?.length > 0 && <Table data={category} columns={props?.isrestaurant ? RestaurantColumns : ProductColumns} />}
       </div>

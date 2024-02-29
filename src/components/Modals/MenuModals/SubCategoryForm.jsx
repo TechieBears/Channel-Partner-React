@@ -12,7 +12,7 @@ import Error from "../../Errors/Error";
 import { ImageUpload, subcategoryLink , restaurantsubcatLink} from "../../../env";
 
 export default function SubCategoryForm(props) {
-  // console.log('props = ', props)
+  console.log('props = ', props)
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   // const categories = useSelector((state) => state?.master?.Category);
@@ -76,12 +76,12 @@ export default function SubCategoryForm(props) {
         setLoader(true);
         createSubCategory(data)
           .then((res) => {
-            if (res?.status === "success") {
+            if (res?.status == "success") {
               setTimeout(() => {
                 // dispatch(setCategory(res));
                 reset();
                 toggle(), setLoader(false), 
-                props?.isrestaurant ? restaurantCategories() : fetchData2();
+                props?.isrestaurant ? props?.restaurantSubCategories() : props?.fetchData();
                 toast.success(res.message);
               }, 1000);
             }
@@ -104,13 +104,13 @@ export default function SubCategoryForm(props) {
         }
         setLoader(true);
         editSubCategory(props?.data?.subcat_id, data).then((res) => {
-          if (res?.message === "subcategory edited successfully") {
+          if (res?.status == "success") {
             setTimeout(() => {
               // dispatch(setSubCategory(res));
               reset();
               toggle(),
               setLoader(false), 
-              props?.isrestaurant ? restaurantCategories() : fetchData2();
+              props?.isrestaurant ? props?.restaurantSubCategories() : props?.fetchData();
               toast.success(res.message);
             }, 1000);
           }
@@ -138,7 +138,8 @@ export default function SubCategoryForm(props) {
               setTimeout(() => {
                 // dispatch(setCategory(res));
                 reset();
-                toggle(), setLoader(false), subCategoryList();
+                toggle(), setLoader(false), 
+                props?.isrestaurant ? restaurantCategories() : fetchData2();
                 toast.success(res.message);
               }, 1000);
             }
@@ -165,7 +166,8 @@ export default function SubCategoryForm(props) {
             setTimeout(() => {
               // dispatch(setSubCategory(res));
               reset();
-              toggle(), setLoader(false), subCategoryList();
+              toggle(), setLoader(false), 
+              props?.isrestaurant ? restaurantCategories() : fetchData2();
               toast.success(res.message);
             }, 1000);
           }

@@ -27,16 +27,6 @@ export default function CategoryForm(props) {
   const dispatch = useDispatch();
   const toggle = () => setIsOpen(!isOpen);
 
-  // ========================= fetch data from api ==============================
-  const categoryList = () => {
-    getCategory()
-      .then((res) => {
-        dispatch(setCategory(res));
-      })
-      .catch((err) => {
-        console.error("Error", err);
-      });
-  };
 
   // ============================ submit data  =====================================
   const onSubmit = async (data) => {
@@ -59,11 +49,11 @@ export default function CategoryForm(props) {
           .then((res) => {
             if (res?.code == 2002) {
               setTimeout(() => {
-                dispatch(setCategory(res));
+                // dispatch(setCategory(res));
                 reset();
                 toggle(),
-                  setLoader(false),
-                  categoryList();
+                setLoader(false),
+                props?.isrestaurant ? props?.restaurantCategories() : props?.productCategories();
                 toast.success(res.message);
               }, 1000);
             }
@@ -93,9 +83,10 @@ export default function CategoryForm(props) {
         editCategory(props?.data?.id, data).then((res) => {
           if (res?.message === "category edited successfully") {
             setTimeout(() => {
-              dispatch(setCategory(res));
+              // dispatch(setCategory(res));
               reset();
-              toggle(), setLoader(false), categoryList();
+              props?.isrestaurant ? props?.restaurantCategories() : props?.productCategories();
+              toggle(), setLoader(false),
               toast.success(res.message);
             }, 1000);
           }
