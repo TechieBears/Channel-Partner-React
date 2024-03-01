@@ -108,7 +108,6 @@ export default function AddRestItem(props) {
                 data.food_video_url = ''
             }
         }
-
         let updatedData = { ...data, vendor: user?.sellerId }
         if (props?.button == 'edit') {
             editFoodItem(updatedData).then(res => {
@@ -146,28 +145,27 @@ export default function AddRestItem(props) {
             'food_subcategory': props?.data?.food_subcategory,
             'food_details': props?.data?.food_details,
             'food_isactive': props?.data?.food_isactive,
+            'food_veg_nonveg': props?.data?.food_veg_nonveg,
         })
     }, [])
 
     //  ------------   Seller Calculations SetPrice --------------------------------
-    const calculateRevenueSeller = watch('food_actual_price')
+    // const calculateRevenueSeller = watch('food_actual_price')
+    // useEffect(() => {
+    //     if (user?.role == 'seller') {
+    //         if (calculateRevenueSeller !== "") {
+    //             var mainUserPrice = calculateRevenueSeller * (user?.insta_commission == null ? 0 : user?.insta_commission / 100);
+    //             const final_price = (calculateRevenueSeller - mainUserPrice);
 
-    useEffect(() => {
-        if (user?.role == 'seller') {
-            if (calculateRevenueSeller !== "") {
-                var mainUserPrice = calculateRevenueSeller * (user?.insta_commission == null ? 0 : user?.insta_commission / 100);
-                console.log('mainUserPrice = ', (calculateRevenueSeller - mainUserPrice));
-                const final_price = (calculateRevenueSeller - mainUserPrice);
-
-                if (isNaN(final_price)) {
-                    setValue('food_revenue', 0);
-                } else {
-                    setFinalPriceSeller(parseFloat(final_price));
-                    setValue('food_revenue', final_price);
-                }
-            }
-        }
-    }, [calculateRevenueSeller])
+    //             if (isNaN(final_price)) {
+    //                 setValue('food_revenue', 0);
+    //             } else {
+    //                 setFinalPriceSeller(parseFloat(final_price));
+    //                 setValue('food_revenue', final_price);
+    //             }
+    //         }
+    //     }
+    // }, [calculateRevenueSeller])
 
     return (
         <>
@@ -277,7 +275,7 @@ export default function AddRestItem(props) {
                                                                 />
                                                                 {errors.food_actual_price && <Error title='MRP is Required*' />}
                                                             </div>
-                                                            <div className="">
+                                                            {/* <div className="">
                                                                 <label className={labelClass}>
                                                                     Item Revenue*
                                                                 </label>
@@ -288,7 +286,7 @@ export default function AddRestItem(props) {
                                                                     className={inputClass}
                                                                     {...register('food_revenue')}
                                                                 />
-                                                            </div>
+                                                            </div> */}
                                                         </>
                                                     }
                                                     {
@@ -410,9 +408,9 @@ export default function AddRestItem(props) {
                                                             placeholder='Upload Images...'
                                                             onChange={(e) => handleImageChange(e)}
                                                             {...register("food_image_1",
-                                                                { required: props.title == 'Edit Product' ? false : true })} />
-                                                        {props?.title == 'Edit Product' && props?.row?.food_image_1 != '' && props?.row?.food_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.row?.food_image_1?.split('/').pop()}
+                                                                { required: props.button == 'edit' ? false : true })} />
+                                                        {props?.data == 'edit' && props?.data?.food_image_1 != '' && props?.data?.food_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.data?.food_image_1?.split('/').pop()}
                                                         </label>}
                                                         {errors.food_image_1 && <Error title='Main Image is required*' />}
                                                     </div>
@@ -427,8 +425,8 @@ export default function AddRestItem(props) {
                                                             {...register("food_image_2",
                                                             )}
                                                         />
-                                                        {props?.title == 'Edit Product' && props?.row?.food_image_2 != '' && props?.row?.food_image_2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.row?.food_image_2?.split('/').pop()}
+                                                        {props?.button == 'edit' && props?.data?.food_image_2 != '' && props?.data?.food_image_2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.data?.food_image_2?.split('/').pop()}
                                                         </label>}
                                                     </div>
                                                     <div className="">
@@ -440,8 +438,8 @@ export default function AddRestItem(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("food_image_3")} />
-                                                        {props?.title == 'edit' && props?.row?.food_image_3 != '' && props?.row?.food_image_3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.row?.food_image_3?.split('/').pop()}
+                                                        {props?.button == 'edit' && props?.data?.food_image_3 != '' && props?.data?.food_image_3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.data?.food_image_3?.split('/').pop()}
                                                         </label>}
                                                     </div>
                                                     <div className="">
@@ -453,8 +451,8 @@ export default function AddRestItem(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("food_image_4")} />
-                                                        {props?.title == 'Edit Product' && props?.row?.food_image_4 != '' && props?.row?.food_image_4 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.row?.food_image_4?.split('/').pop()}
+                                                        {props?.button == 'edit' && props?.data?.food_image_4 != '' && props?.data?.food_image_4 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.data?.food_image_4?.split('/').pop()}
                                                         </label>}
                                                     </div>
                                                     <div className="">
@@ -466,8 +464,8 @@ export default function AddRestItem(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("food_image_5")} />
-                                                        {props?.title == 'Edit Product' && props?.row?.food_image_5 != '' && props?.row?.food_image_5 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.row?.food_image_5?.split('/').pop()}
+                                                        {props?.button == 'edit' && props?.data?.food_image_5 != '' && props?.data?.food_image_5 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.data?.food_image_5?.split('/').pop()}
                                                         </label>}
                                                     </div>
                                                 </div>

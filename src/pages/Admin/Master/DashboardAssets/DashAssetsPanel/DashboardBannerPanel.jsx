@@ -5,28 +5,41 @@ import {
   getHomeBanners,
   delHomeBanners,
   editHomeBanners,
+  addHomePromotion,
 } from "../../../../../api";
 import { useDispatch, useSelector } from "react-redux";
-import { setBanner } from "../../../../../redux/Slices/masterSlice";
+import { setBanner, setPromotions } from "../../../../../redux/Slices/masterSlice";
 import { toast } from "react-toastify";
 import Switch from "react-js-switch";
 import BannerForm from "../../../../../components/Modals/MasterModals/AssetsModals/BannerForm";
 import MediaGallaryModal from "../../../../Settings/MediaGallery/MediaGallery";
 import { getGalleryImages, } from '../../../../../api';
+import AddPromo from "../../../Promotion/Assests/AddPromo";
 
 
 const DashboardBannerPanel = () => {
-  const homeBanners = useSelector((state) => state?.master?.banner);
-  // const dispatch = useDispatch()
   const [bannerList, setBannerList] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [imageDetails, setImageDetails] = useState([]);
+  const [promotionList, setpromotionList] = useState([]);
+  const dispatch = useDispatch()
+
+  // ============== fetch data from api ================
+  const getAllPromotionList = () => {
+    try {
+      addHomePromotion().then((res) => {
+        console.log(res.data)
+        setpromotionList(res.data);
+        dispatch(setPromotions(res))
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
 
   // =================== fetching data ========================
   const fetchData = () => {
     try {
       getGalleryImages().then((res) => {
-        console.log("media gallery data = ", res);
         setImageDetails(res);
       });
     } catch (err) {
@@ -40,8 +53,6 @@ const DashboardBannerPanel = () => {
       getHomeBanners().then((res) => {
         console.log(res.data);
         setBannerList(res.data);
-
-        // dispatch(setBanner(res))
       });
     } catch (error) {
       console.log(error);
@@ -52,10 +63,6 @@ const DashboardBannerPanel = () => {
     getAllBannerList();
     fetchData();
   }, []);
-
-  const openMediaModal = () => {
-    setShowModal(true);
-  };
 
   // ============== delete data from api ================
   const deleteData = (data) => {
@@ -133,10 +140,14 @@ const DashboardBannerPanel = () => {
 
   // ================= columns of the table ===============
   const columns = [
-    { field: "image", header: "Image", body: imageBodyTemp },
-    { field: "id", header: "Action", body: actionBodyTemplate, sortable: true },
-    { field: "isactive", header: "Active", body: switchActive, sortable: true },
+    { field: "image", header: "Image", body: imageBodyTemp, style: true },
+    { field: "id", header: "Action", body: actionBodyTemplate, sortable: true, style: true },
+    { field: "isactive", header: "Active", body: switchActive, sortable: true, style: true },
   ];
+
+  useEffect(() => {
+    getAllPromotionList()
+  }, []);
 
   return (
     <>
@@ -144,20 +155,31 @@ const DashboardBannerPanel = () => {
         <div className="flex justify-between flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 mb-6">
           <div className="">
             <h1 className="font-tbPop text-xl font-semibold text-gray-900 ">
-              Home Banners
+              Banner's And Promos's
             </h1>
           </div>
           {/* <button onClick={openMediaModal}>Open Media gallery</button> */}
           {/* <MediaGallaryModal title="Media Gallery" showModal={showModal} imageDetails={imageDetails} /> */}
-
-          <BannerForm
-            title="Add New Banner"
-            getAllBannerList={getAllBannerList}
-          />
+          <div className="space-x-6">
+            <AddPromo title='Add New Promotion' getAllPromotionList={getAllPromotionList} />
+            <BannerForm
+              title="Add New Banner"
+              getAllBannerList={getAllBannerList}
+            />
+          </div>
         </div>
-        {bannerList?.length > 0 && (
-          <Table data={bannerList} columns={columns} />
-        )}
+        <div className="grid grid-cols-2 gap-x-4">
+          <div>
+            <p>Banner's</p>
+            {bannerList?.length > 0 && (
+              <Table data={bannerList} columns={columns} />
+            )}
+          </div>
+          <div>
+            <p>Promo's</p>
+            {promotionList?.length > 0 && <Table data={promotionList} columns={columns} />}
+          </div>
+        </div>
       </div>
     </>
   );

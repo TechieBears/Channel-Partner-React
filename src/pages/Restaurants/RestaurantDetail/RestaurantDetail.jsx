@@ -46,23 +46,23 @@ export default function RestaurantDetail() {
                         <div className='mx-4 grid grid-cols-4 gap-y-4 mt-4'>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Shop Name</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_name}</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_name == null ? 'Registration Pending' : data?.shop_name}</h5>
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Shop Address</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_address == null || data?.shop_address == '' ? '-----' : data?.shop_address}</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_address == null || data?.shop_address == '' ? 'Registration Pending' : data?.shop_address}</h5>
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Shop Contact</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_contact_number == null || data?.shop_contact_number == '' ? '-----' : data?.shop_contact_number}</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_contact_number == null || data?.shop_contact_number == '' ? 'Registration Pending' : data?.shop_contact_number}</h5>
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Shop Opening Time</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_start_time}</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_start_time == null ? 'Registration Pending' : data?.shop_start_time}</h5>
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Shop Closing Time</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_end_time}</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_end_time == null ? 'Registration Pending' : data?.shop_end_time}</h5>
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Shop Pincode</h5>
@@ -93,10 +93,6 @@ export default function RestaurantDetail() {
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Registration Date</h5>
                                 <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.user?.registration_date}</h5>
                             </div>
-                            <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Shop Closing Time</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_end_time}</h5>
-                            </div>
                         </div>
                     </div>
                     <div className='bg-white rounded-xl mt-4 p-2'>
@@ -104,31 +100,31 @@ export default function RestaurantDetail() {
                         <div className='mx-4 grid grid-cols-4 gap-y-4 mt-4'>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Bank Name</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.bank_name}</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.bank_name == null ? 'Registration Pending' : data?.bank_name}</h5>
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Bank Account Number</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.account_number == null || data?.account_number == '' ? '-----' : data?.account_number}</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.account_number == null || data?.account_number == '' ? 'Registration Pending' : data?.account_number}</h5>
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>IFSC Code</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.ifsc_code == null || data?.ifsc_code == '' ? '-----' : data?.ifsc_code}</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.ifsc_code == null || data?.ifsc_code == '' ? 'Registration Pending' : data?.ifsc_code}</h5>
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Adhar Card Number</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.adhar_card}</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.adhar_card == null ? 'Registration Pending' : data?.adhar_card}</h5>
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>PAN Card Number</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.pan_card}</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.pan_card == null ? 'Registration Pending' : data?.pan_card}</h5>
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>GST Number</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.gst_number}</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.gst_number == null ? 'Registration PEnding' : data?.gst_number}</h5>
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Commision (%)</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.insta_commison_percentage}</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.insta_commison_percentage == null ? "Registration Pending" : data?.insta_commison_percentage}</h5>
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Verifcation by Franchise</h5>
