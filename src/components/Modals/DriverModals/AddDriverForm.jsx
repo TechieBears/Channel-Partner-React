@@ -18,12 +18,10 @@ import { validateEmail, validatePIN, validatePhoneNumber } from '../../Validatio
 
 
 function AddDriverFrom(props) {
-    console.log('props', props)
     const [isOpen, setIsOpen] = useState(false);
     const [loader, setLoader] = useState(false);
     const Franchisee = useSelector((state) => state?.master?.Franchise);
     const toggle = () => setIsOpen(!isOpen);
-    console.log('isOpen = ', isOpen)
     const user = useSelector((state) => state?.user?.FranchiseeDetails);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     // // ========================= fetch data from api ==============================
@@ -174,54 +172,62 @@ function AddDriverFrom(props) {
         }
     }
 
-  // ============================== Reseting data ======================================
-  const fillData = () => {
-    reset({
-        "first_name": props?.data?.user?.first_name,
-        "last_name": props?.data?.user?.last_name,
-        "email": props?.data?.user?.email,
-        "pincode": props?.data?.user?.pincode,
-        "phone_no": props?.data?.user?.phone_no,
-        "address": props?.data?.user?.address,
-        "state": props?.data?.user?.state,
-        "city": props?.data?.user?.city,
-        "date_of_birth": props?.data?.user?.date_of_birth,
-        "gender": props?.data?.user?.gender,
-        "vehicle_type": props?.data?.vehicle_type,
-        "driver_license": props?.data?.driver_license,
-        "vehicle_rc": props?.data?.vehicle_rc,
-        "bank_name": props?.data?.bank_name,
-        "account_number": props?.data?.account_number,
-        "ifsc_code": props?.data?.ifsc_code,
-        "adhar_card": props?.data?.adhar_card,
-        "pan_card": props?.data?.pan_card,
-        "week_off": props?.data?.week_off,
-        // "shift": shift?.title,
-        // "job_type": jobType?.title,
-        "created_by": props?.data?.created_by?.id,
-    })
-    const job_type_json = JSON.parse(props?.data?.job_type.replace(/'/g, '"'));
-    console.log(job_type_json)
-    if (job_type_json?.subTitle == "4-5 hours per day") {
-        setValue('job_type', 'Part Time (4-5 Hours/Day)')
-    } else {
-        setValue('job_type', 'Full Time (9 Hours/Day)')
+    // ============================== Reseting data ======================================
+    const fillData = () => {
+        reset({
+            "first_name": props?.data?.user?.first_name,
+            "last_name": props?.data?.user?.last_name,
+            "email": props?.data?.user?.email,
+            "pincode": props?.data?.user?.pincode,
+            "phone_no": props?.data?.user?.phone_no,
+            "address": props?.data?.user?.address,
+            "state": props?.data?.user?.state,
+            "city": props?.data?.user?.city,
+            "date_of_birth": props?.data?.user?.date_of_birth,
+            "gender": props?.data?.user?.gender,
+            "vehicle_type": props?.data?.vehicle_type,
+            "driver_license": props?.data?.driver_license,
+            "vehicle_rc": props?.data?.vehicle_rc,
+            "bank_name": props?.data?.bank_name,
+            "account_number": props?.data?.account_number,
+            "ifsc_code": props?.data?.ifsc_code,
+            "adhar_card": props?.data?.adhar_card,
+            "pan_card": props?.data?.pan_card,
+            "week_off": props?.data?.week_off,
+            // "shift": shift?.title,
+            // "job_type": jobType?.title,
+            "created_by": props?.data?.created_by?.id,
+        })
+        const inputString = props?.data?.job_type;
+        const jsonString = inputString.replace(/'/g, '"');
+        const keyValuePairs = jsonString.match(/"([^"]+)":\s*"([^"]+)"/g);
+        if (keyValuePairs) {
+            const parsedObject = {};
+            keyValuePairs.forEach(pair => {
+                const [key, value] = pair.split(':').map(str => str.trim().replace(/"/g, ''));
+                parsedObject[key] = value;
+            });
+            if (parsedObject.subTitle == '4-5 hours per day') {
+                setValue('job_type', 'Part Time (4-5 Hours/Day)')
+            } else {
+                setValue('job_type', 'Full Time (9 Hours/Day)')
+            }
+            if (parsedObject?.subTitle == "Morning 9AM to Afternoon 1PM") {
+                setValue('shift', 'Morning 9AM to Afternoon 1PM 4 Hours')
+            } else {
+                setValue('shift', 'Afternoon 4PM to Evening 8PM 4 Hours')
+            }
+        } else {
+            console.error("No key-value pairs found in the input string.");
+        }
     }
-    const shift_type = JSON.parse(props?.data?.job_type.replace(/'/g, '"'));
-    console.log(shift_type)
-    if (shift_type?.subTitle == "Morning 9AM to Afternoon 1PM") {
-        setValue('shift', 'Morning 9AM to Afternoon 1PM 4 Hours')
-    } else {
-        setValue('shift', 'Afternoon 4PM to Evening 8PM 4 Hours')
-    }
-}
 
-useEffect(() => {
-    if (props.button == "edit") {
-        fillData()
-    }
-    FranchiseeDetails()
- }, [])
+    useEffect(() => {
+        if (props.button == "edit") {
+            fillData()
+        }
+        FranchiseeDetails()
+    }, [])
 
     return (
         <>

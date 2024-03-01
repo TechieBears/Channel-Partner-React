@@ -19,7 +19,6 @@ import { validateEmail, validateGST, validatePIN, validatePhoneNumber } from '..
 
 
 export default function AddVendors(props) {
-    console.log('props = ', props)
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     const Franchisee = useSelector((state) => state?.master?.Franchise);
     const [isOpen, setOpen] = useState(false);
