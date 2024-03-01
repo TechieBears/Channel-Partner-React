@@ -14,7 +14,7 @@ export const Admin = [
     //     icon: <ClipboardTick size="24" />,
     //     link: '/restaurant',
     // },
-   
+
     {
         title: 'Menus',
         icon: <Trade size="24" />,
@@ -24,7 +24,7 @@ export const Admin = [
                 title: 'Menu',
                 icon: <Menu size="24" />,
                 link: '/menu',
-            },        
+            },
             {
                 title: 'Restaurant Menu',
                 icon: <Menu size="24" />,
@@ -68,15 +68,15 @@ export const Admin = [
         link: '/coupon',
     },
     {
-        title: 'Banners',
-        icon: <TicketDiscount size="24" />,
+        title: `Banners/Promo's`,
+        icon: < TicketDiscount size="24" />,
         link: '/DashboardAssets',
     },
-    {
-        title: 'Promotions',
-        icon: <Megaphone size="24" />,
-        link: '/promotions',
-    },
+    // {
+    //     title: 'Promotions',
+    //     icon: <Megaphone size="24" />,
+    //     link: '/promotions',
+    // },
     {
         title: 'Settings',
         icon: <Setting2 size="24" />,
