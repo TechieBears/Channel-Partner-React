@@ -11,6 +11,7 @@ import { editVendorProduct, getProductsByAdmin, VerifyProductAdmin, makeFeatureP
 import Switch from 'react-js-switch';
 import userImg from '../../../../assets/user.jpg';
 import AddProduct from '../../../../components/Modals/Vendors/AddProduct';
+import AddRestItem from '../../../../components/Modals/Vendors/AddRestItem';
 
 
 
@@ -87,9 +88,8 @@ const AdminProduct = (props) => {
         toast.success("Filters clear");
     };
 
-    //======================= Table =======================
-
-    const action = (row) => <div className='flex space-x-2'>
+    //======================= Product Actions =======================
+    const productaction = (row) => <div className='flex space-x-2'>
         <Link to={`/product-list/product-details/${row?.product_id}`} state={row} className='items-center p-1 bg-sky-100 rounded-xl hover:bg-sky-200'>
             <Eye size={24} className='text-sky-400' />
         </Link>
@@ -100,6 +100,18 @@ const AdminProduct = (props) => {
         </button>
     </div>
 
+
+    //======================= Product Actions =======================
+    const fooditemaction = (row) => <div className='flex space-x-2'>
+        <Link to={`/food-list/food-details/${row?.food_id}`} state={row} className='items-center p-1 bg-sky-100 rounded-xl hover:bg-sky-200'>
+            <Eye size={24} className='text-sky-400' />
+        </Link>
+        {/* <ViewProduct /> */}
+        <AddRestItem title='Edit Food Item' row={row} getRestaurantFoodItems={getRestaurantFoodItems} />
+        <button className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
+            <Trash size={24} className='text-red-400' />
+        </button>
+    </div>
 
 
     // =============================== active user switch =============================
@@ -193,7 +205,7 @@ const AdminProduct = (props) => {
         return (
             <div className="flex items-center justify-center gap-2 ">
                 <Switch
-                    value={row?.product_isverified_byadmin}
+                    value={row?.food_isverified_byadmin}
                     onChange={() => verifyActions(row)}
                     disabled={row?.markup_percentage == 0 || row?.markup_percentage == undefined ? true : false}
                     size={50}
@@ -207,7 +219,7 @@ const AdminProduct = (props) => {
         return (
             <div className="flex items-center justify-center gap-2 ">
                 <Switch
-                    value={row?.featured}
+                    value={row?.food_isverified_byfranchise}
                     onChange={() => verifyFeatured(row)}
                     disabled={row?.markup_percentage == 0 || row?.markup_percentage == undefined ? true : false}
                     size={50}
@@ -252,12 +264,13 @@ const AdminProduct = (props) => {
         { field: 'product_shelflife', header: 'Self Life', sortable: true },
         { field: 'product_Manufacturer_Name', header: 'Manufacturer Name', sortable: true },
         { field: 'product_country_of_origin', header: 'Country Of Origin', sortable: true },
-        { filed: 'action', header: 'Action', body: action, sortable: true },
+        { filed: 'action', header: 'Action', body: productaction, sortable: true },
         { field: 'isverify', header: 'Admin Verify', body: switchVerify, sortable: true },
         { field: 'featured', header: 'Featured Products', body: switchFeatured, sortable: true },
     ]
 
     const FoodItemColumns = [
+        { field: 'food_msbcode', header: 'Food MSB Code', sortable: true },
         { field: 'food_image_1', header: 'Image', body: representativeBodyTemplateRes, sortable: false, style: true },
         { field: 'food_name', header: 'Food Name', sortable: true },
         { field: 'product_category', header: 'Food Category', body: (row) => <h6>{row?.food_category?.category_name}</h6>, sortable: true },
@@ -267,11 +280,11 @@ const AdminProduct = (props) => {
         // { field: 'product_available_qty', header: 'Available Quantity', sortable: true },
         { field: 'shop_name', header: 'Restaurant Name', body: (row) => <h6>{row?.vendor?.shop_name}</h6>, sortable: true },
         { field: 'pincode', header: 'PINCODE', body: (row) => <h6>{row?.vendor?.user?.pincode}</h6>, sortable: true },
-        { field: 'product_brand', header: 'Brand', sortable: true },
-        { field: 'product_shelflife', header: 'Self Life', sortable: true },
-        { field: 'product_Manufacturer_Name', header: 'Manufacturer Name', sortable: true },
-        { field: 'product_country_of_origin', header: 'Country Of Origin', sortable: true },
-        { filed: 'action', header: 'Action', body: action, sortable: true },
+        { field: 'email', header: 'Email', body: (row) => <h6>{row?.vendor?.user?.email}</h6>, sortable: true },
+        // { field: 'product_shelflife', header: 'Expiry Details', sortable: true },
+        // { field: 'product_Manufacturer_Name', header: 'Manufacturer Name', sortable: true },
+        // { field: 'product_country_of_origin', header: 'Country Of Origin', sortable: true },
+        { filed: 'action', header: 'Action', body: fooditemaction, sortable: true },
         { field: 'isverify', header: 'Admin Verify', body: switchVerifyRes, sortable: true },
         { field: 'featured', header: 'Featured Products', body: switchFeaturedRes, sortable: true },
     ]
@@ -282,11 +295,11 @@ const AdminProduct = (props) => {
         { field: 'product_actual_price', header: 'MRP', sortable: true },
         { field: 'product_available_qty', header: 'Quantity', sortable: true },
         { field: 'product_brand', header: 'Brand', sortable: true },
-        { field: 'product_shelflife', header: 'Self Life', sortable: true },
+        { field: 'product_shelflife', header: 'Expiry Details', sortable: true },
         { field: 'product_description', header: 'Description', sortable: true },
         { field: 'product_Manufacturer_Name', header: 'Manufacturer Name', sortable: true },
         { field: 'product_country_of_origin', header: 'Country Of Origin', sortable: true },
-        { filed: 'action', header: 'Action', body: action, sortable: true },
+        { filed: 'action', header: 'Action', body: productaction, sortable: true },
         // { field: 'isverify', header: 'Admin Verify', body: switchVerify, sortable: true },
     ]
 

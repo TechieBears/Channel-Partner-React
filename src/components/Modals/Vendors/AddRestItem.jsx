@@ -11,6 +11,7 @@ import { ImageUpload, restaurantLink } from '../../../env';
 import { toast } from 'react-toastify';
 
 export default function AddRestItem(props) {
+    console.log('props = ', props)
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false);
     const [category, setCategory] = useState([]);
@@ -140,9 +141,12 @@ export default function AddRestItem(props) {
             setsubCategory(res)
         })
         reset({
-            'food_name': props?.data?.food_name,
-            'food_category': props?.data?.food_category,
-            'food_subcategory': props?.data?.food_subcategory,
+            'food_name': props?.row?.food_name,
+            'food_category': props?.row?.food_category?.id,
+            'food_subcategory': props?.row?.food_subcategory?.subcat_id,
+            'food_actual_price': props?.row?.food_actual_price,
+            'insta_commison_percentage': props?.row?.insta_commison_percentage,
+            'markup_percentage': props?.row?.markup_percentage,
             'food_details': props?.data?.food_details,
             'food_isactive': props?.data?.food_isactive,
             'food_veg_nonveg': props?.data?.food_veg_nonveg,
@@ -169,7 +173,7 @@ export default function AddRestItem(props) {
 
     return (
         <>
-            {props?.button == 'edit' ?
+            {props?.title == 'Edit Food Item' ?
                 <button className='items-center p-1 bg-yellow-100 rounded-xl hover:bg-yellow-200' onClick={() => setOpen(true)}>
                     <Edit size={24} className='text-yellow-400' />
                 </button> :

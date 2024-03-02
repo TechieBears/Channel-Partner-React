@@ -89,7 +89,7 @@ const Step1 = () => {
                         </label>
                         <input
                             type="text"
-                            readOnly
+                            // readOnly
                             placeholder='State'
                             className={inputClass}
                             {...register('state',)}
@@ -101,7 +101,7 @@ const Step1 = () => {
                         </label>
                         <input
                             type="text"
-                            readOnly
+                            // readOnly
                             placeholder='Pincode'
                             className={inputClass}
                             {...register('pinocde',)}
@@ -113,7 +113,7 @@ const Step1 = () => {
                         </label>
                         <input
                             type="text"
-                            readOnly
+                            // readOnly
                             placeholder='City'
                             className={inputClass}
                             {...register('city',)}
