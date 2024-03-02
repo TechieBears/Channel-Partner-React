@@ -268,7 +268,7 @@ const Step3 = (props) => {
                     multiple
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("shop_image", { required: true })} />
+                    {...register("ambience_image", { required: true })} />
                 {props?.button == 'edit' && props?.data.ambience_image != '' && props?.data.ambience_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                     {props?.data?.ambience_image?.split('/').pop()}
                 </label>}
@@ -282,7 +282,7 @@ const Step3 = (props) => {
                     multiple
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("menu_image2", { required: true})} />
+                    {...register("menu_image2", { required: true })} />
                 {props?.button == 'edit' && props?.data.menu_image2 != '' && props?.data.menu_image2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                     {props?.data?.menu_image2?.split('/').pop()}
                 </label>}
@@ -698,6 +698,7 @@ export default function DashboardForm(props) {
 
     // ================= submit data  ===============================
     const onSubmit = async (data) => {
+        console.log('data', data)
         isStepFalied()
         setLoader(true)
         if (activeStep == steps.length - 1) {
