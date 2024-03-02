@@ -127,7 +127,7 @@ const Step1 = () => {
                     }
                     <div className="">
                         <label className={labelClass}>
-                            Restaurant Number*
+                            Restaurant Phone Number*
                         </label>
                         <input
                             type="tel"
@@ -135,7 +135,7 @@ const Step1 = () => {
                             className={inputClass}
                             {...register('shop_contact_number', { required: true, validate: validatePhoneNumber })}
                         />
-                        {errors.shop_contact_number && <Error title='Restaurant Number is required*' />}
+                        {errors.shop_contact_number && <Error title='Restaurant Phone Number is required*' />}
                     </div>
                 </div>
             </div>
@@ -204,7 +204,7 @@ const Step2 = (props) => {
                     value={props?.selectedCuisines}
                     onChange={(selectedOption) => props?.setSelectedCuisines(selectedOption)}
                 />
-                {errors?.type_of_cuisine && <Error title='This is required' />}
+                {errors?.type_of_cuisine && <Error title='Type of Cuisine is required' />}
             </div>
             <div>
                 <label className={labelClass}>
