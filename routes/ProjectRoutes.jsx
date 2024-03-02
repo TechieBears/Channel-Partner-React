@@ -46,7 +46,7 @@ import DashboardBannerPanel from '../src/pages/Admin/Master/DashboardAssets/Dash
 import DashboardPromotions from '../src/pages/Admin/Master/DashboardPromotions';
 import DashboardForm from '../src/components/modals/DashboardModals/DashboardForm';
 import Coupon from '../src/pages/Admin/Coupon/Coupon';
-import RestaurantRegister from '../src/pages/Restaurants/ViewRestaurant/RestaurabtRegister';
+import RestaurantRegister from '../src/pages/Restaurants/ViewRestaurant/RestaurantRegister';
 
 
 
@@ -108,7 +108,6 @@ const ProjectRoutes = () => {
                                     user?.role == 'seller' ?
                                         <>
                                             <Route path='/' element={<VendorDashbaord />} />
-                                            {/* <Route path='/register' element={<RestaurantRegister />} /> */}
                                             <Route path='/register' element={<RestaurantRegister />} />
                                             <Route path="/profile" element={<UserProfile />} />
                                             <Route path='/menu' element={<Menu />} />
