@@ -58,73 +58,67 @@ const Step1 = () => {
                         />
                         {errors.shop_address && <Error title='Year is required*' />}
                     </div>
-                    {manually &&
-                        <>
-                            <p className={`col-span-2 text-center`}>--or enter coordinates manually--</p>
-                            <div className="">
-                                <label className={labelClass}>
-                                    Latitude*
-                                </label>
-                                <input
-                                    type="text"
-                                    placeholder='Latitude'
-                                    className={inputClass}
-                                    {...register('lat', { required: manually })}
-                                />
-                                {errors.lat && <Error title={errors?.lat?.message} />}
-                            </div>
-                            <div className="">
-                                <label className={labelClass}>
-                                    Longitutde*
-                                </label>
-                                <input
-                                    type="text"
-                                    placeholder='Longitutde'
-                                    className={inputClass}
-                                    {...register('long', { required: manually })}
-                                />
-                                {errors.long && <Error title={errors?.long?.message} />}
-                            </div>
+                    <div className="">
+                        <label className={labelClass}>
+                            Latitude*
+                        </label>
+                        <input
+                            type="text"
+                            placeholder='Latitude'
+                            className={inputClass}
+                            {...register('lat', { required: manually })}
+                        />
+                        {errors.lat && <Error title='Latitude Is required' />}
+                    </div>
+                    <div className="">
+                        <label className={labelClass}>
+                            Longitude*
+                        </label>
+                        <input
+                            type="text"
+                            placeholder='Longitutde'
+                            className={inputClass}
+                            {...register('long', { required: manually })}
+                        />
+                        {errors.long && <Error title='Longitude' />}
+                    </div>
 
-                            <div className="">
-                                <label className={labelClass}>
-                                    State*
-                                </label>
-                                <input
-                                    type="text"
-                                    readOnly
-                                    placeholder='State'
-                                    className={inputClass}
-                                    {...register('state',)}
-                                />
-                            </div>
-                            <div className="">
-                                <label className={labelClass}>
-                                    Pincode*
-                                </label>
-                                <input
-                                    type="text"
-                                    readOnly
-                                    placeholder='Pincode'
-                                    className={inputClass}
-                                    {...register('pinocde',)}
-                                />
-                            </div>
-                            <div className="">
-                                <label className={labelClass}>
-                                    City*
-                                </label>
-                                <input
-                                    type="text"
-                                    readOnly
-                                    placeholder='City'
-                                    className={inputClass}
-                                    {...register('city',)}
-                                />
-                            </div>
-                            <div></div>
-                        </>
-                    }
+                    <div className="">
+                        <label className={labelClass}>
+                            State*
+                        </label>
+                        <input
+                            type="text"
+                            readOnly
+                            placeholder='State'
+                            className={inputClass}
+                            {...register('state',)}
+                        />
+                    </div>
+                    <div className="">
+                        <label className={labelClass}>
+                            Pincode*
+                        </label>
+                        <input
+                            type="text"
+                            readOnly
+                            placeholder='Pincode'
+                            className={inputClass}
+                            {...register('pinocde',)}
+                        />
+                    </div>
+                    <div className="">
+                        <label className={labelClass}>
+                            City*
+                        </label>
+                        <input
+                            type="text"
+                            readOnly
+                            placeholder='City'
+                            className={inputClass}
+                            {...register('city',)}
+                        />
+                    </div>
                     <div className="">
                         <label className={labelClass}>
                             Restaurant Phone Number*
@@ -141,11 +135,11 @@ const Step1 = () => {
             </div>
             <div className='col-span-2'>
                 {/* ============================= Maps start ============================= */}
-                <div className=''>
+                <div className='bg-slate-50 rounded-xl'>
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d30128.960774986183!2d73.0314032258855!3d19.27714285590321!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7bda4c2cb3497%3A0x65c3365426378045!2sKamatghar%2C%20Bhiwandi%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1709017397432!5m2!1sen!2sin" width="100%" height="450" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
                 {/* ============================= Maps end ============================= */}
-                <p onClick={() => setManally(!manually)} className={`cursor-pointer ${manually ? 'text-black' : 'text-sky-400'}`}>or enter coordinates manually</p>
+                <p className='text-sm text-gray-400'>Please provide precise location for better results</p>
             </div>
         </div>
     )
@@ -774,9 +768,8 @@ export default function DashboardForm(props) {
     return (
         <>
             {props?.dashBoard &&
-                <button onClick={toggle} className="flex items-center pb-2 space-x-2 transition-all duration-700 group">
-                    <UserAdd size={22} onClick={() => props?.setCard(!props?.card)} className='text-gray-700 group-hover:text-sky-400' />
-                    <h4 className='text-sm font-semibold capitalize font-tbPop lg:text-lg md:text-base group-hover:text-sky-400 text-slate-700'>Register</h4>
+                <button onClick={toggle} className={formBtn1}>
+                    Edit
                 </button>}
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-[100]" onClose={() => toggle}>

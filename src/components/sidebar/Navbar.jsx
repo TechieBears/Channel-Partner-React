@@ -55,7 +55,7 @@ const Navbar = ({ mobileSidebar, setMobileSidebar }) => {
                             </h4>
                             <h4 className="text-[12px] font-medium leading-none capitalize text-gray-500 pt-0.5 ">
                                 {/* <span className='lowercase'>{user?.loggedUserDetails?.role !== "admin" && (`(${user?.loggedUserDetails?.service})`)}</span>  */}
-                                {user?.role}
+                                {user?.role == 'admin' ? user?.role : user?.role == 'seller' ? user?.vendor_type : 'Admin'}
                             </h4>
                         </div>
 
@@ -80,11 +80,10 @@ const Navbar = ({ mobileSidebar, setMobileSidebar }) => {
                         <User size={22} className='text-gray-700 group-hover:text-sky-400' />
                         <h4 className='text-sm font-semibold capitalize font-tbPop lg:text-lg md:text-base group-hover:text-sky-400 text-slate-700'>Profile</h4>
                     </NavLink>
-                    {user?.role == 'seller' ? <DashboardForm dashBoard={true} setCard={setCard} card={card} /> : <NavLink className="flex items-center pb-2 space-x-2 transition-all duration-700 group">
+                    <NavLink className="flex items-center pb-2 space-x-2 transition-all duration-700 group">
                         <Setting2 size={22} onClick={() => setCard(!card)} className='text-gray-700 group-hover:text-sky-400' />
                         <h4 className='text-sm font-semibold capitalize font-tbPop lg:text-lg md:text-base group-hover:text-sky-400 text-slate-700'>Setting</h4>
                     </NavLink>
-                    }
                     <button onClick={logOut} className="flex items-center pb-2 space-x-2 group">
                         <LogoutCurve size={20} className='text-gray-700 group-hover:text-red-500' />
                         <h4 className='text-sm font-semibold capitalize font-tb lg:text-lg md:text-base group-hover:text-red-500 text-slate-700'>logout</h4>
