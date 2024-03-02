@@ -42,30 +42,30 @@ export default function RestaurantDetail() {
             <div className='grid grid-cols-8 gap-x-4'>
                 <div className='col-span-6'>
                     <div className='bg-white rounded-xl mt-4 p-2'>
-                        <p className='font-semibold text-sky-400 text-xl p-2 '>Shop Details</p>
+                        <p className='font-semibold text-sky-400 text-xl p-2 '>Restaurant Details</p>
                         <div className='mx-4 grid grid-cols-4 gap-y-4 mt-4'>
                             <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Shop Name</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_name == null ? 'Registration Pending' : data?.shop_name}</h5>
+                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Restaurant Name</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.Restaurant_name == null ? 'Registration Pending' : data?.Restaurant_name}</h5>
                             </div>
                             <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Shop Address</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_address == null || data?.shop_address == '' ? 'Registration Pending' : data?.shop_address}</h5>
+                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Restaurant Address</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.Restaurant_address == null || data?.Restaurant_address == '' ? 'Registration Pending' : data?.Restaurant_address}</h5>
                             </div>
                             <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Shop Contact</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_contact_number == null || data?.shop_contact_number == '' ? 'Registration Pending' : data?.shop_contact_number}</h5>
+                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Restaurant Contact</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.Restaurant_contact_number == null || data?.Restaurant_contact_number == '' ? 'Registration Pending' : data?.Restaurant_contact_number}</h5>
                             </div>
                             <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Shop Opening Time</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_start_time == null ? 'Registration Pending' : data?.shop_start_time}</h5>
+                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Restaurant Opening Time</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.Restaurant_start_time == null ? 'Registration Pending' : data?.Restaurant_start_time}</h5>
                             </div>
                             <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Shop Closing Time</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_end_time == null ? 'Registration Pending' : data?.shop_end_time}</h5>
+                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Restaurant Closing Time</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.Restaurant_end_time == null ? 'Registration Pending' : data?.Restaurant_end_time}</h5>
                             </div>
                             <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Shop Pincode</h5>
+                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Restaurant Pincode</h5>
                                 <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.user?.pincode}</h5>
                             </div>
                             <div>
