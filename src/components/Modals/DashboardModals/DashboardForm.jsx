@@ -66,9 +66,9 @@ const Step1 = () => {
                             type="text"
                             placeholder='Latitude'
                             className={inputClass}
-                            {...register('lat', { required: manually })}
+                            {...register('latitude', { required: manually })}
                         />
-                        {errors.lat && <Error title='Latitude Is required' />}
+                        {errors.latitude && <Error title='Latitude Is required' />}
                     </div>
                     <div className="">
                         <label className={labelClass}>
@@ -78,9 +78,9 @@ const Step1 = () => {
                             type="text"
                             placeholder='Longitutde'
                             className={inputClass}
-                            {...register('long', { required: manually })}
+                            {...register('longitude', { required: manually })}
                         />
-                        {errors.long && <Error title='Longitude' />}
+                        {errors.longitude && <Error title='Longitude' />}
                     </div>
 
                     <div className="">
@@ -131,6 +131,18 @@ const Step1 = () => {
                         />
                         {errors.shop_contact_number && <Error title='Restaurant Phone Number is required*' />}
                     </div>
+                    <div className="">
+                        <label className={labelClass}>
+                            Restaurant Description*
+                        </label>
+                        <input
+                            type="text"
+                            placeholder='Restaurant Description'
+                            className={inputClass}
+                            {...register('about_restaurant', { required: true, })}
+                        />
+                        {errors.about_restaurant && <Error title='Restaurant Description is required*' />}
+                    </div>
                 </div>
             </div>
             <div className='col-span-2'>
@@ -177,6 +189,21 @@ const Step2 = (props) => {
             <p className='md:col-span-2 lg:col-span-3 font-semibold text-lg'>Establishment Type</p>
             <div className="">
                 <label className={labelClass}>
+                    Restaurant Type*
+                </label>
+                <select
+                    className={inputClass}
+                    {...register('restaurant_type', { required: true })}
+                >
+                    <option value=''>Select</option>
+                    <option value='Both'>Both</option>
+                    <option value='Veg'>Veg</option>
+                    <option value='Non-Veg'>Non-Veg</option>
+                </select>
+                {errors?.restaurant_type && <Error title='This is required' />}
+            </div>
+            <div className="">
+                <label className={labelClass}>
                     Select What Describe you the best*
                 </label>
                 <Select
@@ -218,7 +245,8 @@ const Step2 = (props) => {
                 <input
                     type='time'
                     className={inputClass}
-                    {...register('shop_closing_time', { required: true })}
+                    step={1800}
+                    {...register('shop_end_time', { required: true })}
                 />
                 {errors?.shop_closing_time && <Error title='Closing Hour is required' />}
             </div>
@@ -245,21 +273,21 @@ const Step3 = (props) => {
                 {props?.button == 'edit' && props?.data.ambience_image != '' && props?.data.ambience_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                     {props?.data?.ambience_image?.split('/').pop()}
                 </label>}
-                {errors.ambience_image && <Error title='Menu Image is required*' />}
+                {errors.ambience_image && <Error title='Image is required*' />}
             </div>
             <div className="">
-                <label className={labelClass} htmlFor="main_input">Image 2</label>
+                <label className={labelClass} htmlFor="main_input">Image 2*</label>
                 <input className={fileinput}
                     id="main_input"
                     type='file'
                     multiple
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("menu_image2", {})} />
-                {props?.button == 'edit' && props?.data.menu_image2 != '' && props?.data.menu_image2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                    {props?.data?.menu_image2?.split('/').pop()}
+                    {...register("shop_image", { required: true })} />
+                {props?.button == 'edit' && props?.data.shop_image != '' && props?.data.shop_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                    {props?.data?.shop_image?.split('/').pop()}
                 </label>}
-                {errors.menu_image2 && <Error title='Menu Image is required*' />}
+                {errors.shop_image && <Error title='Image is required*' />}
             </div>
             <div className="">
                 <label className={labelClass} htmlFor="main_input">Image 3</label>
@@ -507,6 +535,7 @@ const Step5 = (props) => {
                     className={inputClass}
                     {...register('bank_name', { required: true })}
                 />
+                {errors?.bank_name && <Error title='Bank Name is required' />}
             </div>
             <div className="">
                 <label className={labelClass}>
@@ -518,6 +547,7 @@ const Step5 = (props) => {
                     className={inputClass}
                     {...register('account_number', { required: true })}
                 />
+                {errors?.account_number && <Error title='Account Number is required' />}
             </div>
             <div className="">
                 <label className={labelClass}>
@@ -527,8 +557,9 @@ const Step5 = (props) => {
                     type="text"
                     placeholder='Bank IFSC Code'
                     className={inputClass}
-                    {...register('ifsc_code')}
+                    {...register('ifsc_code', { required: true })}
                 />
+                {errors?.ifsc_code && <Error title='IFSC Code is required' />}
             </div>
             <p className='col-span-3 text-lg font-semibold'>Adhar Details</p>
             <div className="">
@@ -671,6 +702,7 @@ export default function DashboardForm(props) {
 
     // ================= submit data  ===============================
     const onSubmit = async (data) => {
+        console.log('data', data)
         isStepFalied()
         setLoader(true)
         if (activeStep == steps.length - 1) {
