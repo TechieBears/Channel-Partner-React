@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import Table from '../../../../components/Table/Table';
 import { Link } from 'react-router-dom';
 import { Eye, Trash } from 'iconsax-react';
-import { editVendorProduct, getProductsByAdmin, VerifyProductAdmin, makeFeatureProduct, getRestaurantFood} from '../../../../api';
+import { editVendorProduct, getProductsByAdmin, VerifyProductAdmin, makeFeatureProduct, getRestaurantFood } from '../../../../api';
 import Switch from 'react-js-switch';
 import userImg from '../../../../assets/user.jpg';
 import AddProduct from '../../../../components/Modals/Vendors/AddProduct';
@@ -26,7 +26,7 @@ const AdminProduct = (props) => {
             getProductsByAdmin().then(res => {
                 setShopProducts(res)
             });
-          } catch (error) {
+        } catch (error) {
             console.log(error);
         }
     }
@@ -36,16 +36,16 @@ const AdminProduct = (props) => {
             getRestaurantFood().then(res => {
                 setShopProducts(res)
             });
-          } catch (error) {
+        } catch (error) {
             console.log(error);
         }
     }
-  
+
     useEffect(() => {
-        if (!props?.isrestaurant){
+        if (!props?.isrestaurant) {
             getProducts()
         }
-        if (props?.isrestaurant){
+        if (props?.isrestaurant) {
             getRestaurantFoodItems();
         }
     }, [props.isrestaurant]);
@@ -105,7 +105,7 @@ const AdminProduct = (props) => {
             <Eye size={24} className='text-sky-400' />
         </Link>
         {/* <ViewProduct /> */}
-        <AddRestItem title='edit' row={row} getRestaurantFoodItems={getRestaurantFoodItems} />
+        <AddRestItem title='edit' data={row} getRestaurantFoodItems={getRestaurantFoodItems} />
         <button className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
             <Trash size={24} className='text-red-400' />
         </button>
@@ -149,7 +149,7 @@ const AdminProduct = (props) => {
     }
 
     const verifyFeatured = (row) => {
-        const payload = { productId: row?.product_id, featured : !row?.featured}
+        const payload = { productId: row?.product_id, featured: !row?.featured }
         if (row?.markup_percentage != undefined || row?.markup_percentage != 0) {
             try {
                 makeFeatureProduct(payload).then((form) => {
@@ -364,8 +364,8 @@ const AdminProduct = (props) => {
                     <h2 className='col-span-5 text-xl font-semibold'>{props?.isrestaurant ? "Food Items" : "Product List"}</h2>
                 </div>
                 <div className='mt-4'>
-                {props?.isrestaurant ? <Table data={shopProducts} columns={LoggedUserDetails?.role == 'franchise' ? restaurantColumns : FoodItemColumns} /> :
-                  <Table data={shopProducts} columns={LoggedUserDetails?.role == 'franchise' ? restaurantColumns : ProductColumns} /> }
+                    {props?.isrestaurant ? <Table data={shopProducts} columns={LoggedUserDetails?.role == 'franchise' ? restaurantColumns : FoodItemColumns} /> :
+                        <Table data={shopProducts} columns={LoggedUserDetails?.role == 'franchise' ? restaurantColumns : ProductColumns} />}
                 </div>
             </div>
         </>

@@ -1693,3 +1693,14 @@ export const deleteFoodItem = async (id) => {
         console.log('error while posting data', err)
     }
 }
+
+export const getSingleRestaurant = async (id) => {
+    const url = `${environment.baseUrl}vendor/editonboard_restaurant/${id}`
+    try {
+        const response = await axios.get(url ,id)
+        console.log('response', response)
+        return response.data
+    } catch (error) {
+        console.log('error while getting data', error)
+    }
+}

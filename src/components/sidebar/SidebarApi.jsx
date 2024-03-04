@@ -74,11 +74,6 @@ export const Admin = [
 
 export const Seller = [
     {
-        title: 'Register',
-        icon: <UserAdd size="24" />,
-        link: '/register',
-    },
-    {
         title: 'Dashboard',
         icon: <Element4 size="24" />,
         link: '/',
@@ -97,6 +92,11 @@ export const Seller = [
         title: 'Menu',
         icon: <Menu size="24" />,
         link: '/menu',
+    },
+    {
+        title: 'Register',
+        icon: <UserAdd size="24" />,
+        link: '/register',
     },
     // {
     //     title: 'Paid Plans',
