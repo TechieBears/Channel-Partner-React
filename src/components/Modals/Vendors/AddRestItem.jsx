@@ -140,7 +140,7 @@ export default function AddRestItem(props) {
         var updatedData = { ...data, vendor: props?.row?.vendor?.vendor_id }
         editAdminFinalFood(props?.row?.food_id, updatedData).then(res => {
             if (res?.status == 'success') {
-                props?.getProducts()
+                props?.getRestaurantFoodItems();
                 toast.success('Food item updated successfully')
                 toggle();
             }
@@ -156,16 +156,16 @@ export default function AddRestItem(props) {
         })
         if (user?.role == 'admin'){
             reset({
-                'food_name': props?.row?.food_name,
-                'food_category': props?.row?.food_category?.id,
-                'food_subcategory': props?.row?.food_subcategory?.subcat_id,
-                'food_actual_price': props?.row?.food_actual_price,
-                'insta_commison_percentage': props?.row?.vendor?.insta_commison_percentage,
-                'markup_percentage': props?.row?.markup_percentage,
-                'food_details': props?.row?.food_details,
-                'food_isactive': props?.row?.food_isactive,
-                'food_veg_nonveg': props?.row?.food_veg_nonveg,
-                'food_isactive': props?.row?.food_isactive,
+                'food_name': props?.data?.food_name,
+                'food_category': props?.data?.food_category?.id,
+                'food_subcategory': props?.data?.food_subcategory?.subcat_id,
+                'food_actual_price': props?.data?.food_actual_price,
+                'insta_commison_percentage': props?.data?.vendor?.insta_commison_percentage,
+                'markup_percentage': props?.data?.markup_percentage,
+                'food_details': props?.data?.food_details,
+                'food_isactive': props?.data?.food_isactive,
+                'food_veg_nonveg': props?.data?.food_veg_nonveg,
+                'food_isactive': props?.data?.food_isactive,
             })
         }
         // if (props?.title == 'edit') {
@@ -212,8 +212,8 @@ export default function AddRestItem(props) {
     useEffect(() => {
         if (user?.role == 'admin') {
             if (calculateRevenueAdmin !== "") {
-                var mainPrice = (props?.row?.food_actual_price == null ? 0 : props?.row?.food_actual_price) * (calculateRevenueAdmin / 100);
-                var adminfinalprice = props?.row?.food_actual_price + mainPrice;
+                var mainPrice = (props?.data?.food_actual_price == null ? 0 : props?.data?.food_actual_price) * (calculateRevenueAdmin / 100);
+                var adminfinalprice = props?.data?.food_actual_price + mainPrice;
                 setFinalPriceAdmin(adminfinalprice);
                 setValue('final_price', adminfinalprice?.toFixed(0));
             }

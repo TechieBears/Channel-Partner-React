@@ -769,6 +769,7 @@ export default function DashboardForm(props) {
     const onSubmit = async (data) => {
         moment(data?.shop_start_time).format('LT');
         moment(data?.shop_closing_time).format('LT');
+
         console.log('data', data)
         isStepFalied()
         setLoader(true)
@@ -847,7 +848,7 @@ export default function DashboardForm(props) {
             // }
             let updatedData = {
                 ...data,
-                "type_of_cuisine": selectedCuisines,
+                "type_of_cuisine": JSON.stringify(selectedCuisines),
                 // "restaurant_type": selectedRestType,
                 "vendorId": LoggedUserDetails?.sellerId
             }
