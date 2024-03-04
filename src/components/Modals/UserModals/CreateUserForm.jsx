@@ -489,7 +489,7 @@ function CreateUserForm(props) {
                                                             type="number"
                                                             placeholder='Pin Code'
                                                             className={inputClass}
-                                                            {...register('pincode', { required: true, validate: validatePIN })}
+                                                            {...register('pincode', { required: "Pincode is required*", validate: validatePIN })}
                                                         />
                                                         {errors.pincode && <Error title={errors?.pincode?.message} />}
                                                     </div>

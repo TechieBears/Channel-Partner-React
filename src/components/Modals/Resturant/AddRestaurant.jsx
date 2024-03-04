@@ -219,7 +219,7 @@ export default function AddRestaurant(props) {
                                                             type="email"
                                                             placeholder='Email'
                                                             className={inputClass}
-                                                            {...register('email', { required: true, validate: validateEmail })}
+                                                            {...register('email', { required: "Email is required*", validate: validateEmail})}
                                                         />
                                                         {errors.email && <Error title={errors?.email?.message} />}
                                                     </div>
@@ -243,9 +243,10 @@ export default function AddRestaurant(props) {
                                                         </label>
                                                         <input
                                                             type="tel"
+                                                            maxLength={10}
                                                             placeholder='+91'
                                                             className={inputClass}
-                                                            {...register('phone_no', { required: true, validate: validatePhoneNumber })}
+                                                            {...register('phone_no', { required: "Phone Number is required", validate: validatePhoneNumber })}
                                                         />
                                                         {errors.phone_no && <Error title={errors?.phone_no?.message} />}
                                                     </div>
@@ -343,9 +344,10 @@ export default function AddRestaurant(props) {
                                                         </label>
                                                         <input
                                                             type="text"
+                                                            maxLength={6}
                                                             placeholder='PIN Code'
                                                             className={inputClass}
-                                                            {...register('pincode', { required: true, validate: validatePIN })}
+                                                            {...register('pincode', { required: "Pincode is required*", validate: validatePIN })}
                                                         />
                                                         {errors.pincode && <Error title={errors?.pincode?.message} />}
                                                     </div>

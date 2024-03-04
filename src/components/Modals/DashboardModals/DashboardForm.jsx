@@ -3,7 +3,7 @@ import { Fragment, useState } from 'react';
 import { useForm, Controller, FormProvider, useFormContext } from "react-hook-form";
 import { fileinput, formBtn1, formBtn2, formBtn3, inputClass, labelClass, tableBtn } from '../../../utils/CustomClass';
 import { Edit, UserAdd } from 'iconsax-react';
-import { createStorage, registerRestaurant } from '../../../api';
+import { createStorage, registerRestaurant, getRestaurantCategory } from '../../../api';
 import { setStorageList } from '../../../redux/slices/storageSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -89,7 +89,7 @@ const Step1 = () => {
                         </label>
                         <input
                             type="text"
-                            readOnly
+                            // readOnly
                             placeholder='State'
                             className={inputClass}
                             {...register('state',)}
@@ -101,7 +101,7 @@ const Step1 = () => {
                         </label>
                         <input
                             type="text"
-                            readOnly
+                            // readOnly
                             placeholder='Pincode'
                             className={inputClass}
                             {...register('pinocde',)}
@@ -113,7 +113,7 @@ const Step1 = () => {
                         </label>
                         <input
                             type="text"
-                            readOnly
+                            // readOnly
                             placeholder='City'
                             className={inputClass}
                             {...register('city',)}
@@ -121,7 +121,7 @@ const Step1 = () => {
                     </div>
                     <div className="">
                         <label className={labelClass}>
-                            Restaurant Number*
+                            Restaurant Phone Number*
                         </label>
                         <input
                             type="tel"
@@ -129,7 +129,7 @@ const Step1 = () => {
                             className={inputClass}
                             {...register('shop_contact_number', { required: true, validate: validatePhoneNumber })}
                         />
-                        {errors.shop_contact_number && <Error title='Restaurant Number is required*' />}
+                        {errors.shop_contact_number && <Error title='Restaurant Phone Number is required*' />}
                     </div>
                     <div className="">
                         <label className={labelClass}>
@@ -159,6 +159,8 @@ const Step1 = () => {
 
 // =================== form steps 2 =================
 const Step2 = (props) => {
+    const [category, setCategory] = useState([])
+
     const { register, formState: { errors }, } = useFormContext()
     const [allCuisines, setAllCuisines] = useState([
         { value: "Italian Cuisine", label: "Italian Cuisine" },
@@ -184,6 +186,22 @@ const Step2 = (props) => {
         { value: "Pop-Up Restaurants", label: "Pop-Up Restaurants" },
         { value: "Vegetarian/Vegan Restaurants", label: "Vegetarian/Vegan Restaurants" },
     ]);
+
+    // ============== Restaurant API ================
+    const restaurantCategories = () => {
+        try {
+            getRestaurantCategory().then((res) => {
+                setCategory(res)
+                console.log('categories =', res)
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+
+
+
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
             <p className='md:col-span-2 lg:col-span-3 font-semibold text-lg'>Establishment Type</p>
@@ -208,7 +226,7 @@ const Step2 = (props) => {
                 </label>
                 <Select
                     options={allRestaurantTypes}
-                    isMulti
+                    // isMulti
                     value={props?.selectedRestType}
                     onChange={(selectedOption) => props?.setSelectedRestType(selectedOption)}
                 // {...register('restaurant_type', { required: true })}
@@ -225,7 +243,7 @@ const Step2 = (props) => {
                     value={props?.selectedCuisines}
                     onChange={(selectedOption) => props?.setSelectedCuisines(selectedOption)}
                 />
-                {errors?.type_of_cuisine && <Error title='This is required' />}
+                {errors?.type_of_cuisine && <Error title='Type of Cuisine is required' />}
             </div>
             <div>
                 <label className={labelClass}>
@@ -684,7 +702,8 @@ export default function DashboardForm(props) {
             case 0:
                 return <Step1 />
             case 1:
-                return <Step2 selectedCuisines={selectedCuisines} setSelectedCuisines={setSelectedCuisines} selectedRestType={selectedRestType} setSelectedRestType={setSelectedRestType} />
+                return <Step2 selectedCuisines={selectedCuisines} setSelectedCuisines={setSelectedCuisines} selectedRestType={selectedRestType}
+                 setSelectedRestType={setSelectedRestType} restaurantCategories={restaurantCategories} />
             case 2:
                 return <Step3 />
             case 3:
@@ -702,6 +721,10 @@ export default function DashboardForm(props) {
 
     // ================= submit data  ===============================
     const onSubmit = async (data) => {
+        console.log('shop open time =', moment(data?.shop_start_time).format('LT'))
+        console.log('shop close ime =', moment(data?.shop_closing_time).format('LT'))
+        moment(data?.shop_start_time).format('LT');
+        moment(data?.shop_closing_time).format('LT');
         console.log('data', data)
         isStepFalied()
         setLoader(true)
