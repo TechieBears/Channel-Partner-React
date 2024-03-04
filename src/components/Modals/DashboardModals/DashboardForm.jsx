@@ -204,21 +204,21 @@ const Step2 = (props) => {
 
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
-            <p className='md:col-span-2 lg:col-span-3 font-semibold text-lg'>Establishment Type</p>
+            <p className='text-lg font-semibold md:col-span-2 lg:col-span-3'>Establishment Type</p>
             <div className="">
                 <label className={labelClass}>
                     Restaurant Type*
                 </label>
                 <select
                     className={inputClass}
-                    {...register('restaurant_type', { required: true })}
+                    {...register('veg_nonveg', { required: true })}
                 >
                     <option value=''>Select</option>
                     <option value='Both'>Both</option>
                     <option value='Veg'>Veg</option>
                     <option value='Non-Veg'>Non-Veg</option>
                 </select>
-                {errors?.restaurant_type && <Error title='Restarant Type is required' />}
+                {errors?.veg_nonveg && <Error title='Restaurant Type is required' />}
             </div>
             <div className="">
                 <label className={labelClass}>
@@ -229,7 +229,7 @@ const Step2 = (props) => {
                     // isMulti
                     value={props?.selectedRestType}
                     onChange={(selectedOption) => props?.setSelectedRestType(selectedOption)}
-                // {...register('restaurant_type', { required: true })}
+                    {...register('restaurant_type', { required: true })}
                 />
                 {errors?.restaurant_type && <Error title='This is required' />}
             </div>
@@ -292,8 +292,8 @@ const Step3 = (props) => {
     const { register, formState: { errors }, } = useFormContext()
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
-            <p className='md:col-span-2 lg:col-span-3 font-semibold text-lg'>Upload Images</p>
-            <p className='md:col-span-2 lg:col-span-3 font-normal text-base'>Ambience Images</p>
+            <p className='text-lg font-semibold md:col-span-2 lg:col-span-3'>Upload Images</p>
+            <p className='text-base font-normal md:col-span-2 lg:col-span-3'>Ambience Images</p>
             <div className="">
                 <label className={labelClass} htmlFor="main_input">Image 1 *</label>
                 <input className={fileinput}
@@ -336,7 +336,7 @@ const Step3 = (props) => {
                 </label>}
                 {errors.res_img3 && <Error title='Restaurant Image is required*' />}
             </div> */}
-            <p className='md:col-span-2 lg:col-span-3 font-normal text-base'>Dish Images</p>
+            <p className='text-base font-normal md:col-span-2 lg:col-span-3'>Dish Images</p>
             <div className="">
                 <label className={labelClass} htmlFor="main_input">Image 1*</label>
                 <input className={fileinput}
@@ -883,7 +883,7 @@ export default function DashboardForm(props) {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-8xl overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl">
+                                <Dialog.Panel className="w-full overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl max-w-8xl">
 
                                     <Dialog.Title
                                         as="h2"
