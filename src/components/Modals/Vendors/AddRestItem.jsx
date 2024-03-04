@@ -6,7 +6,7 @@ import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../
 import { useForm } from 'react-hook-form';
 import LoadBox from '../../Loader/LoadBox';
 import { useSelector } from 'react-redux';
-import { addFoodItem, addRestaurant, editFoodItem, editRestaurantFood, getCategory, getRestaurantCategory, getRestaurantSubCategory, getSubCategory } from '../../../api';
+import { addFoodItem, addRestaurant, editFoodItem, editRestaurantFood, getCategory, getRestaurantCategory, getRestaurantSubCategory, getSubCategory, editAdminFinalFood } from '../../../api';
 import { ImageUpload, restaurantLink } from '../../../env';
 import { toast } from 'react-toastify';
 
@@ -129,9 +129,16 @@ export default function AddRestItem(props) {
             })
         }
     }
-
-    const onAdminSubmit = (data) => {
-        console.log(data)
+    
+    const onAdminSubmit = async (data) => {
+        var updatedData = { ...data, vendor: props?.row?.vendor?.vendor_id }
+        editAdminFinalFood(props?.row?.food_id, updatedData).then(res => {
+            if (res?.status == 'success') {
+                props?.getProducts()
+                toast.success('Food item updated successfully')
+                toggle();
+            }
+        })
     }
 
     useEffect(() => {
@@ -141,19 +148,21 @@ export default function AddRestItem(props) {
         getRestaurantSubCategory().then(res => {
             setsubCategory(res)
         })
-        reset({
-            'food_name': props?.row?.food_name,
-            'food_category': props?.row?.food_category?.id,
-            'food_subcategory': props?.row?.food_subcategory?.subcat_id,
-            'food_actual_price': props?.row?.food_actual_price,
-            'insta_commison_percentage': props?.row?.vendor?.insta_commison_percentage,
-            'markup_percentage': props?.row?.markup_percentage,
-            'food_details': props?.row?.food_details,
-            'food_isactive': props?.row?.food_isactive,
-            'food_veg_nonveg': props?.row?.food_veg_nonveg,
-            'food_isactive': props?.row?.food_isactive,
-            'food_image_1': props?.row?.food_image_1,
-        })
+        if(user?.role == 'admin'){
+            reset({
+                'food_name': props?.row?.food_name,
+                'food_category': props?.row?.food_category?.id,
+                'food_subcategory': props?.row?.food_subcategory?.subcat_id,
+                'food_actual_price': props?.row?.food_actual_price,
+                'insta_commison_percentage': props?.row?.vendor?.insta_commison_percentage,
+                'markup_percentage': props?.row?.markup_percentage,
+                'food_details': props?.row?.food_details,
+                'food_isactive': props?.row?.food_isactive,
+                'food_veg_nonveg': props?.row?.food_veg_nonveg,
+                'food_isactive': props?.row?.food_isactive,
+                'food_image_1': props?.row?.food_image_1,
+            })
+        }
     }, [])
 
 
@@ -455,7 +464,8 @@ export default function AddRestItem(props) {
                                                         <input className={fileinput}
                                                             id="main_input"
                                                             type='file'
-                                                            multiple
+                                                            // multiple
+                                                            disabled={user?.role != 'admin' ? false : true}
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             onChange={(e) => handleImageChange(e)}
@@ -471,7 +481,8 @@ export default function AddRestItem(props) {
                                                         <input className={fileinput}
                                                             id="main_input"
                                                             type='file'
-                                                            multiple
+                                                            // multiple
+                                                            disabled={user?.role != 'admin' ? false : true}
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("food_image_2",
@@ -486,7 +497,8 @@ export default function AddRestItem(props) {
                                                         <input className={fileinput}
                                                             id="main_input"
                                                             type='file'
-                                                            multiple
+                                                            // multiple
+                                                            disabled={user?.role != 'admin' ? false : true}
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("food_image_3")} />
@@ -499,7 +511,8 @@ export default function AddRestItem(props) {
                                                         <input className={fileinput}
                                                             id="main_input"
                                                             type='file'
-                                                            multiple
+                                                            // multiple
+                                                            disabled={user?.role != 'admin' ? false : true}
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("food_image_4")} />
@@ -512,7 +525,8 @@ export default function AddRestItem(props) {
                                                         <input className={fileinput}
                                                             id="main_input"
                                                             type='file'
-                                                            multiple
+                                                            // multiple
+                                                            disabled={user?.role != 'admin' ? false : true}
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("food_image_5")} />

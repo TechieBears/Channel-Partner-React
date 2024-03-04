@@ -218,7 +218,7 @@ const Step2 = (props) => {
                     <option value='Veg'>Veg</option>
                     <option value='Non-Veg'>Non-Veg</option>
                 </select>
-                {errors?.restaurant_type && <Error title='This is required' />}
+                {errors?.restaurant_type && <Error title='Restarant Type is required' />}
             </div>
             <div className="">
                 <label className={labelClass}>
@@ -268,6 +268,21 @@ const Step2 = (props) => {
                 />
                 {errors?.shop_closing_time && <Error title='Closing Hour is required' />}
             </div>
+            <div className="">
+                <label className={labelClass}>
+                    Menu Type*
+                </label>
+                <select
+                    name="menu"
+                    className={`${inputClass} !bg-slate-100`}
+                    {...register("menu_type", {required: true})}
+                >
+                    <option value="">Select</option>
+                    <option value="Bestseller">Best Seller</option>
+                    <option value="New">New</option>
+                </select>
+                {errors?.menu_type && <Error title='Menu Type is required' />}
+            </div>
         </div>
     );
 };
@@ -307,7 +322,7 @@ const Step3 = (props) => {
                 </label>}
                 {errors.shop_image && <Error title='Image is required*' />}
             </div>
-            <div className="">
+            {/* <div className="">
                 <label className={labelClass} htmlFor="main_input">Image 3</label>
                 <input className={fileinput}
                     id="main_input"
@@ -320,7 +335,7 @@ const Step3 = (props) => {
                     {props?.data?.res_img3?.split('/').pop()}
                 </label>}
                 {errors.res_img3 && <Error title='Restaurant Image is required*' />}
-            </div>
+            </div> */}
             <p className='md:col-span-2 lg:col-span-3 font-normal text-base'>Dish Images</p>
             <div className="">
                 <label className={labelClass} htmlFor="main_input">Image 1*</label>
@@ -334,6 +349,7 @@ const Step3 = (props) => {
                 {props?.button == 'edit' && props?.data.food_image1 != '' && props?.data.food_image1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                     {props?.data?.food_image1?.split('/').pop()}
                 </label>}
+                {errors.food_image1 && <Error title='Dish Image is required*' />}
             </div>
             <div className="">
                 <label className={labelClass} htmlFor="main_input">Image 2</label>

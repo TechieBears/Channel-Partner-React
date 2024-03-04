@@ -1584,12 +1584,25 @@ export const editAdminFinalProduct = async (id, data) => {
     const url = `${environment.baseUrl}vendor/edit_product_admin/${id}`;
     try {
         const response = await axios.put(url, data);
-        console.log('responseeeeeeeeeeeeeeeeeeeeeeeee', response)
+        // console.log('response = ', response)
         return response.data
     } catch (err) {
         console.log('error while getting vendor by id', err)
     }
 }
+
+
+export const editAdminFinalFood = async (id, data) => {
+    const url = `${environment.baseUrl}vendor/edit_food_admin/${id}`;
+    try {
+        const response = await axios.put(url, data);
+        console.log('response = ', response)
+        return response.data
+    } catch (err) {
+        console.log('error while getting vendor by id', err)
+    }
+}
+
 
 
 // =================== Coupons =================
