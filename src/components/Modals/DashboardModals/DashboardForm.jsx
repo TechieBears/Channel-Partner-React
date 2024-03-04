@@ -212,14 +212,14 @@ const Step2 = (props) => {
                 </label>
                 <select
                     className={inputClass}
-                    {...register('restaurant_type', { required: true })}
+                    {...register('veg_nonveg', { required: true })}
                 >
                     <option value=''>Select</option>
                     <option value='Both'>Both</option>
                     <option value='Veg'>Veg</option>
                     <option value='Non-Veg'>Non-Veg</option>
                 </select>
-                {errors?.restaurant_type && <Error title='This is required' />}
+                {errors?.veg_nonveg && <Error title='This is required' />}
             </div>
             <div className="">
                 <label className={labelClass}>
@@ -230,7 +230,7 @@ const Step2 = (props) => {
                     // isMulti
                     value={props?.selectedRestType}
                     onChange={(selectedOption) => props?.setSelectedRestType(selectedOption)}
-                // {...register('restaurant_type', { required: true })}
+                    {...register('restaurant_type', { required: true })}
                 />
                 {errors?.restaurant_type && <Error title='This is required' />}
             </div>
