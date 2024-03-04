@@ -272,7 +272,7 @@ const Step3 = (props) => {
                 {props?.button == 'edit' && props?.data.ambience_image != '' && props?.data.ambience_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                     {props?.data?.ambience_image?.split('/').pop()}
                 </label>}
-                {errors.ambience_image && <Error title='Ambience Image is required*' />}
+                {errors.ambience_image && <Error title='Image is required*' />}
             </div>
             <div className="">
                 <label className={labelClass} htmlFor="main_input">Image 2*</label>
@@ -282,11 +282,11 @@ const Step3 = (props) => {
                     multiple
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("menu_image2", { required: true })} />
-                {props?.button == 'edit' && props?.data.menu_image2 != '' && props?.data.menu_image2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                    {props?.data?.menu_image2?.split('/').pop()}
+                    {...register("shop_image", { required: true })} />
+                {props?.button == 'edit' && props?.data.shop_image != '' && props?.data.shop_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                    {props?.data?.shop_image?.split('/').pop()}
                 </label>}
-                {errors.menu_image2 && <Error title='Menu Image is required*' />}
+                {errors.shop_image && <Error title='Image is required*' />}
             </div>
             <div className="">
                 <label className={labelClass} htmlFor="main_input">Image 3</label>
@@ -534,6 +534,7 @@ const Step5 = (props) => {
                     className={inputClass}
                     {...register('bank_name', { required: true })}
                 />
+                {errors?.bank_name && <Error title='Bank Name is required' />}
             </div>
             <div className="">
                 <label className={labelClass}>
@@ -545,6 +546,7 @@ const Step5 = (props) => {
                     className={inputClass}
                     {...register('account_number', { required: true })}
                 />
+                {errors?.account_number && <Error title='Account Number is required' />}
             </div>
             <div className="">
                 <label className={labelClass}>
@@ -554,8 +556,9 @@ const Step5 = (props) => {
                     type="text"
                     placeholder='Bank IFSC Code'
                     className={inputClass}
-                    {...register('ifsc_code')}
+                    {...register('ifsc_code', { required: true })}
                 />
+                {errors?.ifsc_code && <Error title='IFSC Code is required' />}
             </div>
             <p className='col-span-3 text-lg font-semibold'>Adhar Details</p>
             <div className="">
