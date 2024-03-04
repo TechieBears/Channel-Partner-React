@@ -1,5 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useForm, Controller, FormProvider, useFormContext } from "react-hook-form";
 import { fileinput, formBtn1, formBtn2, formBtn3, inputClass, labelClass, tableBtn } from '../../../utils/CustomClass';
 import { Edit, UserAdd } from 'iconsax-react';
@@ -16,6 +16,7 @@ import Select from 'react-select'
 import { validateEmail, validatePhoneNumber } from '../../Validations.jsx/Validations';
 import { inputClasses } from '@mui/material';
 import { ImageUpload, restaurantLink } from '../../../env';
+import moment from 'moment';
 
 
 // =================== form steps 1 =================
@@ -159,7 +160,7 @@ const Step1 = () => {
 
 // =================== form steps 2 =================
 const Step2 = (props) => {
-    const [category, setCategory] = useState([])
+    console.log('step 2 props ========', props?.category)
 
     const { register, formState: { errors }, } = useFormContext()
     const [allCuisines, setAllCuisines] = useState([
@@ -185,20 +186,20 @@ const Step2 = (props) => {
         { value: "Food Trucks", label: "Food Trucks" },
         { value: "Pop-Up Restaurants", label: "Pop-Up Restaurants" },
         { value: "Vegetarian/Vegan Restaurants", label: "Vegetarian/Vegan Restaurants" },
+        // {...value:{c}}
     ]);
 
-    // ============== Restaurant API ================
-    const restaurantCategories = () => {
-        try {
-            getRestaurantCategory().then((res) => {
-                setCategory(res)
-                console.log('categories =', res)
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    };
 
+    const updatedRestaurantTypes = allRestaurantTypes.map((restaurantType, index) => {
+        if (index === 1) { // Check if it's the second object in the array
+            const categories = props?.category.map(cat => ({
+                value: cat.category_name,
+                label: cat.category_name
+            }));
+            return { ...restaurantType, options: categories }; // Add categories as options
+        }
+        return restaurantType;
+    });
 
 
 
@@ -225,7 +226,7 @@ const Step2 = (props) => {
                     Select What Describe you the best*
                 </label>
                 <Select
-                    options={allRestaurantTypes}
+                    options={updatedRestaurantTypes}
                     // isMulti
                     value={props?.selectedRestType}
                     onChange={(selectedOption) => props?.setSelectedRestType(selectedOption)}
@@ -614,11 +615,26 @@ export default function DashboardForm(props) {
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     const [isOpen, setIsOpen] = useState(props?.isOpen ? props?.isOpen : false)
     const [loader, setLoader] = useState(false)
+    const [category, setCategory] = useState([])
+    console.log('category:==============', category)
     const [selectedRestType, setSelectedRestType] = useState([])
     const [selectedCuisines, setSelectedCuisines] = useState([])
     const [activeStep, setActiveStep] = useState(0);
     const toggle = () => setIsOpen(!isOpen);
     const steps = ['Restaurant Information', 'Restaurant Type and Timing', 'Upload Images', 'General Information', 'Legal Documentation',];
+
+    // ============== Restaurant API ================
+    const restaurantCategories = () => {
+        try {
+            getRestaurantCategory().then((res) => {
+                setCategory(res)
+                console.log('categories =', res)
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     var methods = useForm({
         defaultValues: {
             "name": "",
@@ -703,7 +719,7 @@ export default function DashboardForm(props) {
                 return <Step1 />
             case 1:
                 return <Step2 selectedCuisines={selectedCuisines} setSelectedCuisines={setSelectedCuisines} selectedRestType={selectedRestType}
-                 setSelectedRestType={setSelectedRestType} restaurantCategories={restaurantCategories} />
+                    setSelectedRestType={setSelectedRestType} category={category} />
             case 2:
                 return <Step3 />
             case 3:
@@ -721,8 +737,6 @@ export default function DashboardForm(props) {
 
     // ================= submit data  ===============================
     const onSubmit = async (data) => {
-        console.log('shop open time =', moment(data?.shop_start_time).format('LT'))
-        console.log('shop close ime =', moment(data?.shop_closing_time).format('LT'))
         moment(data?.shop_start_time).format('LT');
         moment(data?.shop_closing_time).format('LT');
         console.log('data', data)
@@ -820,6 +834,10 @@ export default function DashboardForm(props) {
         methods.reset();
         setLoader(false);
     }
+
+    useEffect(() => {
+        restaurantCategories();
+    }, [])
     return (
         <>
             {props?.dashBoard &&

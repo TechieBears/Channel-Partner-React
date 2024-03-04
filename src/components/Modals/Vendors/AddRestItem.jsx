@@ -157,40 +157,40 @@ export default function AddRestItem(props) {
     }, [])
 
 
-    
-     //  ------------   Seller Calculations SetPrice --------------------------------
-     const calculateRevenueRestaurant = watch('food_actual_price')
 
-     useEffect(() => {
-         if (user?.role == 'admin') {
-             if (calculateRevenueRestaurant !== "") {
-                 var mainUserPrice = calculateRevenueRestaurant * (props?.row?.vendor?.insta_commison_percentage == null ? 0 : props?.row?.vendor?.insta_commison_percentage / 100);
-                 console.log('mainUserPrice = ', (calculateRevenueRestaurant - mainUserPrice));
-                 const final_price = (calculateRevenueRestaurant - mainUserPrice);
- 
-                 if (isNaN(final_price)) {
-                     setValue('product_revenue', 0);
-                 } else {
-                     setFinalPriceSeller(parseFloat(final_price));
-                     setValue('product_revenue', final_price);
-                 }
-             }
-         }
-     }, [calculateRevenueRestaurant])
- 
-     //  ------------   Admin Calculations Set Final Price to User  --------------------------------
-     const calculateRevenueAdmin = watch('markup_percentage')
- 
-     useEffect(() => {
-         if (user?.role == 'admin') {
-             if (calculateRevenueAdmin !== "") {
-                 var mainPrice = (props?.row?.food_actual_price == null ? 0 : props?.row?.food_actual_price) * (calculateRevenueAdmin / 100);
-                 var adminfinalprice = props?.row?.food_actual_price + mainPrice;
-                 setFinalPriceAdmin(adminfinalprice);
-                 setValue('final_price', adminfinalprice?.toFixed(0));
-             }
-         }
-     }, [calculateRevenueAdmin])
+    //  ------------   Seller Calculations SetPrice --------------------------------
+    const calculateRevenueRestaurant = watch('food_actual_price')
+
+    useEffect(() => {
+        if (user?.role == 'admin') {
+            if (calculateRevenueRestaurant !== "") {
+                var mainUserPrice = calculateRevenueRestaurant * (props?.row?.vendor?.insta_commison_percentage == null ? 0 : props?.row?.vendor?.insta_commison_percentage / 100);
+                console.log('mainUserPrice = ', (calculateRevenueRestaurant - mainUserPrice));
+                const final_price = (calculateRevenueRestaurant - mainUserPrice);
+
+                if (isNaN(final_price)) {
+                    setValue('product_revenue', 0);
+                } else {
+                    setFinalPriceSeller(parseFloat(final_price));
+                    setValue('product_revenue', final_price);
+                }
+            }
+        }
+    }, [calculateRevenueRestaurant])
+
+    //  ------------   Admin Calculations Set Final Price to User  --------------------------------
+    const calculateRevenueAdmin = watch('markup_percentage')
+
+    useEffect(() => {
+        if (user?.role == 'admin') {
+            if (calculateRevenueAdmin !== "") {
+                var mainPrice = (props?.row?.food_actual_price == null ? 0 : props?.row?.food_actual_price) * (calculateRevenueAdmin / 100);
+                var adminfinalprice = props?.row?.food_actual_price + mainPrice;
+                setFinalPriceAdmin(adminfinalprice);
+                setValue('final_price', adminfinalprice?.toFixed(0));
+            }
+        }
+    }, [calculateRevenueAdmin])
 
 
 
@@ -220,7 +220,7 @@ export default function AddRestItem(props) {
                 </button> :
                 <button className={`${formBtn1} flex`} onClick={() => setOpen(true)}>
                     <Add className='text-white' />
-                   {props?.title == 'edit' ? 'Edit Food Item' : "Add Food Item"}
+                    {props?.title == 'edit' ? 'Edit Food Item' : "Add Food Item"}
                 </button>}
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-[100]" onClose={() => toggle}>
