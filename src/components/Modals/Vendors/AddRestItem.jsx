@@ -17,6 +17,7 @@ export default function AddRestItem(props) {
     const [category, setCategory] = useState([]);
     const [subCategory, setsubCategory] = useState([])
     const [FinalPriceSeller, setFinalPriceSeller] = useState([]);
+    const [FinalPriceAdmin, setFinalPriceAdmin] = useState([]);
     const { register, handleSubmit, control, watch, reset, setValue, formState: { errors } } = useForm();
     const user = useSelector((state) => state?.user?.loggedUserDetails);
     const toggle = () => setOpen(!isOpen)
@@ -145,21 +146,61 @@ export default function AddRestItem(props) {
             'food_category': props?.row?.food_category?.id,
             'food_subcategory': props?.row?.food_subcategory?.subcat_id,
             'food_actual_price': props?.row?.food_actual_price,
-            'insta_commison_percentage': props?.row?.insta_commison_percentage,
+            'insta_commison_percentage': props?.row?.vendor?.insta_commison_percentage,
             'markup_percentage': props?.row?.markup_percentage,
-            'food_details': props?.data?.food_details,
-            'food_isactive': props?.data?.food_isactive,
-            'food_veg_nonveg': props?.data?.food_veg_nonveg,
+            'food_details': props?.row?.food_details,
+            'food_isactive': props?.row?.food_isactive,
+            'food_veg_nonveg': props?.row?.food_veg_nonveg,
+            'food_isactive': props?.row?.food_isactive,
+            'food_image_1': props?.row?.food_image_1,
         })
     }, [])
 
+
+    
+     //  ------------   Seller Calculations SetPrice --------------------------------
+     const calculateRevenueRestaurant = watch('food_actual_price')
+
+     useEffect(() => {
+         if (user?.role == 'admin') {
+             if (calculateRevenueRestaurant !== "") {
+                 var mainUserPrice = calculateRevenueRestaurant * (props?.row?.vendor?.insta_commison_percentage == null ? 0 : props?.row?.vendor?.insta_commison_percentage / 100);
+                 console.log('mainUserPrice = ', (calculateRevenueRestaurant - mainUserPrice));
+                 const final_price = (calculateRevenueRestaurant - mainUserPrice);
+ 
+                 if (isNaN(final_price)) {
+                     setValue('product_revenue', 0);
+                 } else {
+                     setFinalPriceSeller(parseFloat(final_price));
+                     setValue('product_revenue', final_price);
+                 }
+             }
+         }
+     }, [calculateRevenueRestaurant])
+ 
+     //  ------------   Admin Calculations Set Final Price to User  --------------------------------
+     const calculateRevenueAdmin = watch('markup_percentage')
+ 
+     useEffect(() => {
+         if (user?.role == 'admin') {
+             if (calculateRevenueAdmin !== "") {
+                 var mainPrice = (props?.row?.food_actual_price == null ? 0 : props?.row?.food_actual_price) * (calculateRevenueAdmin / 100);
+                 var adminfinalprice = props?.row?.food_actual_price + mainPrice;
+                 setFinalPriceAdmin(adminfinalprice);
+                 setValue('final_price', adminfinalprice?.toFixed(0));
+             }
+         }
+     }, [calculateRevenueAdmin])
+
+
+
     //  ------------   Seller Calculations SetPrice --------------------------------
-    // const calculateRevenueSeller = watch('food_actual_price')
+    // const calculateRevenueRestaurant = watch('food_actual_price')
     // useEffect(() => {
     //     if (user?.role == 'seller') {
-    //         if (calculateRevenueSeller !== "") {
-    //             var mainUserPrice = calculateRevenueSeller * (user?.insta_commission == null ? 0 : user?.insta_commission / 100);
-    //             const final_price = (calculateRevenueSeller - mainUserPrice);
+    //         if (calculateRevenueRestaurant !== "") {
+    //             var mainUserPrice = calculateRevenueRestaurant * (user?.insta_commission == null ? 0 : user?.insta_commission / 100);
+    //             const final_price = (calculateRevenueRestaurant - mainUserPrice);
 
     //             if (isNaN(final_price)) {
     //                 setValue('food_revenue', 0);
@@ -169,17 +210,17 @@ export default function AddRestItem(props) {
     //             }
     //         }
     //     }
-    // }, [calculateRevenueSeller])
+    // }, [calculateRevenueRestaurant])
 
     return (
         <>
-            {props?.title == 'Edit Food Item' ?
+            {props?.title == 'edit' ?
                 <button className='items-center p-1 bg-yellow-100 rounded-xl hover:bg-yellow-200' onClick={() => setOpen(true)}>
                     <Edit size={24} className='text-yellow-400' />
                 </button> :
                 <button className={`${formBtn1} flex`} onClick={() => setOpen(true)}>
                     <Add className='text-white' />
-                    {props?.title}
+                   {props?.title == 'edit' ? 'Edit Food Item' : "Add Food Item"}
                 </button>}
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-[100]" onClose={() => toggle}>
@@ -225,6 +266,7 @@ export default function AddRestItem(props) {
                                                         </label>
                                                         <input
                                                             type="text"
+                                                            readOnly={user?.role != 'admin' ? false : true}
                                                             placeholder='Food Name'
                                                             className={inputClass}
                                                             {...register('food_name', { required: true })}
@@ -237,6 +279,7 @@ export default function AddRestItem(props) {
                                                         </label>
                                                         <select
                                                             className={inputClass}
+                                                            disabled={user?.role != 'admin' ? false : true}
                                                             {...register('food_category', { required: true })}
                                                         >
                                                             <option value=''>Select</option>
@@ -252,6 +295,7 @@ export default function AddRestItem(props) {
                                                         </label>
                                                         <select
                                                             className={inputClass}
+                                                            disabled={user?.role != 'admin' ? false : true}
                                                             {...register('food_subcategory', { required: true })}
                                                         >
                                                             <option value=''>Select</option>
@@ -312,7 +356,7 @@ export default function AddRestItem(props) {
                                                             </div>
                                                             <div className="">
                                                                 <label className={labelClass}>
-                                                                    Vendor Commision*
+                                                                    Restaurant Commision*
                                                                 </label>
                                                                 <input
                                                                     type="number"
@@ -353,6 +397,7 @@ export default function AddRestItem(props) {
                                                         </label>
                                                         <input
                                                             type="text"
+                                                            readOnly={user?.role != 'admin' ? false : true}
                                                             placeholder='Food Details'
                                                             className={inputClass}
                                                             {...register('food_details', { required: true })}
@@ -363,9 +408,10 @@ export default function AddRestItem(props) {
                                                         <label className={labelClass}>Veg or Non-Veg*</label>
                                                         <select
                                                             className={inputClass}
+                                                            disabled={user?.role != 'admin' ? false : true}
                                                             {...register('food_veg_nonveg', { required: true })}
                                                         >
-                                                            <option value='' selected>Select</option>
+                                                            <option value=''>Select</option>
                                                             <option value='Both'>Both</option>
                                                             <option value='Veg'>Veg</option>
                                                             <option value='Non-Veg'>Non-Veg</option>
@@ -377,6 +423,7 @@ export default function AddRestItem(props) {
                                                         <input
                                                             className={fileinput}
                                                             id="video_input"
+                                                            disabled={user?.role != 'admin' ? false : true}
                                                             type='file'
                                                             accept='video/mp4,video/x-m4v,video/*'
                                                             placeholder='Upload Video...'
@@ -393,6 +440,7 @@ export default function AddRestItem(props) {
                                                         <label className={labelClass}>Is Active*</label>
                                                         <select
                                                             className={inputClass}
+                                                            disabled={user?.role != 'admin' ? false : true}
                                                             {...register('food_isactive', { required: true })}
                                                         >
                                                             <option value="">select</option>
@@ -413,8 +461,8 @@ export default function AddRestItem(props) {
                                                             onChange={(e) => handleImageChange(e)}
                                                             {...register("food_image_1",
                                                                 { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.data == 'edit' && props?.data?.food_image_1 != '' && props?.data?.food_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.data?.food_image_1?.split('/').pop()}
+                                                        {props?.title == 'edit' && props?.row?.food_image_1 != '' && props?.row?.food_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.row?.food_image_1?.split('/').pop()}
                                                         </label>}
                                                         {errors.food_image_1 && <Error title='Main Image is required*' />}
                                                     </div>

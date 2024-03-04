@@ -44,7 +44,7 @@ import DriverDetail from '../src/pages/Admin/Drivers/DriverDetail';
 import ViewAdminProduct from '../src/pages/Admin/Menu/AdminProduct/ViewAdminProduct';
 import DashboardBannerPanel from '../src/pages/Admin/Master/DashboardAssets/DashAssetsPanel/DashboardBannerPanel';
 import DashboardPromotions from '../src/pages/Admin/Master/DashboardPromotions';
-import DashboardForm from '../src/components/modals/DashboardModals/DashboardForm';
+// import DashboardForm from '../src/components/modals/DashboardModals/DashboardForm';
 import Coupon from '../src/pages/Admin/Coupon/Coupon';
 import RestaurantRegister from '../src/pages/Restaurants/ViewRestaurant/RestaurabtRegister';
 

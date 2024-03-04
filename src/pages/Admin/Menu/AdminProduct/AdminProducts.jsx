@@ -50,8 +50,6 @@ const AdminProduct = (props) => {
         }
     }, [props.isrestaurant]);
 
-
-
     const {
         register,
         handleSubmit,
@@ -107,7 +105,7 @@ const AdminProduct = (props) => {
             <Eye size={24} className='text-sky-400' />
         </Link>
         {/* <ViewProduct /> */}
-        <AddRestItem title='Edit Food Item' row={row} getRestaurantFoodItems={getRestaurantFoodItems} />
+        <AddRestItem title='edit' row={row} getRestaurantFoodItems={getRestaurantFoodItems} />
         <button className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
             <Trash size={24} className='text-red-400' />
         </button>
