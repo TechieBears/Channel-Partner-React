@@ -779,6 +779,12 @@ export default function DashboardForm(props) {
             } else {
                 data.ambience_image = ''
             }
+            if (data.shop_image.length != 0) {
+                await ImageUpload(data.shop_image[0], "restaurant", "shopimage", data.name)
+                data.shop_image = `${restaurantLink}${data.name}_shopimage_${data.shop_image[0].name}`
+            } else {
+                data.shop_image = ''
+            }
             if (data.food_image1.length != 0) {
                 await ImageUpload(data.food_image1[0], "restaurant", "outSideImage", data.name)
                 data.food_image1 = `${restaurantLink}${data.name}_outSideImage_${data.food_image1[0].name}`
@@ -842,7 +848,7 @@ export default function DashboardForm(props) {
             let updatedData = {
                 ...data,
                 "type_of_cuisine": selectedCuisines,
-                "restaurant_type": selectedRestType,
+                // "restaurant_type": selectedRestType,
                 "vendorId": LoggedUserDetails?.sellerId
             }
             registerRestaurant(updatedData).then(res => {
