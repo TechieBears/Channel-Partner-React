@@ -136,12 +136,12 @@ const Step1 = () => {
                             Restaurant Description*
                         </label>
                         <input
-                            type="tel"
+                            type="text"
                             placeholder='Restaurant Description'
                             className={inputClass}
-                            {...register('about_restaurant', { required: true, validate: validatePhoneNumber })}
+                            {...register('about_restaurant', { required: true, })}
                         />
-                        {errors.about_restaurant && <Error title='Restaurant Number is required*' />}
+                        {errors.about_restaurant && <Error title='Restaurant Description is required*' />}
                     </div>
                 </div>
             </div>
@@ -245,6 +245,7 @@ const Step2 = (props) => {
                 <input
                     type='time'
                     className={inputClass}
+                    step={1800}
                     {...register('shop_end_time', { required: true })}
                 />
                 {errors?.shop_closing_time && <Error title='Closing Hour is required' />}
