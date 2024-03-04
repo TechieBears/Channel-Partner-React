@@ -57,7 +57,7 @@ const Step1 = () => {
                             className={inputClass}
                             {...register('shop_address', { required: true })}
                         />
-                        {errors.shop_address && <Error title='Year is required*' />}
+                        {errors.shop_address && <Error title='Restaurant Address is Required*' />}
                     </div>
                     <div className="">
                         <label className={labelClass}>
@@ -176,27 +176,26 @@ const Step2 = (props) => {
         { value: "Goan Cuisine", label: "Goan Cuisine" },
     ]);
     const [allRestaurantTypes, setAllRestaurantTypes] = useState([
-        { value: "Fine Dining", label: 'Fine Dining' },
+        { value: "Choose Category", label: "Choose Category" },
         { value: "Casual Dining", label: "Casual Dining" },
         { value: "Fast Food", label: "Fast Food" },
-        { value: "Café/Bistro", label: "Café/Bistro" },
+        { value: "Cafe/Bistro", label: "Cafe/Bistro" },
         { value: "Ethnic Restaurants", label: "Ethnic Restaurants" },
         { value: "Family Style Restaurants", label: "Family Style Restaurants" },
         { value: "Buffet Style Restaurants", label: "Buffet Style Restaurants" },
         { value: "Food Trucks", label: "Food Trucks" },
         { value: "Pop-Up Restaurants", label: "Pop-Up Restaurants" },
         { value: "Vegetarian/Vegan Restaurants", label: "Vegetarian/Vegan Restaurants" },
-        // {...value:{c}}
     ]);
 
 
     const updatedRestaurantTypes = allRestaurantTypes.map((restaurantType, index) => {
-        if (index === 1) { // Check if it's the second object in the array
+        if (index === 0) { 
             const categories = props?.category.map(cat => ({
                 value: cat.category_name,
                 label: cat.category_name
             }));
-            return { ...restaurantType, options: categories }; // Add categories as options
+            return { ...restaurantType, options: categories }; 
         }
         return restaurantType;
     });
@@ -744,67 +743,67 @@ export default function DashboardForm(props) {
         setLoader(true)
         if (activeStep == steps.length - 1) {
             if (data.ambience_image.length != 0) {
-                await ImageUpload(data.ambience_image[0], "storage", "mainImage", data.name)
+                await ImageUpload(data.ambience_image[0], "restaurant", "mainImage", data.name)
                 data.ambience_image = `${restaurantLink}${data.name}_mainImage_${data.ambience_image[0].name}`
             } else {
                 data.ambience_image = ''
             }
             if (data.food_image1.length != 0) {
-                await ImageUpload(data.food_image1[0], "storage", "outSideImage", data.name)
+                await ImageUpload(data.food_image1[0], "restaurant", "outSideImage", data.name)
                 data.food_image1 = `${restaurantLink}${data.name}_outSideImage_${data.food_image1[0].name}`
             } else {
                 data.food_image1 = ''
             }
             if (data.food_image2.length != 0) {
-                await ImageUpload(data.food_image2[0], "storage", "loadingImage", data.name)
+                await ImageUpload(data.food_image2[0], "restaurant", "loadingImage", data.name)
                 data.food_image2 = `${restaurantLink}${data.name}_loadingImage_${data.food_image2[0].name}`
             } else {
                 data.food_image2 = ''
             }
             if (data.food_image3.length != 0) {
-                await ImageUpload(data.food_image3[0], "storage", "stagingImage", data.name)
+                await ImageUpload(data.food_image3[0], "restaurant", "stagingImage", data.name)
                 data.food_image3 = `${restaurantLink}${data.name}_stagingImage_${data.food_image3[0].name}`
             } else {
                 data.food_image3 = ''
             }
             if (data.adhar_img.length != 0) {
-                await ImageUpload(data.adhar_img[0], "storage", "stagingImage", data.name)
+                await ImageUpload(data.adhar_img[0], "restaurant", "stagingImage", data.name)
                 data.adhar_img = `${restaurantLink}${data.name}_stagingImage_${data.adhar_img[0].name}`
             } else {
                 data.adhar_img = ''
             }
             if (data.fassai_doc.length != 0) {
-                await ImageUpload(data.fassai_doc[0], "storage", "stagingImage", data.name)
+                await ImageUpload(data.fassai_doc[0], "restaurant", "stagingImage", data.name)
                 data.fassai_doc = `${restaurantLink}${data.name}_stagingImage_${data.fassai_doc[0].name}`
             } else {
                 data.fassai_doc = ''
             }
             if (data.menu_image2.length != 0) {
-                await ImageUpload(data.menu_image2[0], "storage", "stagingImage", data.name)
+                await ImageUpload(data.menu_image2[0], "restaurant", "stagingImage", data.name)
                 data.menu_image2 = `${restaurantLink}${data.name}_stagingImage_${data.menu_image2[0].name}`
             } else {
                 data.menu_image2 = ''
             }
             if (data.order_img1.length != 0) {
-                await ImageUpload(data.order_img1[0], "storage", "stagingImage", data.name)
+                await ImageUpload(data.order_img1[0], "restaurant", "stagingImage", data.name)
                 data.order_img1 = `${restaurantLink}${data.name}_stagingImage_${data.order_img1[0].name}`
             } else {
                 data.order_img1 = ''
             }
             if (data.order_img2.length != 0) {
-                await ImageUpload(data.order_img2[0], "storage", "stagingImage", data.name)
+                await ImageUpload(data.order_img2[0], "restaurant", "stagingImage", data.name)
                 data.order_img2 = `${restaurantLink}${data.name}_stagingImage_${data.order_img2[0].name}`
             } else {
                 data.order_img2 = ''
             }
             if (data.order_img3.length != 0) {
-                await ImageUpload(data.order_img3[0], "storage", "stagingImage", data.name)
+                await ImageUpload(data.order_img3[0], "restaurant", "stagingImage", data.name)
                 data.order_img3 = `${restaurantLink}${data.name}_stagingImage_${data.order_img3[0].name}`
             } else {
                 data.order_img3 = ''
             }
             if (data.res_img3.length != 0) {
-                await ImageUpload(data.res_img3[0], "storage", "stagingImage", data.name)
+                await ImageUpload(data.res_img3[0], "restaurant", "stagingImage", data.name)
                 data.res_img3 = `${restaurantLink}${data.name}_stagingImage_${data.res_img3[0].name}`
             } else {
                 data.res_img3 = ''
