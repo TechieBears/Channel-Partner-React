@@ -11,6 +11,7 @@ import { ImageUpload, restaurantLink } from '../../../env';
 import { toast } from 'react-toastify';
 
 export default function AddRestItem(props) {
+    console.log('props==============', props)
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false);
     const [category, setCategory] = useState([]);
@@ -141,11 +142,12 @@ export default function AddRestItem(props) {
         })
         reset({
             'food_name': props?.data?.food_name,
-            'food_category': props?.data?.food_category,
-            'food_subcategory': props?.data?.food_subcategory,
+            'food_category': props?.data?.food_category?.id,
+            'food_subcategory': props?.data?.food_subcategory?.subcat_id,
             'food_details': props?.data?.food_details,
             'food_isactive': props?.data?.food_isactive,
             'food_veg_nonveg': props?.data?.food_veg_nonveg,
+            'food_actual_price': props?.data?.food_actual_price,
         })
     }, [])
 
