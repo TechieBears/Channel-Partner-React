@@ -161,6 +161,7 @@ const Step1 = () => {
 // =================== form steps 2 =================
 const Step2 = (props) => {
     console.log('step 2 props ========', props?.category)
+    console.log('props ========', props)
 
     const { register, formState: { errors }, } = useFormContext()
     const [allCuisines, setAllCuisines] = useState([
@@ -176,7 +177,7 @@ const Step2 = (props) => {
         { value: "Goan Cuisine", label: "Goan Cuisine" },
     ]);
     const [allRestaurantTypes, setAllRestaurantTypes] = useState([
-        { value: "Choose Category", label: "Choose Category" },
+        // { value: "Choose Category", label: "Choose Category" },
         { value: "Casual Dining", label: "Casual Dining" },
         { value: "Fast Food", label: "Fast Food" },
         { value: "Cafe/Bistro", label: "Cafe/Bistro" },
@@ -199,6 +200,7 @@ const Step2 = (props) => {
         }
         return restaurantType;
     });
+    console.log('updatedRestaurantTypes =', updatedRestaurantTypes)
 
 
 
@@ -224,14 +226,27 @@ const Step2 = (props) => {
                 <label className={labelClass}>
                     Select What Describe you the best*
                 </label>
-                <Select
+                <select
+                    className={inputClass}
+                    {...register('restaurant_type', { required: true })}
+                >
+                    <option value=''>Select</option>
+                    {updatedRestaurantTypes?.map(item =>
+                        <option key={item?.value} value={item?.value}>{item?.value}</option>
+                    )}
+                </select>
+                {errors?.restaurant_type && <Error title='Select Your Describe is required' />}
+
+                {/* <Select
                     options={updatedRestaurantTypes}
+                    // options={allRestaurantTypes}
                     // isMulti
                     value={props?.selectedRestType}
                     onChange={(selectedOption) => props?.setSelectedRestType(selectedOption)}
-                    {...register('restaurant_type', { required: true })}
-                />
-                {errors?.restaurant_type && <Error title='This is required' />}
+                    // {...register('restaurant_type', { required: true })}
+                    {...register('restaurant_type',)}
+                /> */}
+                {/* {errors?.restaurant_type && <Error title='Restaurant Type is required' />} */}
             </div>
             <div className="">
                 <label className={labelClass}>
@@ -794,12 +809,12 @@ export default function DashboardForm(props) {
             } else {
                 data.fassai_doc = ''
             }
-            if (data.menu_image2.length != 0) {
-                await ImageUpload(data.menu_image2[0], "restaurant", "stagingImage", data.name)
-                data.menu_image2 = `${restaurantLink}${data.name}_stagingImage_${data.menu_image2[0].name}`
-            } else {
-                data.menu_image2 = ''
-            }
+            // if (data.menu_image2.length != 0) {
+            //     await ImageUpload(data.menu_image2[0], "restaurant", "stagingImage", data.name)
+            //     data.menu_image2 = `${restaurantLink}${data.name}_stagingImage_${data.menu_image2[0].name}`
+            // } else {
+            //     data.menu_image2 = ''
+            // }
             if (data.order_img1.length != 0) {
                 await ImageUpload(data.order_img1[0], "restaurant", "stagingImage", data.name)
                 data.order_img1 = `${restaurantLink}${data.name}_stagingImage_${data.order_img1[0].name}`
@@ -818,12 +833,12 @@ export default function DashboardForm(props) {
             } else {
                 data.order_img3 = ''
             }
-            if (data.res_img3.length != 0) {
-                await ImageUpload(data.res_img3[0], "restaurant", "stagingImage", data.name)
-                data.res_img3 = `${restaurantLink}${data.name}_stagingImage_${data.res_img3[0].name}`
-            } else {
-                data.res_img3 = ''
-            }
+            // if (data.res_img3.length != 0) {
+            //     await ImageUpload(data.res_img3[0], "restaurant", "stagingImage", data.name)
+            //     data.res_img3 = `${restaurantLink}${data.name}_stagingImage_${data.res_img3[0].name}`
+            // } else {
+            //     data.res_img3 = ''
+            // }
             let updatedData = {
                 ...data,
                 "type_of_cuisine": selectedCuisines,
@@ -834,6 +849,7 @@ export default function DashboardForm(props) {
                 if (res?.status == 'success') {
                     toast?.success('Restaurants registered successfully')
                     toggle();
+                    setLoader(false);
                 }
             })
         } else {
