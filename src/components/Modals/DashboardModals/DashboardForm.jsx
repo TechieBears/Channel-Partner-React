@@ -191,12 +191,12 @@ const Step2 = (props) => {
 
 
     const updatedRestaurantTypes = allRestaurantTypes.map((restaurantType, index) => {
-        if (index === 0) { 
+        if (index === 0) {
             const categories = props?.category.map(cat => ({
                 value: cat.category_name,
                 label: cat.category_name
             }));
-            return { ...restaurantType, options: categories }; 
+            return { ...restaurantType, options: categories };
         }
         return restaurantType;
     });
@@ -290,7 +290,7 @@ const Step2 = (props) => {
                 <select
                     name="menu"
                     className={`${inputClass} !bg-slate-100`}
-                    {...register("menu_type", {required: true})}
+                    {...register("menu_type", { required: true })}
                 >
                     <option value="">Select</option>
                     <option value="Bestseller">Best Seller</option>
@@ -646,7 +646,6 @@ export default function DashboardForm(props) {
     const [isOpen, setIsOpen] = useState(props?.isOpen ? props?.isOpen : false)
     const [loader, setLoader] = useState(false)
     const [category, setCategory] = useState([])
-    console.log('category:==============', category)
     const [selectedRestType, setSelectedRestType] = useState([])
     const [selectedCuisines, setSelectedCuisines] = useState([])
     const [activeStep, setActiveStep] = useState(0);
@@ -658,7 +657,6 @@ export default function DashboardForm(props) {
         try {
             getRestaurantCategory().then((res) => {
                 setCategory(res)
-                console.log('categories =', res)
             });
         } catch (error) {
             console.log(error);

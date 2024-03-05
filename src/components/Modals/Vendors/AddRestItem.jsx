@@ -75,7 +75,7 @@ export default function AddRestItem(props) {
                 data.food_video_url = `${restaurantLink}${data?.food_name}_img5_${data?.food_video_url[0]?.name}`
             } else {
                 data.food_video_url = props?.data?.food_video_url
-            } 
+            }
         } else {               // for create
             console.log('image create')
             if (data.food_image_1.length != 0) {
@@ -135,7 +135,7 @@ export default function AddRestItem(props) {
             })
         }
     }
-    
+
     const onAdminSubmit = async (data) => {
         var updatedData = { ...data, vendor: props?.row?.vendor?.vendor_id }
         editAdminFinalFood(props?.row?.food_id, updatedData).then(res => {
@@ -154,7 +154,7 @@ export default function AddRestItem(props) {
         getRestaurantSubCategory().then(res => {
             setsubCategory(res)
         })
-        if (user?.role == 'admin'){
+        if (user?.role == 'admin') {
             reset({
                 'food_name': props?.data?.food_name,
                 'food_category': props?.data?.food_category?.id,
@@ -167,21 +167,22 @@ export default function AddRestItem(props) {
                 'food_veg_nonveg': props?.data?.food_veg_nonveg,
                 'food_isactive': props?.data?.food_isactive,
             })
+        } else {
+            if (props?.title == 'edit') {
+                reset({
+                    'food_name': props?.data.food_name,
+                    'food_category': props?.data.food_category?.id,
+                    'food_subcategory': props?.data.food_subcategory?.subcat_id,
+                    'food_actual_price': props?.data.food_actual_price,
+                    'insta_commison_percentage': props?.data.vendor?.insta_commison_percentage,
+                    'markup_percentage': props?.data.markup_percentage,
+                    'food_details': props?.data.food_details,
+                    'food_isactive': props?.data.food_isactive,
+                    'food_veg_nonveg': props?.data.food_veg_nonveg,
+                    'food_isactive': props?.data.food_isactive,
+                })
+            }
         }
-        // if (props?.title == 'edit') {
-        //     reset({
-        //         'food_name': props?.data.food_name,
-        //         'food_category': props?.data.food_category?.id,
-        //         'food_subcategory': props?.data.food_subcategory?.subcat_id,
-        //         'food_actual_price': props?.data.food_actual_price,
-        //         'insta_commison_percentage': props?.data.vendor?.insta_commison_percentage,
-        //         'markup_percentage': props?.data.markup_percentage,
-        //         'food_details': props?.data.food_details,
-        //         'food_isactive': props?.data.food_isactive,
-        //         'food_veg_nonveg': props?.data.food_veg_nonveg,
-        //         'food_isactive': props?.data.food_isactive,
-        //     })
-        // }
     }, [])
 
 
@@ -224,7 +225,7 @@ export default function AddRestItem(props) {
 
     //  ------------   Seller Calculations SetPrice --------------------------------
     const calculateRevenueRestaurant = watch('food_actual_price')
-    
+
     useEffect(() => {
         if (user?.role == 'seller') {
             if (calculateRevenueRestaurant !== "") {
@@ -281,7 +282,7 @@ export default function AddRestItem(props) {
                                         as="h2"
                                         className="w-full px-3 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
                                     >
-                                        {props?.title == "edit" ? "Edit Food Item" : "Add Food Item"  }
+                                        {props?.title == "edit" ? "Edit Food Item" : "Add Food Item"}
                                     </Dialog.Title>
                                     <div className=" bg-gray-200/70">
                                         {/* React Hook Form */}
@@ -502,15 +503,15 @@ export default function AddRestItem(props) {
                                                             id="main_input"
                                                             type='file'
                                                             // multiple
-                                                            disabled={user?.role == 'admin' ? true: false}
+                                                            disabled={user?.role == 'admin' ? true : false}
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("food_image_2",
-                                                            { required: props.button == 'edit' ? false : true })} />
-                                                            {props?.button == 'edit' && props?.data?.food_image_2 != '' && props?.data?.food_image_2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                                {props?.data?.food_image_2?.split('/').pop()}
-                                                            </label>}
-                                                {           errors.food_image_2 && <Error title='Main Image is required*' />}
+                                                                { required: props.button == 'edit' ? false : true })} />
+                                                        {props?.button == 'edit' && props?.data?.food_image_2 != '' && props?.data?.food_image_2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            {props?.data?.food_image_2?.split('/').pop()}
+                                                        </label>}
+                                                        {errors.food_image_2 && <Error title='Main Image is required*' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Image 3</label>
