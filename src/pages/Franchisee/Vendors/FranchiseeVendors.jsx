@@ -12,6 +12,8 @@ import { setUserList } from '../../../redux/Slices/userSlice';
 import { toast } from 'react-toastify';
 import { Eye } from 'iconsax-react';
 import { Link } from 'react-router-dom';
+import userImg from '../../../assets/user.jpg';
+
 
 function FranchiseeVendors() {
     const [activeTab, setActiveTab] = useState(true);

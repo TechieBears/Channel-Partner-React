@@ -23,7 +23,6 @@ export default function Restaurant() {
 
     const getAllRestaurant = () => {
         getRestarant().then((res) => {
-            console.log('restaurant details = ', res)
             const restaurantVendors = res.filter(item => item?.vendor_type == "restaurant");
             setData(restaurantVendors);
         });
@@ -40,26 +39,6 @@ export default function Restaurant() {
             })
         } else {
             toast.warn("No Selected Value !")
-        }
-    }
-
-    // =================== table user active column ========================
-
-    const activeActions = (row) => {
-        const payload = { isactive: !row.isactive, email: row?.email }
-        try {
-            editUser(row?.id, payload).then((form) => {
-                if (form.code == 2002) {
-                    toast.success('User Active Changed !');
-                    getAllRestaurant()
-                }
-                else {
-                    console.log("err");
-                }
-            })
-        }
-        catch (err) {
-            console.log(err);
         }
     }
 
@@ -124,16 +103,6 @@ export default function Restaurant() {
     );
 
 
-    // =================== table user profile column ========================
-    const representativeBodyTemplate = (row) => {
-        return (
-            <div className="rounded-full w-11 h-11">
-                <img src={row?.user?.profile_pic == null || row?.user?.profile_pic == '' || row?.user?.profile_pic == undefined ? userImg : row?.user?.profile_pic} className="object-cover w-full h-full rounded-full" alt={row?.user?.first_name} />
-            </div>
-        );
-    };
-
-
     // =================== table user verify column  ========================
     const activeActionsRole = (rowData) => (
         <h6 className={`${rowData?.isactive !== "false" ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"} py-2 px-5 text-center capitalize rounded-full`}>
@@ -152,13 +121,14 @@ export default function Restaurant() {
     </div>
 
     const columns = [
-        { field: 'id', header: 'ID',  body: (row) => <h6>{row?.user?.id}</h6>, sortable: false },
-        // { field: 'profile_pic', header: 'Profile', body: representativeBodyTemplate, sortable: false, style: true },
+        { field: 'id', header: 'ID', body: (row) => <h6>{row?.user?.id}</h6>, sortable: false },
         { field: 'msb_code', header: 'MSB', sortable: false },
-        { field: 'first_name', body: (row) => <div className="capitalize">{row?.user?.first_name + " " + row?.user?.last_name}</div>, header: 'Name' },
+        { field: 'shop_name', header: 'Restaurant Name', body: (row) => <h6>{row?.shop_name == null ? 'Registration Pending' : row?.shop_name}</h6>, },
+        { field: 'shop_contact_number', header: 'Restaurant Contact', body: (row) => <h6>{row?.shop_contact_number == null ? 'Registration Pending' : row?.shop_contact_number}</h6>, },
+        { field: 'first_name', header: 'Owner Name', body: (row) => <div className="capitalize">{row?.user?.first_name + " " + row?.user?.last_name}</div> },
+        { field: 'phone_no', header: 'Owner Phone No', body: (row) => <h6>{row?.user?.phone_no}</h6>, sortable: false },
         { field: 'email', header: 'Email', body: (row) => <h6>{row?.user?.email}</h6>, sortable: false },
         { field: 'insta_commison_percentage', header: 'Comission(%)', body: (row) => <h6>{row?.insta_commison_percentage}%</h6>, sortable: false },
-        { field: 'phone_no', header: 'Phone No', body: (row) => <h6>{row?.user?.phone_no}</h6>, sortable: false },
         { field: 'pincode', header: 'Pincode', body: (row) => <h6>{row?.user?.pincode}</h6>, sortable: false },
         { field: 'state', header: 'state', body: (row) => <h6>{row?.user?.state}</h6>, sortable: false },
         { field: 'city', header: 'city', body: (row) => <h6>{row?.user?.city}</h6>, sortable: false },
@@ -167,7 +137,6 @@ export default function Restaurant() {
         { field: 'id', header: 'Action', body: actionBodyTemplate, sortable: true },
         { field: 'isactive', header: 'Franchise Verify', body: switchActive, sortable: true },
         { field: 'isverify', header: 'Admin Verify', body: switchVerify, sortable: true },
-        // { header: 'Analyse', body: action, sortable: false },
     ]
 
     useEffect(() => {

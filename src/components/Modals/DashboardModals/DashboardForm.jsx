@@ -1,35 +1,147 @@
-import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useState } from 'react';
-import { useForm, Controller, FormProvider, useFormContext } from "react-hook-form";
-import { fileinput, formBtn1, formBtn2, formBtn3, inputClass, labelClass, tableBtn } from '../../../utils/CustomClass';
-import { Edit, UserAdd } from 'iconsax-react';
-import { createStorage, registerRestaurant } from '../../../api';
-import { setStorageList } from '../../../redux/slices/storageSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { Dialog, Transition } from '@headlessui/react';
+import { Fragment, useEffect, useState } from 'react';
+import { useForm, FormProvider, useFormContext } from "react-hook-form";
+import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
+import { registerRestaurant, getRestaurantCategory, editOnBoarding } from '../../../api';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Error from '../../Errors/Error';
 import LoadBox from '../../Loader/LoadBox';
-import Select from 'react-select'
-import { validateEmail, validatePhoneNumber } from '../../Validations.jsx/Validations';
-import { inputClasses } from '@mui/material';
+import Select from 'react-select';
+import { validatePhoneNumber } from '../../Validations.jsx/Validations';
 import { ImageUpload, restaurantLink } from '../../../env';
-
+import moment from 'moment';
+import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
+import { LocateFixed } from 'lucide-react';
 
 // =================== form steps 1 =================
 
-const Step1 = () => {
+
+
+const Step1 = (props) => {
+    console.log('props = ', props)
+
     const [manually, setManally] = useState(false);
     const [verifyPhone, setVerifyPhone] = useState(false);
     const [verifyEmail, setVerifyEmail] = useState(false);
-    const { register, control, formState: { errors }, } = useFormContext()
+    const { register, getValues, setValue, control, reset, formState: { errors }, } = useFormContext()
+
+    const { isLoaded } = useJsApiLoader({
+        id: 'google-map-script',
+        googleMapsApiKey: import.meta.env.VITE_GOOGLE_API_KEY
+    })
+
+    const [position, setPosition] = useState({
+        lat: 0,
+        lng: 0
+    });
+
+    const getCurrentPostion = () => {
+        navigator.geolocation.getCurrentPosition(async ({ coords }) => {
+            const { latitude, longitude } = coords;
+            setPosition({
+                lat: latitude,
+                lng: longitude
+            })
+            await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyDGaE5jGDxrxwRCloXLOgDgcH-1Q64IlpI`)
+                .then(response => response.json())
+                .then(data => {
+                    const address = data?.results[0]?.formatted_address;
+                    const components = data?.results[0]?.address_components;
+    
+                    const city = components?.find(comp => comp.types.includes('locality'))?.long_name || '';
+                    const state = components?.find(comp => comp.types.includes('administrative_area_level_1'))?.long_name || '';
+                    const pincode = components?.find(comp => comp.types.includes('postal_code'))?.long_name || '';
+                    if (address) {
+                        const { shop_name, shop_contact_number, about_restaurant } = getValues();
+                        const mergedData = {
+                            shop_name: shop_name,
+                            shop_contact_number: shop_contact_number,
+                            about_restaurant: about_restaurant,
+                            city: city,
+                            state: state,
+                            pincode: pincode,
+                            shop_address: address,
+                            latitude: latitude,
+                            longitude: longitude
+                        };
+                        // console.log("++", mergedData)
+                        reset(mergedData);
+                    }
+                })
+                .catch(error => console.error('Error fetching address:', error));
+                // setPosition({
+                //     lat: e.latLng.lat(),
+                //     lng: e.latLng.lng(),
+                // });
+        })
+    }
+
+    useEffect(() => {
+        if (props.button == 'edit' && props.data) {
+            reset({
+                "shop_name": props?.data?.vendor?.shop_name,
+                "shop_address": props?.data?.vendor?.shop_address,
+                "shop_contact_number": props?.data?.vendor?.shop_contact_number,
+                "about_restaurant": props?.data?.about_restaurant,
+                "latitude": props?.data?.vendor?.latitude,
+                "longitude": props?.data?.vendor?.longitude,
+            })
+        } else {
+            // methods = useForm()
+        }
+        getCurrentPostion()
+    }, [])
+
+    const onMarkerDragEnd = async (e) => {
+        const latLng = e.latLng
+        const latitude = latLng.lat();
+        const longitude = latLng.lng();
+        await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${import.meta.env.VITE_GOOGLE_API_KEY}`)
+            .then(response => response.json())
+            .then(data => {
+                const address = data?.results[0]?.formatted_address;
+                const components = data?.results[0]?.address_components;
+
+                const city = components?.find(comp => comp.types.includes('locality'))?.long_name || '';
+                const state = components?.find(comp => comp.types.includes('administrative_area_level_1'))?.long_name || '';
+                const pincode = components?.find(comp => comp.types.includes('postal_code'))?.long_name || '';
+                if (address) {
+                    const { shop_name, shop_contact_number, about_restaurant } = getValues();
+                    const mergedData = {
+                        shop_name: shop_name,
+                        shop_contact_number: shop_contact_number,
+                        about_restaurant: about_restaurant,
+                        city: city,
+                        state: state,
+                        pincode: pincode,
+                        shop_address: address,
+                        latitude: latitude,
+                        longitude: longitude
+                    };
+                    // console.log("++", mergedData)
+                    reset(mergedData);
+                }
+            })
+            .catch(error => console.error('Error fetching address:', error));
+        setPosition({
+            lat: e.latLng.lat(),
+            lng: e.latLng.lng(),
+        });
+    };
+
+
     const OTPInput = () => {
         const inputs = document.querySelectorAll('#otp > *[id]');
         for (let i = 0; i < inputs.length; i++) { inputs[i].addEventListener('keydown', function (event) { if (event.key === "Backspace") { inputs[i].value = ''; if (i !== 0) inputs[i - 1].focus(); } else { if (i === inputs.length - 1 && inputs[i].value !== '') { return true; } else if (event.keyCode > 47 && event.keyCode < 58) { inputs[i].value = event.key; if (i !== inputs.length - 1) inputs[i + 1].focus(); event.preventDefault(); } else if (event.keyCode > 64 && event.keyCode < 91) { inputs[i].value = String.fromCharCode(event.keyCode); if (i !== inputs.length - 1) inputs[i + 1].focus(); event.preventDefault(); } } }); }
         OTPInput()
     }
+
+  
+
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-5 gap-x-3 gap-y-3 ">
             <div className='col-span-3 gap-x-3'>
@@ -56,78 +168,11 @@ const Step1 = () => {
                             className={inputClass}
                             {...register('shop_address', { required: true })}
                         />
-                        {errors.shop_address && <Error title='Year is required*' />}
+                        {errors.shop_address && <Error title='Restaurant Address is Required*' />}
                     </div>
-                    {manually &&
-                        <>
-                            <p className={`col-span-2 text-center`}>--or enter coordinates manually--</p>
-                            <div className="">
-                                <label className={labelClass}>
-                                    Latitude*
-                                </label>
-                                <input
-                                    type="text"
-                                    placeholder='Latitude'
-                                    className={inputClass}
-                                    {...register('lat', { required: manually })}
-                                />
-                                {errors.lat && <Error title={errors?.lat?.message} />}
-                            </div>
-                            <div className="">
-                                <label className={labelClass}>
-                                    Longitutde*
-                                </label>
-                                <input
-                                    type="text"
-                                    placeholder='Longitutde'
-                                    className={inputClass}
-                                    {...register('long', { required: manually })}
-                                />
-                                {errors.long && <Error title={errors?.long?.message} />}
-                            </div>
-
-                            <div className="">
-                                <label className={labelClass}>
-                                    State*
-                                </label>
-                                <input
-                                    type="text"
-                                    readOnly
-                                    placeholder='State'
-                                    className={inputClass}
-                                    {...register('state',)}
-                                />
-                            </div>
-                            <div className="">
-                                <label className={labelClass}>
-                                    Pincode*
-                                </label>
-                                <input
-                                    type="text"
-                                    readOnly
-                                    placeholder='Pincode'
-                                    className={inputClass}
-                                    {...register('pinocde',)}
-                                />
-                            </div>
-                            <div className="">
-                                <label className={labelClass}>
-                                    City*
-                                </label>
-                                <input
-                                    type="text"
-                                    readOnly
-                                    placeholder='City'
-                                    className={inputClass}
-                                    {...register('city',)}
-                                />
-                            </div>
-                            <div></div>
-                        </>
-                    }
                     <div className="">
                         <label className={labelClass}>
-                            Restaurant Number*
+                            Restaurant Phone Number*
                         </label>
                         <input
                             type="tel"
@@ -135,17 +180,112 @@ const Step1 = () => {
                             className={inputClass}
                             {...register('shop_contact_number', { required: true, validate: validatePhoneNumber })}
                         />
-                        {errors.shop_contact_number && <Error title='Restaurant Number is required*' />}
+                        {errors.shop_contact_number && <Error title='Restaurant Phone Number is required*' />}
                     </div>
+                    <div className=''>
+                    <label className={`text-transparent ${labelClass}`}>
+                            Restaurant Phone Number*
+                        </label>
+                        <button type='button' className={`flex w-full justify-center ${formBtn1}`} onClick={getCurrentPostion}><LocateFixed className='me-3'/>Get Current Location</button>
+                    </div>
+                    <div className="">
+                        <label className={labelClass}>
+                            Restaurant Description*
+                        </label>
+                        <input
+                            type="text"
+                            placeholder='Restaurant Description'
+                            className={inputClass}
+                            {...register('about_restaurant', { required: true, })}
+                        />
+                        {errors.about_restaurant && <Error title='Restaurant Description is required*' />}
+                    </div>
+                  
+                    <div className="">
+                        <label className={labelClass}>
+                            Latitude*
+                        </label>
+                        <input
+                            type="text"
+                            placeholder='Latitude'
+                            className={inputClass}
+                            {...register('latitude', { required: manually })}
+                        />
+                        {errors.latitude && <Error title='Latitude Is required' />}
+                    </div>
+                    <div className="">
+                        <label className={labelClass}>
+                            Longitude*
+                        </label>
+                        <input
+                            type="text"
+                            placeholder='Longitutde'
+                            className={inputClass}
+                            {...register('longitude', { required: manually })}
+                        />
+                        {errors.longitude && <Error title='Longitude' />}
+                    </div>
+
+                    {/* <div className="">
+                        <label className={labelClass}>
+                            State*
+                        </label>
+                        <input
+                            type="text"
+                            // readOnly
+                            placeholder='State'
+                            className={inputClass}
+                            {...register('state',)}
+                        />
+                    </div>
+                    <div className="">
+                        <label className={labelClass}>
+                            Pincode*
+                        </label>
+                        <input
+                            type="text"
+                            // readOnly
+                            placeholder='Pincode'
+                            className={inputClass}
+                            {...register('pincode',)}
+                        />
+                    </div>
+                    <div className="">
+                        <label className={labelClass}>
+                            City*
+                        </label>
+                        <input
+                            type="text"
+                            // readOnly
+                            placeholder='City'
+                            className={inputClass}
+                            {...register('city',)}
+                        />
+                    </div> */}
+                   
                 </div>
             </div>
             <div className='col-span-2'>
                 {/* ============================= Maps start ============================= */}
-                <div className=''>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d30128.960774986183!2d73.0314032258855!3d19.27714285590321!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7bda4c2cb3497%3A0x65c3365426378045!2sKamatghar%2C%20Bhiwandi%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1709017397432!5m2!1sen!2sin" width="100%" height="450" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <div className='bg-slate-50 rounded-xl'>
+                    {
+                        isLoaded ? (
+                            <GoogleMap
+                                center={position}
+                                zoom={18}
+                                mapContainerStyle={{ width: '100%', height: '400px', backgroundColor: '#fff' }}
+                            >
+                                <Marker
+                                    position={position}
+                                    draggable={true}
+                                    onDragEnd={onMarkerDragEnd}
+                                />
+                            </GoogleMap>
+                        ) : null
+                    }
                 </div>
                 {/* ============================= Maps end ============================= */}
-                <p onClick={() => setManally(!manually)} className={`cursor-pointer ${manually ? 'text-black' : 'text-sky-400'}`}>or enter coordinates manually</p>
+                <p className='text-sm text-gray-400'>Please provide precise location for better results</p>
             </div>
         </div>
     )
@@ -153,8 +293,12 @@ const Step1 = () => {
 
 // =================== form steps 2 =================
 const Step2 = (props) => {
-    const { register, formState: { errors }, } = useFormContext()
+    console.log('step 2 props ========', props?.category)
+    console.log('props ========', props)
+    const { register, getValues, setValue, control, reset, formState: { errors }, } = useFormContext()
+
     const [allCuisines, setAllCuisines] = useState([
+        { value: "Fast Food", label: "Fast Food" },
         { value: "Italian Cuisine", label: "Italian Cuisine" },
         { value: "French Cuisine", label: "French Cuisine" },
         { value: "Chinese Cuisine", label: "Chinese Cuisine" },
@@ -166,34 +310,72 @@ const Step2 = (props) => {
         { value: "Maharashtrian Cuisine", label: "Maharashtrian Cuisine" },
         { value: "Goan Cuisine", label: "Goan Cuisine" },
     ]);
-    const [allRestaurantTypes, setAllRestaurantTypes] = useState([
-        { value: "Fine Dining", label: 'Fine Dining' },
-        { value: "Casual Dining", label: "Casual Dining" },
-        { value: "Fast Food", label: "Fast Food" },
-        { value: "Café/Bistro", label: "Café/Bistro" },
-        { value: "Ethnic Restaurants", label: "Ethnic Restaurants" },
-        { value: "Family Style Restaurants", label: "Family Style Restaurants" },
-        { value: "Buffet Style Restaurants", label: "Buffet Style Restaurants" },
-        { value: "Food Trucks", label: "Food Trucks" },
-        { value: "Pop-Up Restaurants", label: "Pop-Up Restaurants" },
-        { value: "Vegetarian/Vegan Restaurants", label: "Vegetarian/Vegan Restaurants" },
-    ]);
+
+    useEffect(() => {
+        if (props.button == 'edit' && props.data) {
+            const formattedStartTime = moment(props?.data?.vendor?.shop_start_time, 'h:mm A').format('HH:mm');
+            const formattedEndTime = moment(props?.data?.vendor?.shop_end_time, 'h:mm A').format('HH:mm');
+
+            reset({
+               'veg_nonveg': props?.data?.veg_nonveg,
+               'restaurant_type': props?.data?.restaurant_type,
+               'shop_start_time':formattedStartTime,
+               'shop_end_time': formattedEndTime,
+               'type_of_cuisine': JSON.parse(props?.data?.type_of_cuisine) 
+            })
+        } else {
+            // methods = useForm()
+        }
+    }, [])
+
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
-            <p className='md:col-span-2 lg:col-span-3 font-semibold text-lg'>Establishment Type</p>
+            <p className='text-lg font-semibold md:col-span-2 lg:col-span-3'>Establishment Type</p>
+            <div className="">
+                <label className={labelClass}>
+                    Restaurant Type*
+                </label>
+                <select
+                    className={inputClass}
+                    {...register('veg_nonveg', { required: true })}
+                >
+                    <option value=''>Select</option>
+                    <option value='Both'>Both</option>
+                    <option value='Veg'>Veg</option>
+                    <option value='Non-Veg'>Non-Veg</option>
+                </select>
+                {errors?.veg_nonveg && <Error title='Restaurant Type is required' />}
+            </div>
             <div className="">
                 <label className={labelClass}>
                     Select What Describe you the best*
                 </label>
-                <Select
-                    options={allRestaurantTypes}
-                    isMulti
-                    value={props?.selectedRestType}
-                    onChange={(selectedOption) => props?.setSelectedRestType(selectedOption)}
-                // {...register('restaurant_type', { required: true })}
-                />
-                {errors?.restaurant_type && <Error title='This is required' />}
+                <select
+                    className={inputClass}
+                    {...register('restaurant_type', { required: true })}
+                >
+                    <option value=''>Select</option>
+                    {props?.category?.map(item =>
+                        <option value={item?.category_name}>{item?.category_name}</option>
+                    )}
+                </select>
+                {errors?.restaurant_type && <Error title='Select Your Describe is required' />}
             </div>
+            {/* <div className="">
+                <label className={labelClass}>
+                    Select What Describes you the best*
+                </label>
+                <select
+                    className={inputClass}
+                    {...register('restaurant_type', { required: true })}
+                >
+                    <option value=''>Select</option>
+                    {allOptions.map(item =>
+                        <option key={item?.value} value={item?.value}>{item?.value}</option>
+                    )}
+                </select>
+                {errors?.restaurant_type && <Error title='Select Your Describe is required' />}
+            </div> */}
             <div className="">
                 <label className={labelClass}>
                     Type of cuisines*
@@ -204,7 +386,7 @@ const Step2 = (props) => {
                     value={props?.selectedCuisines}
                     onChange={(selectedOption) => props?.setSelectedCuisines(selectedOption)}
                 />
-                {errors?.type_of_cuisine && <Error title='This is required' />}
+                {errors?.type_of_cuisine && <Error title='Type of Cuisine is required' />}
             </div>
             <div>
                 <label className={labelClass}>
@@ -224,7 +406,8 @@ const Step2 = (props) => {
                 <input
                     type='time'
                     className={inputClass}
-                    {...register('shop_closing_time', { required: true })}
+                    step={1800}
+                    {...register('shop_end_time', { required: true })}
                 />
                 {errors?.shop_closing_time && <Error title='Closing Hour is required' />}
             </div>
@@ -234,40 +417,53 @@ const Step2 = (props) => {
 
 // =================== form steps 3 =================
 const Step3 = (props) => {
-    const { register, formState: { errors }, } = useFormContext()
+    console.log('props 3', props);
+    const { register, getValues, setValue, control, reset, formState: { errors }, } = useFormContext()
+
+    useEffect(() => {
+        if (props.button == 'edit' && props.data) {
+            reset({
+               'ambience_image': props?.data?.ambience_image,
+               'shop_image': props?.data?.vendor?.shop_image,
+            })
+        } else {
+            // methods = useForm()
+        }
+    }, [])
+
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
-            <p className='md:col-span-2 lg:col-span-3 font-semibold text-lg'>Upload Images</p>
-            <p className='md:col-span-2 lg:col-span-3 font-normal text-base'>Ambience Images</p>
+            <p className='text-lg font-semibold md:col-span-2 lg:col-span-3'>Upload Images</p>
+            <p className='text-base font-normal md:col-span-2 lg:col-span-3'>Ambience Images</p>
             <div className="">
                 <label className={labelClass} htmlFor="main_input">Image 1 *</label>
                 <input className={fileinput}
                     id="main_input"
                     type='file'
-                    multiple
+                    // multiple
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("ambience_image", { required: true })} />
-                {props?.button == 'edit' && props?.data.ambience_image != '' && props?.data.ambience_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                    {...register("ambience_image", { required: !props?.data?.ambience_image })} />
+                {props?.button == 'edit' && props?.data.ambience_image != '' && props?.data?.ambience_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                     {props?.data?.ambience_image?.split('/').pop()}
                 </label>}
-                {errors.ambience_image && <Error title='Menu Image is required*' />}
+                {errors.ambience_image && <Error title='Image is required*' />}
             </div>
             <div className="">
                 <label className={labelClass} htmlFor="main_input">Image 2</label>
                 <input className={fileinput}
                     id="main_input"
                     type='file'
-                    multiple
+                    // multiple
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("menu_image2", {})} />
-                {props?.button == 'edit' && props?.data.menu_image2 != '' && props?.data.menu_image2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                    {props?.data?.menu_image2?.split('/').pop()}
+                    {...register("shop_image")} />
+                {props?.button == 'edit' && props?.data?.vendor?.shop_image != '' && props?.data?.vendor?.shop_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                    {props?.data?.vendor?.shop_image?.split('/').pop()}
                 </label>}
-                {errors.menu_image2 && <Error title='Menu Image is required*' />}
+                {/* {errors.shop_image && <Error title='Image is required*' />} */}
             </div>
-            <div className="">
+            {/* <div className="">
                 <label className={labelClass} htmlFor="main_input">Image 3</label>
                 <input className={fileinput}
                     id="main_input"
@@ -280,27 +476,28 @@ const Step3 = (props) => {
                     {props?.data?.res_img3?.split('/').pop()}
                 </label>}
                 {errors.res_img3 && <Error title='Restaurant Image is required*' />}
-            </div>
-            <p className='md:col-span-2 lg:col-span-3 font-normal text-base'>Dish Images</p>
+            </div> */}
+            <p className='text-base font-normal md:col-span-2 lg:col-span-3'>Dish Images</p>
             <div className="">
                 <label className={labelClass} htmlFor="main_input">Image 1*</label>
                 <input className={fileinput}
                     id="main_input"
                     type='file'
-                    multiple
+                    // multiple
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("food_image1", { required: true })} />
+                    {...register("food_image1", { required: !props?.data?.food_image1 })} />
                 {props?.button == 'edit' && props?.data.food_image1 != '' && props?.data.food_image1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                     {props?.data?.food_image1?.split('/').pop()}
                 </label>}
+                {errors.food_image1 && <Error title='Dish Image is required*' />}
             </div>
             <div className="">
                 <label className={labelClass} htmlFor="main_input">Image 2</label>
                 <input className={fileinput}
                     id="main_input"
                     type='file'
-                    multiple
+                    // multiple
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
                     {...register("food_image2", {})} />
@@ -313,7 +510,7 @@ const Step3 = (props) => {
                 <input className={fileinput}
                     id="main_input"
                     type='file'
-                    multiple
+                    // multiple
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
                     {...register("food_image3", {})} />
@@ -327,7 +524,8 @@ const Step3 = (props) => {
 
 // =================== form steps 4 =================
 const Step4 = (props) => {
-    const { register, formState: { errors }, setError, watch } = useFormContext()
+    console.log('props4 = ', props)
+    const { register, setValue, formState: { errors }, setError, watch } = useFormContext()
     const deliveryTime = watch('delivery_time')
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
@@ -377,8 +575,25 @@ const Step4 = (props) => {
 // // =================== form steps 5 =================
 
 const Step5 = (props) => {
-    const { register, formState: { errors }, watch } = useFormContext()
+    console.log('props5 = ', props)
+    const { register, setValue, getValues, control, reset, watch, formState: { errors }, } = useFormContext()
     const gstRegistered = watch('gst_registered');
+    
+    useEffect(() => {
+        if (props.button == 'edit' && props.data) {
+            reset({
+
+               'pan_card': props?.data?.vendor?.pan_card,
+               'bank_name': props?.data?.vendor?.bank_name,
+               'account_number': props?.data?.vendor?.account_number,
+               'ifsc_code': props?.data?.vendor?.ifsc_code,
+               'adhar_card': props?.data?.vendor?.adhar_card,
+            //    'gst_number': props?.data?.vendor?.gst_number,
+            })
+        } else {
+            // methods = useForm()
+        }
+    }, [])
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
             <p className='col-span-3 text-lg font-semibold'>PAN Details</p>
@@ -394,7 +609,7 @@ const Step5 = (props) => {
                 />
                 {errors.pan_card && <Error title='PAN No is required*' />}
             </div>
-            <div className="">
+            {/* <div className="">
                 <label className={labelClass}>
                     Name On Document*
                 </label>
@@ -405,7 +620,7 @@ const Step5 = (props) => {
                     {...register('pan_name', { required: true })}
                 />
                 {errors.pan_name && <Error title='Name On Document is required*' />}
-            </div>
+            </div> */}
             <div className="">
                 <label className={labelClass} htmlFor="main_input">Upload Image</label>
                 <input className={fileinput}
@@ -513,6 +728,7 @@ const Step5 = (props) => {
                     className={inputClass}
                     {...register('bank_name', { required: true })}
                 />
+                {errors?.bank_name && <Error title='Bank Name is required' />}
             </div>
             <div className="">
                 <label className={labelClass}>
@@ -524,6 +740,7 @@ const Step5 = (props) => {
                     className={inputClass}
                     {...register('account_number', { required: true })}
                 />
+                {errors?.account_number && <Error title='Account Number is required' />}
             </div>
             <div className="">
                 <label className={labelClass}>
@@ -533,8 +750,9 @@ const Step5 = (props) => {
                     type="text"
                     placeholder='Bank IFSC Code'
                     className={inputClass}
-                    {...register('ifsc_code')}
+                    {...register('ifsc_code', { required: true })}
                 />
+                {errors?.ifsc_code && <Error title='IFSC Code is required' />}
             </div>
             <p className='col-span-3 text-lg font-semibold'>Adhar Details</p>
             <div className="">
@@ -557,7 +775,8 @@ const Step5 = (props) => {
                     multiple
                     accept='image/jpeg,image/jpg,image/png,application/pdf'
                     placeholder='Upload Images...'
-                    {...register("adhar_img", { required: true })} />
+                    // {...register("adhar_img", { required: true })} />
+                    {...register("adhar_img")} />
                 {props?.button == 'edit' && props?.data?.adhar_img != '' && props?.data?.adhar_img != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
                     {props?.data?.adhar_img.split('storage')[1].split('/')[1].split('_')[2]}
                 </label>}
@@ -568,14 +787,30 @@ const Step5 = (props) => {
 }
 
 export default function DashboardForm(props) {
+    console.log('get rest props = ', props)
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     const [isOpen, setIsOpen] = useState(props?.isOpen ? props?.isOpen : false)
     const [loader, setLoader] = useState(false)
+    const [category, setCategory] = useState([])
     const [selectedRestType, setSelectedRestType] = useState([])
     const [selectedCuisines, setSelectedCuisines] = useState([])
     const [activeStep, setActiveStep] = useState(0);
     const toggle = () => setIsOpen(!isOpen);
+    const { register, handleSubmit, setValue,  control, formState: { errors }, reset } = useForm();
+
     const steps = ['Restaurant Information', 'Restaurant Type and Timing', 'Upload Images', 'General Information', 'Legal Documentation',];
+
+    // ============== Restaurant API ================
+    const restaurantCategories = () => {
+        try {
+            getRestaurantCategory().then((res) => {
+                setCategory(res)
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     var methods = useForm({
         defaultValues: {
             "name": "",
@@ -657,11 +892,12 @@ export default function DashboardForm(props) {
     const getStepContent = (step) => {
         switch (step) {
             case 0:
-                return <Step1 />
+                return <Step1 {...props}/>
             case 1:
-                return <Step2 selectedCuisines={selectedCuisines} setSelectedCuisines={setSelectedCuisines} selectedRestType={selectedRestType} setSelectedRestType={setSelectedRestType} />
+                return <Step2  {...props} selectedCuisines={selectedCuisines} setSelectedCuisines={setSelectedCuisines} selectedRestType={selectedRestType}
+                    setSelectedRestType={setSelectedRestType} category={category} />
             case 2:
-                return <Step3 />
+                return <Step3  {...props}/>
             case 3:
                 return <Step4 {...props} />
             case 4:
@@ -677,90 +913,137 @@ export default function DashboardForm(props) {
 
     // ================= submit data  ===============================
     const onSubmit = async (data) => {
+        const shopStartTime = moment(data?.shop_start_time, 'HH:mm').format('hh:mm A');
+        const shopEndTime = moment(data?.shop_end_time, 'HH:mm').format('hh:mm A');
+
+        data.shop_start_time = shopStartTime;
+        data.shop_end_time = shopEndTime;
+
+        // moment(data?.shop_start_time).format('LT');
+        // moment(data?.shop_closing_time).format('LT');
+
+        // setValue('shop_start_time', moment(data?.shop_start_time, 'HH:mm').format('h:mm A'))
+        // setValue('shop_end_time', moment(data?.shop_end_time, 'HH:mm').format('h:mm A'))
+        // console.log( moment(data?.shop_start_time, 'HH:mm').format('h:mm A'),  moment(data?.shop_end_time, 'HH:mm').format('h:mm A'))
+        console.log(data.shop_start_time, data.shop_end_time)
+
+        // if(data?.shop_start_time || data?.shop_end_time){
+        //     data?.shop_start_time = moment(data?.shop_start_time, 'HH:mm').format('h:mm A')
+        //     data?.shop_end_time = moment(data?.shop_end_time, 'HH:mm').format('h:mm A')
+        // }
+
+        console.log('data', data)
         isStepFalied()
         setLoader(true)
-        if (activeStep == steps.length - 1) {
-            if (data.ambience_image.length != 0) {
-                await ImageUpload(data.ambience_image[0], "storage", "mainImage", data.name)
-                data.ambience_image = `${restaurantLink}${data.name}_mainImage_${data.ambience_image[0].name}`
+        if (props?.button != 'edit') {      
+            if (activeStep == steps.length - 1) {
+                if (data.ambience_image.length != 0) {
+                    await ImageUpload(data.ambience_image[0], "restaurant", "ambience_image", data.shop_name)
+                    data.ambience_image = `${restaurantLink}${data.shop_name}_ambience_image_${data.ambience_image[0].name}`
+                } else {
+                    data.ambience_image = ''
+                }
+                if (data.shop_image.length != 0) {
+                    await ImageUpload(data.shop_image[0], "restaurant", "shop_image", data.shop_name)
+                    data.shop_image = `${restaurantLink}${data.shop_name}_shop_image_${data.shop_image[0].name}`
+                } else {
+                    data.shop_image = ''
+                }
+                if (data.food_image1.length != 0) {
+                    await ImageUpload(data.food_image1[0], "restaurant", "food_image1", data.shop_name)
+                    data.food_image1 = `${restaurantLink}${data.shop_name}_food_image1_${data.food_image1[0].name}`
+                } else {
+                    data.food_image1 = ''
+                }
+                if (data.food_image2.length != 0) {
+                    await ImageUpload(data.food_image2[0], "restaurant", "food_image2", data.shop_name)
+                    data.food_image2 = `${restaurantLink}${data.shop_name}_food_image2_${data.food_image2[0].name}`
+                } else {
+                    data.food_image2 = ''
+                }
+                if (data.food_image3.length != 0) {
+                    await ImageUpload(data.food_image3[0], "restaurant", "food_image3", data.shop_name)
+                    data.food_image3 = `${restaurantLink}${data.shop_name}_food_image3_${data.food_image3[0].name}`
+                } else {
+                    data.food_image3 = ''
+                }
+                if (data.adhar_img.length != 0) {
+                    await ImageUpload(data.adhar_img[0], "restaurant", "adhar_img", data.shop_name)
+                    data.adhar_img = `${restaurantLink}${data.shop_name}_adhar_img_${data.adhar_img[0].name}`
+                } else {
+                    data.adhar_img = ''
+                }
+                if (data.fassai_doc.length != 0) {
+                    await ImageUpload(data.fassai_doc[0], "restaurant", "fassai_doc", data.shop_name)
+                    data.fassai_doc = `${restaurantLink}${data.shop_name}_fassai_doc_${data.fassai_doc[0].name}`
+                } else {
+                    data.fassai_doc = ''
+                }
+                // if (data.menu_image2.length != 0) {
+                //     await ImageUpload(data.menu_image2[0], "restaurant", "stagingImage", data.name)
+                //     data.menu_image2 = `${restaurantLink}${data.name}_stagingImage_${data.menu_image2[0].name}`
+                // } else {
+                //     data.menu_image2 = ''
+                // }
+                if (data.order_img1.length != 0) {
+                    await ImageUpload(data.order_img1[0], "restaurant", "order_img1", data.shop_name)
+                    data.order_img1 = `${restaurantLink}${data.shop_name}_order_img1_${data.order_img1[0].name}`
+                } else {
+                    data.order_img1 = ''
+                }
+                if (data.order_img2.length != 0) {
+                    await ImageUpload(data.order_img2[0], "restaurant", "order_img2", data.shop_name)
+                    data.order_img2 = `${restaurantLink}${data.shop_name}_order_img2_${data.order_img2[0].name}`
+                } else {
+                    data.order_img2 = ''
+                }
+                if (data.order_img3.length != 0) {
+                    await ImageUpload(data.order_img3[0], "restaurant", "order_img3", data.shop_name)
+                    data.order_img3 = `${restaurantLink}${data.shop_name}_order_img3_${data.order_img3[0].name}`
+                } else {
+                    data.order_img3 = ''
+                }
+                // if (data.res_img3.length != 0) {
+                //     await ImageUpload(data.res_img3[0], "restaurant", "stagingImage", data.name)
+                //     data.res_img3 = `${restaurantLink}${data.name}_stagingImage_${data.res_img3[0].name}`
+                // } else {
+                //     data.res_img3 = ''
+                // }
+                let updatedData = {
+                    ...data,
+                    "type_of_cuisine": JSON.stringify(selectedCuisines),
+                    // "restaurant_type": selectedRestType,
+                    "vendorId": LoggedUserDetails?.sellerId,
+                }
+                registerRestaurant(updatedData).then(res => {
+                    if (res?.status == 'success') {
+                        toast?.success('Restaurants registered successfully')
+                        toggle();
+                        setLoader(false);
+                    }
+                })
             } else {
-                data.ambience_image = ''
+                setLoader(false)
+                setActiveStep((prevActiveStep) => prevActiveStep + 1);
             }
-            if (data.food_image1.length != 0) {
-                await ImageUpload(data.food_image1[0], "storage", "outSideImage", data.name)
-                data.food_image1 = `${restaurantLink}${data.name}_outSideImage_${data.food_image1[0].name}`
-            } else {
-                data.food_image1 = ''
-            }
-            if (data.food_image2.length != 0) {
-                await ImageUpload(data.food_image2[0], "storage", "loadingImage", data.name)
-                data.food_image2 = `${restaurantLink}${data.name}_loadingImage_${data.food_image2[0].name}`
-            } else {
-                data.food_image2 = ''
-            }
-            if (data.food_image3.length != 0) {
-                await ImageUpload(data.food_image3[0], "storage", "stagingImage", data.name)
-                data.food_image3 = `${restaurantLink}${data.name}_stagingImage_${data.food_image3[0].name}`
-            } else {
-                data.food_image3 = ''
-            }
-            if (data.adhar_img.length != 0) {
-                await ImageUpload(data.adhar_img[0], "storage", "stagingImage", data.name)
-                data.adhar_img = `${restaurantLink}${data.name}_stagingImage_${data.adhar_img[0].name}`
-            } else {
-                data.adhar_img = ''
-            }
-            if (data.fassai_doc.length != 0) {
-                await ImageUpload(data.fassai_doc[0], "storage", "stagingImage", data.name)
-                data.fassai_doc = `${restaurantLink}${data.name}_stagingImage_${data.fassai_doc[0].name}`
-            } else {
-                data.fassai_doc = ''
-            }
-            if (data.menu_image2.length != 0) {
-                await ImageUpload(data.menu_image2[0], "storage", "stagingImage", data.name)
-                data.menu_image2 = `${restaurantLink}${data.name}_stagingImage_${data.menu_image2[0].name}`
-            } else {
-                data.menu_image2 = ''
-            }
-            if (data.order_img1.length != 0) {
-                await ImageUpload(data.order_img1[0], "storage", "stagingImage", data.name)
-                data.order_img1 = `${restaurantLink}${data.name}_stagingImage_${data.order_img1[0].name}`
-            } else {
-                data.order_img1 = ''
-            }
-            if (data.order_img2.length != 0) {
-                await ImageUpload(data.order_img2[0], "storage", "stagingImage", data.name)
-                data.order_img2 = `${restaurantLink}${data.name}_stagingImage_${data.order_img2[0].name}`
-            } else {
-                data.order_img2 = ''
-            }
-            if (data.order_img3.length != 0) {
-                await ImageUpload(data.order_img3[0], "storage", "stagingImage", data.name)
-                data.order_img3 = `${restaurantLink}${data.name}_stagingImage_${data.order_img3[0].name}`
-            } else {
-                data.order_img3 = ''
-            }
-            if (data.res_img3.length != 0) {
-                await ImageUpload(data.res_img3[0], "storage", "stagingImage", data.name)
-                data.res_img3 = `${restaurantLink}${data.name}_stagingImage_${data.res_img3[0].name}`
-            } else {
-                data.res_img3 = ''
-            }
+        } else{
             let updatedData = {
                 ...data,
-                "type_of_cuisine": selectedCuisines,
-                "restaurant_type": selectedRestType,
-                "vendorId": LoggedUserDetails?.sellerId
+                "type_of_cuisine": JSON.stringify(selectedCuisines),
+                "vendorId": LoggedUserDetails?.sellerId,
+                // "restaurant_type": selectedRestType,
             }
-            registerRestaurant(updatedData).then(res => {
-                if (res?.status == 'success') {
-                    toast?.success('Restaurants registered successfully')
-                    toggle();
+            editOnBoarding(LoggedUserDetails?.sellerId, updatedData).then((res) => {
+                if (res?.message === "product edited successfully") {
+                    setTimeout(() => {
+                        reset();
+                        productList();
+                        toggle(),
+                            setLoader(false),
+                        toast.success(res.message);
+                    }, 1000)
                 }
             })
-        } else {
-            setLoader(false)
-            setActiveStep((prevActiveStep) => prevActiveStep + 1);
         }
     }
 
@@ -770,13 +1053,17 @@ export default function DashboardForm(props) {
         setActiveStep(0)
         methods.reset();
         setLoader(false);
+        reset();
     }
+
+    useEffect(() => {
+        restaurantCategories();
+    }, [])
     return (
         <>
             {props?.dashBoard &&
-                <button onClick={toggle} className="flex items-center pb-2 space-x-2 transition-all duration-700 group">
-                    <UserAdd size={22} onClick={() => props?.setCard(!props?.card)} className='text-gray-700 group-hover:text-sky-400' />
-                    <h4 className='text-sm font-semibold capitalize font-tbPop lg:text-lg md:text-base group-hover:text-sky-400 text-slate-700'>Register</h4>
+                <button onClick={toggle} className={formBtn1}>
+                    Edit
                 </button>}
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-[100]" onClose={() => toggle}>
@@ -802,7 +1089,7 @@ export default function DashboardForm(props) {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-8xl overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl">
+                                <Dialog.Panel className="w-full overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl max-w-8xl">
 
                                     <Dialog.Title
                                         as="h2"

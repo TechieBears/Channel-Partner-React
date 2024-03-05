@@ -1584,12 +1584,25 @@ export const editAdminFinalProduct = async (id, data) => {
     const url = `${environment.baseUrl}vendor/edit_product_admin/${id}`;
     try {
         const response = await axios.put(url, data);
-        console.log('responseeeeeeeeeeeeeeeeeeeeeeeee', response)
+        // console.log('response = ', response)
         return response.data
     } catch (err) {
         console.log('error while getting vendor by id', err)
     }
 }
+
+
+export const editAdminFinalFood = async (id, data) => {
+    const url = `${environment.baseUrl}vendor/edit_food_admin/${id}`;
+    try {
+        const response = await axios.put(url, data);
+        console.log('response = ', response)
+        return response.data
+    } catch (err) {
+        console.log('error while getting vendor by id', err)
+    }
+}
+
 
 
 // =================== Coupons =================
@@ -1648,6 +1661,17 @@ export const registerRestaurant = async (data) => {
     }
 }
 
+export const editOnBoarding = async (id, data) => {
+    const url = `${environment.baseUrl}vendor/editonboard_restaurant/${id}`;
+    try {
+        const response = await axios.put(url, data);
+        // console.log('response', response)
+        return response.data;
+    } catch (err) {
+        console.log('error while posting data', err)
+    }
+}
+
 export const addFoodItem = async (data) => {
     const url = `${environment.baseUrl}vendor/add_restaurant_food`;
     try {
@@ -1678,5 +1702,16 @@ export const deleteFoodItem = async (id) => {
         return response.data;
     } catch (err) {
         console.log('error while posting data', err)
+    }
+}
+
+export const getSingleRestaurant = async (id) => {
+    const url = `${environment.baseUrl}vendor/editonboard_restaurant/${id}`
+    try {
+        const response = await axios.get(url ,id)
+        console.log('response', response)
+        return response.data
+    } catch (error) {
+        console.log('error while getting data', error)
     }
 }

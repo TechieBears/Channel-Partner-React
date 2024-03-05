@@ -170,7 +170,7 @@ const SellerLogin = () => {
                                     Sign in
                                 </button>}
                             </div>
-                            {/* <div className=''><NavLink className='w-full' to='/admin'>Sign-in as a <span className='text-sky-400'>Admin</span></NavLink></div> */}
+                            <div className=''><NavLink className='w-full' to='/admin'>Sign-in as a <span className='text-sky-400'>Admin</span></NavLink></div>
                         </div>
                     </div>
                 </form>

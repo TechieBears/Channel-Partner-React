@@ -79,31 +79,9 @@ export default function FranchiseDetail() {
                             <h6 className='text-black font-tbMon text-lg font-bold pb-3'>All Details</h6>
                             <div className="grid grid-cols-5 gap-y-8 border-b border-slate-300 pb-5">
                                 <div>
-                                    <h5 className='font-tbPop text-slate-900 capitalize text-base'>Company Name</h5>
-                                    {/* <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.user?.comp_name == "" ? '--------' : data?.user?.comp_name}</h5> */}
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>Techie Bears</h5>
-                                </div>
-                                <div>
-                                    <h5 className='font-tbPop text-slate-900 capitalize text-base'>Company Type</h5>
-                                    {/* <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.user?.comp_type == "" ? '--------' : data?.user?.comp_type}</h5> */}
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>Developement</h5>
-                                </div>
-                                {/* <div>
-                                    <h5 className='font-tbPop text-slate-900 capitalize text-base'>designation</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.user?.designation == "" ? '--------' : data?.user?.designation}</h5>
-                                </div> */}
-                                <div>
                                     <h5 className='font-tbPop text-slate-900 capitalize text-base'>address</h5>
                                     <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.user?.address == "" ? '--------' : data?.user?.address}</h5>
                                 </div>
-                                <div>
-                                    <h5 className='font-tbPop text-slate-900 capitalize text-base'>address 2</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.user?.address2 == "" ? '--------' : data?.user?.address2}</h5>
-                                </div>
-                                {/* <div>
-                                    <h5 className='font-tbPop text-slate-900 capitalize text-base'>alternative phone no</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.user?.alt_phone == "" ? '--------' : data?.user?.alt_phone}</h5>
-                                </div> */}
                                 <div>
                                     <h5 className='font-tbPop text-slate-900 capitalize text-base'>city</h5>
                                     <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.user?.city == "" ? '--------' : data?.user?.city}</h5>
@@ -115,10 +93,6 @@ export default function FranchiseDetail() {
                                 <div>
                                     <h5 className='font-tbPop text-slate-900 capitalize text-base'>pincode</h5>
                                     <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.user?.pincode == 0 ? '--------' : data?.user?.pincode}</h5>
-                                </div>
-                                <div>
-                                    <h5 className='font-tbPop text-slate-900 capitalize text-base'>landmark</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.user?.landmark == 0 ? '--------' : data?.user?.landmark}</h5>
                                 </div>
                                 <div>
                                     <h5 className='font-tbPop text-slate-900 capitalize text-base'>active</h5>
@@ -142,14 +116,6 @@ export default function FranchiseDetail() {
                                 <div>
                                     <h5 className='font-tbPop text-slate-900 capitalize text-base'>gst</h5>
                                     <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.gst_number == '' || data?.gst_number == null ? '--------' : data?.gst_number}</h5>
-                                </div>
-                                <div>
-                                    <h5 className='font-tbPop text-slate-900 capitalize text-base'>fssai</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.fssai == '' ? '--------' : data?.fssai}</h5>
-                                </div>
-                                <div>
-                                    <h5 className='font-tbPop text-slate-900 capitalize text-base'>odoc</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.odoc == '' ? '--------' : data?.odoc}</h5>
                                 </div>
                                 <div>
                                     <h5 className='font-tbPop text-slate-900 capitalize text-base'>Bank</h5>

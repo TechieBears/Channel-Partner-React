@@ -80,7 +80,7 @@ const VendorProduct = () => {
         <Link to={`/product-list/product-details/${row?.product_id}`} state={row} className='items-center p-1 bg-sky-100 rounded-xl hover:bg-sky-200'>
             <Eye size={24} className='text-sky-400' />
         </Link>
-        <AddRestItem title='Edit Product' button='edit' data={row} getRestFood={getRestFood} />
+        <AddRestItem title='edit' button='edit' data={row} getRestFood={getRestFood} />
         <button onClick={(row) => deleteItem(row)} className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
             <Trash size={24} className='text-red-400' />
         </button>
@@ -89,7 +89,8 @@ const VendorProduct = () => {
     const representativeBodyTemplate = (row) => {
         return (
             <div className="rounded-full w-11 h-11">
-                <img src={row?.product_image_1 == null || row?.product_image_1 == '' || row?.product_image_1 == undefined ? userImg : row?.product_image_1} className="object-cover w-full h-full rounded-full" alt={row.first_name} />
+               {user?.vendor_type == 'seller' && <img src={row?.product_image_1 == null || row?.product_image_1 == '' || row?.product_image_1 == undefined ? userImg : row?.product_image_1} className="object-cover w-full h-full rounded-full" alt={row.first_name} />}
+               {user?.vendor_type == 'restaurant' && <img src={row?.food_image_1 == null || row?.food_image_1 == '' || row?.food_image_1 == undefined ? userImg : row?.food_image_1} className="object-cover w-full h-full rounded-full" alt={row.food_name} />}
             </div>
         );
     };
@@ -97,7 +98,7 @@ const VendorProduct = () => {
     const adminVerification = (row) =>
     (<div className="flex items-center justify-center gap-2">
         <Switch
-            value={row?.product_isverified_byadmin}
+            value={user?.vendor_type == 'seller' ? row?.product_isverified_byadmin : row?.food_isverified_byadmin }
             disabled={true}
             size={50}
             backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
@@ -108,7 +109,7 @@ const VendorProduct = () => {
     const franchiseVerification = (row) =>
     (<div className="flex items-center justify-center gap-2">
         <Switch
-            value={row?.product_isverified_byfranchise}
+            value={user?.vendor_type == 'seller' ? row?.product_isverified_byfranchise : row?.food_isverified_byfranchise }
             disabled={true}
             size={50}
             backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
@@ -135,13 +136,16 @@ const VendorProduct = () => {
     ]
 
     const restaurantColumns = [
-        { field: 'food_msbcode', header: 'MSB Code', sortable: false },
+        { field: 'food_msbcode', header: 'Food MSB Code', sortable: false },
+        { field: 'food_image_1', header: 'Image', body: representativeBodyTemplate, sortable: true, style: true },
         { field: 'food_name', header: 'Food Name', sortable: false },
         { field: 'food_category', header: 'Category', body: (row) => <h6>{row?.food_category?.category_name}</h6>, sortable: false },
         { field: 'food_subcategory', header: 'Sub-Category', body: (row) => <h6>{row?.food_subcategory?.subcat_name}</h6>, sortable: false },
         { field: 'food_veg_nonveg', header: 'Type', sortable: false },
         { field: 'food_details', header: 'Details', sortable: false },
         { field: 'food_actual_price', header: 'MRP', sortable: true },
+        { field: 'food_isverified_byadmin', header: 'Admin Verification', body: adminVerification, sortable: true },
+        { field: 'food_isverified_byfranchise', header: 'Franchise Verification', body: franchiseVerification, sortable: true },
         { filed: 'action', header: 'Action', body: restAction, sortable: true }
     ]
 
@@ -226,7 +230,7 @@ const VendorProduct = () => {
             <div className='p-4 m-4 bg-white sm:m-5 rounded-xl'>
                 <div className='grid items-center grid-cols-6'>
                     <h2 className='col-span-5 text-xl font-semibold'>{user?.vendor_type == 'restaurant' ? 'Item List' : 'Product List'}</h2>
-                    {user?.isverified_byadmin == true && user?.vendor_type == 'restaurant' ? <AddRestItem title='Add Item' button='add' getRestFood={getRestFood} /> : user?.vendor_type == 'seller' ? <AddProduct title='Add Product' getProducts={getProducts} /> : ''}
+                    {user?.isverified_byadmin == true && user?.vendor_type == 'restaurant' ? <AddRestItem title='Add Item' getRestFood={getRestFood} /> : user?.vendor_type == 'seller' ? <AddProduct title='Add Product' getProducts={getProducts} /> : ''}
                     {/* <AddRestItem title='Add Item' button='add'  /> */}
                     {/* <AddProduct title='Add Product' getProducts={getProducts} />  */}
                 </div>

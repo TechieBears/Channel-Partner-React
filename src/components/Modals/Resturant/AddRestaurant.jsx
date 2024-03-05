@@ -12,7 +12,6 @@ import { restaurantLink, ImageUpload } from '../../../env';
 import { validateCommision, validateEmail, validateGST, validatePIN, validatePhoneNumber } from '../../Validations.jsx/Validations';
 
 export default function AddRestaurant(props) {
-    console.log('props = ', props)
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
@@ -28,7 +27,7 @@ export default function AddRestaurant(props) {
     const categories = ['Asian', 'Mexican', 'Italian', 'Russian cussion', 'Spanish', 'Comfort', 'American', 'North Indian', 'South Indian']
 
     const onSubmit = async (data) => {
-        let updateData = {...data, "vendor_type": 'restaurant'}
+        let updateData = { ...data, "vendor_type": 'restaurant' }
         if (props?.button == 'edit') {
             editRestaurant(props?.data?.user?.id, updateData).then(res => {
                 if (res?.message == 'restaurant edited successfully') {
@@ -60,7 +59,7 @@ export default function AddRestaurant(props) {
                 'pincode': props?.data?.user?.pincode,
                 'email': props?.data?.user?.email,
                 'phone_no': props?.data?.user?.phone_no,
-                'created_by' : props?.data?.created_by?.id,
+                'created_by': props?.data?.created_by?.id,
                 'insta_commison_percentage': props?.data?.insta_commison_percentage
                 // 'date_of_birth': props?.data?.user?.date_of_birth,
                 // 'gender': props?.data?.user?.gender,
@@ -203,7 +202,7 @@ export default function AddRestaurant(props) {
                                                                 <option value="">Select Franchisee</option>
                                                                 {Franchisee?.map(franchisee => (
                                                                     <option key={franchisee?.user?.id} value={franchisee?.user?.id}>
-                                                                      {franchisee?.user?.id}   {franchisee?.user?.first_name + " (" + franchisee?.user?.pincode + ")"}
+                                                                        {franchisee?.user?.id}   {franchisee?.user?.first_name + " (" + franchisee?.user?.pincode + ")"}
                                                                     </option>
                                                                 ))}
                                                             </select>
@@ -220,7 +219,7 @@ export default function AddRestaurant(props) {
                                                             type="email"
                                                             placeholder='Email'
                                                             className={inputClass}
-                                                            {...register('email', { required: true, validate: validateEmail })}
+                                                            {...register('email', { required: "Email is required*", validate: validateEmail})}
                                                         />
                                                         {errors.email && <Error title={errors?.email?.message} />}
                                                     </div>
@@ -244,13 +243,14 @@ export default function AddRestaurant(props) {
                                                         </label>
                                                         <input
                                                             type="tel"
+                                                            maxLength={10}
                                                             placeholder='+91'
                                                             className={inputClass}
-                                                            {...register('phone_no', { required: true, validate: validatePhoneNumber })}
+                                                            {...register('phone_no', { required: "Phone Number is required", validate: validatePhoneNumber })}
                                                         />
                                                         {errors.phone_no && <Error title={errors?.phone_no?.message} />}
                                                     </div>
-                                                
+
                                                     {/* <h3 className='col-span-4 font-semibold text-xl'>Restaurant Details</h3>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -344,9 +344,10 @@ export default function AddRestaurant(props) {
                                                         </label>
                                                         <input
                                                             type="text"
+                                                            maxLength={6}
                                                             placeholder='PIN Code'
                                                             className={inputClass}
-                                                            {...register('pincode', { required: true, validate: validatePIN })}
+                                                            {...register('pincode', { required: "Pincode is required*", validate: validatePIN })}
                                                         />
                                                         {errors.pincode && <Error title={errors?.pincode?.message} />}
                                                     </div>

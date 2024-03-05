@@ -6,22 +6,25 @@ import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../
 import { useForm } from 'react-hook-form';
 import LoadBox from '../../Loader/LoadBox';
 import { useSelector } from 'react-redux';
-import { addFoodItem, addRestaurant, editFoodItem, editRestaurantFood, getCategory, getRestaurantCategory, getRestaurantSubCategory, getSubCategory } from '../../../api';
+import { addFoodItem, addRestaurant, editFoodItem, editRestaurantFood, getCategory, getRestaurantCategory, getRestaurantSubCategory, getSubCategory, editAdminFinalFood } from '../../../api';
 import { ImageUpload, restaurantLink } from '../../../env';
 import { toast } from 'react-toastify';
 
 export default function AddRestItem(props) {
+    console.log('props = ', props)
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false);
     const [category, setCategory] = useState([]);
     const [subCategory, setsubCategory] = useState([])
     const [FinalPriceSeller, setFinalPriceSeller] = useState([]);
+    const [FinalPriceAdmin, setFinalPriceAdmin] = useState([]);
     const { register, handleSubmit, control, watch, reset, setValue, formState: { errors } } = useForm();
     const user = useSelector((state) => state?.user?.loggedUserDetails);
+    console.log('user = ', user)
     const toggle = () => setOpen(!isOpen)
     const closeBtn = () => {
         toggle();
-        reset()
+        reset();
     }
 
     const handleFileChange = (event) => {
@@ -33,85 +36,89 @@ export default function AddRestItem(props) {
         }
     };
     const onSellerSubmit = async (data) => {
-        if (props?.button == 'edit') {
-            if (data.food_image_1 != props?.data?.food_image_1) {
-                await ImageUpload(data.food_image_1[0], "restaurant", "mainImage", data?.food_name)
-                data.food_image_1 = `${restaurantLink}${data?.food_name}_mainImage_${data.food_image_1[0].name}`
+        console.log('data =', data)
+        if (props?.button == 'edit') {      // for edit
+            console.log('image edit')
+            if (data?.food_image_1 != props?.data?.food_image_1) {
+                await ImageUpload(data?.food_image_1[0], "restaurant", "mainImage", data?.food_name)
+                data.food_image_1 = `${restaurantLink}${data?.food_name}_mainImage_${data?.food_image_1[0]?.name}`
             } else {
                 data.food_image_1 = props?.data?.food_image_1
             }
-            if (data.food_image_2 != props?.data?.food_image_2) {
-                await ImageUpload(data.food_image_2[0], "restaurant", "img2", data?.food_name)
-                data.food_image_2 = `${restaurantLink}${data?.food_name}_img2_${data.food_image_2[0].name}`
+            if (data?.food_image_2 != props?.data?.food_image_2) {
+                console.log('img 2 called');
+                await ImageUpload(data?.food_image_2[0], "restaurant", "img2", data?.food_name)
+                data.food_image_2 = `${restaurantLink}${data?.food_name}_img2_${data?.food_image_2[0]?.name}`
             } else {
-                data.food_image_2 = props?.data.food_image_2
+                data.food_image_2 = props?.data?.food_image_2
             }
-            if (data.food_image_3 != props?.data?.food_image_3) {
-                await ImageUpload(data.food_image_3[0], "restaurant", "img3", data?.food_name)
-                data.food_image_3 = `${restaurantLink}${data?.food_name}_img3_${data.food_image_3[0].name}`
+            if (data?.food_image_3 != props?.data?.food_image_3) {
+                await ImageUpload(data?.food_image_3[0], "restaurant", "img3", data?.food_name)
+                data.food_image_3 = `${restaurantLink}${data?.food_name}_img3_${data?.food_image_3[0]?.name}`
             } else {
-                data.food_image_3 = props?.data.food_image_3
+                data.food_image_3 = props?.data?.food_image_3
             }
-            if (data.food_image_4 != props?.data?.food_image_4) {
-                await ImageUpload(data.food_image_4[0], "restaurant", "img4", data?.food_name)
-                data.food_image_4 = `${restaurantLink}${data?.food_name}_img4_${data.food_image_4[0].name}`
+            if (data?.food_image_4 != props?.data?.food_image_4) {
+                await ImageUpload(data?.food_image_4[0], "restaurant", "img4", data?.food_name)
+                data.food_image_4 = `${restaurantLink}${data?.food_name}_img4_${data?.food_image_4[0]?.name}`
             } else {
-                data.food_image_4 = props?.data.food_image_4
+                data.food_image_4 = props?.data?.food_image_4
             }
-            if (data.food_image_5 != props?.data?.food_image_5) {
-                await ImageUpload(data.food_image_5[0], "restaurant", "img5", data?.food_name)
-                data.food_image_5 = `${restaurantLink}${data?.food_name}_img5_${data.food_image_5[0].name}`
+            if (data?.food_image_5 != props?.data?.food_image_5) {
+                await ImageUpload(data?.food_image_5[0], "restaurant", "img5", data?.food_name)
+                data.food_image_5 = `${restaurantLink}${data?.food_name}_img5_${data?.food_image_5[0]?.name}`
             } else {
                 data.food_image_5 = props?.data?.food_image_5
             }
-            if (data.food_video_url != props?.data?.food_video_url) {
-                await ImageUpload(data.food_video_url[0], "restaurant", "img5", data?.food_name)
-                data.food_video_url = `${restaurantLink}${data?.food_name}_img5_${data.food_video_url[0].name}`
+            if (data?.food_video_url != props?.data?.food_video_url) {
+                await ImageUpload(data?.food_video_url[0], "restaurant", "img5", data?.food_name)
+                data.food_video_url = `${restaurantLink}${data?.food_name}_img5_${data?.food_video_url[0]?.name}`
             } else {
                 data.food_video_url = props?.data?.food_video_url
             }
-        } else {
+        } else {               // for create
+            console.log('image create')
             if (data.food_image_1.length != 0) {
                 await ImageUpload(data.food_image_1[0], "restaurant", "mainImage", data?.food_name)
-                data.food_image_1 = `${restaurantLink}${data?.food_name}_mainImage_${data.food_image_1[0].name}`
+                data.food_image_1 = `${restaurantLink}${data?.food_name}_mainImage_${data.food_image_1[0]?.name}`
             } else {
                 data.food_image_1 = ''
             }
             if (data.food_image_2.length != 0) {
                 await ImageUpload(data.food_image_2[0], "restaurant", "img2", data?.food_name)
-                data.food_image_2 = `${restaurantLink}${data?.food_name}_img2_${data.food_image_2[0].name}`
+                data.food_image_2 = `${restaurantLink}${data?.food_name}_img2_${data.food_image_2[0]?.name}`
             } else {
                 data.food_image_2 = ''
             }
             if (data.food_image_3.length != 0) {
                 await ImageUpload(data.food_image_3[0], "restaurant", "img3", data?.food_name)
-                data.food_image_3 = `${restaurantLink}${data?.food_name}_img3_${data.food_image_3[0].name}`
+                data.food_image_3 = `${restaurantLink}${data?.food_name}_img3_${data.food_image_3[0]?.name}`
             } else {
                 data.food_image_3 = ''
             }
             if (data.food_image_4.length != 0) {
                 await ImageUpload(data.food_image_4[0], "restaurant", "img4", data?.food_name)
-                data.food_image_4 = `${restaurantLink}${data?.food_name}_img4_${data.food_image_4[0].name}`
+                data.food_image_4 = `${restaurantLink}${data?.food_name}_img4_${data.food_image_4[0]?.name}`
             } else {
                 data.food_image_4 = ''
             }
             if (data.food_image_5.length != 0) {
                 await ImageUpload(data.food_image_5[0], "restaurant", "img5", data?.food_name)
-                data.food_image_5 = `${restaurantLink}${data?.food_name}_img5_${data.food_image_5[0].name}`
+                data.food_image_5 = `${restaurantLink}${data?.food_name}_img5_${data.food_image_5[0]?.name}`
             } else {
                 data.food_image_5 = ''
             }
             if (data.food_video_url.length != 0) {
                 await ImageUpload(data.food_video_url[0], "restaurant", "img5", data?.food_name)
-                data.food_video_url = `${restaurantLink}${data?.food_name}_img5_${data.food_video_url[0].name}`
+                data.food_video_url = `${restaurantLink}${data?.food_name}_img5_${data.food_video_url[0]?.name}`
             } else {
                 data.food_video_url = ''
             }
         }
-
         let updatedData = { ...data, vendor: user?.sellerId }
         if (props?.button == 'edit') {
-            editFoodItem(updatedData).then(res => {
+            console.log('in function edit')
+            editFoodItem(props?.data?.food_id, updatedData).then(res => {
                 if (res?.status == 'success') {
                     toast?.success('Food item updated successfully')
                     props?.getRestFood()
@@ -129,8 +136,15 @@ export default function AddRestItem(props) {
         }
     }
 
-    const onAdminSubmit = (data) => {
-        console.log(data)
+    const onAdminSubmit = async (data) => {
+        var updatedData = { ...data, vendor: props?.data?.vendor?.vendor_id }
+        editAdminFinalFood(props?.data?.food_id, updatedData).then(res => {
+            if (res?.status == 'success') {
+                props?.getRestaurantFoodItems();
+                toast.success('Food item updated successfully')
+                toggle();
+            }
+        })
     }
 
     useEffect(() => {
@@ -140,24 +154,83 @@ export default function AddRestItem(props) {
         getRestaurantSubCategory().then(res => {
             setsubCategory(res)
         })
-        reset({
-            'food_name': props?.data?.food_name,
-            'food_category': props?.data?.food_category,
-            'food_subcategory': props?.data?.food_subcategory,
-            'food_details': props?.data?.food_details,
-            'food_isactive': props?.data?.food_isactive,
-        })
+        if (user?.role == 'admin') {
+            reset({
+                'food_name': props?.data?.food_name,
+                'food_category': props?.data?.food_category?.id,
+                'food_subcategory': props?.data?.food_subcategory?.subcat_id,
+                'food_actual_price': props?.data?.food_actual_price,
+                'insta_commison_percentage': props?.data?.vendor?.insta_commison_percentage,
+                'markup_percentage': props?.data?.markup_percentage,
+                'food_details': props?.data?.food_details,
+                'food_isactive': props?.data?.food_isactive,
+                'food_veg_nonveg': props?.data?.food_veg_nonveg,
+                'menu_type': props?.data?.menu_type,
+            })
+        } else {
+            if (props?.title == 'edit') {
+                reset({
+                    'food_name': props?.data.food_name,
+                    'food_category': props?.data.food_category?.id,
+                    'food_subcategory': props?.data.food_subcategory?.subcat_id,
+                    'food_actual_price': props?.data.food_actual_price,
+                    'insta_commison_percentage': props?.data.vendor?.insta_commison_percentage,
+                    'markup_percentage': props?.data.markup_percentage,
+                    'food_details': props?.data.food_details,
+                    'food_isactive': props?.data.food_isactive,
+                    'food_veg_nonveg': props?.data.food_veg_nonveg,
+                    'menu_type': props?.data?.menu_type,
+                })
+            }
+        }
     }, [])
 
+
+
     //  ------------   Seller Calculations SetPrice --------------------------------
-    const calculateRevenueSeller = watch('food_actual_price')
+    // const calculateRevenueRestaurant = watch('food_actual_price')
+
+    // useEffect(() => {
+    //     if (user?.role == 'admin') {
+    //         if (calculateRevenueRestaurant !== "") {
+    //             var mainUserPrice = calculateRevenueRestaurant * (props?.data.vendor?.insta_commison_percentage == null ? 0 : props?.row?.vendor?.insta_commison_percentage / 100);
+    //             console.log('mainUserPrice = ', (calculateRevenueRestaurant - mainUserPrice));
+    //             const final_price = (calculateRevenueRestaurant - mainUserPrice);
+
+    //             if (isNaN(final_price)) {
+    //                 setValue('product_revenue', 0);
+    //             } else {
+    //                 setFinalPriceSeller(parseFloat(final_price));
+    //                 setValue('product_revenue', final_price);
+    //             }
+    //         }
+    //     }
+    // }, [calculateRevenueRestaurant])
+
+    //  ------------   Admin Calculations Set Final Price to User  --------------------------------
+    const calculateRevenueAdmin = watch('markup_percentage')
+
+    useEffect(() => {
+        if (user?.role == 'admin') {
+            if (calculateRevenueAdmin !== "") {
+                var mainPrice = (props?.data?.food_actual_price == null ? 0 : props?.data?.food_actual_price) * (calculateRevenueAdmin / 100);
+                var adminfinalprice = props?.data?.food_actual_price + mainPrice;
+                setFinalPriceAdmin(adminfinalprice);
+                setValue('final_price', adminfinalprice?.toFixed(0));
+            }
+        }
+    }, [calculateRevenueAdmin])
+
+
+
+    //  ------------   Seller Calculations SetPrice --------------------------------
+    const calculateRevenueRestaurant = watch('food_actual_price')
 
     useEffect(() => {
         if (user?.role == 'seller') {
-            if (calculateRevenueSeller !== "") {
-                var mainUserPrice = calculateRevenueSeller * (user?.insta_commission == null ? 0 : user?.insta_commission / 100);
-                console.log('mainUserPrice = ', (calculateRevenueSeller - mainUserPrice));
-                const final_price = (calculateRevenueSeller - mainUserPrice);
+            if (calculateRevenueRestaurant !== "") {
+                var mainUserPrice = calculateRevenueRestaurant * (user?.insta_commission == null ? 0 : user?.insta_commission / 100);
+                const final_price = (calculateRevenueRestaurant - mainUserPrice);
 
                 if (isNaN(final_price)) {
                     setValue('food_revenue', 0);
@@ -167,17 +240,17 @@ export default function AddRestItem(props) {
                 }
             }
         }
-    }, [calculateRevenueSeller])
+    }, [calculateRevenueRestaurant])
 
     return (
         <>
-            {props?.button == 'edit' ?
+            {props?.title == 'edit' ?
                 <button className='items-center p-1 bg-yellow-100 rounded-xl hover:bg-yellow-200' onClick={() => setOpen(true)}>
                     <Edit size={24} className='text-yellow-400' />
                 </button> :
                 <button className={`${formBtn1} flex`} onClick={() => setOpen(true)}>
-                    <Add className='text-white' />
-                    {props?.title}
+                    {/* <Add className='text-white' /> */}
+                    {props?.title == 'edit' ? 'Edit Food Item' : "Add Food Item"}
                 </button>}
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-[100]" onClose={() => toggle}>
@@ -209,7 +282,7 @@ export default function AddRestItem(props) {
                                         as="h2"
                                         className="w-full px-3 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
                                     >
-                                        {props?.title}
+                                        {props?.title == "edit" ? "Edit Food Item" : "Add Food Item"}
                                     </Dialog.Title>
                                     <div className=" bg-gray-200/70">
                                         {/* React Hook Form */}
@@ -223,6 +296,7 @@ export default function AddRestItem(props) {
                                                         </label>
                                                         <input
                                                             type="text"
+                                                            readOnly={user?.role != 'admin' ? false : true}
                                                             placeholder='Food Name'
                                                             className={inputClass}
                                                             {...register('food_name', { required: true })}
@@ -235,6 +309,7 @@ export default function AddRestItem(props) {
                                                         </label>
                                                         <select
                                                             className={inputClass}
+                                                            disabled={user?.role != 'admin' ? false : true}
                                                             {...register('food_category', { required: true })}
                                                         >
                                                             <option value=''>Select</option>
@@ -250,6 +325,7 @@ export default function AddRestItem(props) {
                                                         </label>
                                                         <select
                                                             className={inputClass}
+                                                            disabled={user?.role != 'admin' ? false : true}
                                                             {...register('food_subcategory', { required: true })}
                                                         >
                                                             <option value=''>Select</option>
@@ -277,7 +353,7 @@ export default function AddRestItem(props) {
                                                                 />
                                                                 {errors.food_actual_price && <Error title='MRP is Required*' />}
                                                             </div>
-                                                            <div className="">
+                                                            {/* <div className="">
                                                                 <label className={labelClass}>
                                                                     Item Revenue*
                                                                 </label>
@@ -288,7 +364,7 @@ export default function AddRestItem(props) {
                                                                     className={inputClass}
                                                                     {...register('food_revenue')}
                                                                 />
-                                                            </div>
+                                                            </div> */}
                                                         </>
                                                     }
                                                     {
@@ -310,7 +386,7 @@ export default function AddRestItem(props) {
                                                             </div>
                                                             <div className="">
                                                                 <label className={labelClass}>
-                                                                    Vendor Commision*
+                                                                    Restaurant Commision*
                                                                 </label>
                                                                 <input
                                                                     type="number"
@@ -351,6 +427,7 @@ export default function AddRestItem(props) {
                                                         </label>
                                                         <input
                                                             type="text"
+                                                            readOnly={user?.role != 'admin' ? false : true}
                                                             placeholder='Food Details'
                                                             className={inputClass}
                                                             {...register('food_details', { required: true })}
@@ -361,9 +438,10 @@ export default function AddRestItem(props) {
                                                         <label className={labelClass}>Veg or Non-Veg*</label>
                                                         <select
                                                             className={inputClass}
+                                                            disabled={user?.role != 'admin' ? false : true}
                                                             {...register('food_veg_nonveg', { required: true })}
                                                         >
-                                                            <option value='' selected>Select</option>
+                                                            <option value=''>Select</option>
                                                             <option value='Both'>Both</option>
                                                             <option value='Veg'>Veg</option>
                                                             <option value='Non-Veg'>Non-Veg</option>
@@ -375,6 +453,7 @@ export default function AddRestItem(props) {
                                                         <input
                                                             className={fileinput}
                                                             id="video_input"
+                                                            disabled={user?.role != 'admin' ? false : true}
                                                             type='file'
                                                             accept='video/mp4,video/x-m4v,video/*'
                                                             placeholder='Upload Video...'
@@ -383,7 +462,7 @@ export default function AddRestItem(props) {
                                                         />
                                                         {props?.button === 'edit' && props?.data.food_video_url && (
                                                             <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                                {props?.data?.food_video_url?.name}
+                                                                {props?.data.food_video_url?.name}
                                                             </label>
                                                         )}
                                                     </div>
@@ -391,6 +470,7 @@ export default function AddRestItem(props) {
                                                         <label className={labelClass}>Is Active*</label>
                                                         <select
                                                             className={inputClass}
+                                                            disabled={user?.role != 'admin' ? false : true}
                                                             {...register('food_isactive', { required: true })}
                                                         >
                                                             <option value="">select</option>
@@ -399,20 +479,36 @@ export default function AddRestItem(props) {
                                                         </select>
                                                         {errors?.food_isactive && <Error title='This is required' />}
                                                     </div>
-                                                    <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Product Images</p>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Menu Type*
+                                                        </label>
+                                                        <select
+                                                            name="menu"
+                                                            className={`${inputClass} !bg-slate-100`}
+                                                            {...register("menu_type", { required: true })}
+                                                        >
+                                                            <option value="">Select</option>
+                                                            <option value="Bestseller">Best Seller</option>
+                                                            <option value="New">New</option>
+                                                        </select>
+                                                        {errors?.menu_type && <Error title='Menu Type is required' />}
+                                                    </div>
+                                                    <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Food Images</p>
                                                     <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Main Image*</label>
                                                         <input className={fileinput}
                                                             id="main_input"
                                                             type='file'
-                                                            multiple
+                                                            // multiple
+                                                            disabled={user?.role != 'admin' ? false : true}
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            onChange={(e) => handleImageChange(e)}
+                                                            // onChange={(e) => handleImageChange(e)}
                                                             {...register("food_image_1",
-                                                                { required: props.title == 'Edit Product' ? false : true })} />
-                                                        {props?.title == 'Edit Product' && props?.row?.food_image_1 != '' && props?.row?.food_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.row?.food_image_1?.split('/').pop()}
+                                                                { required: props.button == 'edit' ? false : true })} />
+                                                        {props?.button == 'edit' && props?.data?.food_image_1 != '' && props?.data?.food_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                            {props?.data?.food_image_1?.split('/').pop()}
                                                         </label>}
                                                         {errors.food_image_1 && <Error title='Main Image is required*' />}
                                                     </div>
@@ -421,27 +517,29 @@ export default function AddRestItem(props) {
                                                         <input className={fileinput}
                                                             id="main_input"
                                                             type='file'
-                                                            multiple
+                                                            // multiple
+                                                            disabled={user?.role == 'admin' ? true : false}
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("food_image_2",
-                                                            )}
-                                                        />
-                                                        {props?.title == 'Edit Product' && props?.row?.food_image_2 != '' && props?.row?.food_image_2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.row?.food_image_2?.split('/').pop()}
+                                                                { required: props.button == 'edit' ? false : true })} />
+                                                        {props?.button == 'edit' && props?.data?.food_image_2 != '' && props?.data?.food_image_2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                            {props?.data?.food_image_2?.split('/').pop()}
                                                         </label>}
+                                                        {errors.food_image_2 && <Error title='Main Image is required*' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Image 3</label>
                                                         <input className={fileinput}
                                                             id="main_input"
                                                             type='file'
-                                                            multiple
+                                                            // multiple
+                                                            disabled={user?.role != 'admin' ? false : true}
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("food_image_3")} />
-                                                        {props?.title == 'edit' && props?.row?.food_image_3 != '' && props?.row?.food_image_3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.row?.food_image_3?.split('/').pop()}
+                                                        {props?.button == 'edit' && props?.data?.food_image_3 != '' && props?.data?.food_image_3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                            {props?.data?.food_image_3?.split('/').pop()}
                                                         </label>}
                                                     </div>
                                                     <div className="">
@@ -449,12 +547,13 @@ export default function AddRestItem(props) {
                                                         <input className={fileinput}
                                                             id="main_input"
                                                             type='file'
-                                                            multiple
+                                                            // multiple
+                                                            disabled={user?.role != 'admin' ? false : true}
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("food_image_4")} />
-                                                        {props?.title == 'Edit Product' && props?.row?.food_image_4 != '' && props?.row?.food_image_4 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.row?.food_image_4?.split('/').pop()}
+                                                        {props?.button == 'edit' && props?.data?.food_image_4 != '' && props?.data?.food_image_4 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                            {props?.data?.food_image_4?.split('/').pop()}
                                                         </label>}
                                                     </div>
                                                     <div className="">
@@ -462,12 +561,13 @@ export default function AddRestItem(props) {
                                                         <input className={fileinput}
                                                             id="main_input"
                                                             type='file'
-                                                            multiple
+                                                            // multiple
+                                                            disabled={user?.role != 'admin' ? false : true}
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("food_image_5")} />
-                                                        {props?.title == 'Edit Product' && props?.row?.food_image_5 != '' && props?.row?.food_image_5 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.row?.food_image_5?.split('/').pop()}
+                                                        {props?.button == 'edit' && props?.data?.food_image_5 != '' && props?.data?.food_image_5 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                            {props?.data?.food_image_5?.split('/').pop()}
                                                         </label>}
                                                     </div>
                                                 </div>
