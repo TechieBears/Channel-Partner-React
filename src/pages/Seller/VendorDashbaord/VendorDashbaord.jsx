@@ -1,32 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { Tab, TabList, Tabs, TabPanel } from "react-tabs";
-import Table from "../../../components/Table/Table";
+import React, { useState } from "react";
 import {
-    ArrowSwapVertical,
-    Eye,
-    ShoppingCart,
-    Trash,
-    UserRemove,
-    ClipboardTick,
-    Edit,
+    ArrowSwapVertical, ShoppingCart, UserRemove,
+    ClipboardTick
 } from "iconsax-react";
 // import { deleteStorage, getPartnerStorage, getStorages } from "../../../api";
 import { formBtn2, inputClass } from "../../../utils/CustomClass";
 import { formBtn1 } from "../../../utils/CustomClass";
 import { Controller, useForm } from "react-hook-form";
-import axios from "axios";
 import { NavLink } from "react-router-dom";
-import { environment } from "../../../env";
 import { useDispatch, useSelector } from "react-redux";
-import { setStorageList } from "../../../redux/slices/storageSlice";
 import { toast } from "react-toastify";
 import AsyncSelect from "react-select/async";
-import DashboardForm from "../../../components/modals/DashboardModals/DashboardForm";
+import DashboardForm from "../../../components/Modals/DashboardModals/DashboardForm"
 import DeleteModal from "../../../components/Modals/DeleteModal/DeleteModal";
-import ActiveOrders from "../../Admin/Dashboard/OrderList/ActiveOrders";
-import PendingOrders from "../../Admin/Dashboard/OrderList/PendingOrders";
-import moment from "moment";
-import ViewProduct from "../../../components/Modals/Vendors/ViewProduct";
 
 
 

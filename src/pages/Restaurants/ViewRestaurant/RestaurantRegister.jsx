@@ -4,7 +4,7 @@ import Rest1 from '../../../assets/RestaurantImages/Rest1.jpg'
 import Rest2 from '../../../assets/RestaurantImages/Rest2.jpg'
 import Rest3 from '../../../assets/RestaurantImages/Rest3.jpg'
 import Rest4 from '../../../assets/RestaurantImages/Rest4.jpg'
-import DashboardForm from '../../../components/modals/DashboardModals/DashboardForm'
+import DashboardForm from '../../../components/Modals/DashboardModals/DashboardForm'
 import { getSingleRestaurant } from '../../../api'
 import { useSelector } from 'react-redux'
 
@@ -146,7 +146,7 @@ export default function RestaurantRegister() {
                         </div>
                     </div>
                     <div className='mt-4'>
-                        <DashboardForm dashBoard={true} />
+                        <DashboardForm data={data} dashBoard={true} button="edit"/>
                     </div>
                 </div>
                 <div className=' col-span-2 bg-white rounded-xl mt-4 p-2'>

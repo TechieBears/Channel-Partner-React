@@ -19,7 +19,11 @@ import { LocateFixed } from 'lucide-react';
 
 // =================== form steps 1 =================
 
-const Step1 = () => {
+
+
+const Step1 = (props) => {
+    console.log('props = ', props)
+
     const [manually, setManally] = useState(false);
     const [verifyPhone, setVerifyPhone] = useState(false);
     const [verifyEmail, setVerifyEmail] = useState(false);
@@ -29,7 +33,6 @@ const Step1 = () => {
         id: 'google-map-script',
         googleMapsApiKey: import.meta.env.VITE_GOOGLE_API_KEY
     })
-
 
     const [position, setPosition] = useState({
         lat: 0,
@@ -78,6 +81,18 @@ const Step1 = () => {
     }
 
     useEffect(() => {
+        if (props.button == 'edit' && props.data) {
+            reset({
+                "shop_name": props?.data?.vendor?.shop_name,
+                "shop_address": props?.data?.vendor?.shop_address,
+                "shop_contact_number": props?.data?.vendor?.shop_contact_number,
+                "about_restaurant": props?.data?.about_restaurant,
+                "latitude": props?.data?.vendor?.latitude,
+                "longitude": props?.data?.vendor?.longitude,
+            })
+        } else {
+            // methods = useForm()
+        }
         // getCurrentPostion()
     }, [])
 
@@ -124,6 +139,9 @@ const Step1 = () => {
         for (let i = 0; i < inputs.length; i++) { inputs[i].addEventListener('keydown', function (event) { if (event.key === "Backspace") { inputs[i].value = ''; if (i !== 0) inputs[i - 1].focus(); } else { if (i === inputs.length - 1 && inputs[i].value !== '') { return true; } else if (event.keyCode > 47 && event.keyCode < 58) { inputs[i].value = event.key; if (i !== inputs.length - 1) inputs[i + 1].focus(); event.preventDefault(); } else if (event.keyCode > 64 && event.keyCode < 91) { inputs[i].value = String.fromCharCode(event.keyCode); if (i !== inputs.length - 1) inputs[i + 1].focus(); event.preventDefault(); } } }); }
         OTPInput()
     }
+
+  
+
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-5 gap-x-3 gap-y-3 ">
             <div className='col-span-3 gap-x-3'>
@@ -277,8 +295,8 @@ const Step1 = () => {
 const Step2 = (props) => {
     console.log('step 2 props ========', props?.category)
     console.log('props ========', props)
+    // const { register, getValues, control, reset, formState: { errors }, } = useFormContext()
 
-    const { register, formState: { errors }, } = useFormContext()
     const [allCuisines, setAllCuisines] = useState([
         { value: "Italian Cuisine", label: "Italian Cuisine" },
         { value: "French Cuisine", label: "French Cuisine" },
@@ -317,7 +335,19 @@ const Step2 = (props) => {
     });
     console.log('updatedRestaurantTypes =', updatedRestaurantTypes)
 
-
+    useEffect(() => {
+        if (props.button == 'edit' && props.data) {
+            reset({
+               'veg_nonveg': props?.data?.veg_nonveg,
+               'restaurant_type': props?.data?.restaurant_type,
+               'shop_start_time': props?.data?.vendor?.shop_start_time,
+               'shop_end_time': props?.data?.vendor?.shop_end_time,
+               'type_of_cuisine': props?.data?.type_of_cuisine
+            })
+        } else {
+            // methods = useForm()
+        }
+    }, [])
 
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
@@ -742,6 +772,7 @@ const Step5 = (props) => {
 }
 
 export default function DashboardForm(props) {
+    console.log('get rest props = ', props)
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     const [isOpen, setIsOpen] = useState(props?.isOpen ? props?.isOpen : false)
     const [loader, setLoader] = useState(false)
@@ -750,6 +781,8 @@ export default function DashboardForm(props) {
     const [selectedCuisines, setSelectedCuisines] = useState([])
     const [activeStep, setActiveStep] = useState(0);
     const toggle = () => setIsOpen(!isOpen);
+    const { register, handleSubmit, control, formState: { errors }, reset } = useForm();
+
     const steps = ['Restaurant Information', 'Restaurant Type and Timing', 'Upload Images', 'General Information', 'Legal Documentation',];
 
     // ============== Restaurant API ================
@@ -844,12 +877,12 @@ export default function DashboardForm(props) {
     const getStepContent = (step) => {
         switch (step) {
             case 0:
-                return <Step1 />
+                return <Step1 {...props}/>
             case 1:
-                return <Step2 selectedCuisines={selectedCuisines} setSelectedCuisines={setSelectedCuisines} selectedRestType={selectedRestType}
+                return <Step2  {...props} selectedCuisines={selectedCuisines} setSelectedCuisines={setSelectedCuisines} selectedRestType={selectedRestType}
                     setSelectedRestType={setSelectedRestType} category={category} />
             case 2:
-                return <Step3 />
+                return <Step3  {...props}/>
             case 3:
                 return <Step4 {...props} />
             case 4:
