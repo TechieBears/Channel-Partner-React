@@ -98,7 +98,7 @@ const VendorProduct = () => {
     const adminVerification = (row) =>
     (<div className="flex items-center justify-center gap-2">
         <Switch
-            value={row?.product_isverified_byadmin}
+            value={user?.vendor_type == 'seller' ? row?.product_isverified_byadmin : row?.food_isverified_byadmin }
             disabled={true}
             size={50}
             backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
@@ -109,7 +109,7 @@ const VendorProduct = () => {
     const franchiseVerification = (row) =>
     (<div className="flex items-center justify-center gap-2">
         <Switch
-            value={row?.product_isverified_byfranchise}
+            value={user?.vendor_type == 'seller' ? row?.product_isverified_byfranchise : row?.food_isverified_byfranchise }
             disabled={true}
             size={50}
             backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
