@@ -1661,6 +1661,17 @@ export const registerRestaurant = async (data) => {
     }
 }
 
+export const editOnBoarding = async (id, data) => {
+    const url = `${environment.baseUrl}vendor/editonboard_restaurant/${id}`;
+    try {
+        const response = await axios.put(url, data);
+        // console.log('response', response)
+        return response.data;
+    } catch (err) {
+        console.log('error while posting data', err)
+    }
+}
+
 export const addFoodItem = async (data) => {
     const url = `${environment.baseUrl}vendor/add_restaurant_food`;
     try {

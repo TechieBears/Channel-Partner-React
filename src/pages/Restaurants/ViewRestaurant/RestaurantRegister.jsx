@@ -51,7 +51,7 @@ export default function RestaurantRegister() {
         <div className='px-5 gap-5'>
             <div className='grid grid-cols-8 gap-x-4'>
                 <div className='col-span-6'>
-                    <div className='bg-white rounded-xl mt-4 p-2'>
+                    <div className='bg-white rounded-xl mt-4 p-2 pb-4'>
                         <p className='font-semibold text-sky-400 text-xl p-2 '>Restaurant Details</p>
                         <div className='mx-4 grid grid-cols-4 gap-y-4 '>
                             <div>
@@ -108,7 +108,7 @@ export default function RestaurantRegister() {
                             </div>
                         </div>
                     </div> */}
-                    <div className='bg-white rounded-xl mt-4 p-2'>
+                    <div className='bg-white rounded-xl mt-4 p-2 pb-4'>
                         <p className='font-semibold text-sky-400 text-xl p-2 '>Legal Details</p>
                         <div className='mx-4 grid grid-cols-4 gap-y-4'>
                             <div>
