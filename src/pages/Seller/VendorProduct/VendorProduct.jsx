@@ -89,7 +89,8 @@ const VendorProduct = () => {
     const representativeBodyTemplate = (row) => {
         return (
             <div className="rounded-full w-11 h-11">
-                <img src={row?.product_image_1 == null || row?.product_image_1 == '' || row?.product_image_1 == undefined ? userImg : row?.product_image_1} className="object-cover w-full h-full rounded-full" alt={row.first_name} />
+               {user?.vendor_type == 'seller' && <img src={row?.product_image_1 == null || row?.product_image_1 == '' || row?.product_image_1 == undefined ? userImg : row?.product_image_1} className="object-cover w-full h-full rounded-full" alt={row.first_name} />}
+               {user?.vendor_type == 'restaurant' && <img src={row?.food_image_1 == null || row?.food_image_1 == '' || row?.food_image_1 == undefined ? userImg : row?.food_image_1} className="object-cover w-full h-full rounded-full" alt={row.food_name} />}
             </div>
         );
     };
@@ -135,13 +136,16 @@ const VendorProduct = () => {
     ]
 
     const restaurantColumns = [
-        { field: 'food_msbcode', header: 'MSB Code', sortable: false },
+        { field: 'food_msbcode', header: 'Food MSB Code', sortable: false },
+        { field: 'food_image_1', header: 'Image', body: representativeBodyTemplate, sortable: true, style: true },
         { field: 'food_name', header: 'Food Name', sortable: false },
         { field: 'food_category', header: 'Category', body: (row) => <h6>{row?.food_category?.category_name}</h6>, sortable: false },
         { field: 'food_subcategory', header: 'Sub-Category', body: (row) => <h6>{row?.food_subcategory?.subcat_name}</h6>, sortable: false },
         { field: 'food_veg_nonveg', header: 'Type', sortable: false },
         { field: 'food_details', header: 'Details', sortable: false },
         { field: 'food_actual_price', header: 'MRP', sortable: true },
+        { field: 'food_isverified_byadmin', header: 'Admin Verification', body: adminVerification, sortable: true },
+        { field: 'food_isverified_byfranchise', header: 'Franchise Verification', body: franchiseVerification, sortable: true },
         { filed: 'action', header: 'Action', body: restAction, sortable: true }
     ]
 

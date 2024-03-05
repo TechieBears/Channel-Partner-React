@@ -24,7 +24,7 @@ export default function AddRestItem(props) {
     const toggle = () => setOpen(!isOpen)
     const closeBtn = () => {
         toggle();
-        reset()
+        reset();
     }
 
     const handleFileChange = (event) => {
