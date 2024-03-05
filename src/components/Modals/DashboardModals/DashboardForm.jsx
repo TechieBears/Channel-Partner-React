@@ -1,23 +1,21 @@
-import { Dialog, Transition } from '@headlessui/react'
+import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useEffect, useState } from 'react';
-import { useForm, Controller, FormProvider, useFormContext } from "react-hook-form";
-import { fileinput, formBtn1, formBtn2, formBtn3, inputClass, labelClass, tableBtn } from '../../../utils/CustomClass';
-import { Edit, UserAdd } from 'iconsax-react';
-import { createStorage, registerRestaurant, getRestaurantCategory } from '../../../api';
-import { setStorageList } from '../../../redux/slices/storageSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useForm, FormProvider, useFormContext } from "react-hook-form";
+import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
+import { registerRestaurant, getRestaurantCategory } from '../../../api';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Error from '../../Errors/Error';
 import LoadBox from '../../Loader/LoadBox';
-import Select from 'react-select'
-import { validateEmail, validatePhoneNumber } from '../../Validations.jsx/Validations';
-import { inputClasses } from '@mui/material';
+import Select from 'react-select';
+import { validatePhoneNumber } from '../../Validations.jsx/Validations';
 import { ImageUpload, restaurantLink } from '../../../env';
 import moment from 'moment';
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
+import { LocateFixed } from 'lucide-react';
 
 // =================== form steps 1 =================
 
@@ -25,7 +23,7 @@ const Step1 = () => {
     const [manually, setManally] = useState(false);
     const [verifyPhone, setVerifyPhone] = useState(false);
     const [verifyEmail, setVerifyEmail] = useState(false);
-    const { register, control, reset, formState: { errors }, } = useFormContext()
+    const { register, getValues, control, reset, formState: { errors }, } = useFormContext()
 
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
@@ -41,36 +39,61 @@ const Step1 = () => {
     const getCurrentPostion = () => {
         navigator.geolocation.getCurrentPosition(async ({ coords }) => {
             const { latitude, longitude } = coords;
-            await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyDGaE5jGDxrxwRCloXLOgDgcH-1Q64IlpI`)
-                .then(response => response.json())
-                .then(data => console.log(data.results[0].formatted_address))
-                .catch(error => console.error('Error fetching address:', error));
             setPosition({
                 lat: latitude,
                 lng: longitude
             })
+            await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyDGaE5jGDxrxwRCloXLOgDgcH-1Q64IlpI`)
+                .then(response => response.json())
+                .then(data => {
+                    const address = data?.results[0]?.formatted_address;
+                    const components = data?.results[0]?.address_components;
+    
+                    const city = components?.find(comp => comp.types.includes('locality'))?.long_name || '';
+                    const state = components?.find(comp => comp.types.includes('administrative_area_level_1'))?.long_name || '';
+                    const pincode = components?.find(comp => comp.types.includes('postal_code'))?.long_name || '';
+                    if (address) {
+                        const { shop_name, shop_contact_number, about_restaurant } = getValues();
+                        const mergedData = {
+                            shop_name: shop_name,
+                            shop_contact_number: shop_contact_number,
+                            about_restaurant: about_restaurant,
+                            city: city,
+                            state: state,
+                            pincode: pincode,
+                            shop_address: address,
+                            latitude: latitude,
+                            longitude: longitude
+                        };
+                        // console.log("++", mergedData)
+                        reset(mergedData);
+                    }
+                })
+                .catch(error => console.error('Error fetching address:', error));
+                // setPosition({
+                //     lat: e.latLng.lat(),
+                //     lng: e.latLng.lng(),
+                // });
         })
     }
 
     useEffect(() => {
-        getCurrentPostion()
+        // getCurrentPostion()
     }, [])
 
     const onMarkerDragEnd = async (e) => {
         const latLng = e.latLng
         const latitude = latLng.lat();
         const longitude = latLng.lng();
-        await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&${import.meta.env.VITE_GOOGLE_API_KEY}`)
+        await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${import.meta.env.VITE_GOOGLE_API_KEY}`)
             .then(response => response.json())
             .then(data => {
-                const address = data.results[0].formatted_address;
-                console.log("🚀 ~ onMarkerDragEnd ~ address:", address)
-                const components = data.results[0].address_components;
+                const address = data?.results[0]?.formatted_address;
+                const components = data?.results[0]?.address_components;
 
-                const city = components.find(comp => comp.types.includes('locality'))?.long_name || '';
-                const state = components.find(comp => comp.types.includes('administrative_area_level_1'))?.long_name || '';
-                const pincode = components.find(comp => comp.types.includes('postal_code'))?.long_name || '';
-
+                const city = components?.find(comp => comp.types.includes('locality'))?.long_name || '';
+                const state = components?.find(comp => comp.types.includes('administrative_area_level_1'))?.long_name || '';
+                const pincode = components?.find(comp => comp.types.includes('postal_code'))?.long_name || '';
                 if (address) {
                     const { shop_name, shop_contact_number, about_restaurant } = getValues();
                     const mergedData = {
@@ -84,7 +107,7 @@ const Step1 = () => {
                         latitude: latitude,
                         longitude: longitude
                     };
-                    console.log("++", mergedData)
+                    // console.log("++", mergedData)
                     reset(mergedData);
                 }
             })
@@ -131,6 +154,37 @@ const Step1 = () => {
                     </div>
                     <div className="">
                         <label className={labelClass}>
+                            Restaurant Phone Number*
+                        </label>
+                        <input
+                            type="tel"
+                            placeholder='Restaurant Number'
+                            className={inputClass}
+                            {...register('shop_contact_number', { required: true, validate: validatePhoneNumber })}
+                        />
+                        {errors.shop_contact_number && <Error title='Restaurant Phone Number is required*' />}
+                    </div>
+                    <div className=''>
+                    <label className={`text-transparent ${labelClass}`}>
+                            Restaurant Phone Number*
+                        </label>
+                        <button type='button' className={`flex w-full justify-center ${formBtn1}`} onClick={getCurrentPostion}><LocateFixed className='me-3'/>Get Current Location</button>
+                    </div>
+                    <div className="">
+                        <label className={labelClass}>
+                            Restaurant Description*
+                        </label>
+                        <input
+                            type="text"
+                            placeholder='Restaurant Description'
+                            className={inputClass}
+                            {...register('about_restaurant', { required: true, })}
+                        />
+                        {errors.about_restaurant && <Error title='Restaurant Description is required*' />}
+                    </div>
+                  
+                    <div className="">
+                        <label className={labelClass}>
                             Latitude*
                         </label>
                         <input
@@ -175,7 +229,7 @@ const Step1 = () => {
                             // readOnly
                             placeholder='Pincode'
                             className={inputClass}
-                            {...register('pinocde',)}
+                            {...register('pincode',)}
                         />
                     </div>
                     <div className="">
@@ -190,30 +244,7 @@ const Step1 = () => {
                             {...register('city',)}
                         />
                     </div>
-                    <div className="">
-                        <label className={labelClass}>
-                            Restaurant Phone Number*
-                        </label>
-                        <input
-                            type="tel"
-                            placeholder='Restaurant Number'
-                            className={inputClass}
-                            {...register('shop_contact_number', { required: true, validate: validatePhoneNumber })}
-                        />
-                        {errors.shop_contact_number && <Error title='Restaurant Phone Number is required*' />}
-                    </div>
-                    <div className="">
-                        <label className={labelClass}>
-                            Restaurant Description*
-                        </label>
-                        <input
-                            type="text"
-                            placeholder='Restaurant Description'
-                            className={inputClass}
-                            {...register('about_restaurant', { required: true, })}
-                        />
-                        {errors.about_restaurant && <Error title='Restaurant Description is required*' />}
-                    </div>
+                   
                 </div>
             </div>
             <div className='col-span-2'>
@@ -223,7 +254,7 @@ const Step1 = () => {
                         isLoaded ? (
                             <GoogleMap
                                 center={position}
-                                zoom={20}
+                                zoom={18}
                                 mapContainerStyle={{ width: '100%', height: '400px', backgroundColor: '#fff' }}
                             >
                                 <Marker
@@ -366,21 +397,6 @@ const Step2 = (props) => {
                     {...register('shop_end_time', { required: true })}
                 />
                 {errors?.shop_closing_time && <Error title='Closing Hour is required' />}
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Menu Type*
-                </label>
-                <select
-                    name="menu"
-                    className={`${inputClass} !bg-slate-100`}
-                    {...register("menu_type", { required: true })}
-                >
-                    <option value="">Select</option>
-                    <option value="Bestseller">Best Seller</option>
-                    <option value="New">New</option>
-                </select>
-                {errors?.menu_type && <Error title='Menu Type is required' />}
             </div>
         </div>
     );
@@ -953,6 +969,7 @@ export default function DashboardForm(props) {
         setActiveStep(0)
         methods.reset();
         setLoader(false);
+        reset();
     }
 
     useEffect(() => {

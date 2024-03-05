@@ -165,7 +165,7 @@ export default function AddRestItem(props) {
                 'food_details': props?.data?.food_details,
                 'food_isactive': props?.data?.food_isactive,
                 'food_veg_nonveg': props?.data?.food_veg_nonveg,
-                'food_isactive': props?.data?.food_isactive,
+                'menu_type': props?.data?.menu_type,
             })
         } else {
             if (props?.title == 'edit') {
@@ -179,7 +179,7 @@ export default function AddRestItem(props) {
                     'food_details': props?.data.food_details,
                     'food_isactive': props?.data.food_isactive,
                     'food_veg_nonveg': props?.data.food_veg_nonveg,
-                    'food_isactive': props?.data.food_isactive,
+                    'menu_type': props?.data?.menu_type,
                 })
             }
         }
@@ -479,6 +479,21 @@ export default function AddRestItem(props) {
                                                         </select>
                                                         {errors?.food_isactive && <Error title='This is required' />}
                                                     </div>
+                                                    <div className="">
+                                                        <label className={labelClass}>
+                                                            Menu Type*
+                                                        </label>
+                                                        <select
+                                                            name="menu"
+                                                            className={`${inputClass} !bg-slate-100`}
+                                                            {...register("menu_type", { required: true })}
+                                                        >
+                                                            <option value="">Select</option>
+                                                            <option value="Bestseller">Best Seller</option>
+                                                            <option value="New">New</option>
+                                                        </select>
+                                                        {errors?.menu_type && <Error title='Menu Type is required' />}
+                                                    </div>
                                                     <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Food Images</p>
                                                     <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Main Image*</label>
@@ -492,7 +507,7 @@ export default function AddRestItem(props) {
                                                             // onChange={(e) => handleImageChange(e)}
                                                             {...register("food_image_1",
                                                                 { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data?.food_image_1 != '' && props?.data?.food_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                        {props?.button == 'edit' && props?.data?.food_image_1 != '' && props?.data?.food_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
                                                             {props?.data?.food_image_1?.split('/').pop()}
                                                         </label>}
                                                         {errors.food_image_1 && <Error title='Main Image is required*' />}
@@ -508,7 +523,7 @@ export default function AddRestItem(props) {
                                                             placeholder='Upload Images...'
                                                             {...register("food_image_2",
                                                                 { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data?.food_image_2 != '' && props?.data?.food_image_2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                        {props?.button == 'edit' && props?.data?.food_image_2 != '' && props?.data?.food_image_2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
                                                             {props?.data?.food_image_2?.split('/').pop()}
                                                         </label>}
                                                         {errors.food_image_2 && <Error title='Main Image is required*' />}
@@ -523,7 +538,7 @@ export default function AddRestItem(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("food_image_3")} />
-                                                        {props?.button == 'edit' && props?.data?.food_image_3 != '' && props?.data?.food_image_3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                        {props?.button == 'edit' && props?.data?.food_image_3 != '' && props?.data?.food_image_3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
                                                             {props?.data?.food_image_3?.split('/').pop()}
                                                         </label>}
                                                     </div>
@@ -537,7 +552,7 @@ export default function AddRestItem(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("food_image_4")} />
-                                                        {props?.button == 'edit' && props?.data?.food_image_4 != '' && props?.data?.food_image_4 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                        {props?.button == 'edit' && props?.data?.food_image_4 != '' && props?.data?.food_image_4 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
                                                             {props?.data?.food_image_4?.split('/').pop()}
                                                         </label>}
                                                     </div>
@@ -551,7 +566,7 @@ export default function AddRestItem(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("food_image_5")} />
-                                                        {props?.button == 'edit' && props?.data?.food_image_5 != '' && props?.data?.food_image_5 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                        {props?.button == 'edit' && props?.data?.food_image_5 != '' && props?.data?.food_image_5 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
                                                             {props?.data?.food_image_5?.split('/').pop()}
                                                         </label>}
                                                     </div>
