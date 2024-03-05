@@ -137,8 +137,8 @@ export default function AddRestItem(props) {
     }
 
     const onAdminSubmit = async (data) => {
-        var updatedData = { ...data, vendor: props?.row?.vendor?.vendor_id }
-        editAdminFinalFood(props?.row?.food_id, updatedData).then(res => {
+        var updatedData = { ...data, vendor: props?.data?.vendor?.vendor_id }
+        editAdminFinalFood(props?.data?.food_id, updatedData).then(res => {
             if (res?.status == 'success') {
                 props?.getRestaurantFoodItems();
                 toast.success('Food item updated successfully')
