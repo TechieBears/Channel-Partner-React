@@ -13,11 +13,9 @@ import { ImageUpload, bannerLink } from "../../../../env";
 import MediaGallaryModal from "../../../../pages/Settings/MediaGallery/MediaGallery";
 
 export default function BannerForm(props) {
-  console.log("props = ", props);
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const [showSampleImageUpload, setShowSampleImageUpload] = useState(false);
-  // console.log('showSampleImageUpload', showSampleImageUpload) 
 
   const dispatch = useDispatch();
   const toggle = () => setIsOpen(!isOpen);
@@ -32,7 +30,6 @@ export default function BannerForm(props) {
   const [showModal, setShowModal] = useState(false);
   const [imageDetails, setImageDetails] = useState([]);
   const [childData, setChildData] = useState('');
-  // console.log('imageDetails = = ', imageDetails)
   const mediaGalleryModalRef = useRef(null);
 
   const handleDivClick = () => {
@@ -55,7 +52,7 @@ export default function BannerForm(props) {
   
   const handleChildData = (data) => {
     setChildData(data);
-    console.log('childData = ', childData)
+    // console.log('childData = ', childData)
     setValue("slide_url", childData);
   };
 
@@ -111,8 +108,6 @@ export default function BannerForm(props) {
       }
     } else {
       try {
-        // console.log(data?.slide_url)
-        // console.log(props?.data?.slide_url)
         if (data?.slide_url?.length > 0 && props?.data?.slide_url) {
           await ImageUpload(
             data.slide_url[0],
@@ -196,8 +191,8 @@ export default function BannerForm(props) {
         setShowSampleImageUpload(false);
         setShowModal(false)
     } else {
-      console.log('showModal == ', showModal)
-      console.log('showSampleImageUpload == ', showSampleImageUpload)
+      // console.log('showModal == ', showModal)
+      // console.log('showSampleImageUpload == ', showSampleImageUpload)
         setShowSampleImageUpload(true);
         setShowModal(true)
     }

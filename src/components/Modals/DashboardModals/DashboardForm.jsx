@@ -295,7 +295,7 @@ const Step1 = (props) => {
 const Step2 = (props) => {
     console.log('step 2 props ========', props?.category)
     console.log('props ========', props)
-    // const { register, getValues, control, reset, formState: { errors }, } = useFormContext()
+    const { register, getValues, control, reset, formState: { errors }, } = useFormContext()
 
     const [allCuisines, setAllCuisines] = useState([
         { value: "Italian Cuisine", label: "Italian Cuisine" },
@@ -324,18 +324,19 @@ const Step2 = (props) => {
 
 
     const updatedRestaurantTypes = allRestaurantTypes.map((restaurantType, index) => {
-        if (index === 0) {
+        if (index == 0) {
             const categories = props?.category.map(cat => ({
-                value: cat.category_name,
-                label: cat.category_name
+                value: cat?.category_name,
+                label: cat?.category_name
             }));
             return { ...restaurantType, options: categories };
         }
         return restaurantType;
     });
-    console.log('updatedRestaurantTypes =', updatedRestaurantTypes)
+   
 
     useEffect(() => {
+        console.log('updatedRestaurantTypes =', updatedRestaurantTypes)
         if (props.button == 'edit' && props.data) {
             reset({
                'veg_nonveg': props?.data?.veg_nonveg,
@@ -381,18 +382,22 @@ const Step2 = (props) => {
                     )}
                 </select>
                 {errors?.restaurant_type && <Error title='Select Your Describe is required' />}
-
-                {/* <Select
-                    options={updatedRestaurantTypes}
-                    // options={allRestaurantTypes}
-                    // isMulti
-                    value={props?.selectedRestType}
-                    onChange={(selectedOption) => props?.setSelectedRestType(selectedOption)}
-                    // {...register('restaurant_type', { required: true })}
-                    {...register('restaurant_type',)}
-                /> */}
-                {/* {errors?.restaurant_type && <Error title='Restaurant Type is required' />} */}
             </div>
+            {/* <div className="">
+                <label className={labelClass}>
+                    Select What Describes you the best*
+                </label>
+                <select
+                    className={inputClass}
+                    {...register('restaurant_type', { required: true })}
+                >
+                    <option value=''>Select</option>
+                    {allOptions.map(item =>
+                        <option key={item?.value} value={item?.value}>{item?.value}</option>
+                    )}
+                </select>
+                {errors?.restaurant_type && <Error title='Select Your Describe is required' />}
+            </div> */}
             <div className="">
                 <label className={labelClass}>
                     Type of cuisines*
@@ -434,7 +439,20 @@ const Step2 = (props) => {
 
 // =================== form steps 3 =================
 const Step3 = (props) => {
-    const { register, formState: { errors }, } = useFormContext()
+    console.log('props 3', props);
+    const { register, getValues, control, reset, formState: { errors }, } = useFormContext()
+
+    useEffect(() => {
+        if (props.button == 'edit' && props.data) {
+            reset({
+               'ambience_image': props?.data?.ambience_image,
+               'shop_image': props?.data?.vendor?.shop_image,
+            })
+        } else {
+            // methods = useForm()
+        }
+    }, [])
+
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
             <p className='text-lg font-semibold md:col-span-2 lg:col-span-3'>Upload Images</p>
@@ -444,28 +462,28 @@ const Step3 = (props) => {
                 <input className={fileinput}
                     id="main_input"
                     type='file'
-                    multiple
+                    // multiple
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("ambience_image", { required: true })} />
-                {props?.button == 'edit' && props?.data.ambience_image != '' && props?.data.ambience_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                    {...register("ambience_image", { required: !props?.data?.ambience_image })} />
+                {props?.button == 'edit' && props?.data.ambience_image != '' && props?.data?.ambience_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                     {props?.data?.ambience_image?.split('/').pop()}
                 </label>}
                 {errors.ambience_image && <Error title='Image is required*' />}
             </div>
             <div className="">
-                <label className={labelClass} htmlFor="main_input">Image 2*</label>
+                <label className={labelClass} htmlFor="main_input">Image 2</label>
                 <input className={fileinput}
                     id="main_input"
                     type='file'
-                    multiple
+                    // multiple
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("shop_image", { required: true })} />
-                {props?.button == 'edit' && props?.data.shop_image != '' && props?.data.shop_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                    {props?.data?.shop_image?.split('/').pop()}
+                    {...register("shop_image")} />
+                {props?.button == 'edit' && props?.data?.vendor?.shop_image != '' && props?.data?.vendor?.shop_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                    {props?.data?.vendor?.shop_image?.split('/').pop()}
                 </label>}
-                {errors.shop_image && <Error title='Image is required*' />}
+                {/* {errors.shop_image && <Error title='Image is required*' />} */}
             </div>
             {/* <div className="">
                 <label className={labelClass} htmlFor="main_input">Image 3</label>
@@ -487,10 +505,10 @@ const Step3 = (props) => {
                 <input className={fileinput}
                     id="main_input"
                     type='file'
-                    multiple
+                    // multiple
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("food_image1", { required: true })} />
+                    {...register("food_image1", { required: !props?.data?.food_image1 })} />
                 {props?.button == 'edit' && props?.data.food_image1 != '' && props?.data.food_image1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                     {props?.data?.food_image1?.split('/').pop()}
                 </label>}
@@ -501,7 +519,7 @@ const Step3 = (props) => {
                 <input className={fileinput}
                     id="main_input"
                     type='file'
-                    multiple
+                    // multiple
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
                     {...register("food_image2", {})} />
@@ -514,7 +532,7 @@ const Step3 = (props) => {
                 <input className={fileinput}
                     id="main_input"
                     type='file'
-                    multiple
+                    // multiple
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
                     {...register("food_image3", {})} />
@@ -528,6 +546,7 @@ const Step3 = (props) => {
 
 // =================== form steps 4 =================
 const Step4 = (props) => {
+    console.log('props4 = ', props)
     const { register, formState: { errors }, setError, watch } = useFormContext()
     const deliveryTime = watch('delivery_time')
     return (
@@ -578,8 +597,20 @@ const Step4 = (props) => {
 // // =================== form steps 5 =================
 
 const Step5 = (props) => {
-    const { register, formState: { errors }, watch } = useFormContext()
+    console.log('props5 = ', props)
+    const { register, getValues, control, reset, watch, formState: { errors }, } = useFormContext()
     const gstRegistered = watch('gst_registered');
+    
+    useEffect(() => {
+        if (props.button == 'edit' && props.data) {
+            reset({
+               'ambience_image': props?.data?.ambience_image,
+               'shop_image': props?.data?.vendor?.shop_image,
+            })
+        } else {
+            // methods = useForm()
+        }
+    }, [])
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
             <p className='col-span-3 text-lg font-semibold'>PAN Details</p>
