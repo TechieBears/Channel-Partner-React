@@ -17,7 +17,7 @@ import { validateEmail, validatePhoneNumber } from '../../Validations.jsx/Valida
 import { inputClasses } from '@mui/material';
 import { ImageUpload, restaurantLink } from '../../../env';
 import moment from 'moment';
-
+import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 
 // =================== form steps 1 =================
 
@@ -25,7 +25,77 @@ const Step1 = () => {
     const [manually, setManally] = useState(false);
     const [verifyPhone, setVerifyPhone] = useState(false);
     const [verifyEmail, setVerifyEmail] = useState(false);
-    const { register, control, formState: { errors }, } = useFormContext()
+    const { register, control, reset, formState: { errors }, } = useFormContext()
+
+    const { isLoaded } = useJsApiLoader({
+        id: 'google-map-script',
+        googleMapsApiKey: import.meta.env.VITE_GOOGLE_API_KEY
+    })
+
+
+    const [position, setPosition] = useState({
+        lat: 0,
+        lng: 0
+    });
+
+    const getCurrentPostion = () => {
+        navigator.geolocation.getCurrentPosition(async ({ coords }) => {
+            const { latitude, longitude } = coords;
+            await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyDGaE5jGDxrxwRCloXLOgDgcH-1Q64IlpI`)
+                .then(response => response.json())
+                .then(data => console.log(data.results[0].formatted_address))
+                .catch(error => console.error('Error fetching address:', error));
+            setPosition({
+                lat: latitude,
+                lng: longitude
+            })
+        })
+    }
+
+    useEffect(() => {
+        getCurrentPostion()
+    }, [])
+
+    const onMarkerDragEnd = async (e) => {
+        const latLng = e.latLng
+        const latitude = latLng.lat();
+        const longitude = latLng.lng();
+        await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&${import.meta.env.VITE_GOOGLE_API_KEY}`)
+            .then(response => response.json())
+            .then(data => {
+                const address = data.results[0].formatted_address;
+                console.log("🚀 ~ onMarkerDragEnd ~ address:", address)
+                const components = data.results[0].address_components;
+
+                const city = components.find(comp => comp.types.includes('locality'))?.long_name || '';
+                const state = components.find(comp => comp.types.includes('administrative_area_level_1'))?.long_name || '';
+                const pincode = components.find(comp => comp.types.includes('postal_code'))?.long_name || '';
+
+                if (address) {
+                    const { shop_name, shop_contact_number, about_restaurant } = getValues();
+                    const mergedData = {
+                        shop_name: shop_name,
+                        shop_contact_number: shop_contact_number,
+                        about_restaurant: about_restaurant,
+                        city: city,
+                        state: state,
+                        pincode: pincode,
+                        shop_address: address,
+                        latitude: latitude,
+                        longitude: longitude
+                    };
+                    console.log("++", mergedData)
+                    reset(mergedData);
+                }
+            })
+            .catch(error => console.error('Error fetching address:', error));
+        setPosition({
+            lat: e.latLng.lat(),
+            lng: e.latLng.lng(),
+        });
+    };
+
+
     const OTPInput = () => {
         const inputs = document.querySelectorAll('#otp > *[id]');
         for (let i = 0; i < inputs.length; i++) { inputs[i].addEventListener('keydown', function (event) { if (event.key === "Backspace") { inputs[i].value = ''; if (i !== 0) inputs[i - 1].focus(); } else { if (i === inputs.length - 1 && inputs[i].value !== '') { return true; } else if (event.keyCode > 47 && event.keyCode < 58) { inputs[i].value = event.key; if (i !== inputs.length - 1) inputs[i + 1].focus(); event.preventDefault(); } else if (event.keyCode > 64 && event.keyCode < 91) { inputs[i].value = String.fromCharCode(event.keyCode); if (i !== inputs.length - 1) inputs[i + 1].focus(); event.preventDefault(); } } }); }
@@ -149,7 +219,21 @@ const Step1 = () => {
             <div className='col-span-2'>
                 {/* ============================= Maps start ============================= */}
                 <div className='bg-slate-50 rounded-xl'>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d30128.960774986183!2d73.0314032258855!3d19.27714285590321!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7bda4c2cb3497%3A0x65c3365426378045!2sKamatghar%2C%20Bhiwandi%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1709017397432!5m2!1sen!2sin" width="100%" height="450" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    {
+                        isLoaded ? (
+                            <GoogleMap
+                                center={position}
+                                zoom={20}
+                                mapContainerStyle={{ width: '100%', height: '400px', backgroundColor: '#fff' }}
+                            >
+                                <Marker
+                                    position={position}
+                                    draggable={true}
+                                    onDragEnd={onMarkerDragEnd}
+                                />
+                            </GoogleMap>
+                        ) : null
+                    }
                 </div>
                 {/* ============================= Maps end ============================= */}
                 <p className='text-sm text-gray-400'>Please provide precise location for better results</p>
