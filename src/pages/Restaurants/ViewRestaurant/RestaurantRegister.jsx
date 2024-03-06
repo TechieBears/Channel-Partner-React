@@ -10,9 +10,7 @@ import { useSelector } from 'react-redux'
 
 export default function RestaurantRegister() {
     const [data, setData] = useState();
-    console.log('data', data)
     const User = useSelector((state) => state?.user?.loggedUserDetails);
-    console.log('user', User)
     const images = [
         {
             URL: Rest1,
@@ -38,7 +36,6 @@ export default function RestaurantRegister() {
 
     const getDetails = () => {
         getSingleRestaurant(User?.sellerId).then(res => {
-            console.log('res', res)
             setData(res)
         })
     }
@@ -146,7 +143,7 @@ export default function RestaurantRegister() {
                         </div>
                     </div>
                     <div className='mt-4'>
-                        <DashboardForm data={data} dashBoard={true} button="edit"/>
+                        <DashboardForm data={data} dashBoard={true} button="edit" getDetails={getDetails} />
                     </div>
                 </div>
                 <div className=' col-span-2 bg-white rounded-xl mt-4 p-2'>

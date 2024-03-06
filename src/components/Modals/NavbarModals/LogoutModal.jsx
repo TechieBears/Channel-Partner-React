@@ -10,7 +10,6 @@ export default function LogoutModal({ open, setOpen }) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector(state => state?.user?.loggedUserDetails);
-    console.log('user log = ', user)
 
     // ============================= logout user dashbaord ================================
     const logOut = () => {
@@ -18,9 +17,9 @@ export default function LogoutModal({ open, setOpen }) {
         dispatch(setRoleIs(undefined))
         dispatch(setLoggedUser(false))
         setOpen(!open)
-        if(user?.role != 'admin' && user?.role != 'franchise'){
+        if (user?.role != 'admin' && user?.role != 'franchise') {
             navigate('/')
-        }else{
+        } else {
             navigate('/admin')
         }
     }
