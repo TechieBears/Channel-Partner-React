@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 import Switch from "react-js-switch";
 import BannerForm from "../../../../../components/Modals/MasterModals/AssetsModals/BannerForm";
 import MediaGallaryModal from "../../../../Settings/MediaGallery/MediaGallery";
-import { getGalleryImages, } from '../../../../../api';
+import { getGalleryImages, delHomePromotion } from '../../../../../api';
 import AddPromo from "../../../Promotion/Assests/AddPromo";
 
 
@@ -62,13 +62,23 @@ const DashboardBannerPanel = () => {
   useEffect(() => {
     getAllBannerList();
     fetchData();
+    getAllPromotionList();
   }, []);
 
   // ============== delete data from api ================
-  const deleteData = (data) => {
+  const deleteDataBanner = (data) => {
     delHomeBanners(data).then((res) => {
       if (res?.message == "deleted successfully") {
         getAllBannerList();
+        toast.success(res?.message);
+      }
+    });
+  };
+
+  const deleteDataPromotion = (data) => {
+    delHomePromotion(data).then((res) => {
+      if (res?.message == "deleted successfully") {
+        getAllPromotionList();
         toast.success(res?.message);
       }
     });
@@ -84,7 +94,7 @@ const DashboardBannerPanel = () => {
         getAllBannerList={getAllBannerList}
       />
       <button
-        onClick={() => deleteData(row.slide_id)}
+        onClick={() => deleteDataBanner(row.slide_id)}
         className="bg-red-100  px-1.5 py-2 rounded-sm"
       >
         <Trash size="20" className="text-red-500" />
@@ -102,7 +112,7 @@ const DashboardBannerPanel = () => {
           getAllPromotionList={getAllPromotionList}
         />
         <button
-          onClick={() => deleteData(row.slide_id)}
+          onClick={() => deleteDataPromotion(row.slide_id)}
           className="bg-red-100  px-1.5 py-2 rounded-sm"
         >
           <Trash size="20" className="text-red-500" />

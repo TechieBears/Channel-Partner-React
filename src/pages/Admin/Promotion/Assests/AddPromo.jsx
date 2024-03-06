@@ -15,7 +15,6 @@ import { setPromotions } from '../../../../redux/Slices/masterSlice';
 
 
 export default function AddPromo(props) {
-    console.log('props = ', props)
     const [isOpen, setIsOpen] = useState(false)
     const [loader, setLoader] = useState(false)
     const dispatch = useDispatch()
@@ -32,7 +31,6 @@ export default function AddPromo(props) {
     const onSubmit = async (data) => {
         if (props?.title != 'Edit Promotions') {
             try {
-                console.log('post called')
                 if (data.slide_url.length != 0) {
                     await ImageUpload(data.slide_url[0], "promotion", "promotion", data.slide_url[0].name)
                     data.slide_url = `${promotionLink}${data.slide_url[0].name}_promotion_${data.slide_url[0].name}`
