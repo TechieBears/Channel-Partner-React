@@ -1,28 +1,21 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 // import Button from '../buttons/Button';
-import { formBtn1, formBtn2, inputClass, labelClass, tableBtn} from "../../../utils/CustomClass";
-import { CloseCircle } from "iconsax-react";
-import { getGalleryImages } from "../../../api";
+import { formBtn1, formBtn2, tableBtn } from "../../../utils/CustomClass";
 import { useForm } from "react-hook-form";
 
 
-const MediaGallaryModal = (props) => {
-  // console.log("props = ", props);
-  const [isOpen, setIsOpen] = useState();
+const MediaGallaryModal = ({sendDataToParent, ...props}) => {
+  console.log("props = ", props);
+  const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const [imageDetails, setImageDetails] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const toggle = () => setIsOpen(!isOpen);
   console.log('selectedImage', selectedImage)
+  console.log('isOpen', isOpen)
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    reset,
-    formState: { errors },
-  } = useForm();
+  const { reset, formState: { errors }} = useForm();
 
   useEffect(() => {
     setImageDetails(props?.mediaModal?.mediaModalData);
@@ -39,19 +32,14 @@ const MediaGallaryModal = (props) => {
 
   const uploadImg = () => {
     setSelectedImage(selectedImage?.media_url)
-    console.log('media_name = ', selectedImage?.media_url);
-    props?.sendDataToParent(selectedImage?.media_url);
+    sendDataToParent(selectedImage?.media_url)
     toggle();
-    reset();
-    // setIsOpen(!isOpen);
   }
 
   // ===================== close modals ===============================
   const closeBtn = () => {
     reset();
     toggle();
-    setIsOpen(!isOpen)
-    setLoader(false);
   };
 
   return (
@@ -68,7 +56,7 @@ const MediaGallaryModal = (props) => {
           <Edit size="20" className="text-yellow-500" />
         </button>
       )}
-      <Transition appear show={isOpen} as={Fragment}>
+      <Transition appear show={!isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-[100]" onClose={() => toggle}>
           <Transition.Child
             as={Fragment}
