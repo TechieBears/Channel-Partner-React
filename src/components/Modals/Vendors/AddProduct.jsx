@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 import { ImageUpload, productLink } from '../../../env';
 
 const AddProduct = (props) => {
-    // console.log('props= ', props)
+    console.log('props= ', props)
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
     const [category, setCategory] = useState([]);

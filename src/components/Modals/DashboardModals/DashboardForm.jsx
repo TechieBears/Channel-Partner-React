@@ -725,75 +725,75 @@ export default function DashboardForm(props) {
         setLoader(true)
         if (activeStep == steps.length - 1) {
             if (props?.button != 'edit') {
-                if (data.ambience_image.length != 0) {
-                    await ImageUpload(data.ambience_image[0], "restaurant", "ambience_image", data.shop_name)
-                    data.ambience_image = `${restaurantLink}${data.shop_name}_ambience_image_${data.ambience_image[0].name}`
+                if (data?.ambience_image.length != 0) {
+                    await ImageUpload(data?.ambience_image[0], "restaurant", "ambience_image", data?.shop_name)
+                    data.ambience_image = `${restaurantLink}${data?.shop_name}_ambience_image_${data?.ambience_image[0].name}`
                 } else {
                     data.ambience_image = ''
                 }
-                if (data.shop_image?.length != 0) {
-                    await ImageUpload(data.shop_image[0], "restaurant", "shop_image", data.shop_name)
-                    data.shop_image = `${restaurantLink}${data.shop_name}_shop_image_${data.shop_image[0].name}`
+                if (data?.shop_image?.length != 0) {
+                    await ImageUpload(data?.shop_image[0], "restaurant", "shop_image", data?.shop_name)
+                    data.shop_image = `${restaurantLink}${data?.shop_name}_shop_image_${data?.shop_image[0].name}`
                 } else {
                     data.shop_image = ''
                 }
-                if (data.food_image1?.length != 0) {
-                    await ImageUpload(data.food_image1[0], "restaurant", "food_image1", data.shop_name)
-                    data.food_image1 = `${restaurantLink}${data.shop_name}_food_image1_${data.food_image1[0].name}`
+                if (data?.food_image1?.length != 0) {
+                    await ImageUpload(data?.food_image1[0], "restaurant", "food_image1", data?.shop_name)
+                    data.food_image1 = `${restaurantLink}${data?.shop_name}_food_image1_${data?.food_image1[0].name}`
                 } else {
                     data.food_image1 = ''
                 }
-                if (data.food_image2?.length != 0) {
-                    await ImageUpload(data.food_image2[0], "restaurant", "food_image2", data.shop_name)
-                    data.food_image2 = `${restaurantLink}${data.shop_name}_food_image2_${data.food_image2[0].name}`
+                if (data?.food_image2?.length != 0) {
+                    await ImageUpload(data?.food_image2[0], "restaurant", "food_image2", data?.shop_name)
+                    data.food_image2 = `${restaurantLink}${data?.shop_name}_food_image2_${data?.food_image2[0].name}`
                 } else {
                     data.food_image2 = ''
                 }
-                if (data.food_image3?.length != 0) {
-                    await ImageUpload(data.food_image3[0], "restaurant", "food_image3", data.shop_name)
-                    data.food_image3 = `${restaurantLink}${data.shop_name}_food_image3_${data.food_image3[0].name}`
+                if (data?.food_image3?.length != 0) {
+                    await ImageUpload(data?.food_image3[0], "restaurant", "food_image3", data?.shop_name)
+                    data.food_image3 = `${restaurantLink}${data?.shop_name}_food_image3_${data?.food_image3[0].name}`
                 } else {
                     data.food_image3 = ''
                 }
-                if (data.adhar_card?.length != 0) {
-                    await ImageUpload(data.adhar_card[0], "restaurant", "adhar_card", data.shop_name)
-                    data.adhar_card = `${restaurantLink}${data.shop_name}_adhar_card_${data.adhar_card[0].name}`
+                if (data?.adhar_card?.length != 0) {
+                    await ImageUpload(data?.adhar_card[0], "restaurant", "adhar_card", data?.shop_name)
+                    data.adhar_card = `${restaurantLink}${data?.shop_name}_adhar_card_${data?.adhar_card[0].name}`
                 } else {
                     data.adhar_card = ''
                 }
-                if (data.fssai_license?.length != 0) {
-                    await ImageUpload(data.fassai_doc[0], "restaurant", "fassai_doc", data.shop_name)
-                    data.fssai_license = `${restaurantLink}${data.shop_name}_fassai_doc_${data.fssai_license[0].name}`
+                if (data?.fssai_license?.length != 0) {
+                    await ImageUpload(data?.fssai_license[0], "restaurant", "fssai_license", data?.shop_name)
+                    data.fssai_license = `${restaurantLink}${data?.shop_name}_fssai_license_${data?.fssai_license[0].name}`
                 } else {
                     data.fssai_license = ''
                 }
-                if (data.order_img1?.length != 0) {
-                    await ImageUpload(data.order_img1[0], "restaurant", "order_img1", data.shop_name)
-                    data.order_img1 = `${restaurantLink}${data.shop_name}_order_img1_${data.order_img1[0].name}`
+                if (data?.order_img1?.length != 0) {
+                    await ImageUpload(data?.order_img1[0], "restaurant", "order_img1", data?.shop_name)
+                    data.order_img1 = `${restaurantLink}${data?.shop_name}_order_img1_${data?.order_img1[0].name}`
                 } else {
                     data.order_img1 = ''
                 }
-                if (data.order_img2?.length != 0) {
-                    await ImageUpload(data.order_img2[0], "restaurant", "order_img2", data.shop_name)
-                    data.order_img2 = `${restaurantLink}${data.shop_name}_order_img2_${data.order_img2[0].name}`
+                if (data?.order_img2?.length != 0) {
+                    await ImageUpload(data?.order_img2[0], "restaurant", "order_img2", data?.shop_name)
+                    data.order_img2 = `${restaurantLink}${data?.shop_name}_order_img2_${data?.order_img2[0].name}`
                 } else {
                     data.order_img2 = ''
                 }
-                if (data.order_img3?.length != 0) {
-                    await ImageUpload(data.order_img3[0], "restaurant", "order_img3", data.shop_name)
-                    data.order_img3 = `${restaurantLink}${data.shop_name}_order_img3_${data.order_img3[0].name}`
+                if (data?.order_img3?.length != 0) {
+                    await ImageUpload(data?.order_img3[0], "restaurant", "order_img3", data?.shop_name)
+                    data.order_img3 = `${restaurantLink}${data?.shop_name}_order_img3_${data?.order_img3[0].name}`
                 } else {
                     data.order_img3 = ''
                 }
-                if (data.pan_card?.length != 0) {
-                    await ImageUpload(data.pan_card[0], "restaurant", "pan_name", data.shop_name)
-                    data.pan_card = `${restaurantLink}${data.shop_name}_pan_name_${data.pan_card[0].name}`
+                if (data?.pan_card?.length != 0) {
+                    await ImageUpload(data?.pan_card[0], "restaurant", "pan_name", data?.shop_name)
+                    data.pan_card = `${restaurantLink}${data?.shop_name}_pan_name_${data?.pan_card[0].name}`
                 } else {
                     data.pan_card = ''
                 }
-                if (data.adhar_card?.length != 0) {
-                    await ImageUpload(data.adhar_card[0], "restaurant", "adhar_card", data.shop_name)
-                    data.adhar_card = `${restaurantLink}${data.shop_name}_adhar_card_${data.adhar_card[0].name}`
+                if (data?.adhar_card?.length != 0) {
+                    await ImageUpload(data?.adhar_card[0], "restaurant", "adhar_card", data?.shop_name)
+                    data.adhar_card = `${restaurantLink}${data?.shop_name}_adhar_card_${data?.adhar_card[0].name}`
                 } else {
                     data.adhar_card = ''
                 }
@@ -923,6 +923,7 @@ export default function DashboardForm(props) {
 
     useEffect(() => {
         restaurantCategories();
+        setLoader(false);
     }, [])
 
     return (
