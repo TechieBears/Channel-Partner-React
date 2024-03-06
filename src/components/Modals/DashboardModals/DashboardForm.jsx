@@ -22,11 +22,7 @@ import { LocateFixed } from 'lucide-react';
 
 
 const Step1 = (props) => {
-    // console.log('props = ', props)
-
     const [manually, setManally] = useState(false);
-    const [verifyPhone, setVerifyPhone] = useState(false);
-    const [verifyEmail, setVerifyEmail] = useState(false);
     const { register, getValues, setValue, control, reset, formState: { errors }, } = useFormContext()
 
     const { isLoaded } = useJsApiLoader({
@@ -51,7 +47,7 @@ const Step1 = (props) => {
                 .then(data => {
                     const address = data?.results[0]?.formatted_address;
                     const components = data?.results[0]?.address_components;
-    
+
                     const city = components?.find(comp => comp.types.includes('locality'))?.long_name || '';
                     const state = components?.find(comp => comp.types.includes('administrative_area_level_1'))?.long_name || '';
                     const pincode = components?.find(comp => comp.types.includes('postal_code'))?.long_name || '';
@@ -73,26 +69,14 @@ const Step1 = (props) => {
                     }
                 })
                 .catch(error => console.error('Error fetching address:', error));
-                // setPosition({
-                //     lat: e.latLng.lat(),
-                //     lng: e.latLng.lng(),
-                // });
+            // setPosition({
+            //     lat: e.latLng.lat(),
+            //     lng: e.latLng.lng(),
+            // });
         })
     }
 
     useEffect(() => {
-        if (props.button == 'edit' && props.data) {
-            // reset({
-            //     "shop_name": props?.data?.vendor?.shop_name,
-            //     "shop_address": props?.data?.vendor?.shop_address,
-            //     "shop_contact_number": props?.data?.vendor?.shop_contact_number,
-            //     "about_restaurant": props?.data?.about_restaurant,
-            //     "latitude": props?.data?.vendor?.latitude,
-            //     "longitude": props?.data?.vendor?.longitude,
-            // })
-        } else {
-            // methods = useForm()
-        }
         getCurrentPostion()
     }, [])
 
@@ -140,7 +124,7 @@ const Step1 = (props) => {
         OTPInput()
     }
 
-  
+
 
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-5 gap-x-3 gap-y-3 ">
@@ -183,10 +167,10 @@ const Step1 = (props) => {
                         {errors.shop_contact_number && <Error title='Restaurant Phone Number is required*' />}
                     </div>
                     <div className=''>
-                    <label className={`text-transparent ${labelClass}`}>
+                        <label className={`text-transparent ${labelClass}`}>
                             Restaurant Phone Number*
                         </label>
-                        <button type='button' className={`flex w-full justify-center ${formBtn1}`} onClick={getCurrentPostion}><LocateFixed className='me-3'/>Get Current Location</button>
+                        <button type='button' className={`flex w-full justify-center ${formBtn1}`} onClick={getCurrentPostion}><LocateFixed className='me-3' />Get Current Location</button>
                     </div>
                     <div className="">
                         <label className={labelClass}>
@@ -200,7 +184,7 @@ const Step1 = (props) => {
                         />
                         {errors.about_restaurant && <Error title='Restaurant Description is required*' />}
                     </div>
-                  
+
                     <div className="">
                         <label className={labelClass}>
                             Latitude*
@@ -262,7 +246,7 @@ const Step1 = (props) => {
                             {...register('city',)}
                         />
                     </div> */}
-                   
+
                 </div>
             </div>
             <div className='col-span-2'>
@@ -293,9 +277,7 @@ const Step1 = (props) => {
 
 // =================== form steps 2 =================
 const Step2 = (props) => {
-    // console.log('step 2 props ========', props?.category)
-    console.log('props2 ========', props)
-    const { register, getValues, setValue, control, reset, formState: { errors }, } = useFormContext()
+    const { register, formState: { errors }, } = useFormContext()
 
     const [allCuisines, setAllCuisines] = useState([
         { value: "Fast Food", label: "Fast Food" },
@@ -310,23 +292,6 @@ const Step2 = (props) => {
         { value: "Maharashtrian Cuisine", label: "Maharashtrian Cuisine" },
         { value: "Goan Cuisine", label: "Goan Cuisine" },
     ]);
-
-    useEffect(() => {
-        if (props.button == 'edit' && props.data) {
-            const formattedStartTime = moment(props?.data?.vendor?.shop_start_time, 'h:mm A').format('HH:mm');
-            const formattedEndTime = moment(props?.data?.vendor?.shop_end_time, 'h:mm A').format('HH:mm');
-
-            reset({
-               'veg_nonveg': props?.data?.veg_nonveg,
-               'restaurant_type': props?.data?.restaurant_type,
-               'shop_start_time':formattedStartTime,
-               'shop_end_time': formattedEndTime,
-               'type_of_cuisine': JSON.parse(props?.data?.type_of_cuisine) 
-            })
-        } else {
-            // methods = useForm()
-        }
-    }, [])
 
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
@@ -417,19 +382,7 @@ const Step2 = (props) => {
 
 // =================== form steps 3 =================
 const Step3 = (props) => {
-    console.log('props 3', props);
-    const { register, getValues, setValue, control, reset, formState: { errors }, } = useFormContext()
-
-    useEffect(() => {
-        if (props.button == 'edit' && props.data) {
-            reset({
-               'ambience_image': props?.data?.ambience_image,
-               'shop_image': props?.data?.vendor?.shop_image,
-            })
-        } else {
-            // methods = useForm()
-        }
-    }, [])
+    const { register, formState: { errors }, } = useFormContext()
 
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
@@ -562,23 +515,7 @@ const Step4 = (props) => {
 
 const Step5 = (props) => {
     console.log('props5 = ', props)
-    const { register, setValue, getValues, control, reset, watch, formState: { errors }, } = useFormContext()
-    const gstRegistered = watch('gst_registered');
-    
-    useEffect(() => {
-        if (props.button == 'edit' && props.data) {
-            reset({
-               'pan_card': props?.data?.vendor?.pan_card,
-               'bank_name': props?.data?.vendor?.bank_name,
-               'account_number': props?.data?.vendor?.account_number,
-               'ifsc_code': props?.data?.vendor?.ifsc_code,
-               'adhar_card': props?.data?.vendor?.adhar_card,
-               'gst_number': props?.data?.vendor?.gst_number,
-            })
-        } else {
-            // methods = useForm()
-        }
-    }, [])
+    const { register, formState: { errors } } = useFormContext()
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
             <div className="">
@@ -588,7 +525,7 @@ const Step5 = (props) => {
                     type='file'
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("pan_card", {required: true})} />
+                    {...register("pan_card", { required: true })} />
                 {props?.button == 'edit' && props?.data?.vendor?.pan_card != '' && props?.data?.vendor?.pan_card != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                     {props?.data?.vendor?.pan_card?.split('/').pop()}
                 </label>
@@ -673,7 +610,6 @@ const Step5 = (props) => {
 }
 
 export default function DashboardForm(props) {
-    console.log('get rest props = ', props)
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     const [isOpen, setIsOpen] = useState(props?.isOpen ? props?.isOpen : false)
     const [loader, setLoader] = useState(false)
@@ -682,9 +618,7 @@ export default function DashboardForm(props) {
     const [selectedCuisines, setSelectedCuisines] = useState([])
     const [activeStep, setActiveStep] = useState(0);
     const toggle = () => setIsOpen(!isOpen);
-
     const steps = ['Restaurant Information', 'Restaurant Type and Timing', 'Upload Images', 'General Information', 'Legal Documentation',];
-
     // ============== Restaurant API ================
     const restaurantCategories = () => {
         try {
@@ -695,7 +629,6 @@ export default function DashboardForm(props) {
             console.log(error);
         }
     };
-
     var methods = useForm({
         defaultValues: {
             "shop_name": "",
@@ -734,7 +667,7 @@ export default function DashboardForm(props) {
                 "longitude": props?.data?.vendor?.longitude,
                 "veg_nonveg": props?.data?.veg_nonveg,
                 "restaurant_type": props?.data?.restaurant_type,
-                "shop_start_time":formattedStartTime,
+                "shop_start_time": formattedStartTime,
                 "shop_end_time": formattedEndTime,
                 // "type_of_cuisine": JSON.parse(props?.data?.type_of_cuisine),
                 "ambience_image": props?.data?.ambience_image,
@@ -762,12 +695,12 @@ export default function DashboardForm(props) {
     const getStepContent = (step) => {
         switch (step) {
             case 0:
-                return <Step1 {...props}/>
+                return <Step1 {...props} />
             case 1:
                 return <Step2  {...props} selectedCuisines={selectedCuisines} setSelectedCuisines={setSelectedCuisines} selectedRestType={selectedRestType}
                     setSelectedRestType={setSelectedRestType} category={category} />
             case 2:
-                return <Step3  {...props}/>
+                return <Step3  {...props} />
             case 3:
                 return <Step4 {...props} />
             case 4:
@@ -784,89 +717,88 @@ export default function DashboardForm(props) {
     // ================= submit data  ===============================
     const onSubmit = async (data) => {
         console.log('data', data)
+        isStepFalied()
         const shopStartTime = moment(data?.shop_start_time, 'HH:mm').format('hh:mm A');
         const shopEndTime = moment(data?.shop_end_time, 'HH:mm').format('hh:mm A');
         data.shop_start_time = shopStartTime;
         data.shop_end_time = shopEndTime;
-
-        isStepFalied()
         setLoader(true)
         if (activeStep == steps.length - 1) {
-            if (props?.button != 'edit') {    
+            if (props?.button != 'edit') {
                 if (data.ambience_image.length != 0) {
                     await ImageUpload(data.ambience_image[0], "restaurant", "ambience_image", data.shop_name)
                     data.ambience_image = `${restaurantLink}${data.shop_name}_ambience_image_${data.ambience_image[0].name}`
                 } else {
                     data.ambience_image = ''
                 }
-                if (data.shop_image.length != 0) {
+                if (data.shop_image?.length != 0) {
                     await ImageUpload(data.shop_image[0], "restaurant", "shop_image", data.shop_name)
                     data.shop_image = `${restaurantLink}${data.shop_name}_shop_image_${data.shop_image[0].name}`
                 } else {
                     data.shop_image = ''
                 }
-                if (data.food_image1.length != 0) {
+                if (data.food_image1?.length != 0) {
                     await ImageUpload(data.food_image1[0], "restaurant", "food_image1", data.shop_name)
                     data.food_image1 = `${restaurantLink}${data.shop_name}_food_image1_${data.food_image1[0].name}`
                 } else {
                     data.food_image1 = ''
                 }
-                if (data.food_image2.length != 0) {
+                if (data.food_image2?.length != 0) {
                     await ImageUpload(data.food_image2[0], "restaurant", "food_image2", data.shop_name)
                     data.food_image2 = `${restaurantLink}${data.shop_name}_food_image2_${data.food_image2[0].name}`
                 } else {
                     data.food_image2 = ''
                 }
-                if (data.food_image3.length != 0) {
+                if (data.food_image3?.length != 0) {
                     await ImageUpload(data.food_image3[0], "restaurant", "food_image3", data.shop_name)
                     data.food_image3 = `${restaurantLink}${data.shop_name}_food_image3_${data.food_image3[0].name}`
                 } else {
                     data.food_image3 = ''
                 }
-                if (data.adhar_img.length != 0) {
-                    await ImageUpload(data.adhar_img[0], "restaurant", "adhar_img", data.shop_name)
-                    data.adhar_img = `${restaurantLink}${data.shop_name}_adhar_img_${data.adhar_img[0].name}`
-                } else {
-                    data.adhar_img = ''
-                }
-                if (data.fassai_doc.length != 0) {
-                    await ImageUpload(data.fassai_doc[0], "restaurant", "fassai_doc", data.shop_name)
-                    data.fassai_doc = `${restaurantLink}${data.shop_name}_fassai_doc_${data.fassai_doc[0].name}`
-                } else {
-                    data.fassai_doc = ''
-                }
-                if (data.order_img1.length != 0) {
-                    await ImageUpload(data.order_img1[0], "restaurant", "order_img1", data.shop_name)
-                    data.order_img1 = `${restaurantLink}${data.shop_name}_order_img1_${data.order_img1[0].name}`
-                } else {
-                    data.order_img1 = ''
-                }
-                if (data.order_img2.length != 0) {
-                    await ImageUpload(data.order_img2[0], "restaurant", "order_img2", data.shop_name)
-                    data.order_img2 = `${restaurantLink}${data.shop_name}_order_img2_${data.order_img2[0].name}`
-                } else {
-                    data.order_img2 = ''
-                }
-                if (data.order_img3.length != 0) {
-                    await ImageUpload(data.order_img3[0], "restaurant", "order_img3", data.shop_name)
-                    data.order_img3 = `${restaurantLink}${data.shop_name}_order_img3_${data.order_img3[0].name}`
-                } else {
-                    data.order_img3 = ''
-                }
-                if (data.pan_name.length != 0) {
-                    await ImageUpload(data.pan_name[0], "restaurant", "pan_name", data.shop_name)
-                    data.pan_name = `${restaurantLink}${data.shop_name}_pan_name_${data.pan_name[0].name}`
-                } else {
-                    data.pan_name = ''
-                }
-                if (data.adhar_card.length != 0) {
+                if (data.adhar_card?.length != 0) {
                     await ImageUpload(data.adhar_card[0], "restaurant", "adhar_card", data.shop_name)
                     data.adhar_card = `${restaurantLink}${data.shop_name}_adhar_card_${data.adhar_card[0].name}`
                 } else {
                     data.adhar_card = ''
                 }
-            } 
-            else{
+                if (data.fssai_license?.length != 0) {
+                    await ImageUpload(data.fassai_doc[0], "restaurant", "fassai_doc", data.shop_name)
+                    data.fssai_license = `${restaurantLink}${data.shop_name}_fassai_doc_${data.fssai_license[0].name}`
+                } else {
+                    data.fssai_license = ''
+                }
+                if (data.order_img1?.length != 0) {
+                    await ImageUpload(data.order_img1[0], "restaurant", "order_img1", data.shop_name)
+                    data.order_img1 = `${restaurantLink}${data.shop_name}_order_img1_${data.order_img1[0].name}`
+                } else {
+                    data.order_img1 = ''
+                }
+                if (data.order_img2?.length != 0) {
+                    await ImageUpload(data.order_img2[0], "restaurant", "order_img2", data.shop_name)
+                    data.order_img2 = `${restaurantLink}${data.shop_name}_order_img2_${data.order_img2[0].name}`
+                } else {
+                    data.order_img2 = ''
+                }
+                if (data.order_img3?.length != 0) {
+                    await ImageUpload(data.order_img3[0], "restaurant", "order_img3", data.shop_name)
+                    data.order_img3 = `${restaurantLink}${data.shop_name}_order_img3_${data.order_img3[0].name}`
+                } else {
+                    data.order_img3 = ''
+                }
+                if (data.pan_card?.length != 0) {
+                    await ImageUpload(data.pan_card[0], "restaurant", "pan_name", data.shop_name)
+                    data.pan_card = `${restaurantLink}${data.shop_name}_pan_name_${data.pan_card[0].name}`
+                } else {
+                    data.pan_card = ''
+                }
+                if (data.adhar_card?.length != 0) {
+                    await ImageUpload(data.adhar_card[0], "restaurant", "adhar_card", data.shop_name)
+                    data.adhar_card = `${restaurantLink}${data.shop_name}_adhar_card_${data.adhar_card[0].name}`
+                } else {
+                    data.adhar_card = ''
+                }
+            }
+            else {
                 if (data?.ambience_image?.length > 0 && props?.data?.ambience_image) {
                     await ImageUpload(data?.ambience_image[0], "restaurant", "ambience_image", data?.shop_name)
                     data.ambience_image = `${restaurantLink}${data?.shop_name}_ambience_image_${data?.ambience_image[0]?.name}`
@@ -940,7 +872,7 @@ export default function DashboardForm(props) {
                     data.adhar_card = props?.data?.adhar_card
                 }
             }
-            try{
+            try {
                 if (props?.button != "edit") {
                     let updatedData = {
                         ...data,
@@ -965,20 +897,21 @@ export default function DashboardForm(props) {
                         if (res?.message === "Restaurant edited successfully") {
                             setTimeout(() => {
                                 toggle(),
-                                setLoader(false),
-                                toast.success(res?.message);
+                                    setLoader(false),
+                                    toast.success(res?.message);
+                                props?.getDetails()
                             }, 1000)
                         }
                     })
                 }
             } catch (error) {
                 console.log(error);
-            } 
-        } else {
-                setLoader(false)
-                setActiveStep((prevActiveStep) => prevActiveStep + 1);
             }
+        } else {
+            setLoader(false)
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
         }
+    }
 
     // ================= close modal  ===============
     const closeBtn = () => {
@@ -986,7 +919,6 @@ export default function DashboardForm(props) {
         setActiveStep(0)
         methods.reset();
         setLoader(false);
-        reset();
     }
 
     useEffect(() => {
