@@ -11,6 +11,7 @@ import { ImageUpload, restaurantLink } from '../../../env';
 import { toast } from 'react-toastify';
 
 export default function AddRestItem(props) {
+    console.log('props = ', props)
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false);
     const [category, setCategory] = useState([]);
@@ -35,7 +36,7 @@ export default function AddRestItem(props) {
     };
     const onSellerSubmit = async (data) => {
         if (props?.button == 'edit') {      // for edit
-            console.log('image edit')
+            // console.log('image edit')
             if (data?.food_image_1 != props?.data?.food_image_1) {
                 await ImageUpload(data?.food_image_1[0], "restaurant", "mainImage", data?.food_name)
                 data.food_image_1 = `${restaurantLink}${data?.food_name}_mainImage_${data?.food_image_1[0]?.name}`
@@ -74,7 +75,7 @@ export default function AddRestItem(props) {
                 data.food_video_url = props?.data?.food_video_url
             }
         } else {               // for create
-            console.log('image create')
+            // console.log('image create')
             if (data.food_image_1.length != 0) {
                 await ImageUpload(data.food_image_1[0], "restaurant", "mainImage", data?.food_name)
                 data.food_image_1 = `${restaurantLink}${data?.food_name}_mainImage_${data.food_image_1[0]?.name}`
@@ -204,19 +205,7 @@ export default function AddRestItem(props) {
     //     }
     // }, [calculateRevenueRestaurant])
 
-    //  ------------   Admin Calculations Set Final Price to User  --------------------------------
-    const calculateRevenueAdmin = watch('markup_percentage')
 
-    useEffect(() => {
-        if (user?.role == 'admin') {
-            if (calculateRevenueAdmin !== "") {
-                var mainPrice = (props?.data?.food_actual_price == null ? 0 : props?.data?.food_actual_price) * (calculateRevenueAdmin / 100);
-                var adminfinalprice = props?.data?.food_actual_price + mainPrice;
-                setFinalPriceAdmin(adminfinalprice);
-                setValue('final_price', adminfinalprice?.toFixed(0));
-            }
-        }
-    }, [calculateRevenueAdmin])
 
 
 
@@ -238,6 +227,22 @@ export default function AddRestItem(props) {
             }
         }
     }, [calculateRevenueRestaurant])
+
+
+
+        //  ------------   Admin Calculations Set Final Price to User  --------------------------------
+        const calculateRevenueAdmin = watch('markup_percentage')
+
+        useEffect(() => {
+            if (user?.role == 'admin') {
+                if (calculateRevenueAdmin !== "") {
+                    var mainPrice = (props?.data?.food_actual_price == null ? 0 : props?.data?.food_actual_price) * (calculateRevenueAdmin / 100);
+                    var adminfinalprice = props?.data?.food_actual_price + mainPrice;
+                    setFinalPriceAdmin(adminfinalprice);
+                    setValue('final_price', adminfinalprice?.toFixed(0));
+                }
+            }
+        }, [calculateRevenueAdmin])
 
     return (
         <>
@@ -491,6 +496,21 @@ export default function AddRestItem(props) {
                                                         </select>
                                                         {errors?.menu_type && <Error title='Menu Type is required' />}
                                                     </div>
+                                                    {
+                                                        user?.role == 'seller' &&
+                                                        <div className="">
+                                                            <label className={labelClass}>
+                                                                Food Revenue*
+                                                            </label>
+                                                            <input
+                                                                type="text"
+                                                                readOnly
+                                                                placeholder='₹ 0.00'
+                                                                className={inputClass}
+                                                                {...register('food_revenue')}
+                                                            />
+                                                        </div>
+                                                    }
                                                     <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Food Images</p>
                                                     <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Main Image*</label>

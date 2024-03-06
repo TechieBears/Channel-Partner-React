@@ -156,17 +156,10 @@ const VendorProduct = () => {
     }
 
     useEffect(() => {
-        // if (user?.vendor_type != "restaurant"){
-        //     getAllSeller().then(res => {
-        //         setSellers(res)
-        //     })
-        //     getProducts()
-        // }else{
-        //     getrestaurantProducts();
-        // }
-
         if (user?.vendor_type == 'restaurant') {
             getRestFood()
+        }else{
+            getProducts();
         }
     }, []);
 
@@ -229,7 +222,7 @@ const VendorProduct = () => {
             </div>
             <div className='p-4 m-4 bg-white sm:m-5 rounded-xl'>
                 <div className='grid items-center grid-cols-6'>
-                    <h2 className='col-span-5 text-xl font-semibold'>{user?.vendor_type == 'restaurant' ? 'Item List' : 'Product List'}</h2>
+                    <h2 className='col-span-5 text-xl font-semibold'>{user?.vendor_type == 'restaurant' ? 'Item List' : 'Product List'}</h2>
                     {user?.isverified_byadmin == true && user?.vendor_type == 'restaurant' ? <AddRestItem title='Add Item' getRestFood={getRestFood} /> : user?.vendor_type == 'seller' ? <AddProduct title='Add Product' getProducts={getProducts} /> : ''}
                     {/* <AddRestItem title='Add Item' button='add'  /> */}
                     {/* <AddProduct title='Add Product' getProducts={getProducts} />  */}

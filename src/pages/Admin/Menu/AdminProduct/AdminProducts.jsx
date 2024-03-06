@@ -154,7 +154,7 @@ const AdminProduct = (props) => {
     }
 
     const featureItem = (row) => {
-        console.log('called')
+        // console.log('called')
         const payload = {
             food_id: row?.food_id,
             featured: !row?.featured,

@@ -84,15 +84,15 @@ export const Seller = [
         link: '/vendor-orders',
     },
     {
-        title: 'Product List',
+        title: 'Menu List',
         icon: <LayoutList size="24" />,
         link: '/product-list',
     },
-    {
-        title: 'Menu',
-        icon: <Menu size="24" />,
-        link: '/menu',
-    },
+    // {
+    //     title: 'Menu',
+    //     icon: <Menu size="24" />,
+    //     link: '/menu',
+    // },
     {
         title: 'Register',
         icon: <UserAdd size="24" />,
