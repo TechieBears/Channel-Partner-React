@@ -41,7 +41,7 @@ export default function AddRestItem(props) {
     const onSellerSubmit = async (data) => {
         console.log('data ==', data)
         if (props?.title != 'Add Item') {      // for edit
-            // console.log('image edit')
+            console.log('image edit')
             if (data?.food_image_1 != props?.data?.food_image_1) {
                 await ImageUpload(data?.food_image_1[0], "restaurant", "mainImage", data?.food_name)
                 data.food_image_1 = `${restaurantLink}${data?.food_name}_mainImage_${data?.food_image_1[0]?.name}`
