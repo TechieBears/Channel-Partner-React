@@ -1,12 +1,11 @@
-import { Dialog, Transition } from '@headlessui/react'
-import { Add, Edit } from 'iconsax-react'
-import React, { useState, Fragment, useEffect } from 'react'
-import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass'
-// import { CloseButton } from 'react-toastify/dist/components';
+import { Dialog, Transition } from '@headlessui/react';
+import { Edit } from 'iconsax-react';
+import React, { useState, Fragment, useEffect } from 'react';
+import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
 import { useForm } from 'react-hook-form';
 import LoadBox from '../../Loader/LoadBox';
 import { useSelector } from 'react-redux';
-import { addFoodItem, addRestaurant, editFoodItem, editRestaurantFood, getCategory, getRestaurantCategory, getRestaurantSubCategory, getSubCategory, editAdminFinalFood } from '../../../api';
+import { addFoodItem, editFoodItem, getRestaurantCategory, getRestaurantSubCategory, editAdminFinalFood } from '../../../api';
 import { ImageUpload, restaurantLink } from '../../../env';
 import { toast } from 'react-toastify';
 import Error from '../../Errors/Error';
@@ -14,7 +13,7 @@ import Error from '../../Errors/Error';
 
 
 export default function AddRestItem(props) {
-    console.log('props = ', props)
+    // console.log('props = ', props)
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false);
     const [category, setCategory] = useState([]);
@@ -23,7 +22,7 @@ export default function AddRestItem(props) {
     const [FinalPriceAdmin, setFinalPriceAdmin] = useState([]);
     const { register, handleSubmit, control, watch, reset, setValue, formState: { errors } } = useForm();
     const user = useSelector((state) => state?.user?.loggedUserDetails);
-    console.log('user', user)
+    // console.log('user', user)
     const toggle = () => setOpen(!isOpen)
     const closeBtn = () => {
         toggle();
@@ -42,38 +41,37 @@ export default function AddRestItem(props) {
         console.log('data ==', data)
         if (props?.title != 'Add Item') {      // for edit
             console.log('image edit')
-            if (data?.food_image_1 != props?.data?.food_image_1) {
+            if (data?.food_image_1?.length > 0 &&  props?.data?.food_image_1) {
                 await ImageUpload(data?.food_image_1[0], "restaurant", "mainImage", data?.food_name)
                 data.food_image_1 = `${restaurantLink}${data?.food_name}_mainImage_${data?.food_image_1[0]?.name}`
             } else {
                 data.food_image_1 = props?.data?.food_image_1
             }
-            if (data?.food_image_2 != props?.data?.food_image_2) {
-                console.log('img 2 called');
+            if (data?.food_image_2?.length > 0 && props?.data?.food_image_2) {
                 await ImageUpload(data?.food_image_2[0], "restaurant", "img2", data?.food_name)
                 data.food_image_2 = `${restaurantLink}${data?.food_name}_img2_${data?.food_image_2[0]?.name}`
             } else {
                 data.food_image_2 = props?.data?.food_image_2
             }
-            if (data?.food_image_3 != props?.data?.food_image_3) {
+            if (data?.food_image_3?.length > 0 && props?.data?.food_image_3) {
                 await ImageUpload(data?.food_image_3[0], "restaurant", "img3", data?.food_name)
                 data.food_image_3 = `${restaurantLink}${data?.food_name}_img3_${data?.food_image_3[0]?.name}`
             } else {
                 data.food_image_3 = props?.data?.food_image_3
             }
-            if (data?.food_image_4 != props?.data?.food_image_4) {
+            if (data?.food_image_4?.length > 0 && props?.data?.food_image_4) {
                 await ImageUpload(data?.food_image_4[0], "restaurant", "img4", data?.food_name)
                 data.food_image_4 = `${restaurantLink}${data?.food_name}_img4_${data?.food_image_4[0]?.name}`
             } else {
                 data.food_image_4 = props?.data?.food_image_4
             }
-            if (data?.food_image_5 != props?.data?.food_image_5) {
+            if (data?.food_image_5?.length > 0 && props?.data?.food_image_5) {
                 await ImageUpload(data?.food_image_5[0], "restaurant", "img5", data?.food_name)
                 data.food_image_5 = `${restaurantLink}${data?.food_name}_img5_${data?.food_image_5[0]?.name}`
             } else {
                 data.food_image_5 = props?.data?.food_image_5
             }
-            if (data?.food_video_url != props?.data?.food_video_url) {
+            if (data?.food_video_url?.length > 0 && props?.data?.food_video_url) {
                 await ImageUpload(data?.food_video_url[0], "restaurant", "img5", data?.food_name)
                 data.food_video_url = `${restaurantLink}${data?.food_name}_img5_${data?.food_video_url[0]?.name}`
             } else {
@@ -81,38 +79,38 @@ export default function AddRestItem(props) {
             }
         } else {               // for create
             // console.log('image create')
-            if (data.food_image_1.length != 0) {
-                await ImageUpload(data.food_image_1[0], "restaurant", "mainImage", data?.food_name)
+            if (data?.food_image_1?.length != 0) {
+                await ImageUpload(data?.food_image_1[0], "restaurant", "mainImage", data?.food_name)
                 data.food_image_1 = `${restaurantLink}${data?.food_name}_mainImage_${data.food_image_1[0]?.name}`
             } else {
                 data.food_image_1 = ''
             }
-            if (data.food_image_2.length != 0) {
-                await ImageUpload(data.food_image_2[0], "restaurant", "img2", data?.food_name)
+            if (data?.food_image_2?.length != 0) {
+                await ImageUpload(data?.food_image_2[0], "restaurant", "img2", data?.food_name)
                 data.food_image_2 = `${restaurantLink}${data?.food_name}_img2_${data.food_image_2[0]?.name}`
             } else {
                 data.food_image_2 = ''
             }
-            if (data.food_image_3.length != 0) {
-                await ImageUpload(data.food_image_3[0], "restaurant", "img3", data?.food_name)
+            if (data?.food_image_3?.length != 0) {
+                await ImageUpload(data?.food_image_3[0], "restaurant", "img3", data?.food_name)
                 data.food_image_3 = `${restaurantLink}${data?.food_name}_img3_${data.food_image_3[0]?.name}`
             } else {
                 data.food_image_3 = ''
             }
-            if (data.food_image_4.length != 0) {
-                await ImageUpload(data.food_image_4[0], "restaurant", "img4", data?.food_name)
+            if (data?.food_image_4?.length != 0) {
+                await ImageUpload(data?.food_image_4[0], "restaurant", "img4", data?.food_name)
                 data.food_image_4 = `${restaurantLink}${data?.food_name}_img4_${data.food_image_4[0]?.name}`
             } else {
                 data.food_image_4 = ''
             }
-            if (data.food_image_5.length != 0) {
-                await ImageUpload(data.food_image_5[0], "restaurant", "img5", data?.food_name)
+            if (data?.food_image_5?.length != 0) {
+                await ImageUpload(data?.food_image_5[0], "restaurant", "img5", data?.food_name)
                 data.food_image_5 = `${restaurantLink}${data?.food_name}_img5_${data.food_image_5[0]?.name}`
             } else {
                 data.food_image_5 = ''
             }
-            if (data.food_video_url.length != 0) {
-                await ImageUpload(data.food_video_url[0], "restaurant", "img5", data?.food_name)
+            if (data?.food_video_url?.length != 0) {
+                await ImageUpload(data?.food_video_url[0], "restaurant", "img5", data?.food_name)
                 data.food_video_url = `${restaurantLink}${data?.food_name}_img5_${data.food_video_url[0]?.name}`
             } else {
                 data.food_video_url = ''
@@ -125,9 +123,10 @@ export default function AddRestItem(props) {
             editFoodItem(props?.data?.food_id, updatedData).then(res => {
                 if (res?.status == 'success') {
                     toast?.success('Food item updated successfully')
-                    props?.getRestFood()
+                    props?.getRestFood();
                     toggle();
-                    setLoader(false)
+                    setLoader(false);
+                    reset();
                 }
             })
         } else {
@@ -135,9 +134,10 @@ export default function AddRestItem(props) {
             addFoodItem(updatedData).then(res => {
                 if (res?.status == 'success') {
                     toast.success('Food Item Added Successfully')
-                    props?.getRestFood()
-                    toggle()
-                    setLoader(false)
+                    props?.getRestFood();
+                    toggle();
+                    setLoader(false);
+                    reset();
                 }
             })
         }
