@@ -81,18 +81,18 @@ const Step1 = (props) => {
     }
 
     useEffect(() => {
-        if (props.button == 'edit' && props.data) {
-            // reset({
-            //     "shop_name": props?.data?.vendor?.shop_name,
-            //     "shop_address": props?.data?.vendor?.shop_address,
-            //     "shop_contact_number": props?.data?.vendor?.shop_contact_number,
-            //     "about_restaurant": props?.data?.about_restaurant,
-            //     "latitude": props?.data?.vendor?.latitude,
-            //     "longitude": props?.data?.vendor?.longitude,
-            // })
-        } else {
-            // methods = useForm()
-        }
+        // if (props.button == 'edit' && props.data) {
+        //     reset({
+        //         "shop_name": props?.data?.vendor?.shop_name,
+        //         "shop_address": props?.data?.vendor?.shop_address,
+        //         "shop_contact_number": props?.data?.vendor?.shop_contact_number,
+        //         "about_restaurant": props?.data?.about_restaurant,
+        //         "latitude": props?.data?.vendor?.latitude,
+        //         "longitude": props?.data?.vendor?.longitude,
+        //     })
+        // } else {
+        //     // methods = useForm()
+        // }
         getCurrentPostion()
     }, [])
 
@@ -225,44 +225,6 @@ const Step1 = (props) => {
                         />
                         {errors.longitude && <Error title='Longitude' />}
                     </div>
-
-                    {/* <div className="">
-                        <label className={labelClass}>
-                            State*
-                        </label>
-                        <input
-                            type="text"
-                            // readOnly
-                            placeholder='State'
-                            className={inputClass}
-                            {...register('state',)}
-                        />
-                    </div>
-                    <div className="">
-                        <label className={labelClass}>
-                            Pincode*
-                        </label>
-                        <input
-                            type="text"
-                            // readOnly
-                            placeholder='Pincode'
-                            className={inputClass}
-                            {...register('pincode',)}
-                        />
-                    </div>
-                    <div className="">
-                        <label className={labelClass}>
-                            City*
-                        </label>
-                        <input
-                            type="text"
-                            // readOnly
-                            placeholder='City'
-                            className={inputClass}
-                            {...register('city',)}
-                        />
-                    </div> */}
-                   
                 </div>
             </div>
             <div className='col-span-2'>
@@ -783,7 +745,7 @@ export default function DashboardForm(props) {
 
     // ================= submit data  ===============================
     const onSubmit = async (data) => {
-        console.log('data', data)
+        console.log('data =======', data)
         const shopStartTime = moment(data?.shop_start_time, 'HH:mm').format('hh:mm A');
         const shopEndTime = moment(data?.shop_end_time, 'HH:mm').format('hh:mm A');
         data.shop_start_time = shopStartTime;
@@ -986,7 +948,6 @@ export default function DashboardForm(props) {
         setActiveStep(0)
         methods.reset();
         setLoader(false);
-        reset();
     }
 
     useEffect(() => {
