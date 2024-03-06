@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 import Switch from "react-js-switch";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import { useSelector } from "react-redux";
-import { getRestarant, verifyVendors } from "../../../api";
+import { getRestarant, verifyVendors, getFranchRestaurant } from "../../../api";
 import { useForm } from "react-hook-form";
 import userImg from "../../../assets/user.jpg";
 import {
@@ -22,6 +22,7 @@ import { toast } from "react-toastify";
 export default function Restaurant() {
   const [data, setData] = useState([]);
   const user = useSelector((state) => state?.user?.loggedUserDetails);
+  console.log('user', user);
   const {
     register,
     handleSubmit,
@@ -29,6 +30,8 @@ export default function Restaurant() {
     reset,
   } = useForm();
 
+
+  // ============== Fetch All Admin Restaurants  ================
   const getAllRestaurant = () => {
     getRestarant().then((res) => {
       const restaurantVendors = res.filter(
@@ -38,18 +41,26 @@ export default function Restaurant() {
     });
   };
 
-//   // ============== fetch data from api ================
-//   const getAllPromotionList = () => {
-//     try {
-//       addHomePromotion().then((res) => {
-//         console.log(res.data);
-//         setpromotionList(res.data);
-//         dispatch(setPromotions(res));
-//       });
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   };
+  // ============== Fetch Franchisee Restaurant  ================
+  const getFranchiseRestaurants = () => {
+    try {
+       getFranchRestaurant(user?.userid).then((res) => {
+        console.log(res.data);
+        setData(res.data);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (user?.role == "admin") {
+      getAllRestaurant();
+    }
+    if (user?.role == "franchise") {
+      getFranchiseRestaurants();
+    }
+  }, []);
 
   // =================== filter data ========================
   const onSubmit = async (data) => {
@@ -274,15 +285,6 @@ export default function Restaurant() {
       sortable: true,
     },
   ];
-
-  useEffect(() => {
-    if (user?.role == "admin") {
-      getAllRestaurant();
-    }
-    if (user?.role == "franchise") {
-      getFranchiseRestaurants();
-    }
-  }, []);
 
   return (
     <>

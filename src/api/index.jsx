@@ -345,6 +345,17 @@ export const getRestarant = async () => {
     }
 }
 
+/* ============== get all Franchisee Restaurant ============ */
+export const getFranchRestaurant = async (franchId, data) => {
+    const url = `${environment.baseUrl}franchise/all_restaurant_byfranchise/${franchId}`;
+    try {
+        const response = await axios.get(url, data)
+        return response.data
+    } catch (err) {
+        console.log('Error getting restaurant', err)
+    }
+}
+
 /* ============== update restaurant ============ */
 export const editRestaurant = async (vendorID, data) => {
     const url = `${environment.baseUrl}vendor/edit_restaurant/${vendorID}`;
