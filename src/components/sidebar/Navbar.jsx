@@ -55,7 +55,7 @@ const Navbar = ({ mobileSidebar, setMobileSidebar }) => {
                             </h4>
                             <h4 className="text-[12px] font-medium leading-none capitalize text-gray-500 pt-0.5 ">
                                 {/* <span className='lowercase'>{user?.loggedUserDetails?.role !== "admin" && (`(${user?.loggedUserDetails?.service})`)}</span>  */}
-                                {user?.role == 'admin' ? user?.role : user?.role == 'seller' ? user?.vendor_type : 'Admin'}
+                                {user?.role == 'admin' ? 'Admin' : user?.role == 'seller' ? user?.vendor_type : user?.role == 'franchise' ? 'Franchise' : ''}
                             </h4>
                         </div>
 

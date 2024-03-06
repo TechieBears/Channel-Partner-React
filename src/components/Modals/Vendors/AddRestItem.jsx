@@ -9,6 +9,9 @@ import { useSelector } from 'react-redux';
 import { addFoodItem, addRestaurant, editFoodItem, editRestaurantFood, getCategory, getRestaurantCategory, getRestaurantSubCategory, getSubCategory, editAdminFinalFood } from '../../../api';
 import { ImageUpload, restaurantLink } from '../../../env';
 import { toast } from 'react-toastify';
+import Error from '../../Errors/Error';
+
+
 
 export default function AddRestItem(props) {
     console.log('props = ', props)
@@ -20,6 +23,7 @@ export default function AddRestItem(props) {
     const [FinalPriceAdmin, setFinalPriceAdmin] = useState([]);
     const { register, handleSubmit, control, watch, reset, setValue, formState: { errors } } = useForm();
     const user = useSelector((state) => state?.user?.loggedUserDetails);
+    console.log('user', user)
     const toggle = () => setOpen(!isOpen)
     const closeBtn = () => {
         toggle();
@@ -35,8 +39,9 @@ export default function AddRestItem(props) {
         }
     };
     const onSellerSubmit = async (data) => {
-        if (props?.button == 'edit') {      // for edit
-            // console.log('image edit')
+        console.log('data ==', data)
+        if (props?.title != 'Add Item') {      // for edit
+            console.log('image edit')
             if (data?.food_image_1 != props?.data?.food_image_1) {
                 await ImageUpload(data?.food_image_1[0], "restaurant", "mainImage", data?.food_name)
                 data.food_image_1 = `${restaurantLink}${data?.food_name}_mainImage_${data?.food_image_1[0]?.name}`
@@ -114,21 +119,25 @@ export default function AddRestItem(props) {
             }
         }
         let updatedData = { ...data, vendor: user?.sellerId }
-        if (props?.button == 'edit') {
+        if (props?.title != 'Add Item') {
+            setLoader(true)
             console.log('in function edit')
             editFoodItem(props?.data?.food_id, updatedData).then(res => {
                 if (res?.status == 'success') {
                     toast?.success('Food item updated successfully')
                     props?.getRestFood()
                     toggle();
+                    setLoader(false)
                 }
             })
         } else {
+            setLoader(true)
             addFoodItem(updatedData).then(res => {
                 if (res?.status == 'success') {
                     toast.success('Food Item Added Successfully')
                     props?.getRestFood()
                     toggle()
+                    setLoader(false)
                 }
             })
         }
@@ -524,7 +533,7 @@ export default function AddRestItem(props) {
                                                             // onChange={(e) => handleImageChange(e)}
                                                             {...register("food_image_1",
                                                                 { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data?.food_image_1 != '' && props?.data?.food_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                        {props?.button == 'edit' && props?.data?.food_image_1 != '' && props?.data?.food_image_1 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                             {props?.data?.food_image_1?.split('/').pop()}
                                                         </label>}
                                                         {errors.food_image_1 && <Error title='Main Image is required*' />}
@@ -538,12 +547,10 @@ export default function AddRestItem(props) {
                                                             disabled={user?.role == 'admin' ? true : false}
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            {...register("food_image_2",
-                                                                { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data?.food_image_2 != '' && props?.data?.food_image_2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                            {...register("food_image_2")} />
+                                                        {props?.button == 'edit' && props?.data?.food_image_2 != '' && props?.data?.food_image_2 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                             {props?.data?.food_image_2?.split('/').pop()}
                                                         </label>}
-                                                        {errors.food_image_2 && <Error title='Main Image is required*' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Image 3</label>
@@ -555,7 +562,7 @@ export default function AddRestItem(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("food_image_3")} />
-                                                        {props?.button == 'edit' && props?.data?.food_image_3 != '' && props?.data?.food_image_3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                        {props?.button == 'edit' && props?.data?.food_image_3 != '' && props?.data?.food_image_3 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                             {props?.data?.food_image_3?.split('/').pop()}
                                                         </label>}
                                                     </div>
@@ -569,7 +576,7 @@ export default function AddRestItem(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("food_image_4")} />
-                                                        {props?.button == 'edit' && props?.data?.food_image_4 != '' && props?.data?.food_image_4 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                        {props?.button == 'edit' && props?.data?.food_image_4 != '' && props?.data?.food_image_4 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                             {props?.data?.food_image_4?.split('/').pop()}
                                                         </label>}
                                                     </div>
@@ -583,7 +590,7 @@ export default function AddRestItem(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("food_image_5")} />
-                                                        {props?.button == 'edit' && props?.data?.food_image_5 != '' && props?.data?.food_image_5 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                        {props?.button == 'edit' && props?.data?.food_image_5 != '' && props?.data?.food_image_5 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                             {props?.data?.food_image_5?.split('/').pop()}
                                                         </label>}
                                                     </div>

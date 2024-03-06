@@ -148,6 +148,11 @@ export const Franchise = [
         icon: <Wallet size="24" />,
         link: '/delivery',
     },
+    {
+        title: 'Resturants',
+        icon: <ChefHat />,
+        link: '/resturants',
+    },
     // {
     //     title: 'Settings',
     //     icon: <Wallet size="24" />,
