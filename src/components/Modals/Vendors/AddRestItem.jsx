@@ -11,7 +11,6 @@ import { ImageUpload, restaurantLink } from '../../../env';
 import { toast } from 'react-toastify';
 
 export default function AddRestItem(props) {
-    // console.log('props = ', props)
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false);
     const [category, setCategory] = useState([]);
@@ -20,7 +19,6 @@ export default function AddRestItem(props) {
     const [FinalPriceAdmin, setFinalPriceAdmin] = useState([]);
     const { register, handleSubmit, control, watch, reset, setValue, formState: { errors } } = useForm();
     const user = useSelector((state) => state?.user?.loggedUserDetails);
-    // console.log('user = ', user)
     const toggle = () => setOpen(!isOpen)
     const closeBtn = () => {
         toggle();
@@ -36,7 +34,6 @@ export default function AddRestItem(props) {
         }
     };
     const onSellerSubmit = async (data) => {
-        console.log('data =', data)
         if (props?.button == 'edit') {      // for edit
             console.log('image edit')
             if (data?.food_image_1 != props?.data?.food_image_1) {
@@ -168,7 +165,7 @@ export default function AddRestItem(props) {
                 'menu_type': props?.data?.menu_type,
             })
         } else {
-            if (props?.title == 'edit') {
+            if (props?.button == 'edit') {
                 reset({
                     'food_name': props?.data.food_name,
                     'food_category': props?.data.food_category?.id,
@@ -485,7 +482,7 @@ export default function AddRestItem(props) {
                                                         </label>
                                                         <select
                                                             name="menu"
-                                                            className={`${inputClass} !bg-slate-100`}
+                                                            className={`${inputClass}`}
                                                             {...register("menu_type", { required: true })}
                                                         >
                                                             <option value="">Select</option>

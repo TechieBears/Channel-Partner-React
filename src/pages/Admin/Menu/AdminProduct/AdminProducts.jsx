@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import Table from '../../../../components/Table/Table';
 import { Link } from 'react-router-dom';
 import { Eye, Trash } from 'iconsax-react';
-import { editVendorProduct, getProductsByAdmin, VerifyProductAdmin, makeFeatureProduct, getRestaurantFood } from '../../../../api';
+import { editVendorProduct, getProductsByAdmin, VerifyProductAdmin, makeFeatureProduct, getRestaurantFood, editAdminFinalFood } from '../../../../api';
 import Switch from 'react-js-switch';
 import userImg from '../../../../assets/user.jpg';
 import AddProduct from '../../../../components/Modals/Vendors/AddProduct';
@@ -20,7 +20,6 @@ const AdminProduct = (props) => {
     const [shopProducts, setShopProducts] = useState([])
     const storages = useSelector((state) => state?.storage?.list);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
-    console.log('shopProducts', shopProducts)
     const getProducts = () => {
         try {
             getProductsByAdmin().then(res => {
@@ -111,22 +110,6 @@ const AdminProduct = (props) => {
         </button>
     </div>
 
-
-    // =============================== active user switch =============================
-    const switchActive = (row) => {
-        return (
-            <div className="flex items-center justify-center gap-2">
-                <Switch
-                    value={row?.product_isverified_byfranchise}
-                    disabled={true}
-                    // onChange={() => activeActions(row)}
-                    size={50}
-                    backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
-                    borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
-            </div>
-        )
-    }
-
     const verifyActions = (row) => {
         const payload = { productId: row?.product_id, product_isverified_byadmin: !row?.product_isverified_byadmin, product_isverified_byfranchise: row?.product_isverified_byfranchise }
         if (row?.markup_percentage != undefined || row.markup_percentage != 0) {
@@ -144,6 +127,51 @@ const AdminProduct = (props) => {
             }
             catch (err) {
                 console.log(err);
+            }
+        }
+    }
+
+    const itemVerifyAdmin = (row) => {
+        const payload = {
+            food_id: row?.food_id,
+            food_isverified_byadmin: !row?.food_isverified_byadmin,
+        }
+        if (row?.markup_percentage != undefined || row?.markup_percentage != 0) {
+            try {
+                editAdminFinalFood(row?.food_id, payload).then(res => {
+                    if (res?.status == 'success') {
+                        toast?.success(res?.message)
+                        getRestaurantFoodItems();
+                    } else {
+                        console.log('error', res?.message)
+                    }
+                }
+                )
+            } catch (e) {
+                console.log(e)
+            }
+        }
+    }
+
+    const featureItem = (row) => {
+        console.log('called')
+        const payload = {
+            food_id: row?.food_id,
+            featured: !row?.featured,
+        }
+        if (row?.markup_percentage != undefined || row?.markup_percentage != 0) {
+            try {
+                editAdminFinalFood(row?.food_id, payload).then(res => {
+                    if (res?.status == 'success') {
+                        toast?.success(res?.message)
+                        getRestaurantFoodItems();
+                    } else {
+                        console.log('error', res?.message)
+                    }
+                }
+                )
+            } catch (e) {
+                console.log(e)
             }
         }
     }
@@ -183,7 +211,7 @@ const AdminProduct = (props) => {
         )
     }
 
-    // =============================== verify user switch =============================
+    // =============================== verify Vendor Product switch =============================
     const switchFeatured = (row) => {
         return (
             <div className="flex items-center justify-center gap-2 ">
@@ -198,13 +226,13 @@ const AdminProduct = (props) => {
         )
     }
 
-    // =============================== FOOD ITEMS SWITCHES =============================
+    // =============================== FOOD ITEMS Admin Verify SWITCHES =============================
     const switchVerifyRes = (row) => {
         return (
             <div className="flex items-center justify-center gap-2 ">
                 <Switch
                     value={row?.food_isverified_byadmin}
-                    onChange={() => verifyActions(row)}
+                    onChange={() => itemVerifyAdmin(row)}
                     disabled={row?.markup_percentage == 0 || row?.markup_percentage == undefined ? true : false}
                     size={50}
                     backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
@@ -213,12 +241,14 @@ const AdminProduct = (props) => {
         )
     }
 
+    // ================== Feature Restaurant Food Items =================
+
     const switchFeaturedRes = (row) => {
         return (
             <div className="flex items-center justify-center gap-2 ">
                 <Switch
-                    value={row?.food_isverified_byfranchise}
-                    onChange={() => verifyFeatured(row)}
+                    value={row?.featured}
+                    onChange={() => featureItem(row)}
                     disabled={row?.markup_percentage == 0 || row?.markup_percentage == undefined ? true : false}
                     size={50}
                     backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
@@ -275,13 +305,9 @@ const AdminProduct = (props) => {
         { field: 'product_subcategory', header: 'Food Sub-Category', body: (row) => <h6>{row?.food_subcategory?.subcat_name}</h6>, sortable: true },
         { field: 'food_actual_price', header: 'MRP', sortable: true },
         { field: 'final_price', header: 'Final Price', sortable: true },
-        // { field: 'product_available_qty', header: 'Available Quantity', sortable: true },
         { field: 'shop_name', header: 'Restaurant Name', body: (row) => <h6>{row?.vendor?.shop_name}</h6>, sortable: true },
         { field: 'pincode', header: 'PINCODE', body: (row) => <h6>{row?.vendor?.user?.pincode}</h6>, sortable: true },
         { field: 'email', header: 'Email', body: (row) => <h6>{row?.vendor?.user?.email}</h6>, sortable: true },
-        // { field: 'product_shelflife', header: 'Expiry Details', sortable: true },
-        // { field: 'product_Manufacturer_Name', header: 'Manufacturer Name', sortable: true },
-        // { field: 'product_country_of_origin', header: 'Country Of Origin', sortable: true },
         { filed: 'action', header: 'Action', body: fooditemaction, sortable: true },
         { field: 'isverify', header: 'Admin Verify', body: switchVerifyRes, sortable: true },
         { field: 'featured', header: 'Featured Products', body: switchFeaturedRes, sortable: true },
@@ -298,7 +324,7 @@ const AdminProduct = (props) => {
         { field: 'product_Manufacturer_Name', header: 'Manufacturer Name', sortable: true },
         { field: 'product_country_of_origin', header: 'Country Of Origin', sortable: true },
         { filed: 'action', header: 'Action', body: productaction, sortable: true },
-        // { field: 'isverify', header: 'Admin Verify', body: switchVerify, sortable: true },
+        { field: 'isverify', header: 'Admin Verify', body: switchVerify, sortable: true },
     ]
 
 
