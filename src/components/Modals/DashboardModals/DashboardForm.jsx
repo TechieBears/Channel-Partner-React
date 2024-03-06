@@ -22,7 +22,7 @@ import { LocateFixed } from 'lucide-react';
 
 
 const Step1 = (props) => {
-    console.log('props = ', props)
+    // console.log('props = ', props)
 
     const [manually, setManally] = useState(false);
     const [verifyPhone, setVerifyPhone] = useState(false);
@@ -82,14 +82,14 @@ const Step1 = (props) => {
 
     useEffect(() => {
         if (props.button == 'edit' && props.data) {
-            reset({
-                "shop_name": props?.data?.vendor?.shop_name,
-                "shop_address": props?.data?.vendor?.shop_address,
-                "shop_contact_number": props?.data?.vendor?.shop_contact_number,
-                "about_restaurant": props?.data?.about_restaurant,
-                "latitude": props?.data?.vendor?.latitude,
-                "longitude": props?.data?.vendor?.longitude,
-            })
+            // reset({
+            //     "shop_name": props?.data?.vendor?.shop_name,
+            //     "shop_address": props?.data?.vendor?.shop_address,
+            //     "shop_contact_number": props?.data?.vendor?.shop_contact_number,
+            //     "about_restaurant": props?.data?.about_restaurant,
+            //     "latitude": props?.data?.vendor?.latitude,
+            //     "longitude": props?.data?.vendor?.longitude,
+            // })
         } else {
             // methods = useForm()
         }
@@ -293,8 +293,8 @@ const Step1 = (props) => {
 
 // =================== form steps 2 =================
 const Step2 = (props) => {
-    console.log('step 2 props ========', props?.category)
-    console.log('props ========', props)
+    // console.log('step 2 props ========', props?.category)
+    console.log('props2 ========', props)
     const { register, getValues, setValue, control, reset, formState: { errors }, } = useFormContext()
 
     const [allCuisines, setAllCuisines] = useState([
@@ -463,20 +463,6 @@ const Step3 = (props) => {
                 </label>}
                 {/* {errors.shop_image && <Error title='Image is required*' />} */}
             </div>
-            {/* <div className="">
-                <label className={labelClass} htmlFor="main_input">Image 3</label>
-                <input className={fileinput}
-                    id="main_input"
-                    type='file'
-                    multiple
-                    accept='image/jpeg,image/jpg,image/png'
-                    placeholder='Upload Images...'
-                    {...register("res_img3", {})} />
-                {props?.button == 'edit' && props?.data.res_img3 != '' && props?.data.res_img3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                    {props?.data?.res_img3?.split('/').pop()}
-                </label>}
-                {errors.res_img3 && <Error title='Restaurant Image is required*' />}
-            </div> */}
             <p className='text-base font-normal md:col-span-2 lg:col-span-3'>Dish Images</p>
             <div className="">
                 <label className={labelClass} htmlFor="main_input">Image 1*</label>
@@ -552,7 +538,7 @@ const Step4 = (props) => {
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
                     {...register("order_img2", {})} />
-                {props?.button == 'edit' && props?.data.order_img2 != '' && props?.data.order_img2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                {props?.button == 'edit' && props?.data?.order_img2 != '' && props?.data?.order_img2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                     {props?.data?.order_img2?.split('/').pop()}
                 </label>}
             </div>
@@ -565,7 +551,7 @@ const Step4 = (props) => {
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
                     {...register("order_img3", {})} />
-                {props?.button == 'edit' && props?.data.order_img3 != '' && props?.data.order_img3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                {props?.button == 'edit' && props?.data?.order_img3 != '' && props?.data?.order_img3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                     {props?.data?.order_img3?.split('/').pop()}
                 </label>}
             </div>
@@ -582,13 +568,12 @@ const Step5 = (props) => {
     useEffect(() => {
         if (props.button == 'edit' && props.data) {
             reset({
-
                'pan_card': props?.data?.vendor?.pan_card,
                'bank_name': props?.data?.vendor?.bank_name,
                'account_number': props?.data?.vendor?.account_number,
                'ifsc_code': props?.data?.vendor?.ifsc_code,
                'adhar_card': props?.data?.vendor?.adhar_card,
-            //    'gst_number': props?.data?.vendor?.gst_number,
+               'gst_number': props?.data?.vendor?.gst_number,
             })
         } else {
             // methods = useForm()
@@ -596,31 +581,6 @@ const Step5 = (props) => {
     }, [])
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
-            <p className='col-span-3 text-lg font-semibold'>PAN Details</p>
-            {/* <div className="">
-                <label className={labelClass}>
-                    PAN No*
-                </label>
-                <input
-                    type="text"
-                    placeholder='PAN No'
-                    className={inputClass}
-                    {...register('pan_card', { required: true })}
-                />
-                {errors.pan_card && <Error title='PAN No is required*' />}
-            </div> */}
-            {/* <div className="">
-                <label className={labelClass}>
-                    Name On Document*
-                </label>
-                <input
-                    type="text"
-                    placeholder='Name On Document'
-                    className={inputClass}
-                    {...register('pan_name', { required: true })}
-                />
-                {errors.pan_name && <Error title='Name On Document is required*' />}
-            </div> */}
             <div className="">
                 <label className={labelClass} htmlFor="main_input">PAN Card Photo*</label>
                 <input className={fileinput}
@@ -628,81 +588,19 @@ const Step5 = (props) => {
                     type='file'
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("pan_name", {required: true})} />
-                {props?.button == 'edit' && props?.data.pan_name != '' && props?.data.pan_name != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                    {props?.data?.pan_name?.split('/').pop()}
+                    {...register("pan_card", {required: true})} />
+                {props?.button == 'edit' && props?.data?.vendor?.pan_card != '' && props?.data?.vendor?.pan_card != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                    {props?.data?.vendor?.pan_card?.split('/').pop()}
                 </label>
                 }
-                {errors.pan_name && <Error title='PAN Card Image is required*' />}
+                {errors.pan_card && <Error title='PAN Card Image is required*' />}
             </div>
-            <p className='col-span-3 text-lg font-semibold'>GST Details</p>
             <div>
-                <label>Is Your Restaurant GST registered</label>
-                <select
-                    className={inputClass}
-                    {...register('gst_registered', {})}
-                >
-                    <option value='Yes'>Yes</option>
-                    <option value='No'>No</option>
-                </select>
-            </div>
-            {gstRegistered == "Yes" &&
-                <>
-                    <div>
-                        <label>GST Number</label>
-                        <input
-                            className={inputClass}
-                            {...register('gst_number', { required: gstRegistered == 'Yes' ? true : false })}
-                            placeholder='GST Number'
-                        />
-                        {errors?.gst_number && (gstRegistered == 'Yes') ? <Error title='GST Number is required*' /> : ''}
-                    </div>
-                    {/* <div className="">
-                        <label className={labelClass} htmlFor="main_input">GST Image</label>
-                        <input className={fileinput}
-                            id="main_input"
-                            type='file'
-                            multiple
-                            accept='image/jpeg,image/jpg,image/png'
-                            placeholder='Upload Images...'
-                            {...register("order_img3", {})} />
-                        {props?.button == 'edit' && props?.data.order_img3 != '' && props?.data.order_img3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                            {props?.data?.order_img3?.split('/').pop()}
-                        </label>}
-                    </div> */}
-                    <div>
-                        <label>Do you charge 5% GST on all your menu items?</label>
-                        <select
-                            className={inputClass}
-                            {...register('gst_charge_menu', { required: true })}
-                        >
-                            <option value='No'>No</option>
-                            <option value='Yes'>Yes</option>
-                        </select>
-                    </div>
-                </>
-            }
-            <p className='col-span-3 text-lg font-semibold'>FSSAI Details</p>
-            <div className="">
-                <label className={labelClass}>
-                    FSSAI Cerificate Number
-                </label>
+                <label>GST Number</label>
                 <input
-                    type="text"
-                    placeholder='FSSAI Cerificate Number'
                     className={inputClass}
-                    {...register('fssai_certificate_number')}
-                />
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    FSSAI Expiry Date
-                </label>
-                <input
-                    type="date"
-                    placeholder='FSSAI Expiry Date'
-                    className={inputClass}
-                    {...register('fssai_expiry_date')}
+                    {...register('gst_number')}
+                    placeholder='GST Number'
                 />
             </div>
             <div className="">
@@ -713,9 +611,9 @@ const Step5 = (props) => {
                     multiple
                     accept='image/jpeg,image/jpg,image/png,application/pdf'
                     placeholder='Upload Images...'
-                    {...register("fassai_doc", {})} />
-                {props?.button == 'edit' && props?.data?.fassai_doc != '' && props?.data?.fassai_doc != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
-                    {props?.data?.fassai_doc.split('storage')[1].split('/')[1].split('_')[2]}
+                    {...register("fssai_license", {})} />
+                {props?.button == 'edit' && props?.data?.vendor?.fssai_license != '' && props?.data?.vendor?.fssai_license != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
+                    {props?.data?.vendor?.fssai_license?.split('/').pop()}
                 </label>}
             </div>
             <p className='col-span-3 text-lg font-semibold'>Banking Details</p>
@@ -756,18 +654,6 @@ const Step5 = (props) => {
                 {errors?.ifsc_code && <Error title='IFSC Code is required*' />}
             </div>
             <p className='col-span-3 text-lg font-semibold'>Adhar Details</p>
-            {/* <div className="">
-                <label className={labelClass}>
-                    Adhar Number*
-                </label>
-                <input
-                    type="text"
-                    placeholder='Adhar Number'
-                    className={inputClass}
-                    {...register('adhar_card', { required: true })}
-                />
-                {errors?.adhar_card && <Error title='Adhar number is required' />}
-            </div> */}
             <div className="">
                 <label className={labelClass} htmlFor="main_input">Aadhar Card Photo*</label>
                 <input className={fileinput}
@@ -777,8 +663,8 @@ const Step5 = (props) => {
                     accept='image/jpeg,image/jpg,image/png,application/pdf'
                     placeholder='Upload Images...'
                     {...register("adhar_card", { required: true })} />
-                {props?.button == 'edit' && props?.data?.adhar_card != '' && props?.data?.adhar_card != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
-                    {props?.data?.adhar_card.split('storage')[1].split('/')[1].split('_')[2]}
+                {props?.button == 'edit' && props?.data?.vendor?.adhar_card != '' && props?.data?.vendor?.adhar_card != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
+                    {props?.data?.vendor?.adhar_card?.split('/').pop()}
                 </label>}
                 {errors.adhar_card && <Error title='Adhar Card Image is required*' />}
             </div>
@@ -796,7 +682,6 @@ export default function DashboardForm(props) {
     const [selectedCuisines, setSelectedCuisines] = useState([])
     const [activeStep, setActiveStep] = useState(0);
     const toggle = () => setIsOpen(!isOpen);
-    const { register, handleSubmit, setValue,  control, formState: { errors }, reset } = useForm();
 
     const steps = ['Restaurant Information', 'Restaurant Type and Timing', 'Upload Images', 'General Information', 'Legal Documentation',];
 
@@ -813,68 +698,53 @@ export default function DashboardForm(props) {
 
     var methods = useForm({
         defaultValues: {
-            "name": "",
-            "operational_year": "",
-            "location": "",
-            "manage_software": "",
-            "operating_hrs": "",
-            "rating": "",
-            "address": "",
-            "description": "",
-            "door_sensor": "",
-            "temp_system": "",
-            "remote_temp_sys": "",
-            "electricity_bckup": "",
-            "cctv": "",
-            "chamber_type": "",
-            "storage_type": "",
-            "temp_compliance": "",
-            "blast_frezzing": "",
-            "spoc_name": "",
-            "spoc_desgination": "",
-            "spoc_contact": "",
-            "spoc_email": "",
-            "dm_name": "",
-            "dm_desgination": "",
-            "dm_contact": "",
-            "dm_email": "",
-            "fassai_license": "",
-            "gst_no": "",
-            "other_license": "",
+            "shop_name": "",
+            "shop_address": "",
+            "shop_contact_number": "",
+            "about_restaurant": "",
+            "latitude": "",
+            "longitude": "",
+            "veg_nonveg": "",
+            "restaurant_type": "",
+            "shop_start_time": "",
+            "shop_end_time": "",
+            "type_of_cuisine": "",
+            "ambience_image": "",
+            "shop_image": "",
+            "pan_card": "",
+            "bank_name": "",
+            "account_number": "",
+            "ifsc_code": "",
+            "adhar_card": "",
+            "gst_number": "",
         }
     });
     // =================== default values ====================
     if (props.button == 'edit' && props.data) {
+        const formattedStartTime = moment(props?.data?.vendor?.shop_start_time, 'h:mm A').format('HH:mm');
+        const formattedEndTime = moment(props?.data?.vendor?.shop_end_time, 'h:mm A').format('HH:mm');
+
         methods = useForm({
             defaultValues: {
-                "name": props?.data?.name,
-                "operational_year": props?.data?.operational_year,
-                "location": props?.data?.location,
-                "manage_software": props?.data?.manage_software,
-                "operating_hrs": props?.data?.operating_hrs,
-                "rating": props?.data?.rating,
-                "chamber_type": props?.data?.chamber_type,
-                "storage_type": props?.data?.storage_type,
-                "temp_compliance": props?.data?.temp_compliance,
-                "address": props?.data?.address,
-                "description": props?.data?.description,
-                "door_sensor": props?.data?.door_sensor,
-                "temp_system": props?.data?.temp_system,
-                "remote_temp_sys": props?.data?.remote_temp_sys,
-                "electricity_bckup": props?.data?.electricity_bckup,
-                "cctv": props?.data?.cctv,
-                "blast_frezzing": props?.data?.blast_frezzing,
-                "spoc_name": props?.data?.spoc_name,
-                "spoc_desgination": props?.data?.spoc_desgination,
-                "spoc_contact": props?.data?.spoc_contact,
-                "spoc_email": props?.data?.spoc_email,
-                "dm_name": props?.data?.dm_name,
-                "dm_desgination": props?.data?.dm_desgination,
-                "dm_contact": props?.data?.dm_contact,
-                "dm_email": props?.data?.dm_email,
-                "fassai_license": props?.data?.fassai_license,
-                "gst_no": props?.data?.gst_no,
-                "other_license": props?.data?.other_license,
+                "shop_name": props?.data?.vendor?.shop_name,
+                "shop_address": props?.data?.vendor?.shop_address,
+                "shop_contact_number": props?.data?.vendor?.shop_contact_number,
+                "about_restaurant": props?.data?.about_restaurant,
+                "latitude": props?.data?.vendor?.latitude,
+                "longitude": props?.data?.vendor?.longitude,
+                "veg_nonveg": props?.data?.veg_nonveg,
+                "restaurant_type": props?.data?.restaurant_type,
+                "shop_start_time":formattedStartTime,
+                "shop_end_time": formattedEndTime,
+                "type_of_cuisine": JSON.parse(props?.data?.type_of_cuisine),
+                "ambience_image": props?.data?.ambience_image,
+                "shop_image": props?.data?.vendor?.shop_image,
+                "pan_card": props?.data?.vendor?.pan_card,
+                "bank_name": props?.data?.vendor?.bank_name,
+                "account_number": props?.data?.vendor?.account_number,
+                "ifsc_code": props?.data?.vendor?.ifsc_code,
+                "adhar_card": props?.data?.vendor?.adhar_card,
+                "gst_number": props?.data?.vendor?.gst_number,
             }
         })
     } else {
@@ -913,29 +783,17 @@ export default function DashboardForm(props) {
 
     // ================= submit data  ===============================
     const onSubmit = async (data) => {
+        console.log('activeStep = ', activeStep, 'steps.length = ', steps.length)
         const shopStartTime = moment(data?.shop_start_time, 'HH:mm').format('hh:mm A');
         const shopEndTime = moment(data?.shop_end_time, 'HH:mm').format('hh:mm A');
 
         data.shop_start_time = shopStartTime;
         data.shop_end_time = shopEndTime;
 
-        // moment(data?.shop_start_time).format('LT');
-        // moment(data?.shop_closing_time).format('LT');
-
-        // setValue('shop_start_time', moment(data?.shop_start_time, 'HH:mm').format('h:mm A'))
-        // setValue('shop_end_time', moment(data?.shop_end_time, 'HH:mm').format('h:mm A'))
-        // console.log( moment(data?.shop_start_time, 'HH:mm').format('h:mm A'),  moment(data?.shop_end_time, 'HH:mm').format('h:mm A'))
-        console.log(data.shop_start_time, data.shop_end_time)
-
-        // if(data?.shop_start_time || data?.shop_end_time){
-        //     data?.shop_start_time = moment(data?.shop_start_time, 'HH:mm').format('h:mm A')
-        //     data?.shop_end_time = moment(data?.shop_end_time, 'HH:mm').format('h:mm A')
-        // }
-
         console.log('data', data)
         isStepFalied()
         setLoader(true)
-        if (props?.button != 'edit') {      
+        if (props?.button != 'edit') {    
             if (activeStep == steps.length - 1) {
                 if (data.ambience_image.length != 0) {
                     await ImageUpload(data.ambience_image[0], "restaurant", "ambience_image", data.shop_name)
@@ -979,12 +837,6 @@ export default function DashboardForm(props) {
                 } else {
                     data.fassai_doc = ''
                 }
-                // if (data.menu_image2.length != 0) {
-                //     await ImageUpload(data.menu_image2[0], "restaurant", "stagingImage", data.name)
-                //     data.menu_image2 = `${restaurantLink}${data.name}_stagingImage_${data.menu_image2[0].name}`
-                // } else {
-                //     data.menu_image2 = ''
-                // }
                 if (data.order_img1.length != 0) {
                     await ImageUpload(data.order_img1[0], "restaurant", "order_img1", data.shop_name)
                     data.order_img1 = `${restaurantLink}${data.shop_name}_order_img1_${data.order_img1[0].name}`
@@ -1015,127 +867,141 @@ export default function DashboardForm(props) {
                 } else {
                     data.adhar_card = ''
                 }
-                // if (data.res_img3.length != 0) {
-                //     await ImageUpload(data.res_img3[0], "restaurant", "stagingImage", data.name)
-                //     data.res_img3 = `${restaurantLink}${data.name}_stagingImage_${data.res_img3[0].name}`
-                // } else {
-                //     data.res_img3 = ''
-                // }
-                let updatedData = {
-                    ...data,
-                    "type_of_cuisine": JSON.stringify(selectedCuisines),
-                    // "restaurant_type": selectedRestType,
-                    "vendorId": LoggedUserDetails?.sellerId,
-                }
-                registerRestaurant(updatedData).then(res => {
-                    if (res?.status == 'success') {
-                        toast?.success('Restaurants registered successfully')
-                        toggle();
-                        setLoader(false);
+            } 
+            try{
+                if (props?.button != "edit") {
+                    let updatedData = {
+                        ...data,
+                        "type_of_cuisine": JSON.stringify(selectedCuisines),
+                        "vendorId": LoggedUserDetails?.sellerId,
+                        // "restaurant_type": selectedRestType,
                     }
-                })
-            } else {
-                setLoader(false)
-                setActiveStep((prevActiveStep) => prevActiveStep + 1);
-            }
-        } else{
-            if (data.ambience_image.length > 0 && props?.data?.ambience_image) {
-                await ImageUpload(data.ambience_image[0], "restaurant", "ambience_image", data.shop_name)
-                data.ambience_image = `${restaurantLink}${data.shop_name}_ambience_image_${data.ambience_image[0].name}`
-            } else {
-                data.ambience_image = props?.data?.ambience_image
-            }
-            if (data.shop_image.length > 0 && props?.data?.vendor?.shop_image) {
-                await ImageUpload(data.shop_image[0], "restaurant", "shop_image", data.shop_name)
-                data.shop_image = `${restaurantLink}${data.shop_name}_shop_image_${data.shop_image[0].name}`
-            } else {
-                data.shop_image = props?.data?.vendor?.shop_image
-            }
-            if (data.food_image1.length > 0 && props?.data?.food_image1) {
-                await ImageUpload(data.food_image1[0], "restaurant", "food_image1", data.shop_name)
-                data.food_image1 = `${restaurantLink}${data.shop_name}_food_image1_${data.food_image1[0].name}`
-            } else {
-                data.food_image1 = props?.data?.food_image1
-            }
-            if (data.food_image2.length > 0 && props?.data?.food_image2) {
-                await ImageUpload(data.food_image2[0], "restaurant", "food_image2", data.shop_name)
-                data.food_image2 = `${restaurantLink}${data.shop_name}_food_image2_${data.food_image2[0].name}`
-            } else {
-                data.food_image2 = props?.data?.food_image2
-            }
-            if (data.food_image3.length > 0 && props?.data?.food_image3) {
-                await ImageUpload(data.food_image3[0], "restaurant", "food_image3", data.shop_name)
-                data.food_image3 = `${restaurantLink}${data.shop_name}_food_image3_${data.food_image3[0].name}`
-            } else {
-                data.food_image3 = props?.data?.food_image3
-            }
-            if (data.adhar_img.length > 0 && props?.data?.adhar_img) {
-                await ImageUpload(data.adhar_img[0], "restaurant", "adhar_img", data.shop_name)
-                data.adhar_img = `${restaurantLink}${data.shop_name}_adhar_img_${data.adhar_img[0].name}`
-            } else {
-                data.adhar_img = props?.data?.adhar_img
-            }
-            if (data.fassai_doc.length > 0 && props?.data?.fassai_doc) {
-                await ImageUpload(data.fassai_doc[0], "restaurant", "fassai_doc", data.shop_name)
-                data.fassai_doc = `${restaurantLink}${data.shop_name}_fassai_doc_${data.fassai_doc[0].name}`
-            } else {
-                data.fassai_doc = props?.data?.fassai_doc
-            }
-            // if (data.menu_image2.length != 0) {
-            //     await ImageUpload(data.menu_image2[0], "restaurant", "stagingImage", data.name)
-            //     data.menu_image2 = `${restaurantLink}${data.name}_stagingImage_${data.menu_image2[0].name}`
-            // } else {
-            //     data.menu_image2 = ''
-            // }
-            if (data.order_img1.length > 0 && props?.data?.order_img1) {
-                await ImageUpload(data.order_img1[0], "restaurant", "order_img1", data.shop_name)
-                data.order_img1 = `${restaurantLink}${data.shop_name}_order_img1_${data.order_img1[0].name}`
-            } else {
-                data.order_img1 = props?.data?.order_img1
-            }
-            if (data.order_img2.length != 0) {
-                await ImageUpload(data.order_img2[0], "restaurant", "order_img2", data.shop_name)
-                data.order_img2 = `${restaurantLink}${data.shop_name}_order_img2_${data.order_img2[0].name}`
-            } else {
-                data.order_img2 = order_img1
-            }
-            if (data.order_img3.length > 0 && props?.data?.order_img3) {
-                await ImageUpload(data.order_img3[0], "restaurant", "order_img3", data.shop_name)
-                data.order_img3 = `${restaurantLink}${data.shop_name}_order_img3_${data.order_img3[0].name}`
-            } else {
-                data.order_img3 = props?.data?.order_img3
-            }
-            if (data.pan_name.length > 0 && props?.data?.pan_name) {
-                await ImageUpload(data.pan_name[0], "restaurant", "pan_name", data.shop_name)
-                data.pan_name = `${restaurantLink}${data.shop_name}_pan_name_${data.pan_name[0].name}`
-            } else {
-                data.pan_name = props?.data?.pan_name
-            }
-            if (data.adhar_card.length > 0 && props?.data?.adhar_card) {
-                await ImageUpload(data.adhar_card[0], "restaurant", "adhar_card", data.shop_name)
-                data.adhar_card = `${restaurantLink}${data.shop_name}_adhar_card_${data.adhar_card[0].name}`
-            } else {
-                data.adhar_card = props?.data?.adhar_card
-            }
-            let updatedData = {
-                ...data,
-                "type_of_cuisine": JSON.stringify(selectedCuisines),
-                "vendorId": LoggedUserDetails?.sellerId,
-                // "restaurant_type": selectedRestType,
-            }
-            editOnBoarding(LoggedUserDetails?.sellerId, updatedData).then((res) => {
-                if (res?.message === "product edited successfully") {
-                    setTimeout(() => {
-                        reset();
-                        productList();
-                        toggle(),
-                            setLoader(false),
-                        toast.success(res.message);
-                    }, 1000)
+                    registerRestaurant(updatedData).then(res => {
+                        if (res?.status == 'success') {
+                            toast?.success('Restaurants registered successfully')
+                            toggle();
+                            setLoader(false);
+                        }
+                    })
+                } else {
+                    let updatedData = {
+                        ...data,
+                        "type_of_cuisine": JSON.stringify(selectedCuisines),
+                        "vendorId": LoggedUserDetails?.sellerId,
+                        // "restaurant_type": selectedRestType,
+                    }
+                    editOnBoarding(LoggedUserDetails?.sellerId, updatedData).then((res) => {
+                        if (res?.message === "Restaurant edited successfully") {
+                            setTimeout(() => {
+                                reset();
+                                productList();
+                                toggle(),
+                                    setLoader(false),
+                                toast.success(res.message);
+                            }, 1000)
+                        }
+                    })
                 }
-            })
+            } catch (error) {
+                console.log(error);
+            } 
+        } else{
+                if (activeStep == steps.length - 1) {    
+                    if (data?.ambience_image?.length > 0 && props?.data?.ambience_image) {
+                        await ImageUpload(data?.ambience_image[0], "restaurant", "ambience_image", data?.shop_name)
+                        data.ambience_image = `${restaurantLink}${data?.shop_name}_ambience_image_${data?.ambience_image[0]?.name}`
+                    } else {
+                        data.ambience_image = props?.data?.ambience_image
+                    }
+                    if (data?.shop_image?.length > 0 && props?.data?.vendor?.shop_image) {
+                        await ImageUpload(data?.shop_image[0], "restaurant", "shop_image", data?.shop_name)
+                        data.shop_image = `${restaurantLink}${data?.shop_name}_shop_image_${data?.shop_image[0]?.name}`
+                    } else {
+                        data.shop_image = props?.data?.vendor?.shop_image
+                    }
+                    if (data?.food_image1?.length > 0 && props?.data?.food_image1) {
+                        await ImageUpload(data?.food_image1[0], "restaurant", "food_image1", data?.shop_name)
+                        data.food_image1 = `${restaurantLink}${data?.shop_name}_food_image1_${data?.food_image1[0]?.name}`
+                    } else {
+                        data.food_image1 = props?.data?.food_image1
+                    }
+                    if (data?.food_image2?.length > 0 && props?.data?.food_image2) {
+                        await ImageUpload(data?.food_image2[0], "restaurant", "food_image2", data?.shop_name)
+                        data.food_image2 = `${restaurantLink}${data?.shop_name}_food_image2_${data?.food_image2[0]?.name}`
+                    } else {
+                        data.food_image2 = props?.data?.food_image2
+                    }
+                    if (data?.food_image3?.length > 0 && props?.data?.food_image3) {
+                        await ImageUpload(data?.food_image3[0], "restaurant", "food_image3", data?.shop_name)
+                        data.food_image3 = `${restaurantLink}${data?.shop_name}_food_image3_${data?.food_image3[0]?.name}`
+                    } else {
+                        data.food_image3 = props?.data?.food_image3
+                    }
+                    if (data?.adhar_card?.length > 0 && props?.data?.adhar_card) {
+                        await ImageUpload(data?.adhar_card[0], "restaurant", "adhar_card", data?.shop_name)
+                        data.adhar_card = `${restaurantLink}${data?.shop_name}_adhar_card_${data?.adhar_card[0]?.name}`
+                    } else {
+                        data.adhar_card = props?.data?.adhar_card
+                    }
+                    if (data?.fssai_license?.length > 0 && props?.data?.fssai_license) {
+                        await ImageUpload(data?.fssai_license[0], "restaurant", "fssai_license", data?.shop_name)
+                        data.fssai_license = `${restaurantLink}${data?.shop_name}_fssai_license_${data?.fssai_license[0]?.name}`
+                    } else {
+                        data.fssai_license = props?.data?.fssai_license
+                    }
+                    if (data?.order_img1?.length > 0 && props?.data?.order_img1) {
+                        await ImageUpload(data?.order_img1[0], "restaurant", "order_img1", data?.shop_name)
+                        data.order_img1 = `${restaurantLink}${data?.shop_name}_order_img1_${data?.order_img1[0]?.name}`
+                    } else {
+                        data.order_img1 = props?.data?.order_img1
+                    }
+                    if (data?.order_img2?.length > 0 && props?.data?.order_img2) {
+                        await ImageUpload(data?.order_img2[0], "restaurant", "order_img2", data?.shop_name)
+                        data.order_img2 = `${restaurantLink}${data?.shop_name}_order_img2_${data?.order_img2[0]?.name}`
+                    } else {
+                        data.order_img2 = props?.data?.order_img2
+                    }
+                    if (data?.order_img3?.length > 0 && props?.data?.order_img3) {
+                        await ImageUpload(data?.order_img3[0], "restaurant", "order_img3", data?.shop_name)
+                        data.order_img3 = `${restaurantLink}${data?.shop_name}_order_img3_${data?.order_img3[0]?.name}`
+                    } else {
+                        data.order_img3 = props?.data?.order_img3
+                    }
+                    if (data?.pan_card?.length > 0 && props?.data?.pan_card) {
+                        await ImageUpload(data?.pan_card[0], "restaurant", "pan_card", data?.shop_name)
+                        data.pan_card = `${restaurantLink}${data?.shop_name}_pan_card_${data?.pan_card[0]?.name}`
+                    } else {
+                        data.pan_card = props?.data?.pan_card
+                    }
+                    if (data?.adhar_card?.length > 0 && props?.data?.adhar_card) {
+                        await ImageUpload(data?.adhar_card[0], "restaurant", "adhar_card", data?.shop_name)
+                        data.adhar_card = `${restaurantLink}${data?.shop_name}_adhar_card_${data?.adhar_card[0]?.name}`
+                    } else {
+                        data.adhar_card = props?.data?.adhar_card
+                    }
+                    let updatedData = {
+                        ...data,
+                        "type_of_cuisine": JSON.stringify(selectedCuisines),
+                        "vendorId": LoggedUserDetails?.sellerId,
+                        // "restaurant_type": selectedRestType,
+                    }
+                    editOnBoarding(LoggedUserDetails?.sellerId, updatedData).then((res) => {
+                        if (res?.message === "Restaurant edited successfully") {
+                            setTimeout(() => {
+                                reset();
+                                productList();
+                                toggle(),
+                                    setLoader(false),
+                                toast.success(res.message);
+                            }, 1000)
+                        }
+                    })
+                }else {
+                    setLoader(false)
+                    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+                }
+            }
         }
-    }
 
     // ================= close modal  ===============
     const closeBtn = () => {
