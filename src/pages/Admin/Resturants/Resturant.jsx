@@ -38,18 +38,18 @@ export default function Restaurant() {
     });
   };
 
-//   // ============== fetch data from api ================
-//   const getAllPromotionList = () => {
-//     try {
-//       addHomePromotion().then((res) => {
-//         console.log(res.data);
-//         setpromotionList(res.data);
-//         dispatch(setPromotions(res));
-//       });
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   };
+  //   // ============== fetch data from api ================
+  //   const getAllPromotionList = () => {
+  //     try {
+  //       addHomePromotion().then((res) => {
+  //         console.log(res.data);
+  //         setpromotionList(res.data);
+  //         dispatch(setPromotions(res));
+  //       });
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
 
   // =================== filter data ========================
   const onSubmit = async (data) => {
@@ -144,11 +144,10 @@ export default function Restaurant() {
   // =================== table user verify column  ========================
   const activeActionsRole = (rowData) => (
     <h6
-      className={`${
-        rowData?.isactive !== "false"
+      className={`${rowData?.isactive !== "false"
           ? "bg-green-100 text-green-500"
           : "bg-red-100 text-red-500"
-      } py-2 px-5 text-center capitalize rounded-full`}
+        } py-2 px-5 text-center capitalize rounded-full`}
     >
       {rowData?.isactive !== "false" ? "Active" : "Inactive"}
     </h6>
@@ -280,7 +279,7 @@ export default function Restaurant() {
       getAllRestaurant();
     }
     if (user?.role == "franchise") {
-      getFranchiseRestaurants();
+      // getFranchiseRestaurants();
     }
   }, []);
 

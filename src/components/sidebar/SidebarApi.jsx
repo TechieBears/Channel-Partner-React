@@ -88,41 +88,11 @@ export const Seller = [
         icon: <LayoutList size="24" />,
         link: '/product-list',
     },
-    // {
-    //     title: 'Menu',
-    //     icon: <Menu size="24" />,
-    //     link: '/menu',
-    // },
     {
         title: 'Register',
         icon: <UserAdd size="24" />,
         link: '/register',
     },
-    // {
-    //     title: 'Paid Plans',
-    //     icon: <Notebook size="24" />,
-    //     link: '/paid-plans',
-    // },
-    // {
-    //     title: 'Wallet',
-    //     icon: <Wallet size="24" />,
-    //     link: '/wallet',
-    // },
-    // {
-    //     title: 'Market Place',
-    //     icon: <ShoppingCart size="24" />,
-    //     link: '/market-place',
-    // },
-    // {
-    //     title: 'Support',
-    //     icon: <Headphone size="24" />,
-    //     link: '/support',
-    // },
-    // {
-    //     title: 'Complaints',
-    //     icon: <AlertTriangle size="24" />,
-    //     link: '/complaints',
-    // },
 ]
 
 
@@ -153,26 +123,6 @@ export const Franchise = [
         icon: <ChefHat />,
         link: '/resturants',
     },
-    // {
-    //     title: 'Settings',
-    //     icon: <Wallet size="24" />,
-    //     link: '/settings',
-    // },
-    // {
-    //     title: 'Analytics',
-    //     icon: <Soup size="24" />,
-    //     link: '/analytics',
-    // },
-    // {
-    //     title: 'Orders',
-    //     icon: <LayoutList size="24" />,
-    //     link: '/orders',
-    // },
-    // {
-    //     title: 'Resturants',
-    //     icon: <ChefHat />,
-    //     link: '/resturants',
-    // },
 ]
 
 export const Restaurant = [
