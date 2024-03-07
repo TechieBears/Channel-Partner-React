@@ -47,7 +47,18 @@ const VendorProduct = () => {
 
     const getRestFood = () => {
         try {
-            getRestaurantFood().then(res => {
+            getRestaurantFood(LoggedUserDetails?.sellerId).then(res => {
+                console.log('RestID Food Item =', res)
+                setData(res)
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const getProducts = () => {
+        try{
+            getAllShopProduct(LoggedUserDetails?.sellerId).then(res => {
                 setData(res)
             });
         } catch (error) {
@@ -68,6 +79,24 @@ const VendorProduct = () => {
         }
     }
 
+    useEffect(() => {
+        // if (user?.vendor_type != "restaurant"){
+        //     getAllSeller().then(res => {
+        //         setSellers(res)
+        //     })
+        //     getProducts()
+        // }else{
+        //     getrestaurantProducts();
+        // }
+
+        if (user?.vendor_type == 'restaurant') {
+            getRestFood()
+        } else{
+            getProducts();
+        }
+    }, []);
+
+
     //======================= Table =======================
     const action = (row) => <div className='flex space-x-2'>
         <Link to={`/product-list/product-details/${row?.product_id}`} state={row} className='items-center p-1 bg-sky-100 rounded-xl hover:bg-sky-200'>
@@ -84,9 +113,9 @@ const VendorProduct = () => {
             <Eye size={24} className='text-sky-400' />
         </Link>
         <AddRestItem title='edit' button='edit' data={row} getRestFood={getRestFood} />
-        <button onClick={(row) => deleteItem(row)} className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
+        {/* <button onClick={(row) => deleteItem(row)} className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
             <Trash size={24} className='text-red-400' />
-        </button>
+        </button> */}
     </div>
 
     const representativeBodyTemplate = (row) => {
@@ -120,6 +149,37 @@ const VendorProduct = () => {
     </div>)
 
 
+    // =============================== FOOD ITEMS Admin Verify SWITCHES =============================
+    const switchVerifyRes = (row) => {
+        return (
+            <div className="flex items-center justify-center gap-2 ">
+                <Switch
+                    value={row?.food_isverified_byadmin}
+                    disabled={true}
+                    size={50}
+                    backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
+                    borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
+            </div>
+        )
+    }
+
+    // ================== Feature Restaurant Food Items =================
+    // const switchFeaturedRes = (row) => {
+    //     return (
+    //         <div className="flex items-center justify-center gap-2 ">
+    //             <Switch
+    //                 value={row?.featured}
+    //                 disabled={true}
+    //                 size={50}
+    //                 backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
+    //                 borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
+    //         </div>
+    //     )
+    // }
+    // =============================== FOOD ITEMS SWITCHES =============================
+
+
+
     const shopColumns = [
         { field: 'product_id', header: 'ID', sortable: false },
         { field: 'Product Image', header: 'Image', body: representativeBodyTemplate, sortable: true, style: true },
@@ -139,41 +199,19 @@ const VendorProduct = () => {
     ]
 
     const restaurantColumns = [
-        { field: 'food_msbcode', header: 'Food MSB Code', sortable: false },
-        { field: 'food_image_1', header: 'Image', body: representativeBodyTemplate, sortable: true, style: true },
-        { field: 'food_name', header: 'Food Name', sortable: false },
-        { field: 'food_category', header: 'Category', body: (row) => <h6>{row?.food_category?.category_name}</h6>, sortable: false },
-        { field: 'food_subcategory', header: 'Sub-Category', body: (row) => <h6>{row?.food_subcategory?.subcat_name}</h6>, sortable: false },
-        { field: 'food_veg_nonveg', header: 'Type', sortable: false },
-        { field: 'food_details', header: 'Details', sortable: false },
+        { field: 'food_msbcode', header: 'Food MSB Code', sortable: true },
+        { field: 'food_image_1', header: 'Image', body: representativeBodyTemplate, sortable: false, style: true },
+        { field: 'food_name', header: 'Food Name', sortable: true },
+        { field: 'product_category', header: 'Food Category', body: (row) => <h6>{row?.food_category?.category_name}</h6>, sortable: true },
+        { field: 'product_subcategory', header: 'Food Sub-Category', body: (row) => <h6>{row?.food_subcategory?.subcat_name}</h6>, sortable: true },
         { field: 'food_actual_price', header: 'MRP', sortable: true },
-        { field: 'food_isverified_byadmin', header: 'Admin Verification', body: adminVerification, sortable: true },
-        { field: 'food_isverified_byfranchise', header: 'Franchise Verification', body: franchiseVerification, sortable: true },
-        { filed: 'action', header: 'Action', body: restAction, sortable: true }
+        { field: 'food_isactive', header: 'Food Availability', body: (row) => <h6>{row?.food_isactive == true ? 'Available' : 'Out Of Stock'}</h6>, sortable: true },
+        { field: 'food_veg_nonveg', header: 'Food Veg / Non-Veg', body: (row) => <h6>{row?.food_veg_nonveg}</h6>, sortable: true },
+        { field: 'menu_type', header: 'Menu Type', sortable: true },
+        { filed: 'action', header: 'Action', body: restAction, sortable: true },
+        { field: 'isverify', header: 'Admin Verify', body: switchVerifyRes, sortable: true }
     ]
 
-    const getProducts = () => {
-        getAllShopProduct(LoggedUserDetails?.sellerId).then(res => {
-            setData(res)
-        })
-    }
-
-    useEffect(() => {
-        // if (user?.vendor_type != "restaurant"){
-        //     getAllSeller().then(res => {
-        //         setSellers(res)
-        //     })
-        //     getProducts()
-        // }else{
-        //     getrestaurantProducts();
-        // }
-
-        if (user?.vendor_type == 'restaurant') {
-            getRestFood()
-        } else{
-            getProducts();
-        }
-    }, []);
 
 
     return (

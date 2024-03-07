@@ -478,15 +478,15 @@ export default function AddRestItem(props) {
                                                         )}
                                                     </div>
                                                     <div>
-                                                        <label className={labelClass}>Is Active*</label>
+                                                        <label className={labelClass}>Food Availability*</label>
                                                         <select
                                                             className={inputClass}
                                                             disabled={user?.role != 'admin' ? false : true}
                                                             {...register('food_isactive', { required: true })}
                                                         >
                                                             <option value="">select</option>
-                                                            <option value={true}>Active</option>
-                                                            <option value={false}>In-Active</option>
+                                                            <option value={true}>Available</option>
+                                                            <option value={false}>Out of Stock</option>
                                                         </select>
                                                         {errors?.food_isactive && <Error title='This is required' />}
                                                     </div>

@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import Table from '../../../../components/Table/Table';
 import { Link } from 'react-router-dom';
 import { Eye, Trash } from 'iconsax-react';
-import { editVendorProduct, getProductsByAdmin, VerifyProductAdmin, makeFeatureProduct, getRestaurantFood, editAdminFinalFood } from '../../../../api';
+import { editVendorProduct, getProductsByAdmin, VerifyProductAdmin, makeFeatureProduct, getRestaurantFood, editAdminFinalFood, getRestaurantFoodAdmin } from '../../../../api';
 import Switch from 'react-js-switch';
 import userImg from '../../../../assets/user.jpg';
 import AddProduct from '../../../../components/Modals/Vendors/AddProduct';
@@ -20,6 +20,7 @@ const AdminProduct = (props) => {
     const [shopProducts, setShopProducts] = useState([])
     const storages = useSelector((state) => state?.storage?.list);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
+    console.log('shopProducts =', shopProducts);
     const getProducts = () => {
         try {
             getProductsByAdmin().then(res => {
@@ -32,7 +33,7 @@ const AdminProduct = (props) => {
 
     const getRestaurantFoodItems = () => {
         try {
-            getRestaurantFood().then(res => {
+            getRestaurantFoodAdmin().then(res => {
                 setShopProducts(res)
             });
         } catch (error) {
