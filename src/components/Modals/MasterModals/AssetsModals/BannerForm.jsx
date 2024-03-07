@@ -25,7 +25,7 @@ export default function BannerForm(props) {
   const [imageDetails, setImageDetails] = useState([]);
   const [childData, setChildData] = useState('');
   const mediaGalleryModalRef = useRef(null);
-  console.log('childData == ', childData)
+  // console.log('childData == ', childData)
 
   
   // ===================== close modals ===============================
@@ -85,9 +85,9 @@ export default function BannerForm(props) {
 
   // ============================ submit data  =====================================
   const onSubmit = async (data) => {
-    console.log('inside submit')
+    // console.log('inside submit')
     const slideUrl = watch('slide_url')
-    console.log('slideUrl', slideUrl, 'childData', childData)
+    // console.log('slideUrl', slideUrl, 'childData', childData)
 
     if (childData) {    
       if (props?.button != "edit") {
