@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { useSelector } from 'react-redux';
 import LoadBox from '../../Loader/LoadBox';
@@ -6,9 +6,10 @@ import { useForm } from 'react-hook-form';
 import Error from '../../Errors/Error';
 import { Add, Edit } from 'iconsax-react';
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
-import { addProduct, editVendorProduct, editAdminFinalProduct, getCategory, getSubCategory } from '../../../api';
+import { addProduct, editVendorProduct, editAdminFinalProduct, getCategory, getSubCategory, getGalleryImages } from '../../../api';
 import { toast } from 'react-toastify';
 import { ImageUpload, productLink } from '../../../env';
+import MediaGallaryModal from '../../../pages/Settings/MediaGallery/MediaGallery';
 
 const AddProduct = (props) => {
     console.log('props= ', props)
@@ -21,11 +22,48 @@ const AddProduct = (props) => {
     const { register, handleSubmit, control, watch, reset, setValue, formState: { errors } } = useForm();
     const toggle = () => setOpen(!isOpen)
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
+    const mediaGalleryModalRef = useRef(null);
+
+
+    const [openGallery, setopenGallery] = useState(false);
+    const [openGalleryModal, setopenGalleryModal] = useState(false);
+    const [imageDetails, setImageDetails] = useState([]);
+    const [childData, setChildData] = useState('');
 
     const closeBtn = () => {
         toggle();
         reset()
     }
+
+    const handleSelectChange = (e) => {
+        if (e.target.value == 'true') {
+            setopenGallery(true);
+        }else{
+            setopenGallery(false);
+        }
+    };
+
+    const openMediaModal = () => {
+        setopenGalleryModal(!openGalleryModal);
+    };
+
+      // ============== fetch data from api ================
+  const fetchData = () => {
+    try {
+      getGalleryImages().then((res) => {
+        // console.log("media gallery data = ", res);
+        setImageDetails(res);
+      });
+    } catch (err) {
+      console.log("error", err);
+    }
+  };
+
+    const receiveDataFromChild = (data) => {
+        setChildData(data);
+        setValue("slide_url", childData);
+        // console.log('childData = ', childData)
+      };
 
     const handleImageChange = async (e) => {
         console.log('e', e)
@@ -45,6 +83,8 @@ const AddProduct = (props) => {
     const calculateRevenueSeller = watch('product_actual_price')
 
     useEffect(() => {
+        fetchData();
+
         if (LoggedUserDetails?.role == 'seller') {
             if (calculateRevenueSeller !== "") {
                 var mainUserPrice = calculateRevenueSeller * (LoggedUserDetails?.insta_commission == null ? 0 : LoggedUserDetails?.insta_commission / 100);
@@ -485,75 +525,10 @@ const AddProduct = (props) => {
                                                         />
                                                         {errors.product_unit && <Error title='Product Unit is Required*' />}
                                                     </div>
-
-
-                                                    {/* <div className="">
-                                                        <label className={labelClass}>
-                                                            Availability Date
-                                                        </label>
-                                                        <input
-                                                            type="date"
-                                                            placeholder=''
-                                                            className={inputClass}
-                                                            {...register('availability_date',)}
-                                                        />
-                                                        {errors.availability_date && <Error title='Availability Date is Required*' />}
-                                                    </div> */}
-                                                    {/* <div className="">
-                                                        <label className={labelClass}>
-                                                            Warranty / Guaranty
-                                                        </label>
-                                                        <select
-                                                            className={inputClass}
-                                                            {...register('warranty',)}
-                                                        >
-                                                            <option value='Yes'>Yes</option>
-                                                            <option value='No'>No</option>
-                                                        </select>
-                                                        {errors.warranty && <Error title='War is Required*' />}
-                                                    </div> */}
-                                                    {/* <div className="">
-                                                        <label className={labelClass}>
-                                                            Special Offer
-                                                        </label>
-                                                        <select
-                                                            className={inputClass}
-                                                            {...register('speacial_offer',)}
-                                                        >
-                                                            <option value='Yes'>Yes</option>
-                                                            <option value='No'>No</option>
-                                                        </select>
-                                                        {errors.warranty && <Error title='War is Required*' />}
-                                                    </div> */}
-                                                    {/* <div className="">
-                                                        <label className={labelClass}>
-                                                            Tags
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Tags'
-                                                            className={inputClass}
-                                                            {...register('tags')}
-                                                        />
-                                                        {errors.tags && <Error title='Tags is Required*' />}
-                                                    </div> */}
-                                                    {/* <div className="">
-                                                        <label className={labelClass}>
-                                                            Discount Price
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Discount Price'
-                                                            className={inputClass}
-                                                            {...register('discount_price',)}
-                                                        />
-                                                        {errors.tags && <Error title='Tags is Required*' />}
-                                                    </div> */}
                                                     {
                                                         LoggedUserDetails?.role == 'admin' &&
                                                         <>
                                                             <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Price Calculation</p>
-
                                                             <div className="">
                                                                 <label className={labelClass}>
                                                                     Product MRP*
@@ -730,6 +705,36 @@ const AddProduct = (props) => {
 
                                                     <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Product Images</p>
                                                     <div className="">
+                                                        <label className={labelClass}>
+                                                            Check Image Option*
+                                                        </label>
+                                                        <select
+                                                            name=""
+                                                            onChange={handleSelectChange}
+                                                            className={`${inputClass} !bg-slate-100`}
+                                                            >
+                                                            <option value="false">I have a own Images</option>
+                                                            <option value="true">I Don't have a Images</option>
+                                                        </select>
+                                                    </div>
+                                                    {openGallery && (
+                                                        <div className="w-full mt-3 mb-2">
+                                                            <span className={`cursor-pointer w-full ${formBtn1}`} onClick={openMediaModal}>
+                                                            Open Sample Images
+                                                            </span>
+                                                            <input
+                                                            type="text" 
+                                                            className="hidden"
+                                                            />
+                                                            {childData == undefined || childData == '' && (
+                                                            <Error title="Main Image is required*" />
+                                                            )}
+                                                        </div>
+                                                        )}
+
+                                                {!openGallery &&
+                                                <>
+                                                    <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Main Image*</label>
                                                         <input className={fileinput}
                                                             id="main_input"
@@ -803,6 +808,7 @@ const AddProduct = (props) => {
                                                         </label>}
                                                         {/* {errors.product_image_5 && <Error title='Profile Image is required*' />} */}
                                                     </div>
+                                                    </> }
                                                 </div>
                                             </div>
                                             <footer className="flex justify-end px-4 py-2 space-x-3 bg-white">
@@ -810,6 +816,17 @@ const AddProduct = (props) => {
                                                 <button type='button' className={formBtn2} onClick={closeBtn}>close</button>
                                             </footer>
                                         </form>
+                                        {openGalleryModal && <div className="hidden">
+                                            <MediaGallaryModal
+                                                ref={mediaGalleryModalRef}
+                                                id="mediaGalleryModal"
+                                                className="hidden"
+                                                title="Upload Image"
+                                                imageDetails={imageDetails}
+                                                setopenGalleryModal={openMediaModal}
+                                                sendDataToParent={receiveDataFromChild}
+                                            />
+                                        </div> }
                                     </div>
                                 </Dialog.Panel>
                             </Transition.Child>

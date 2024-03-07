@@ -21,8 +21,25 @@ const MediaGallaryModal = ({sendDataToParent, ...props}) => {
     setImageDetails(props?.mediaModal?.mediaModalData);
   }, [props?.mediaModal]);
 
+  // const handleImageClick = (data) => {
+  //   setSelectedImage(data);
+  // };
+
   const handleImageClick = (data) => {
-    setSelectedImage(data);
+    // Check if the image is already selected
+    const index = selectedImage?.findIndex((image) => image.media_url === data.media_url);
+
+    // If the image is already selected, remove it from the array
+    if (index !== -1) {
+      const newSelectedImages = [...selectedImage];
+      newSelectedImages.splice(index, 1);
+      setSelectedImage(newSelectedImages);
+    } else {
+      // If the image is not selected, add it to the array
+      if (selectedImage.length < 5) {
+        setSelectedImage([...selectedImage, data]);
+      }
+    }
   };
 
   const handleContinue = () => {
@@ -88,41 +105,28 @@ const MediaGallaryModal = ({sendDataToParent, ...props}) => {
                   >
                     Media Gallery
                   </Dialog.Title>
-                  {/* <div
-                    id="default-modal"
-                    data-modal-show="true"
-                    aria-hidden="true"
-                    className="fixed left-0 right-0 z-50 items-center justify-center overflow-x-hidden overflow-y-auto show h-modal md:h-full top-4 md:inset-0"
-                  >
-                    <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"></div>
-                    <div className="fixed inset-0 w-screen overflow-y-auto">
-                      <div className="flex items-end justify-center p-4 text-center min-h-min sm:items-center sm:p-0">
-                        <div
-                          className={`relative transform overflow-hidden bg-gray-50 text-left shadow-xl transition-all w-full h-screen scale-0 ${
-                            props?.showModal ? "scale-100" : ""
-                          }`}
-                        > */}
-                  {/* <div className="p-3 text-gray-900 bg-yellow-500 modal-header">
-                            <div className="flex justify-between">
-                              <h5 className="text-xl text-white uppercase tennis-primary-font-bold">
-                                Media Gallery
-                              </h5>
-                              <CloseCircle size="30" color="#fff" className='cursor-pointer' name="Close" onClick={props.onClose} />
-                            </div>
-                          </div> */}
                   <div className="modal-body tennis-secondary-font bg-gray-200 min-h-[calc(100vh-12rem)] px-6 py-4 sidebar-scroll scroll-smooth focus:scroll-auto overflow-y-auto">
                     <ul className="grid lg:grid-cols-6 lg:gap-4 md:grid-cols-4 sm:grid-cols-3 md:gap-3 sm:gap-1">
                       {props?.imageDetails?.length > 0 &&
                         props?.imageDetails?.map((data, index) => (
-                          <li
-                            key={index}
-                            className={`shadow-lg cursor-pointer text-center bg-gray-50 rounded-sm ${
-                              selectedImage === data
-                                ? "border-2 border-yellow-500 p-2"
-                                : ""
-                            }`}
-                            onClick={() => handleImageClick(data)}
-                          >
+                          // <li
+                          //   key={index}
+                          //   className={`shadow-lg cursor-pointer text-center bg-gray-50 rounded-sm ${
+                          //     selectedImage === data
+                          //       ? "border-2 border-yellow-500 p-2"
+                          //       : ""
+                          //   }`}
+                          //   onClick={() => handleImageClick(data)}
+                          // >
+                             <li
+                                key={index}
+                                className={`shadow-lg cursor-pointer text-center bg-gray-50 rounded-sm ${
+                                  selectedImage?.find((image) => image.media_url === data.media_url)
+                                    ? "border-2 border-yellow-500 p-2"
+                                    : ""
+                                }`}
+                                onClick={() => handleImageClick(data)}
+                              >
                             <img
                               src={data.media_url}
                               alt={data.media_name}
@@ -136,23 +140,6 @@ const MediaGallaryModal = ({sendDataToParent, ...props}) => {
                     </ul>
                   </div>
                   <div className="gap-3 p-3 bg-white modal-foote sm:flex sm:flex-row-reverse">
-                    {/* <button
-                              type="button"
-                              name="Continue"
-                              onClick={handleContinue}
-                              className={formBtn1}
-                            >
-                              Edit
-                            </button>
-                            <button
-                              type="button"
-                              name="Continue"
-                              onClick={handleContinue}
-                              className={formBtn1}
-                            >
-                              Edit
-                            </button> */}
-
                     <footer className="flex justify-end px-4 py-2 space-x-3 bg-white">
                       {loader ? (
                         <LoadBox className="relative block w-auto px-5 transition-colors font-tb tracking-wide duration-200 py-2.5 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize" />
@@ -169,23 +156,6 @@ const MediaGallaryModal = ({sendDataToParent, ...props}) => {
                         close
                       </button>
                     </footer>
-
-                    {/* <Button
-                                type="button"
-                                name="Continue"
-                                onClick={handleContinue}
-                                className="inline-flex justify-center w-full px-4 py-2 text-sm font-semibold text-white bg-teal-500 shadow-sm rounded-xs ring-1 ring-inset ring-teal-300 sm:w-auto"
-                            ></Button>
-                            <Button
-                                type="button"
-                                name="Cancel"
-                                onClick={props.onClose}
-                                className="inline-flex justify-center w-full px-4 py-2 text-sm font-semibold text-gray-900 bg-white shadow-sm rounded-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:w-auto"
-                            ></Button> */}
-                    {/* </div>
-                        </div>
-                      </div> */}
-                    {/* </div> */}
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
