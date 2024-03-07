@@ -107,7 +107,12 @@ export const Franchise = [
         title: 'menu',
         icon: <Menu size="24" />,
         link: '/menu',
+    }, {
+        title: 'Resturants',
+        icon: <ChefHat />,
+        link: '/resturants',
     },
+
     {
         title: 'Vendors',
         icon: <Notebook size="24" />,
@@ -118,11 +123,7 @@ export const Franchise = [
         icon: <Wallet size="24" />,
         link: '/delivery',
     },
-    {
-        title: 'Resturants',
-        icon: <ChefHat />,
-        link: '/resturants',
-    },
+
 ]
 
 export const Restaurant = [
