@@ -1,23 +1,20 @@
-import React, { useEffect, useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import React, { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import AsyncSelect from "react-select/async";
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 import { toast } from 'react-toastify';
 import Table from '../../../components/Table/Table';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import AddProduct from '../../../components/Modals/Vendors/AddProduct';
-import { Edit, Eye, Trash } from 'iconsax-react';
-import ViewProduct from '../../../components/Modals/Vendors/ViewProduct';
-import { deleteFoodItem, getAllSeller, getAllShopProduct, getRestaurantFood } from '../../../api';
+import { Eye, Trash } from 'iconsax-react';
+import { deleteFoodItem, getAllShopProduct, getRestaurantFood } from '../../../api';
 import Switch from 'react-js-switch';
 import AddRestItem from '../../../components/Modals/Vendors/AddRestItem';
 
 const VendorProduct = () => {
     const [data, setData] = useState([])
-    console.log('data', data)
     const user = useSelector((state) => state?.user?.loggedUserDetails);
-    console.log('user ', user)
     const storages = useSelector((state) => state?.storage?.list);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
 
@@ -48,7 +45,6 @@ const VendorProduct = () => {
     const getRestFood = () => {
         try {
             getRestaurantFood(LoggedUserDetails?.sellerId).then(res => {
-                console.log('RestID Food Item =', res)
                 setData(res)
             });
         } catch (error) {
@@ -66,29 +62,20 @@ const VendorProduct = () => {
         }
     }
 
-    const deleteItem = (row) => {
-        try {
-            deleteFoodItem(row?.food_id).then(res => {
-                if (res?.status == 'success') {
-                    toast?.success('Food Items deleted successfully')
-                    getRestFood()
-                }
-            })
-        } catch (e) {
-            console.log('error occured while deleting food item')
-        }
-    }
+    // const deleteItem = (row) => {
+    //     try {
+    //         deleteFoodItem(row?.food_id).then(res => {
+    //             if (res?.status == 'success') {
+    //                 toast?.success('Food Items deleted successfully')
+    //                 getRestFood()
+    //             }
+    //         })
+    //     } catch (e) {
+    //         console.log('error occured while deleting food item')
+    //     }
+    // }
 
     useEffect(() => {
-        // if (user?.vendor_type != "restaurant"){
-        //     getAllSeller().then(res => {
-        //         setSellers(res)
-        //     })
-        //     getProducts()
-        // }else{
-        //     getrestaurantProducts();
-        // }
-
         if (user?.vendor_type == 'restaurant') {
             getRestFood()
         } else{
@@ -274,8 +261,6 @@ const VendorProduct = () => {
                 <div className='grid items-center grid-cols-6'>
                     <h2 className='col-span-5 text-xl font-semibold'>{user?.vendor_type == 'restaurant' ? 'Item List' : 'Product List'}</h2>
                     {user?.isverified_byadmin == true && user?.vendor_type == 'restaurant' ? <AddRestItem title='Add Item' getRestFood={getRestFood} /> : user?.vendor_type == 'seller' ? <AddProduct title='Add Product' getProducts={getProducts} /> : ''}
-                    {/* <AddRestItem title='Add Item' button='add'  /> */}
-                    {/* <AddProduct title='Add Product' getProducts={getProducts} />  */}
                 </div>
                 <div className='mt-4'>
                     <Table data={data} columns={user?.vendor_type == 'restaurant' ? restaurantColumns : shopColumns} />
