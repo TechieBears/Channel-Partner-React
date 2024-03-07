@@ -12,7 +12,7 @@ import { setPromotions } from "../../../../../redux/Slices/masterSlice";
 import { toast } from "react-toastify";
 import Switch from "react-js-switch";
 import BannerForm from "../../../../../components/Modals/MasterModals/AssetsModals/BannerForm";
-import { getGalleryImages, delHomePromotion } from '../../../../../api';
+import { getGalleryImages, delHomePromotion, editHomePromotion } from '../../../../../api';
 import AddPromo from "../../../Promotion/Assests/AddPromo";
 
 
@@ -120,17 +120,17 @@ const DashboardBannerPanel = () => {
   );
 
   const imageBodyTemp = (row) => (
-    <div className="w-52 h-24 rounded bg-slate-100">
+    <div className="h-24 rounded w-52 bg-slate-100">
       <img
         src={row?.slide_url}
         alt="image"
-        className="w-full bg-slate-100 h-full object-cover rounded"
+        className="object-cover w-full h-full rounded bg-slate-100"
       />
     </div>
   );
 
   const vendorTypeStyle = (row) => (
-    <div className="w-28 h-24 items-center">
+    <div className="items-center h-24 w-28">
       <h5>{row?.vendor_type}</h5>
     </div>
   );
@@ -171,6 +171,44 @@ const DashboardBannerPanel = () => {
     );
   };
 
+
+  
+  // ------ Active/ Deactive Promotions -----
+  const verifyActionsPromo = (row) => {
+    const payload = {
+      slide_isactive: !row?.slide_isactive,
+      slide_url: row?.slide_url,
+    };
+    try {
+      editHomePromotion(row?.slide_id, payload).then((form) => {
+        console.log(payload);
+        if (form.status == "success") {
+          toast.success("Promotion Activation Changed !");
+          getAllPromotionList();
+        } else {
+          console.log("err");
+        }
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // =============================== active user switch =============================
+  const switchActivePromo = (row) => {
+    return (
+      <div className="flex items-center justify-center gap-2 ">
+        <Switch
+          value={row?.slide_isactive}
+          onChange={() => verifyActionsPromo(row)}
+          size={50}
+          backgroundColor={{ on: "#86d993", off: "#c6c6c6" }}
+          borderColor={{ on: "#86d993", off: "#c6c6c6" }}
+        />
+      </div>
+    );
+  };
+
   // ================= columns of the table ===============
   const bannercolumns = [
     { field: "image", header: "Image", body: imageBodyTemp, style: true },
@@ -184,7 +222,7 @@ const DashboardBannerPanel = () => {
     { field: "image", header: "Image", body: imageBodyTemp, style: true },
     { field: 'vendor_type', header: 'Vendor Type', sortable: true, style: true },
     { field: "id", header: "Action", body: actionBodyTemplatePromotion, sortable: true, style: true },
-    { field: "isactive", header: "Active", body: switchActive, sortable: true, style: true },
+    { field: "isactive", header: "Active", body: switchActivePromo, sortable: true, style: true },
   ];
 
   useEffect(() => {
@@ -193,11 +231,11 @@ const DashboardBannerPanel = () => {
 
   return (
     <>
-      <div className="bg-white rounded-xl m-4 sm:m-5 shadow-sm p-5">
+      <div className="p-5 m-4 bg-white shadow-sm rounded-xl sm:m-5">
         <div className="grid grid-cols-2 gap-x-4">
           <div>
-            <div className="flex justify-between mb-4 mx-5 items-center text-center">
-              <h5 className="font-semibold text-2xl">Banners</h5>
+            <div className="flex items-center justify-between mx-5 mb-4 text-center">
+              <h5 className="text-2xl font-semibold">Banners</h5>
               <BannerForm title="Add New Banner" getAllBannerList={getAllBannerList} />
             </div>
             {bannerList?.length > 0 && (
@@ -205,8 +243,8 @@ const DashboardBannerPanel = () => {
             )}
           </div>
           <div>
-            <div className="flex justify-between mb-4 mx-5 items-center text-center">
-              <h5 className="font-semibold text-2xl">Promotions</h5>
+            <div className="flex items-center justify-between mx-5 mb-4 text-center">
+              <h5 className="text-2xl font-semibold">Promotions</h5>
               <AddPromo title='Add New Promotion' getAllPromotionList={getAllPromotionList} />
             </div>
             {promotionList?.length > 0 && <Table data={promotionList} columns={promotioncolumns} />}

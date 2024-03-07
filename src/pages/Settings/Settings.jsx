@@ -20,7 +20,11 @@ export default function Settings() {
                     <Tab
                         className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 1 ? 'text-sky-500  border-b-2 border-sky-400 outline-0' : 'text-gray-500 border-b'
                             }`}
-                    >Media gallery</Tab>
+                    >Media gallery Banners</Tab>
+                    <Tab
+                        className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 2 ? 'text-sky-500  border-b-2 border-sky-400 outline-0' : 'text-gray-500 border-b'
+                            }`}
+                    >Media gallery Products</Tab>
                     {/* <Tab
                         className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 1 ? 'text-sky-500  border-b-2 border-sky-400 outline-0' : 'text-gray-500 border-b'
                             }`}
@@ -35,6 +39,7 @@ export default function Settings() {
                     >Custom</Tab> */}
                 </TabList>
                 <TabPanel><Tax /></TabPanel>
+                <TabPanel><CustomFileUpload /></TabPanel>
                 <TabPanel><CustomFileUpload /></TabPanel>
 
 
