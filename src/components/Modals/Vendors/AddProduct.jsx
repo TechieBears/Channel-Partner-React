@@ -28,42 +28,52 @@ const AddProduct = (props) => {
     const [openGallery, setopenGallery] = useState(false);
     const [openGalleryModal, setopenGalleryModal] = useState(false);
     const [imageDetails, setImageDetails] = useState([]);
-    const [childData, setChildData] = useState('');
+    const [childData, setChildData] = useState([]);
+    // console.log('childData  ==', childData);
+
 
     const closeBtn = () => {
         toggle();
         reset()
+        setChildData([])
     }
 
     const handleSelectChange = (e) => {
         if (e.target.value == 'true') {
             setopenGallery(true);
-        }else{
+        } else {
             setopenGallery(false);
         }
     };
 
     const openMediaModal = () => {
         setopenGalleryModal(!openGalleryModal);
+        // console.log('openGalleryModal', openGalleryModal)
     };
 
-      // ============== fetch data from api ================
-  const fetchData = () => {
-    try {
-      getGalleryImages().then((res) => {
-        // console.log("media gallery data = ", res);
-        setImageDetails(res);
-      });
-    } catch (err) {
-      console.log("error", err);
-    }
-  };
+    // ============== fetch data from api ================
+    const fetchData = () => {
+        try {
+            getGalleryImages().then((res) => {
+                // console.log("media gallery data = ", res);
+                setImageDetails(res);
+            });
+        } catch (err) {
+            console.log("error", err);
+        }
+    };
 
     const receiveDataFromChild = (data) => {
+        // console.log('-- child data --', data);
         setChildData(data);
-        setValue("slide_url", childData);
+
+        if (data) {
+            console.log(openGallery)
+            setopenGallery(!openGallery);
+        }
+        // setValue("slide_url", childData);
         // console.log('childData = ', childData)
-      };
+    };
 
     const handleImageChange = async (e) => {
         console.log('e', e)
@@ -72,14 +82,11 @@ const AddProduct = (props) => {
 
         if (width === 200 && height === 200) {
             console.log('Image dimensions are valid (200x200).');
-            // Proceed with upload or any other action
         } else {
-            console.log('Please upload an image with dimensions 200x200.');
-            // Notify user or handle validation failure
+            alert('Please upload an image with dimensions 200x200.');
         }
     };
-
-    //  ------------   Seller Calculations SetPrice --------------------------------
+    
     const calculateRevenueSeller = watch('product_actual_price')
 
     useEffect(() => {
@@ -88,7 +95,6 @@ const AddProduct = (props) => {
         if (LoggedUserDetails?.role == 'seller') {
             if (calculateRevenueSeller !== "") {
                 var mainUserPrice = calculateRevenueSeller * (LoggedUserDetails?.insta_commission == null ? 0 : LoggedUserDetails?.insta_commission / 100);
-                console.log('mainUserPrice = ', (calculateRevenueSeller - mainUserPrice));
                 const final_price = (calculateRevenueSeller - mainUserPrice);
 
                 if (isNaN(final_price)) {
@@ -99,6 +105,15 @@ const AddProduct = (props) => {
                 }
             }
         }
+        setTimeout(() => {
+            setValue('product_image_1', childData[0]?.media_url)
+            setValue('product_image_2', childData[1]?.media_url)
+            setValue('product_image_3', childData[2]?.media_url)
+            setValue('product_image_4', childData[3]?.media_url)
+            setValue('product_image_5', childData[4]?.media_url)
+        }, 2000);
+
+
     }, [calculateRevenueSeller])
 
 
@@ -131,76 +146,96 @@ const AddProduct = (props) => {
     const onSellerSubmit = async (data) => {
         console.log('seller payload = ', data);
         if (props?.title == 'Edit Product') {
-            if (data?.product_image_1 != props?.row?.product_image_1) {
+            if (data?.product_image_1?.length > 0 && props?.row?.product_image_1) {
                 await ImageUpload(data?.product_image_1[0], "shopProduct", "MainImage", data?.product_name)
                 data.product_image_1 = `${productLink}${data?.product_name}_MainImage_${data?.product_image_1[0]?.name}`
             } else {
                 data.product_image_1 = props?.row?.product_image_1
             }
-            if (data?.product_image_2 != props?.row?.product_image_2) {
+            if (data?.product_image_2?.length > 0 && props?.row?.product_image_2) {
                 await ImageUpload(data?.product_image_2[0], "shopProduct", "Image2", data?.product_name)
                 data.product_image_2 = `${productLink}${data?.product_name}_Image2_${data?.product_image_2[0]?.name}`
             } else {
                 data.product_image_2 = props?.row?.product_image_2
             }
-            if (data?.product_image_3 != props?.row?.product_image_3) {
+            if (data?.product_image_3?.length > 0 && props?.row?.product_image_3) {
                 await ImageUpload(data?.product_image_3[0], "shopProduct", "Image3", data?.product_name)
                 data.product_image_3 = `${productLink}${data?.product_name}_Image3_${data?.product_image_3[0]?.name}`
             } else {
                 data.product_image_3 = props?.row?.product_image_3
             }
-            if (data?.product_image_4 != props?.row?.product_image_4) {
+            if (data?.product_image_4?.length > 0 && props?.row?.product_image_4) {
                 await ImageUpload(data?.product_image_4[0], "shopProduct", "Image4", data?.product_name)
                 data.product_image_4 = `${productLink}${data?.product_name}_Image4_${data?.product_image_4[0]?.name}`
             } else {
                 data.product_image_4 = props?.row?.product_image_4
             }
-            if (data?.product_image_5 != props?.row?.product_image_5) {
+            if (data?.product_image_5?.length > 0 && props?.row?.product_image_5) {
                 await ImageUpload(data?.product_image_5[0], "shopProduct", "Image5", data?.product_name)
                 data.product_image_5 = `${productLink}${data?.product_name}_Image5_${data?.product_image_5[0]?.name}`
             } else {
                 data.product_image_5 = props?.row?.product_image_5
             }
-            if (data?.product_video_url != props?.row?.product_video_url) {
+            if (data?.product_video_url?.length > 0 && props?.row?.product_video_url) {
                 await ImageUpload(data?.product_video_url[0], "shopProduct", "Image5", data?.product_name)
                 data.product_video_url = `${productLink}${data?.product_name}_Image5_${data?.product_video_url[0]?.name}`
             } else {
                 data.product_video_url = props?.row?.product_video_url
             }
         } else {
-            if (data?.product_image_1.length != 0) {
+            if (data?.product_image_1?.length != 0 && childData[0]?.media_url == '') {
                 await ImageUpload(data?.product_image_1[0], "shopProduct", "MainImage", data?.product_name)
                 data.product_image_1 = `${productLink}${data?.product_name}_MainImage_${data?.product_image_1[0]?.name}`
             } else {
-                data.product_image_1 = ''
+                if (childData[0]?.media_url) {
+                    data.product_image_1 = childData[0]?.media_url
+                }else{
+                    data.product_image_1 = ''
+                }
             }
-            if (data?.product_image_2.length != 0) {
+            if (data?.product_image_2?.length != 0 && childData[1]?.media_url == '') {
                 await ImageUpload(data?.product_image_2[0], "shopProduct", "Image2", data?.product_name)
                 data.product_image_2 = `${productLink}${data?.product_name}_Image2_${data?.product_image_2[0]?.name}`
             } else {
-                data.product_image_2 = ''
+                if (childData[1]?.media_url) {
+                    data.product_image_2 = childData[1]?.media_url
+                }else{
+                    data.product_image_2 = ''
+                }
             }
-            if (data?.product_image_3.length != 0) {
+            if (data?.product_image_3?.length != 0 && childData[2]?.media_url == '') {
                 await ImageUpload(data?.product_image_3[0], "shopProduct", "Image3", data?.product_name)
                 data.product_image_3 = `${productLink}${data?.product_name}_Image3_${data?.product_image_3[0]?.name}`
             } else {
-                data.product_image_3 = ''
+                if (childData[2]?.media_url) {
+                    data.product_image_3 = childData[2]?.media_url
+                }else{
+                    data.product_image_3 = ''
+                }
             }
-            if (data?.product_image_4.length != 0) {
+            if (data?.product_image_4?.length != 0 && childData[3]?.media_url == '') {
                 await ImageUpload(data?.product_image_4[0], "shopProduct", "Image4", data?.product_name)
                 data.product_image_4 = `${productLink}${data?.product_name}_Image4_${data?.product_image_4[0]?.name}`
             } else {
-                data.product_image_4 = ''
+                if (childData[3]?.media_url) {
+                    data.product_image_4 = childData[3]?.media_url
+                }else{
+                    data.product_image_4 = ''
+                }
             }
-            if (data?.product_image_5.length != 0) {
+            if (data?.product_image_5?.length != 0 && childData[4]?.media_url == '') {
                 await ImageUpload(data?.product_image_5[0], "shopProduct", "Image5", data?.product_name)
                 data.product_image_5 = `${productLink}${data?.product_name}_Image5_${data?.product_image_5[0]?.name}`
             } else {
-                data.product_image_5 = ''
+                if (childData[4]?.media_url) {
+                    data.product_image_5 = childData[4]?.media_url
+                }else{
+                    data.product_image_5 = ''
+                }
             }
-            if (data?.product_video_url.length != 0) {
-                await ImageUpload(data?.product_video_url[0], "shopProduct", "Image5", data?.product_name)
-                data.product_video_url = `${productLink}${data?.product_name}_Image5_${data?.product_video_url[0]?.name}`
+            if (data?.product_video_url?.length != 0) {
+                await ImageUpload(data?.product_video_url[0], "shopProduct", "videoUrl", data?.product_name)
+                data.product_video_url = `${productLink}${data?.product_name}_videoUrl_${data?.product_video_url[0]?.name}`
             } else {
                 data.product_video_url = ''
             }
@@ -212,6 +247,10 @@ const AddProduct = (props) => {
                     props?.getProducts()
                     toast.success('Product updated successfully')
                     toggle();
+                    reset();
+                    setopenGallery(false);
+                    setopenGalleryModal(false);
+                    setChildData([])
                 }
             })
         } else {
@@ -222,7 +261,11 @@ const AddProduct = (props) => {
                     props?.getProducts()
                     toast.success('Product Added Successfully')
                     toggle();
-                    props?.getProducts()
+                    props?.getProducts();
+                    reset();
+                    setopenGallery(false);
+                    setopenGalleryModal(false);
+                    setChildData([])
                 } else {
                     toast.error('Error while creating product')
                 }
@@ -421,44 +464,6 @@ const AddProduct = (props) => {
                                                             {errors.product_actual_price && <Error title='MRP is Required*' />}
                                                         </div>
                                                     }
-
-
-                                                    {/* <div className="">
-                                                        <label className={labelClass}>
-                                                            SKU*
-                                                        </label>
-                                                        <input
-                                                            type="number"
-                                                            placeholder='SKU'
-                                                            className={inputClass}
-                                                            {...register('product_stock', { required: true })}
-                                                        />
-                                                        {errors.product_stock && <Error title='SKU is Required*' />}
-                                                    </div> */}
-                                                    {/* <div className="">
-                                                        <label className={labelClass}>
-                                                            Variations
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Variations'
-                                                            className={inputClass}
-                                                            {...register('variations')}
-                                                        />
-                                                        {errors?.variations && <Error title='Varitation is Required' />}
-                                                    </div> */}
-                                                    {/* <div className="">
-                                                        <label className={labelClass}>
-                                                            GST (%)
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='GST (%)'
-                                                            className={inputClass}
-                                                            {...register('gst_per', { required: true })}
-                                                        />
-                                                        {errors?.gst_per && <Error title='GST is Required' />}
-                                                    </div> */}
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             Product Status*
@@ -619,20 +624,7 @@ const AddProduct = (props) => {
                                                                 {props?.data?.product_video_url?.name}
                                                             </label>
                                                         )}
-                                                        {/* {errors.product_video_url && <Error title='Video file is required*' />} */}
                                                     </div>
-                                                    {/* <div className="">
-                                                        <label className={labelClass}>
-                                                            FSSAI License*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='FSSAI License'
-                                                            className={inputClass}
-                                                            {...register('fssai_lic', { required: true })}
-                                                        />
-                                                        {errors.fssai_lic && <Error title='FSSAI License is Required*' />}
-                                                    </div> */}
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             Manufacturer Name*
@@ -684,25 +676,6 @@ const AddProduct = (props) => {
                                                             />
                                                         </div>
                                                     }
-                                                    {/* <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Brand Information</p> */}
-
-                                                    {/* <div className="">
-                                                        <label className={labelClass} htmlFor="main_input">Brand Logo*</label>
-                                                        <input className={fileinput}
-                                                            id="main_input"
-                                                            type='file'
-                                                            multiple
-                                                            accept='image/jpeg,image/jpg,image/png'
-                                                            placeholder='Upload Images...'
-                                                            {...register("product_brand_logo", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data.product_brand_logo != '' && props?.data.product_brand_logo != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.data?.product_brand_logo?.split('/').pop()}
-                                                        </label>}
-                                                        {errors.product_brand_logo && <Error title='Profile Image is required*' />}
-                                                    </div> */}
-
-
-
                                                     <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Product Images</p>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -712,7 +685,7 @@ const AddProduct = (props) => {
                                                             name=""
                                                             onChange={handleSelectChange}
                                                             className={`${inputClass} !bg-slate-100`}
-                                                            >
+                                                        >
                                                             <option value="false">I have a own Images</option>
                                                             <option value="true">I Don't have a Images</option>
                                                         </select>
@@ -720,95 +693,102 @@ const AddProduct = (props) => {
                                                     {openGallery && (
                                                         <div className="w-full mt-3 mb-2">
                                                             <span className={`cursor-pointer w-full ${formBtn1}`} onClick={openMediaModal}>
-                                                            Open Sample Images
+                                                                Open Sample Images
                                                             </span>
                                                             <input
-                                                            type="text" 
-                                                            className="hidden"
+                                                                type="text"
+                                                                className="hidden"
                                                             />
                                                             {childData == undefined || childData == '' && (
-                                                            <Error title="Main Image is required*" />
+                                                                <Error title="Main Image is required*" />
                                                             )}
                                                         </div>
-                                                        )}
+                                                    )}
 
-                                                {!openGallery &&
-                                                <>
-                                                    <div className="">
-                                                        <label className={labelClass} htmlFor="main_input">Main Image*</label>
-                                                        <input className={fileinput}
-                                                            id="main_input"
-                                                            type='file'
-                                                            multiple
-                                                            accept='image/jpeg,image/jpg,image/png'
-                                                            placeholder='Upload Images...'
-                                                            onChange={(e) => handleImageChange(e)}
-                                                            {...register("product_image_1",
-                                                                { required: props.title == 'Edit Product' ? false : true })} />
-                                                        {props?.title == 'Edit Product' && props?.row?.product_image_1 != '' && props?.row?.product_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.row?.product_image_1?.split('/').pop()}
-                                                        </label>}
-                                                        {errors.product_image_1 && <Error title='Main Image is required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass} htmlFor="main_input">Image 2</label>
-                                                        <input className={fileinput}
-                                                            id="main_input"
-                                                            type='file'
-                                                            multiple
-                                                            accept='image/jpeg,image/jpg,image/png'
-                                                            placeholder='Upload Images...'
-                                                            {...register("product_image_2",
-                                                            )}
-                                                        />
-                                                        {props?.title == 'Edit Product' && props?.row?.product_image_2 != '' && props?.row?.product_image_2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.row?.product_image_2?.split('/').pop()}
-                                                        </label>}
-                                                        {/* {errors.product_image_2 && <Error title='Profile Image is required*' />} */}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass} htmlFor="main_input">Image 3</label>
-                                                        <input className={fileinput}
-                                                            id="main_input"
-                                                            type='file'
-                                                            multiple
-                                                            accept='image/jpeg,image/jpg,image/png'
-                                                            placeholder='Upload Images...'
-                                                            {...register("product_image_3")} />
-                                                        {props?.title == 'edit' && props?.row?.product_image_3 != '' && props?.row?.product_image_3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.row?.product_image_3?.split('/').pop()}
-                                                        </label>}
-                                                        {/* {errors.product_image_3 && <Error title='Profile Image is required*' />} */}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass} htmlFor="main_input">Image 4</label>
-                                                        <input className={fileinput}
-                                                            id="main_input"
-                                                            type='file'
-                                                            multiple
-                                                            accept='image/jpeg,image/jpg,image/png'
-                                                            placeholder='Upload Images...'
-                                                            {...register("product_image_4")} />
-                                                        {props?.title == 'Edit Product' && props?.row?.product_image_4 != '' && props?.row?.product_image_4 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.row?.product_image_4?.split('/').pop()}
-                                                        </label>}
-                                                        {/* {errors.product_image_4 && <Error title='Profile Image is required*' />} */}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass} htmlFor="main_input">Image 5</label>
-                                                        <input className={fileinput}
-                                                            id="main_input"
-                                                            type='file'
-                                                            multiple
-                                                            accept='image/jpeg,image/jpg,image/png'
-                                                            placeholder='Upload Images...'
-                                                            {...register("product_image_5")} />
-                                                        {props?.title == 'Edit Product' && props?.row?.product_image_5 != '' && props?.row?.product_image_5 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.row?.product_image_5?.split('/').pop()}
-                                                        </label>}
-                                                        {/* {errors.product_image_5 && <Error title='Profile Image is required*' />} */}
-                                                    </div>
-                                                    </> }
+                                                    {!openGallery &&
+                                                        <>
+                                                            <div className="">
+                                                                <label className={labelClass} htmlFor="main_input">Main Image*</label>
+                                                                <input className={fileinput}
+                                                                    id="main_input"
+                                                                    type='file'
+                                                                    multiple
+                                                                    accept='image/jpeg,image/jpg,image/png'
+                                                                    placeholder='Upload Images...'
+                                                                    onChange={(e) => handleImageChange(e)}
+                                                                    {...register("product_image_1", {
+                                                                         required: props.title == 'Edit Product' && (!childData[0]?.media_url || childData[0]?.media_url == '') && !props?.row?.product_image_1 })} />
+                                                                {props?.title == 'Edit Product' && props?.row?.product_image_1 != '' && props?.row?.product_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                    {!childData[0] && props?.row?.product_image_1?.split('/').pop()}
+                                                                </label>}
+                                                                {childData[0]?.media_url?.split('/').pop()}
+                                                                {errors.product_image_1 && <Error title='Main Image is required*' />}
+                                                            </div>
+
+
+                                                            <div className="">
+                                                                <label className={labelClass} htmlFor="main_input">Image 2</label>
+                                                                <input className={fileinput}
+                                                                    id="main_input"
+                                                                    type='file'
+                                                                    multiple
+                                                                    accept='image/jpeg,image/jpg,image/png'
+                                                                    placeholder='Upload Images...'
+                                                                    {...register("product_image_2",
+                                                                    )}
+                                                                />
+                                                                {props?.title == 'Edit Product' && props?.row?.product_image_2 != '' && props?.row?.product_image_2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                    {!childData[1] && props?.row?.product_image_2?.split('/').pop()}
+                                                                </label>}
+                                                                {childData[1]?.media_url?.split('/').pop()}
+                                                                {/* {errors.product_image_2 && <Error title='Profile Image is required*' />} */}
+                                                            </div>
+                                                            <div className="">
+                                                                <label className={labelClass} htmlFor="main_input">Image 3</label>
+                                                                <input className={fileinput}
+                                                                    id="main_input"
+                                                                    type='file'
+                                                                    multiple
+                                                                    accept='image/jpeg,image/jpg,image/png'
+                                                                    placeholder='Upload Images...'
+                                                                    {...register("product_image_3")} />
+                                                                {props?.title == 'Edit Product' && props?.row?.product_image_3 != '' && props?.row?.product_image_3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                    {!childData[2] && props?.row?.product_image_3?.split('/').pop()}
+                                                                </label>}
+                                                                {childData[2]?.media_url?.split('/').pop()}
+                                                                {/* {errors.product_image_3 && <Error title='Profile Image is required*' />} */}
+                                                            </div>
+                                                            <div className="">
+                                                                <label className={labelClass} htmlFor="main_input">Image 4</label>
+                                                                <input className={fileinput}
+                                                                    id="main_input"
+                                                                    type='file'
+                                                                    multiple
+                                                                    accept='image/jpeg,image/jpg,image/png'
+                                                                    placeholder='Upload Images...'
+                                                                    {...register("product_image_4")} />
+                                                                {props?.title == 'Edit Product' && props?.row?.product_image_4 != '' && props?.row?.product_image_4 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                    {!childData[3] && props?.row?.product_image_4?.split('/').pop()}
+                                                                </label>}
+                                                                {childData[3]?.media_url?.split('/').pop()}
+                                                                {/* {errors.product_image_4 && <Error title='Profile Image is required*' />} */}
+                                                            </div>
+                                                            <div className="">
+                                                                <label className={labelClass} htmlFor="main_input">Image 5</label>
+                                                                <input className={fileinput}
+                                                                    id="main_input"
+                                                                    type='file'
+                                                                    multiple
+                                                                    accept='image/jpeg,image/jpg,image/png'
+                                                                    placeholder='Upload Images...'
+                                                                    {...register("product_image_5")} />
+                                                                {props?.title == 'Edit Product' && props?.row?.product_image_5 != '' && props?.row?.product_image_5 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                    {!childData[4] && props?.row?.product_image_5?.split('/').pop()}
+                                                                </label>}
+                                                                {childData[4]?.media_url?.split('/').pop()}
+                                                                {/* {errors.product_image_5 && <Error title='Profile Image is required*' />} */}
+                                                            </div>
+                                                        </>}
                                                 </div>
                                             </div>
                                             <footer className="flex justify-end px-4 py-2 space-x-3 bg-white">
@@ -826,7 +806,7 @@ const AddProduct = (props) => {
                                                 setopenGalleryModal={openMediaModal}
                                                 sendDataToParent={receiveDataFromChild}
                                             />
-                                        </div> }
+                                        </div>}
                                     </div>
                                 </Dialog.Panel>
                             </Transition.Child>

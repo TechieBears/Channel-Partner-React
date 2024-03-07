@@ -10,6 +10,7 @@ import AddProduct from '../../../components/Modals/Vendors/AddProduct';
 import { Eye, Trash } from 'iconsax-react';
 import { deleteFoodItem, getAllShopProduct, getRestaurantFood, getSingleRestaurant } from '../../../api';
 import Switch from 'react-js-switch';
+import userImg from '../../../assets/user.jpg';
 import AddRestItem from '../../../components/Modals/Vendors/AddRestItem';
 
 const VendorProduct = () => {

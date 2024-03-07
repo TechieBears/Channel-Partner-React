@@ -10,7 +10,7 @@ const MediaGallaryModal = ({sendDataToParent, ...props}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const [imageDetails, setImageDetails] = useState([]);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState([]);
   const toggle = () => setIsOpen(!isOpen);
   // console.log('selectedImage', selectedImage)
   // console.log('isOpen', isOpen)
@@ -27,7 +27,7 @@ const MediaGallaryModal = ({sendDataToParent, ...props}) => {
 
   const handleImageClick = (data) => {
     // Check if the image is already selected
-    const index = selectedImage?.findIndex((image) => image.media_url === data.media_url);
+    const index = selectedImage?.findIndex((image) => image.media_id === data.media_id);
 
     // If the image is already selected, remove it from the array
     if (index !== -1) {
@@ -42,14 +42,12 @@ const MediaGallaryModal = ({sendDataToParent, ...props}) => {
     }
   };
 
-  const handleContinue = () => {
-    props.onSelectImage(selectedImage);
-    props.onClose();
-  };
-
   const uploadImg = () => {
-    setSelectedImage(selectedImage?.media_url)
-    sendDataToParent(selectedImage?.media_url)
+    console.log('-- selectedImage -- ', selectedImage)
+    setSelectedImage(selectedImage)
+    sendDataToParent(selectedImage)
+    // setSelectedImage(selectedImage?.media_url)
+    // sendDataToParent(selectedImage?.media_url)
     toggle();
   }
 
@@ -121,7 +119,7 @@ const MediaGallaryModal = ({sendDataToParent, ...props}) => {
                              <li
                                 key={index}
                                 className={`shadow-lg cursor-pointer text-center bg-gray-50 rounded-sm ${
-                                  selectedImage?.find((image) => image.media_url === data.media_url)
+                                  selectedImage?.find((image) => image.media_id === data.media_id)
                                     ? "border-2 border-yellow-500 p-2"
                                     : ""
                                 }`}
