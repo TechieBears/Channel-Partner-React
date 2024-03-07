@@ -1,21 +1,12 @@
 import { Notebook } from "@phosphor-icons/react";
 import { Element4, ElementPlus, Trade, Truck, User, Settings, Menu, Shop, SecurityUser, Book, TicketExpired, TicketDiscount, Profile2User, ClipboardTick, Bank, Setting2, Wallet, ShoppingCart, Headphone, Ticket, UserAdd } from "iconsax-react";
 import { AlertTriangle, Bike, ChefHat, LayoutList, Megaphone, Settings2, Soup, User2 } from "lucide-react";
-
 export const Admin = [
     {
         title: 'Dashboard',
         icon: <Element4 size="24" />,
         link: '/admin',
     },
-
-    {
-        title: 'Restaurant',
-        icon: <ClipboardTick size="24" />,
-        link: '/restaurant',
-    },
-
-   
     {
         title: 'Menus',
         icon: <Trade size="24" />,
@@ -25,7 +16,7 @@ export const Admin = [
                 title: 'Menu',
                 icon: <Menu size="24" />,
                 link: '/menu',
-            },        
+            },
             {
                 title: 'Restaurant Menu',
                 icon: <Menu size="24" />,
@@ -69,14 +60,9 @@ export const Admin = [
         link: '/coupon',
     },
     {
-        title: 'Banners',
-        icon: <TicketDiscount size="24" />,
+        title: `Banners/Promo's`,
+        icon: < TicketDiscount size="24" />,
         link: '/DashboardAssets',
-    },
-    {
-        title: 'Promotions',
-        icon: <Megaphone size="24" />,
-        link: '/promotions',
     },
     {
         title: 'Settings',
@@ -98,40 +84,15 @@ export const Seller = [
         link: '/vendor-orders',
     },
     {
-        title: 'Product List',
+        title: 'Menu List',
         icon: <LayoutList size="24" />,
         link: '/product-list',
     },
     {
-        title: 'Menu',
-        icon: <Menu size="24" />,
-        link: '/menu',
+        title: 'Register',
+        icon: <UserAdd size="24" />,
+        link: '/register',
     },
-    // {
-    //     title: 'Paid Plans',
-    //     icon: <Notebook size="24" />,
-    //     link: '/paid-plans',
-    // },
-    // {
-    //     title: 'Wallet',
-    //     icon: <Wallet size="24" />,
-    //     link: '/wallet',
-    // },
-    // {
-    //     title: 'Market Place',
-    //     icon: <ShoppingCart size="24" />,
-    //     link: '/market-place',
-    // },
-    // {
-    //     title: 'Support',
-    //     icon: <Headphone size="24" />,
-    //     link: '/support',
-    // },
-    // {
-    //     title: 'Complaints',
-    //     icon: <AlertTriangle size="24" />,
-    //     link: '/complaints',
-    // },
 ]
 
 
@@ -146,7 +107,12 @@ export const Franchise = [
         title: 'menu',
         icon: <Menu size="24" />,
         link: '/menu',
+    }, {
+        title: 'Resturants',
+        icon: <ChefHat />,
+        link: '/resturants',
     },
+
     {
         title: 'Vendors',
         icon: <Notebook size="24" />,
@@ -157,26 +123,7 @@ export const Franchise = [
         icon: <Wallet size="24" />,
         link: '/delivery',
     },
-    // {
-    //     title: 'Settings',
-    //     icon: <Wallet size="24" />,
-    //     link: '/settings',
-    // },
-    // {
-    //     title: 'Analytics',
-    //     icon: <Soup size="24" />,
-    //     link: '/analytics',
-    // },
-    // {
-    //     title: 'Orders',
-    //     icon: <LayoutList size="24" />,
-    //     link: '/orders',
-    // },
-    // {
-    //     title: 'Resturants',
-    //     icon: <ChefHat />,
-    //     link: '/resturants',
-    // },
+
 ]
 
 export const Restaurant = [

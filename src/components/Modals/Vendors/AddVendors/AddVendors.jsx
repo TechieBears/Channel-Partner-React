@@ -19,7 +19,6 @@ import { validateEmail, validateGST, validatePIN, validatePhoneNumber } from '..
 
 
 export default function AddVendors(props) {
-    console.log('props = ', props)
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     const Franchisee = useSelector((state) => state?.master?.Franchise);
     const [isOpen, setOpen] = useState(false);
@@ -97,13 +96,16 @@ export default function AddVendors(props) {
         if (props.button != 'edit') {   // for create
             try {
                 setLoader(true);
-
                 let additionalPayload = {};
                 if (LoggedUserDetails?.role == 'franchise') {
-                    additionalPayload = { created_by: LoggedUserDetails?.userid };
+                    additionalPayload = { created_by: LoggedUserDetails?.userid, vendor_type: "seller" };
+                }
+                let vendorType = {};
+                if (LoggedUserDetails?.role == 'admin') {
+                    vendorType = { vendor_type: "seller"  };
                 }
 
-                const requestData = { ...data, ...additionalPayload };
+                const requestData = { ...data, ...additionalPayload, ...vendorType };
 
                 const response = await CreateFranchiseeVendors(requestData)
                 if (response?.message == "seller added successfully") {
@@ -128,9 +130,13 @@ export default function AddVendors(props) {
                 setLoader(true)
                 let additionalPayload = {};
                 if (LoggedUserDetails?.role == 'franchise') {
-                    additionalPayload = { created_by: LoggedUserDetails?.userid };
+                    additionalPayload = { created_by: LoggedUserDetails?.userid, vendor_type: "seller"  };
                 }
-                const requestData = { ...data, ...additionalPayload };
+                let vendorType = {};
+                if (LoggedUserDetails?.role == 'admin') {
+                    vendorType = { vendor_type: "seller"  };
+                }
+                const requestData = { ...data, ...additionalPayload , ...vendorType};
 
                 const response = await EditFranchiseeVendors(props?.data?.user?.id, requestData)
                 if (response?.status == "success") {
@@ -138,7 +144,6 @@ export default function AddVendors(props) {
                         toggle();
                         setLoader(false)
                         props?.FranchiseeVendors()
-                        fetchData()
                         toast.success(response?.message);
                     }, 1000);
                 } else {

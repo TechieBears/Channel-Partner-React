@@ -1,32 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { Tab, TabList, Tabs, TabPanel } from "react-tabs";
-import Table from "../../../components/Table/Table";
+import React, { useState } from "react";
 import {
-    ArrowSwapVertical,
-    Eye,
-    ShoppingCart,
-    Trash,
-    UserRemove,
-    ClipboardTick,
-    Edit,
+    ArrowSwapVertical, ShoppingCart, UserRemove,
+    ClipboardTick
 } from "iconsax-react";
 // import { deleteStorage, getPartnerStorage, getStorages } from "../../../api";
 import { formBtn2, inputClass } from "../../../utils/CustomClass";
 import { formBtn1 } from "../../../utils/CustomClass";
 import { Controller, useForm } from "react-hook-form";
-import axios from "axios";
 import { NavLink } from "react-router-dom";
-import { environment } from "../../../env";
 import { useDispatch, useSelector } from "react-redux";
-import { setStorageList } from "../../../redux/slices/storageSlice";
 import { toast } from "react-toastify";
 import AsyncSelect from "react-select/async";
-import DashboardForm from "../../../components/modals/DashboardModals/DashboardForm";
+import DashboardForm from "../../../components/Modals/DashboardModals/DashboardForm"
 import DeleteModal from "../../../components/Modals/DeleteModal/DeleteModal";
-import ActiveOrders from "../../Admin/Dashboard/OrderList/ActiveOrders";
-import PendingOrders from "../../Admin/Dashboard/OrderList/PendingOrders";
-import moment from "moment";
-import ViewProduct from "../../../components/Modals/Vendors/ViewProduct";
 
 
 
@@ -158,7 +144,7 @@ const Dashboard = () => {
 
     return (
         <>
-            {user?.isverified_byadmin != true && <DashboardForm dashBoard={false} isOpen={modelOpen} />}
+            {user?.isverified_byadmin != true && user?.vendor_type == 'restaurant' ? <DashboardForm dashBoard={false} isOpen={modelOpen} /> : ''}
             <DeleteModal
                 title="Delete Stroage"
                 deleteBtn={deleteData}
@@ -279,7 +265,7 @@ const Dashboard = () => {
                     </form>
                 </div>
                 {/* ===================== New Order Section ===================== */}
-                <div className="grid gap-6 m-4 bg-white p-4 rounded-xl md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
+                <div className="grid gap-6 p-4 m-4 bg-white rounded-xl md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
                     {data.map(product => (
                         <NavLink
                             to={`/vendor-orders/order-detail/:${product?.id}`}
@@ -299,12 +285,12 @@ const Dashboard = () => {
                                     </p>
                                 </div>
                                 <div className="flex-1 p-4 my-2">
-                                    <div className="grid grid-cols-2 items-center">
+                                    <div className="grid items-center grid-cols-2">
                                         <div className="grid grid-cols-2">
                                             {product?.items?.map(item => (
                                                 <div key={item?.name} className="">
                                                     <img
-                                                        className="w-16 border-2 p-1 rounded-xl"
+                                                        className="w-16 p-1 border-2 rounded-xl"
                                                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU"
                                                         alt=""
                                                     />
@@ -317,7 +303,7 @@ const Dashboard = () => {
                                             ))}
                                         </div>
 
-                                        <p className=" col-span-1 mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 ">
+                                        <p className="col-span-1 mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 ">
                                             Payment - {product?.paymentMethod}
                                         </p>
                                     </div>

@@ -18,9 +18,6 @@ import { toast } from 'react-toastify';
 function Franchisees() {
     const dispatch = useDispatch()
     const Franchisee = useSelector((state) => state?.master?.Franchise);
-    console.log('franchisee Table data = ', Franchisee);
-
-
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const [open, setOpen] = React.useState(false);
     const [delId, setDelId] = React.useState(0);
@@ -114,7 +111,7 @@ function Franchisees() {
     const representativeBodyTemplate = (row) => {
         return (
             <div className="rounded-full w-11 h-11">
-                <img src={row?.user?.profile_pic == null || row?.user?.profile_pic == '' || row?.user?.profile_pic == undefined ? userImg : row?.user?.profile_pic} className="object-cover w-full h-full rounded-full" alt={row.user?.first_name} />
+                <img src={row?.user?.profile_pic == null || row?.user?.profile_pic == '' || row?.user?.profile_pic == undefined || row?.user?.profile_pic.includes('undefined') ? userImg : row?.user?.profile_pic} className="object-cover w-full h-full rounded-full" alt={row.user?.first_name} />
             </div>
         );
     };
@@ -136,6 +133,7 @@ function Franchisees() {
     const columns = [
         // { field: 'id', header: 'ID', sortable: false },
         { field: 'profile_pic', header: 'Profile', body: representativeBodyTemplate, sortable: false, style: true },
+        { field: 'msb_code', header: 'MSB Code', sortable: false },
         { field: 'first_name', body: (row) => <div className="capitalize">{row?.user?.first_name + " " + row?.user?.last_name}</div>, header: 'Name' },
         { field: 'email', header: 'Email', body: (row) => <h6>{row?.user?.email}</h6>, sortable: false },
         { field: 'gender', header: 'Gender', body: (row) => <h6>{row?.user?.gender}</h6>, sortable: false },

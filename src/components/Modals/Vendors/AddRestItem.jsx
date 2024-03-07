@@ -1,25 +1,33 @@
-import { Dialog, Transition } from '@headlessui/react'
-import { Add, Edit } from 'iconsax-react'
-import React, { useState, Fragment, useEffect } from 'react'
-import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass'
-// import { CloseButton } from 'react-toastify/dist/components';
+import { Dialog, Transition } from '@headlessui/react';
+import { Edit } from 'iconsax-react';
+import React, { useState, Fragment, useEffect } from 'react';
+import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
 import { useForm } from 'react-hook-form';
 import LoadBox from '../../Loader/LoadBox';
 import { useSelector } from 'react-redux';
-import { getCategory, getSubCategory } from '../../../api';
+import { addFoodItem, editFoodItem, getRestaurantCategory, getRestaurantSubCategory, editAdminFinalFood } from '../../../api';
+import { ImageUpload, restaurantLink } from '../../../env';
+import { toast } from 'react-toastify';
+import Error from '../../Errors/Error';
+
+
 
 export default function AddRestItem(props) {
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false);
     const [category, setCategory] = useState([]);
     const [subCategory, setsubCategory] = useState([])
+    const [FinalPriceSeller, setFinalPriceSeller] = useState([]);
+    const [FinalPriceAdmin, setFinalPriceAdmin] = useState([]);
     const { register, handleSubmit, control, watch, reset, setValue, formState: { errors } } = useForm();
-    const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
+    const user = useSelector((state) => state?.user?.loggedUserDetails);
+    // console.log('user', user)
     const toggle = () => setOpen(!isOpen)
     const closeBtn = () => {
         toggle();
-        reset()
+        reset();
     }
+
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file.size > 100 * 1024 * 1024) {
@@ -28,32 +36,231 @@ export default function AddRestItem(props) {
             return;
         }
     };
-    const onSellerSubmit = (data) => {
-        console.log('data', data)
+    const onSellerSubmit = async (data) => {
+        console.log('data ==', data)
+        if (props?.title != 'Add Item') {      // for edit
+            console.log('image edit')
+            if (data?.food_image_1?.length > 0 && props?.data?.food_image_1) {
+                await ImageUpload(data?.food_image_1[0], "restaurant", "mainImage", data?.food_name)
+                data.food_image_1 = `${restaurantLink}${data?.food_name}_mainImage_${data?.food_image_1[0]?.name}`
+            } else {
+                data.food_image_1 = props?.data?.food_image_1
+            }
+            if (data?.food_image_2?.length > 0 && props?.data?.food_image_2) {
+                await ImageUpload(data?.food_image_2[0], "restaurant", "img2", data?.food_name)
+                data.food_image_2 = `${restaurantLink}${data?.food_name}_img2_${data?.food_image_2[0]?.name}`
+            } else {
+                data.food_image_2 = props?.data?.food_image_2
+            }
+            if (data?.food_image_3?.length > 0 && props?.data?.food_image_3) {
+                await ImageUpload(data?.food_image_3[0], "restaurant", "img3", data?.food_name)
+                data.food_image_3 = `${restaurantLink}${data?.food_name}_img3_${data?.food_image_3[0]?.name}`
+            } else {
+                data.food_image_3 = props?.data?.food_image_3
+            }
+            if (data?.food_image_4?.length > 0 && props?.data?.food_image_4) {
+                await ImageUpload(data?.food_image_4[0], "restaurant", "img4", data?.food_name)
+                data.food_image_4 = `${restaurantLink}${data?.food_name}_img4_${data?.food_image_4[0]?.name}`
+            } else {
+                data.food_image_4 = props?.data?.food_image_4
+            }
+            if (data?.food_image_5?.length > 0 && props?.data?.food_image_5) {
+                await ImageUpload(data?.food_image_5[0], "restaurant", "img5", data?.food_name)
+                data.food_image_5 = `${restaurantLink}${data?.food_name}_img5_${data?.food_image_5[0]?.name}`
+            } else {
+                data.food_image_5 = props?.data?.food_image_5
+            }
+            if (data?.food_video_url?.length > 0 && props?.data?.food_video_url) {
+                await ImageUpload(data?.food_video_url[0], "restaurant", "img5", data?.food_name)
+                data.food_video_url = `${restaurantLink}${data?.food_name}_img5_${data?.food_video_url[0]?.name}`
+            } else {
+                data.food_video_url = props?.data?.food_video_url
+            }
+        } else {               // for create
+            // console.log('image create')
+            if (data?.food_image_1?.length != 0) {
+                await ImageUpload(data?.food_image_1[0], "restaurant", "mainImage", data?.food_name)
+                data.food_image_1 = `${restaurantLink}${data?.food_name}_mainImage_${data.food_image_1[0]?.name}`
+            } else {
+                data.food_image_1 = ''
+            }
+            if (data?.food_image_2?.length != 0) {
+                await ImageUpload(data?.food_image_2[0], "restaurant", "img2", data?.food_name)
+                data.food_image_2 = `${restaurantLink}${data?.food_name}_img2_${data.food_image_2[0]?.name}`
+            } else {
+                data.food_image_2 = ''
+            }
+            if (data?.food_image_3?.length != 0) {
+                await ImageUpload(data?.food_image_3[0], "restaurant", "img3", data?.food_name)
+                data.food_image_3 = `${restaurantLink}${data?.food_name}_img3_${data.food_image_3[0]?.name}`
+            } else {
+                data.food_image_3 = ''
+            }
+            if (data?.food_image_4?.length != 0) {
+                await ImageUpload(data?.food_image_4[0], "restaurant", "img4", data?.food_name)
+                data.food_image_4 = `${restaurantLink}${data?.food_name}_img4_${data.food_image_4[0]?.name}`
+            } else {
+                data.food_image_4 = ''
+            }
+            if (data?.food_image_5?.length != 0) {
+                await ImageUpload(data?.food_image_5[0], "restaurant", "img5", data?.food_name)
+                data.food_image_5 = `${restaurantLink}${data?.food_name}_img5_${data.food_image_5[0]?.name}`
+            } else {
+                data.food_image_5 = ''
+            }
+            if (data?.food_video_url?.length != 0) {
+                await ImageUpload(data?.food_video_url[0], "restaurant", "img5", data?.food_name)
+                data.food_video_url = `${restaurantLink}${data?.food_name}_img5_${data.food_video_url[0]?.name}`
+            } else {
+                data.food_video_url = ''
+            }
+        }
+        let updatedData = { ...data, vendor: user?.sellerId }
+        if (props?.title != 'Add Item') {
+            setLoader(true)
+            console.log('in function edit')
+            editFoodItem(props?.data?.food_id, updatedData).then(res => {
+                if (res?.status == 'success') {
+                    toast?.success('Food item updated successfully')
+                    props?.getRestFood();
+                    toggle();
+                    setLoader(false);
+                    reset();
+                }
+            })
+        } else {
+            setLoader(true)
+            addFoodItem(updatedData).then(res => {
+                if (res?.status == 'success') {
+                    toast.success('Food Item Added Successfully')
+                    props?.getRestFood();
+                    toggle();
+                    setLoader(false);
+                    reset();
+                }
+            })
+        }
     }
 
-    const onAdminSubmit = (data) => {
-        console.log('data', data)
+    const onAdminSubmit = async (data) => {
+        var updatedData = { ...data, vendor: props?.data?.vendor?.vendor_id }
+        editAdminFinalFood(props?.data?.food_id, updatedData).then(res => {
+            if (res?.status == 'success') {
+                props?.getRestaurantFoodItems();
+                toast.success('Food item updated successfully')
+                toggle();
+            }
+        })
     }
 
     useEffect(() => {
-        getCategory().then(res => {
+        getRestaurantCategory().then(res => {
             setCategory(res)
         })
-        getSubCategory().then(res => {
+        getRestaurantSubCategory().then(res => {
             setsubCategory(res)
         })
+        if (user?.role == 'admin') {
+            reset({
+                'food_name': props?.data?.food_name,
+                'food_category': props?.data?.food_category?.id,
+                'food_subcategory': props?.data?.food_subcategory?.subcat_id,
+                'food_actual_price': props?.data?.food_actual_price,
+                'insta_commison_percentage': props?.data?.vendor?.insta_commison_percentage,
+                'markup_percentage': props?.data?.markup_percentage,
+                'food_details': props?.data?.food_details,
+                'food_isactive': props?.data?.food_isactive,
+                'food_veg_nonveg': props?.data?.food_veg_nonveg,
+                'menu_type': props?.data?.menu_type,
+            })
+        } else {
+            if (props?.button == 'edit') {
+                reset({
+                    'food_name': props?.data.food_name,
+                    'food_category': props?.data.food_category?.id,
+                    'food_subcategory': props?.data.food_subcategory?.subcat_id,
+                    'food_actual_price': props?.data.food_actual_price,
+                    'insta_commison_percentage': props?.data.vendor?.insta_commison_percentage,
+                    'markup_percentage': props?.data.markup_percentage,
+                    'food_details': props?.data.food_details,
+                    'food_isactive': props?.data.food_isactive,
+                    'food_veg_nonveg': props?.data.food_veg_nonveg,
+                    'menu_type': props?.data?.menu_type,
+                })
+            }
+        }
     }, [])
+
+
+
+    //  ------------   Seller Calculations SetPrice --------------------------------
+    // const calculateRevenueRestaurant = watch('food_actual_price')
+
+    // useEffect(() => {
+    //     if (user?.role == 'admin') {
+    //         if (calculateRevenueRestaurant !== "") {
+    //             var mainUserPrice = calculateRevenueRestaurant * (props?.data.vendor?.insta_commison_percentage == null ? 0 : props?.row?.vendor?.insta_commison_percentage / 100);
+    //             console.log('mainUserPrice = ', (calculateRevenueRestaurant - mainUserPrice));
+    //             const final_price = (calculateRevenueRestaurant - mainUserPrice);
+
+    //             if (isNaN(final_price)) {
+    //                 setValue('product_revenue', 0);
+    //             } else {
+    //                 setFinalPriceSeller(parseFloat(final_price));
+    //                 setValue('product_revenue', final_price);
+    //             }
+    //         }
+    //     }
+    // }, [calculateRevenueRestaurant])
+
+
+
+
+
+    //  ------------   Seller Calculations SetPrice --------------------------------
+    const calculateRevenueRestaurant = watch('food_actual_price')
+
+    useEffect(() => {
+        if (user?.role == 'seller') {
+            if (calculateRevenueRestaurant !== "") {
+                var mainUserPrice = calculateRevenueRestaurant * (user?.insta_commission == null ? 0 : user?.insta_commission / 100);
+                const final_price = (calculateRevenueRestaurant - mainUserPrice);
+
+                if (isNaN(final_price)) {
+                    setValue('food_revenue', 0);
+                } else {
+                    setFinalPriceSeller(parseFloat(final_price));
+                    setValue('food_revenue', final_price);
+                }
+            }
+        }
+    }, [calculateRevenueRestaurant])
+
+
+
+    //  ------------   Admin Calculations Set Final Price to User  --------------------------------
+    const calculateRevenueAdmin = watch('markup_percentage')
+
+    useEffect(() => {
+        if (user?.role == 'admin') {
+            if (calculateRevenueAdmin !== "") {
+                var mainPrice = (props?.data?.food_actual_price == null ? 0 : props?.data?.food_actual_price) * (calculateRevenueAdmin / 100);
+                var adminfinalprice = props?.data?.food_actual_price + mainPrice;
+                setFinalPriceAdmin(adminfinalprice);
+                setValue('final_price', adminfinalprice?.toFixed(0));
+            }
+        }
+    }, [calculateRevenueAdmin])
 
     return (
         <>
-            {props?.button == 'edit' ?
+            {props?.title == 'edit' ?
                 <button className='items-center p-1 bg-yellow-100 rounded-xl hover:bg-yellow-200' onClick={() => setOpen(true)}>
                     <Edit size={24} className='text-yellow-400' />
                 </button> :
                 <button className={`${formBtn1} flex`} onClick={() => setOpen(true)}>
-                    <Add className='text-white' />
-                    {props?.title}
+                    {/* <Add className='text-white' /> */}
+                    {props?.title == 'edit' ? 'Edit Food Item' : "Add Food Item"}
                 </button>}
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-[100]" onClose={() => toggle}>
@@ -85,51 +292,51 @@ export default function AddRestItem(props) {
                                         as="h2"
                                         className="w-full px-3 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
                                     >
-                                        {props?.title}
+                                        {props?.title == "edit" ? "Edit Food Item" : "Add Food Item"}
                                     </Dialog.Title>
                                     <div className=" bg-gray-200/70">
                                         {/* React Hook Form */}
-                                        <form onSubmit={LoggedUserDetails?.role == 'admin' ? handleSubmit(onAdminSubmit) : handleSubmit(onSellerSubmit)}>
+                                        <form onSubmit={user?.role == 'admin' ? handleSubmit(onAdminSubmit) : handleSubmit(onSellerSubmit)}>
                                             <div className="p-4 overflow-y-scroll scrollbars " >
                                                 <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-4 gap-x-3 gap-y-3 customBox">
                                                     <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Basic Information</p>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Product Name*
+                                                            Food Name*
                                                         </label>
                                                         <input
                                                             type="text"
-                                                            placeholder='Product Name'
+                                                            readOnly={user?.role != 'admin' ? false : true}
+                                                            placeholder='Food Name'
                                                             className={inputClass}
-                                                            {...register('product_name', { required: true })}
+                                                            {...register('food_name', { required: true })}
                                                         />
-                                                        {errors.product_name && <Error title='Product Name is Required*' />}
+                                                        {errors.food_name && <Error title='Food Name is Required*' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Product Category*
+                                                            Food Category*
                                                         </label>
                                                         <select
                                                             className={inputClass}
-                                                            {...register('product_category', { required: true })}
+                                                            disabled={user?.role != 'admin' ? false : true}
+                                                            {...register('food_category', { required: true })}
                                                         >
                                                             <option value=''>Select</option>
                                                             {category?.map(item =>
-                                                                // {
-                                                                // console.log(item?.id)
                                                                 <option key={item?.id} value={item?.id}>{item?.category_name}</option>
-                                                                // }
                                                             )}
                                                         </select>
-                                                        {errors.product_category && <Error title='Category is Required*' />}
+                                                        {errors.good_category && <Error title='Category is Required*' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Product Sub-Category*
+                                                            Food Sub-Category*
                                                         </label>
                                                         <select
                                                             className={inputClass}
-                                                            {...register('product_subcategory', { required: true })}
+                                                            disabled={user?.role != 'admin' ? false : true}
+                                                            {...register('food_subcategory', { required: true })}
                                                         >
                                                             <option value=''>Select</option>
                                                             {
@@ -138,110 +345,58 @@ export default function AddRestItem(props) {
                                                                 ))
                                                             }
                                                         </select>
-                                                        {errors.product_subcategory && <Error title='Sub Category is Required*' />}
+                                                        {errors.food_subcategory && <Error title='Sub Category is Required*' />}
                                                     </div>
-                                                    {
-                                                        LoggedUserDetails?.role == 'seller' &&
-                                                        <div className="">
-                                                            <label className={labelClass}>
-                                                                Product MRP*
-                                                            </label>
-                                                            <input
-                                                                type="number"
-                                                                placeholder='Product MRP'
-                                                                className={inputClass}
-                                                                {...register('product_actual_price', { required: true })}
-                                                            />
-                                                            {errors.product_actual_price && <Error title='MRP is Required*' />}
-                                                        </div>
-                                                    }
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Product Status*
-                                                        </label>
-                                                        <select
-                                                            className={inputClass}
-                                                            {...register('product_isactive', { required: true })}
-                                                        >
-                                                            <option value=''>Select</option>
-                                                            <option value={true}>Available</option>
-                                                            <option value={false}>Out Of Stock</option>
-                                                        </select>
-                                                        {errors.product_isactive && <Error title='Status is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Country of Origin*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='India'
-                                                            className={inputClass}
-                                                            {...register('product_country_of_origin', { required: true })}
-                                                        />
-                                                        {errors.product_country_of_origin && <Error title='Country of Origin is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Product Available Quantity*
-                                                        </label>
-                                                        <input
-                                                            type="number"
-                                                            placeholder='150'
-                                                            className={inputClass}
-                                                            {...register('product_available_qty', { required: true })}
-                                                        />
-                                                        {errors.product_available_qty && <Error title='Available Quantity is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Product Unit Type *
-                                                        </label>
-                                                        <select
-                                                            className={inputClass}
-                                                            {...register('product_unit_type', { required: true })}
-                                                        >
-                                                            <option value=''>Select</option>
-                                                            <option key="" value="(kg)">Kilograms (kg)</option>
-                                                            <option key="" value="(g)">grams (g)</option>
-                                                            <option key="" value="(ltr)">Liters (ltr)</option>
-                                                            <option key="" value="(pcs)">Pieces (pcs)</option>
-                                                        </select>
-                                                        {errors.product_unit_type && <Error title='Product Unit Type is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Product Unit*
-                                                        </label>
-                                                        <input
-                                                            type="number"
-                                                            placeholder='50g'
-                                                            className={inputClass}
-                                                            {...register('product_unit', { required: true })}
-                                                        />
-                                                        {errors.product_unit && <Error title='Product Unit is Required*' />}
-                                                    </div>
-                                                    {
-                                                        LoggedUserDetails?.role == 'admin' &&
+                                                    {user?.role == 'seller' &&
                                                         <>
-                                                            <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Price Calculation</p>
-
                                                             <div className="">
                                                                 <label className={labelClass}>
-                                                                    Product MRP*
+                                                                    Food MRP*
+                                                                </label>
+                                                                <input
+                                                                    type="number"
+                                                                    placeholder='Food MRP'
+                                                                    step={1}
+                                                                    min={1}
+                                                                    className={inputClass}
+                                                                    {...register('food_actual_price', { required: true })}
+                                                                />
+                                                                {errors.food_actual_price && <Error title='MRP is Required*' />}
+                                                            </div>
+                                                            {/* <div className="">
+                                                                <label className={labelClass}>
+                                                                    Item Revenue*
+                                                                </label>
+                                                                <input
+                                                                    type="text"
+                                                                    readOnly
+                                                                    placeholder='₹ 0.00'
+                                                                    className={inputClass}
+                                                                    {...register('food_revenue')}
+                                                                />
+                                                            </div> */}
+                                                        </>
+                                                    }
+                                                    {
+                                                        user?.role == 'admin' &&
+                                                        <>
+                                                            <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Price Calculation</p>
+                                                            <div className="">
+                                                                <label className={labelClass}>
+                                                                    Food MRP*
                                                                 </label>
                                                                 <input
                                                                     type="number"
                                                                     readOnly
-                                                                    placeholder='Product MRP'
+                                                                    placeholder='Food MRP'
                                                                     className={inputClass}
-                                                                    {...register('product_actual_price', { required: true })}
+                                                                    {...register('food_actual_price', { required: true })}
                                                                 />
-                                                                {errors.product_actual_price && <Error title='MRP is Required*' />}
+                                                                {errors.food_actual_price && <Error title='MRP is Required*' />}
                                                             </div>
                                                             <div className="">
                                                                 <label className={labelClass}>
-                                                                    Vendor Commision*
+                                                                    Restaurant Commision*
                                                                 </label>
                                                                 <input
                                                                     type="number"
@@ -278,126 +433,122 @@ export default function AddRestItem(props) {
                                                     <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Additional Information</p>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Description*
+                                                            Food Details*
                                                         </label>
                                                         <input
                                                             type="text"
-                                                            placeholder='Description'
+                                                            readOnly={user?.role != 'admin' ? false : true}
+                                                            placeholder='Food Details'
                                                             className={inputClass}
-                                                            {...register('product_description', { required: true })}
+                                                            {...register('food_details', { required: true })}
                                                         />
-                                                        {errors.product_description && <Error title='Description is Required*' />}
+                                                        {errors.food_details && <Error title='Food Details is Required*' />}
+                                                    </div>
+                                                    <div>
+                                                        <label className={labelClass}>Veg or Non-Veg*</label>
+                                                        <select
+                                                            className={inputClass}
+                                                            disabled={(user?.role == 'admin' || props?.details?.veg_nonveg == 'Veg')}
+                                                            {...register('food_veg_nonveg', { required: true })}
+                                                        >
+                                                            <option value='' >Select</option>
+                                                            <option value='Both'>Both</option>
+                                                            <option value='Veg' selected={props?.details?.veg_nonveg == 'Veg'}>Veg</option>
+                                                            <option value='Non-Veg'>Non-Veg</option>
+                                                        </select>
+                                                        {errors?.food_veg_nonveg && <Error title='This is required' />}
                                                     </div>
                                                     <div className="">
-                                                        <label className={labelClass}>
-                                                            Shelf Life*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Shelf Life'
-                                                            className={inputClass}
-                                                            {...register('product_shelflife', { required: true })}
-                                                        />
-                                                        {errors.product_shelflife && <Error title='Shelf Life is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass} htmlFor="video_input">Product Video</label>
+                                                        <label className={labelClass} htmlFor="video_input">Food Video</label>
                                                         <input
                                                             className={fileinput}
                                                             id="video_input"
+                                                            disabled={user?.role != 'admin' ? false : true}
                                                             type='file'
                                                             accept='video/mp4,video/x-m4v,video/*'
                                                             placeholder='Upload Video...'
-                                                            {...register("product_video_url")}
+                                                            {...register("food_video_url")}
                                                             onChange={handleFileChange}
                                                         />
-                                                        {props?.button === 'edit' && props?.data.product_video_url && (
+                                                        {props?.button === 'edit' && props?.data.food_video_url && (
                                                             <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                                {props?.data?.product_video_url?.name}
+                                                                {props?.data.food_video_url?.name}
                                                             </label>
                                                         )}
                                                     </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Manufacturer Name*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Manufacturer Name'
+                                                    <div>
+                                                        <label className={labelClass}>Is Active*</label>
+                                                        <select
                                                             className={inputClass}
-                                                            {...register('product_Manufacturer_Name', { required: true })}
-                                                        />
-                                                        {errors.product_Manufacturer_Name && <Error title='Manufacturer Name is Required*' />}
+                                                            disabled={user?.role != 'admin' ? false : true}
+                                                            {...register('food_isactive', { required: true })}
+                                                        >
+                                                            <option value="">select</option>
+                                                            <option value={true}>Active</option>
+                                                            <option value={false}>In-Active</option>
+                                                        </select>
+                                                        {errors?.food_isactive && <Error title='This is required' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Nutritional Info*
+                                                            Menu Type*
                                                         </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Nutritional Info'
-                                                            className={inputClass}
-                                                            {...register('product_nutritional_info', { required: true })}
-                                                        />
-                                                        {errors.product_nutritional_info && <Error title='Nutritional Info is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Brand*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Brand'
-                                                            className={inputClass}
-                                                            {...register('product_brand', { required: true })}
-                                                        />
-                                                        {errors.product_brand && <Error title='Brand is Required*' />}
+                                                        <select
+                                                            name="menu"
+                                                            className={`${inputClass}`}
+                                                            {...register("menu_type", { required: true })}
+                                                        >
+                                                            <option value="">Select</option>
+                                                            <option value="Bestseller">Best Seller</option>
+                                                            <option value="New">New</option>
+                                                        </select>
+                                                        {errors?.menu_type && <Error title='Menu Type is required' />}
                                                     </div>
                                                     {
-                                                        LoggedUserDetails?.role == 'seller' &&
+                                                        user?.role == 'seller' &&
                                                         <div className="">
                                                             <label className={labelClass}>
-                                                                Product Revenue*
+                                                                Food Revenue*
                                                             </label>
                                                             <input
                                                                 type="text"
                                                                 readOnly
                                                                 placeholder='₹ 0.00'
                                                                 className={inputClass}
-                                                                {...register('product_revenue')}
+                                                                {...register('food_revenue')}
                                                             />
                                                         </div>
                                                     }
-                                                    <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Product Images</p>
+                                                    <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Food Images</p>
                                                     <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Main Image*</label>
                                                         <input className={fileinput}
                                                             id="main_input"
                                                             type='file'
-                                                            multiple
+                                                            // multiple
+                                                            disabled={user?.role != 'admin' ? false : true}
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            onChange={(e) => handleImageChange(e)}
-                                                            {...register("product_image_1",
-                                                                { required: props.title == 'Edit Product' ? false : true })} />
-                                                        {props?.title == 'Edit Product' && props?.row?.product_image_1 != '' && props?.row?.product_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.row?.product_image_1?.split('/').pop()}
+                                                            // onChange={(e) => handleImageChange(e)}
+                                                            {...register("food_image_1",
+                                                                { required: props.button == 'edit' ? false : true })} />
+                                                        {props?.button == 'edit' && props?.data?.food_image_1 != '' && props?.data?.food_image_1 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
+                                                            {props?.data?.food_image_1?.split('/').pop()}
                                                         </label>}
-                                                        {errors.product_image_1 && <Error title='Main Image is required*' />}
+                                                        {errors.food_image_1 && <Error title='Main Image is required*' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Image 2</label>
                                                         <input className={fileinput}
                                                             id="main_input"
                                                             type='file'
-                                                            multiple
+                                                            // multiple
+                                                            disabled={user?.role == 'admin' ? true : false}
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            {...register("product_image_2",
-                                                            )}
-                                                        />
-                                                        {props?.title == 'Edit Product' && props?.row?.product_image_2 != '' && props?.row?.product_image_2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.row?.product_image_2?.split('/').pop()}
+                                                            {...register("food_image_2")} />
+                                                        {props?.button == 'edit' && props?.data?.food_image_2 != '' && props?.data?.food_image_2 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
+                                                            {props?.data?.food_image_2?.split('/').pop()}
                                                         </label>}
                                                     </div>
                                                     <div className="">
@@ -405,12 +556,13 @@ export default function AddRestItem(props) {
                                                         <input className={fileinput}
                                                             id="main_input"
                                                             type='file'
-                                                            multiple
+                                                            // multiple
+                                                            disabled={user?.role != 'admin' ? false : true}
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            {...register("product_image_3")} />
-                                                        {props?.title == 'edit' && props?.row?.product_image_3 != '' && props?.row?.product_image_3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.row?.product_image_3?.split('/').pop()}
+                                                            {...register("food_image_3")} />
+                                                        {props?.button == 'edit' && props?.data?.food_image_3 != '' && props?.data?.food_image_3 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
+                                                            {props?.data?.food_image_3?.split('/').pop()}
                                                         </label>}
                                                     </div>
                                                     <div className="">
@@ -418,12 +570,13 @@ export default function AddRestItem(props) {
                                                         <input className={fileinput}
                                                             id="main_input"
                                                             type='file'
-                                                            multiple
+                                                            // multiple
+                                                            disabled={user?.role != 'admin' ? false : true}
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            {...register("product_image_4")} />
-                                                        {props?.title == 'Edit Product' && props?.row?.product_image_4 != '' && props?.row?.product_image_4 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.row?.product_image_4?.split('/').pop()}
+                                                            {...register("food_image_4")} />
+                                                        {props?.button == 'edit' && props?.data?.food_image_4 != '' && props?.data?.food_image_4 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
+                                                            {props?.data?.food_image_4?.split('/').pop()}
                                                         </label>}
                                                     </div>
                                                     <div className="">
@@ -431,14 +584,14 @@ export default function AddRestItem(props) {
                                                         <input className={fileinput}
                                                             id="main_input"
                                                             type='file'
-                                                            multiple
+                                                            // multiple
+                                                            disabled={user?.role != 'admin' ? false : true}
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
-                                                            {...register("product_image_5")} />
-                                                        {props?.title == 'Edit Product' && props?.row?.product_image_5 != '' && props?.row?.product_image_5 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.row?.product_image_5?.split('/').pop()}
+                                                            {...register("food_image_5")} />
+                                                        {props?.button == 'edit' && props?.data?.food_image_5 != '' && props?.data?.food_image_5 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
+                                                            {props?.data?.food_image_5?.split('/').pop()}
                                                         </label>}
-                                                        {/* {errors.product_image_5 && <Error title='Profile Image is required*' />} */}
                                                     </div>
                                                 </div>
                                             </div>

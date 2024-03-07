@@ -20,7 +20,6 @@ const Promotions = () => {
     const getAllPromotionList = () => {
         try {
             addHomePromotion().then((res) => {
-                console.log(res.data)
                 setpromotionList(res.data);
                 dispatch(setPromotions(res))
             })
@@ -58,7 +57,6 @@ const Promotions = () => {
         const payload = { slide_isactive: !row?.slide_isactive, slide_url: row?.slide_url }
         try {
             editHomePromotion(row?.slide_id, payload).then((form) => {
-                console.log(payload)
                 if (form.message == "slide edited successfully") {
                     toast.success('Promotion Activation Changed !');
                     getAllPromotionList()

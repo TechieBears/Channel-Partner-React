@@ -18,7 +18,6 @@ import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomC
 
 function Drivers() {
     const dispatch = useDispatch()
-    const userList = useSelector(state => state.users.list)
     const {
         register,
         handleSubmit,
@@ -28,7 +27,7 @@ function Drivers() {
     const [open, setOpen] = React.useState(false);
     const [delId, setDelId] = React.useState(0);
     const DeliveryList = useSelector((state) => state?.delivery?.deliveryList);
-    console.log(DeliveryList)
+    console.log('driverList', DeliveryList)
     // =================== filter data ========================
     const onSubmit = async (data) => {
         if (data?.name != '' || data?.email != '' || data?.city != '' || data?.role != '') {
@@ -92,7 +91,7 @@ function Drivers() {
     const representativeBodyTemplate = (row) => {
         return (
             <div className="rounded-full w-11 h-11">
-                <img src={row?.user?.profile_pic == null || row?.user?.profile_pic == '' || row?.user?.profile_pic == undefined ? userImg : row?.user?.profile_pic} className="object-cover w-full h-full rounded-full" alt={row.user?.first_name} />
+                <img src={row?.user?.profile_pic == null || row?.user?.profile_pic == '' || row?.user?.profile_pic == undefined || row?.user?.profile_pic.includes('undefined') ? userImg : row?.user?.profile_pic} className="object-cover w-full h-full rounded-full" alt={row.user?.first_name} />
             </div>
         );
     };
@@ -105,7 +104,7 @@ function Drivers() {
         </h6>
     );
 
-  
+
     // ======================= Table Column Definitions =========================
     // const columns = [
     //     { field: 'id', header: 'ID', body: representativeBodyTemplate, sortable: true, style: true },

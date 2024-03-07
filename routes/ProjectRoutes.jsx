@@ -41,12 +41,13 @@ import ViewProduct from '../src/components/Modals/Vendors/ViewProduct';
 import Complaints from '../src/components/Modals/Complaints/Complaints';
 import FranchiseDetail from '../src/pages/Admin/Franchisees/FranchiseDetail';
 import DriverDetail from '../src/pages/Admin/Drivers/DriverDetail';
-import FranchiseRestaurent from '../src/pages/Franchisee/Resturants/Resturant';
 import ViewAdminProduct from '../src/pages/Admin/Menu/AdminProduct/ViewAdminProduct';
 import DashboardBannerPanel from '../src/pages/Admin/Master/DashboardAssets/DashAssetsPanel/DashboardBannerPanel';
 import DashboardPromotions from '../src/pages/Admin/Master/DashboardPromotions';
-import DashboardForm from '../src/components/modals/DashboardModals/DashboardForm';
+// import DashboardForm from '../src/components/modals/DashboardModals/DashboardForm';
 import Coupon from '../src/pages/Admin/Coupon/Coupon';
+import RestaurantRegister from '../src/pages/Restaurants/ViewRestaurant/RestaurantRegister';
+import FoodDetails from '../src/pages/Admin/Menu/AdminProduct/FoodDetails';
 
 
 
@@ -79,9 +80,10 @@ const ProjectRoutes = () => {
                                 {user?.role == 'admin' ?
                                     <>
                                         <Route path="/admin" element={<Dashboard />} />
-                                        <Route path="/menu" element={<Menu isrestaurant={false}/>}  />
-                                        <Route path="/restaurantmenu" element={<Menu isrestaurant={true} />}  />
+                                        <Route path="/menu" element={<Menu isrestaurant={false} />} />
+                                        <Route path="/restaurantmenu" element={<Menu isrestaurant={true} />} />
                                         <Route path='/product-list/product-details/:id' element={<ViewAdminProduct />} />
+                                        <Route path='/food-list/food-details/:id' element={<FoodDetails />} />
                                         <Route path="/resturants" element={<Restaurant />} />
                                         <Route path="/resturants/restaurant-detail/:id" element={<RestaurantDetail />} />
                                         <Route path="/franchisee" element={<Franchisee />} />
@@ -108,12 +110,13 @@ const ProjectRoutes = () => {
                                     user?.role == 'seller' ?
                                         <>
                                             <Route path='/' element={<VendorDashbaord />} />
+                                            <Route path='/register' element={<RestaurantRegister />} />
                                             <Route path="/profile" element={<UserProfile />} />
                                             <Route path='/menu' element={<Menu />} />
                                             <Route path='/vendor-orders' element={<VendorOrders />} />
                                             <Route path='/vendor-orders/order-detail/:id' element={<ViewOrder />} />
                                             <Route path='/product-list' element={<VendorProduct />} />
-                                            <Route path='/product-list/product-details/:id' element={<ViewAdminProduct />} />
+                                            <Route path='/food-list/food-details/:id' element={<FoodDetails />} />
                                             <Route path='/complaints' element={<Complaints />} />
                                         </> :
                                         user?.role == 'franchise' ? <>
@@ -132,7 +135,6 @@ const ProjectRoutes = () => {
                                             user?.role == 'restaurant' ?
                                                 <>
                                                     <Route path='/' element={<VendorDashbaord />} />
-
                                                 </> : ''}
                             </Routes>
                         </Sidebar>

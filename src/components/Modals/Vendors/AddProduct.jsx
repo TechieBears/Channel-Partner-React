@@ -1,19 +1,17 @@
-import { Fragment, useEffect, useRef, useState } from 'react';
-import { Dialog, Transition } from '@headlessui/react'
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Fragment, useEffect, useState } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
+import { useSelector } from 'react-redux';
 import LoadBox from '../../Loader/LoadBox';
 import { useForm } from 'react-hook-form';
 import Error from '../../Errors/Error';
-import { MultiSelect } from 'primereact/multiselect';
 import { Add, Edit } from 'iconsax-react';
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
-import { addProduct, editVendorProduct, getAllSeller, editAdminFinalProduct, getCategory, getSubCategory } from '../../../api';
+import { addProduct, editVendorProduct, editAdminFinalProduct, getCategory, getSubCategory } from '../../../api';
 import { toast } from 'react-toastify';
 import { ImageUpload, productLink } from '../../../env';
 
 const AddProduct = (props) => {
+    console.log('props= ', props)
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
     const [category, setCategory] = useState([]);

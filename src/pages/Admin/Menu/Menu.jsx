@@ -31,7 +31,7 @@ const Menu = (props) => {
                         className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 2 ? 'text-sky-500  border-b-2 border-sky-400 outline-0' : 'text-gray-500 border-b'
                             }`}
                     >
-                        Products
+                     {props?.isrestaurant ? "Food Items" : "Products"}
                     </Tab>}
                 </TabList>
                 {/* ================= Category component ============== */}
@@ -44,7 +44,7 @@ const Menu = (props) => {
                 </TabPanel>
                 {/* ================= Product component ============== */}
                 {LoggedUserDetails?.role != 'seller' && <TabPanel>
-                    <AdminProduct />
+                    <AdminProduct  isrestaurant={props?.isrestaurant} />
                 </TabPanel>}
             </Tabs>
         </div>

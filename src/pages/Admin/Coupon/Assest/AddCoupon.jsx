@@ -6,6 +6,8 @@ import { formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../.
 import { Edit } from 'iconsax-react'
 import { addCoupon, editCoupon } from '../../../../api'
 import { toast } from 'react-toastify'
+import Error from '../../../../components/Errors/Error'
+
 
 export default function AddCoupon(props) {
     const [isOpen, setIsOpen] = useState(false)
@@ -151,7 +153,7 @@ export default function AddCoupon(props) {
                                                         className={inputClass}
                                                         {...register('discount_price', { required: true })}
                                                     />
-                                                    {errors.discount_price && <Error title='Percentage is required*' />}
+                                                    {errors.discount_price && <Error title='Discounted Price is required*' />}
                                                 </div>
                                                 <div className="">
                                                     <label className={labelClass} >Expiry Date*</label>
@@ -161,7 +163,7 @@ export default function AddCoupon(props) {
                                                         className={inputClass}
                                                         {...register('expiry_date', { required: true })}
                                                     />
-                                                    {errors.expiry_date && <Error title='Percentage is required*' />}
+                                                    {errors.expiry_date && <Error title='Expiry Date is required*' />}
                                                 </div>
                                                 <div className="">
                                                     <label className={labelClass} >Coupon Type*</label>
@@ -173,7 +175,7 @@ export default function AddCoupon(props) {
                                                         <option value='Restaurant'>Restaurant</option>
                                                         <option value='Vendor'>Vendor</option>
                                                     </select>
-                                                    {errors.discount_percent && <Error title='Percentage is required*' />}
+                                                    {errors.discount_percent && <Error title='Coupon Type is required*' />}
                                                 </div>
                                             </div>
 

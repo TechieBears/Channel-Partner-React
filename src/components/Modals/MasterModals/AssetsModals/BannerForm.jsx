@@ -1,9 +1,9 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
-import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn} from "../../../../utils/CustomClass";
+import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from "../../../../utils/CustomClass";
 import { Edit } from "iconsax-react";
-import { addHomeBanners, editHomeBanners, getHomeBanners, getGalleryImages} from "../../../../api";
+import { addHomeBanners, editHomeBanners, getGalleryImages } from "../../../../api";
 import { useDispatch } from "react-redux";
 import { setBanner } from "../../../../redux/Slices/masterSlice";
 import { toast } from "react-toastify";
@@ -13,50 +13,27 @@ import { ImageUpload, bannerLink } from "../../../../env";
 import MediaGallaryModal from "../../../../pages/Settings/MediaGallery/MediaGallery";
 
 export default function BannerForm(props) {
-  // console.log("props = ", props);
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
-  const [showSampleImageUpload, setShowSampleImageUpload] = useState(false);
-  // console.log('showSampleImageUpload', showSampleImageUpload) 
 
   const dispatch = useDispatch();
   const toggle = () => setIsOpen(!isOpen);
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    reset,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, setValue, reset, formState: { errors }} = useForm();
 
-  const [showModal, setShowModal] = useState(false);
+  const [openGallery, setopenGallery] = useState(false);
+  const [openGalleryModal, setopenGalleryModal] = useState(false);
   const [imageDetails, setImageDetails] = useState([]);
   const [childData, setChildData] = useState('');
-  // console.log('imageDetails = = ', imageDetails)
   const mediaGalleryModalRef = useRef(null);
 
-  const handleDivClick = () => {
-    // Open the MediaGallaryModal
-    setShowModal(true);
-  };
-
-  const openModal = () => {
-    if (mediaGalleryModalRef.current) {
-      mediaGalleryModalRef.current.openModal();
-    }else{
-      mediaGalleryModalRef.current.openModal();
-    }
-    // setShowModal(true);
+  const openMediaModal = () => {
+    setopenGalleryModal(true);
   };
   
-  const closeModal = () => {
-    setShowModal(false);
-  };
-  
-  const handleChildData = (data) => {
+  const receiveDataFromChild = (data) => {
     setChildData(data);
-    console.log('childData = ', childData)
     setValue("slide_url", childData);
+    console.log('childData = ', childData)
   };
 
 
@@ -73,14 +50,18 @@ export default function BannerForm(props) {
   };
   useEffect(() => {
     fetchData();
+    reset({
+      'vendor_type': props?.data?.vendor_type 
+    })
   }, []);
 
   // ============================ submit data  =====================================
   const onSubmit = async (data) => {
-    
     if (props?.button != "edit") {
       try {
-        if (data.slide_url.length != 0) {
+        if (childData) {
+          data.slide_url = childData;
+        } else if (data?.slide_url?.length !== 0) {
           await ImageUpload(
             data.slide_url[0],
             "banner",
@@ -99,6 +80,7 @@ export default function BannerForm(props) {
               reset();
               toggle(), setLoader(false), props?.getAllBannerList();
               toast.success(res?.message);
+              setChildData('')
             }, 1000);
           }
         });
@@ -108,14 +90,14 @@ export default function BannerForm(props) {
       }
     } else {
       try {
-        if (data?.slide_url != props?.data?.slide_url) {
+        if (data?.slide_url?.length > 0 && props?.data?.slide_url) {
           await ImageUpload(
             data.slide_url[0],
             "banner",
             "banner",
-            data.slide_url[0].name
+            data.slide_url[0]?.name
           );
-          data.slide_url = `${bannerLink}${data.slide_url[0].name}_banner_${data.slide_url[0].name}`;
+          data.slide_url = `${bannerLink}${data.slide_url[0]?.name}_banner_${data.slide_url[0]?.name}`;
         } else {
           data.slide_url = props?.data?.slide_url;
         }
@@ -127,6 +109,7 @@ export default function BannerForm(props) {
               reset();
               toggle(), setLoader(false), props?.getAllBannerList();
               toast.success(res?.message);
+              setChildData('')
             }, 1000);
           }
         });
@@ -183,18 +166,14 @@ export default function BannerForm(props) {
     reset();
     toggle();
     setLoader(false);
-    setShowSampleImageUpload(false);
+    setopenGallery(false);
   };
 
   const handleSelectChange = (e) => {
-    if (e.target.value === 'I have a own Images') {
-        setShowSampleImageUpload(false);
-        setShowModal(false)
-    } else {
-      console.log('showModal == ', showModal)
-      console.log('showSampleImageUpload == ', showSampleImageUpload)
-        setShowSampleImageUpload(true);
-        setShowModal(true)
+    if (e.target.value == 'true') {
+       setopenGallery(true);
+    }else{
+      setopenGallery(false);
     }
   };
 
@@ -245,7 +224,9 @@ export default function BannerForm(props) {
                   </Dialog.Title>
                   <div className=" bg-gray-200/70">
                     {/* React Hook Form */}
-                    <form onSubmit={childData == '' ? handleSubmit(onSubmit) : handleSubmit(GallerySubmit)}>
+                    {/* <form onSubmit={childData == '' ? handleSubmit(onSubmit) : handleSubmit(GallerySubmit)}> */}
+                    <form onSubmit={handleSubmit(onSubmit)}>
+
                       <div className="py-4 mx-4 customBox">
                         <div className="mb-3">
                           <select
@@ -253,14 +234,36 @@ export default function BannerForm(props) {
                             onChange={handleSelectChange}
                             className={`${inputClass} !bg-slate-100`}
                             >
-                            <option value="I have a own Images" selected>I have a own Images</option>
-                            <option value="I Don't have a Images">I Don't have a Images</option>
+                            <option value="false">I have a own Images</option>
+                            <option value="true">I Don't have a Images</option>
                           </select>
                         </div>
 
+                        <div className="my-2">
+                         <label className={labelClass} htmlFor="main_input">
+                            Vendor *
+                          </label>
+                        <select
+                            name=""
+                            {...register('vendor_type', {required: true})}
+                            className={`${inputClass} !bg-slate-100`}
+                            >
+                            <option value="">select</option>
+                            <option value="Restaurant">Restaurant</option>
+                            <option value="Seller">Seller</option>
+                          </select>
+                          {errors.vendor_type && <Error title='Vendor type is Required*' />}
+                        </div>
 
-                        {!showSampleImageUpload &&  (
-                        <div className="">
+
+                       {openGallery && <div className="w-1/2 mt-3 mb-2">
+                          <span className={`cursor-pointer w-full ${formBtn1}`} onClick={openMediaModal}>
+                            Open Sample Images
+                          </span>
+                        </div>}
+
+
+                       {!openGallery && <div className="">
                           <label className={labelClass} htmlFor="main_input">
                             Image*
                           </label>
@@ -272,12 +275,12 @@ export default function BannerForm(props) {
                             accept="image/jpeg,image/jpg,image/png"
                             placeholder="Upload Images..."
                             {...register("slide_url", {
-                              required: props.button == "edit" ? false : true,
+                              required: !childData && (props.button === "edit" ? false : true),
                             })}
                           />
                           {props?.button == "edit" &&
-                            props?.data.slide_url != "" &&
-                            props?.data.slide_url != undefined && (
+                            props?.data?.slide_url != "" &&
+                            props?.data?.slide_url != undefined && (
                               <label className="block mb-1 font-medium text-blue-800 text-md font-tb">
                                 {props?.data?.slide_url?.split("/").pop()}
                               </label>
@@ -285,31 +288,11 @@ export default function BannerForm(props) {
                           {errors.slide_url && (
                             <Error title="Main Image is required*" />
                           )}
-                        </div>
-                        )}
+                        </div> }
 
-                        {showModal &&
-                        <div className="" onClick={handleDivClick}>
-                            <label className={labelClass} htmlFor="main_input">
-                              Image*
-                            </label>
-                            {/* You may add other content here, e.g., a message or an icon */}
-                          </div>
-                          }
 
-                         {/* MediaGallaryModal */}
-                          {/* <div className="hidden"> */}
-                            {showModal && <MediaGallaryModal
-                              // ref={mediaGalleryModalRef}
-                              // id="mediaGalleryModal"
-                              className="hidden"
-                              title="Upload Image"
-                              // showModal={showModal}
-                              imageDetails={imageDetails}
-                              sendDataToParent={handleChildData}
-                            />}
-                            {childData && <span>{childData.split("/").pop()}</span>}
-                          {/* </div> */}
+                    
+                        {childData && <span>{childData.split("/").pop()}</span>}
                       </div>
 
                       <footer className="flex justify-end px-4 py-2 space-x-3 bg-white">
@@ -332,17 +315,16 @@ export default function BannerForm(props) {
                       </footer>
 
                     </form>
-                        {/* <div className="hidden">
+                       {openGalleryModal && <div className="hidden">
                           <MediaGallaryModal
                               ref={mediaGalleryModalRef}
                               id="mediaGalleryModal"
                               className="hidden"
                               title="Upload Image"
-                              showModal={showModal}
                               imageDetails={imageDetails}
-                              sendDataToParent={handleChildData}
+                              sendDataToParent={receiveDataFromChild}
                           />
-                        </div> */}
+                        </div> }
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

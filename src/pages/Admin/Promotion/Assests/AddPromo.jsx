@@ -15,7 +15,6 @@ import { setPromotions } from '../../../../redux/Slices/masterSlice';
 
 
 export default function AddPromo(props) {
-    console.log('props = ', props)
     const [isOpen, setIsOpen] = useState(false)
     const [loader, setLoader] = useState(false)
     const dispatch = useDispatch()
@@ -32,7 +31,6 @@ export default function AddPromo(props) {
     const onSubmit = async (data) => {
         if (props?.title != 'Edit Promotions') {
             try {
-                console.log('post called')
                 if (data.slide_url.length != 0) {
                     await ImageUpload(data.slide_url[0], "promotion", "promotion", data.slide_url[0].name)
                     data.slide_url = `${promotionLink}${data.slide_url[0].name}_promotion_${data.slide_url[0].name}`
@@ -58,7 +56,7 @@ export default function AddPromo(props) {
             }
         } else {
             try {
-                if (data?.slide_url != props?.data?.slide_url) {
+                if (data?.slide_url?.length > 0 && props?.data?.slide_url) {
                     await ImageUpload(data.slide_url[0], "promotion", "promotion", data.slide_url[0].name)
                     data.slide_url = `${promotionLink}${data.slide_url[0].name}_promotion_${data.slide_url[0].name}`
                 } else {
@@ -140,6 +138,21 @@ export default function AddPromo(props) {
                                         {/* React Hook Form */}
                                         <form onSubmit={handleSubmit(onSubmit)} >
                                             <div className="py-4 mx-4 customBox">
+                                                <div className="my-2">
+                                                <label className={labelClass} htmlFor="main_input">
+                                                    Vendor *
+                                                </label>
+                                                <select
+                                                    name=""
+                                                    {...register('vendor_type', {required: true})}
+                                                    className={`${inputClass} !bg-slate-100`}
+                                                    >
+                                                    <option value="">select</option>
+                                                    <option value="Restaurant">Restaurant</option>
+                                                    <option value="Seller">Seller</option>
+                                                </select>
+                                                {errors.vendor_type && <Error title='Vendor type is Required*' />}
+                                                </div>
                                                 {/* <div className="">
                                                     <label className={labelClass} >Type*</label>
                                                     <select

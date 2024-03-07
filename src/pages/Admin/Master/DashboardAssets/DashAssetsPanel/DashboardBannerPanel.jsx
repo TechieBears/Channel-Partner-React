@@ -5,29 +5,41 @@ import {
   getHomeBanners,
   delHomeBanners,
   editHomeBanners,
+  addHomePromotion,
 } from "../../../../../api";
-import { useDispatch, useSelector } from "react-redux";
-import { setBanner } from "../../../../../redux/Slices/masterSlice";
+import { useDispatch } from "react-redux";
+import { setPromotions } from "../../../../../redux/Slices/masterSlice";
 import { toast } from "react-toastify";
 import Switch from "react-js-switch";
 import BannerForm from "../../../../../components/Modals/MasterModals/AssetsModals/BannerForm";
-import MediaGallaryModal from "../../../../Settings/MediaGallery/MediaGallery";
-import { getGalleryImages, } from '../../../../../api';
+import { getGalleryImages, delHomePromotion } from '../../../../../api';
+import AddPromo from "../../../Promotion/Assests/AddPromo";
 
 
 const DashboardBannerPanel = () => {
-  const homeBanners = useSelector((state) => state?.master?.banner);
-  // const dispatch = useDispatch()
   const [bannerList, setBannerList] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [imageDetails, setImageDetails] = useState([]);
+  const [promotionList, setpromotionList] = useState([]);
+  const dispatch = useDispatch()
+
+  // ============== fetch data from api ================
+  const getAllPromotionList = () => {
+    try {
+      addHomePromotion().then((res) => {
+        console.log(res.data)
+        setpromotionList(res.data);
+        dispatch(setPromotions(res))
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
 
   // =================== fetching data ========================
   const fetchData = () => {
     try {
       getGalleryImages().then((res) => {
-        console.log("media gallery data = ", res);
-        setImageDetails(res);
+        // setImageDetails(res);
       });
     } catch (err) {
       console.log("error", err);
@@ -40,8 +52,6 @@ const DashboardBannerPanel = () => {
       getHomeBanners().then((res) => {
         console.log(res.data);
         setBannerList(res.data);
-
-        // dispatch(setBanner(res))
       });
     } catch (error) {
       console.log(error);
@@ -51,14 +61,11 @@ const DashboardBannerPanel = () => {
   useEffect(() => {
     getAllBannerList();
     fetchData();
+    getAllPromotionList();
   }, []);
 
-  const openMediaModal = () => {
-    setShowModal(true);
-  };
-
   // ============== delete data from api ================
-  const deleteData = (data) => {
+  const deleteDataBanner = (data) => {
     delHomeBanners(data).then((res) => {
       if (res?.message == "deleted successfully") {
         getAllBannerList();
@@ -67,8 +74,17 @@ const DashboardBannerPanel = () => {
     });
   };
 
+  const deleteDataPromotion = (data) => {
+    delHomePromotion(data).then((res) => {
+      if (res?.message == "deleted successfully") {
+        getAllPromotionList();
+        toast.success(res?.message);
+      }
+    });
+  };
+
   // ================= action of the table ===============
-  const actionBodyTemplate = (row) => (
+  const actionBodyTemplateBanner = (row) => (
     <div className="flex items-center gap-2">
       <BannerForm
         button="edit"
@@ -77,7 +93,25 @@ const DashboardBannerPanel = () => {
         getAllBannerList={getAllBannerList}
       />
       <button
-        onClick={() => deleteData(row.slide_id)}
+        onClick={() => deleteDataBanner(row.slide_id)}
+        className="bg-red-100  px-1.5 py-2 rounded-sm"
+      >
+        <Trash size="20" className="text-red-500" />
+      </button>
+    </div>
+  );
+
+  // ================= action of the table ===============
+  const actionBodyTemplatePromotion = (row) => (
+    <div className="flex items-center gap-2">
+      <AddPromo
+        button="edit"
+        title="Edit Promotions"
+        data={row}
+        getAllPromotionList={getAllPromotionList}
+      />
+      <button
+        onClick={() => deleteDataPromotion(row.slide_id)}
         className="bg-red-100  px-1.5 py-2 rounded-sm"
       >
         <Trash size="20" className="text-red-500" />
@@ -92,6 +126,12 @@ const DashboardBannerPanel = () => {
         alt="image"
         className="w-full bg-slate-100 h-full object-cover rounded"
       />
+    </div>
+  );
+
+  const vendorTypeStyle = (row) => (
+    <div className="w-28 h-24 items-center">
+      <h5>{row?.vendor_type}</h5>
     </div>
   );
 
@@ -132,32 +172,46 @@ const DashboardBannerPanel = () => {
   };
 
   // ================= columns of the table ===============
-  const columns = [
-    { field: "image", header: "Image", body: imageBodyTemp },
-    { field: "id", header: "Action", body: actionBodyTemplate, sortable: true },
-    { field: "isactive", header: "Active", body: switchActive, sortable: true },
+  const bannercolumns = [
+    { field: "image", header: "Image", body: imageBodyTemp, style: true },
+    { field: 'vendor_type', header: 'Vendor Type', sortable: true, style: true },
+    { field: "id", header: "Action", body: actionBodyTemplateBanner, sortable: true, style: true },
+    { field: "isactive", header: "Active", body: switchActive, sortable: true, style: true },
   ];
+
+  // ================= columns of the table ===============
+  const promotioncolumns = [
+    { field: "image", header: "Image", body: imageBodyTemp, style: true },
+    { field: 'vendor_type', header: 'Vendor Type', sortable: true, style: true },
+    { field: "id", header: "Action", body: actionBodyTemplatePromotion, sortable: true, style: true },
+    { field: "isactive", header: "Active", body: switchActive, sortable: true, style: true },
+  ];
+
+  useEffect(() => {
+    getAllPromotionList()
+  }, []);
 
   return (
     <>
-      <div className="bg-white rounded-xl m-4 sm:m-5 shadow-sm  p-5  ">
-        <div className="flex justify-between flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 mb-6">
-          <div className="">
-            <h1 className="font-tbPop text-xl font-semibold text-gray-900 ">
-              Home Banners
-            </h1>
+      <div className="bg-white rounded-xl m-4 sm:m-5 shadow-sm p-5">
+        <div className="grid grid-cols-2 gap-x-4">
+          <div>
+            <div className="flex justify-between mb-4 mx-5 items-center text-center">
+              <h5 className="font-semibold text-2xl">Banners</h5>
+              <BannerForm title="Add New Banner" getAllBannerList={getAllBannerList} />
+            </div>
+            {bannerList?.length > 0 && (
+              <Table data={bannerList} columns={bannercolumns} />
+            )}
           </div>
-          {/* <button onClick={openMediaModal}>Open Media gallery</button> */}
-          {/* <MediaGallaryModal title="Media Gallery" showModal={showModal} imageDetails={imageDetails} /> */}
-
-          <BannerForm
-            title="Add New Banner"
-            getAllBannerList={getAllBannerList}
-          />
+          <div>
+            <div className="flex justify-between mb-4 mx-5 items-center text-center">
+              <h5 className="font-semibold text-2xl">Promotions</h5>
+              <AddPromo title='Add New Promotion' getAllPromotionList={getAllPromotionList} />
+            </div>
+            {promotionList?.length > 0 && <Table data={promotionList} columns={promotioncolumns} />}
+          </div>
         </div>
-        {bannerList?.length > 0 && (
-          <Table data={bannerList} columns={columns} />
-        )}
       </div>
     </>
   );
