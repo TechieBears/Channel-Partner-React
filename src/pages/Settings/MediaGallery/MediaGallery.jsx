@@ -40,6 +40,7 @@ const MediaGallaryModal = ({sendDataToParent, ...props}) => {
   const closeBtn = () => {
     reset();
     toggle();
+    props?.setopenGalleryModal();
   };
 
   return (
@@ -91,19 +92,19 @@ const MediaGallaryModal = ({sendDataToParent, ...props}) => {
                     id="default-modal"
                     data-modal-show="true"
                     aria-hidden="true"
-                    className="show overflow-x-hidden overflow-y-auto fixed h-modal md:h-full top-4 left-0 right-0 md:inset-0 z-50 justify-center items-center"
+                    className="fixed left-0 right-0 z-50 items-center justify-center overflow-x-hidden overflow-y-auto show h-modal md:h-full top-4 md:inset-0"
                   >
-                    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+                    <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"></div>
                     <div className="fixed inset-0 w-screen overflow-y-auto">
-                      <div className="flex min-h-min items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                      <div className="flex items-end justify-center p-4 text-center min-h-min sm:items-center sm:p-0">
                         <div
                           className={`relative transform overflow-hidden bg-gray-50 text-left shadow-xl transition-all w-full h-screen scale-0 ${
                             props?.showModal ? "scale-100" : ""
                           }`}
                         > */}
-                  {/* <div className="modal-header p-3 bg-yellow-500 text-gray-900">
+                  {/* <div className="p-3 text-gray-900 bg-yellow-500 modal-header">
                             <div className="flex justify-between">
-                              <h5 className="text-white text-xl uppercase tennis-primary-font-bold">
+                              <h5 className="text-xl text-white uppercase tennis-primary-font-bold">
                                 Media Gallery
                               </h5>
                               <CloseCircle size="30" color="#fff" className='cursor-pointer' name="Close" onClick={props.onClose} />
@@ -125,16 +126,16 @@ const MediaGallaryModal = ({sendDataToParent, ...props}) => {
                             <img
                               src={data.media_url}
                               alt={data.media_name}
-                              className="min-w-full h-40 object-cover"
+                              className="object-cover h-40 min-w-full"
                             />
-                            <div className="text-xs font-semibold py-2">
+                            <div className="py-2 text-xs font-semibold">
                               {data.media_name}
                             </div>
                           </li>
                         ))}
                     </ul>
                   </div>
-                  <div className="modal-foote bg-white p-3 sm:flex sm:flex-row-reverse gap-3">
+                  <div className="gap-3 p-3 bg-white modal-foote sm:flex sm:flex-row-reverse">
                     {/* <button
                               type="button"
                               name="Continue"
@@ -173,13 +174,13 @@ const MediaGallaryModal = ({sendDataToParent, ...props}) => {
                                 type="button"
                                 name="Continue"
                                 onClick={handleContinue}
-                                className="inline-flex w-full justify-center rounded-xs bg-teal-500 px-4 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-teal-300 sm:w-auto"
+                                className="inline-flex justify-center w-full px-4 py-2 text-sm font-semibold text-white bg-teal-500 shadow-sm rounded-xs ring-1 ring-inset ring-teal-300 sm:w-auto"
                             ></Button>
                             <Button
                                 type="button"
                                 name="Cancel"
                                 onClick={props.onClose}
-                                className="inline-flex w-full justify-center rounded-xs bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50  sm:w-auto"
+                                className="inline-flex justify-center w-full px-4 py-2 text-sm font-semibold text-gray-900 bg-white shadow-sm rounded-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:w-auto"
                             ></Button> */}
                     {/* </div>
                         </div>
