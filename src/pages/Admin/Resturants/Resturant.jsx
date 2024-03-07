@@ -6,8 +6,8 @@ import { NavLink } from "react-router-dom";
 import Switch from "react-js-switch";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import { useSelector } from "react-redux";
-import { getRestarant, verifyVendors, getFranchRestaurant } from "../../../api";
-import { useForm } from "react-hook-form";
+import { getRestarant, verifyVendors, getFranchRestaurant, GetFranchisee } from "../../../api";
+import { useForm ,Controller} from "react-hook-form";
 import userImg from "../../../assets/user.jpg";
 import {
   formBtn1,
@@ -18,16 +18,39 @@ import {
 import axios from "axios";
 import AddItem from "../../../components/Modals/Resturant/AddItem";
 import { toast } from "react-toastify";
+import _ from 'lodash';
+import Select from "react-select";
 
 export default function Restaurant() {
   const [data, setData] = useState([]);
   const user = useSelector((state) => state?.user?.loggedUserDetails);
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm();
+
+  const [pincodeOptions, setPincodeOptions] = useState()
+  const [franchiseOptions, setFranchiseOptions] = useState()
+
+  // ============== Fetch All Franchise Data ================
+  const GetFranchiseeData = () => {
+    try {
+      GetFranchisee().then((res) => {
+        if (res?.length > 0) {
+          const newData = res.map((data) => ({
+            label: data?.user?.first_name + " " + data?.user?.last_name + `(${data?.msb_code})`,
+            value: data?.franch_id,
+          }))
+          setFranchiseOptions(newData)
+        }
+      })
+    } catch (error) {
+      console.log("🚀 ~ file: Vendors.jsx:57 ~ GetFranchiseeData ~ error:", error)
+    }
+  }
 
 
   // ============== Fetch All Admin Restaurants  ================
@@ -54,11 +77,24 @@ export default function Restaurant() {
   useEffect(() => {
     if (user?.role == "admin") {
       getAllRestaurant();
+      GetFranchiseeData();
     }
     if (user?.role == "franchise") {
       getFranchiseRestaurants();
+      GetFranchiseeData();
     }
   }, []);
+
+  useEffect(() => {
+    if (data?.length > 0) {
+        const newData = data?.map((data) => ({
+            label: data?.user?.pincode,
+            value: data?.user?.pincode,
+        }))
+        const uniquePincodeData = _.uniqBy(newData, 'value')
+        setPincodeOptions(uniquePincodeData);
+    }
+}, [data])
 
   // =================== filter data ========================
   const onSubmit = async (data) => {
@@ -237,44 +273,70 @@ export default function Restaurant() {
             <div className="">
               <input
                 type="text"
-                placeholder="Search by name"
-                autoComplete="off"
+                placeholder='Search By Name'
+                autoComplete='off'
                 className={`${inputClass} !bg-slate-100`}
-                {...register("name")}
+                {...register('name')}
               />
             </div>
             <div className="">
               <input
                 type="text"
-                placeholder="Search by email"
-                autoComplete="off"
+                placeholder='Search By MSB Code'
+                autoComplete='off'
                 className={`${inputClass} !bg-slate-100`}
-                {...register("email")}
+                {...register('msbcode')}
               />
             </div>
             <div className="">
-              <select
-                name="City"
-                className={`${inputClass} !bg-slate-100`}
-                {...register("role")}
-              >
-                <option value="">Select by Role</option>
-                <option value="user">User</option>
-                <option value="admin">Admin</option>
-                <option value="provider">Provider</option>
-              </select>
+              <Controller
+                control={control}
+                name="franchise"
+                render={({
+                  field: { onChange, value, ref },
+                }) => (
+                  <Select
+                    value={franchiseOptions?.find(option => option.value === value)}
+                    options={franchiseOptions}
+                    className="w-100 text-gray-900"
+                    placeholder="Search By Franchise"
+                    onChange={(selectedOption) => onChange(selectedOption.value)}
+                    inputRef={ref}
+                    maxMenuHeight={200}
+                    styles={{
+                      placeholder: (provided) => ({
+                        ...provided,
+                        color: '#9CA3AF', // Light gray color
+                      }),
+                    }}
+                  />
+                )}
+              />
             </div>
             <div className="">
-              <select
-                name="City"
-                className={`${inputClass} !bg-slate-100`}
-                {...register("city")}
-              >
-                <option value="">Select by city name</option>
-                <option value="Mumbai">Mumbai</option>
-                <option value="Bangalore">Bangalore</option>
-                <option value="Delhi">Delhi</option>
-              </select>
+              <Controller
+                control={control}
+                name="pincode"
+                render={({
+                  field: { onChange, value, ref },
+                }) => (
+                  <Select
+                    value={pincodeOptions?.find(option => option.value === value)}
+                    options={pincodeOptions}
+                    className="w-100 text-gray-900"
+                    placeholder="Search By Pincode"
+                    onChange={(selectedOption) => onChange(selectedOption.value)}
+                    inputRef={ref}
+                    maxMenuHeight={200}
+                    styles={{
+                      placeholder: (provided) => ({
+                        ...provided,
+                        color: '#9CA3AF', // Light gray color
+                      }),
+                    }}
+                  />
+                )}
+              />
             </div>
           </div>
           <div className="flex items-center gap-x-2">

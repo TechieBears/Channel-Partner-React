@@ -9,16 +9,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { GetFranchisee, verifyFranchise } from "../../../api";
 import { setFranchise } from "../../../redux/Slices/masterSlice";
 import axios from 'axios';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import userImg from '../../../assets/user.jpg';
 import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
 import { toast } from 'react-toastify';
+import { environment } from '../../../env';
+import Select from "react-select";
+import _ from 'lodash';
+import AsyncSelect from 'react-select/async';
 
 
 function Franchisees() {
     const dispatch = useDispatch()
     const Franchisee = useSelector((state) => state?.master?.Franchise);
-    const { register, handleSubmit, formState: { errors }, reset } = useForm();
+    const { control, register, handleSubmit, formState: { errors }, reset,setValue } = useForm();
     const [open, setOpen] = React.useState(false);
     const [delId, setDelId] = React.useState(0);
 
@@ -30,11 +34,15 @@ function Franchisees() {
         setActiveTab(tabNumber);
     };
 
+    const [franchiseData, setFranchiseData] = useState()
+    const [pincodeOptions, setPincodeOptions] = useState()
+
     // // ========================= fetch data from api ==============================
     const FranchiseeDetails = () => {
         try {
             GetFranchisee().then((res) => {
                 dispatch(setFranchise(res));
+                setFranchiseData(res)
             });
         } catch (error) {
             console.log(error);
@@ -45,21 +53,49 @@ function Franchisees() {
         FranchiseeDetails()
     }, [])
 
+    useEffect(() => {
+        if (franchiseData?.length > 0) {
+            const newData = franchiseData?.map((data) => ({
+                label: data?.user?.pincode,
+                value: data?.user?.pincode,
+            }))
+            const uniquePincodeData = _.uniqBy(newData, 'value')
+            setPincodeOptions(uniquePincodeData);
+        }
+    }, [franchiseData])
+
 
 
 
     // =================== filter data ========================
     const onSubmit = async (data) => {
-        if (data?.name != '' || data?.email != '' || data?.city != '' || data?.role != '') {
-            let url = `${environment.baseUrl}user-filter/?first_name=${data?.name}&email=${data?.email}&city=${data?.city}&role=${data?.role}`
+        console.log("🚀 ~ file: Franchisees.jsx:69 ~ onSubmit ~ data:", data)
+
+
+        if (data?.name != '' || data?.msbcode != '' || data?.pincode != '' || data?.pincode != undefined) {
+            let url = `${environment.baseUrl}franchise/franchise_list?name=${data?.name}&msbcode=${data?.msbcode}&pincode=${data?.pincode?.value ? data?.pincode?.value :'' }`
             await axios.get(url).then((res) => {
-                dispatch(setUserList(res.data))
+                console.log("🚀 ~ file: Franchisees.jsx:74 ~ awaitaxios.get ~ res:", res)
+                setFranchiseData(res?.data?.results)
                 toast.success("Filters applied successfully")
             })
         } else {
             toast.warn("No Selected Value !")
         }
     }
+
+    const handleClear = () => {
+        // reset()
+        reset({
+            name:'',
+            msbcode:'',
+            pincode:''
+        })
+        toast.success("Filters clear successfully")
+        FranchiseeDetails()
+        setFranchiseData()
+    }
+
 
 
 
@@ -133,19 +169,19 @@ function Franchisees() {
     const columns = [
         // { field: 'id', header: 'ID', sortable: false },
         { field: 'profile_pic', header: 'Profile', body: representativeBodyTemplate, sortable: false, style: true },
-        { field: 'msb_code', header: 'MSB Code', sortable: false },
-        { field: 'first_name', body: (row) => <div className="capitalize">{row?.user?.first_name + " " + row?.user?.last_name}</div>, header: 'Name' },
-        { field: 'email', header: 'Email', body: (row) => <h6>{row?.user?.email}</h6>, sortable: false },
-        { field: 'gender', header: 'Gender', body: (row) => <h6>{row?.user?.gender}</h6>, sortable: false },
-        { field: 'phone_no', header: 'Phone No', body: (row) => <h6>{row?.user?.phone_no}</h6>, sortable: false },
-        { field: 'pincode', header: 'Pincode', body: (row) => <h6>{row?.user?.pincode}</h6>, sortable: false },
-        { field: 'address', header: 'Address', body: (row) => <h6>{row?.user?.address}</h6>, sortable: false },
-        { field: 'state', header: 'state', body: (row) => <h6>{row?.user?.state}</h6>, sortable: false },
-        { field: 'city', header: 'city', body: (row) => <h6>{row?.user?.city}</h6>, sortable: false },
-        { field: 'registration_date', header: 'Registration Date', body: (row) => <h6>{row?.user?.registration_date}</h6>, sortable: false },
-        { field: 'status', header: 'Status', body: activeActionsRole, sortable: false },
-        { field: 'id', header: 'Action', body: actionBodyTemplate, sortable: true },
-        { field: 'isverify', header: 'Admin Verify', body: switchVerify, sortable: true },
+        { field: 'msb_code', header: 'MSB Code', sortable: false, style: true },
+        { field: 'first_name', body: (row) => <div className="capitalize">{row?.user?.first_name + " " + row?.user?.last_name}</div>, header: 'Name', style: true },
+        // { field: 'email', header: 'Email', body: (row) => <h6>{row?.user?.email}</h6>, sortable: false },
+        // { field: 'gender', header: 'Gender', body: (row) => <h6>{row?.user?.gender}</h6>, sortable: false },
+        { field: 'phone_no', header: 'Phone No', body: (row) => <h6>{row?.user?.phone_no}</h6>, sortable: false, style: true },
+        { field: 'pincode', header: 'Pincode', body: (row) => <h6>{row?.user?.pincode}</h6>, sortable: false, style: true },
+        { field: 'address', header: 'Address', body: (row) => <h6>{row?.user?.address}</h6>, sortable: false, style: true },
+        // { field: 'state', header: 'state', body: (row) => <h6>{row?.user?.state}</h6>, sortable: false },
+        // { field: 'city', header: 'city', body: (row) => <h6>{row?.user?.city}</h6>, sortable: false },
+        // { field: 'registration_date', header: 'Registration Date', body: (row) => <h6>{row?.user?.registration_date}</h6>, sortable: false },
+        { field: 'status', header: 'Status', body: activeActionsRole, sortable: false, style: true },
+        { field: 'id', header: 'Action', body: actionBodyTemplate, sortable: true, style: true },
+        { field: 'isverify', header: 'Admin Verify', body: switchVerify, sortable: true, style: true },
         // { header: 'Analyse', body: action, sortable: false },
     ]
     return (
@@ -158,7 +194,7 @@ function Franchisees() {
                         <div className="">
                             <input
                                 type="text"
-                                placeholder='Search by name'
+                                placeholder='Search by Name'
                                 autoComplete='off'
                                 className={`${inputClass} !bg-slate-100`}
                                 {...register('name')}
@@ -167,44 +203,44 @@ function Franchisees() {
                         <div className="">
                             <input
                                 type="text"
-                                placeholder='Search by email'
+                                placeholder='Search by MSB Code'
                                 autoComplete='off'
                                 className={`${inputClass} !bg-slate-100`}
-                                {...register('email')}
+                                {...register('msbcode')}
                             />
                         </div>
                         <div className="">
-                            <select
-                                name="City"
-                                className={`${inputClass} !bg-slate-100`}
-                                {...register("role")}
-                            >
-                                <option value="" >
-                                    Select by Role
-                                </option>
-                                <option value="user">User</option>
-                                <option value="admin">Admin</option>
-                                <option value="provider">Provider</option>
-                            </select>
+                            <Controller
+                                control={control}
+                                name="pincode"
+                                render={({
+                                    field: { onChange, value, ref },
+                                }) => (
+                                    
+                                    <Select
+                                        // value={pincodeOptions?.find(option => option.value === value)}
+                                        value={value}
+                                        options={pincodeOptions}
+                                        className="w-100 text-gray-900"
+                                        placeholder="Search by Pincode"
+                                        onChange={ onChange}
+                                        inputRef={ref}
+                                        maxMenuHeight={200}
+                                        styles={{
+                                            placeholder: (provided) => ({
+                                                ...provided,
+                                                color: '#9CA3AF', // Light gray color
+                                            }),
+                                        }}
+                                    />
+                                )}
+                            />
                         </div>
-                        <div className="">
-                            <select
-                                name="City"
-                                className={`${inputClass} !bg-slate-100`}
-                                {...register("city")}
-                            >
-                                <option value="" >
-                                    Select by city name
-                                </option>
-                                <option value="Mumbai">Mumbai</option>
-                                <option value="Bangalore">Bangalore</option>
-                                <option value="Delhi">Delhi</option>
-                            </select>
-                        </div>
+
                     </div>
                     <div className="flex items-center gap-x-2">
                         <button type='submit' className={`${formBtn1} w-full text-center`}>Filter</button>
-                        <button type='button' className={`${formBtn2} w-full text-center`} onClick={() => { reset(), toast.success("Filters clear successfully"), fetchData() }}>Clear</button>
+                        <button type='button' className={`${formBtn2} w-full text-center`} onClick={() => handleClear()}>Clear</button>
                     </div>
                 </form>
             </div>
@@ -217,7 +253,7 @@ function Franchisees() {
                     </div>
                     <AddFranchisee title='Add Franchisee' FranchiseeDetails={FranchiseeDetails} />
                 </div>
-                {Franchisee?.length > 0 && <Table data={Franchisee} columns={columns} />}
+                {franchiseData?.length > 0 && <Table data={franchiseData} columns={columns}/>}
             </div>
         </>
     )
