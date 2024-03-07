@@ -70,23 +70,23 @@ export default function FoodDetails() {
                         <div className='grid grid-cols-4 gap-5'>
                             <div>
                                 <p className='text-lg font-semibold'>Category</p>
-                                <p className='text-sm text-gray-600'>{food?.food_category?.category_name}</p>
+                                <p className='text-sm text-gray-600'>{food?.food_category?.category_name ? food?.food_category?.category_name : '------'}</p>
                             </div>
                             <div>
                                 <p className='text-lg font-semibold'>Sub-Category</p>
-                                <p className='text-sm text-gray-600'>{food?.food_subcategory?.subcat_name}</p>
+                                <p className='text-sm text-gray-600'>{food?.food_subcategory?.subcat_name ? food?.food_subcategory?.subcat_name : '------'}</p>
                             </div>
                             <div>
                                 <p className='text-lg font-semibold'>Details</p>
-                                <p className='text-sm text-gray-600'>{food?.food_details}</p>
+                                <p className='text-sm text-gray-600'>{food?.food_details ? food?.food_details : '------'}</p>
                             </div>
                             <div>
                                 <p className='text-lg font-semibold'>Veg/Non-Veg</p>
-                                <p className='text-sm text-gray-600'>{food?.food_veg_nonveg}</p>
+                                <p className='text-sm text-gray-600'>{food?.food_veg_nonveg ? food?.food_veg_nonveg : '------'}</p>
                             </div>
                             <div>
                                 <p className='text-lg font-semibold'>Offers</p>
-                                <p className='text-sm text-gray-600'>{food?.offers}</p>
+                                <p className='text-sm text-gray-600'>{food?.offers ? food?.offers : '-----'}</p>
                             </div>
                         </div>
                     </div>
