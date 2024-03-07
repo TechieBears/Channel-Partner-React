@@ -27,7 +27,8 @@ export default function BannerForm(props) {
   const mediaGalleryModalRef = useRef(null);
 
   const openMediaModal = () => {
-    setopenGalleryModal(true);
+    // setopenGallery(!openGallery);
+    setopenGalleryModal(!openGalleryModal);
   };
   
   const receiveDataFromChild = (data) => {
@@ -322,6 +323,7 @@ export default function BannerForm(props) {
                               className="hidden"
                               title="Upload Image"
                               imageDetails={imageDetails}
+                              setopenGalleryModal={openMediaModal}
                               sendDataToParent={receiveDataFromChild}
                           />
                         </div> }
