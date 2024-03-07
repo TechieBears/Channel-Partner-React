@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Table from '../../../components/Table/Table';
 import { ArrowSwapVertical, Box, Eye, NotificationBing, ShoppingCart, Trash, Category, UserTick, UserRemove, Timer } from 'iconsax-react';
-import { deleteStorage, getPartnerStorage, getStorages } from '../../../api';
+// import { deleteStorage, getPartnerStorage, getStorages } from '../../../api';
 import { formBtn2, inputClass } from '../../../utils/CustomClass';
 import { formBtn1 } from '../../../utils/CustomClass';
 import { Controller, useForm } from 'react-hook-form';
@@ -14,6 +14,7 @@ import { toast } from 'react-toastify';
 import AsyncSelect from 'react-select/async';
 import DashboardForm from '../../../components/modals/DashboardModals/DashboardForm';
 import DeleteModal from '../../../components/Modals/DeleteModal/DeleteModal';
+import { getStorages } from '../../../api';
 
 const Order = () => {
     const user = useSelector((state) => state.user.loggedUserDetails)
@@ -173,9 +174,9 @@ const Order = () => {
                     </div>
 
                     {/* =========================  fileter ======================= */}
-                    <div className="bg-white p-4 sm:m-5 rounded-xl" >
-                        <form onSubmit={handleSubmit(onSubmit)} className='flex md:items-center flex-col lg:flex-row gap-2'>
-                            <div className="grid grid-cols-1 sm:grid-cols-4 w-full  gap-y-3 gap-x-2">
+                    <div className="p-4 bg-white sm:m-5 rounded-xl" >
+                        <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2 md:items-center lg:flex-row'>
+                            <div className="grid w-full grid-cols-1 sm:grid-cols-4 gap-y-3 gap-x-2">
                                 <div className="">
                                     <input
                                         type="text"
@@ -210,7 +211,7 @@ const Order = () => {
                                     </select>
                                 </div>
                             </div>
-                            <div className="flex gap-x-2 items-center">
+                            <div className="flex items-center gap-x-2">
                                 <button type='submit' className={`${formBtn1} w-full text-center`}>Filter</button>
                                 <button type='button' className={`${formBtn2} w-full text-center`} onClick={() => { reset(), toast.success("Filters clear successfully"), fetchData() }}>Clear</button>
                             </div>
@@ -221,7 +222,7 @@ const Order = () => {
                         {/* {activeTab === 1 && <p>Content for Tab 1</p>}
                         {activeTab === 2 && <p>Content for Tab 2</p>} */}
                         <div className='grid gap-6 mt-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2'>
-                            <div className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:border-gray-700 " previewlistener="true">
+                            <div className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg " previewlistener="true">
                                 <div className="items-center gap-x-3">
                                     <div className='flex flex-wrap justify-between p-4'>
                                         <p className='text-sm'>Order Id -  <span className='text-sky-400'>753</span></p>
@@ -232,24 +233,24 @@ const Order = () => {
                                             <div className='flex items-center justify-between'>
                                                 <img className='w-16' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU" alt="" />
                                                 <div>
-                                                    <h2 className="text-sm font-semibold tracking-wide text-gray-800 dark:text-white">Butter Milk x 7 more</h2>
+                                                    <h2 className="text-sm font-semibold tracking-wide text-gray-800 ">Butter Milk x 7 more</h2>
                                                     <p>Lorem ipsum dolor, sit amet </p>
                                                 </div>
                                             </div>
-                                            <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 dark:text-gray-400">Payment - Cash</p>
+                                            <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 ">Payment - Cash</p>
                                         </div>
                                     </div>
                                     <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
                                         <p className='text-base font-medium'>Order Price - $ 1,000</p>
                                         <div className="flex items-center gap-x-2">
-                                            <button type="button" className="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-gray-800 rounded-lg bg-gray-200 hover:text-black hover:bg-gray-300 capitalize w-full">Reject</button>
-                                            <button type="submit" className="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize w-full">Confirm</button>
+                                            <button type="button" className="relative block w-full px-4 py-2 overflow-hidden text-base font-semibold tracking-wide text-center text-gray-800 capitalize transition-colors duration-200 bg-gray-200 rounded-lg font-tb hover:text-black hover:bg-gray-300">Reject</button>
+                                            <button type="submit" className="relative block w-full px-4 py-2 overflow-hidden text-base font-semibold tracking-wide text-center text-white capitalize transition-colors duration-200 rounded-lg font-tb bg-sky-400 hover:bg-sky-400">Confirm</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:border-gray-700 " previewlistener="true">
+                            <div className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg " previewlistener="true">
                                 <div className="items-center gap-x-3">
                                     <div className='flex flex-wrap justify-between p-4'>
                                         <p className='text-sm'>Order Id -  <span className='text-sky-400'>753</span></p>
@@ -260,24 +261,24 @@ const Order = () => {
                                             <div className='flex items-center justify-between'>
                                                 <img className='w-16' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU" alt="" />
                                                 <div>
-                                                    <h2 className="text-sm font-semibold tracking-wide text-gray-800 dark:text-white">Butter Milk x 7 more</h2>
+                                                    <h2 className="text-sm font-semibold tracking-wide text-gray-800 ">Butter Milk x 7 more</h2>
                                                     <p>Lorem ipsum dolor, sit amet </p>
                                                 </div>
                                             </div>
-                                            <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 dark:text-gray-400">Payment - Cash</p>
+                                            <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 ">Payment - Cash</p>
                                         </div>
                                     </div>
                                     <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
                                         <p className='text-base font-medium'>Order Price - $ 1,000</p>
                                         <div className="flex items-center gap-x-2">
-                                            <button type="button" className="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-gray-800 rounded-lg bg-gray-200 hover:text-black hover:bg-gray-300 capitalize w-full">Reject</button>
-                                            <button type="submit" className="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize w-full">Confirm</button>
+                                            <button type="button" className="relative block w-full px-4 py-2 overflow-hidden text-base font-semibold tracking-wide text-center text-gray-800 capitalize transition-colors duration-200 bg-gray-200 rounded-lg font-tb hover:text-black hover:bg-gray-300">Reject</button>
+                                            <button type="submit" className="relative block w-full px-4 py-2 overflow-hidden text-base font-semibold tracking-wide text-center text-white capitalize transition-colors duration-200 rounded-lg font-tb bg-sky-400 hover:bg-sky-400">Confirm</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:border-gray-700 " previewlistener="true">
+                            <div className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg " previewlistener="true">
                                 <div className="items-center gap-x-3">
                                     <div className='flex flex-wrap justify-between p-4'>
                                         <p className='text-sm'>Order Id -  <span className='text-sky-400'>753</span></p>
@@ -288,24 +289,24 @@ const Order = () => {
                                             <div className='flex items-center justify-between'>
                                                 <img className='w-16' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU" alt="" />
                                                 <div>
-                                                    <h2 className="text-sm font-semibold tracking-wide text-gray-800 dark:text-white">Butter Milk x 7 more</h2>
+                                                    <h2 className="text-sm font-semibold tracking-wide text-gray-800 ">Butter Milk x 7 more</h2>
                                                     <p>Lorem ipsum dolor, sit amet </p>
                                                 </div>
                                             </div>
-                                            <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 dark:text-gray-400">Payment - Cash</p>
+                                            <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 ">Payment - Cash</p>
                                         </div>
                                     </div>
                                     <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
                                         <p className='text-base font-medium'>Order Price - $ 1,000</p>
                                         <div className="flex items-center gap-x-2">
-                                            <button type="button" className="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-gray-800 rounded-lg bg-gray-200 hover:text-black hover:bg-gray-300 capitalize w-full">Reject</button>
-                                            <button type="submit" className="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize w-full">Confirm</button>
+                                            <button type="button" className="relative block w-full px-4 py-2 overflow-hidden text-base font-semibold tracking-wide text-center text-gray-800 capitalize transition-colors duration-200 bg-gray-200 rounded-lg font-tb hover:text-black hover:bg-gray-300">Reject</button>
+                                            <button type="submit" className="relative block w-full px-4 py-2 overflow-hidden text-base font-semibold tracking-wide text-center text-white capitalize transition-colors duration-200 rounded-lg font-tb bg-sky-400 hover:bg-sky-400">Confirm</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:border-gray-700 " previewlistener="true">
+                            <div className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg " previewlistener="true">
                                 <div className="items-center gap-x-3">
                                     <div className='flex flex-wrap justify-between p-4'>
                                         <p className='text-sm'>Order Id -  <span className='text-sky-400'>753</span></p>
@@ -316,18 +317,18 @@ const Order = () => {
                                             <div className='flex items-center justify-between'>
                                                 <img className='w-16' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU" alt="" />
                                                 <div>
-                                                    <h2 className="text-sm font-semibold tracking-wide text-gray-800 dark:text-white">Butter Milk x 7 more</h2>
+                                                    <h2 className="text-sm font-semibold tracking-wide text-gray-800 ">Butter Milk x 7 more</h2>
                                                     <p>Lorem ipsum dolor, sit amet </p>
                                                 </div>
                                             </div>
-                                            <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 dark:text-gray-400">Payment - Cash</p>
+                                            <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 ">Payment - Cash</p>
                                         </div>
                                     </div>
                                     <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
                                         <p className='text-base font-medium'>Order Price - $ 1,000</p>
                                         <div className="flex items-center gap-x-2">
-                                            <button type="button" className="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-gray-800 rounded-lg bg-gray-200 hover:text-black hover:bg-gray-300 capitalize w-full">Reject</button>
-                                            <button type="submit" className="relative block px-4 transition-colors font-tb tracking-wide duration-200 py-2 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize w-full">Confirm</button>
+                                            <button type="button" className="relative block w-full px-4 py-2 overflow-hidden text-base font-semibold tracking-wide text-center text-gray-800 capitalize transition-colors duration-200 bg-gray-200 rounded-lg font-tb hover:text-black hover:bg-gray-300">Reject</button>
+                                            <button type="submit" className="relative block w-full px-4 py-2 overflow-hidden text-base font-semibold tracking-wide text-center text-white capitalize transition-colors duration-200 rounded-lg font-tb bg-sky-400 hover:bg-sky-400">Confirm</button>
                                         </div>
                                     </div>
                                 </div>

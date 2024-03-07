@@ -1,11 +1,10 @@
 export const environment = {
     // --------------------Local Server Api URL--------------------
-    baseUrl: 'http://192.168.0.151:8006/',
+    baseUrl: 'http://192.168.0.151:8005/',
     // baseUrl: 'http://127.0.0.1:8000/',
 
 
     // --------------------Live Server Api URL--------------------
-    // baseUrl: 'https://ref.techiebears.com/',
     // baseUrl: 'https://cpapi.techiebears.com/',
 }
 
@@ -25,37 +24,7 @@ const client = new S3Client({
 export const ImageUpload = async (data, folder, imgname, name) => {
     const command = new PutObjectCommand({
         Bucket: "channel-partner-media",
-        Key: `${folder}/${name}_${imgname}_${data.name}`,
-        Body: data,
-    });
-    try {
-        const response = await client.send(command);
-        console.log(response);
-    } catch (err) {
-        console.error(err);
-    }
-};
-
-// export const ImageUpload = async (data, folder, imgname, name) => {
-//     const command = new PutObjectCommand({
-//         Bucket: "channel-partner-media",
-//         // Key: `${folder}/${name}_${imgname}_${data.name}`,
-//         Key: `${folder}/${name}_${imgname}_${data.name}`,
-//         Body: data,
-//     });
-//     try {
-//         const response = await client.send(command);
-//         console.log(response);
-//     } catch (err) {
-//         console.error(err);
-//     }
-// };
-
-export const profileUpload = async (data, name) => {
-    const timestamp = Date.now();
-    const command = new PutObjectCommand({
-        Bucket: "channel-partner-media",
-        Key: `profile/${name}_${data?.name}`,
+        Key: `${folder}/${name}_${imgname}_${data?.name}`,
         Body: data,
     });
     try {
@@ -67,18 +36,20 @@ export const profileUpload = async (data, name) => {
 };
 
 
-// == LINK ==
-// export const link = 'https://reeferon-media.s3.ap-south-1.amazonaws.com/storage/'
-// == LINK ==
-// export const profileLink = 'https://reeferon-media.s3.ap-south-1.amazonaws.com/profile/'
-// export const demovideoLink = 'https://reeferon-media.s3.ap-south-1.amazonaws.com/demovideo/'
-// export const storeproductLink = 'https://reeferon-media.s3.ap-south-1.amazonaws.com/storeproduct/'
-// export const bannerLink = 'https://reeferon-media.s3.ap-south-1.amazonaws.com/banner/'
-// export const movableCatLink = 'https://reeferon-media.s3.ap-south-1.amazonaws.com/movablecategory/'
-// export const movableproductLink = 'https://reeferon-media.s3.ap-south-1.amazonaws.com/movableproduct/'
-
-// export const categoryLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/category/'
+//  ----------------------- S3 Bucket Links --------------------------
 export const categoryLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/category/'
+export const restaurantcategoryLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/restaurantcategory/'
 export const subcategoryLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/subcategory/'
-export const productLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/product/'
-// export const categoryLink = 's3://channel-partner-media/category/'
+export const restaurantsubcatLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/restaurantsubcategory/'
+export const productLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/shopProduct/'
+export const profileImageLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/profileimg/'
+export const bannerLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/banner/'
+export const promotionLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/promotion/'
+export const mediaGalleryLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/mediagallery/'
+
+
+// ---- Franchisee Links ----
+export const franchiselink  = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/franchisee/'
+export const deliveryBoylink  = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/deliveryboy/'
+export const vendorlink  = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/vendor/'
+export const restaurantLink  = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/restaurant/'

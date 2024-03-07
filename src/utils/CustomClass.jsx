@@ -6,4 +6,6 @@ export const formBtn1 = `relative block w-auto px-8 transition-colors font-tb tr
 
 export const formBtn2 = `relative block w-auto px-8 transition-colors font-tb tracking-wide duration-200 py-2.5 overflow-hidden text-base font-semibold text-center text-gray-800 rounded-lg bg-gray-200 hover:text-black hover:bg-gray-300 capitalize`
 
+export const formBtn3 = `relative block w-auto px-8 transition-colors font-tb tracking-wide duration-200 py-2.5 overflow-hidden text-base font-semibold text-center text-gray-800 rounded-lg bg-gray-200 hover:text-black hover:bg-sky-400 hover:text-white capitalize`
+
 export const fileinput = `flex py-1.5 font-tb w-full rounded-md border border-input bg-white px-2 text-base text-gray-400 file:border-0 file:bg-gray-400/70 file:py-1.5 file:text-white  cursor-pointer file:text-base file:font-medium file:rounded file:active:bg-sky-400 file:hover:bg-sky-400 duration-700 transition-all`

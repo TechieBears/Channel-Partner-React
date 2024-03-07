@@ -4,19 +4,21 @@ import ProductForm from '../../../../components/Modals/MenuModals/ProductForm';
 import Table from '../../../../components/Table/Table';
 import { useDispatch, useSelector } from 'react-redux';
 import { setProduct } from '../../../../redux/Slices/masterSlice';
-import { getProducts, deleteProduct } from "../../../../api";
+import { getProducts, deleteProduct, getProductsAdmin } from "../../../../api";
 import { setSubCategory, setCategory } from "../../../../redux/Slices/masterSlice";
+import  AddProduct  from '../../../../components/Modals/Vendors/AddProduct';
+
 
 const Product = () => {
   const subcategory = useSelector((state) => state?.master?.SubCategory);
   const category = useSelector((state) => state?.master?.Category);
-  const product = useSelector((state) => state?.master?.Product)
+  const product = useSelector((state) => state?.master?.Product);
   const dispatch = useDispatch()
 
   // ============== fetch data from api ================
   const fetchData = () => {
       try {
-          getProducts().then((res) => {
+        getProductsAdmin().then((res) => {
               dispatch(setProduct(res))
           })
       } catch (error) {
@@ -44,19 +46,19 @@ const Product = () => {
   </div>
 
   const imageBodyTemp = (row) => <div className='w-20 h-20'>
-      <img src={row?.main_image} alt="image" className='object-cover w-full h-full' />
+      <img src={row?.product_image_1} alt="image" className='object-cover w-full h-full' />
   </div>
 
   // ================= columns of the table ===============
   const columns = [
-      { field: 'main_image', header: 'Image', body: imageBodyTemp, style: true },
+      { field: 'product_image_1', header: 'Image', body: imageBodyTemp, style: true },
       { field: 'product_name', header: 'Name' },
-      { field: 'brand', header: 'Brand' },
-      { field: 'description', header: 'Description' },
-      { field: 'avilable_qty', header: 'Available Qty' },
-      { field: 'discounted_price', header: 'Discounted Price (₹)' },
-      { field: 'actual_price', header: 'Actual Price (₹)' },
-      { field: 'offers', header: 'offer (%)' },
+      { field: 'product_Manufacturer_Name', header: 'Manufacturer Name' },
+      { field: 'product_brand', header: 'Brand' },
+      { field: 'product_description', header: 'Description' },
+      { field: 'product_available_qty', header: 'Available Qty' },
+      { field: 'product_actual_price', header: 'Discounted Price (₹)' },
+      { field: 'product_shelflife', header: 'Validity' },
       { field: 'subcat_id', header: 'Action', body: actionBodyTemplate, sortable: true },
   ];
 
@@ -67,7 +69,9 @@ const Product = () => {
                   <div className="">
                       <h1 className='text-xl font-semibold text-gray-900 font-tbPop '>Product List</h1>
                   </div>
-                  <ProductForm title='Add Product' />
+                  {/* <AddProduct title='Add Product' getProducts={getProducts} sellerId={matchedSeller?.vendor_id} /> */}
+                  
+                  <AddProduct title='Add Product' />
               </div>
               {product?.length > 0 && <Table data={product} columns={columns} />}
           </div>

@@ -1,39 +1,69 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Trash } from "iconsax-react";
 import CategoryForm from "../../../../components/Modals/MenuModals/CategoryForm";
 import Table from "../../../../components/Table/Table";
 import { useDispatch, useSelector } from "react-redux";
 import { setCategory } from "../../../../redux/Slices/masterSlice";
-import { delCategory, getCategory } from "../../../../api";
+import { delCategory, getCategory, getRestaurantCategory } from "../../../../api";
 import { NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
 
-const Category = () => {
-  const category = useSelector((state) => state?.master?.Category);
+
+const Category = (props) => {
+  // console.log('category isrestaurant = ', props?.isrestaurant);
+  // const category = useSelector((state) => state?.master?.Category);
+  const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
+
+  const [category, setCategory] = useState([])
+  // console.log('category = ', category)
+
   const dispatch = useDispatch();
 
-  // ============== fetch data from api ================
-  const fetchData = () => {
+
+  // ============== Products API ================
+  const productCategories = () => {
     try {
       getCategory().then((res) => {
-        dispatch(setCategory(res));
+        setCategory(res)
+        // dispatch(setCategory(res));
       });
     } catch (error) {
       console.log(error);
     }
   };
 
+    // ============== Restaurant API ================
+    const restaurantCategories = () => {
+      try {
+        getRestaurantCategory().then((res) => {
+          console.log(res)
+          setCategory(res)
+          // dispatch(setCategory(res));
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
   // ============== delete data from api ================
   const deleteData = (data) => {
     delCategory(data).then((res) => {
-      if (res?.message === "Data deleted successfully") {
-        fetchData();
+      if (res?.status === "success") {
+        productCategories();
         toast.success(res?.message);
       }
     });
   };
+
+  
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (!props?.isrestaurant){
+      productCategories();
+    }
+    if (props?.isrestaurant){
+      restaurantCategories();
+    }
+  }, [props.isrestaurant]);
 
   // ================= action of the table ===============
   const actionBodyTemplate = (row) => (
@@ -59,39 +89,31 @@ const Category = () => {
   );
 
   // ================= columns of the table ===============
-  const columns = [
-    {
-      field: "category_image",
-      header: "Image",
-      body: imageBodyTemp,
-      style: true,
-    },
-    {
-      field: "category_name",
-      header: "Name",
-      body: (row) => (
-        <NavLink to={`/menu/category-detail/${row?.id}`}>
-          <h6 className="hover:underline hover:text-sky-400">
-            {row?.category_name}
-          </h6>{" "}
-        </NavLink>
-      ),
-    },
+  
+  const ProductColumns = [
+    { field: "category_image", header: "Image", body: imageBodyTemp, style: true},
+    { field: "category_name", header: "Name", body: (row) => (   <h6 className="">{row?.category_name}</h6> )},
+    { field: "id", header: "Action", body: actionBodyTemplate, sortable: true },
+  ];
+  
+  const RestaurantColumns = [
+    { field: "category_image", header: "Image", body: imageBodyTemp, style: true},
+    { field: "category_name", header: "Name", body: (row) => (   <h6 className="">{row?.category_name}</h6> )},
     { field: "id", header: "Action", body: actionBodyTemplate, sortable: true },
   ];
 
   return (
     <>
-      <div className="p-5 m-4 bg-white shadow-sm rounded-xl sm:m-5 ">
+     <div className="p-5 m-4 bg-white shadow-sm rounded-xl sm:m-5 ">
         <div className="flex flex-col items-start justify-between mb-6 space-y-4 sm:flex-row sm:items-center sm:space-y-0">
           <div className="">
             <h1 className="text-xl font-semibold text-gray-900 font-tbPop ">
               Category List
             </h1>
           </div>
-          <CategoryForm title="Add Category" />
+          <CategoryForm title="Add Category" isrestaurant={props?.isrestaurant} productCategories={productCategories} restaurantCategories={restaurantCategories} />
         </div>
-        {category?.length > 0 && <Table data={category} columns={columns} />}
+        {category?.length > 0 && <Table data={category} columns={props?.isrestaurant ? RestaurantColumns : ProductColumns} />}
       </div>
     </>
   );

@@ -4,18 +4,26 @@ import SubCategoryForm from "../../../../components/Modals/MenuModals/SubCategor
 import Table from "../../../../components/Table/Table";
 import { useDispatch, useSelector } from "react-redux";
 import { setSubCategory, setCategory } from "../../../../redux/Slices/masterSlice";
-import { deleteSubCategory, getSubCategory, getCategory } from "../../../../api";
+import { deleteSubCategory, getSubCategory, getCategory, getRestaurantCategory, getRestaurantSubCategory } from "../../../../api";
+import Switch from 'react-js-switch';
 
-const SubCategory = () => {
-  const subcategory = useSelector((state) => state?.master?.SubCategory);
+
+const SubCategory = (props) => {
+  // const subcategory = useSelector((state) => state?.master?.SubCategory);
+  // const category = useSelector((state) => state?.master?.Category);
+  // console.log('category', category)
+  const [category, setCategory] = useState([])
+  const [subcategory, setSubcategory] = useState([])
   const dispatch = useDispatch();
 
-  // ============== fetch data from api ================
-
+  
+  // ============== Products API starts================
   const fetchData = () => {
     try {
       getSubCategory().then((res) => {
-        dispatch(setSubCategory(res));
+        setSubcategory(res)
+        fetchData2();
+        // dispatch(setSubCategory(res));
       });
     } catch (error) {
       console.log(error);
@@ -25,13 +33,40 @@ const SubCategory = () => {
   const fetchData2 = () => {
     try {
       getCategory().then((res) => {
-        dispatch(setCategory(res));
+        setCategory(res)
+        // dispatch(setCategory(res));
       });
     } catch (error) {
       console.log(error);
     }
   };
-  
+  // ============== Products API ends================
+
+  // ============== Products API starts================
+  const restaurantSubCategories = () => {
+    try {
+      getRestaurantSubCategory().then((res) => {
+        setSubcategory(res)
+        restaurantCategories();
+        // dispatch(setSubCategory(res));
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const restaurantCategories = () => {
+    try {
+      getRestaurantCategory().then((res) => {
+        setCategory(res)
+        // dispatch(setCategory(res));
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // ============== Products API ends================
+
 
   // ============== delete data from api ================
   const deleteData = (data) => {
@@ -42,10 +77,15 @@ const SubCategory = () => {
     });
   };
 
+
   useEffect(() => {
-    fetchData();
-    fetchData2();
-  }, []);
+    if (!props?.isrestaurant){
+      fetchData();
+    }
+    if (props?.isrestaurant){
+      restaurantSubCategories();
+    }
+  }, [props.isrestaurant]);
 
   // ================= action of the table ===============
   const actionBodyTemplate = (row) => (
@@ -60,6 +100,7 @@ const SubCategory = () => {
     </div>
   );
 
+
   const imageBodyTemp = (row) => (
     <div className="w-20 h-20">
       <img
@@ -70,22 +111,98 @@ const SubCategory = () => {
     </div>
   );
 
-  // ================= columns of the table ===============
-  const columns = [
-    {
-      field: "subcat_image",
-      header: "Image",
-      body: imageBodyTemp,
-      style: true,
-    },
-    { field: "subcat_name", header: "Name" },
-    {
-      field: "subcat_id",
-      header: "Action",
-      body: actionBodyTemplate,
-      sortable: true,
-    },
-  ];
+  const verifyActions = (row) => {
+    const payload = { userId: row?.user?.id, isverifiedbyadmin: row?.user?.isverified_byadmin, isverifiedbyfranchise: !row?.isverifiedbyfranchise }
+    // try {
+    //     verifyDeliveryBoy(payload).then((form) => {
+    //         console.log(payload)
+    //         if (form.message == "delivery boy verified successfully") {
+    //             toast.success('Driver Verification Changed !');
+    //             DeliveryBoyDetails()
+    //         }
+    //         else {
+    //             console.log("err");
+    //         }
+    //     })
+    // }
+    // catch (err) {
+    //     console.log(err);
+    // }
+  }
+
+
+  // =============================== verify user switch =============================
+  const switchVerify = (row) => {
+    return (
+      <div className="flex items-center justify-center gap-2 ">
+        <Switch
+          value={row?.isverifiedbyfranchise}
+          onChange={() => verifyActions(row)}
+          size={50}
+          backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
+          borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
+      </div>
+    )
+  }
+  // =============================== active user switch =============================
+  const switchActive = (row) => {
+    return (
+      <div className="flex items-center justify-center gap-2">
+        <Switch
+          value={row?.user?.isverified_byadmin}
+          disabled={true}
+          onChange={() => activeActions(row)}
+          size={50}
+          backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
+          borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
+      </div>
+    )
+  }
+
+  // =================== table user profile column ========================
+  const representativeBodyTemplate = (row) => {
+    return (
+      <div className="rounded-full w-14 h-14">
+        <img src={row?.subcat_image} className="object-cover w-full h-full rounded-full" alt={row?.subcat_name} />
+      </div>
+    );
+  };
+  
+  
+
+ // ================= columns of the table ===============
+       // ======================= Table Column Definitions =========================
+    const ProductColumns = [
+      { field: 'subcat_image', header: 'Image', body: representativeBodyTemplate, sortable: true, style: true },
+      { field: 'subcat_name', header: 'Name', sortable: true },
+      { field: 'category', header: 'Category',  
+        body: rowData => {
+          if (Array.isArray(category)) {
+              const matchingCategory = category.find(cat => cat?.id == rowData?.category);
+              return matchingCategory ? matchingCategory?.category_name : '';
+          } else {
+              return 'Category data is not available.';
+          }
+        }},
+    { field: "id", header: "Action", body: actionBodyTemplate, sortable: true },
+    ];
+
+    // ======================= Table Column Definitions =========================
+    const RestaurantColumns = [
+      { field: 'subcat_image', header: 'Image', body: representativeBodyTemplate, sortable: true, style: true },
+      { field: 'subcat_name', header: 'Name', sortable: true },
+      { field: 'category', header: 'Category',  
+        body: rowData => {
+          if (Array.isArray(category)) {
+              const matchingCategory = category.find(cat => cat?.id == rowData?.category);
+              return matchingCategory ? matchingCategory?.category_name : '';
+          } else {
+              return 'Category data is not available.';
+          }
+      }},
+        { field: "id", header: "Action", body: actionBodyTemplate, sortable: true },
+    ];
+
 
   return (
     <>
@@ -96,11 +213,9 @@ const SubCategory = () => {
               SubCategory List
             </h1>
           </div>
-          <SubCategoryForm title="Add SubCategory" />
+          <SubCategoryForm title="Add SubCategory" isrestaurant={props?.isrestaurant} fetchData={fetchData} restaurantSubCategories={restaurantSubCategories}/>
         </div>
-        {subcategory?.length > 0 && (
-          <Table data={subcategory} columns={columns} />
-        )}
+          {subcategory?.length > 0 && <Table data={subcategory} columns={props?.isrestaurant ? RestaurantColumns : ProductColumns} />}
       </div>
     </>
   );

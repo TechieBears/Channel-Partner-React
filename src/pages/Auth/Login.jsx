@@ -3,17 +3,19 @@ import { inputClass } from '../../utils/CustomClass'
 import leftImage from '../../assets/leftImage.png'
 import { useState } from 'react';
 import { Eye, EyeSlash } from 'iconsax-react';
-import { useDispatch } from 'react-redux';
-import { setLoggedUser, setLoggedUserDetails, setRoleIs } from '../../redux/Slices/loginSlice';
+import { setLoggedUser, setLoggedUserDetails, setRoleIs, setFranchiseeDetails } from '../../redux/Slices/loginSlice';
 import LoadBox from '../../components/Loader/LoadBox';
 import { toast } from 'react-toastify';
 import Error from '../../components/Errors/Error';
-import { login } from '../../api/index';
+import { login, getFranchiseDetails } from '../../api/index';
+import { useDispatch, useSelector } from "react-redux";
+
 
 const Login = () => {
     const [eyeIcon, setEyeIcon] = useState(false)
     const [loader, setLoader] = useState(false)
     const dispatch = useDispatch()
+
     const {
         register,
         handleSubmit,
@@ -40,11 +42,35 @@ const Login = () => {
                     dispatch(setRoleIs(res?.is_subadmin))
                     setLoader(false)
                     dispatch(setLoggedUser(true))
+                    if (res?.userid && res?.role == 'franchise') {
+                        getFranchiseDetailsById(res?.userid);
+                    }
                 } else {
                     setLoader(false)
                     toast.error(res?.message)
                 }
+            })
+        } catch (error) {
+            setLoader(false)
+            toast.error(error?.message)
+            console.log(error)
+        }
+    }
 
+
+    const getFranchiseDetailsById = async (id) => {
+        try {
+            setLoader(true)
+            await getFranchiseDetails(id).then((res) => {
+                console.log(" Franchisee Additional data ", res)
+                if (res) {
+                    console.log(" ..", res[0])
+                    dispatch(setFranchiseeDetails(res[0]))
+                    setLoader(false)
+                } else {
+                    setLoader(false)
+                    toast.error(res?.message)
+                }
             })
         } catch (error) {
             setLoader(false)
@@ -63,11 +89,11 @@ const Login = () => {
                 <form onSubmit={handleSubmit(onSubmit)} >
                     <div className="w-[20rem] md:w-[22rem] lg:w-[27rem] xl:w-[27rem] md:p-3 py-5 space-y-3">
                         <div className="">
-                            <h2 className="text-xl font-bold tracking-tight text-black lg:mx-3 sm:text-3xl font-tbPop">
-                                Hello, <span className='text-sky-400'>Again!</span>
+                            <h2 className="text-xl font-bold tracking-tight text-black lg:mx-3 sm:text-3xl font-tbPop ">
+                                Welcome, <span className='text-sky-400'>Admin!</span>
                             </h2>
                             <h5 className="text-sm font-medium text-gray-400 lg:mx-3 sm:text-base font-tbPop">
-                                Please SignIn to Dashboard!
+                                Please SignIn to Admin Dashboard!
                             </h5>
                         </div>
 

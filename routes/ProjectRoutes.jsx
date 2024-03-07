@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
 import Aos from "aos";
 import { Route, Routes } from "react-router-dom";
-import Sidebar from '../src/components/Sidebar/Sidebar';
+import Sidebar from '../src/components/sidebar/Sidebar';
 import Preloader from '../src/components/Loader/PreLoader';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -13,18 +13,13 @@ import UserView from '../src/pages/Admin/User/UserView';
 import UserProfile from '../src/pages/Admin/UserProfile/UserProfile';
 import Login from '../src/pages/Auth/Login';
 import { useSelector } from 'react-redux';
-// import VendorDashbaord from '/src/pages/Vendor/VendorDashbaord/VendorDashbaord';
-// import VendorProduct from '../src/pages/Vendor/VendorProduct/VendorProduct';
-
 import VendorDashbaord from '../src/pages/Seller/VendorDashbaord/VendorDashbaord';
 import VendorProduct from '../src/pages/Seller/VendorProduct/VendorProduct';
 import VendorOrders from '../src/pages/Seller/VendorOrders/VendorOrders';
-
 import Menu from '../src/pages/Admin/Menu/Menu';
 import RestaurantDetail from '../src/pages/Restaurants/RestaurantDetail/RestaurantDetail';
 import Drivers from '../src/pages/Admin/Drivers/Drivers';
 import Order from '../src/pages/Admin/Order/Order';
-import Banner from '../src/pages/Admin/Banner/Banner';
 import Reports from '../src/pages/Admin/Reports/Reports';
 import CategoryDetail from '../src/pages/Admin/Menu/CategoryDetail/CategoryDetail';
 import SubAdmin from '../src/pages/Admin/SubAdmin/SubAdmin';
@@ -34,13 +29,31 @@ import VendorDetails from '../src/components/Modals/Vendors/VendorDetails';
 import Promotions from '../src/pages/Admin/Promotion/Promotions';
 import Settings from '../src/pages/Settings/Settings';
 import SubAdminDetail from '../src/pages/Admin/SubAdmin/SubAdminDetail';
-import FranchiseeDashboard from '../src/pages/Franchisee/Dashboard/MainDashboard'
+import Franchisee from '../src/pages/Admin/Franchisees/Franchisees'
+// ==================== Franchisee Imports ====================
+import FranchiseeDashboard from '../src/pages/Franchisee/FranchiseeDashboard';
+import FranchiseeOrder from '../src/pages/Franchisee/FranchiseeOrder';
+import FranchiseeVendors from '../src/pages/Franchisee/Vendors/FranchiseeVendors';
+import DeliveryBoy from '../src/pages/Franchisee/DeliveryBoy';
+import SellerLogin from '../src/pages/Auth/SellerLogin';
+import ViewOrder from '../src/components/Modals/Vendors/ViewOrder';
+import ViewProduct from '../src/components/Modals/Vendors/ViewProduct';
+import Complaints from '../src/components/Modals/Complaints/Complaints';
+import FranchiseDetail from '../src/pages/Admin/Franchisees/FranchiseDetail';
+import DriverDetail from '../src/pages/Admin/Drivers/DriverDetail';
+import FranchiseRestaurent from '../src/pages/Franchisee/Resturants/Resturant';
+import ViewAdminProduct from '../src/pages/Admin/Menu/AdminProduct/ViewAdminProduct';
+import DashboardBannerPanel from '../src/pages/Admin/Master/DashboardAssets/DashAssetsPanel/DashboardBannerPanel';
+import DashboardPromotions from '../src/pages/Admin/Master/DashboardPromotions';
+import DashboardForm from '../src/components/modals/DashboardModals/DashboardForm';
+import Coupon from '../src/pages/Admin/Coupon/Coupon';
 
 
 
 const ProjectRoutes = () => {
     const [loading, setLoading] = useState(true);
     const login = useSelector(state => state.user.isLogged)
+    const user = useSelector(state => state?.user?.loggedUserDetails);
 
     // ================ loading ================
     useEffect(() => {
@@ -63,61 +76,72 @@ const ProjectRoutes = () => {
                         <Sidebar>
                             <Routes>
                                 {/* ============ Admin Routes ============ */}
-                                {/* <Route path="/" element={<Dashboard />} />
-                                <Route path="/menu" element={<Menu />} />
-                                <Route path="/resturants" element={<Restaurant />} />
-                                <Route path="/resturants/restaurant-detail/:id" element={<RestaurantDetail />} />
-                                <Route path="/vendors" element={<Vendors />} />
-                                <Route path="/vendors/vendors-detail/:id" element={<VendorDetails />} />
-                                <Route path="/menu/category-detail/:id" element={<CategoryDetail />} />
-                                <Route path="/dashboard/:id" element={<DashboardView />} />
-                                <Route path="/DashboardAssets" element={<DashboardAssets />} />
-                                <Route path="/promotions" element={<Promotions />} />
-                                <Route path="/drivers" element={<Drivers />} />
-                                <Route path="/orders" element={<Order />} />
-                                <Route path="/banners" element={<Banner />} />
-                                <Route path="/user" element={<User />} />
-                                <Route path="/user/:id" element={<UserView />} />
-                                <Route path="/profile" element={<UserProfile />} />
-                                <Route path="/reports" element={<Reports />} />
-                                <Route path="/subadmin" element={<SubAdmin />} />
-                                <Route path="/subadmin/subadmin-detail/:id" element={<SubAdminDetail />} />
-                                <Route path="/settings" element={<Settings />} /> */}
+                                {user?.role == 'admin' ?
+                                    <>
+                                        <Route path="/admin" element={<Dashboard />} />
+                                        <Route path="/menu" element={<Menu isrestaurant={false}/>}  />
+                                        <Route path="/restaurantmenu" element={<Menu isrestaurant={true} />}  />
+                                        <Route path='/product-list/product-details/:id' element={<ViewAdminProduct />} />
+                                        <Route path="/resturants" element={<Restaurant />} />
+                                        <Route path="/resturants/restaurant-detail/:id" element={<RestaurantDetail />} />
+                                        <Route path="/franchisee" element={<Franchisee />} />
+                                        <Route path="/franchise/franchise-detail/:id" element={<FranchiseDetail />} />
+                                        <Route path="/vendors" element={<Vendors />} />
+                                        <Route path="/vendors/vendors-detail/:id" element={<VendorDetails />} />
+                                        <Route path="/menu/category-detail/:id" element={<CategoryDetail />} />
+                                        <Route path="/dashboard/:id" element={<DashboardView />} />
+                                        <Route path="/coupon" element={<Coupon />} />
+                                        <Route path="/DashboardAssets" element={<DashboardAssets />} />
+                                        <Route path="/promotions" element={<DashboardPromotions />} />
+                                        <Route path="/drivers" element={<Drivers />} />
+                                        <Route path="/drivers/driver-detail/:id" element={<DriverDetail />} />
+                                        <Route path="/orders" element={<Order />} />
+                                        <Route path="/banners" element={<DashboardBannerPanel />} />
+                                        <Route path="/user" element={<User />} />
+                                        <Route path="/user/:id" element={<UserView />} />
+                                        <Route path="/profile" element={<UserProfile />} />
+                                        <Route path="/reports" element={<Reports />} />
+                                        <Route path="/subadmin" element={<SubAdmin />} />
+                                        <Route path="/subadmin/subadmin-detail/:id" element={<SubAdminDetail />} />
+                                        <Route path="/settings" element={<Settings />} />
+                                    </> :
+                                    user?.role == 'seller' ?
+                                        <>
+                                            <Route path='/' element={<VendorDashbaord />} />
+                                            <Route path="/profile" element={<UserProfile />} />
+                                            <Route path='/menu' element={<Menu />} />
+                                            <Route path='/vendor-orders' element={<VendorOrders />} />
+                                            <Route path='/vendor-orders/order-detail/:id' element={<ViewOrder />} />
+                                            <Route path='/product-list' element={<VendorProduct />} />
+                                            <Route path='/product-list/product-details/:id' element={<ViewAdminProduct />} />
+                                            <Route path='/complaints' element={<Complaints />} />
+                                        </> :
+                                        user?.role == 'franchise' ? <>
+                                            <Route path='/' element={<FranchiseeDashboard />} />
+                                            <Route path="/profile" element={<UserProfile />} />
+                                            <Route path='/analytics' element={<FranchiseeDashboard />} />
+                                            <Route path='/menu' element={<Menu />} />
+                                            <Route path='/orders' element={<Order />} />
+                                            <Route path='/vendors' element={<FranchiseeVendors />} />
+                                            <Route path="/vendors/vendors-detail/:id" element={<VendorDetails />} />
+                                            <Route path='/resturants' element={<Restaurant />} />
+                                            <Route path='/resturants/restaurant-detail/:id' element={<RestaurantDetail />} />
+                                            <Route path='/delivery' element={<DeliveryBoy />} />
+                                            <Route path="/drivers/driver-detail/:id" element={<DriverDetail />} />
+                                        </> :
+                                            user?.role == 'restaurant' ?
+                                                <>
+                                                    <Route path='/' element={<VendorDashbaord />} />
 
-                                {/* ============================================================================== Partner Flexi store Routes =========================================== */}
-                                {/* <Route path="/vendorDashbaord" element={<VendorDashbaord />} />
-                                <Route path="/vendorProduct" element={<VendorProduct />} />
-                                <Route path="/vendorOrders" element={<VendorOrders />} /> */}
-
-
-
-                                {/* ================== Vendor Routes ======================== */}
-                                {/* <Route path='/' element={<VendorDashbaord />} />
-                                <Route path='/orders' element={<VendorOrders />} />
-                                <Route path='/product-list' element={<VendorProduct />} /> */}
-                                {/* ================== Vendor Routes ======================== */}
-
-
-
-                                {/* ================== Franchisee Routes ======================== */}
-                                <Route path='/' element={<FranchiseeDashboard />} />
-                                <Route path='/analytics' element={<FranchiseeDashboard />} />
-                                <Route path='/orders' element={<FranchiseeDashboard />} />
-                                <Route path='/vendors' element={<FranchiseeDashboard />} />
-                                <Route path='/delivery' element={<FranchiseeDashboard />} />
-                                <Route path='/settings' element={<VendorOrders />} />
-                                {/* ================== Franchisee Routes ======================== */}
-
-
-
-
+                                                </> : ''}
                             </Routes>
                         </Sidebar>
                     }
                 </>
                 :
                 <Routes>
-                    <Route path="/" element={<Login />} />
+                    <Route path="/admin" element={<Login />} />
+                    <Route path="/" element={<SellerLogin />} />
                 </Routes>
             }
             <ToastContainer position="top-right"

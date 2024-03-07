@@ -13,7 +13,7 @@ import {
   UserRemove,
   Timer,
 } from "iconsax-react";
-import { deleteStorage, getPartnerStorage, getStorages } from "../../../api";
+// import { deleteStorage, getPartnerStorage, getStorages } from "../../../api";
 import { formBtn2, inputClass } from "../../../utils/CustomClass";
 import { formBtn1 } from "../../../utils/CustomClass";
 import { Controller, useForm } from "react-hook-form";
@@ -53,11 +53,9 @@ const Dashboard = () => {
   // ======================== Data submit ===================================
   const onSubmit = async (data) => {
     if (data?.name?.value !== undefined || data?.location != "") {
-      let url = `${environment.baseUrl}storage-filter/?name=${
-        data?.name?.value == undefined ? "" : data?.name?.value
-      }&location=${data.location == undefined ? "" : data.location}&user=${
-        user?.role != "admin" ? user?.userid : ""
-      }`;
+      let url = `${environment.baseUrl}storage-filter/?name=${data?.name?.value == undefined ? "" : data?.name?.value
+        }&location=${data.location == undefined ? "" : data.location}&user=${user?.role != "admin" ? user?.userid : ""
+        }`;
       await axios.get(url).then((res) => {
         dispatch(setStorageList(res.data));
         toast.success("Filters applied successfully");
@@ -69,26 +67,26 @@ const Dashboard = () => {
 
   // ====================== fetch data api ==================================
 
-  const StorageList = () => {
-    if (user.role == "admin") {
-      getStorages()
-        .then((res) => {
-          console.log(res);
-          dispatch(setStorageList(res));
-        })
-        .catch((err) => {
-          console.error("Error", err);
-        });
-    } else {
-      getPartnerStorage(user?.userid)
-        .then((res) => {
-          dispatch(setStorageList(res));
-        })
-        .catch((err) => {
-          console.error("Error", err);
-        });
-    }
-  };
+  // const StorageList = () => {
+  //   if (user.role == "admin") {
+  //     getStorages()
+  //       .then((res) => {
+  //         console.log(res);
+  //         dispatch(setStorageList(res));
+  //       })
+  //       .catch((err) => {
+  //         console.error("Error", err);
+  //       });
+  //   } else {
+  //     getPartnerStorage(user?.userid)
+  //       .then((res) => {
+  //         dispatch(setStorageList(res));
+  //       })
+  //       .catch((err) => {
+  //         console.error("Error", err);
+  //       });
+  //   }
+  // };
 
   // ================================ Dropdown List =========================
 
@@ -115,7 +113,7 @@ const Dashboard = () => {
       name: null,
       location: "",
     });
-    StorageList();
+    // StorageList();
     toast.success("Filters clear");
   };
 
@@ -169,9 +167,6 @@ const Dashboard = () => {
     { field: "id", header: "Action", body: actionBodyTemplate, sortable: true },
   ];
 
-  useEffect(() => {
-    StorageList();
-  }, []);
 
   const [activeTab, setActiveTab] = useState(1);
 
@@ -284,43 +279,6 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-
-        <div className="mx-auto mt-8 sm:m-5">
-          <Tabs
-            selectedIndex={selectedTab}
-            onSelect={(index) => setSelectedTab(index)}
-          >
-            <TabList className="flex mx-6 space-x-4 border-b">
-              <Tab
-                className={`p-3 cursor-pointer font-tbPop font-medium   ${
-                  selectedTab === 0
-                    ? "text-sky-500  border-b-2 border-sky-400 outline-0"
-                    : "text-gray-500 border-b"
-                }`}
-              >
-                Pending
-              </Tab>
-              <Tab
-                className={`p-3 cursor-pointer font-tbPop font-medium   ${
-                  selectedTab === 1
-                    ? "text-sky-500  border-b-2 border-sky-400 outline-0"
-                    : "text-gray-500 border-b"
-                }`}
-              >
-                Active
-              </Tab>
-            </TabList>
-            {/* ================= Pending Orders component ============== */}
-            <TabPanel>
-              <PendingOrders />
-            </TabPanel>
-            {/* ================= Active Orders component ============== */}
-            <TabPanel>
-              <ActiveOrders />
-            </TabPanel>
-          </Tabs>
-        </div>
-
         {/* =====================Dashboard filters===================== */}
         <div className="p-4 m-4 bg-white sm:m-5 rounded-xl">
           <form
@@ -349,21 +307,6 @@ const Dashboard = () => {
                   )}
                 />
               </div>
-              {/* <div className="">
-                                <select
-                                    name="Product type"
-                                    placeholder='Product type'
-                                    className={`${inputClass} !bg-slate-100`}
-                                    {...register("type")}
-                                >
-                                    <option value="" >
-                                        Product type
-                                    </option>
-                                    <option value="Veg">Veg</option>
-                                    <option value="Non-Veg">Non-Veg</option>
-                                    <option value="Both">Both</option>
-                                </select>
-                            </div> */}
               <div className="">
                 <select
                   name="City"
@@ -378,31 +321,6 @@ const Dashboard = () => {
                   ))}
                 </select>
               </div>
-              {/* <div className="">
-                                <select
-                                    name="Temperature Range"
-                                    className={`${inputClass} !bg-slate-100`}
-                                    {...register("temp_compliance")}
-                                >
-                                    <option value="" >
-                                        Temperature
-                                    </option>
-                                    {tempretureRangeList?.map((temp) => <option value={temp?.name} key={temp?.name}>{temp?.name}</option>)}
-                                </select>
-                            </div>
-                            <div className="">
-                                <select
-                                    name="Storage type"
-                                    className={`${inputClass} !bg-slate-100 `}
-                                    {...register("storage_type")}
-                                >
-                                    <option value="" >
-                                        Storage type
-                                    </option>
-                                    <option value="Mezzanine">Mezzanine</option>
-                                    <option value="Palletized - Racks">Palletized - Racks</option>
-                                </select>
-                            </div> */}
             </div>
             <div className="flex items-center gap-x-2">
               <button
@@ -421,18 +339,39 @@ const Dashboard = () => {
             </div>
           </form>
         </div>
-
-        {/* =====================Dashboard table===================== */}
-        {/* <div className="p-5 m-4 bg-white shadow-sm rounded-xl sm:m-5 sm:p-7 " >
-                    <div className="flex flex-col items-start justify-between mb-6 space-y-4 sm:flex-row sm:items-center sm:space-y-0">
-                        <div className="">
-                            <h1 className='text-xl font-semibold text-gray-900 font-tbPop '>Storages</h1>
-                            <h6 className='text-base font-medium text-gray-400 font-tb'>Storages in different locations</h6>
-                        </div>
-                        <DashboardForm title='Add Stroage' />
-                    </div>
-                    {storages && <Table data={storages} columns={columns} />}
-                </div> */}
+        <div className="mx-auto mt-8 sm:m-5">
+          <Tabs
+            selectedIndex={selectedTab}
+            onSelect={(index) => setSelectedTab(index)}
+          >
+            <TabList className="flex mx-6 space-x-4 border-b">
+              <Tab
+                className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 0
+                  ? "text-sky-500  border-b-2 border-sky-400 outline-0"
+                  : "text-gray-500 border-b"
+                  }`}
+              >
+                Pending
+              </Tab>
+              <Tab
+                className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 1
+                  ? "text-sky-500  border-b-2 border-sky-400 outline-0"
+                  : "text-gray-500 border-b"
+                  }`}
+              >
+                Active
+              </Tab>
+            </TabList>
+            {/* ================= Pending Orders component ============== */}
+            <TabPanel>
+              <PendingOrders />
+            </TabPanel>
+            {/* ================= Active Orders component ============== */}
+            <TabPanel>
+              <ActiveOrders />
+            </TabPanel>
+          </Tabs>
+        </div>
       </section>
     </>
   );

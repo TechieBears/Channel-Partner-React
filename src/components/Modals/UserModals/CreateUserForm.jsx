@@ -93,12 +93,6 @@ function CreateUserForm(props) {
             } else {
                 data.pan_url = ''
             }
-            // if (data?.cheque_url.length != 0) {
-            //     await ImageUpload(data?.cheque_url[0], "doc", "chequeImage", data?.name)
-            //     data.cheque_url = `${link}${data?.name}_chequeImage_${data?.cheque_url[0].name}`
-            // } else {
-            //     data.cheque_url = ''
-            // }
             if (data?.gst_url.length != 0) {
                 await ImageUpload(data?.gst_url[0], "doc", "gstImage", data?.name)
                 data.gst_url = `${link}${data?.name}_gstImage_${data?.gst_url[0].name}`
@@ -111,12 +105,6 @@ function CreateUserForm(props) {
             } else {
                 data.fssai_url = ''
             }
-            // if (data?.bus_card_url.length != 0) {
-            //     await ImageUpload(data?.bus_card_url[0], "doc", "businessImage", data?.name)
-            //     data.bus_card_url = `${link}${data?.name}_businessImage_${data?.bus_card_url[0].name}`
-            // } else {
-            //     data.bus_card_url = ''
-            // }
             if (data?.odoc_url.length != 0) {
                 await ImageUpload(data?.odoc_url[0], "doc", "otherImage", data?.name)
                 data.odoc_url = `${link}${data?.name}_otherImage_${data?.odoc_url[0].name}`
@@ -131,12 +119,6 @@ function CreateUserForm(props) {
             } else {
                 data.pan_url = props?.data?.pan_url
             }
-            // if (data?.cheque_url.length != 0) {
-            //     await ImageUpload(data?.cheque_url[0], "doc", "chequeImage", data?.name)
-            //     data.cheque_url = `${link}${data?.name}_chequeImage_${data?.cheque_url[0].name}`
-            // } else {
-            //     data.cheque_url = props?.data?.cheque_url
-            // }
             if (data?.gst_url.length != 0) {
                 await ImageUpload(data?.gst_url[0], "doc", "gstImage", data?.name)
                 data.gst_url = `${link}${data?.name}_gstImage_${data?.gst_url[0].name}`
@@ -149,12 +131,6 @@ function CreateUserForm(props) {
             } else {
                 data.fssai_url = props?.data?.fssai_url
             }
-            // if (data?.bus_card_url.length != 0) {
-            //     await ImageUpload(data?.bus_card_url[0], "doc", "businessImage", data?.name)
-            //     data.bus_card_url = `${link}${data?.name}_businessImage_${data?.bus_card_url[0].name}`
-            // } else {
-            //     data.bus_card_url = props?.data?.bus_card_url
-            // }
             if (data?.odoc_url.length != 0) {
                 await ImageUpload(data?.odoc_url[0], "doc", "otherImage", data?.name)
                 data.odoc_url = `${link}${data?.name}_otherImage_${data?.odoc_url[0].name}`
@@ -283,7 +259,7 @@ function CreateUserForm(props) {
                         <div className="fixed inset-0 bg-black bg-opacity-25" />
                     </Transition.Child>
                     <div className="fixed inset-0 overflow-y-auto scrollbars">
-                        <div className="flex min-h-full items-center justify-center p-4 text-center">
+                        <div className="flex items-center justify-center min-h-full p-4 text-center">
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-out duration-300"
@@ -293,11 +269,11 @@ function CreateUserForm(props) {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-6xl transform overflow-hidden rounded-lg bg-white  text-left align-middle shadow-xl transition-all">
+                                <Dialog.Panel className="w-full max-w-6xl overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl">
 
                                     <Dialog.Title
                                         as="h2"
-                                        className="text-lg text-white w-full bg-sky-400 font-tb leading-6 font-semibold py-4 px-3"
+                                        className="w-full px-3 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
                                     >
                                         {props?.title}
                                     </Dialog.Title>
@@ -305,7 +281,7 @@ function CreateUserForm(props) {
                                         {/* React Hook Form */}
                                         <form onSubmit={handleSubmit(onSubmit)} >
                                             <div className="">
-                                                <div className="py-4 mx-4 grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4  gap-x-3 gap-y-3 ">
+                                                <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-x-3 gap-y-3 ">
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             Company Name*
@@ -545,8 +521,8 @@ function CreateUserForm(props) {
                                                     {/* --------------- kyc details ------------ */}
 
                                                 </div>
-                                                <h1 className='mx-4 font-tbPop text-xl font-semibold text-gray-900 '>KYC Details:</h1>
-                                                <div className="py-4 mx-4 grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3  gap-x-3 gap-y-3">
+                                                <h1 className='mx-4 text-xl font-semibold text-gray-900 font-tbPop '>KYC Details:</h1>
+                                                <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-x-3 gap-y-3">
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             Pan Card
@@ -704,7 +680,7 @@ function CreateUserForm(props) {
                                                 </div>
                                             </div>
                                             {/* =============== footer section ==================== */}
-                                            <footer className="py-2 flex bg-white justify-end px-4 space-x-3">
+                                            <footer className="flex justify-end px-4 py-2 space-x-3 bg-white">
                                                 {loader ? <LoadBox className="relative block w-auto px-5 transition-colors font-tb tracking-wide duration-200 py-2.5 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize" /> : <button type='submit' className={formBtn1}>submit</button>}
                                                 <button type='button' className={formBtn2} onClick={closeBtn}>close</button>
                                             </footer>

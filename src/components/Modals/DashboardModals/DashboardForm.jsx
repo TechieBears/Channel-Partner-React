@@ -1,683 +1,581 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react';
 import { useForm, Controller, FormProvider, useFormContext } from "react-hook-form";
-import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../utils/CustomClass';
-import Switch from 'react-switch'
-import { Edit } from 'iconsax-react';
-import { createStorage, getPartnerStorage, getStorages, updateStorage } from '../../../api';
+import { fileinput, formBtn1, formBtn2, formBtn3, inputClass, labelClass, tableBtn } from '../../../utils/CustomClass';
+import { Edit, UserAdd } from 'iconsax-react';
+import { createStorage, registerRestaurant } from '../../../api';
 import { setStorageList } from '../../../redux/slices/storageSlice';
 import { useDispatch, useSelector } from 'react-redux';
-// import { ImageUpload, link, demovideoLink } from '../../../env';
 import { toast } from 'react-toastify';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Error from '../../Errors/Error';
 import LoadBox from '../../Loader/LoadBox';
+import Select from 'react-select'
+import { validateEmail, validatePhoneNumber } from '../../Validations.jsx/Validations';
+import { inputClasses } from '@mui/material';
+import { ImageUpload, restaurantLink } from '../../../env';
 
 
 // =================== form steps 1 =================
 
 const Step1 = () => {
+    const [manually, setManally] = useState(false);
+    const [verifyPhone, setVerifyPhone] = useState(false);
+    const [verifyEmail, setVerifyEmail] = useState(false);
     const { register, control, formState: { errors }, } = useFormContext()
-    const cityNames = useSelector((state) => state?.master?.city)
-    const tempretureRangeList = useSelector(state => state?.master?.temperatureRange)
+    const OTPInput = () => {
+        const inputs = document.querySelectorAll('#otp > *[id]');
+        for (let i = 0; i < inputs.length; i++) { inputs[i].addEventListener('keydown', function (event) { if (event.key === "Backspace") { inputs[i].value = ''; if (i !== 0) inputs[i - 1].focus(); } else { if (i === inputs.length - 1 && inputs[i].value !== '') { return true; } else if (event.keyCode > 47 && event.keyCode < 58) { inputs[i].value = event.key; if (i !== inputs.length - 1) inputs[i + 1].focus(); event.preventDefault(); } else if (event.keyCode > 64 && event.keyCode < 91) { inputs[i].value = String.fromCharCode(event.keyCode); if (i !== inputs.length - 1) inputs[i + 1].focus(); event.preventDefault(); } } }); }
+        OTPInput()
+    }
     return (
-        <div className="py-4 mx-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
-            <div className="">
-                <label className={labelClass}>
-                    Name*
-                </label>
-                <input
-                    type="text"
-                    placeholder='Name'
-                    className={inputClass}
-                    {...register('name', { required: true })}
-                />
-                {errors.name && <Error title='Name is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Operational Year*
-                </label>
-                <input
-                    type="month"
-                    placeholder='year'
-                    className={inputClass}
-                    {...register('operational_year', { required: true })}
-                />
-                {errors.operational_year && <Error title='Year is required*' />}
-            </div>
+        <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-5 gap-x-3 gap-y-3 ">
+            <div className='col-span-3 gap-x-3'>
+                <div className='grid grid-cols-2 gap-3'>
+                    <div className="">
+                        <label className={labelClass}>
+                            Restaurant Name*
+                        </label>
+                        <input
+                            type="text"
+                            placeholder='Name'
+                            className={inputClass}
+                            {...register('shop_name', { required: true })}
+                        />
+                        {errors.shop_name && <Error title='Restaurant Name is required*' />}
+                    </div>
+                    <div className="">
+                        <label className={labelClass}>
+                            Restaurant Complete Address*
+                        </label>
+                        <input
+                            type="text"
+                            placeholder='Restaurant Address'
+                            className={inputClass}
+                            {...register('shop_address', { required: true })}
+                        />
+                        {errors.shop_address && <Error title='Year is required*' />}
+                    </div>
+                    {manually &&
+                        <>
+                            <p className={`col-span-2 text-center`}>--or enter coordinates manually--</p>
+                            <div className="">
+                                <label className={labelClass}>
+                                    Latitude*
+                                </label>
+                                <input
+                                    type="text"
+                                    placeholder='Latitude'
+                                    className={inputClass}
+                                    {...register('lat', { required: manually })}
+                                />
+                                {errors.lat && <Error title={errors?.lat?.message} />}
+                            </div>
+                            <div className="">
+                                <label className={labelClass}>
+                                    Longitutde*
+                                </label>
+                                <input
+                                    type="text"
+                                    placeholder='Longitutde'
+                                    className={inputClass}
+                                    {...register('long', { required: manually })}
+                                />
+                                {errors.long && <Error title={errors?.long?.message} />}
+                            </div>
 
-            <div className="">
-                <label className={labelClass}>
-                    City Name*
-                </label>
-                <select
-                    name="City"
-                    className={inputClass}
-                    {...register("location", { required: true })}
-                >
-                    <option value="" >
-                        Select City*
-                    </option>
-                    {cityNames?.map((city) => <option value={city?.name} key={city?.name}>{city?.name}</option>)}
-                </select>
-                {errors.location && <Error title='City is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Storage Type*
-                </label>
-                <select
-                    name="Storage Type"
-                    className={inputClass}
-                    {...register("storage_type", { required: true })}
-                >
-                    <option value="" >
-                        Select Storage Type
-                    </option>
-                    <option value="Mezzanine">Mezzanine</option>
-                    <option value="Palletized - Racks">Palletized - Racks</option>
-                </select>
-                {errors.storage_type && <Error title='Storage type is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Temperature Compliance*
-                </label>
-                <select
-                    name="Temperature Compliance"
-                    className={inputClass}
-                    {...register("temp_compliance", { required: true })}
-                >
-                    <option value="" >
-                        Select Temperature Compliance
-                    </option>
-                    <option value="High">High</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Low">Low</option>
-                </select>
-                {errors.temp_compliance && <Error title='Temperature compliance is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Type of Chambar*
-                </label>
-                <select
-                    name="type of chambar"
-                    className={inputClass}
-                    {...register("chamber_type", { required: true })}
-                >
-                    <option value="" >
-                        Select Chamber Type
-                    </option>
-                    <option value="Fixed Temperature">Fixed Temperature</option>
-                    <option value="Convertible">Convertible</option>
-                </select>
-                {errors.chamber_type && <Error title='Chamber Type is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Rating*
-                </label>
-                <select
-                    name="Rating"
-                    className={inputClass}
-                    {...register("rating", { required: true })}
-                >
-                    <option value="" >
-                        Select Rating
-                    </option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-                {errors.rating && <Error title='Rating is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Warehouse Management Software*
-                </label>
-                <input
-                    type="text"
-                    placeholder='Manual / Excel / Software Name'
-                    className={inputClass}
-                    {...register('manage_software', { required: true })}
-                />
-                {errors.manage_software && <Error title='Management software is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Operating Hours*
-                </label>
-                <input
-                    type="text"
-                    placeholder='Operating Hours'
-                    className={inputClass}
-                    {...register('operating_hrs', { required: true })}
-                />
-                {errors.operating_hrs && <Error title='Operating hours is required*' />}
-            </div>
-
-            <div className="">
-                <label className={labelClass}>
-                    Address*
-                </label>
-                <textarea placeholder='Please enter address'
-                    className={inputClass}
-                    maxLength={980}
-                    {...register('address', { required: true })}></textarea>
-                {errors.address && <Error title='Address is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Description*
-                </label>
-                <textarea
-                    placeholder='Plase enter description'
-                    className={inputClass}
-                    maxLength={1980}
-                    {...register('description', { required: true })}>
-                </textarea>
-                {errors.description && <Error title='Description is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Door sensor
-                </label>
-                <Controller
-                    name="door_sensor"
-                    control={control}
-                    defaultValue={false}
-                    render={({ field }) => (
-                        <Switch
-                            onChange={(checked) => field.onChange(checked)}
-                            checked={field.value}
+                            <div className="">
+                                <label className={labelClass}>
+                                    State*
+                                </label>
+                                <input
+                                    type="text"
+                                    readOnly
+                                    placeholder='State'
+                                    className={inputClass}
+                                    {...register('state',)}
+                                />
+                            </div>
+                            <div className="">
+                                <label className={labelClass}>
+                                    Pincode*
+                                </label>
+                                <input
+                                    type="text"
+                                    readOnly
+                                    placeholder='Pincode'
+                                    className={inputClass}
+                                    {...register('pinocde',)}
+                                />
+                            </div>
+                            <div className="">
+                                <label className={labelClass}>
+                                    City*
+                                </label>
+                                <input
+                                    type="text"
+                                    readOnly
+                                    placeholder='City'
+                                    className={inputClass}
+                                    {...register('city',)}
+                                />
+                            </div>
+                            <div></div>
+                        </>
+                    }
+                    <div className="">
+                        <label className={labelClass}>
+                            Restaurant Number*
+                        </label>
+                        <input
+                            type="tel"
+                            placeholder='Restaurant Number'
+                            className={inputClass}
+                            {...register('shop_contact_number', { required: true, validate: validatePhoneNumber })}
                         />
-                    )}
-                />
+                        {errors.shop_contact_number && <Error title='Restaurant Number is required*' />}
+                    </div>
+                </div>
             </div>
-            <div className="">
-                <label className={labelClass}>
-                    Temperature Display System
-                </label>
-                <Controller
-                    name="temp_system"
-                    control={control}
-                    defaultValue={false}
-                    render={({ field }) => (
-                        <Switch
-                            onChange={(checked) => field.onChange(checked)}
-                            checked={field.value}
-                        />
-                    )}
-                />
+            <div className='col-span-2'>
+                {/* ============================= Maps start ============================= */}
+                <div className=''>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d30128.960774986183!2d73.0314032258855!3d19.27714285590321!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7bda4c2cb3497%3A0x65c3365426378045!2sKamatghar%2C%20Bhiwandi%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1709017397432!5m2!1sen!2sin" width="100%" height="450" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+                {/* ============================= Maps end ============================= */}
+                <p onClick={() => setManally(!manually)} className={`cursor-pointer ${manually ? 'text-black' : 'text-sky-400'}`}>or enter coordinates manually</p>
             </div>
-            <div className="">
-                <label className={labelClass}>
-                    Remote Temperature Monitoring System
-                </label>
-                <Controller
-                    name="remote_temp_sys"
-                    control={control}
-                    defaultValue={false}
-                    render={({ field }) => (
-                        <Switch
-                            onChange={(checked) => field.onChange(checked)}
-                            checked={field.value}
-                        />
-                    )}
-                />
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Electricity back Up
-                </label>
-                <Controller
-                    name="electricity_bckup"
-                    control={control}
-                    defaultValue={false}
-                    render={({ field }) => (
-                        <Switch
-                            onChange={(checked) => field.onChange(checked)}
-                            checked={field.value}
-                        />
-                    )}
-                />
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Surveillance CCTV
-                </label>
-                <Controller
-                    name="cctv"
-                    control={control}
-                    defaultValue={false}
-                    render={({ field }) => (
-                        <Switch
-                            onChange={(checked) => field.onChange(checked)}
-                            checked={field.value}
-                        />
-                    )}
-                />
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Blast Frezzing
-                </label>
-                <Controller
-                    name="blast_frezzing"
-                    control={control}
-                    defaultValue={false}
-                    render={({ field }) => (
-                        <Switch
-                            onChange={(checked) => field.onChange(checked)}
-                            checked={field.value}
-                        />
-                    )}
-                />
-            </div>
-
         </div>
     )
 }
+
 // =================== form steps 2 =================
-
-const Step2 = () => {
+const Step2 = (props) => {
     const { register, formState: { errors }, } = useFormContext()
-    const designationList = useSelector(state => state?.master?.designation)
+    const [allCuisines, setAllCuisines] = useState([
+        { value: "Italian Cuisine", label: "Italian Cuisine" },
+        { value: "French Cuisine", label: "French Cuisine" },
+        { value: "Chinese Cuisine", label: "Chinese Cuisine" },
+        { value: "Japanese Cuisine", label: "Japanese Cuisine" },
+        { value: "Mexican Cuisine", label: "Mexican Cuisine" },
+        { value: "Thai Cuisine", label: "Thai Cuisine" },
+        { value: "Spanish Cuisine", label: "Spanish Cuisine" },
+        { value: "South Indian Cuisine", label: "South Indian Cuisine" },
+        { value: "Maharashtrian Cuisine", label: "Maharashtrian Cuisine" },
+        { value: "Goan Cuisine", label: "Goan Cuisine" },
+    ]);
+    const [allRestaurantTypes, setAllRestaurantTypes] = useState([
+        { value: "Fine Dining", label: 'Fine Dining' },
+        { value: "Casual Dining", label: "Casual Dining" },
+        { value: "Fast Food", label: "Fast Food" },
+        { value: "Café/Bistro", label: "Café/Bistro" },
+        { value: "Ethnic Restaurants", label: "Ethnic Restaurants" },
+        { value: "Family Style Restaurants", label: "Family Style Restaurants" },
+        { value: "Buffet Style Restaurants", label: "Buffet Style Restaurants" },
+        { value: "Food Trucks", label: "Food Trucks" },
+        { value: "Pop-Up Restaurants", label: "Pop-Up Restaurants" },
+        { value: "Vegetarian/Vegan Restaurants", label: "Vegetarian/Vegan Restaurants" },
+    ]);
     return (
-        <div className="py-4 mx-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
+        <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
+            <p className='md:col-span-2 lg:col-span-3 font-semibold text-lg'>Establishment Type</p>
             <div className="">
                 <label className={labelClass}>
-                    Contact person name*
+                    Select What Describe you the best*
                 </label>
-                <input
-                    type="text"
-                    placeholder='Contact Person Name'
-                    className={inputClass}
-                    {...register('spoc_name', { required: true })}
+                <Select
+                    options={allRestaurantTypes}
+                    isMulti
+                    value={props?.selectedRestType}
+                    onChange={(selectedOption) => props?.setSelectedRestType(selectedOption)}
+                // {...register('restaurant_type', { required: true })}
                 />
-                {errors.spoc_name && <Error title='Name is required*' />}
+                {errors?.restaurant_type && <Error title='This is required' />}
             </div>
             <div className="">
                 <label className={labelClass}>
-                    Desgination*
+                    Type of cuisines*
                 </label>
-                <select
-                    placeholder='Desgination'
-                    className={inputClass}
-                    {...register('spoc_desgination', { required: true })}
-                >
-                    <option value=''>Select Desgination</option>
-                    {designationList?.map((curElm) => <option value={curElm?.name} key={curElm?.name}>{curElm?.name}</option>)}
-
-                </select>
-                {errors.spoc_desgination && <Error title='Desgination is required*' />}
+                <Select
+                    options={allCuisines}
+                    isMulti
+                    value={props?.selectedCuisines}
+                    onChange={(selectedOption) => props?.setSelectedCuisines(selectedOption)}
+                />
+                {errors?.type_of_cuisine && <Error title='This is required' />}
             </div>
-            <div className="">
+            <div>
                 <label className={labelClass}>
-                    Contact no*
+                    Opeing Hour*
                 </label>
                 <input
-                    type="text"
-                    placeholder='Contact no'
+                    type='time'
                     className={inputClass}
-                    {...register('spoc_contact', { required: true })}
+                    {...register('shop_start_time', { required: true })}
                 />
-                {errors.spoc_contact && <Error title='Contact is required*' />}
+                {errors?.shop_start_time && <Error title='Opening Hour is required' />}
             </div>
-            <div className="">
+            <div>
                 <label className={labelClass}>
-                    Email id
+                    Closing Hour*
                 </label>
                 <input
-                    type="email"
-                    placeholder='Email id'
+                    type='time'
                     className={inputClass}
-                    {...register('spoc_email', {
-                        pattern: {
-                            value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-                            message: "Enter Valid Email"
-                        }
-                    })}
+                    {...register('shop_closing_time', { required: true })}
                 />
-                {errors.spoc_email && <Error title={`${errors?.spoc_email?.message}`} />}
+                {errors?.shop_closing_time && <Error title='Closing Hour is required' />}
             </div>
         </div>
     );
-}
+};
+
 // =================== form steps 3 =================
-
-const Step3 = () => {
+const Step3 = (props) => {
     const { register, formState: { errors }, } = useFormContext()
-    const designationList = useSelector(state => state?.master?.designation)
     return (
-        <div className="py-4 mx-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
+        <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
+            <p className='md:col-span-2 lg:col-span-3 font-semibold text-lg'>Upload Images</p>
+            <p className='md:col-span-2 lg:col-span-3 font-normal text-base'>Ambience Images</p>
             <div className="">
-                <label className={labelClass}>
-                    Contact Person Name*
-                </label>
-                <input
-                    type="text"
-                    placeholder='Contact person Name'
-                    className={inputClass}
-                    {...register('dm_name', { required: true })}
-                />
-                {errors.dm_name && <Error title='Contact is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Desgination*
-                </label>
-                <select
-                    placeholder='Desgination'
-                    className={inputClass}
-                    {...register('dm_desgination', { required: true })}
-                >
-                    <option value=''>Select Desgination</option>
-                    {designationList?.map((curElm) => <option value={curElm?.name} key={curElm?.name}>{curElm?.name}</option>)}
-                </select>
-                {errors.dm_desgination && <Error title='Desgination is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Contact No*
-                </label>
-                <input
-                    type="text"
-                    placeholder='Contact No'
-                    className={inputClass}
-                    {...register('dm_contact', { required: true })}
-                />
-                {errors.dm_contact && <Error title='Contact No is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass}>
-                    Email id
-                </label>
-                <input
-                    type="email"
-                    placeholder='Email id'
-                    className={inputClass}
-                    {...register('dm_email', {
-                        pattern: {
-                            value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-                            message: "Enter Valid Email"
-                        }
-                    })}
-                />
-                {errors.dm_email && <Error title={`${errors?.dm_email?.message}`} />}
-            </div>
-        </div>
-    );
-}
-// =================== form steps 4 =================
-
-const Step4 = (props) => {
-    const { register, formState: { errors }, setError } = useFormContext()
-    const validateVideoSize = (file) => {
-        if (file[0].size > 30 * 1024 * 1024) {
-            setError('video', {
-                type: 'manual',
-                message: 'Video file size should be less than 10MB',
-            });
-        } else {
-            return true;
-        }
-    };
-    return (
-        <div className="py-4 mx-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
-            <div className="">
-                <label className={labelClass} htmlFor="main_input">Main Image*</label>
+                <label className={labelClass} htmlFor="main_input">Image 1 *</label>
                 <input className={fileinput}
                     id="main_input"
                     type='file'
                     multiple
-                    accept='image/jpeg,image/jpg,image/png,application/pdf'
+                    accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("image", { required: props.button == 'edit' ? false : true })} />
-                {props?.button == 'edit' && props?.data.image != '' && props?.data.image != undefined && <label className='block mb-1 text-md font-tb font-medium text-blue-800 capitalize'>
-                    {props?.data.image.split('storage')[1].split('/')[1].split('_')[2]}
+                    {...register("ambience_image", { required: true })} />
+                {props?.button == 'edit' && props?.data.ambience_image != '' && props?.data.ambience_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                    {props?.data?.ambience_image?.split('/').pop()}
                 </label>}
-                {errors.image && <Error title='Main Image is required*' />}
+                {errors.ambience_image && <Error title='Menu Image is required*' />}
             </div>
             <div className="">
-                <label className={labelClass} htmlFor="Outside">Outside Image*</label>
+                <label className={labelClass} htmlFor="main_input">Image 2</label>
                 <input className={fileinput}
-                    id="Outside"
+                    id="main_input"
                     type='file'
                     multiple
-                    accept='image/jpeg,image/jpg,image/png,application/pdf'
+                    accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("outside_img", { required: props.button == 'edit' ? false : true })} />
-                {props?.button == 'edit' && props?.data.outside_img != '' && props?.data.outside_img != undefined && <label className='block mb-1 text-md font-tb font-medium text-blue-800 capitalize'>
-                    {props?.data.outside_img.split('storage')[1].split('/')[1].split('_')[2]}
+                    {...register("menu_image2", {})} />
+                {props?.button == 'edit' && props?.data.menu_image2 != '' && props?.data.menu_image2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                    {props?.data?.menu_image2?.split('/').pop()}
                 </label>}
-                {errors.outside_img && <Error title=' Outside Image is required*' />}
+                {errors.menu_image2 && <Error title='Menu Image is required*' />}
             </div>
             <div className="">
-                <label className={labelClass} htmlFor="Other">Other Images</label>
+                <label className={labelClass} htmlFor="main_input">Image 3</label>
                 <input className={fileinput}
-                    id="Other"
+                    id="main_input"
                     type='file'
                     multiple
-                    accept='image/jpeg,image/jpg,image/png,application/pdf'
+                    accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("other_img")} />
-                {props?.button == 'edit' && props?.data.other_img != '' && props?.data.other_img != undefined && <label className='block mb-1 text-md font-tb font-medium text-blue-800 capitalize'>
-                    {props?.data.other_img.split('storage')[1].split('/')[1].split('_')[2]}
+                    {...register("res_img3", {})} />
+                {props?.button == 'edit' && props?.data.res_img3 != '' && props?.data.res_img3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                    {props?.data?.res_img3?.split('/').pop()}
+                </label>}
+                {errors.res_img3 && <Error title='Restaurant Image is required*' />}
+            </div>
+            <p className='md:col-span-2 lg:col-span-3 font-normal text-base'>Dish Images</p>
+            <div className="">
+                <label className={labelClass} htmlFor="main_input">Image 1*</label>
+                <input className={fileinput}
+                    id="main_input"
+                    type='file'
+                    multiple
+                    accept='image/jpeg,image/jpg,image/png'
+                    placeholder='Upload Images...'
+                    {...register("food_image1", { required: true })} />
+                {props?.button == 'edit' && props?.data.food_image1 != '' && props?.data.food_image1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                    {props?.data?.food_image1?.split('/').pop()}
                 </label>}
             </div>
             <div className="">
-                <label className={labelClass} htmlFor="Loading">Loading / Unloading Bays</label>
+                <label className={labelClass} htmlFor="main_input">Image 2</label>
                 <input className={fileinput}
-                    id="Loading"
+                    id="main_input"
                     type='file'
                     multiple
-                    accept='image/jpeg,image/jpg,image/png,application/pdf'
+                    accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("loading_img")} />
-                {props?.button == 'edit' && props?.data.loading_img != '' && props?.data.loading_img != undefined &&
-                    <>
-                        <label className='block mb-1 text-md font-tb font-medium text-blue-800 capitalize'>
-                            {props?.data.loading_img.split('storage')[1].split('/')[1].split('_')[2]}
-                        </label>
-                    </>
-                }
+                    {...register("food_image2", {})} />
+                {props?.button == 'edit' && props?.data.food_image2 != '' && props?.data.food_image2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                    {props?.data?.food_image2?.split('/').pop()}
+                </label>}
             </div>
             <div className="">
-                <label className={labelClass} htmlFor="Staging">Staging Area / Ante Room</label>
+                <label className={labelClass} htmlFor="main_input">Image 3</label>
                 <input className={fileinput}
-                    id="Staging"
+                    id="main_input"
                     type='file'
                     multiple
-                    accept='image/jpeg,image/jpg,image/png,application/pdf'
+                    accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("staging_img")} />
-                {props?.button == 'edit' && props?.data.staging_img != '' && props?.data.staging_img != undefined &&
-                    <>
-                        <label className='block mb-1 text-md font-tb font-medium text-blue-800 capitalize'>
-                            {props?.data.staging_img.split('storage')[1].split('/')[1].split('_')[2]}
-                        </label>
-                    </>
-                }
+                    {...register("food_image3", {})} />
+                {props?.button == 'edit' && props?.data.food_image3 != '' && props?.data.food_image3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                    {props?.data?.food_image3?.split('/').pop()}
+                </label>}
+            </div>
+        </div>
+    );
+}
+
+// =================== form steps 4 =================
+const Step4 = (props) => {
+    const { register, formState: { errors }, setError, watch } = useFormContext()
+    const deliveryTime = watch('delivery_time')
+    return (
+        <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
+            <p className='col-span-3 text-lg font-semibold'>Ordering Menu Photos</p>
+            <div className="">
+                <label className={labelClass} htmlFor="main_input">Image 1</label>
+                <input className={fileinput}
+                    id="main_input"
+                    type='file'
+                    multiple
+                    accept='image/jpeg,image/jpg,image/png'
+                    placeholder='Upload Images...'
+                    {...register("order_img1", {})} />
+                {props?.button == 'edit' && props?.data.order_img1 != '' && props?.data.order_img1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                    {props?.data?.order_img1?.split('/').pop()}
+                </label>}
             </div>
             <div className="">
-                <label className={labelClass} htmlFor="Storage">Storage Area</label>
+                <label className={labelClass} htmlFor="main_input">Image 2</label>
                 <input className={fileinput}
-                    id="Storage"
+                    id="main_input"
                     type='file'
                     multiple
-                    accept='image/jpeg,image/jpg,image/png,application/pdf'
+                    accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("storage_img")} />
-                {props?.button == 'edit' && props?.data.storage_img != '' && props?.data.storage_img != undefined &&
-                    <>
-                        <label className='block mb-1 text-md font-tb font-medium text-blue-800 capitalize'>
-                            {props?.data.storage_img.split('storage')[1].split('/')[1].split('_')[2]}
-                        </label>
-                    </>
-                }
+                    {...register("order_img2", {})} />
+                {props?.button == 'edit' && props?.data.order_img2 != '' && props?.data.order_img2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                    {props?.data?.order_img2?.split('/').pop()}
+                </label>}
             </div>
             <div className="">
-                <label className={labelClass} htmlFor="evideo">E-Demo Video*</label>
+                <label className={labelClass} htmlFor="main_input">Image 3</label>
                 <input className={fileinput}
-                    id="evideo"
+                    id="main_input"
                     type='file'
                     multiple
-                    accept='video/mp4,video/x-m4v,video/*,video/quicktime,video/x-ms-wmv,video/x-msvideo'
-                    placeholder='Upload Video...'
-                    {...register("video_url", {
-                        required: props.button == 'edit' ? false : 'Video is required*',
-                        onChange: (e) => {
-                            validateVideoSize(e.target.files);
-                        }
-                    })} />
-                {props?.button == 'edit' && props?.data.video_url != '' && props?.data.video_url != undefined &&
-                    <>
-                        <label className='block mb-1 text-md font-tb font-medium text-blue-800 capitalize'>
-                            {props?.data.video_url.split('demovideo')[1].split('/')[1].split('_')[2]}
-                        </label>
-                    </>
-                }
-                {errors.video_url && <Error title={`${errors.video_url.message}`} />}
+                    accept='image/jpeg,image/jpg,image/png'
+                    placeholder='Upload Images...'
+                    {...register("order_img3", {})} />
+                {props?.button == 'edit' && props?.data.order_img3 != '' && props?.data.order_img3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                    {props?.data?.order_img3?.split('/').pop()}
+                </label>}
             </div>
         </div>
     )
 }
-// =================== form steps 5 =================
+// // =================== form steps 5 =================
 
 const Step5 = (props) => {
-    const { register, formState: { errors }, } = useFormContext()
+    const { register, formState: { errors }, watch } = useFormContext()
+    const gstRegistered = watch('gst_registered');
     return (
-        <div className="py-4 mx-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
+        <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
+            <p className='col-span-3 text-lg font-semibold'>PAN Details</p>
             <div className="">
                 <label className={labelClass}>
-                    Fassai license*
+                    PAN No*
                 </label>
                 <input
                     type="text"
-                    placeholder='Fassai License'
+                    placeholder='PAN No'
                     className={inputClass}
-                    {...register('fassai_license', { required: true })}
+                    {...register('pan_card', { required: true })}
                 />
-                {errors.fassai_license && <Error title=' License is required*' />}
+                {errors.pan_card && <Error title='PAN No is required*' />}
             </div>
             <div className="">
                 <label className={labelClass}>
-                    GST No*
+                    Name On Document*
                 </label>
                 <input
                     type="text"
-                    placeholder='GST No'
+                    placeholder='Name On Document'
                     className={inputClass}
-                    {...register('gst_no', { required: true })}
+                    {...register('pan_name', { required: true })}
                 />
-                {errors.gst_no && <Error title='GST No is required*' />}
+                {errors.pan_name && <Error title='Name On Document is required*' />}
+            </div>
+            <div className="">
+                <label className={labelClass} htmlFor="main_input">Upload Image</label>
+                <input className={fileinput}
+                    id="main_input"
+                    type='file'
+                    multiple
+                    accept='image/jpeg,image/jpg,image/png'
+                    placeholder='Upload Images...'
+                    {...register("order_img3", {})} />
+                {props?.button == 'edit' && props?.data.order_img3 != '' && props?.data.order_img3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                    {props?.data?.order_img3?.split('/').pop()}
+                </label>}
+            </div>
+            <p className='col-span-3 text-lg font-semibold'>GST Details</p>
+            <div>
+                <label>Is Your Restaurant GST registered</label>
+                <select
+                    className={inputClass}
+                    {...register('gst_registered', {})}
+                >
+                    <option value='Yes'>Yes</option>
+                    <option value='No'>No</option>
+                </select>
+            </div>
+            {gstRegistered == "Yes" &&
+                <>
+                    <div>
+                        <label>GST Number</label>
+                        <input
+                            className={inputClass}
+                            {...register('gst_number', { required: gstRegistered == 'Yes' ? true : false })}
+                            placeholder='GST Number'
+                        />
+                        {errors?.gst_number && (gstRegistered == 'Yes') ? <Error title='GST Number is required' /> : ''}
+                    </div>
+                    <div className="">
+                        <label className={labelClass} htmlFor="main_input">Upload Image</label>
+                        <input className={fileinput}
+                            id="main_input"
+                            type='file'
+                            multiple
+                            accept='image/jpeg,image/jpg,image/png'
+                            placeholder='Upload Images...'
+                            {...register("order_img3", {})} />
+                        {props?.button == 'edit' && props?.data.order_img3 != '' && props?.data.order_img3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                            {props?.data?.order_img3?.split('/').pop()}
+                        </label>}
+                    </div>
+                    <div>
+                        <label>Do you charge 5% GST on all your menu items?</label>
+                        <select
+                            className={inputClass}
+                            {...register('gst_charge_menu', { required: true })}
+                        >
+                            <option value='No'>No</option>
+                            <option value='Yes'>Yes</option>
+                        </select>
+                    </div>
+                </>
+            }
+            <p className='col-span-3 text-lg font-semibold'>FSSAI Details</p>
+            <div className="">
+                <label className={labelClass}>
+                    FSSAI Cerificate Number
+                </label>
+                <input
+                    type="text"
+                    placeholder='FSSAI Cerificate Number'
+                    className={inputClass}
+                    {...register('fssai_certificate_number')}
+                />
             </div>
             <div className="">
                 <label className={labelClass}>
-                    Any Other licenses
+                    FSSAI Expiry Date
                 </label>
                 <input
-                    type="text"
-                    placeholder='Any Other Licenses'
+                    type="date"
+                    placeholder='FSSAI Expiry Date'
                     className={inputClass}
-                    {...register('other_license')}
+                    {...register('fssai_expiry_date')}
                 />
             </div>
             <div className="">
-                <label className={labelClass} htmlFor="main_input">Fassai license  Doc*</label>
+                <label className={labelClass} htmlFor="main_input">Fassai license  Doc</label>
                 <input className={fileinput}
                     id="main_input"
                     type='file'
                     multiple
                     accept='image/jpeg,image/jpg,image/png,application/pdf'
                     placeholder='Upload Images...'
-                    {...register("fassai_doc", { required: props.button == 'edit' ? false : true })} />
-                {props?.button == 'edit' && props?.data?.fassai_doc != '' && props?.data?.fassai_doc != undefined && <label className='block mb-1 text-md font-tb font-medium text-blue-800 capitalize'>
+                    {...register("fassai_doc", {})} />
+                {props?.button == 'edit' && props?.data?.fassai_doc != '' && props?.data?.fassai_doc != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
                     {props?.data?.fassai_doc.split('storage')[1].split('/')[1].split('_')[2]}
                 </label>}
-                {errors.fassai_doc && <Error title='Fassai license Docx*' />}
+            </div>
+            <p className='col-span-3 text-lg font-semibold'>Banking Details</p>
+            <div className="">
+                <label className={labelClass}>
+                    Bank Name*
+                </label>
+                <input
+                    type="text"
+                    placeholder='Bank Name'
+                    className={inputClass}
+                    {...register('bank_name', { required: true })}
+                />
             </div>
             <div className="">
-                <label className={labelClass} htmlFor="main_input">Gst Doc*</label>
+                <label className={labelClass}>
+                    Bank Account Number*
+                </label>
+                <input
+                    type="text"
+                    placeholder='Bank Account Number'
+                    className={inputClass}
+                    {...register('account_number', { required: true })}
+                />
+            </div>
+            <div className="">
+                <label className={labelClass}>
+                    Bank IFSC Code
+                </label>
+                <input
+                    type="text"
+                    placeholder='Bank IFSC Code'
+                    className={inputClass}
+                    {...register('ifsc_code')}
+                />
+            </div>
+            <p className='col-span-3 text-lg font-semibold'>Adhar Details</p>
+            <div className="">
+                <label className={labelClass}>
+                    Adhar Number*
+                </label>
+                <input
+                    type="text"
+                    placeholder='Adhar Number'
+                    className={inputClass}
+                    {...register('adhar_card', { required: true })}
+                />
+                {errors?.adhar_card && <Error title='Adhar number is required' />}
+            </div>
+            <div className="">
+                <label className={labelClass} htmlFor="main_input">Adhar Photo*</label>
                 <input className={fileinput}
                     id="main_input"
                     type='file'
                     multiple
                     accept='image/jpeg,image/jpg,image/png,application/pdf'
                     placeholder='Upload Images...'
-                    {...register("gst_doc", { required: props.button == 'edit' ? false : true })} />
-                {props?.button == 'edit' && props?.data?.gst_doc != '' && props?.data?.gst_doc != undefined && <label className='block mb-1 text-md font-tb font-medium text-blue-800 capitalize'>
-                    {props?.data?.gst_doc.split('storage')[1].split('/')[1].split('_')[2]}
+                    {...register("adhar_img", { required: true })} />
+                {props?.button == 'edit' && props?.data?.adhar_img != '' && props?.data?.adhar_img != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
+                    {props?.data?.adhar_img.split('storage')[1].split('/')[1].split('_')[2]}
                 </label>}
-                {errors.gst_doc && <Error title='Gst Image docx is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass} htmlFor="other_lic_doc">Other licenses Doc</label>
-                <input className={fileinput}
-                    id="other_lic_doc"
-                    type='file'
-                    multiple
-                    accept='image/jpeg,image/jpg,image/png,application/pdf'
-                    placeholder='Upload Images...'
-                    {...register("other_lic_doc")} />
-                {props?.button == 'edit' && props?.data?.other_lic_doc != '' && props?.data?.other_lic_doc != undefined && <label className='block mb-1 text-md font-tb font-medium text-blue-800 capitalize'>
-                    {props?.data?.other_lic_doc.split('storage')[1].split('/')[1].split('_')[2]}
-                </label>}
-                {errors.other_lic_doc && <Error title='Other licenses Docx is required*' />}
-            </div>
-            <div className="">
-                <label className={labelClass} htmlFor="electricity_url">Electricity Doc</label>
-                <input className={fileinput}
-                    id="electricity_url"
-                    type='file'
-                    multiple
-                    accept='image/jpeg,image/jpg,image/png,application/pdf'
-                    placeholder='Upload Doc...'
-                    {...register("electricity_url")} />
-                {props?.button == 'edit' && props?.data.electricity_url != '' && props?.data.electricity_url != undefined &&
-                    <>
-                        <label className='block mb-1 text-md font-tb font-medium text-blue-800 capitalize'>
-                            {props?.data.electricity_url.split('storage')[1].split('/')[1].split('_')[2]}
-                        </label>
-                    </>
-                }
-            </div>
-            <div className="">
-                <label className={labelClass} htmlFor="noc_url">NOC Doc</label>
-                <input className={fileinput}
-                    id="noc_url"
-                    type='file'
-                    multiple
-                    accept='image/jpeg,image/jpg,image/png,application/pdf'
-                    placeholder='Upload Doc...'
-                    {...register("noc_url")} />
-                {props?.button == 'edit' && props?.data.noc_url != '' && props?.data.noc_url != undefined &&
-                    <>
-                        <label className='block mb-1 text-md font-tb font-medium text-blue-800 capitalize'>
-                            {props?.data.noc_url.split('storage')[1].split('/')[1].split('_')[2]}
-                        </label>
-                    </>
-                }
+                {errors.adhar_img && <Error title='Adhar Card Image is required*' />}
             </div>
         </div>
     )
 }
 
 export default function DashboardForm(props) {
-    const user = useSelector((state) => state.user.loggedUserDetails)
-    const [isOpen, setIsOpen] = useState(false)
+    const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
+    const [isOpen, setIsOpen] = useState(props?.isOpen ? props?.isOpen : false)
     const [loader, setLoader] = useState(false)
+    const [selectedRestType, setSelectedRestType] = useState([])
+    const [selectedCuisines, setSelectedCuisines] = useState([])
     const [activeStep, setActiveStep] = useState(0);
     const toggle = () => setIsOpen(!isOpen);
-    const dispatch = useDispatch();
-    const steps = ['Storage', 'SPOC', 'Decision Maker', 'Compliances', 'Facility Images'];
+    const steps = ['Restaurant Information', 'Restaurant Type and Timing', 'Upload Images', 'General Information', 'Legal Documentation',];
     var methods = useForm({
         defaultValues: {
             "name": "",
@@ -747,24 +645,6 @@ export default function DashboardForm(props) {
     } else {
         methods = useForm()
     }
-
-    // ============== fetch data from api ================
-    const StorageList = () => {
-        if (user.role == 'admin') {
-            getStorages().then(res => {
-                dispatch(setStorageList(res))
-            }).catch(err => {
-                console.error('Error', err);
-            })
-        } else {
-            getPartnerStorage(user?.userid).then(res => {
-                dispatch(setStorageList(res))
-            }).catch(err => {
-                console.error('Error', err);
-            })
-        }
-
-    }
     // =========================== back button =========================
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -779,13 +659,13 @@ export default function DashboardForm(props) {
             case 0:
                 return <Step1 />
             case 1:
-                return <Step2 />
+                return <Step2 selectedCuisines={selectedCuisines} setSelectedCuisines={setSelectedCuisines} selectedRestType={selectedRestType} setSelectedRestType={setSelectedRestType} />
             case 2:
                 return <Step3 />
             case 3:
-                return <Step5 {...props} />
-            case 4:
                 return <Step4 {...props} />
+            case 4:
+                return <Step5 {...props} />
             default:
                 return (
                     <h1>
@@ -800,191 +680,84 @@ export default function DashboardForm(props) {
         isStepFalied()
         setLoader(true)
         if (activeStep == steps.length - 1) {
-            if (props.button != 'edit') {
-                if (data.image.length != 0) {
-                    await ImageUpload(data.image[0], "storage", "mainImage", data.name)
-                    data.image = `${link}${data.name}_mainImage_${data.image[0].name}`
-                } else {
-                    data.image = ''
-                }
-                if (data.outside_img.length != 0) {
-                    await ImageUpload(data.outside_img[0], "storage", "outSideImage", data.name)
-                    data.outside_img = `${link}${data.name}_outSideImage_${data.outside_img[0].name}`
-                } else {
-                    data.outside_img = ''
-                }
-                if (data.loading_img.length != 0) {
-                    await ImageUpload(data.loading_img[0], "storage", "loadingImage", data.name)
-                    data.loading_img = `${link}${data.name}_loadingImage_${data.loading_img[0].name}`
-                } else {
-                    data.loading_img = ''
-                }
-                if (data.staging_img.length != 0) {
-                    await ImageUpload(data.staging_img[0], "storage", "stagingImage", data.name)
-                    data.staging_img = `${link}${data.name}_stagingImage_${data.staging_img[0].name}`
-                } else {
-                    data.staging_img = ''
-                }
-                if (data.storage_img.length != 0) {
-                    await ImageUpload(data.storage_img[0], "storage", "storageImage", data.name)
-                    data.storage_img = `${link}${data.name}_storageImage_${data.storage_img[0].name}`
-                } else {
-                    data.storage_img = ''
-                }
-                if (data.other_img.length != 0) {
-                    await ImageUpload(data.other_img[0], "storage", "otherImage", data.name)
-                    data.other_img = `${link}${data.name}_otherImage_${data.other_img[0].name}`
-                } else {
-                    data.other_img = ''
-                }
-                if (data.fassai_doc.length != 0) {
-                    await ImageUpload(data.fassai_doc[0], "storage", "fassaiImage", data.name)
-                    data.fassai_doc = `${link}${data.name}_fassaiImage_${data.fassai_doc[0].name}`
-                } else {
-                    data.fassai_doc = ''
-                }
-                if (data.gst_doc.length != 0) {
-                    await ImageUpload(data.gst_doc[0], "storage", "gstImage", data.name)
-                    data.gst_doc = `${link}${data.name}_gstImage_${data.gst_doc[0].name}`
-                } else {
-                    data.gst_doc = ''
-                }
-                if (data.other_lic_doc.length != 0) {
-                    await ImageUpload(data.other_lic_doc[0], "storage", "otherImage", data.name)
-                    data.other_lic_doc = `${link}${data.name}_otherImage_${data.other_lic_doc[0].name}`
-                } else {
-                    data.other_lic_doc = ''
-                }
-                if (data.video_url.length != 0) {
-                    await ImageUpload(data.video_url[0], "demovideo", "edemo", data.name)
-                    data.video_url = `${demovideoLink}${data.name}_edemo_${data.video_url[0].name}`
-                } else {
-                    data.video_url = ''
-                }
-                if (data.electricity_url.length != 0) {
-                    await ImageUpload(data.electricity_url[0], "storage", "electricity", data.name)
-                    data.electricity_url = `${link}${data.name}_electricity_${data.electricity_url[0].name}`
-                } else {
-                    data.electricity_url = ''
-                }
-                if (data.noc_url.length != 0) {
-                    await ImageUpload(data.noc_url[0], "storage", "noc", data.name)
-                    data.noc_url = `${link}${data.name}_noc_${data.noc_url[0].name}`
-                } else {
-                    data.noc_url = ''
-                }
+            if (data.ambience_image.length != 0) {
+                await ImageUpload(data.ambience_image[0], "storage", "mainImage", data.name)
+                data.ambience_image = `${restaurantLink}${data.name}_mainImage_${data.ambience_image[0].name}`
+            } else {
+                data.ambience_image = ''
             }
-            else {
-                if (data.image.length != 0) {
-                    ImageUpload(data.image[0], "storage", "mainImage", data.name)
-                    data.image = `${link}${data.name}_mainImage_${data.image[0].name}`
-                } else {
-                    data.image = props.data.image
-                }
-                if (data.outside_img.length != 0) {
-                    await ImageUpload(data.outside_img[0], "storage", "outSideImage", data.name)
-                    data.outside_img = `${link}${data.name}_outSideImage_${data.outside_img[0].name}`
-                } else {
-                    data.outside_img = props.data.outside_img
-                }
-                if (data.loading_img.length != 0) {
-                    await ImageUpload(data.loading_img[0], "storage", "loadingImage", data.name)
-                    data.loading_img = `${link}${data.name}_loadingImage_${data.loading_img[0].name}`
-                } else {
-                    data.loading_img = props.data.loading_img
-                }
-                if (data.staging_img.length != 0) {
-                    await ImageUpload(data.staging_img[0], "storage", "stagingImage", data.name)
-                    data.staging_img = `${link}${data.name}_stagingImage_${data.staging_img[0].name}`
-                } else {
-                    data.staging_img = props.data.staging_img
-                }
-                if (data.storage_img.length != 0) {
-                    await ImageUpload(data.storage_img[0], "storage", "storageImage", data.name)
-                    data.storage_img = `${link}${data.name}_storageImage_${data.storage_img[0].name}`
-                } else {
-                    data.storage_img = props.data.storage_img
-                }
-                if (data.other_img.length != 0) {
-                    await ImageUpload(data.other_img[0], "storage", "otherImage", data.name)
-                    data.other_img = `${link}${data.name}_otherImage_${data.other_img[0].name}`
-                } else {
-                    data.other_img = props.data.other_img
-                }
-                if (data.fassai_doc.length != 0) {
-                    await ImageUpload(data.fassai_doc[0], "storage", "fassaiImage", data.name)
-                    data.fassai_doc = `${link}${data.name}_fassaiImage_${data.fassai_doc[0].name}`
-                } else {
-                    data.fassai_doc = props.data.fassai_doc
-                }
-                if (data.gst_doc.length != 0) {
-                    await ImageUpload(data.gst_doc[0], "storage", "gstImage", data.name)
-                    data.gst_doc = `${link}${data.name}_gstImage_${data.gst_doc[0].name}`
-                } else {
-                    data.gst_doc = props.data.gst_doc
-                }
-                if (data.other_lic_doc.length != 0) {
-                    await ImageUpload(data.other_lic_doc[0], "storage", "otherImage", data.name)
-                    data.other_lic_doc = `${link}${data.name}_otherImage_${data.other_lic_doc[0].name}`
-                } else {
-                    data.other_lic_doc = props.data.other_lic_doc
-                }
-
-                if (data.video_url.length != 0) {
-                    await ImageUpload(data.video_url[0], "demovideo", "edemo", data.name)
-                    data.video_url = `${demovideoLink}${data.name}_edemo_${data.video_url[0].name}`
-                } else {
-                    data.video_url = props.data.video_url
-                }
-                if (data.electricity_url.length != 0) {
-                    await ImageUpload(data.electricity_url[0], "storage", "electricity", data.name)
-                    data.electricity_url = `${link}${data.name}_electricity_${data.electricity_url[0].name}`
-                } else {
-                    data.electricity_url = props.data.electricity_url
-                }
-                if (data.noc_url.length != 0) {
-                    await ImageUpload(data.noc_url[0], "storage", "noc", data.name)
-                    data.noc_url = `${link}${data.name}_noc_${data.noc_url[0].name}`
-                } else {
-                    data.noc_url = props.data.noc_url
-                }
+            if (data.food_image1.length != 0) {
+                await ImageUpload(data.food_image1[0], "storage", "outSideImage", data.name)
+                data.food_image1 = `${restaurantLink}${data.name}_outSideImage_${data.food_image1[0].name}`
+            } else {
+                data.food_image1 = ''
             }
-
-            try {
-                if (props.button == 'edit') {
-                    updateStorage(props?.data?.id, data).then((res) => {
-                        if (res?.message === 'Data edited successfully') {
-                            StorageList()
-                            setLoader(false)
-                            toggle();
-                            toast.success(res?.message);
-                        }
-                    })
-                } else {
-                    if (user.role == 'partner') {
-                        data.user = user?.userid
-                        createStorage(data).then((res) => {
-                            if (res?.message === 'Data added successfully') {
-                                StorageList()
-                                setLoader(false)
-                                toggle();
-                                toast.success(res?.message);
-                            }
-                        })
-                    } else {
-                        createStorage(data).then((res) => {
-                            if (res?.message === 'Data added successfully') {
-                                StorageList()
-                                setLoader(false)
-                                toggle();
-                                toast.success(res?.message);
-                            }
-                        })
-                    }
-                }
-            } catch (error) {
-                console.log(error);
+            if (data.food_image2.length != 0) {
+                await ImageUpload(data.food_image2[0], "storage", "loadingImage", data.name)
+                data.food_image2 = `${restaurantLink}${data.name}_loadingImage_${data.food_image2[0].name}`
+            } else {
+                data.food_image2 = ''
             }
+            if (data.food_image3.length != 0) {
+                await ImageUpload(data.food_image3[0], "storage", "stagingImage", data.name)
+                data.food_image3 = `${restaurantLink}${data.name}_stagingImage_${data.food_image3[0].name}`
+            } else {
+                data.food_image3 = ''
+            }
+            if (data.adhar_img.length != 0) {
+                await ImageUpload(data.adhar_img[0], "storage", "stagingImage", data.name)
+                data.adhar_img = `${restaurantLink}${data.name}_stagingImage_${data.adhar_img[0].name}`
+            } else {
+                data.adhar_img = ''
+            }
+            if (data.fassai_doc.length != 0) {
+                await ImageUpload(data.fassai_doc[0], "storage", "stagingImage", data.name)
+                data.fassai_doc = `${restaurantLink}${data.name}_stagingImage_${data.fassai_doc[0].name}`
+            } else {
+                data.fassai_doc = ''
+            }
+            if (data.menu_image2.length != 0) {
+                await ImageUpload(data.menu_image2[0], "storage", "stagingImage", data.name)
+                data.menu_image2 = `${restaurantLink}${data.name}_stagingImage_${data.menu_image2[0].name}`
+            } else {
+                data.menu_image2 = ''
+            }
+            if (data.order_img1.length != 0) {
+                await ImageUpload(data.order_img1[0], "storage", "stagingImage", data.name)
+                data.order_img1 = `${restaurantLink}${data.name}_stagingImage_${data.order_img1[0].name}`
+            } else {
+                data.order_img1 = ''
+            }
+            if (data.order_img2.length != 0) {
+                await ImageUpload(data.order_img2[0], "storage", "stagingImage", data.name)
+                data.order_img2 = `${restaurantLink}${data.name}_stagingImage_${data.order_img2[0].name}`
+            } else {
+                data.order_img2 = ''
+            }
+            if (data.order_img3.length != 0) {
+                await ImageUpload(data.order_img3[0], "storage", "stagingImage", data.name)
+                data.order_img3 = `${restaurantLink}${data.name}_stagingImage_${data.order_img3[0].name}`
+            } else {
+                data.order_img3 = ''
+            }
+            if (data.res_img3.length != 0) {
+                await ImageUpload(data.res_img3[0], "storage", "stagingImage", data.name)
+                data.res_img3 = `${restaurantLink}${data.name}_stagingImage_${data.res_img3[0].name}`
+            } else {
+                data.res_img3 = ''
+            }
+            let updatedData = {
+                ...data,
+                "type_of_cuisine": selectedCuisines,
+                "restaurant_type": selectedRestType,
+                "vendorId": LoggedUserDetails?.sellerId
+            }
+            registerRestaurant(updatedData).then(res => {
+                if (res?.status == 'success') {
+                    toast?.success('Restaurants registered successfully')
+                    toggle();
+                }
+            })
         } else {
             setLoader(false)
             setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -1000,16 +773,11 @@ export default function DashboardForm(props) {
     }
     return (
         <>
-            {props.button !== "edit" ? (
-                <button onClick={toggle} className={tableBtn}>
-                    Add Storage
-                </button>
-            ) : (
-                <button
-                    onClick={toggle}
-                    className="bg-yellow-100 px-1.5 py-2 rounded-sm"><Edit size="20" className='text-yellow-500' />
-                </button>
-            )}
+            {props?.dashBoard &&
+                <button onClick={toggle} className="flex items-center pb-2 space-x-2 transition-all duration-700 group">
+                    <UserAdd size={22} onClick={() => props?.setCard(!props?.card)} className='text-gray-700 group-hover:text-sky-400' />
+                    <h4 className='text-sm font-semibold capitalize font-tbPop lg:text-lg md:text-base group-hover:text-sky-400 text-slate-700'>Register</h4>
+                </button>}
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-[100]" onClose={() => toggle}>
                     <Transition.Child
@@ -1024,7 +792,7 @@ export default function DashboardForm(props) {
                         <div className="fixed inset-0 bg-black bg-opacity-25" />
                     </Transition.Child>
                     <div className="fixed inset-0 ">
-                        <div className="flex min-h-full items-center justify-center p-4 text-center">
+                        <div className="flex items-center justify-center min-h-full p-4 text-center">
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-out duration-300"
@@ -1034,19 +802,19 @@ export default function DashboardForm(props) {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-5xl transform overflow-hidden rounded-lg bg-white  text-left align-middle shadow-xl transition-all">
+                                <Dialog.Panel className="w-full max-w-8xl overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl">
 
                                     <Dialog.Title
                                         as="h2"
-                                        className="text-lg text-white w-full bg-sky-400 font-tb leading-6 font-semibold py-4 px-3"
+                                        className="w-full px-3 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
                                     >
-                                        {props?.title}
+                                        Register Restaurant
                                     </Dialog.Title>
-                                    <div className=" bg-gray-200/70 ">
+                                    <div className=" bg-gray-200/70">
                                         {/* React Hook Form */}
                                         <FormProvider {...methods}>
                                             <form onSubmit={methods.handleSubmit(onSubmit)} >
-                                                <div className="py-4 overflow-y-scroll scrollbars h-[24rem] lg:h-[30rem]" >
+                                                <div className="py-4 overflow-y-scroll scrollbars h-[24rem] lg:h-[34rem]" >
                                                     <Stepper activeStep={activeStep} className='p-2' alternativeLabel>
                                                         {
                                                             steps?.map((step, index) => {
@@ -1064,7 +832,7 @@ export default function DashboardForm(props) {
                                                     </Stepper>
                                                     {getStepContent(activeStep)}
                                                 </div>
-                                                <footer className="py-2 flex bg-white justify-end px-4 space-x-3">
+                                                <footer className="flex justify-end px-4 py-2 space-x-3 bg-white">
                                                     <button type='button' className={formBtn1} disabled={activeStep == 0} onClick={handleBack}>Back</button>
                                                     {/* <button type='submit' className={formBtn1}>{activeStep == 4 ? "Submit" : "Next"}</button> */}
                                                     {loader ? <LoadBox className="relative block w-auto px-5 transition-colors font-tb tracking-wide duration-200 py-2.5 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize" /> : <button type='submit' className={formBtn1}>{activeStep == 4 ? "Submit" : "Next"}</button>}
