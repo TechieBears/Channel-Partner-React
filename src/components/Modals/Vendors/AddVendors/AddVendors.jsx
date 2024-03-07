@@ -20,6 +20,7 @@ import moment from 'moment';
 
 
 export default function AddVendors(props) {
+    console.log('props = ', props)
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     const Franchisee = useSelector((state) => state?.master?.Franchise);
     const [isOpen, setOpen] = useState(false);
@@ -42,6 +43,11 @@ export default function AddVendors(props) {
     };
     // ============================= form submiting ======================================
     const onSubmit = async (data) => {
+        const shopStartTime = moment(data?.shop_start_time, 'HH:mm').format('hh:mm A');
+        const shopEndTime = moment(data?.shop_end_time, 'HH:mm').format('hh:mm A');
+        data.shop_start_time = shopStartTime;
+        data.shop_end_time = shopEndTime;
+        
         if (props.button != 'edit') {    // for create
             if (data?.bank_passbook.length != 0) {
                 await ImageUpload(data?.bank_passbook[0], "vendor", "BankPassbook", data?.first_name)
@@ -163,6 +169,8 @@ export default function AddVendors(props) {
 
     // ======================== Reset data into the form  =======================
     useMemo(() => {
+        const formattedStartTime = moment(props?.data?.shop_start_time, 'h:mm A').format('HH:mm');
+        const formattedEndTime = moment(props?.data?.shop_end_time, 'h:mm A').format('HH:mm');
         reset({
             first_name: props?.data?.user?.first_name,
             last_name: props?.data?.user?.last_name,
@@ -187,8 +195,8 @@ export default function AddVendors(props) {
             created_by: props?.data?.created_by?.id,
             shop_name: props?.data?.shop_name,
             hawker_shop_photo: props?.data?.hawker_shop_photo,
-            shop_start_time: props?.data?.shop_start_time,
-            shop_end_time: props?.data?.shop_end_time,
+            shop_start_time: formattedStartTime,
+            shop_end_time: formattedEndTime
         });
         setValue('created_by', props?.data?.created_by?.id)
     }, [props.data]);
@@ -365,6 +373,7 @@ export default function AddVendors(props) {
                                                             className={inputClass}
                                                             {...register("gender", { required: true })}
                                                         >
+                                                            <option value="">select</option>
                                                             <option value="Male">Male</option>
                                                             <option value="Female">Female</option>
                                                             <option value="Other">Other</option>
