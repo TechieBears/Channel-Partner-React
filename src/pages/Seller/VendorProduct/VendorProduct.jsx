@@ -17,8 +17,11 @@ const VendorProduct = () => {
     const [data, setData] = useState([])
     console.log('data', data)
     const user = useSelector((state) => state?.user?.loggedUserDetails);
+    console.log('user ', user)
     const storages = useSelector((state) => state?.storage?.list);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
+
+
     const { register, handleSubmit, control, formState: { errors }, reset } = useForm();
     const loadOptions = (_, callback) => {
         const uniqueNames = new Set();
@@ -231,7 +234,7 @@ const VendorProduct = () => {
             </div>
             <div className='p-4 m-4 bg-white sm:m-5 rounded-xl'>
                 <div className='grid items-center grid-cols-6'>
-                    <h2 className='col-span-5 text-xl font-semibold'>{user?.vendor_type == 'restaurant' ? 'Item List' : 'Product List'}</h2>
+                    <h2 className='col-span-5 text-xl font-semibold'>{user?.vendor_type == 'restaurant' ? 'Item List' : 'Product List'}</h2>
                     {user?.isverified_byadmin == true && user?.vendor_type == 'restaurant' ? <AddRestItem title='Add Item' getRestFood={getRestFood} /> : user?.vendor_type == 'seller' ? <AddProduct title='Add Product' getProducts={getProducts} /> : ''}
                     {/* <AddRestItem title='Add Item' button='add'  /> */}
                     {/* <AddProduct title='Add Product' getProducts={getProducts} />  */}

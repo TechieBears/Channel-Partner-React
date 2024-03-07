@@ -279,6 +279,7 @@ const AdminProduct = (props) => {
 
 
     const ProductColumns = [
+        { field: 'product_msbcode', header: 'Product MSB Code'},
         { field: 'profile_pic', header: 'Image', body: representativeBodyTemplate, sortable: false, style: true },
         { field: 'product_name', header: 'Product Name', sortable: true },
         { field: 'product_category', header: 'Product Category', body: (row) => <h6>{row?.product_category?.category_name}</h6>, sortable: true },

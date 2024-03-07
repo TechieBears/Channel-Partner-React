@@ -50,6 +50,7 @@ export default function Coupon() {
 
     const columns = [
         { field: 'coupon_name', header: 'Coupon Name', sortable: true },
+        { field: 'discount_price', header: 'Discounted Price', sortable: true },
         { field: 'discount_percent', header: 'Coupon Percentage', sortable: true },
         { field: 'expiry_date', header: 'Expiry Date', },
         { field: 'coupon_type', header: 'Coupon Type', sortable: true },

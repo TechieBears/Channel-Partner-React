@@ -7,12 +7,11 @@ import {
   editHomeBanners,
   addHomePromotion,
 } from "../../../../../api";
-import { useDispatch, useSelector } from "react-redux";
-import { setBanner, setPromotions } from "../../../../../redux/Slices/masterSlice";
+import { useDispatch } from "react-redux";
+import { setPromotions } from "../../../../../redux/Slices/masterSlice";
 import { toast } from "react-toastify";
 import Switch from "react-js-switch";
 import BannerForm from "../../../../../components/Modals/MasterModals/AssetsModals/BannerForm";
-import MediaGallaryModal from "../../../../Settings/MediaGallery/MediaGallery";
 import { getGalleryImages, delHomePromotion } from '../../../../../api';
 import AddPromo from "../../../Promotion/Assests/AddPromo";
 
@@ -40,7 +39,7 @@ const DashboardBannerPanel = () => {
   const fetchData = () => {
     try {
       getGalleryImages().then((res) => {
-        setImageDetails(res);
+        // setImageDetails(res);
       });
     } catch (err) {
       console.log("error", err);
