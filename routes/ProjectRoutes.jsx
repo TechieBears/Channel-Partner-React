@@ -120,7 +120,7 @@ const ProjectRoutes = () => {
                                             <Route path='/complaints' element={<Complaints />} />
                                         </> :
                                         user?.role == 'franchise' ? <>
-                                            <Route path='/' element={<FranchiseeDashboard />} />
+                                            <Route path='/admin' element={<FranchiseeDashboard />} />
                                             <Route path="/profile" element={<UserProfile />} />
                                             <Route path='/analytics' element={<FranchiseeDashboard />} />
                                             <Route path='/menu' element={<Menu />} />
