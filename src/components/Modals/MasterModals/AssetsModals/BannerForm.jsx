@@ -81,8 +81,8 @@ export default function BannerForm(props) {
   // ============================ submit data  =====================================
   const onSubmit = async (data) => {
     const slideUrl = watch('slide_url')
-    if (childData) {    
-      if (props?.button != "edit") {
+  
+      if (props?.button != "edit" && childData) {
         try {
           if (childData) {
             data.slide_url = childData;
@@ -118,38 +118,43 @@ export default function BannerForm(props) {
           console.log("error", error);
         }
       } else {
-        try {
-          if (data?.slide_url?.length > 0 && props?.data?.slide_url) {
-            await ImageUpload(
-              data.slide_url[0],
-              "banner",
-              "banner",
-              data.slide_url[0]?.name
-            );
-            data.slide_url = `${bannerLink}${data.slide_url[0]?.name}_banner_${data.slide_url[0]?.name}`;
-          } else {
-            data.slide_url = props?.data?.slide_url;
-          }
-          setLoader(true);
-          editHomeBanners(props?.data?.slide_id, data).then((res) => {
-            if (res?.message === "slide edited successfully") {
-              setTimeout(() => {
-                dispatch(setBanner(res));
-                reset();
-                toggle(), 
-                setLoader(false),
-                props?.getAllBannerList();
-                toast.success(res?.message);
-                setChildData('')
-                setopenGallery(false);
-                setopenGalleryModal(false);
-              }, 1000);
+        if(props?.button == 'edit'){
+          try {
+            if (childData) {
+              data.slide_url = childData
+            } else{
+              if (data?.slide_url?.length > 0 && props?.data?.slide_url && !childData) {
+                await ImageUpload(
+                  data.slide_url[0],
+                  "banner",
+                  "banner",
+                  data.slide_url[0]?.name
+                );
+                data.slide_url = `${bannerLink}${data.slide_url[0]?.name}_banner_${data.slide_url[0]?.name}`;
+              } else {
+                data.slide_url = props?.data?.slide_url;
+              }
             }
-          });
-        } catch (error) {
-          setLoader(false);
-          console.log("error", error);
-        }
+            setLoader(true);
+            editHomeBanners(props?.data?.slide_id, data).then((res) => {
+              if (res?.message === "slide edited successfully") {
+                setTimeout(() => {
+                  dispatch(setBanner(res));
+                  reset();
+                  toggle(), 
+                  setLoader(false),
+                  props?.getAllBannerList();
+                  toast.success(res?.message);
+                  setChildData('')
+                  setopenGallery(false);
+                  setopenGalleryModal(false);
+                }, 1000);
+              }
+            });
+          } catch (error) {
+            setLoader(false);
+            console.log("error", error);
+          }
       }
     }
   };
