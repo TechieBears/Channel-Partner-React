@@ -6,14 +6,14 @@ import { useForm } from "react-hook-form";
 
 
 const MediaGallaryModal = ({sendDataToParent, ...props}) => {
-  console.log("props = ", props);
+  // console.log("props = ", props);
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const [imageDetails, setImageDetails] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const toggle = () => setIsOpen(!isOpen);
-  console.log('selectedImage', selectedImage)
-  console.log('isOpen', isOpen)
+  // console.log('selectedImage', selectedImage)
+  // console.log('isOpen', isOpen)
 
   const { reset, formState: { errors }} = useForm();
 

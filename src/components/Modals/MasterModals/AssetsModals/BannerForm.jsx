@@ -25,6 +25,8 @@ export default function BannerForm(props) {
   const [imageDetails, setImageDetails] = useState([]);
   const [childData, setChildData] = useState('');
   const mediaGalleryModalRef = useRef(null);
+  console.log('childData == ', childData)
+
   
   // ===================== close modals ===============================
   const closeBtn = () => {
@@ -51,7 +53,7 @@ export default function BannerForm(props) {
   const receiveDataFromChild = (data) => {
     setChildData(data);
     setValue("slide_url", childData);
-    console.log('childData = ', childData)
+    // console.log('childData = ', childData)
   };
 
 
@@ -74,19 +76,20 @@ export default function BannerForm(props) {
       'vendor_type': props?.data?.vendor_type 
     })
     if (childData){
-      setValue("slide_url", childData);
+      // setValue("slide_url", childData);
     }
-    console.log('childData == ', childData)
+    // console.log('childData == ', childData)
 
   }, []);
 
 
   // ============================ submit data  =====================================
   const onSubmit = async (data) => {
+    console.log('inside submit')
     const slideUrl = watch('slide_url')
     console.log('slideUrl', slideUrl, 'childData', childData)
 
-    if (slideUrl != '' && childData != '') {    
+    if (childData) {    
       if (props?.button != "edit") {
         try {
           if (childData) {
@@ -308,7 +311,6 @@ export default function BannerForm(props) {
                             <input
                               type="text" 
                               className="hidden"
-                              {...register("slide_url", { required : true })}
                             />
                             {childData == undefined || childData == '' && (
                               <Error title="Main Image is requiredy*" />
