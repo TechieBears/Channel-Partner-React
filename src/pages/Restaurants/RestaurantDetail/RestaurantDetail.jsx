@@ -6,34 +6,25 @@ import SimpleGallery from '../../../components/Gallary/SimpleGallery';
 export default function RestaurantDetail() {
     const location = useLocation();
     const data = location.state;
+    console.log('data', data)
     const navigate = useNavigate()
     const images = [
         {
-            URL: data?.profile_pic,
-            width: 15,
-            height: 9,
-        },
-        {
-            URL: data?.address_proof,
+            URL: data?.created_by?.profile_pic,
             width: 1500,
             height: 900,
         },
         {
-            URL: data?.bank_passbook,
+            URL: data?.pan_card,
             width: 1500,
             height: 900,
         },
         {
-            URL: data?.hawker_shop_photo,
+            URL: data?.adhar_card,
             width: 1500,
             height: 900,
         },
-        {
-            URL: data?.shop_image,
-            width: 1500,
-            height: 900,
-        },
-    ].filter(image => image.URL !== '' || image.URL !== null);
+    ].filter(image => image.URL !== '' || image.URL !== null || image.URL.includes('undefined'));
     return (
         <div className='px-5 gap-5'>
             <button className='flex' onClick={() => navigate(-1)}>
@@ -46,23 +37,23 @@ export default function RestaurantDetail() {
                         <div className='mx-4 grid grid-cols-4 gap-y-4 mt-4'>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Restaurant Name</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.Restaurant_name == null ? 'Registration Pending' : data?.Restaurant_name}</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_name == null ? 'Registration Pending' : data?.shop_name}</h5>
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Restaurant Address</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.Restaurant_address == null || data?.Restaurant_address == '' ? 'Registration Pending' : data?.Restaurant_address}</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_address == null || data?.shop_address == '' ? 'Registration Pending' : data?.shop_address}</h5>
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Restaurant Contact</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.Restaurant_contact_number == null || data?.Restaurant_contact_number == '' ? 'Registration Pending' : data?.Restaurant_contact_number}</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_contact_number == null || data?.shop_contact_number == '' ? 'Registration Pending' : data?.shop_contact_number}</h5>
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Restaurant Opening Time</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.Restaurant_start_time == null ? 'Registration Pending' : data?.Restaurant_start_time}</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_start_time == null ? 'Registration Pending' : data?.shop_start_time}</h5>
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Restaurant Closing Time</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.Restaurant_end_time == null ? 'Registration Pending' : data?.Restaurant_end_time}</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_end_time == null ? 'Registration Pending' : data?.shop_end_time}</h5>
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Restaurant Pincode</h5>
@@ -109,14 +100,6 @@ export default function RestaurantDetail() {
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>IFSC Code</h5>
                                 <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.ifsc_code == null || data?.ifsc_code == '' ? 'Registration Pending' : data?.ifsc_code}</h5>
-                            </div>
-                            <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Adhar Card Number</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.adhar_card == null ? 'Registration Pending' : data?.adhar_card}</h5>
-                            </div>
-                            <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>PAN Card Number</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.pan_card == null ? 'Registration Pending' : data?.pan_card}</h5>
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>GST Number</h5>
