@@ -75,20 +75,12 @@ export default function BannerForm(props) {
     reset({
       'vendor_type': props?.data?.vendor_type 
     })
-    if (childData){
-      // setValue("slide_url", childData);
-    }
-    // console.log('childData == ', childData)
-
   }, []);
 
 
   // ============================ submit data  =====================================
   const onSubmit = async (data) => {
-    // console.log('inside submit')
     const slideUrl = watch('slide_url')
-    // console.log('slideUrl', slideUrl, 'childData', childData)
-
     if (childData) {    
       if (props?.button != "edit") {
         try {
@@ -111,7 +103,9 @@ export default function BannerForm(props) {
               setTimeout(() => {
                 dispatch(setBanner(res));
                 reset();
-                toggle(), setLoader(false), props?.getAllBannerList();
+                toggle(), 
+                setLoader(false), 
+                props?.getAllBannerList();
                 toast.success(res?.message);
                 setChildData('')
                 setopenGallery(false);
@@ -142,7 +136,9 @@ export default function BannerForm(props) {
               setTimeout(() => {
                 dispatch(setBanner(res));
                 reset();
-                toggle(), setLoader(false), props?.getAllBannerList();
+                toggle(), 
+                setLoader(false),
+                props?.getAllBannerList();
                 toast.success(res?.message);
                 setChildData('')
                 setopenGallery(false);
@@ -157,46 +153,6 @@ export default function BannerForm(props) {
       }
     }
   };
-
-  
-  const GallerySubmit = async (data) => {
-    if (props?.button != "edit") {
-      try {
-        setLoader(true);
-        addHomeBanners(data).then((res) => {
-          if (res?.message === "slide added successfully") {
-            setTimeout(() => {
-              dispatch(setBanner(res));
-              reset();
-              toggle(), setLoader(false), props?.getAllBannerList();
-              toast.success(res?.message);
-            }, 1000);
-          }
-        });
-      } catch (error) {
-        setLoader(false);
-        console.log("error", error);
-      }
-    } else {
-      try {
-        setLoader(true);
-        editHomeBanners(props?.data?.slide_id, data).then((res) => {
-          if (res?.message === "slide edited successfully") {
-            setTimeout(() => {
-              dispatch(setBanner(res));
-              reset();
-              toggle(), setLoader(false), props?.getAllBannerList();
-              toast.success(res?.message);
-            }, 1000);
-          }
-        });
-      } catch (error) {
-        setLoader(false);
-        console.log("error", error);
-      }
-    }
-  };
-
 
   return (
     <>
@@ -313,7 +269,7 @@ export default function BannerForm(props) {
                               className="hidden"
                             />
                             {childData == undefined || childData == '' && (
-                              <Error title="Main Image is requiredy*" />
+                              <Error title="Main Image is required*" />
                             )}
                           </div>
                         )}
