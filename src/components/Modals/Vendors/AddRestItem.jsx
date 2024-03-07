@@ -13,7 +13,6 @@ import Error from '../../Errors/Error';
 
 
 export default function AddRestItem(props) {
-    // console.log('props = ', props)
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false);
     const [category, setCategory] = useState([]);
@@ -41,7 +40,7 @@ export default function AddRestItem(props) {
         console.log('data ==', data)
         if (props?.title != 'Add Item') {      // for edit
             console.log('image edit')
-            if (data?.food_image_1?.length > 0 &&  props?.data?.food_image_1) {
+            if (data?.food_image_1?.length > 0 && props?.data?.food_image_1) {
                 await ImageUpload(data?.food_image_1[0], "restaurant", "mainImage", data?.food_name)
                 data.food_image_1 = `${restaurantLink}${data?.food_name}_mainImage_${data?.food_image_1[0]?.name}`
             } else {
@@ -239,19 +238,19 @@ export default function AddRestItem(props) {
 
 
 
-        //  ------------   Admin Calculations Set Final Price to User  --------------------------------
-        const calculateRevenueAdmin = watch('markup_percentage')
+    //  ------------   Admin Calculations Set Final Price to User  --------------------------------
+    const calculateRevenueAdmin = watch('markup_percentage')
 
-        useEffect(() => {
-            if (user?.role == 'admin') {
-                if (calculateRevenueAdmin !== "") {
-                    var mainPrice = (props?.data?.food_actual_price == null ? 0 : props?.data?.food_actual_price) * (calculateRevenueAdmin / 100);
-                    var adminfinalprice = props?.data?.food_actual_price + mainPrice;
-                    setFinalPriceAdmin(adminfinalprice);
-                    setValue('final_price', adminfinalprice?.toFixed(0));
-                }
+    useEffect(() => {
+        if (user?.role == 'admin') {
+            if (calculateRevenueAdmin !== "") {
+                var mainPrice = (props?.data?.food_actual_price == null ? 0 : props?.data?.food_actual_price) * (calculateRevenueAdmin / 100);
+                var adminfinalprice = props?.data?.food_actual_price + mainPrice;
+                setFinalPriceAdmin(adminfinalprice);
+                setValue('final_price', adminfinalprice?.toFixed(0));
             }
-        }, [calculateRevenueAdmin])
+        }
+    }, [calculateRevenueAdmin])
 
     return (
         <>
@@ -449,12 +448,12 @@ export default function AddRestItem(props) {
                                                         <label className={labelClass}>Veg or Non-Veg*</label>
                                                         <select
                                                             className={inputClass}
-                                                            disabled={user?.role != 'admin' ? false : true}
+                                                            disabled={(user?.role == 'admin' || props?.details?.veg_nonveg == 'Veg')}
                                                             {...register('food_veg_nonveg', { required: true })}
                                                         >
-                                                            <option value=''>Select</option>
+                                                            <option value='' >Select</option>
                                                             <option value='Both'>Both</option>
-                                                            <option value='Veg'>Veg</option>
+                                                            <option value='Veg' selected={props?.details?.veg_nonveg == 'Veg'}>Veg</option>
                                                             <option value='Non-Veg'>Non-Veg</option>
                                                         </select>
                                                         {errors?.food_veg_nonveg && <Error title='This is required' />}

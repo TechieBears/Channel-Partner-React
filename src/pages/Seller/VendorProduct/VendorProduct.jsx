@@ -9,19 +9,16 @@ import { Link, NavLink } from 'react-router-dom';
 import AddProduct from '../../../components/Modals/Vendors/AddProduct';
 import { Edit, Eye, Trash } from 'iconsax-react';
 import ViewProduct from '../../../components/Modals/Vendors/ViewProduct';
-import { deleteFoodItem, getAllSeller, getAllShopProduct, getRestaurantFood } from '../../../api';
+import { deleteFoodItem, getAllSeller, getAllShopProduct, getRestaurantFood, getSingleRestaurant } from '../../../api';
 import Switch from 'react-js-switch';
 import AddRestItem from '../../../components/Modals/Vendors/AddRestItem';
 
 const VendorProduct = () => {
     const [data, setData] = useState([])
-    console.log('data', data)
+    const [details, setDetails] = useState([]);
     const user = useSelector((state) => state?.user?.loggedUserDetails);
-    console.log('user ', user)
     const storages = useSelector((state) => state?.storage?.list);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
-
-
     const { register, handleSubmit, control, formState: { errors }, reset } = useForm();
     const loadOptions = (_, callback) => {
         const uniqueNames = new Set();
@@ -92,8 +89,8 @@ const VendorProduct = () => {
     const representativeBodyTemplate = (row) => {
         return (
             <div className="rounded-full w-11 h-11">
-               {user?.vendor_type == 'seller' && <img src={row?.product_image_1 == null || row?.product_image_1 == '' || row?.product_image_1 == undefined ? userImg : row?.product_image_1} className="object-cover w-full h-full rounded-full" alt={row.first_name} />}
-               {user?.vendor_type == 'restaurant' && <img src={row?.food_image_1 == null || row?.food_image_1 == '' || row?.food_image_1 == undefined ? userImg : row?.food_image_1} className="object-cover w-full h-full rounded-full" alt={row.food_name} />}
+                {user?.vendor_type == 'seller' && <img src={row?.product_image_1 == null || row?.product_image_1 == '' || row?.product_image_1 == undefined ? userImg : row?.product_image_1} className="object-cover w-full h-full rounded-full" alt={row.first_name} />}
+                {user?.vendor_type == 'restaurant' && <img src={row?.food_image_1 == null || row?.food_image_1 == '' || row?.food_image_1 == undefined ? userImg : row?.food_image_1} className="object-cover w-full h-full rounded-full" alt={row.food_name} />}
             </div>
         );
     };
@@ -101,7 +98,7 @@ const VendorProduct = () => {
     const adminVerification = (row) =>
     (<div className="flex items-center justify-center gap-2">
         <Switch
-            value={user?.vendor_type == 'seller' ? row?.product_isverified_byadmin : row?.food_isverified_byadmin }
+            value={user?.vendor_type == 'seller' ? row?.product_isverified_byadmin : row?.food_isverified_byadmin}
             disabled={true}
             size={50}
             backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
@@ -112,7 +109,7 @@ const VendorProduct = () => {
     const franchiseVerification = (row) =>
     (<div className="flex items-center justify-center gap-2">
         <Switch
-            value={user?.vendor_type == 'seller' ? row?.product_isverified_byfranchise : row?.food_isverified_byfranchise }
+            value={user?.vendor_type == 'seller' ? row?.product_isverified_byfranchise : row?.food_isverified_byfranchise}
             disabled={true}
             size={50}
             backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
@@ -158,19 +155,17 @@ const VendorProduct = () => {
         })
     }
 
-    useEffect(() => {
-        // if (user?.vendor_type != "restaurant"){
-        //     getAllSeller().then(res => {
-        //         setSellers(res)
-        //     })
-        //     getProducts()
-        // }else{
-        //     getrestaurantProducts();
-        // }
+    const getDetails = () => {
+        getSingleRestaurant(user?.sellerId).then(res => {
+            setDetails(res)
+        })
+    }
 
+    useEffect(() => {
         if (user?.vendor_type == 'restaurant') {
             getRestFood()
-        } else{
+            getDetails()
+        } else {
             getProducts();
         }
     }, []);
@@ -235,7 +230,7 @@ const VendorProduct = () => {
             <div className='p-4 m-4 bg-white sm:m-5 rounded-xl'>
                 <div className='grid items-center grid-cols-6'>
                     <h2 className='col-span-5 text-xl font-semibold'>{user?.vendor_type == 'restaurant' ? 'Item List' : 'Product List'}</h2>
-                    {user?.isverified_byadmin == true && user?.vendor_type == 'restaurant' ? <AddRestItem title='Add Item' getRestFood={getRestFood} /> : user?.vendor_type == 'seller' ? <AddProduct title='Add Product' getProducts={getProducts} /> : ''}
+                    {user?.isverified_byadmin == true && user?.vendor_type == 'restaurant' ? <AddRestItem title='Add Item' getRestFood={getRestFood} details={details} /> : user?.vendor_type == 'seller' ? <AddProduct title='Add Product' getProducts={getProducts} /> : ''}
                     {/* <AddRestItem title='Add Item' button='add'  /> */}
                     {/* <AddProduct title='Add Product' getProducts={getProducts} />  */}
                 </div>

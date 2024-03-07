@@ -29,37 +29,6 @@ export default function Restaurant() {
     reset,
   } = useForm();
 
-
-  // ============== Fetch All Admin Restaurants  ================
-  const getAllRestaurant = () => {
-    getRestarant().then((res) => {
-      const restaurantVendors = res.filter(
-        (item) => item?.vendor_type == "restaurant"
-      );
-      setData(restaurantVendors);
-    });
-  };
-
-  // ============== Fetch Franchisee Restaurant  ================
-  const getFranchiseRestaurants = () => {
-    try {
-      getFranchRestaurant(user?.userid).then((res) => {
-        setData(res);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    if (user?.role == "admin") {
-      getAllRestaurant();
-    }
-    if (user?.role == "franchise") {
-      getFranchiseRestaurants();
-    }
-  }, []);
-
   // =================== filter data ========================
   const onSubmit = async (data) => {
     if (
@@ -225,6 +194,38 @@ export default function Restaurant() {
     { field: "isactive", header: "Franchise Verify", body: switchActive, sortable: true },
   ];
 
+
+
+  // ============== Fetch All Admin Restaurants  ================
+  const getAllRestaurant = () => {
+    getRestarant().then((res) => {
+      const restaurantVendors = res.filter(
+        (item) => item?.vendor_type == "restaurant"
+      );
+      setData(restaurantVendors);
+    });
+  };
+
+  // ============== Fetch Franchisee Restaurant  ================
+  const getFranchiseRestaurants = () => {
+    try {
+      getFranchRestaurant(user?.userid).then((res) => {
+        setData(res);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (user?.role == "admin") {
+      getAllRestaurant();
+    }
+    if (user?.role == "franchise") {
+      getFranchiseRestaurants();
+    }
+  }, []);
+
   return (
     <>
       {/* ========================= user filter ======================= */}
@@ -311,8 +312,6 @@ export default function Restaurant() {
             getAllRestaurant={getAllRestaurant}
             id={user?.userid}
           />
-
-          {/* <AddItem title='Add Item' /> */}
         </div>
         {<Table columns={columns} data={data} />}
       </div>
