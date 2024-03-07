@@ -18,9 +18,6 @@ import { toast } from 'react-toastify';
 function Franchisees() {
     const dispatch = useDispatch()
     const Franchisee = useSelector((state) => state?.master?.Franchise);
-    console.log('franchisee Table data = ', Franchisee);
-
-
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const [open, setOpen] = React.useState(false);
     const [delId, setDelId] = React.useState(0);

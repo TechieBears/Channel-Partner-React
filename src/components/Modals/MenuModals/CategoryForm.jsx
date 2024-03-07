@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { Edit } from "iconsax-react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn} from "../../../utils/CustomClass";
+import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from "../../../utils/CustomClass";
 import { setCategory } from "../../../redux/Slices/masterSlice";
 import LoadBox from "../../Loader/LoadBox";
 import Error from "../../Errors/Error";
@@ -13,7 +13,6 @@ import { ImageUpload, categoryLink, restaurantcategoryLink } from "../../../env"
 
 
 export default function CategoryForm(props) {
-  console.log('props = ', props)
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const {
@@ -52,8 +51,8 @@ export default function CategoryForm(props) {
                 // dispatch(setCategory(res));
                 reset();
                 toggle(),
-                setLoader(false),
-                props?.isrestaurant ? props?.restaurantCategories() : props?.productCategories();
+                  setLoader(false),
+                  props?.isrestaurant ? props?.restaurantCategories() : props?.productCategories();
                 toast.success(res.message);
               }, 1000);
             }
@@ -87,7 +86,7 @@ export default function CategoryForm(props) {
               reset();
               props?.isrestaurant ? props?.restaurantCategories() : props?.productCategories();
               toggle(), setLoader(false),
-              toast.success(res.message);
+                toast.success(res.message);
             }, 1000);
           }
         });
@@ -98,13 +97,13 @@ export default function CategoryForm(props) {
     }
   };
 
-   // ============================ submit data  =====================================
-   const onRestaurantSubmit = async (data) => {
+  // ============================ submit data  =====================================
+  const onRestaurantSubmit = async (data) => {
     console.log('data = ', data)
     if (props?.button != "edit") {
       try {
         if (data.category_image.length != 0) {
-          await ImageUpload( data.category_image[0], "restaurantcategory", "restaurantcategory", data.category_name);
+          await ImageUpload(data.category_image[0], "restaurantcategory", "restaurantcategory", data.category_name);
           data.category_image = `${restaurantcategoryLink}${data.category_name}_restaurantcategory_${data.category_image[0].name}`;
         } else {
           data.category_image = "";
@@ -119,7 +118,7 @@ export default function CategoryForm(props) {
                 reset();
                 toggle(),
                   setLoader(false),
-                  props?.isrestaurant ? props?.restaurantCategories() : props?.productCategories(); 
+                  props?.isrestaurant ? props?.restaurantCategories() : props?.productCategories();
                 toast.success(res.message);
               }, 1000);
             }
@@ -135,7 +134,7 @@ export default function CategoryForm(props) {
     } else {
       try {
         if (data.category_image.length != 0) {
-          await ImageUpload( data.category_image[0], "restaurantcategory", "restaurantcategory", data.category_name);
+          await ImageUpload(data.category_image[0], "restaurantcategory", "restaurantcategory", data.category_name);
           data.category_image = `${restaurantcategoryLink}${data.category_name}_restaurantcategory_${data.category_image[0].name}`;
         } else {
           data.category_image = props.data.category_image;
@@ -146,8 +145,8 @@ export default function CategoryForm(props) {
             setTimeout(() => {
               dispatch(setCategory(res));
               reset();
-              toggle(), setLoader(false), 
-              props?.isrestaurant ? props?.restaurantCategories() : props?.productCategories(); 
+              toggle(), setLoader(false),
+                props?.isrestaurant ? props?.restaurantCategories() : props?.productCategories();
               toast.success(res.message);
             }, 1000);
           }

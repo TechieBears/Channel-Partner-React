@@ -22,7 +22,6 @@ import { toast } from "react-toastify";
 export default function Restaurant() {
   const [data, setData] = useState([]);
   const user = useSelector((state) => state?.user?.loggedUserDetails);
-  console.log('user', user);
   const {
     register,
     handleSubmit,
@@ -140,7 +139,6 @@ export default function Restaurant() {
 
   // =============================== verify user switch =============================
   const switchVerify = (row) => {
-    console.log('row', row)
     return (
       <div className="flex items-center justify-center gap-2 ">
         <Switch
