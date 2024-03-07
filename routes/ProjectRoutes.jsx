@@ -47,6 +47,7 @@ import DashboardPromotions from '../src/pages/Admin/Master/DashboardPromotions';
 // import DashboardForm from '../src/components/modals/DashboardModals/DashboardForm';
 import Coupon from '../src/pages/Admin/Coupon/Coupon';
 import RestaurantRegister from '../src/pages/Restaurants/ViewRestaurant/RestaurantRegister';
+import FoodDetails from '../src/pages/Admin/Menu/AdminProduct/FoodDetails';
 
 
 
@@ -82,6 +83,7 @@ const ProjectRoutes = () => {
                                         <Route path="/menu" element={<Menu isrestaurant={false} />} />
                                         <Route path="/restaurantmenu" element={<Menu isrestaurant={true} />} />
                                         <Route path='/product-list/product-details/:id' element={<ViewAdminProduct />} />
+                                        <Route path='/food-list/food-details/:id' element={<FoodDetails />} />
                                         <Route path="/resturants" element={<Restaurant />} />
                                         <Route path="/resturants/restaurant-detail/:id" element={<RestaurantDetail />} />
                                         <Route path="/franchisee" element={<Franchisee />} />
@@ -114,7 +116,7 @@ const ProjectRoutes = () => {
                                             <Route path='/vendor-orders' element={<VendorOrders />} />
                                             <Route path='/vendor-orders/order-detail/:id' element={<ViewOrder />} />
                                             <Route path='/product-list' element={<VendorProduct />} />
-                                            <Route path='/product-list/product-details/:id' element={<ViewAdminProduct />} />
+                                            <Route path='/food-list/food-details/:id' element={<FoodDetails />} />
                                             <Route path='/complaints' element={<Complaints />} />
                                         </> :
                                         user?.role == 'franchise' ? <>

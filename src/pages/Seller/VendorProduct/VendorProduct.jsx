@@ -77,7 +77,7 @@ const VendorProduct = () => {
     </div>
     //======================= Table =======================
     const restAction = (row) => <div className='flex space-x-2'>
-        <Link to={`/product-list/product-details/${row?.product_id}`} state={row} className='items-center p-1 bg-sky-100 rounded-xl hover:bg-sky-200'>
+        <Link to={`/food-list/food-details/${row?.product_id}`} state={row} className='items-center p-1 bg-sky-100 rounded-xl hover:bg-sky-200'>
             <Eye size={24} className='text-sky-400' />
         </Link>
         <AddRestItem title='edit' button='edit' data={row} getRestFood={getRestFood} />
