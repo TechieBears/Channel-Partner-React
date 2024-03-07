@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ImageUpload, vendorlink } from "../../../../env";
 import { toast } from 'react-toastify';
 import { validateEmail, validateGST, validatePIN, validatePhoneNumber } from '../../../Validations.jsx/Validations';
+import moment from 'moment';
 
 
 
@@ -102,7 +103,7 @@ export default function AddVendors(props) {
                 }
                 let vendorType = {};
                 if (LoggedUserDetails?.role == 'admin') {
-                    vendorType = { vendor_type: "seller"  };
+                    vendorType = { vendor_type: "seller" };
                 }
 
                 const requestData = { ...data, ...additionalPayload, ...vendorType };
@@ -130,13 +131,13 @@ export default function AddVendors(props) {
                 setLoader(true)
                 let additionalPayload = {};
                 if (LoggedUserDetails?.role == 'franchise') {
-                    additionalPayload = { created_by: LoggedUserDetails?.userid, vendor_type: "seller"  };
+                    additionalPayload = { created_by: LoggedUserDetails?.userid, vendor_type: "seller" };
                 }
                 let vendorType = {};
                 if (LoggedUserDetails?.role == 'admin') {
-                    vendorType = { vendor_type: "seller"  };
+                    vendorType = { vendor_type: "seller" };
                 }
-                const requestData = { ...data, ...additionalPayload , ...vendorType};
+                const requestData = { ...data, ...additionalPayload, ...vendorType };
 
                 const response = await EditFranchiseeVendors(props?.data?.user?.id, requestData)
                 if (response?.status == "success") {
@@ -253,10 +254,10 @@ export default function AddVendors(props) {
                                                             type="text"
                                                             placeholder="First Name"
                                                             className={inputClass}
-                                                            {...register("first_name", { required: true })}
+                                                            {...register("first_name", { required: true, pattern: /^[A-Za-z]+$/i })}
                                                         />
                                                         {errors.first_name && (
-                                                            <Error title="First Name is Required*" />
+                                                            <Error title={errors?.first_name ? 'First Name should Contain alphabets only' : 'First Name is Required'} />
                                                         )}
                                                     </div>
                                                     <div className="">
@@ -265,10 +266,10 @@ export default function AddVendors(props) {
                                                             type="text"
                                                             placeholder="Last Name"
                                                             className={inputClass}
-                                                            {...register("last_name", { required: true })}
+                                                            {...register("last_name", { required: true, pattern: /^[A-Za-z]+$/i })}
                                                         />
                                                         {errors.last_name && (
-                                                            <Error title="Last Name is Required*" />
+                                                            <Error title={errors?.last_name ? 'Last Name should Contain alphabets Only' : 'Last Name is Required'} />
                                                         )}
                                                     </div>
                                                     <div className="">
@@ -315,7 +316,7 @@ export default function AddVendors(props) {
                                                             {...register("email", { required: true, validate: validateEmail })}
                                                         />
                                                         {errors.email && (
-                                                            <Error title={errors?.email?.message} />
+                                                            <Error title={errors?.email?.message ? errors?.email?.message : 'Email is Required'} />
                                                         )}
                                                     </div>
                                                     <div className="">
@@ -350,7 +351,7 @@ export default function AddVendors(props) {
                                                         </label>
                                                         <input
                                                             type="date"
-                                                            // placeholder='Last Name'
+                                                            max={moment().format('YYYY-MM-DD')}
                                                             className={inputClass}
                                                             {...register("date_of_birth", { required: true })}
                                                         />
@@ -474,8 +475,11 @@ export default function AddVendors(props) {
                                                             type="text"
                                                             placeholder="Enter State"
                                                             className={inputClass}
-                                                            {...register("state")}
+                                                            {...register("state", { pattern: /^[A-Za-z]+$/i })}
                                                         />
+                                                        {errors.address && (
+                                                            <Error title={errors.address && 'State should contain All Alphabets'} />
+                                                        )}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>City*</label>
@@ -483,10 +487,10 @@ export default function AddVendors(props) {
                                                             type="text"
                                                             placeholder="City"
                                                             className={inputClass}
-                                                            {...register("city", { required: true })}
+                                                            {...register("city", { required: true, pattern: /^[A-Za-z]+$/i })}
                                                         />
                                                         {errors.address && (
-                                                            <Error title="City is Required*" />
+                                                            <Error title={errors?.address ? 'State should contain All Alphabets' : 'City is Required'} />
                                                         )}
                                                     </div>
 

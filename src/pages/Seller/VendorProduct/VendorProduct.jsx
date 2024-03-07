@@ -8,7 +8,7 @@ import Table from '../../../components/Table/Table';
 import { Link } from 'react-router-dom';
 import AddProduct from '../../../components/Modals/Vendors/AddProduct';
 import { Eye, Trash } from 'iconsax-react';
-import { deleteFoodItem, getAllShopProduct, getRestaurantFood } from '../../../api';
+import { deleteFoodItem, getAllShopProduct, getRestaurantFood, getSingleRestaurant } from '../../../api';
 import Switch from 'react-js-switch';
 import AddRestItem from '../../../components/Modals/Vendors/AddRestItem';
 
