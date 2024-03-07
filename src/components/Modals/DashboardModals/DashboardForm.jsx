@@ -326,21 +326,6 @@ const Step2 = (props) => {
                 </select>
                 {errors?.restaurant_type && <Error title='Select Your Describe is required' />}
             </div>
-            {/* <div className="">
-                <label className={labelClass}>
-                    Select What Describes you the best*
-                </label>
-                <select
-                    className={inputClass}
-                    {...register('restaurant_type', { required: true })}
-                >
-                    <option value=''>Select</option>
-                    {allOptions.map(item =>
-                        <option key={item?.value} value={item?.value}>{item?.value}</option>
-                    )}
-                </select>
-                {errors?.restaurant_type && <Error title='Select Your Describe is required' />}
-            </div> */}
             <div className="">
                 <label className={labelClass}>
                     Type of cuisines*

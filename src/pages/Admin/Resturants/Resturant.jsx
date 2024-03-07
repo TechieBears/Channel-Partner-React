@@ -32,70 +32,6 @@ export default function Restaurant() {
     reset,
   } = useForm();
 
-  const [pincodeOptions, setPincodeOptions] = useState()
-  const [franchiseOptions, setFranchiseOptions] = useState()
-
-  // ============== Fetch All Franchise Data ================
-  const GetFranchiseeData = () => {
-    try {
-      GetFranchisee().then((res) => {
-        if (res?.length > 0) {
-          const newData = res.map((data) => ({
-            label: data?.user?.first_name + " " + data?.user?.last_name + `(${data?.msb_code})`,
-            value: data?.franch_id,
-          }))
-          setFranchiseOptions(newData)
-        }
-      })
-    } catch (error) {
-      console.log("🚀 ~ file: Vendors.jsx:57 ~ GetFranchiseeData ~ error:", error)
-    }
-  }
-
-
-  // ============== Fetch All Admin Restaurants  ================
-  const getAllRestaurant = () => {
-    getRestarant().then((res) => {
-      const restaurantVendors = res.filter(
-        (item) => item?.vendor_type == "restaurant"
-      );
-      setData(restaurantVendors);
-    });
-  };
-
-  // ============== Fetch Franchisee Restaurant  ================
-  const getFranchiseRestaurants = () => {
-    try {
-      getFranchRestaurant(user?.userid).then((res) => {
-        setData(res);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    if (user?.role == "admin") {
-      getAllRestaurant();
-      GetFranchiseeData();
-    }
-    if (user?.role == "franchise") {
-      getFranchiseRestaurants();
-      GetFranchiseeData();
-    }
-  }, []);
-
-  useEffect(() => {
-    if (data?.length > 0) {
-        const newData = data?.map((data) => ({
-            label: data?.user?.pincode,
-            value: data?.user?.pincode,
-        }))
-        const uniquePincodeData = _.uniqBy(newData, 'value')
-        setPincodeOptions(uniquePincodeData);
-    }
-}, [data])
-
   // =================== filter data ========================
   const onSubmit = async (data) => {
     if (
@@ -261,6 +197,38 @@ export default function Restaurant() {
     { field: "isactive", header: "Franchise Verify", body: switchActive, sortable: true },
   ];
 
+
+
+  // ============== Fetch All Admin Restaurants  ================
+  const getAllRestaurant = () => {
+    getRestarant().then((res) => {
+      const restaurantVendors = res.filter(
+        (item) => item?.vendor_type == "restaurant"
+      );
+      setData(restaurantVendors);
+    });
+  };
+
+  // ============== Fetch Franchisee Restaurant  ================
+  const getFranchiseRestaurants = () => {
+    try {
+      getFranchRestaurant(user?.userid).then((res) => {
+        setData(res);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (user?.role == "admin") {
+      getAllRestaurant();
+    }
+    if (user?.role == "franchise") {
+      getFranchiseRestaurants();
+    }
+  }, []);
+
   return (
     <>
       {/* ========================= user filter ======================= */}
@@ -373,8 +341,6 @@ export default function Restaurant() {
             getAllRestaurant={getAllRestaurant}
             id={user?.userid}
           />
-
-          {/* <AddItem title='Add Item' /> */}
         </div>
         {<Table columns={columns} data={data} />}
       </div>

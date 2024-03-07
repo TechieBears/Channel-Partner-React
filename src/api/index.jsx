@@ -1510,13 +1510,24 @@ export const addRestaurantFood = async (data) => {
 }
 
 // ================= Add Product =================
-export const getRestaurantFood = async (data) => {
+export const getRestaurantFoodAdmin = async (data) => {
     const url = `${environment.baseUrl}vendor/add_restaurant_food`
     try {
         const response = await axios.get(url, data);
         return response.data;
     } catch (error) {
         console.log('error creating product', error)
+    }
+}
+
+// ================= Add Product =================
+export const getRestaurantFood = async (id) => { 
+    const url = `${environment.baseUrl}vendor/food_by_restaurant/${id}`
+    try {
+        const response = await axios.get(url);
+        return response.data;
+    } catch (error) {
+        console.log('error while getting Restaurant Food', error)
     }
 }
 

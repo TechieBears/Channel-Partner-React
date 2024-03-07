@@ -101,23 +101,23 @@ const DashboardBannerPanel = () => {
     </div>
   );
 
-    // ================= action of the table ===============
-    const actionBodyTemplatePromotion = (row) => (
-      <div className="flex items-center gap-2">
-        <AddPromo
-          button="edit"
-          title="Edit Promotions"
-          data={row}
-          getAllPromotionList={getAllPromotionList}
-        />
-        <button
-          onClick={() => deleteDataPromotion(row.slide_id)}
-          className="bg-red-100  px-1.5 py-2 rounded-sm"
-        >
-          <Trash size="20" className="text-red-500" />
-        </button>
-      </div>
-    );
+  // ================= action of the table ===============
+  const actionBodyTemplatePromotion = (row) => (
+    <div className="flex items-center gap-2">
+      <AddPromo
+        button="edit"
+        title="Edit Promotions"
+        data={row}
+        getAllPromotionList={getAllPromotionList}
+      />
+      <button
+        onClick={() => deleteDataPromotion(row.slide_id)}
+        className="bg-red-100  px-1.5 py-2 rounded-sm"
+      >
+        <Trash size="20" className="text-red-500" />
+      </button>
+    </div>
+  );
 
   const imageBodyTemp = (row) => (
     <div className="w-52 h-24 rounded bg-slate-100">
@@ -174,7 +174,7 @@ const DashboardBannerPanel = () => {
   // ================= columns of the table ===============
   const bannercolumns = [
     { field: "image", header: "Image", body: imageBodyTemp, style: true },
-    { field: 'vendor_type', header: 'Vendor Type', sortable: true, style: true},
+    { field: 'vendor_type', header: 'Vendor Type', sortable: true, style: true },
     { field: "id", header: "Action", body: actionBodyTemplateBanner, sortable: true, style: true },
     { field: "isactive", header: "Active", body: switchActive, sortable: true, style: true },
   ];
@@ -182,7 +182,7 @@ const DashboardBannerPanel = () => {
   // ================= columns of the table ===============
   const promotioncolumns = [
     { field: "image", header: "Image", body: imageBodyTemp, style: true },
-    { field: 'vendor_type', header: 'Vendor Type', sortable: true, style: true},
+    { field: 'vendor_type', header: 'Vendor Type', sortable: true, style: true },
     { field: "id", header: "Action", body: actionBodyTemplatePromotion, sortable: true, style: true },
     { field: "isactive", header: "Active", body: switchActive, sortable: true, style: true },
   ];
@@ -198,11 +198,11 @@ const DashboardBannerPanel = () => {
           <div>
             <div className="flex justify-between mb-4 mx-5 items-center text-center">
               <h5 className="font-semibold text-2xl">Banners</h5>
-              <BannerForm title="Add New Banner" getAllBannerList={getAllBannerList}/>
+              <BannerForm title="Add New Banner" getAllBannerList={getAllBannerList} />
             </div>
             {bannerList?.length > 0 && (
               <Table data={bannerList} columns={bannercolumns} />
-              )}
+            )}
           </div>
           <div>
             <div className="flex justify-between mb-4 mx-5 items-center text-center">
