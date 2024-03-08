@@ -24,7 +24,6 @@ const animatedComponents = makeAnimated();
 
 
 const Step1 = (props) => {
-    console.log("🚀 ~ file: DashboardForm.jsx:25 ~ Step1 ~ props:", props.data)
     const [manually, setManally] = useState(false);
     const { register, getValues, setValue, control, reset, formState: { errors }, } = useFormContext()
 
@@ -293,7 +292,6 @@ const Step1 = (props) => {
 
 // =================== form steps 2 =================
 const Step2 = (props) => {
-    console.log("🚀 ~ file: DashboardForm.jsx:301 ~ Step2 ~ props:", props)
     const { register, formState: { errors }, reset, control } = useFormContext()
 
     const [allCuisines, setAllCuisines] = useState([
@@ -360,7 +358,7 @@ const Step2 = (props) => {
                 <label className={labelClass}>
                     Type of cuisines*
                 </label>
-                {/* <Controller
+                <Controller
                     control={control}
                     name="type_of_cuisine"
                     rules={{ required: true }}
@@ -378,13 +376,13 @@ const Step2 = (props) => {
                             onChange={onChange}
                         />
                     )}
-                /> */}
-                <Select
+                />
+                {/* <Select
                     options={allCuisines}
                     isMulti
                     value={props?.selectedCuisines}
                     onChange={(selectedOption) => props?.setSelectedCuisines(selectedOption)}
-                />
+                /> */}
                 {errors?.type_of_cuisine && <Error title='Type of Cuisine is required' />}
             </div>
             <div>
@@ -497,7 +495,6 @@ const Step3 = (props) => {
 
 // =================== form steps 4 =================
 const Step4 = (props) => {
-    console.log('props4 = ', props)
     const { register, setValue, formState: { errors }, setError, watch } = useFormContext()
     const deliveryTime = watch('delivery_time')
     return (
@@ -661,7 +658,6 @@ export default function DashboardForm(props) {
     const [selectedCuisines, setSelectedCuisines] = useState([])
     const [activeStep, setActiveStep] = useState(0);
     const toggle = () => setIsOpen(!isOpen);
-    // const { reset , setValue} = useForm()
     const steps = ['Restaurant Information', 'Restaurant Type and Timing', 'Upload Images', 'General Information', 'Legal Documentation',];
     // ============== Restaurant API ================
     const restaurantCategories = () => {
@@ -698,8 +694,6 @@ export default function DashboardForm(props) {
     });
     // =================== default values ====================
     if (props.button == 'edit' && props.data) {
-        console.log("🚀 ~ file: DashboardForm.jsx:711 ~ DashboardForm ~ props.data:", props.data)
-
         const formattedStartTime = moment(props?.data?.vendor?.shop_start_time, 'h:mm A').format('HH:mm');
         const formattedEndTime = moment(props?.data?.vendor?.shop_end_time, 'h:mm A').format('HH:mm');
 
@@ -727,33 +721,40 @@ export default function DashboardForm(props) {
             }
         })
 
-       
     } else {
         methods = useForm()
     }
 
 
-    useEffect(()=>{
-        methods.setValue('shop_name', props?.data?.vendor?.shop_name)
-        methods.reset({
-            "shop_name": props?.data?.vendor?.shop_name
-        })
-    },[])
+    useEffect(() => {
+        if (isOpen && props?.data && props.button == 'edit') {
+            console.log("🚀 ~ file: DashboardForm.jsx:733 ~ useEffect ~ props?.data:", props?.data) 
+            const formattedStartTime = moment(props?.data?.vendor?.shop_start_time, 'h:mm A').format('HH:mm');
+            const formattedEndTime = moment(props?.data?.vendor?.shop_end_time, 'h:mm A').format('HH:mm');
+            methods.reset({
+                "shop_name": props?.data?.vendor?.shop_name,
+                "shop_address": props?.data?.vendor?.shop_address,
+                "shop_contact_number": props?.data?.vendor?.shop_contact_number,
+                "about_restaurant": props?.data?.about_restaurant,
+                "latitude": props?.data?.vendor?.latitude,
+                "longitude": props?.data?.vendor?.longitude,
+                "veg_nonveg": props?.data?.veg_nonveg,
+                "restaurant_type": props?.data?.restaurant_type,
+                "shop_start_time": formattedStartTime,
+                "shop_end_time": formattedEndTime,
+                "type_of_cuisine": JSON.parse(props?.data?.type_of_cuisine.replace(/'/g, '"'))  ,
+                "ambience_image": props?.data?.ambience_image,
+                "shop_image": props?.data?.vendor?.shop_image,
+                "pan_card": props?.data?.vendor?.pan_card,
+                "bank_name": props?.data?.vendor?.bank_name,
+                "account_number": props?.data?.vendor?.account_number,
+                "ifsc_code": props?.data?.vendor?.ifsc_code,
+                "adhar_card": props?.data?.vendor?.adhar_card,
+                "gst_number": props?.data?.vendor?.gst_number,
+            })
+        }
+    }, [isOpen])
 
-    useEffect(()=>{
-        methods.setValue('shop_name', props.data?.vendor?.shop_name)
-    },[activeStep])
-
-
-    // useEffect(() => {
-    //     // you can do async server request and fill up form
-    //     setTimeout(() => {
-    //       reset({
-    //         shop_name: props?.data?.vendor?.shop_name,
-            
-    //       });
-    //     }, 2000);
-    //   }, [activeStep]);
     // =========================== back button =========================
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -962,13 +963,11 @@ export default function DashboardForm(props) {
                 } else {
                     let updatedData = {
                         ...data,
-                        "type_of_cuisine": JSON.stringify(selectedCuisines),
-                        // "type_of_cuisine": JSON.stringify(data?.type_of_cuisine),
+                        // "type_of_cuisine": JSON.stringify(selectedCuisines),
+                        "type_of_cuisine": JSON.stringify(type_of_cuisine),
 
                         "vendorId": LoggedUserDetails?.sellerId,
                     }
-                    // console.log("🚀 ~ file: DashboardForm.jsx:948 ~ onSubmit ~ updatedData:", updatedData)
-                    return
                     editOnBoarding(LoggedUserDetails?.sellerId, updatedData).then((res) => {
                         if (res?.message === "Restaurant edited successfully") {
                             setTimeout(() => {
@@ -976,6 +975,7 @@ export default function DashboardForm(props) {
                                     setLoader(false),
                                     toast.success(res?.message);
                                 props?.getDetails()
+                                setActiveStep(0)
                             }, 1000)
                         }
                     })
@@ -1000,13 +1000,8 @@ export default function DashboardForm(props) {
     useEffect(() => {
         restaurantCategories();
         setLoader(false);
-        // methods.setValue('shop_name', props?.data?.vendor?.shop_name)
     }, [])
 
-    // useEffect(() => {
-    //     methods.setValue('shop_name', props?.data?.vendor?.shop_name)
-    //     methods.setValue('shop_name', props?.data?.vendor?.shop_name)
-    // }, [activeStep])
 
     return (
         <>
