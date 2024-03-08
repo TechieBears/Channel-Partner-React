@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import Table from '../../../components/Table/Table';
 import { Link } from 'react-router-dom';
 import { Eye, Trash } from 'iconsax-react';
-import { delUser, verifyDeliveryBoy, getUser, getDeliveryBoy } from '../../../api';
+import { delUser, verifyDeliveryBoy, getUser, getDeliveryBoy, GetFranchisee } from '../../../api';
 import Switch from 'react-js-switch';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -15,10 +15,13 @@ import DeleteModal from '../../../components/Modals/DeleteModal/DeleteModal';
 import userImg from '../../../assets/user.jpg';
 import AddDriverFrom from '../../../components/Modals/DriverModals/AddDriverForm';
 import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
+import _ from 'lodash';
+import Select from "react-select";
 
 function Drivers() {
     const dispatch = useDispatch()
     const {
+        control,
         register,
         handleSubmit,
         formState: { errors },
@@ -27,26 +30,73 @@ function Drivers() {
     const [open, setOpen] = React.useState(false);
     const [delId, setDelId] = React.useState(0);
     const DeliveryList = useSelector((state) => state?.delivery?.deliveryList);
+    const [deliveryBoyData, setDeliveryBoyData] = useState()
     console.log('driverList', DeliveryList)
+
+
+    const [pincodeOptions, setPincodeOptions] = useState()
+    const [franchiseOptions, setFranchiseOptions] = useState()
+
+
+    // =================== fetch all franchise data ========================
+    const GetFranchiseeData = () => {
+        try {
+            GetFranchisee().then((res) => {
+                if (res?.length > 0) {
+                    const newData = res.map((data) => ({
+                        label: data?.user?.first_name + " " + data?.user?.last_name + `(${data?.msb_code})`,
+                        value: data?.user?.id,
+                    }))
+                    setFranchiseOptions(newData)
+                }
+            })
+        } catch (error) {
+            console.log("🚀 ~ file: Vendors.jsx:57 ~ GetFranchiseeData ~ error:", error)
+        }
+    }
+
+
+
+
     // =================== filter data ========================
     const onSubmit = async (data) => {
-        if (data?.name != '' || data?.email != '' || data?.city != '' || data?.role != '') {
-            let url = `${environment.baseUrl}user-filter/?first_name=${data?.name}&email=${data?.email}&city=${data?.city}&role=${data?.role}`
-            await axios.get(url).then((res) => {
-                dispatch(setUserList(res.data))
-                toast.success("Filters applied successfully")
-            })
+        if (data?.name != '' || data?.msbcode != '' || data?.franchise != '' || data?.franchise != undefined || data?.pincode != '' || data?.pincode != undefined) {
+            try {
+                let url = `${environment.baseUrl}delivery/deliveryboy_list?name=${data?.name}&msbcode=${data?.msbcode}&franchise=${data?.franchise?.value ? data?.franchise?.value : ''}&pincode=${data?.pincode?.value ? data?.pincode?.value : ''}`
+                await axios.get(url).then((res) => {
+                    setDeliveryBoyData(res?.data?.results)
+                    toast.success("Filters applied successfully")
+                }).catch((err) => {
+                    console.log("🚀 ~ file: Drivers.jsx:70 ~ awaitaxios.get ~ err:", err)
+                })
+            } catch (err) {
+                console.log("🚀 ~ file: Drivers.jsx:75 ~ onSubmit ~ err:", err)
+            }
         } else {
             toast.warn("No Selected Value !")
         }
     }
+
+    const handleClear = () => {
+        reset({
+            name: '',
+            msbcode: '',
+            franchise: '',
+            pincode: ''
+        })
+        toast.success("Filters clear successfully")
+        setDeliveryBoyData()
+        DeliveryBoyDetails()
+    }
+
 
 
     // // ========================= fetch data from api ==============================
     const DeliveryBoyDetails = () => {
         try {
             getDeliveryBoy().then((res) => {
-                dispatch(setDeliveryList(res));
+                dispatch(setDeliveryList(res?.data));
+                setDeliveryBoyData(res?.data)
             });
         } catch (error) {
             console.log(error);
@@ -55,7 +105,19 @@ function Drivers() {
 
     useEffect(() => {
         DeliveryBoyDetails()
+        GetFranchiseeData()
     }, [])
+
+    useEffect(() => {
+        if (deliveryBoyData?.length > 0) {
+            const newData = deliveryBoyData?.map((data) => ({
+                label: data?.user?.pincode,
+                value: data?.user?.pincode,
+            }))
+            const uniquePincodeData = _.uniqBy(newData, 'value')
+            setPincodeOptions(uniquePincodeData);
+        }
+    }, [deliveryBoyData])
 
 
     // =================== delete the user data ========================
@@ -212,7 +274,7 @@ function Drivers() {
                         <div className="">
                             <input
                                 type="text"
-                                placeholder='Search by name'
+                                placeholder='Search By Name'
                                 autoComplete='off'
                                 className={`${inputClass} !bg-slate-100`}
                                 {...register('name')}
@@ -221,31 +283,66 @@ function Drivers() {
                         <div className="">
                             <input
                                 type="text"
-                                placeholder='Search by email'
+                                placeholder='Search By MSB Code'
                                 autoComplete='off'
                                 className={`${inputClass} !bg-slate-100`}
-                                {...register('email')}
+                                {...register('msbcode')}
                             />
                         </div>
-
                         <div className="">
-                            <select
-                                name="City"
-                                className={`${inputClass} !bg-slate-100`}
-                                {...register("city")}
-                            >
-                                <option value="" >
-                                    Select by city name
-                                </option>
-                                <option value="Mumbai">Mumbai</option>
-                                <option value="Bangalore">Bangalore</option>
-                                <option value="Delhi">Delhi</option>
-                            </select>
+                            <Controller
+                                control={control}
+                                name="franchise"
+                                render={({
+                                    field: { onChange, value, ref },
+                                }) => (
+                                    <Select
+                                        value={value}
+                                        options={franchiseOptions}
+                                        className="w-100 text-gray-900"
+                                        placeholder="Search By Franchise"
+                                        onChange={onChange}
+                                        inputRef={ref}
+                                        maxMenuHeight={200}
+                                        styles={{
+                                            placeholder: (provided) => ({
+                                                ...provided,
+                                                color: '#9CA3AF', // Light gray color
+                                            }),
+                                        }}
+                                    />
+                                )}
+                            />
+                        </div>
+                        <div className="">
+                            <Controller
+                                control={control}
+                                name="pincode"
+                                render={({
+                                    field: { onChange, value, ref },
+                                }) => (
+                                    <Select
+                                        value={value}
+                                        options={pincodeOptions}
+                                        className="w-100 text-gray-900"
+                                        placeholder="Search By Pincode"
+                                        onChange={onChange}
+                                        inputRef={ref}
+                                        maxMenuHeight={200}
+                                        styles={{
+                                            placeholder: (provided) => ({
+                                                ...provided,
+                                                color: '#9CA3AF', // Light gray color
+                                            }),
+                                        }}
+                                    />
+                                )}
+                            />
                         </div>
                     </div>
                     <div className="flex items-center gap-x-2">
                         <button type='submit' className={`${formBtn1} w-full text-center`}>Filter</button>
-                        <button type='button' className={`${formBtn2} w-full text-center`} onClick={() => { reset(), toast.success("Filters clear successfully"), DeliveryBoyDetails() }}>Clear</button>
+                        <button type='button' className={`${formBtn2} w-full text-center`} onClick={() => handleClear()}>Clear</button>
                     </div>
                 </form>
             </div>
@@ -260,7 +357,7 @@ function Drivers() {
                         <AddDriverFrom title='Add Driver' DeliveryBoyDetails={DeliveryBoyDetails} />
                     </div>
                 </div>
-                <Table data={DeliveryList?.data} columns={columns} />
+                <Table data={deliveryBoyData} columns={columns} />
             </div>
         </>
     )

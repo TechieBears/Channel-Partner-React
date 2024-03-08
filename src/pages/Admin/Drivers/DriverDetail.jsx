@@ -4,16 +4,17 @@ import { useLocation } from 'react-router-dom'
 import PathName from '../../../components/PathName/PathName';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import ImageGallery from '../../../components/Modals/LightBox/ImageGallery';
+import userImg from '../../../assets/user.jpg'
 
 function DriverDetail() {
     const location = useLocation();
     const data = location.state;
     let jobTypeString = data?.job_type;
     jobTypeString = jobTypeString.replace(/'/g, '"');
-    const JobTypeObject = JSON.parse(jobTypeString);
+    // const JobTypeObject = JSON.parse(jobTypeString);
     let shiftString = data?.shift;
     shiftString = shiftString.replace(/'/g, '"');
-    const shiftObject = JSON.parse(shiftString);
+    // const shiftObject = JSON.parse(shiftString);
     console.log('state', data)
     const [selectedTab, setSelectedTab] = useState(0);
     const images = [
@@ -48,7 +49,7 @@ function DriverDetail() {
                 <div className="bg-white px-10 py-4 mx-5 my-2 mt-5 rounded-xl space-y-3 ">
                     <div className='flex flex-row gap-14 w-full'>
                         <div className='w-36 h-36'>
-                            <img src={data?.user?.profile_pic == null || data?.user?.profile_pic == '' || data?.user?.profile_pic == undefined ? userImg : data?.user?.profile_pic} alt='img' className='w-full h-full rounded-full object-cover' />
+                            <img src={data?.user?.profile_pic == null || data?.user?.profile_pic == '' || data?.user?.profile_pic == undefined || data?.user?.profile_pic.includes('undefined') ? userImg : data?.user?.profile_pic} alt='img' className='w-full h-full rounded-full object-cover' />
                         </div>
                         <div className='flex justify-evenly flex-col'>
                             <div>
@@ -133,19 +134,19 @@ function DriverDetail() {
                                 </div>
                                 <div>
                                     <h5 className='font-tbPop text-slate-900 capitalize text-base'>Driver Rating</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.driver_rating == '' || data?.driver_rating == null || data?.driver_rating == undefined  ? 'No rating' : data?.driver_rating}</h5>
+                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.driver_rating == '' || data?.driver_rating == null || data?.driver_rating == undefined ? 'No rating' : data?.driver_rating}</h5>
                                 </div>
                                 <div>
                                     <h5 className='font-tbPop text-slate-900 capitalize text-base'>Driving License</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.driver_license == '' || data?.driver_license == null || data?.driver_license == undefined  ? 'No rating' : data?.driver_license}</h5>
+                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.driver_license == '' || data?.driver_license == null || data?.driver_license == undefined ? 'No rating' : data?.driver_license}</h5>
                                 </div>
                                 <div>
                                     <h5 className='font-tbPop text-slate-900 capitalize text-base'>Vehicle Type</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.vehicle_type == '' || data?.vehicle_type == null || data?.vehicle_type == undefined  ? 'No rating' : data?.vehicle_type}</h5>
+                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.vehicle_type == '' || data?.vehicle_type == null || data?.vehicle_type == undefined ? 'No rating' : data?.vehicle_type}</h5>
                                 </div>
                                 <div>
                                     <h5 className='font-tbPop text-slate-900 capitalize text-base'>Vehicle RC</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.vehicle_rc == '' || data?.vehicle_rc == null || data?.vehicle_rc == undefined  ? 'No rating' : data?.vehicle_rc}</h5>
+                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.vehicle_rc == '' || data?.vehicle_rc == null || data?.vehicle_rc == undefined ? 'No rating' : data?.vehicle_rc}</h5>
                                 </div>
                             </div>
                             <h6 className='text-black font-tbMon text-lg font-bold pt-3'>Kyc Details</h6>
@@ -179,15 +180,15 @@ function DriverDetail() {
                             <div className="grid grid-cols-5 gap-y-5 my-4 border-b border-slate-300 pb-5">
                                 <div>
                                     <h5 className='font-tbPop text-slate-900 capitalize text-base'>Job type</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{JobTypeObject?.title == '' || JobTypeObject?.title == null || JobTypeObject?.title == undefined ? '--------' : JobTypeObject?.title}</h5>
+                                    {/* <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{JobTypeObject?.title == '' || JobTypeObject?.title == null || JobTypeObject?.title == undefined ? '--------' : JobTypeObject?.title}</h5> */}
                                 </div>
                                 <div>
                                     <h5 className='font-tbPop text-slate-900 capitalize text-base'>Working Hours</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{JobTypeObject?.subTitle == '' || JobTypeObject?.subTitle == null || JobTypeObject?.subTitle == undefined ? '--------' : JobTypeObject?.subTitle}</h5>
+                                    {/* <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{JobTypeObject?.subTitle == '' || JobTypeObject?.subTitle == null || JobTypeObject?.subTitle == undefined ? '--------' : JobTypeObject?.subTitle}</h5> */}
                                 </div>
                                 <div>
                                     <h5 className='font-tbPop text-slate-900 capitalize text-base'>Shift</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{shiftObject?.title == '' || shiftObject?.title == null || shiftObject?.title == undefined ? '--------' : shiftObject?.title}</h5>
+                                    {/* <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{shiftObject?.title == '' || shiftObject?.title == null || shiftObject?.title == undefined ? '--------' : shiftObject?.title}</h5> */}
                                 </div>
                                 <div>
                                     <h5 className='font-tbPop text-slate-900 capitalize text-base'>Week-Off</h5>

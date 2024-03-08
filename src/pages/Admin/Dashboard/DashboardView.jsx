@@ -1,26 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom';
-import { getSingleStorages } from '../../../api';
-import SimpleGallery from '../../../components/Gallary/SimpleGallery';
 import { ArrowLeft, Link } from 'iconsax-react';
+import React, { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import SimpleGallery from '../../../components/Gallary/SimpleGallery';
 import PathName from '../../../components/PathName/PathName';
 
 const DashboardView = () => {
     const [data, setData] = useState();
     const { id } = useParams();
     const navigate = useNavigate();
-    const fetchSingleData = () => {
-        try {
-            getSingleStorages(id).then((res) => {
-                setData(res);
-            })
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    useEffect(() => {
-        fetchSingleData()
-    }, [])
 
     const images = [
         {
