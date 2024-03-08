@@ -66,10 +66,6 @@ const Step1 = (props) => {
                             latitude: latitude,
                             longitude: longitude
                         };
-                        // console.log("++", mergedData)
-                        // reset(mergedData);
-
-
                     }
                 })
                 .catch(error => console.error('Error fetching address:', error));
@@ -82,16 +78,6 @@ const Step1 = (props) => {
 
     useEffect(() => {
         getCurrentPostion()
-        // if (props) {
-        //     reset({
-        //         shop_name: props?.data?.vendor?.shop_name,
-        //         about_restaurant: props?.data?.about_restaurant,
-        //         shop_contact_number: props?.data?.vendor?.shop_contact_number,
-        //         shop_address: props?.data?.vendor?.shop_address,
-        //         latitude: props?.data?.vendor?.latitude,
-        //         longitude: props?.data?.vendor?.longitude,
-        //     })
-        // }
     }, [])
 
 
@@ -121,7 +107,6 @@ const Step1 = (props) => {
                         latitude: latitude,
                         longitude: longitude
                     };
-                    // console.log("++", mergedData)
                     reset(mergedData);
                 }
             })
@@ -249,7 +234,6 @@ const Step1 = (props) => {
 
 // =================== form steps 2 =================
 const Step2 = (props) => {
-    console.log("🚀 ~ file: DashboardForm.jsx:301 ~ Step2 ~ props:", props)
     const { register, formState: { errors }, reset, control } = useFormContext()
 
     const [allCuisines, setAllCuisines] = useState([
@@ -302,11 +286,24 @@ const Step2 = (props) => {
                 <label className={labelClass}>
                     Type of cuisines*
                 </label>
-                <Select
-                    options={allCuisines}
-                    isMulti
-                    value={props?.selectedCuisines}
-                    onChange={(selectedOption) => props?.setSelectedCuisines(selectedOption)}
+                <Controller
+                    control={control}
+                    name="type_of_cuisine"
+                    rules={{ required: true }}
+                    render={({
+                        field: { onChange, onBlur, value, name, ref },
+                        fieldState: { invalid, isTouched, isDirty, error },
+                        formState,
+                    }) => (
+                        <Select
+                            value={value}
+                            isMulti
+                            options={allCuisines}
+                            className="basic-multi-select w-100"
+                            components={animatedComponents}
+                            onChange={onChange}
+                        />
+                    )}
                 />
                 {errors?.type_of_cuisine && <Error title='Type of Cuisine is required' />}
             </div>
@@ -420,7 +417,6 @@ const Step3 = (props) => {
 
 // =================== form steps 4 =================
 const Step4 = (props) => {
-    console.log('props4 = ', props)
     const { register, setValue, formState: { errors }, setError, watch } = useFormContext()
     const deliveryTime = watch('delivery_time')
     return (
@@ -610,8 +606,6 @@ export default function DashboardForm(props) {
     });
     // =================== default values ====================
     if (props.button == 'edit' && props.data) {
-        console.log("🚀 ~ file: DashboardForm.jsx:711 ~ DashboardForm ~ props.data:", props.data)
-
         const formattedStartTime = moment(props?.data?.vendor?.shop_start_time, 'h:mm A').format('HH:mm');
         const formattedEndTime = moment(props?.data?.vendor?.shop_end_time, 'h:mm A').format('HH:mm');
         methods = useForm({
@@ -638,10 +632,40 @@ export default function DashboardForm(props) {
             }
         })
 
-
     } else {
         methods = useForm()
     }
+
+
+    useEffect(() => {
+        if (isOpen && props?.data && props.button == 'edit') {
+            console.log("🚀 ~ file: DashboardForm.jsx:733 ~ useEffect ~ props?.data:", props?.data) 
+            const formattedStartTime = moment(props?.data?.vendor?.shop_start_time, 'h:mm A').format('HH:mm');
+            const formattedEndTime = moment(props?.data?.vendor?.shop_end_time, 'h:mm A').format('HH:mm');
+            methods.reset({
+                "shop_name": props?.data?.vendor?.shop_name,
+                "shop_address": props?.data?.vendor?.shop_address,
+                "shop_contact_number": props?.data?.vendor?.shop_contact_number,
+                "about_restaurant": props?.data?.about_restaurant,
+                "latitude": props?.data?.vendor?.latitude,
+                "longitude": props?.data?.vendor?.longitude,
+                "veg_nonveg": props?.data?.veg_nonveg,
+                "restaurant_type": props?.data?.restaurant_type,
+                "shop_start_time": formattedStartTime,
+                "shop_end_time": formattedEndTime,
+                "type_of_cuisine": JSON.parse(props?.data?.type_of_cuisine.replace(/'/g, '"'))  ,
+                "ambience_image": props?.data?.ambience_image,
+                "shop_image": props?.data?.vendor?.shop_image,
+                "pan_card": props?.data?.vendor?.pan_card,
+                "bank_name": props?.data?.vendor?.bank_name,
+                "account_number": props?.data?.vendor?.account_number,
+                "ifsc_code": props?.data?.vendor?.ifsc_code,
+                "adhar_card": props?.data?.vendor?.adhar_card,
+                "gst_number": props?.data?.vendor?.gst_number,
+            })
+        }
+    }, [isOpen])
+
     // =========================== back button =========================
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -682,6 +706,7 @@ export default function DashboardForm(props) {
         setLoader(true)
         if (activeStep == steps.length - 1) {
             if (props?.button != 'edit') {
+                
                 if (data?.ambience_image.length != 0) {
                     await ImageUpload(data?.ambience_image[0], "restaurant", "ambience_image", data?.shop_name)
                     data.ambience_image = `${restaurantLink}${data?.shop_name}_ambience_image_${data?.ambience_image[0].name}`
@@ -833,7 +858,7 @@ export default function DashboardForm(props) {
                 if (props?.button != "edit") {
                     let updatedData = {
                         ...data,
-                        "type_of_cuisine": JSON.stringify(selectedCuisines),
+                        "type_of_cuisine": JSON.stringify(data.type_of_cuisine),
                         "vendorId": LoggedUserDetails?.sellerId,
                         "shop_start_time": shopStartTime,
                         "shop_end_time": shopEndTime,
@@ -849,13 +874,10 @@ export default function DashboardForm(props) {
                 } else {
                     let updatedData = {
                         ...data,
-                        "type_of_cuisine": JSON.stringify(selectedCuisines),
-                        // "type_of_cuisine": JSON.stringify(data?.type_of_cuisine),
-
+                        "type_of_cuisine": JSON.stringify(data.type_of_cuisine),       
                         "vendorId": LoggedUserDetails?.sellerId,
                     }
-                    // console.log("🚀 ~ file: DashboardForm.jsx:948 ~ onSubmit ~ updatedData:", updatedData)
-                    return
+                    console.log("🚀 ~ file: DashboardForm.jsx:896 ~ onSubmit ~ updatedData:", updatedData)
                     editOnBoarding(LoggedUserDetails?.sellerId, updatedData).then((res) => {
                         if (res?.message === "Restaurant edited successfully") {
                             setTimeout(() => {
@@ -863,6 +885,7 @@ export default function DashboardForm(props) {
                                     setLoader(false),
                                     toast.success(res?.message);
                                 props?.getDetails()
+                                setActiveStep(0)
                             }, 1000)
                         }
                     })
@@ -909,10 +932,8 @@ export default function DashboardForm(props) {
                 "ifsc_code": props?.data?.vendor?.ifsc_code,
                 "adhar_card": props?.data?.vendor?.adhar_card,
                 "gst_number": props?.data?.vendor?.gst_number,
-
             })
         }
-
     }, [isOpen])
 
     useEffect(() => {

@@ -883,18 +883,6 @@ export const getProductsByAdmin = async () => {
     }
 }
 
-// ============== get All Seller ================
-
-export const getAllSeller = async () => {
-    const url = `${environment.baseUrl}vendor/create_vendor`
-    try {
-        const response = await axios.get(url);
-        return response.data
-    } catch (err) {
-        console.log('error while getting vendor', err)
-    }
-}
-
 export const getProductById = async (id) => {
     const url = `${environment.baseUrl}vendor/edit_product/${id}`;
     try {
