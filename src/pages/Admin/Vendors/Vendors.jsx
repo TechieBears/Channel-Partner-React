@@ -6,20 +6,30 @@ import AddRestaurant from '../../../components/Modals/Resturant/AddRestaurant';
 import { NavLink, Link } from 'react-router-dom';
 import Switch from 'react-js-switch';
 import AddVendors from '../../../components/Modals/Vendors/AddVendors/AddVendors';
-import { useForm } from 'react-hook-form';
+import AddVendorShops from '../../../components/Modals/Vendors/AddVendors/AddVendorShops';
+import { Controller, useForm } from 'react-hook-form';
 import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
 import { useDispatch, useSelector } from "react-redux";
 import userImg from '../../../assets/user.jpg';
 import { setFranchiseVendors } from "../../../redux/Slices/masterSlice";
-import { GetFranchiseeVendors, verifyVendors } from "../../../api";
+import { GetFranchisee, GetFranchiseeVendors, verifyVendors } from "../../../api";
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import _ from 'lodash';
+import Select from "react-select";
+import { environment } from '../../../env';
+
+
 
 
 
 function Vendors() {
     const [Vendors, SetVendors] = useState();
-    const { register, handleSubmit, formState: { errors }, reset } = useForm();
+
+    const [pincodeOptions, setPincodeOptions] = useState()
+    const [franchiseOptions, setFranchiseOptions] = useState()
+
+    const { control, register, handleSubmit, formState: { errors }, reset } = useForm();
     const dispatch = useDispatch()
     // // ========================= fetch data from api ==============================
     const FranchiseeVendors = () => {
@@ -33,17 +43,72 @@ function Vendors() {
         }
     };
 
+    const GetFranchiseeData = () => {
+        try {
+            GetFranchisee().then((res) => {
+                if (res?.length > 0) {
+                    const newData = res.map((data) => ({
+                        label: data?.user?.first_name + " " + data?.user?.last_name + `(${data?.msb_code})`,
+                        value: data?.user?.id,
+                    }))
+                    setFranchiseOptions(newData)
+                }
+            })
+        } catch (error) {
+            console.log("🚀 ~ file: Vendors.jsx:57 ~ GetFranchiseeData ~ error:", error)
+        }
+    }
+
+    useEffect(() => {
+        FranchiseeVendors()
+        GetFranchiseeData()
+    }, [])
+
+    useEffect(() => {
+        if (Vendors?.length > 0) {
+            const newData = Vendors?.map((data) => ({
+                label: data?.user?.pincode,
+                value: data?.user?.pincode,
+            }))
+            const uniquePincodeData = _.uniqBy(newData, 'value')
+            setPincodeOptions(uniquePincodeData);
+        }
+    }, [Vendors])
+
+
+    const changeTab = (tabNumber) => {
+        setActiveTab(tabNumber);
+    };
+
     // =================== filter data ========================
     const onSubmit = async (data) => {
-        if (data?.name != '' || data?.email != '' || data?.city != '' || data?.role != '') {
-            let url = `${environment.baseUrl}user-filter/?first_name=${data?.name}&email=${data?.email}&city=${data?.city}&role=${data?.role}`
-            await axios.get(url).then((res) => {
-                dispatch(setUserList(res.data))
-                toast.success("Filters applied successfully")
-            })
+        if (data?.name != '' || data?.msbcode != '' || data?.franchise != '' || data?.franchise != undefined || data?.pincode != '' || data?.pincode != undefined) {
+            try {
+                let url = `${environment.baseUrl}vendor/vendor_list?name=${data?.name}&msbcode=${data?.msbcode}&franchise=${data?.franchise?.value ? data?.franchise?.value : ''}&pincode=${data?.pincode?.value ? data?.pincode?.value : ''}`
+                await axios.get(url).then((res) => {
+                    SetVendors(res?.data?.results)
+                    toast.success("Filters applied successfully")
+                }).catch((err) => {
+                    console.log("🚀 ~ file: Vendors.jsx:100 ~ awaitaxios.get ~ err:", err)
+                })
+            } catch (err) {
+                console.log("🚀 ~ file: Vendors.jsx:101 ~ onSubmit ~ err:", err)
+            }
         } else {
             toast.warn("No Selected Value !")
         }
+    }
+
+    const handleClear = () => {
+        reset({
+            name: '',
+            msbcode: '',
+            franchise: '',
+            pincode: ''
+        })
+        toast.success("Filters clear successfully")
+        SetVendors()
+        FranchiseeVendors()
     }
 
     // =================== table user active column ========================
@@ -128,13 +193,12 @@ function Vendors() {
     const columns = [
         { field: 'hawker_shop_photo', header: 'Shop Image', body: representativeBodyTemplate, sortable: false, style: true },
         { field: 'msb_code', header: 'MSB Code', sortable: false },
-        { field: 'shop_name', header: 'Shop Name', body: (row) => <div className="capitalize">{row?.shop_name ? row?.shop_name : 'Not Available'}</div> },
-        { field: 'shop_name', header: 'Franchise Name', body: (row) => <div className="capitalize">{row?.created_by?.first_name + " " + row?.created_by?.last_name}</div> },
-        { field: 'email', header: 'Email', body: (row) => <h6>{row?.user?.email}</h6>, sortable: false },
+        { field: 'first_name', body: (row) => <div className="capitalize">{row?.user?.first_name + " " + row?.user?.last_name}</div>, header: 'Name' },
+        // { field: 'email', header: 'Email', body: (row) => <h6>{row?.user?.email}</h6>, sortable: false },
         { field: 'insta_commison_percentage', header: 'Comission(%)', body: (row) => <h6>{row?.insta_commison_percentage}%</h6>, sortable: false },
         { field: 'phone_no', header: 'Phone No', body: (row) => <h6>{row?.user?.phone_no}</h6>, sortable: false },
         { field: 'pincode', header: 'Pincode', body: (row) => <h6>{row?.user?.pincode}</h6>, sortable: false },
-        { field: 'state', header: 'state', body: (row) => <h6>{row?.user?.state}</h6>, sortable: false },
+        // { field: 'state', header: 'state', body: (row) => <h6>{row?.user?.state}</h6>, sortable: false },
         { field: 'city', header: 'city', body: (row) => <h6>{row?.user?.city}</h6>, sortable: false },
         { field: 'registration_date', header: 'Registration Date', body: (row) => <h6>{row?.user?.registration_date}</h6>, sortable: false },
         { field: 'status', header: 'Status', body: activeActionsRole, sortable: false },
@@ -155,7 +219,7 @@ function Vendors() {
                         <div className="">
                             <input
                                 type="text"
-                                placeholder='Search by name'
+                                placeholder='Search By Name'
                                 autoComplete='off'
                                 className={`${inputClass} !bg-slate-100`}
                                 {...register('name')}
@@ -164,43 +228,66 @@ function Vendors() {
                         <div className="">
                             <input
                                 type="text"
-                                placeholder='Search by email'
+                                placeholder='Search By MSB Code'
                                 autoComplete='off'
                                 className={`${inputClass} !bg-slate-100`}
-                                {...register('email')}
+                                {...register('msbcode')}
                             />
                         </div>
                         <div className="">
-                            <select
-                                name="City"
-                                className={`${inputClass} !bg-slate-100`}
-                                {...register("role")}
-                            >
-                                <option value="" >
-                                    Select by Status
-                                </option>
-                                <option value="active">Active</option>
-                                <option value="inactive">InActive</option>
-                            </select>
+                            <Controller
+                                control={control}
+                                name="franchise"
+                                render={({
+                                    field: { onChange, value, ref },
+                                }) => (
+                                    <Select
+                                        value={value}
+                                        options={franchiseOptions}
+                                        className="w-100 text-gray-900"
+                                        placeholder="Search By Franchise"
+                                        onChange={onChange}
+                                        inputRef={ref}
+                                        maxMenuHeight={200}
+                                        styles={{
+                                            placeholder: (provided) => ({
+                                                ...provided,
+                                                color: '#9CA3AF', // Light gray color
+                                            }),
+                                        }}
+                                    />
+                                )}
+                            />
                         </div>
                         <div className="">
-                            <select
-                                name="City"
-                                className={`${inputClass} !bg-slate-100`}
-                                {...register("city")}
-                            >
-                                <option value="" >
-                                    Select by pincode
-                                </option>
-                                <option value="Mumbai">Mumbai</option>
-                                <option value="Bangalore">Bangalore</option>
-                                <option value="Delhi">Delhi</option>
-                            </select>
+                            <Controller
+                                control={control}
+                                name="pincode"
+                                render={({
+                                    field: { onChange, value, ref },
+                                }) => (
+                                    <Select
+                                        value={value}
+                                        options={pincodeOptions}
+                                        className="w-100 text-gray-900"
+                                        placeholder="Search By Pincode"
+                                        onChange={onChange}
+                                        inputRef={ref}
+                                        maxMenuHeight={200}
+                                        styles={{
+                                            placeholder: (provided) => ({
+                                                ...provided,
+                                                color: '#9CA3AF', // Light gray color
+                                            }),
+                                        }}
+                                    />
+                                )}
+                            />
                         </div>
                     </div>
                     <div className="flex items-center gap-x-2">
                         <button type='submit' className={`${formBtn1} w-full text-center`}>Filter</button>
-                        <button type='button' className={`${formBtn2} w-full text-center`} onClick={() => { reset(), toast.success("Filters clear successfully"), fetchData() }}>Clear</button>
+                        <button type='button' className={`${formBtn2} w-full text-center`} onClick={() => handleClear()}>Clear</button>
                     </div>
                 </form>
             </div>
