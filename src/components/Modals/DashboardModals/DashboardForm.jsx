@@ -321,7 +321,7 @@ const Step2 = (props) => {
                 >
                     <option value=''>Select</option>
                     {props?.category?.map(item =>
-                        <option value={item?.category_name}>{item?.category_name}</option>
+                        <option value={item?.category_name} key={item?.category_name}>{item?.category_name}</option>
                     )}
                 </select>
                 {errors?.restaurant_type && <Error title='Select Your Describe is required' />}
