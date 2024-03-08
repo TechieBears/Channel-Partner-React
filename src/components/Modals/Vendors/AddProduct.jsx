@@ -36,6 +36,8 @@ const AddProduct = (props) => {
         toggle();
         reset()
         setChildData([])
+        setopenGallery(false);
+        setopenGalleryModal(false);
     }
 
     const handleSelectChange = (e) => {
@@ -146,13 +148,15 @@ const AddProduct = (props) => {
     const onSellerSubmit = async (data) => {
         console.log('seller payload = ', data);
         if (props?.title == 'Edit Product') {
-            if (data?.product_image_1?.length > 0 && props?.row?.product_image_1) {
+            if (data?.product_image_1?.length > 0) {
+                console.log('Product image1 if')
                 await ImageUpload(data?.product_image_1[0], "shopProduct", "MainImage", data?.product_name)
                 data.product_image_1 = `${productLink}${data?.product_name}_MainImage_${data?.product_image_1[0]?.name}`
             } else {
+                console.log('Product image1 else')
                 data.product_image_1 = props?.row?.product_image_1
             }
-            if (data?.product_image_2?.length > 0 && props?.row?.product_image_2) {
+            if (data?.product_image_2?.length > 0) {
                 await ImageUpload(data?.product_image_2[0], "shopProduct", "Image2", data?.product_name)
                 data.product_image_2 = `${productLink}${data?.product_name}_Image2_${data?.product_image_2[0]?.name}`
             } else {
@@ -183,7 +187,7 @@ const AddProduct = (props) => {
                 data.product_video_url = props?.row?.product_video_url
             }
         } else {
-            if (data?.product_image_1?.length != 0 && childData[0]?.media_url == '') {
+            if (data?.product_image_1?.length > 0 && childData[0]?.media_url != '') {
                 await ImageUpload(data?.product_image_1[0], "shopProduct", "MainImage", data?.product_name)
                 data.product_image_1 = `${productLink}${data?.product_name}_MainImage_${data?.product_image_1[0]?.name}`
             } else {
@@ -193,7 +197,7 @@ const AddProduct = (props) => {
                     data.product_image_1 = ''
                 }
             }
-            if (data?.product_image_2?.length != 0 && childData[1]?.media_url == '') {
+            if (data?.product_image_2?.length > 0 && childData[1]?.media_url != '') {
                 await ImageUpload(data?.product_image_2[0], "shopProduct", "Image2", data?.product_name)
                 data.product_image_2 = `${productLink}${data?.product_name}_Image2_${data?.product_image_2[0]?.name}`
             } else {
@@ -203,7 +207,7 @@ const AddProduct = (props) => {
                     data.product_image_2 = ''
                 }
             }
-            if (data?.product_image_3?.length != 0 && childData[2]?.media_url == '') {
+            if (data?.product_image_3?.length > 0 && childData[2]?.media_url != '') {
                 await ImageUpload(data?.product_image_3[0], "shopProduct", "Image3", data?.product_name)
                 data.product_image_3 = `${productLink}${data?.product_name}_Image3_${data?.product_image_3[0]?.name}`
             } else {
@@ -213,7 +217,7 @@ const AddProduct = (props) => {
                     data.product_image_3 = ''
                 }
             }
-            if (data?.product_image_4?.length != 0 && childData[3]?.media_url == '') {
+            if (data?.product_image_4?.length > 0 && childData[3]?.media_url != '') {
                 await ImageUpload(data?.product_image_4[0], "shopProduct", "Image4", data?.product_name)
                 data.product_image_4 = `${productLink}${data?.product_name}_Image4_${data?.product_image_4[0]?.name}`
             } else {
@@ -223,7 +227,7 @@ const AddProduct = (props) => {
                     data.product_image_4 = ''
                 }
             }
-            if (data?.product_image_5?.length != 0 && childData[4]?.media_url == '') {
+            if (data?.product_image_5?.length > 0 && childData[4]?.media_url != '') {
                 await ImageUpload(data?.product_image_5[0], "shopProduct", "Image5", data?.product_name)
                 data.product_image_5 = `${productLink}${data?.product_name}_Image5_${data?.product_image_5[0]?.name}`
             } else {
@@ -408,6 +412,7 @@ const AddProduct = (props) => {
                                                         </label>
                                                         <input
                                                             type="text"
+                                                            readOnly={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
                                                             placeholder='Product Name'
                                                             className={inputClass}
                                                             {...register('product_name', { required: true })}
@@ -420,6 +425,7 @@ const AddProduct = (props) => {
                                                         </label>
                                                         <select
                                                             className={inputClass}
+                                                            disabled={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
                                                             {...register('product_category', { required: true })}
                                                         >
                                                             <option value=''>Select</option>
@@ -438,6 +444,7 @@ const AddProduct = (props) => {
                                                         </label>
                                                         <select
                                                             className={inputClass}
+                                                            disabled={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
                                                             {...register('product_subcategory', { required: true })}
                                                         >
                                                             <option value=''>Select</option>
@@ -470,6 +477,7 @@ const AddProduct = (props) => {
                                                         </label>
                                                         <select
                                                             className={inputClass}
+                                                            disabled={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
                                                             {...register('product_isactive', { required: true })}
                                                         >
                                                             <option value=''>Select</option>
@@ -484,6 +492,7 @@ const AddProduct = (props) => {
                                                         </label>
                                                         <input
                                                             type="text"
+                                                            readOnly={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
                                                             placeholder='India'
                                                             className={inputClass}
                                                             {...register('product_country_of_origin', { required: true })}
@@ -496,6 +505,7 @@ const AddProduct = (props) => {
                                                         </label>
                                                         <input
                                                             type="number"
+                                                            readOnly={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
                                                             placeholder='150'
                                                             className={inputClass}
                                                             {...register('product_available_qty', { required: true })}
@@ -508,6 +518,7 @@ const AddProduct = (props) => {
                                                         </label>
                                                         <select
                                                             className={inputClass}
+                                                            disabled={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
                                                             {...register('product_unit_type', { required: true })}
                                                         >
                                                             <option value=''>Select</option>
@@ -525,6 +536,7 @@ const AddProduct = (props) => {
                                                         <input
                                                             type="number"
                                                             placeholder='50g'
+                                                            readOnly={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
                                                             className={inputClass}
                                                             {...register('product_unit', { required: true })}
                                                         />
@@ -590,6 +602,7 @@ const AddProduct = (props) => {
                                                         </label>
                                                         <input
                                                             type="text"
+                                                            readOnly={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
                                                             placeholder='Description'
                                                             className={inputClass}
                                                             {...register('product_description', { required: true })}
@@ -602,6 +615,7 @@ const AddProduct = (props) => {
                                                         </label>
                                                         <input
                                                             type="text"
+                                                            readOnly={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
                                                             placeholder='Shelf Life'
                                                             className={inputClass}
                                                             {...register('product_shelflife', { required: true })}
@@ -614,6 +628,7 @@ const AddProduct = (props) => {
                                                             className={fileinput}
                                                             id="video_input"
                                                             type='file'
+                                                            disabled={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
                                                             accept='video/mp4,video/x-m4v,video/*'
                                                             placeholder='Upload Video...'
                                                             {...register("product_video_url")}
@@ -631,6 +646,7 @@ const AddProduct = (props) => {
                                                         </label>
                                                         <input
                                                             type="text"
+                                                            readOnly={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
                                                             placeholder='Manufacturer Name'
                                                             className={inputClass}
                                                             {...register('product_Manufacturer_Name', { required: true })}
@@ -643,6 +659,7 @@ const AddProduct = (props) => {
                                                         </label>
                                                         <input
                                                             type="text"
+                                                            readOnly={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
                                                             placeholder='Nutritional Info'
                                                             className={inputClass}
                                                             {...register('product_nutritional_info', { required: true })}
@@ -655,6 +672,7 @@ const AddProduct = (props) => {
                                                         </label>
                                                         <input
                                                             type="text"
+                                                            readOnly={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
                                                             placeholder='Brand'
                                                             className={inputClass}
                                                             {...register('product_brand', { required: true })}
@@ -677,19 +695,20 @@ const AddProduct = (props) => {
                                                         </div>
                                                     }
                                                     <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Product Images</p>
-                                                    <div className="">
+                                                    {LoggedUserDetails?.role != 'admin' && LoggedUserDetails?.role != 'franchise' && <div className="">
                                                         <label className={labelClass}>
                                                             Check Image Option*
                                                         </label>
                                                         <select
                                                             name=""
+                                                            disabled={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
                                                             onChange={handleSelectChange}
                                                             className={`${inputClass} !bg-slate-100`}
                                                         >
                                                             <option value="false">I have a own Images</option>
                                                             <option value="true">I Don't have a Images</option>
                                                         </select>
-                                                    </div>
+                                                    </div>}
                                                     {openGallery && (
                                                         <div className="w-full mt-3 mb-2">
                                                             <span className={`cursor-pointer w-full ${formBtn1}`} onClick={openMediaModal}>
@@ -712,7 +731,8 @@ const AddProduct = (props) => {
                                                                 <input className={fileinput}
                                                                     id="main_input"
                                                                     type='file'
-                                                                    multiple
+                                                                    disabled={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
+                                                                    // multiple
                                                                     accept='image/jpeg,image/jpg,image/png'
                                                                     placeholder='Upload Images...'
                                                                     onChange={(e) => handleImageChange(e)}
@@ -721,7 +741,10 @@ const AddProduct = (props) => {
                                                                 {props?.title == 'Edit Product' && props?.row?.product_image_1 != '' && props?.row?.product_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
                                                                     {!childData[0] && props?.row?.product_image_1?.split('/').pop()}
                                                                 </label>}
-                                                                {childData[0]?.media_url?.split('/').pop()}
+                                                                <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                    {childData[0]?.media_url?.split('/').pop()}
+                                                                </label>
+                                                                
                                                                 {errors.product_image_1 && <Error title='Main Image is required*' />}
                                                             </div>
 
@@ -731,7 +754,8 @@ const AddProduct = (props) => {
                                                                 <input className={fileinput}
                                                                     id="main_input"
                                                                     type='file'
-                                                                    multiple
+                                                                    disabled={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
+                                                                    // multiple
                                                                     accept='image/jpeg,image/jpg,image/png'
                                                                     placeholder='Upload Images...'
                                                                     {...register("product_image_2",
@@ -740,7 +764,9 @@ const AddProduct = (props) => {
                                                                 {props?.title == 'Edit Product' && props?.row?.product_image_2 != '' && props?.row?.product_image_2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
                                                                     {!childData[1] && props?.row?.product_image_2?.split('/').pop()}
                                                                 </label>}
-                                                                {childData[1]?.media_url?.split('/').pop()}
+                                                                <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                    {childData[1]?.media_url?.split('/').pop()}
+                                                                </label>
                                                                 {/* {errors.product_image_2 && <Error title='Profile Image is required*' />} */}
                                                             </div>
                                                             <div className="">
@@ -748,14 +774,17 @@ const AddProduct = (props) => {
                                                                 <input className={fileinput}
                                                                     id="main_input"
                                                                     type='file'
-                                                                    multiple
+                                                                    disabled={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
+                                                                    // multiple
                                                                     accept='image/jpeg,image/jpg,image/png'
                                                                     placeholder='Upload Images...'
                                                                     {...register("product_image_3")} />
                                                                 {props?.title == 'Edit Product' && props?.row?.product_image_3 != '' && props?.row?.product_image_3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
                                                                     {!childData[2] && props?.row?.product_image_3?.split('/').pop()}
                                                                 </label>}
-                                                                {childData[2]?.media_url?.split('/').pop()}
+                                                                <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                    {childData[2]?.media_url?.split('/').pop()}
+                                                                </label>
                                                                 {/* {errors.product_image_3 && <Error title='Profile Image is required*' />} */}
                                                             </div>
                                                             <div className="">
@@ -763,14 +792,17 @@ const AddProduct = (props) => {
                                                                 <input className={fileinput}
                                                                     id="main_input"
                                                                     type='file'
-                                                                    multiple
+                                                                    disabled={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
+                                                                    // multiple
                                                                     accept='image/jpeg,image/jpg,image/png'
                                                                     placeholder='Upload Images...'
                                                                     {...register("product_image_4")} />
                                                                 {props?.title == 'Edit Product' && props?.row?.product_image_4 != '' && props?.row?.product_image_4 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
                                                                     {!childData[3] && props?.row?.product_image_4?.split('/').pop()}
                                                                 </label>}
-                                                                {childData[3]?.media_url?.split('/').pop()}
+                                                                <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                    {childData[3]?.media_url?.split('/').pop()}
+                                                                </label>
                                                                 {/* {errors.product_image_4 && <Error title='Profile Image is required*' />} */}
                                                             </div>
                                                             <div className="">
@@ -778,14 +810,17 @@ const AddProduct = (props) => {
                                                                 <input className={fileinput}
                                                                     id="main_input"
                                                                     type='file'
-                                                                    multiple
+                                                                    disabled={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
+                                                                    // multiple
                                                                     accept='image/jpeg,image/jpg,image/png'
                                                                     placeholder='Upload Images...'
                                                                     {...register("product_image_5")} />
                                                                 {props?.title == 'Edit Product' && props?.row?.product_image_5 != '' && props?.row?.product_image_5 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
                                                                     {!childData[4] && props?.row?.product_image_5?.split('/').pop()}
                                                                 </label>}
-                                                                {childData[4]?.media_url?.split('/').pop()}
+                                                                <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                    {childData[4]?.media_url?.split('/').pop()}
+                                                                </label>
                                                                 {/* {errors.product_image_5 && <Error title='Profile Image is required*' />} */}
                                                             </div>
                                                         </>}

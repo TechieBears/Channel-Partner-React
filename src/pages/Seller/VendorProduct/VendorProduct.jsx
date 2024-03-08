@@ -129,7 +129,7 @@ const VendorProduct = () => {
         { field: 'product_shelflife', header: 'Self Life', sortable: true },
         { field: 'product_Manufacturer_Name', header: 'Manufacturer Name', sortable: true },
         { field: 'product_country_of_origin', header: 'Country Of Origin', sortable: true },
-        { field: 'product_country_of_origin', header: 'Status', body: (row) => <h6>{row?.product_isactive == true ? 'Available' : 'Out Of Stock'}</h6>, sortable: true },
+        { field: 'status', header: 'Status', body: (row) => <h6>{row?.product_isactive == true ? 'Available' : 'Out Of Stock'}</h6>, sortable: true },
         { field: 'product_isverified_byadmin', header: 'Admin Verification', body: adminVerification, sortable: true },
         { field: 'product_isverified_byfranchise', header: 'Franchise Verification', body: franchiseVerification, sortable: true },
         { filed: 'action', header: 'Action', body: action, sortable: true },
@@ -152,6 +152,7 @@ const VendorProduct = () => {
     const getProducts = () => {
         getAllShopProduct(LoggedUserDetails?.sellerId).then(res => {
             setData(res)
+            console.log(res)
         })
     }
 
