@@ -1,21 +1,15 @@
-import { Eye, Trash } from 'iconsax-react';
-import React, { useState } from 'react';
 import axios from 'axios';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { NavLink } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import DeleteModal from '../../../components/Modals/DeleteModal/DeleteModal';
-import DashboardForm from '../../../components/modals/DashboardModals/DashboardForm';
 import { environment } from '../../../env';
 import { setStorageList } from '../../../redux/slices/storageSlice';
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 
 const Order = () => {
     const user = useSelector((state) => state.user.loggedUserDetails)
-    const storages = useSelector((state) => state?.storage?.list)
-    const cityNames = useSelector((state) => state?.master?.city)
-    const tempretureRangeList = useSelector(state => state?.master?.temperatureRange)
     const dispatch = useDispatch()
     const [open, setOpen] = React.useState(false);
     const [delId, setDelId] = React.useState(0);
@@ -43,21 +37,6 @@ const Order = () => {
 
     }
 
-    // ================================ Dropdown List =========================
-
-    const filterOptions = (options, inputValue) => {
-        return options.filter((i) =>
-            i.label.toLowerCase().includes(inputValue.toLowerCase())
-        );
-    };
-
-    const loadOptions = (_, callback) => {
-        const uniqueNames = new Set();
-        const uniqueProducts = storages?.filter(res => res.name && !uniqueNames.has(res.name) && uniqueNames.add(res.name))
-            .map(res => ({ label: res.name, value: res.name }));
-        callback(uniqueProducts || []);
-    }
-
     // ================= delete storage data ===============
     const toggleModalBtn = (id) => {
         setOpen(!open)
@@ -66,17 +45,61 @@ const Order = () => {
     const deleteData = () => {
         deleteStorage(delId).then((form) => {
             if (form?.message === 'Data deleted successfully') {
-                StorageList();
                 toast.success(form?.message);
                 setOpen(!open)
             }
         })
     }
-    const [activeTab, setActiveTab] = useState(1);
 
-    const changeTab = (tabNumber) => {
-        setActiveTab(tabNumber);
-    };
+    // const webSocketUrl = environment.WEB_SOCKET_API_URL;
+    // const ws = useRef(new WebSocket(webSocketUrl)).current;
+    // useEffect(() => {
+    //     // Function to send a general message
+    //     const sendMessage = (message) => {
+    //         if (ws.readyState === WebSocket.OPEN) {
+    //             ws.send(message);
+    //         } else {
+    //             console.log("WebSocket connection not open.");
+    //         }
+    //     };
+
+    //     // Function to send a specific type of message
+    //     const sendHelloMessage = () => {
+    //         sendMessage("Hello!");
+    //     };
+
+    //     const sendCustomMessage = (customMessage) => {
+    //         sendMessage(customMessage);
+    //     };
+
+    //     // Event listener for WebSocket open
+    //     ws.onopen = () => {
+    //         console.log('WebSocket Client Connected');
+    //         // Example: Sending a specific type of message when the WebSocket connection is open
+    //         sendHelloMessage();
+    //     };
+
+    //     // Event listener for incoming messages
+    //     ws.onmessage = (event) => {
+    //         console.log('Received message:', event);
+    //         // Handle incoming messages as needed
+    //     };
+
+    //     // Event listener for WebSocket close
+    //     ws.onclose = () => {
+    //         console.log('WebSocket Client Closed');
+    //     };
+
+    //     // Event listener for WebSocket errors
+    //     ws.onerror = (e) => {
+    //         console.log('WebSocket Error:', e.message);
+    //     };
+
+    //     // Cleanup function for useEffect
+    //     return () => {
+    //         ws.close(); // Close the WebSocket connection when component unmounts
+    //     };
+    // }, []);
 
     return (
         <>
@@ -89,29 +112,6 @@ const Order = () => {
             <section className='w-full h-full'>
 
                 <div className="mx-auto mt-8 sm:m-5">
-                    <div className="flex">
-                        <button
-                            onClick={() => changeTab(1)}
-                            className={`py-2 px-0 mx-5 ${activeTab === 1 ? 'border-b-2 border-blue-400 text-black' : 'bg-transparent'
-                                }`}
-                        >
-                            Pending
-                        </button>
-                        <button
-                            onClick={() => changeTab(2)}
-                            className={`py-2 px-0 mx-5 ${activeTab === 2 ? 'border-b-2 border-blue-400 text-black' : 'bg-transparent'
-                                }`}
-                        >
-                            Active
-                        </button>
-                        <button
-                            onClick={() => changeTab(3)}
-                            className={`py-2 px-0 mx-5 ${activeTab === 3 ? 'border-b-2 border-blue-400 text-black' : 'bg-transparent'
-                                }`}
-                        >
-                            History
-                        </button>
-                    </div>
 
                     {/* =========================  fileter ======================= */}
                     <div className="p-4 bg-white sm:m-5 rounded-xl" >
