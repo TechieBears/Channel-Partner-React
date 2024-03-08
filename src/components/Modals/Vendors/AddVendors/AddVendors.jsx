@@ -20,7 +20,6 @@ import moment from 'moment';
 
 
 export default function AddVendors(props) {
-    console.log('props = ', props)
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     const Franchisee = useSelector((state) => state?.master?.Franchise);
     const [isOpen, setOpen] = useState(false);
@@ -47,7 +46,7 @@ export default function AddVendors(props) {
         const shopEndTime = moment(data?.shop_end_time, 'HH:mm').format('hh:mm A');
         data.shop_start_time = shopStartTime;
         data.shop_end_time = shopEndTime;
-        
+
         if (props.button != 'edit') {    // for create
             if (data?.bank_passbook.length != 0) {
                 await ImageUpload(data?.bank_passbook[0], "vendor", "BankPassbook", data?.first_name)
@@ -105,11 +104,11 @@ export default function AddVendors(props) {
                 setLoader(true);
                 let additionalPayload = {};
                 if (LoggedUserDetails?.role == 'franchise') {
-                    additionalPayload = { created_by: LoggedUserDetails?.userid, vendor_type: "seller" };
+                    additionalPayload = { created_by: LoggedUserDetails?.userid, vendor_type: "shop" };
                 }
                 let vendorType = {};
                 if (LoggedUserDetails?.role == 'admin') {
-                    vendorType = { vendor_type: "seller" };
+                    vendorType = { vendor_type: "shop" };
                 }
 
                 const requestData = { ...data, ...additionalPayload, ...vendorType };
@@ -137,11 +136,11 @@ export default function AddVendors(props) {
                 setLoader(true)
                 let additionalPayload = {};
                 if (LoggedUserDetails?.role == 'franchise') {
-                    additionalPayload = { created_by: LoggedUserDetails?.userid, vendor_type: "seller" };
+                    additionalPayload = { created_by: LoggedUserDetails?.userid, vendor_type: "shop" };
                 }
                 let vendorType = {};
                 if (LoggedUserDetails?.role == 'admin') {
-                    vendorType = { vendor_type: "seller" };
+                    vendorType = { vendor_type: "shop" };
                 }
                 const requestData = { ...data, ...additionalPayload, ...vendorType };
 
@@ -435,24 +434,6 @@ export default function AddVendors(props) {
                                                             <Error title="shop end time is Required*" />
                                                         )}
                                                     </div>
-                                                    {/* <div className="">
-                                                        <label className={labelClass}>Vendor Type*</label>
-                                                        <select
-                                                            name="category Type"
-                                                            className={inputClass}
-                                                            {...register("vendor_type", { required: true })}
-                                                        >
-                                                            <option value="">Select Type</option>
-                                                            {categories?.map((category) => (
-                                                                <option key={category.id} value={category.category_name} selected={props?.data?.category === category.id}>
-                                                                    {category.category_name}
-                                                                </option>
-                                                            ))}
-                                                        </select>
-                                                        {errors.vendor_type && (
-                                                            <Error title="Vendor Type is required*" />
-                                                        )}
-                                                    </div> */}
                                                     <div className="">
                                                         <label className={labelClass}>PINCODE*</label>
                                                         <input
@@ -511,7 +492,6 @@ export default function AddVendors(props) {
                                                                 placeholder="10"
                                                                 className={inputClass}
                                                                 {...register("insta_commison_percentage", { required: true })}
-                                                            // disabled={props?.button == 'edit' ? true : false}
                                                             />
                                                             {errors.address && (
                                                                 <Error title="Insta commison percentage is Required*" />
@@ -524,25 +504,27 @@ export default function AddVendors(props) {
                                                 <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-x-3 gap-y-3">
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Pan Card
+                                                            Pan Card*
                                                         </label>
                                                         <input
                                                             type="text"
                                                             placeholder='PAN  No'
                                                             className={inputClass}
-                                                            {...register('pan_card')}
+                                                            {...register('pan_card', { required: true })}
                                                         />
+                                                        {errors?.pan_card && <Error title='Pan Card Number is required' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Aadhar Card
+                                                            Aadhar Card*
                                                         </label>
                                                         <input
                                                             type="text"
                                                             placeholder='Aadhar No'
                                                             className={inputClass}
-                                                            {...register('adhar_card')}
+                                                            {...register('adhar_card', { required: true })}
                                                         />
+                                                        {errors?.adhar_card && <Error title='Aadhar Card Number is required' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -561,28 +543,30 @@ export default function AddVendors(props) {
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Bank Name
+                                                            Bank Name*
                                                         </label>
                                                         <div className="flex items-center space-x-2">
                                                             <input
                                                                 type="text"
                                                                 placeholder='Bank Name'
                                                                 className={inputClass}
-                                                                {...register('bank_name')}
+                                                                {...register('bank_name', { required: true })}
                                                             />
+                                                            {errors?.bank_name && <Error title='Bank name is Required' />}
                                                         </div>
                                                     </div>
 
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Bank Account Number
+                                                            Bank Account Number*
                                                         </label>
                                                         <input
                                                             type="text"
                                                             placeholder='Account Number'
                                                             className={inputClass}
-                                                            {...register('account_number')}
+                                                            {...register('account_number', { required: true })}
                                                         />
+                                                        {errors?.account_number && <Error title='Account Number is Required' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Bank PassBook Image*</label>

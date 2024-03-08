@@ -909,7 +909,13 @@ export default function DashboardForm(props) {
     useEffect(() => {
         restaurantCategories();
         setLoader(false);
+        // methods.setValue('shop_name', props?.data?.vendor?.shop_name)
     }, [])
+
+    // useEffect(() => {
+    //     methods.setValue('shop_name', props?.data?.vendor?.shop_name)
+    //     methods.setValue('shop_name', props?.data?.vendor?.shop_name)
+    // }, [activeStep])
 
     return (
         <>

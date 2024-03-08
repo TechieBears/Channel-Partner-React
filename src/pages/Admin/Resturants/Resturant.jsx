@@ -89,6 +89,27 @@ export default function Restaurant() {
     }
   };
 
+  // ============== Fetch All Admin Restaurants  ================
+  const getAllRestaurant = () => {
+    getRestarant().then((res) => {
+      const restaurantVendors = res.filter(
+        (item) => item?.vendor_type == "restaurant"
+      );
+      setData(restaurantVendors);
+    });
+  };
+
+  // ============== Fetch Franchisee Restaurant  ================
+  const getFranchiseRestaurants = () => {
+    try {
+      getFranchRestaurant(user?.userid).then((res) => {
+        setData(res);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // =============================== active user switch =============================
   const switchActive = (row) => {
     return (
@@ -137,7 +158,7 @@ export default function Restaurant() {
         title="Edit User"
         id={row?.user?.id}
         data={row}
-        getAllRestaurant={getAllRestaurant}
+        getAllRestaurant={user?.role == 'admin' ? getAllRestaurant : getFranchRestaurant}
       />
     </div>
   );
@@ -152,27 +173,6 @@ export default function Restaurant() {
     >
       {rowData?.isactive !== "false" ? "Active" : "Inactive"}
     </h6>
-  );
-
-  /*================================     column    ========================= */
-
-  const action = (row) => (
-    <div className="flex items-center gap-2">
-      <NavLink
-        to={`/resturants/restaurant-detail/${row?.vendor_id}`}
-        state={row}
-        className="bg-green-100 px-1.5 py-1 rounded-lg"
-      >
-        <Eye size="20" className="text-green-500" />
-      </NavLink>
-      <AddRestaurant
-        button="edit"
-        title="Edit User"
-        id={row?.user?.id}
-        data={row}
-        getAllRestaurant={getAllRestaurant}
-      />
-    </div>
   );
 
   const columns = [
@@ -193,29 +193,6 @@ export default function Restaurant() {
     { field: "isverify", header: "Admin Verify", body: switchVerify, sortable: true },
     { field: "isactive", header: "Franchise Verify", body: switchActive, sortable: true },
   ];
-
-
-
-  // ============== Fetch All Admin Restaurants  ================
-  const getAllRestaurant = () => {
-    getRestarant().then((res) => {
-      const restaurantVendors = res.filter(
-        (item) => item?.vendor_type == "restaurant"
-      );
-      setData(restaurantVendors);
-    });
-  };
-
-  // ============== Fetch Franchisee Restaurant  ================
-  const getFranchiseRestaurants = () => {
-    try {
-      getFranchRestaurant(user?.userid).then((res) => {
-        setData(res);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   useEffect(() => {
     if (user?.role == "admin") {
@@ -309,7 +286,7 @@ export default function Restaurant() {
           </div>
           <AddRestaurant
             title="Add Restaurant"
-            getAllRestaurant={getAllRestaurant}
+            getAllRestaurant={user?.role == 'admin' ? getAllRestaurant : getFranchRestaurant}
             id={user?.userid}
           />
         </div>

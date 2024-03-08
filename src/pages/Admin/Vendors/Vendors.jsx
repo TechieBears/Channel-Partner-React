@@ -6,7 +6,6 @@ import AddRestaurant from '../../../components/Modals/Resturant/AddRestaurant';
 import { NavLink, Link } from 'react-router-dom';
 import Switch from 'react-js-switch';
 import AddVendors from '../../../components/Modals/Vendors/AddVendors/AddVendors';
-import AddVendorShops from '../../../components/Modals/Vendors/AddVendors/AddVendorShops';
 import { useForm } from 'react-hook-form';
 import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
 import { useDispatch, useSelector } from "react-redux";
@@ -19,19 +18,9 @@ import { toast } from 'react-toastify';
 
 
 function Vendors() {
-    const [activeTab, setActiveTab] = useState(true);
-    const [rstatus, setStatus] = useState();
     const [Vendors, SetVendors] = useState();
-    // console.log('vendor = ', Vendors)
-
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const dispatch = useDispatch()
-    // const Vendors = useSelector((state) => state?.master?.FranchiseVendors);
-    // console.log('Admin Vendors = ', Vendors);
-
-
-
-
     // // ========================= fetch data from api ==============================
     const FranchiseeVendors = () => {
         try {
@@ -42,15 +31,6 @@ function Vendors() {
         } catch (error) {
             console.log(error);
         }
-    };
-
-    useEffect(() => {
-        FranchiseeVendors()
-    }, [])
-
-
-    const changeTab = (tabNumber) => {
-        setActiveTab(tabNumber);
     };
 
     // =================== filter data ========================
@@ -67,24 +47,6 @@ function Vendors() {
     }
 
     // =================== table user active column ========================
-
-    const activeActions = (row) => {
-        const payload = { isactive: !row.isactive, email: row?.email }
-        try {
-            editUser(row?.id, payload).then((form) => {
-                if (form.code == 2002) {
-                    toast.success('User Active Changed !');
-                    FranchiseeVendors()
-                }
-                else {
-                    console.log("err");
-                }
-            })
-        }
-        catch (err) {
-            console.log(err);
-        }
-    }
 
     const verifyActions = (row) => {
         const payload = { userId: row?.user?.id, isverifiedbyadmin: !row?.user?.isverified_byadmin, isverifiedbyfranchise: row?.isverifiedbyfranchise }
@@ -113,7 +75,6 @@ function Vendors() {
                 <Switch
                     value={row?.isverifiedbyfranchise}
                     disabled={true}
-                    // onChange={() => activeActions(row)}
                     size={50}
                     backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
                     borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
@@ -164,23 +125,11 @@ function Vendors() {
         </h6>
     );
 
-
-
-
-    /*================================     column    ========================= */
-
-    const verifyByAdmin = (row) => <Switch checked={row?.is_verified} onChange={() => setStatus(row?.id)} />
-    const ActiveStatus = (row) => <Switch checked={row?.is_active} onChange={() => setStatus(row?.id)} />
-    const status = (row) => <Switch checked={row?.id == rstatus ? true : false} onChange={() => setStatus(row?.id)} />
-    const action = (row) => <button className={`${tableBtn}`} >
-        View Analysis
-    </button>
-
     const columns = [
         { field: 'hawker_shop_photo', header: 'Shop Image', body: representativeBodyTemplate, sortable: false, style: true },
         { field: 'msb_code', header: 'MSB Code', sortable: false },
         { field: 'shop_name', header: 'Shop Name', body: (row) => <div className="capitalize">{row?.shop_name ? row?.shop_name : 'Not Available'}</div> },
-        { field: 'shop_name', header: 'Franchise Name', body: (row) => <div className="capitalize">{row?.created_by?.first_name + " " +  row?.created_by?.last_name}</div> },
+        { field: 'shop_name', header: 'Franchise Name', body: (row) => <div className="capitalize">{row?.created_by?.first_name + " " + row?.created_by?.last_name}</div> },
         { field: 'email', header: 'Email', body: (row) => <h6>{row?.user?.email}</h6>, sortable: false },
         { field: 'insta_commison_percentage', header: 'Comission(%)', body: (row) => <h6>{row?.insta_commison_percentage}%</h6>, sortable: false },
         { field: 'phone_no', header: 'Phone No', body: (row) => <h6>{row?.user?.phone_no}</h6>, sortable: false },
@@ -192,11 +141,11 @@ function Vendors() {
         { field: 'id', header: 'Action', body: actionBodyTemplate, sortable: true },
         { field: 'isactive', header: 'Franchise Verify', body: switchActive, sortable: true },
         { field: 'isverify', header: 'Admin Verify', body: switchVerify, sortable: true },
-        // { header: 'Analyse', body: action, sortable: false },
     ]
 
-
-
+    useEffect(() => {
+        FranchiseeVendors()
+    }, [])
     return (
         <>
             {/* ========================= user filter ======================= */}
@@ -266,9 +215,6 @@ function Vendors() {
                     </div>
                     <AddVendors title='Add Vendors' FranchiseeVendors={FranchiseeVendors} />
                 </div>
-                {/* {
-                    Vendors?.legth > 0 && <Table data={Vendors} columns={columns} />
-                } */}
                 {
                     <Table data={Vendors} columns={columns} />
                 }
