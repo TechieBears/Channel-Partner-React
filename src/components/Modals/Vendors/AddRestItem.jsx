@@ -15,12 +15,16 @@ import LoadBox from '../../Loader/LoadBox';
 export default function AddRestItem(props) {
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false);
-    const [category, setCategory] = useState([]);
-    const [subCategory, setsubCategory] = useState([])
     const [FinalPriceSeller, setFinalPriceSeller] = useState([]);
     const [FinalPriceAdmin, setFinalPriceAdmin] = useState([]);
     const { register, handleSubmit, control, watch, reset, setValue, formState: { errors } } = useForm();
     const user = useSelector((state) => state?.user?.loggedUserDetails);
+    const categoryField = watch('food_category');
+    let subCat;
+    if (props?.category && props?.subCategory) {
+        subCat = props?.subCategory.filter(cat => cat?.category == categoryField)
+    }
+    // let filteredSubCat = subCategory.filter()
     const toggle = () => {
         setOpen(!isOpen)
         setLoader(!loader)
@@ -156,12 +160,6 @@ export default function AddRestItem(props) {
     }
 
     useEffect(() => {
-        getRestaurantCategory().then(res => {
-            setCategory(res)
-        })
-        getRestaurantSubCategory().then(res => {
-            setsubCategory(res)
-        })
         if (user?.role == 'admin') {
             reset({
                 'food_name': props?.data?.food_name,
@@ -233,9 +231,9 @@ export default function AddRestItem(props) {
                 <button className='items-center p-1 bg-yellow-100 rounded-xl hover:bg-yellow-200' onClick={() => setOpen(true)}>
                     <Edit size={24} className='text-yellow-400' />
                 </button> :
-                <button className={`${formBtn1} flex`} onClick={() => setOpen(true)}>
+                <button className={`${formBtn1}`} onClick={() => setOpen(true)}>
                     {/* <Add className='text-white' /> */}
-                    {props?.title == 'edit' ? 'Edit Food Item' : "Add Food Item"}
+                    {props?.title == 'edit' ? 'Edit Item' : "Add Item"}
                 </button>}
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-[100]" onClose={() => toggle}>
@@ -267,7 +265,7 @@ export default function AddRestItem(props) {
                                         as="h2"
                                         className="w-full px-3 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
                                     >
-                                        {props?.title == "edit" ? "Edit Food Item" : "Add Food Item"}
+                                        {props?.title == "edit" ? "Edit Food Item" : "Add Item"}
                                     </Dialog.Title>
                                     <div className=" bg-gray-200/70">
                                         {/* React Hook Form */}
@@ -298,7 +296,7 @@ export default function AddRestItem(props) {
                                                             {...register('food_category', { required: true })}
                                                         >
                                                             <option value=''>Select</option>
-                                                            {category?.map(item =>
+                                                            {props?.category?.map(item =>
                                                                 <option key={item?.id} value={item?.id}>{item?.category_name}</option>
                                                             )}
                                                         </select>
@@ -315,7 +313,7 @@ export default function AddRestItem(props) {
                                                         >
                                                             <option value=''>Select</option>
                                                             {
-                                                                subCategory?.map(item => (
+                                                                subCat?.map(item => (
                                                                     <option key={item?.subcat_id} value={item?.subcat_id} >{item?.subcat_name}</option>
                                                                 ))
                                                             }

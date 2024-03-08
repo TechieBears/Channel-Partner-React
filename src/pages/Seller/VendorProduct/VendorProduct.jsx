@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import AsyncSelect from "react-select/async";
 import { toast } from 'react-toastify';
-import { getAllShopProduct, getRestaurantFood, getSingleRestaurant } from '../../../api';
+import { getAllShopProduct, getRestaurantCategory, getRestaurantFood, getRestaurantSubCategory, getSingleRestaurant } from '../../../api';
 import AddProduct from '../../../components/Modals/Vendors/AddProduct';
 import AddRestItem from '../../../components/Modals/Vendors/AddRestItem';
 import Table from '../../../components/Table/Table';
@@ -15,6 +15,8 @@ import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 const VendorProduct = () => {
     const [data, setData] = useState([])
     const [details, setDetails] = useState([]);
+    const [category, setCategory] = useState([]);
+    const [subCategory, setsubCategory] = useState([])
     const user = useSelector((state) => state?.user?.loggedUserDetails);
     const storages = useSelector((state) => state?.storage?.list);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
@@ -66,7 +68,7 @@ const VendorProduct = () => {
         <Link to={`/food-list/food-details/${row?.product_id}`} state={row} className='items-center p-1 bg-sky-100 rounded-xl hover:bg-sky-200'>
             <Eye size={24} className='text-sky-400' />
         </Link>
-        <AddRestItem title='edit' button='edit' data={row} getRestFood={getRestFood} />
+        <AddRestItem title='edit' button='edit' data={row} getRestFood={getRestFood} category={category} subCategory={subCategory} />
     </div>
 
     const representativeBodyTemplate = (row) => {
@@ -165,6 +167,20 @@ const VendorProduct = () => {
         } else {
             getProducts();
         }
+        try {
+            getRestaurantCategory().then(res => {
+                setCategory(res)
+            })
+        } catch (error) {
+            console.log('error', error)
+        }
+        try {
+            getRestaurantSubCategory().then(res => {
+                setsubCategory(res)
+            })
+        } catch (error) {
+
+        }
     }, []);
 
 
@@ -225,9 +241,9 @@ const VendorProduct = () => {
                 </form>
             </div>
             <div className='p-4 m-4 bg-white sm:m-5 rounded-xl'>
-                <div className='grid items-center grid-cols-6'>
-                    <h2 className='col-span-5 text-xl font-semibold'>{user?.vendor_type == 'restaurant' ? 'Item List' : 'Product List'}</h2>
-                    {user?.isverified_byadmin == true && user?.vendor_type == 'restaurant' ? <AddRestItem title='Add Item' details={details} getRestFood={getRestFood} /> : user?.vendor_type == 'seller' ? <AddProduct title='Add Product' getProducts={getProducts} /> : ''}
+                <div className='grid items-center sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-6'>
+                    <h2 className='lg:col-span-5 text-xl font-semibold'>{user?.vendor_type == 'restaurant' ? 'Item List' : 'Product List'}</h2>
+                    {user?.isverified_byadmin == true && user?.vendor_type == 'restaurant' ? <AddRestItem title='Add Item' details={details} getRestFood={getRestFood} category={category} subCategory={subCategory} /> : user?.vendor_type == 'seller' ? <AddProduct title='Add Product' getProducts={getProducts} /> : ''}
                 </div>
                 <div className='mt-4'>
                     <Table data={data} columns={user?.vendor_type == 'restaurant' ? restaurantColumns : shopColumns} />

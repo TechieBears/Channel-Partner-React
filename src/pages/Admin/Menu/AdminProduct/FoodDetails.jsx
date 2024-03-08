@@ -6,7 +6,6 @@ import { ArrowLeft } from 'iconsax-react';
 export default function FoodDetails() {
     const location = useLocation();
     const food = location.state;
-    console.log('food', food);
     const navigate = useNavigate();
     const images = [
         {
@@ -40,8 +39,8 @@ export default function FoodDetails() {
             <button className='flex gap-2 mb-2' onClick={() => navigate(-1)}>
                 <ArrowLeft /> Back
             </button>
-            <div className='grid grid-cols-6 gap-4'>
-                <div className='col-span-4 bg-white rounded-xl'>
+            <div className='grid  sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-6 gap-4'>
+                <div className='lg:col-span-4 bg-white rounded-xl'>
                     <div className='p-4 '>
                         <div className='mt-2'>
                             <p className='text-2xl font-semibold'>{food?.food_name}</p>
@@ -116,7 +115,7 @@ export default function FoodDetails() {
                         </div>
                     </div>
                 </div>
-                <div className='w-96 bg-white rounded-xl'>
+                <div className='lg:col-span-2 bg-white rounded-xl'>
                     <SimpleGallery
                         galleryID="my-test-gallery"
                         images={images}

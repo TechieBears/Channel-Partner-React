@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 import Switch from "react-js-switch";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import { useSelector } from "react-redux";
-import { getRestarant, verifyVendors, getFranchRestaurant, GetFranchisee } from "../../../api";
+import { getRestarant, verifyVendors, getFranchRestaurant, GetFranchisee, getRestaurantCategory, getRestaurantSubCategory } from "../../../api";
 import { useForm, Controller } from "react-hook-form";
 import userImg from "../../../assets/user.jpg";
 import {
@@ -32,7 +32,6 @@ export default function Restaurant() {
     formState: { errors },
     reset,
   } = useForm();
-
   const [pincodeOptions, setPincodeOptions] = useState()
   const [franchiseOptions, setFranchiseOptions] = useState()
 
