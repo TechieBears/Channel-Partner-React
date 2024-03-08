@@ -162,19 +162,19 @@ const AddProduct = (props) => {
             } else {
                 data.product_image_2 = props?.row?.product_image_2
             }
-            if (data?.product_image_3?.length > 0 && props?.row?.product_image_3) {
+            if (data?.product_image_3?.length > 0) {
                 await ImageUpload(data?.product_image_3[0], "shopProduct", "Image3", data?.product_name)
                 data.product_image_3 = `${productLink}${data?.product_name}_Image3_${data?.product_image_3[0]?.name}`
             } else {
                 data.product_image_3 = props?.row?.product_image_3
             }
-            if (data?.product_image_4?.length > 0 && props?.row?.product_image_4) {
+            if (data?.product_image_4?.length > 0) {
                 await ImageUpload(data?.product_image_4[0], "shopProduct", "Image4", data?.product_name)
                 data.product_image_4 = `${productLink}${data?.product_name}_Image4_${data?.product_image_4[0]?.name}`
             } else {
                 data.product_image_4 = props?.row?.product_image_4
             }
-            if (data?.product_image_5?.length > 0 && props?.row?.product_image_5) {
+            if (data?.product_image_5?.length > 0) {
                 await ImageUpload(data?.product_image_5[0], "shopProduct", "Image5", data?.product_name)
                 data.product_image_5 = `${productLink}${data?.product_name}_Image5_${data?.product_image_5[0]?.name}`
             } else {
