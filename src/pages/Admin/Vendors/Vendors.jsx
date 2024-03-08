@@ -90,15 +90,18 @@ function Vendors() {
 
     // =================== filter data ========================
     const onSubmit = async (data) => {
-        console.log("🚀 ~ file: Vendors.jsx:96 ~ onSubmit ~ data:", data)
         if (data?.name != '' || data?.msbcode != '' || data?.franchise != '' || data?.franchise != undefined || data?.pincode != '' || data?.pincode != undefined) {
-            let url = `${environment.baseUrl}vendor/vendor_list?name=${data?.name}&msbcode=${data?.msbcode}&franchise=${data?.franchise?.value ? data?.franchise?.value :'' }&pincode=${data?.pincode?.value ? data?.pincode?.value :'' }`
-            await axios.get(url).then((res) => {
-                console.log("🚀 ~ file: Vendors.jsx:97 ~ onSubmit ~ url:", url)
-                console.log("🚀 ~ file: Vendors.jsx:97 ~ awaitaxios.get ~ res:", res)
-                SetVendors(res?.data?.results)
-                toast.success("Filters applied successfully")
-            })
+            try {
+                let url = `${environment.baseUrl}vendor/vendor_list?name=${data?.name}&msbcode=${data?.msbcode}&franchise=${data?.franchise?.value ? data?.franchise?.value : ''}&pincode=${data?.pincode?.value ? data?.pincode?.value : ''}`
+                await axios.get(url).then((res) => {
+                    SetVendors(res?.data?.results)
+                    toast.success("Filters applied successfully")
+                }).catch((err) => {
+                    console.log("🚀 ~ file: Vendors.jsx:100 ~ awaitaxios.get ~ err:", err)
+                })
+            } catch (err) {
+                console.log("🚀 ~ file: Vendors.jsx:101 ~ onSubmit ~ err:", err)
+            }
         } else {
             toast.warn("No Selected Value !")
         }
@@ -106,10 +109,10 @@ function Vendors() {
 
     const handleClear = () => {
         reset({
-            name:'',
-            msbcode:'',
-            franchise:'',
-            pincode:''
+            name: '',
+            msbcode: '',
+            franchise: '',
+            pincode: ''
         })
         toast.success("Filters clear successfully")
         SetVendors()

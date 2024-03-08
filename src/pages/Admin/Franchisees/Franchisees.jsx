@@ -22,7 +22,7 @@ import AsyncSelect from 'react-select/async';
 function Franchisees() {
     const dispatch = useDispatch()
     const Franchisee = useSelector((state) => state?.master?.Franchise);
-    const { control, register, handleSubmit, formState: { errors }, reset,setValue } = useForm();
+    const { control, register, handleSubmit, formState: { errors }, reset, setValue } = useForm();
     const [open, setOpen] = React.useState(false);
     const [delId, setDelId] = React.useState(0);
 
@@ -67,16 +67,19 @@ function Franchisees() {
 
     // =================== filter data ========================
     const onSubmit = async (data) => {
-        console.log("🚀 ~ file: Franchisees.jsx:69 ~ onSubmit ~ data:", data)
-
-
         if (data?.name != '' || data?.msbcode != '' || data?.pincode != '' || data?.pincode != undefined) {
-            let url = `${environment.baseUrl}franchise/franchise_list?name=${data?.name}&msbcode=${data?.msbcode}&pincode=${data?.pincode?.value ? data?.pincode?.value :'' }`
-            await axios.get(url).then((res) => {
-                console.log("🚀 ~ file: Franchisees.jsx:74 ~ awaitaxios.get ~ res:", res)
-                setFranchiseData(res?.data?.results)
-                toast.success("Filters applied successfully")
-            })
+            try {
+                let url = `${environment.baseUrl}franchise/franchise_list?name=${data?.name}&msbcode=${data?.msbcode}&pincode=${data?.pincode?.value ? data?.pincode?.value : ''}`
+                await axios.get(url).then((res) => {
+                    console.log("🚀 ~ file: Franchisees.jsx:74 ~ awaitaxios.get ~ res:", res)
+                    setFranchiseData(res?.data?.results)
+                    toast.success("Filters applied successfully")
+                }).catch((err) => {
+                    console.log("🚀 ~ file: Franchisees.jsx:78 ~ awaitaxios.get ~ err:", err)
+                })
+            } catch (err) {
+                console.log("🚀 ~ file: Franchisees.jsx:81 ~ onSubmit ~ err:", err)
+            }
         } else {
             toast.warn("No Selected Value !")
         }
@@ -84,9 +87,9 @@ function Franchisees() {
 
     const handleClear = () => {
         reset({
-            name:'',
-            msbcode:'',
-            pincode:''
+            name: '',
+            msbcode: '',
+            pincode: ''
         })
         toast.success("Filters clear successfully")
         setFranchiseData()
@@ -213,13 +216,13 @@ function Franchisees() {
                                 render={({
                                     field: { onChange, value, ref },
                                 }) => (
-                                    
+
                                     <Select
                                         value={value}
                                         options={pincodeOptions}
                                         className="w-100 text-gray-900"
                                         placeholder="Search by Pincode"
-                                        onChange={ onChange}
+                                        onChange={onChange}
                                         inputRef={ref}
                                         maxMenuHeight={200}
                                         styles={{
@@ -249,7 +252,7 @@ function Franchisees() {
                     </div>
                     <AddFranchisee title='Add Franchisee' FranchiseeDetails={FranchiseeDetails} />
                 </div>
-                {franchiseData?.length > 0 && <Table data={franchiseData} columns={columns}/>}
+                {franchiseData?.length > 0 && <Table data={franchiseData} columns={columns} />}
             </div>
         </>
     )

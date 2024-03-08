@@ -65,15 +65,18 @@ export default function Restaurant() {
 
   // =================== filter data ========================
   const onSubmit = async (data) => {
-    console.log("🚀 ~ file: Resturant.jsx:56 ~ onSubmit ~ data:", data)
     if (data?.name != '' || data?.msbcode != '' || data?.franchise != '' || data?.franchise != undefined || data?.pincode != '' || data?.pincode != undefined) {
-      let url = `${environment.baseUrl}vendor/vendor_list?name=${data?.name}&msbcode=${data?.msbcode}&franchise=${data?.franchise?.value ? data?.franchise?.value : ''}&pincode=${data?.pincode?.value ? data?.pincode?.value : ''}&vendor_type=restaurant`
-      await axios.get(url).then((res) => {
-        console.log("🚀 ~ file: Resturant.jsx:61 ~ onSubmit ~ url:", url)
-        console.log("🚀 ~ file: Resturant.jsx:59 ~ awaitaxios.get ~ res:", res)
-        setData(res?.data?.results)
-        toast.success("Filters applied successfully")
-      })
+      try {
+        let url = `${environment.baseUrl}vendor/vendor_list?name=${data?.name}&msbcode=${data?.msbcode}&franchise=${data?.franchise?.value ? data?.franchise?.value : ''}&pincode=${data?.pincode?.value ? data?.pincode?.value : ''}&vendor_type=restaurant`
+        await axios.get(url).then((res) => {
+          setData(res?.data?.results)
+          toast.success("Filters applied successfully")
+        }).catch((err) => {
+          console.log("🚀 ~ file: Resturant.jsx:75 ~ awaitaxios.get ~ err:", err)
+        })
+      } catch (err) {
+        console.log("🚀 ~ file: Resturant.jsx:76 ~ onSubmit ~ err:", err)
+      }
     } else {
       toast.warn("No Selected Value !")
     }
@@ -364,7 +367,7 @@ export default function Restaurant() {
             <button
               type="button"
               className={`${formBtn2} w-full text-center`}
-              onClick={() => 
+              onClick={() =>
                 handleClear()
               }
             >

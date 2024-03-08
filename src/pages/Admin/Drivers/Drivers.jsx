@@ -61,13 +61,17 @@ function Drivers() {
     // =================== filter data ========================
     const onSubmit = async (data) => {
         if (data?.name != '' || data?.msbcode != '' || data?.franchise != '' || data?.franchise != undefined || data?.pincode != '' || data?.pincode != undefined) {
-            let url = `${environment.baseUrl}delivery/deliveryboy_list?name=${data?.name}&msbcode=${data?.msbcode}&franchise=${data?.franchise?.value ? data?.franchise?.value : ''}&pincode=${data?.pincode?.value ? data?.pincode?.value : ''}`
-            await axios.get(url).then((res) => {
-                console.log("🚀 ~ file: Drivers.jsx:66 ~ onSubmit ~ url:", url)
-                console.log("🚀 ~ file: Drivers.jsx:66 ~ awaitaxios.get ~ res:", res)
-                setDeliveryBoyData(res?.data?.results)
-                toast.success("Filters applied successfully")
-            })
+            try {
+                let url = `${environment.baseUrl}delivery/deliveryboy_list?name=${data?.name}&msbcode=${data?.msbcode}&franchise=${data?.franchise?.value ? data?.franchise?.value : ''}&pincode=${data?.pincode?.value ? data?.pincode?.value : ''}`
+                await axios.get(url).then((res) => {
+                    setDeliveryBoyData(res?.data?.results)
+                    toast.success("Filters applied successfully")
+                }).catch((err) => {
+                    console.log("🚀 ~ file: Drivers.jsx:70 ~ awaitaxios.get ~ err:", err)
+                })
+            } catch (err) {
+                console.log("🚀 ~ file: Drivers.jsx:75 ~ onSubmit ~ err:", err)
+            }
         } else {
             toast.warn("No Selected Value !")
         }
@@ -75,10 +79,10 @@ function Drivers() {
 
     const handleClear = () => {
         reset({
-            name:'',
-            msbcode:'',
-            franchise:'',
-            pincode:''
+            name: '',
+            msbcode: '',
+            franchise: '',
+            pincode: ''
         })
         toast.success("Filters clear successfully")
         setDeliveryBoyData()
