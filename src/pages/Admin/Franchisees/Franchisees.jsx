@@ -65,8 +65,6 @@ function Franchisees() {
     }, [franchiseData])
 
 
-
-
     // =================== filter data ========================
     const onSubmit = async (data) => {
         console.log("🚀 ~ file: Franchisees.jsx:69 ~ onSubmit ~ data:", data)
@@ -85,15 +83,14 @@ function Franchisees() {
     }
 
     const handleClear = () => {
-        // reset()
         reset({
             name:'',
             msbcode:'',
             pincode:''
         })
         toast.success("Filters clear successfully")
-        FranchiseeDetails()
         setFranchiseData()
+        FranchiseeDetails()
     }
 
 
@@ -218,7 +215,6 @@ function Franchisees() {
                                 }) => (
                                     
                                     <Select
-                                        // value={pincodeOptions?.find(option => option.value === value)}
                                         value={value}
                                         options={pincodeOptions}
                                         className="w-100 text-gray-900"

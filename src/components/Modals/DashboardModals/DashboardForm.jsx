@@ -1,6 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useEffect, useState } from 'react';
-import { useForm, FormProvider, useFormContext } from "react-hook-form";
+import { useForm, FormProvider, useFormContext, Controller } from "react-hook-form";
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
 import { registerRestaurant, getRestaurantCategory, editOnBoarding } from '../../../api';
 import { useSelector } from 'react-redux';
@@ -16,12 +16,15 @@ import { ImageUpload, restaurantLink } from '../../../env';
 import moment from 'moment';
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 import { LocateFixed } from 'lucide-react';
+import makeAnimated from "react-select/animated";
+const animatedComponents = makeAnimated();
 
 // =================== form steps 1 =================
 
 
 
 const Step1 = (props) => {
+    console.log("🚀 ~ file: DashboardForm.jsx:25 ~ Step1 ~ props:", props.data)
     const [manually, setManally] = useState(false);
     const { register, getValues, setValue, control, reset, formState: { errors }, } = useFormContext()
 
@@ -65,7 +68,9 @@ const Step1 = (props) => {
                             longitude: longitude
                         };
                         // console.log("++", mergedData)
-                        reset(mergedData);
+                        // reset(mergedData);
+
+
                     }
                 })
                 .catch(error => console.error('Error fetching address:', error));
@@ -78,7 +83,18 @@ const Step1 = (props) => {
 
     useEffect(() => {
         getCurrentPostion()
+        // if (props) {
+        //     reset({
+        //         shop_name: props?.data?.vendor?.shop_name,
+        //         about_restaurant: props?.data?.about_restaurant,
+        //         shop_contact_number: props?.data?.vendor?.shop_contact_number,
+        //         shop_address: props?.data?.vendor?.shop_address,
+        //         latitude: props?.data?.vendor?.latitude,
+        //         longitude: props?.data?.vendor?.longitude,
+        //     })
+        // }
     }, [])
+
 
     const onMarkerDragEnd = async (e) => {
         const latLng = e.latLng
@@ -277,7 +293,8 @@ const Step1 = (props) => {
 
 // =================== form steps 2 =================
 const Step2 = (props) => {
-    const { register, formState: { errors }, } = useFormContext()
+    console.log("🚀 ~ file: DashboardForm.jsx:301 ~ Step2 ~ props:", props)
+    const { register, formState: { errors }, reset, control } = useFormContext()
 
     const [allCuisines, setAllCuisines] = useState([
         { value: "Fast Food", label: "Fast Food" },
@@ -292,6 +309,19 @@ const Step2 = (props) => {
         { value: "Maharashtrian Cuisine", label: "Maharashtrian Cuisine" },
         { value: "Goan Cuisine", label: "Goan Cuisine" },
     ]);
+
+    // useEffect(() => {
+    //     if (props) {
+    //         const cusine_data = JSON.parse(props?.data?.type_of_cuisine.replace(/'/g, '"'))           
+    //         reset({
+    //             veg_nonveg: props?.data?.veg_nonveg,
+    //             shop_start_time: props?.data?.vendor?.shop_start_time.split(" ")[0],
+    //             shop_end_time: props?.data?.vendor?.shop_end_time.split(" ")[0],
+    //             restaurant_type: props?.data?.restaurant_type,
+    //             type_of_cuisine: cusine_data
+    //         })
+    //     }
+    // }, [])
 
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
@@ -330,6 +360,25 @@ const Step2 = (props) => {
                 <label className={labelClass}>
                     Type of cuisines*
                 </label>
+                {/* <Controller
+                    control={control}
+                    name="type_of_cuisine"
+                    rules={{ required: true }}
+                    render={({
+                        field: { onChange, onBlur, value, name, ref },
+                        fieldState: { invalid, isTouched, isDirty, error },
+                        formState,
+                    }) => (
+                        <Select
+                            value={value}
+                            isMulti
+                            options={allCuisines}
+                            className="basic-multi-select w-100"
+                            components={animatedComponents}
+                            onChange={onChange}
+                        />
+                    )}
+                /> */}
                 <Select
                     options={allCuisines}
                     isMulti
@@ -499,8 +548,17 @@ const Step4 = (props) => {
 // // =================== form steps 5 =================
 
 const Step5 = (props) => {
-    console.log('props5 = ', props)
-    const { register, formState: { errors } } = useFormContext()
+    const { register, formState: { errors }, reset } = useFormContext()
+    // useEffect(()=>{
+    //     if(props){
+    //         reset({
+    //             gst_number:props?.data?.vendor?.gst_number,
+    //             bank_name:props?.data?.vendor?.bank_name,
+    //             account_number:props?.data?.vendor?.account_number,
+    //             ifsc_code:props?.data?.vendor?.ifsc_code,
+    //         })
+    //     }
+    // },[])
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
             <div className="">
@@ -510,7 +568,7 @@ const Step5 = (props) => {
                     type='file'
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("pan_card", { required: true })} />
+                    {...register("pan_card", { required: !(props?.data?.vendor?.pan_card) })} />
                 {props?.button == 'edit' && props?.data?.vendor?.pan_card != '' && props?.data?.vendor?.pan_card != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                     {props?.data?.vendor?.pan_card?.split('/').pop()}
                 </label>
@@ -584,7 +642,7 @@ const Step5 = (props) => {
                     multiple
                     accept='image/jpeg,image/jpg,image/png,application/pdf'
                     placeholder='Upload Images...'
-                    {...register("adhar_card", { required: true })} />
+                    {...register("adhar_card", { required: !(props?.data?.vendor?.adhar_card) })} />
                 {props?.button == 'edit' && props?.data?.vendor?.adhar_card != '' && props?.data?.vendor?.adhar_card != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
                     {props?.data?.vendor?.adhar_card?.split('/').pop()}
                 </label>}
@@ -603,6 +661,7 @@ export default function DashboardForm(props) {
     const [selectedCuisines, setSelectedCuisines] = useState([])
     const [activeStep, setActiveStep] = useState(0);
     const toggle = () => setIsOpen(!isOpen);
+    // const { reset , setValue} = useForm()
     const steps = ['Restaurant Information', 'Restaurant Type and Timing', 'Upload Images', 'General Information', 'Legal Documentation',];
     // ============== Restaurant API ================
     const restaurantCategories = () => {
@@ -639,6 +698,8 @@ export default function DashboardForm(props) {
     });
     // =================== default values ====================
     if (props.button == 'edit' && props.data) {
+        console.log("🚀 ~ file: DashboardForm.jsx:711 ~ DashboardForm ~ props.data:", props.data)
+
         const formattedStartTime = moment(props?.data?.vendor?.shop_start_time, 'h:mm A').format('HH:mm');
         const formattedEndTime = moment(props?.data?.vendor?.shop_end_time, 'h:mm A').format('HH:mm');
 
@@ -665,9 +726,34 @@ export default function DashboardForm(props) {
                 "gst_number": props?.data?.vendor?.gst_number,
             }
         })
+
+       
     } else {
         methods = useForm()
     }
+
+
+    useEffect(()=>{
+        methods.setValue('shop_name', props?.data?.vendor?.shop_name)
+        methods.reset({
+            "shop_name": props?.data?.vendor?.shop_name
+        })
+    },[])
+
+    useEffect(()=>{
+        methods.setValue('shop_name', props.data?.vendor?.shop_name)
+    },[activeStep])
+
+
+    // useEffect(() => {
+    //     // you can do async server request and fill up form
+    //     setTimeout(() => {
+    //       reset({
+    //         shop_name: props?.data?.vendor?.shop_name,
+            
+    //       });
+    //     }, 2000);
+    //   }, [activeStep]);
     // =========================== back button =========================
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -701,8 +787,9 @@ export default function DashboardForm(props) {
 
     // ================= submit data  ===============================
     const onSubmit = async (data) => {
-        console.log('data', data)
+        console.log("🚀 ~ file: DashboardForm.jsx:773 ~ onSubmit ~ data:", data)
         isStepFalied()
+
         const shopStartTime = moment(data?.shop_start_time, 'HH:mm').format('hh:mm A');
         const shopEndTime = moment(data?.shop_end_time, 'HH:mm').format('hh:mm A');
         data.shop_start_time = shopStartTime;
@@ -876,8 +963,12 @@ export default function DashboardForm(props) {
                     let updatedData = {
                         ...data,
                         "type_of_cuisine": JSON.stringify(selectedCuisines),
+                        // "type_of_cuisine": JSON.stringify(data?.type_of_cuisine),
+
                         "vendorId": LoggedUserDetails?.sellerId,
                     }
+                    // console.log("🚀 ~ file: DashboardForm.jsx:948 ~ onSubmit ~ updatedData:", updatedData)
+                    return
                     editOnBoarding(LoggedUserDetails?.sellerId, updatedData).then((res) => {
                         if (res?.message === "Restaurant edited successfully") {
                             setTimeout(() => {

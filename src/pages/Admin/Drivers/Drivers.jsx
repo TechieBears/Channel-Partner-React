@@ -30,6 +30,7 @@ function Drivers() {
     const [open, setOpen] = React.useState(false);
     const [delId, setDelId] = React.useState(0);
     const DeliveryList = useSelector((state) => state?.delivery?.deliveryList);
+    const [deliveryBoyData, setDeliveryBoyData] = useState()
     console.log('driverList', DeliveryList)
 
 
@@ -44,7 +45,7 @@ function Drivers() {
                 if (res?.length > 0) {
                     const newData = res.map((data) => ({
                         label: data?.user?.first_name + " " + data?.user?.last_name + `(${data?.msb_code})`,
-                        value: data?.franch_id,
+                        value: data?.user?.id,
                     }))
                     setFranchiseOptions(newData)
                 }
@@ -59,10 +60,12 @@ function Drivers() {
 
     // =================== filter data ========================
     const onSubmit = async (data) => {
-        if (data?.name != '' || data?.email != '' || data?.city != '' || data?.role != '') {
-            let url = `${environment.baseUrl}user-filter/?first_name=${data?.name}&email=${data?.email}&city=${data?.city}&role=${data?.role}`
+        if (data?.name != '' || data?.msbcode != '' || data?.franchise != '' || data?.franchise != undefined || data?.pincode != '' || data?.pincode != undefined) {
+            let url = `${environment.baseUrl}delivery/deliveryboy_list?name=${data?.name}&msbcode=${data?.msbcode}&franchise=${data?.franchise?.value ? data?.franchise?.value : ''}&pincode=${data?.pincode?.value ? data?.pincode?.value : ''}`
             await axios.get(url).then((res) => {
-                dispatch(setUserList(res.data))
+                console.log("🚀 ~ file: Drivers.jsx:66 ~ onSubmit ~ url:", url)
+                console.log("🚀 ~ file: Drivers.jsx:66 ~ awaitaxios.get ~ res:", res)
+                setDeliveryBoyData(res?.data?.results)
                 toast.success("Filters applied successfully")
             })
         } else {
@@ -70,12 +73,26 @@ function Drivers() {
         }
     }
 
+    const handleClear = () => {
+        reset({
+            name:'',
+            msbcode:'',
+            franchise:'',
+            pincode:''
+        })
+        toast.success("Filters clear successfully")
+        setDeliveryBoyData()
+        DeliveryBoyDetails()
+    }
+
+
 
     // // ========================= fetch data from api ==============================
     const DeliveryBoyDetails = () => {
         try {
             getDeliveryBoy().then((res) => {
-                dispatch(setDeliveryList(res));
+                dispatch(setDeliveryList(res?.data));
+                setDeliveryBoyData(res?.data)
             });
         } catch (error) {
             console.log(error);
@@ -88,15 +105,15 @@ function Drivers() {
     }, [])
 
     useEffect(() => {
-        if (DeliveryList?.data?.length > 0) {
-            const newData = DeliveryList?.data?.map((data) => ({
+        if (deliveryBoyData?.length > 0) {
+            const newData = deliveryBoyData?.map((data) => ({
                 label: data?.user?.pincode,
                 value: data?.user?.pincode,
             }))
             const uniquePincodeData = _.uniqBy(newData, 'value')
             setPincodeOptions(uniquePincodeData);
         }
-    }, [DeliveryList?.data])
+    }, [deliveryBoyData])
 
 
     // =================== delete the user data ========================
@@ -250,7 +267,7 @@ function Drivers() {
             <div className="p-4 bg-white sm:m-5 rounded-xl" >
                 <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2 md:items-center lg:flex-row'>
                     <div className="grid w-full grid-cols-1 sm:grid-cols-4 gap-y-3 gap-x-2">
-                    <div className="">
+                        <div className="">
                             <input
                                 type="text"
                                 placeholder='Search By Name'
@@ -276,11 +293,11 @@ function Drivers() {
                                     field: { onChange, value, ref },
                                 }) => (
                                     <Select
-                                        value={franchiseOptions?.find(option => option.value === value)}
+                                        value={value}
                                         options={franchiseOptions}
                                         className="w-100 text-gray-900"
                                         placeholder="Search By Franchise"
-                                        onChange={(selectedOption) => onChange(selectedOption.value)}
+                                        onChange={onChange}
                                         inputRef={ref}
                                         maxMenuHeight={200}
                                         styles={{
@@ -301,11 +318,11 @@ function Drivers() {
                                     field: { onChange, value, ref },
                                 }) => (
                                     <Select
-                                        value={pincodeOptions?.find(option => option.value === value)}
+                                        value={value}
                                         options={pincodeOptions}
                                         className="w-100 text-gray-900"
                                         placeholder="Search By Pincode"
-                                        onChange={(selectedOption) => onChange(selectedOption.value)}
+                                        onChange={onChange}
                                         inputRef={ref}
                                         maxMenuHeight={200}
                                         styles={{
@@ -321,7 +338,7 @@ function Drivers() {
                     </div>
                     <div className="flex items-center gap-x-2">
                         <button type='submit' className={`${formBtn1} w-full text-center`}>Filter</button>
-                        <button type='button' className={`${formBtn2} w-full text-center`} onClick={() => { reset(), toast.success("Filters clear successfully"), DeliveryBoyDetails() }}>Clear</button>
+                        <button type='button' className={`${formBtn2} w-full text-center`} onClick={() => handleClear()}>Clear</button>
                     </div>
                 </form>
             </div>
@@ -336,7 +353,7 @@ function Drivers() {
                         <AddDriverFrom title='Add Driver' DeliveryBoyDetails={DeliveryBoyDetails} />
                     </div>
                 </div>
-                <Table data={DeliveryList?.data} columns={columns} />
+                <Table data={deliveryBoyData} columns={columns} />
             </div>
         </>
     )

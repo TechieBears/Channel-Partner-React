@@ -57,7 +57,7 @@ function Vendors() {
                 if (res?.length > 0) {
                     const newData = res.map((data) => ({
                         label: data?.user?.first_name + " " + data?.user?.last_name + `(${data?.msb_code})`,
-                        value: data?.franch_id,
+                        value: data?.user?.id,
                     }))
                     setFranchiseOptions(newData)
                 }
@@ -91,15 +91,29 @@ function Vendors() {
     // =================== filter data ========================
     const onSubmit = async (data) => {
         console.log("🚀 ~ file: Vendors.jsx:96 ~ onSubmit ~ data:", data)
-        if (data?.name != '' || data?.email != '' || data?.city != '' || data?.role != '') {
-            let url = `${environment.baseUrl}user-filter/?first_name=${data?.name}&email=${data?.email}&city=${data?.city}&role=${data?.role}`
+        if (data?.name != '' || data?.msbcode != '' || data?.franchise != '' || data?.franchise != undefined || data?.pincode != '' || data?.pincode != undefined) {
+            let url = `${environment.baseUrl}vendor/vendor_list?name=${data?.name}&msbcode=${data?.msbcode}&franchise=${data?.franchise?.value ? data?.franchise?.value :'' }&pincode=${data?.pincode?.value ? data?.pincode?.value :'' }`
             await axios.get(url).then((res) => {
-                dispatch(setUserList(res.data))
+                console.log("🚀 ~ file: Vendors.jsx:97 ~ onSubmit ~ url:", url)
+                console.log("🚀 ~ file: Vendors.jsx:97 ~ awaitaxios.get ~ res:", res)
+                SetVendors(res?.data?.results)
                 toast.success("Filters applied successfully")
             })
         } else {
             toast.warn("No Selected Value !")
         }
+    }
+
+    const handleClear = () => {
+        reset({
+            name:'',
+            msbcode:'',
+            franchise:'',
+            pincode:''
+        })
+        toast.success("Filters clear successfully")
+        SetVendors()
+        FranchiseeVendors()
     }
 
     // =================== table user active column ========================
@@ -264,11 +278,11 @@ function Vendors() {
                                     field: { onChange, value, ref },
                                 }) => (
                                     <Select
-                                        value={franchiseOptions?.find(option => option.value === value)}
+                                        value={value}
                                         options={franchiseOptions}
                                         className="w-100 text-gray-900"
                                         placeholder="Search By Franchise"
-                                        onChange={(selectedOption) => onChange(selectedOption.value)}
+                                        onChange={onChange}
                                         inputRef={ref}
                                         maxMenuHeight={200}
                                         styles={{
@@ -289,11 +303,11 @@ function Vendors() {
                                     field: { onChange, value, ref },
                                 }) => (
                                     <Select
-                                        value={pincodeOptions?.find(option => option.value === value)}
+                                        value={value}
                                         options={pincodeOptions}
                                         className="w-100 text-gray-900"
                                         placeholder="Search By Pincode"
-                                        onChange={(selectedOption) => onChange(selectedOption.value)}
+                                        onChange={onChange}
                                         inputRef={ref}
                                         maxMenuHeight={200}
                                         styles={{
@@ -309,7 +323,7 @@ function Vendors() {
                     </div>
                     <div className="flex items-center gap-x-2">
                         <button type='submit' className={`${formBtn1} w-full text-center`}>Filter</button>
-                        <button type='button' className={`${formBtn2} w-full text-center`} onClick={() => { reset(), toast.success("Filters clear successfully"), fetchData() }}>Clear</button>
+                        <button type='button' className={`${formBtn2} w-full text-center`} onClick={() => handleClear()}>Clear</button>
                     </div>
                 </form>
             </div>
