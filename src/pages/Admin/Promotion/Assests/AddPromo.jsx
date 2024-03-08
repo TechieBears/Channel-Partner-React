@@ -1,26 +1,25 @@
-import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useState, useEffect, useRef } from "react";
+import { Dialog, Transition } from '@headlessui/react';
+import { Fragment, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../../utils/CustomClass';
 import { Edit } from 'iconsax-react';
-import {  addHomePromotion , editHomePromotion, postHomePromotion, getGalleryImages} from '../../../../api';
+import { editHomePromotion, postHomePromotion } from '../../../../api';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import Error from '../../../../components/Errors/Error';
 import { ImageUpload, promotionLink } from '../../../../env';
 import LoadBox from '../../../../components/Loader/LoadBox';
 import { setPromotions } from '../../../../redux/Slices/masterSlice';
-import MediaGallaryModal from '../../../Settings/MediaGallery/MediaGallery';
 
 
 export default function AddPromo(props) {
     const [isOpen, setIsOpen] = useState(false)
     const [loader, setLoader] = useState(false)
-    const [openGallery, setopenGallery] = useState(false);
-    const [openGalleryModal, setopenGalleryModal] = useState(false);
-    const [imageDetails, setImageDetails] = useState([]);
-    const [childData, setChildData] = useState('');
-    const mediaGalleryModalRef = useRef(null);
+    // const [openGallery, setopenGallery] = useState(false);
+    // const [openGalleryModal, setopenGalleryModal] = useState(false);
+    // const [imageDetails, setImageDetails] = useState([]);
+    // const [childData, setChildData] = useState('');
+    // const mediaGalleryModalRef = useRef(null);
     // console.log('childData == ', childData)
     const dispatch = useDispatch()
     const toggle = () => setIsOpen(!isOpen);
@@ -31,45 +30,45 @@ export default function AddPromo(props) {
     const closeBtn = () => {
         toggle();
         setLoader(false);
-        setopenGallery(false);
-        setopenGalleryModal(false);
         reset();
+        // setopenGallery(false);
+        // setopenGalleryModal(false);
     };
 
-    const openMediaModal = () => {
-        setopenGalleryModal(!openGalleryModal);
-    };
+    // const openMediaModal = () => {
+    //     setopenGalleryModal(!openGalleryModal);
+    // };
 
 
-    const handleSelectChange = (e) => {
-        if (e.target.value == 'true') {
-           setopenGallery(true);
-        }else{
-          setopenGallery(false);
-        }
-    };
+    // const handleSelectChange = (e) => {
+    //     if (e.target.value == 'true') {
+    //        setopenGallery(true);
+    //     }else{
+    //       setopenGallery(false);
+    //     }
+    // };
 
-    const receiveDataFromChild = (data) => {
-        setChildData(data);
-        setValue("slide_url", childData);
-        // console.log('childData = ', childData)
-    };
+    // const receiveDataFromChild = (data) => {
+    //     setChildData(data);
+    //     setValue("slide_url", childData);
+    //     // console.log('childData = ', childData)
+    // };
 
 
     // ============== fetch data from api ================
-    const fetchData = () => {
-        try {
-        getGalleryImages().then((res) => {
-            // console.log("media gallery data = ", res);
-            setImageDetails(res);
-        });
-        } catch (err) {
-        console.log("error", err);
-        }
-    };
+    // const fetchData = () => {
+    //     try {
+    //     getGalleryImages().then((res) => {
+    //         // console.log("media gallery data = ", res);
+    //         setImageDetails(res);
+    //     });
+    //     } catch (err) {
+    //     console.log("error", err);
+    //     }
+    // };
     
     useEffect(() => {
-        fetchData();
+        // fetchData();
         reset({
           'vendor_type': props?.data?.vendor_type 
         })
@@ -79,12 +78,15 @@ export default function AddPromo(props) {
 
     // ============================ submit data  =====================================
     const onSubmit = async (data) => {
-        const slideUrl = watch('slide_url')
-            if (props?.title != 'Edit Promotions' && childData) {
+        // const slideUrl = watch('slide_url')
+            // if (props?.title != 'Edit Promotions' && childData) {
+              
+            if (props?.title != 'Edit Promotions') {
                 try {
-                    if (childData) {
-                        data.slide_url = childData;
-                    } else if (data?.slide_url?.length != 0) {
+                    // if (childData) {
+                    //     data.slide_url = childData;
+                    // } else if (data?.slide_url?.length != 0) {
+                    if (data?.slide_url?.length != 0) {
                         await ImageUpload(data.slide_url[0], "promotion", "promotion", data.slide_url[0].name)
                         data.slide_url = `${promotionLink}${data.slide_url[0].name}_promotion_${data.slide_url[0].name}`
                     } else {
@@ -100,9 +102,9 @@ export default function AddPromo(props) {
                                 setLoader(false),
                                 props?.getAllPromotionList()
                                 toast.success(res?.message);
-                                setChildData('')
-                                setopenGallery(false);
-                                setopenGalleryModal(false);
+                                // setChildData('')
+                                // setopenGallery(false);
+                                // setopenGalleryModal(false);
                             }, 1000)
                         }
                     })
@@ -113,16 +115,17 @@ export default function AddPromo(props) {
             } else {
                 if(props?.title == 'Edit Promotions'){
                   try {
-                    if (childData) {
-                      data.slide_url = childData
-                    } else{
-                      if (data?.slide_url?.length > 0 && props?.data?.slide_url && !childData) {
+                    // if (childData) {
+                    //   data.slide_url = childData
+                    // } else{
+                      // if (data?.slide_url?.length > 0 && props?.data?.slide_url && !childData) {
+                      if (data?.slide_url?.length > 0 && props?.data?.slide_url) {
                           await ImageUpload(data.slide_url[0], "promotion", "promotion", data.slide_url[0].name)
                           data.slide_url = `${promotionLink}${data.slide_url[0].name}_promotion_${data.slide_url[0].name}`
                       } else {
                           data.slide_url = props?.data?.slide_url
                       }
-                    }
+                    // }
                     setLoader(true);
                     editHomePromotion(props?.data?.slide_id, data).then((res) => {
                         if (res?.message === "slide edited successfully") {
@@ -133,9 +136,9 @@ export default function AddPromo(props) {
                                 setLoader(false),
                                 props?.getAllPromotionList()
                                 toast.success(res?.message);
-                                setChildData('')
-                                setopenGallery(false);
-                                setopenGalleryModal(false);
+                                // setChildData('')
+                                // setopenGallery(false);
+                                // setopenGalleryModal(false);
                             }, 1000)
   
                         }
@@ -200,7 +203,7 @@ export default function AddPromo(props) {
                     <form onSubmit={handleSubmit(onSubmit)}>
 
                       <div className="py-4 mx-4 customBox">
-                        <div className="mb-3">
+                        {/* <div className="mb-3">
                           <select
                             name=""
                             onChange={handleSelectChange}
@@ -209,7 +212,7 @@ export default function AddPromo(props) {
                             <option value="false">I have a own Images</option>
                             <option value="true">I Don't have a Images</option>
                           </select>
-                        </div>
+                        </div> */}
 
                         <div className="my-2">
                          <label className={labelClass} htmlFor="main_input">
@@ -227,7 +230,8 @@ export default function AddPromo(props) {
                           {errors.vendor_type && <Error title='Vendor type is Required*' />}
                         </div>
 
-                       {!openGallery && <div className="">
+                       {/* {!openGallery && <div className=""> */}
+                      <div className="">
                           <label className={labelClass} htmlFor="main_input">
                             Image*
                           </label>
@@ -239,7 +243,8 @@ export default function AddPromo(props) {
                             accept="image/jpeg,image/jpg,image/png"
                             placeholder="Upload Images..."
                             {...register("slide_url", {
-                              required: !childData && (props.button === "edit" ? false : true),
+                              // required: !childData && (props.button === "edit" ? false : true),
+                              required: (props.button === "edit" ? false : true),
                             })}
                           />
                           {props?.button == "edit" &&
@@ -252,9 +257,9 @@ export default function AddPromo(props) {
                           {errors.slide_url && (
                             <Error title="Main Image is required*" />
                           )}
-                        </div> }
+                        </div>
 
-                        {openGallery && (
+                        {/* {openGallery && (
                           <div className="w-1/2 mt-3 mb-2">
                             <span className={`cursor-pointer w-full ${formBtn1}`} onClick={openMediaModal}>
                               Open Sample Images
@@ -267,9 +272,9 @@ export default function AddPromo(props) {
                               <Error title="Main Image is required*" />
                             )}
                           </div>
-                        )}
+                        )} */}
                     
-                        {childData && <span>{childData.split("/").pop()}</span>}
+                        {/* {childData && <span>{childData.split("/").pop()}</span>} */}
                       </div>
 
                       <footer className="flex justify-end px-4 py-2 space-x-3 bg-white">
@@ -292,7 +297,7 @@ export default function AddPromo(props) {
                       </footer>
 
                     </form>
-                       {openGalleryModal && <div className="hidden">
+                       {/* {openGalleryModal && <div className="hidden">
                           <MediaGallaryModal
                               ref={mediaGalleryModalRef}
                               id="mediaGalleryModal"
@@ -302,7 +307,7 @@ export default function AddPromo(props) {
                               setopenGalleryModal={openMediaModal}
                               sendDataToParent={receiveDataFromChild}
                           />
-                        </div> }
+                        </div> } */}
                   </div>
                                 </Dialog.Panel>
                             </Transition.Child>

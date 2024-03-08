@@ -511,10 +511,10 @@ const AddProduct = (props) => {
                                                             {...register('product_unit_type', { required: true })}
                                                         >
                                                             <option value=''>Select</option>
-                                                            <option key="" value="(kg)">Kilograms (kg)</option>
-                                                            <option key="" value="(g)">grams (g)</option>
-                                                            <option key="" value="(ltr)">Liters (ltr)</option>
-                                                            <option key="" value="(pcs)">Pieces (pcs)</option>
+                                                            <option value="(kg)">Kilograms (kg)</option>
+                                                            <option value="(g)">grams (g)</option>
+                                                            <option value="(ltr)">Liters (ltr)</option>
+                                                            <option value="(pcs)">Pieces (pcs)</option>
                                                         </select>
                                                         {errors.product_unit_type && <Error title='Product Unit Type is Required*' />}
                                                     </div>
