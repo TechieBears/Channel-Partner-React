@@ -1,16 +1,16 @@
+import { Eye, Trash } from 'iconsax-react';
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
-import AsyncSelect from "react-select/async";
-import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
-import { toast } from 'react-toastify';
-import Table from '../../../components/Table/Table';
-import { Link } from 'react-router-dom';
-import AddProduct from '../../../components/Modals/Vendors/AddProduct';
-import { Eye, Trash } from 'iconsax-react';
-import { deleteFoodItem, getAllShopProduct, getRestaurantFood, getSingleRestaurant } from '../../../api';
 import Switch from 'react-js-switch';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import AsyncSelect from "react-select/async";
+import { toast } from 'react-toastify';
+import { getAllShopProduct, getRestaurantFood, getSingleRestaurant } from '../../../api';
+import AddProduct from '../../../components/Modals/Vendors/AddProduct';
 import AddRestItem from '../../../components/Modals/Vendors/AddRestItem';
+import Table from '../../../components/Table/Table';
+import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 
 const VendorProduct = () => {
     const [data, setData] = useState([])
@@ -51,19 +51,6 @@ const VendorProduct = () => {
         }
     }
 
-    // const deleteItem = (row) => {
-    //     try {
-    //         deleteFoodItem(row?.food_id).then(res => {
-    //             if (res?.status == 'success') {
-    //                 toast?.success('Food Items deleted successfully')
-    //                 getRestFood()
-    //             }
-    //         })
-    //     } catch (e) {
-    //         console.log('error occured while deleting food item')
-    //     }
-    // }
-
     //======================= Table =======================
     const action = (row) => <div className='flex space-x-2'>
         <Link to={`/product-list/product-details/${row?.product_id}`} state={row} className='items-center p-1 bg-sky-100 rounded-xl hover:bg-sky-200'>
@@ -80,9 +67,6 @@ const VendorProduct = () => {
             <Eye size={24} className='text-sky-400' />
         </Link>
         <AddRestItem title='edit' button='edit' data={row} getRestFood={getRestFood} />
-        {/* <button onClick={(row) => deleteItem(row)} className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
-            <Trash size={24} className='text-red-400' />
-        </button> */}
     </div>
 
     const representativeBodyTemplate = (row) => {
@@ -129,23 +113,6 @@ const VendorProduct = () => {
             </div>
         )
     }
-
-    // ================== Feature Restaurant Food Items =================
-    // const switchFeaturedRes = (row) => {
-    //     return (
-    //         <div className="flex items-center justify-center gap-2 ">
-    //             <Switch
-    //                 value={row?.featured}
-    //                 disabled={true}
-    //                 size={50}
-    //                 backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
-    //                 borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
-    //         </div>
-    //     )
-    // }
-    // =============================== FOOD ITEMS SWITCHES =============================
-
-
 
     const shopColumns = [
         { field: 'product_id', header: 'ID', sortable: false },
@@ -260,7 +227,7 @@ const VendorProduct = () => {
             <div className='p-4 m-4 bg-white sm:m-5 rounded-xl'>
                 <div className='grid items-center grid-cols-6'>
                     <h2 className='col-span-5 text-xl font-semibold'>{user?.vendor_type == 'restaurant' ? 'Item List' : 'Product List'}</h2>
-                    {user?.isverified_byadmin == true && user?.vendor_type == 'restaurant' ? <AddRestItem title='Add Item' getRestFood={getRestFood} /> : user?.vendor_type == 'seller' ? <AddProduct title='Add Product' getProducts={getProducts} /> : ''}
+                    {user?.isverified_byadmin == true && user?.vendor_type == 'restaurant' ? <AddRestItem title='Add Item' details={details} getRestFood={getRestFood} /> : user?.vendor_type == 'seller' ? <AddProduct title='Add Product' getProducts={getProducts} /> : ''}
                 </div>
                 <div className='mt-4'>
                     <Table data={data} columns={user?.vendor_type == 'restaurant' ? restaurantColumns : shopColumns} />

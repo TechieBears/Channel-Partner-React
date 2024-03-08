@@ -52,7 +52,7 @@ export default function FoodDetails() {
                                 </div>
                                 <div className='items-center p-2 text-sm '>
                                     <p className='text-lg font-semibold'>Restaurant Name</p>
-                                    <p className='text-sm text-gray-600'>{food?.restaurant?.vendor?.shop_name ? food?.restaurant?.vendor?.shop_name : '-------'}</p>
+                                    <p className='text-sm text-gray-600'>{food?.vendor?.shop_name ? food?.vendor?.shop_name : '-------'}</p>
                                 </div>
                                 <div className='items-center p-2 text-sm '>
                                     <p className='text-lg font-semibold'>Price</p>

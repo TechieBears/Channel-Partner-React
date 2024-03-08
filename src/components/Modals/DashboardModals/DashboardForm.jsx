@@ -142,129 +142,86 @@ const Step1 = (props) => {
 
 
     return (
-        <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-5 gap-x-3 gap-y-3 ">
-            <div className='col-span-3 gap-x-3'>
-                <div className='grid grid-cols-2 gap-3'>
-                    <div className="">
-                        <label className={labelClass}>
-                            Restaurant Name*
-                        </label>
-                        <input
-                            type="text"
-                            placeholder='Name'
-                            className={inputClass}
-                            {...register('shop_name', { required: true })}
-                        />
-                        {errors.shop_name && <Error title='Restaurant Name is required*' />}
-                    </div>
-                    <div className="">
-                        <label className={labelClass}>
-                            Restaurant Complete Address*
-                        </label>
-                        <input
-                            type="text"
-                            placeholder='Restaurant Address'
-                            className={inputClass}
-                            {...register('shop_address', { required: true })}
-                        />
-                        {errors.shop_address && <Error title='Restaurant Address is Required*' />}
-                    </div>
-                    <div className="">
-                        <label className={labelClass}>
-                            Restaurant Phone Number*
-                        </label>
-                        <input
-                            type="tel"
-                            placeholder='Restaurant Number'
-                            className={inputClass}
-                            {...register('shop_contact_number', { required: true, validate: validatePhoneNumber })}
-                        />
-                        {errors.shop_contact_number && <Error title='Restaurant Phone Number is required*' />}
-                    </div>
-                    <div className=''>
-                        <label className={`text-transparent ${labelClass}`}>
-                            Restaurant Phone Number*
-                        </label>
-                        <button type='button' className={`flex w-full justify-center ${formBtn1}`} onClick={getCurrentPostion}><LocateFixed className='me-3' />Get Current Location</button>
-                    </div>
-                    <div className="">
-                        <label className={labelClass}>
-                            Restaurant Description*
-                        </label>
-                        <input
-                            type="text"
-                            placeholder='Restaurant Description'
-                            className={inputClass}
-                            {...register('about_restaurant', { required: true, })}
-                        />
-                        {errors.about_restaurant && <Error title='Restaurant Description is required*' />}
-                    </div>
-
-                    <div className="">
-                        <label className={labelClass}>
-                            Latitude*
-                        </label>
-                        <input
-                            type="text"
-                            placeholder='Latitude'
-                            className={inputClass}
-                            {...register('latitude', { required: manually })}
-                        />
-                        {errors.latitude && <Error title='Latitude Is required' />}
-                    </div>
-                    <div className="">
-                        <label className={labelClass}>
-                            Longitude*
-                        </label>
-                        <input
-                            type="text"
-                            placeholder='Longitutde'
-                            className={inputClass}
-                            {...register('longitude', { required: manually })}
-                        />
-                        {errors.longitude && <Error title='Longitude' />}
-                    </div>
-
-                    {/* <div className="">
-                        <label className={labelClass}>
-                            State*
-                        </label>
-                        <input
-                            type="text"
-                            // readOnly
-                            placeholder='State'
-                            className={inputClass}
-                            {...register('state',)}
-                        />
-                    </div>
-                    <div className="">
-                        <label className={labelClass}>
-                            Pincode*
-                        </label>
-                        <input
-                            type="text"
-                            // readOnly
-                            placeholder='Pincode'
-                            className={inputClass}
-                            {...register('pincode',)}
-                        />
-                    </div>
-                    <div className="">
-                        <label className={labelClass}>
-                            City*
-                        </label>
-                        <input
-                            type="text"
-                            // readOnly
-                            placeholder='City'
-                            className={inputClass}
-                            {...register('city',)}
-                        />
-                    </div> */}
-
-                </div>
+        <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-x-3 gap-y-3 customBox">
+            <div className="">
+                <label className={labelClass}>
+                    Restaurant Name*
+                </label>
+                <input
+                    type="text"
+                    placeholder='Name'
+                    className={inputClass}
+                    {...register('shop_name', { required: true })}
+                />
+                {errors.shop_name && <Error title='Restaurant Name is required*' />}
             </div>
-            <div className='col-span-2'>
+            <div className="">
+                <label className={labelClass}>
+                    Restaurant Complete Address*
+                </label>
+                <input
+                    type="text"
+                    placeholder='Restaurant Address'
+                    className={inputClass}
+                    {...register('shop_address', { required: true })}
+                />
+                {errors.shop_address && <Error title='Restaurant Address is Required*' />}
+            </div>
+            <div className="">
+                <label className={labelClass}>
+                    Restaurant Phone Number*
+                </label>
+                <input
+                    type="tel"
+                    placeholder='Restaurant Number'
+                    className={inputClass}
+                    {...register('shop_contact_number', { required: true, validate: validatePhoneNumber })}
+                />
+                {errors.shop_contact_number && <Error title='Restaurant Phone Number is required*' />}
+            </div>
+            <div className="">
+                <label className={labelClass}>
+                    Restaurant Description*
+                </label>
+                <input
+                    type="text"
+                    placeholder='Restaurant Description'
+                    className={inputClass}
+                    {...register('about_restaurant', { required: true, })}
+                />
+                {errors.about_restaurant && <Error title='Restaurant Description is required*' />}
+            </div>
+            <div className=''>
+                <label className={`text-transparent ${labelClass}`}>
+                    Restaurant Phone Number*
+                </label>
+                <button type='button' className={`flex w-full justify-center ${formBtn1}`} onClick={getCurrentPostion}><LocateFixed className='me-3' />Get Current Location</button>
+            </div>
+            <div className="">
+                <label className={labelClass}>
+                    Latitude*
+                </label>
+                <input
+                    type="text"
+                    placeholder='Latitude'
+                    className={inputClass}
+                    {...register('latitude', { required: manually })}
+                />
+                {errors.latitude && <Error title='Latitude Is required' />}
+            </div>
+            <div className="">
+                <label className={labelClass}>
+                    Longitude*
+                </label>
+                <input
+                    type="text"
+                    placeholder='Longitutde'
+                    className={inputClass}
+                    {...register('longitude', { required: manually })}
+                />
+                {errors.longitude && <Error title='Longitude' />}
+            </div>
+            <div className='md:col-span-2 lg:col-span-3 xl:grid-cols-3'>
                 {/* ============================= Maps start ============================= */}
                 <div className='bg-slate-50 rounded-xl'>
                     {
@@ -272,7 +229,7 @@ const Step1 = (props) => {
                             <GoogleMap
                                 center={position}
                                 zoom={18}
-                                mapContainerStyle={{ width: '100%', height: '400px', backgroundColor: '#fff' }}
+                                mapContainerStyle={{ width: '100%', height: '200px', backgroundColor: '#fff' }}
                             >
                                 <Marker
                                     position={position}
@@ -307,20 +264,6 @@ const Step2 = (props) => {
         { value: "Maharashtrian Cuisine", label: "Maharashtrian Cuisine" },
         { value: "Goan Cuisine", label: "Goan Cuisine" },
     ]);
-
-    // useEffect(() => {
-    //     if (props) {
-    //         const cusine_data = JSON.parse(props?.data?.type_of_cuisine.replace(/'/g, '"'))           
-    //         reset({
-    //             veg_nonveg: props?.data?.veg_nonveg,
-    //             shop_start_time: props?.data?.vendor?.shop_start_time.split(" ")[0],
-    //             shop_end_time: props?.data?.vendor?.shop_end_time.split(" ")[0],
-    //             restaurant_type: props?.data?.restaurant_type,
-    //             type_of_cuisine: cusine_data
-    //         })
-    //     }
-    // }, [])
-
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
             <p className='text-lg font-semibold md:col-span-2 lg:col-span-3'>Establishment Type</p>
@@ -546,16 +489,6 @@ const Step4 = (props) => {
 
 const Step5 = (props) => {
     const { register, formState: { errors }, reset } = useFormContext()
-    // useEffect(()=>{
-    //     if(props){
-    //         reset({
-    //             gst_number:props?.data?.vendor?.gst_number,
-    //             bank_name:props?.data?.vendor?.bank_name,
-    //             account_number:props?.data?.vendor?.account_number,
-    //             ifsc_code:props?.data?.vendor?.ifsc_code,
-    //         })
-    //     }
-    // },[])
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
             <div className="">
@@ -565,7 +498,7 @@ const Step5 = (props) => {
                     type='file'
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("pan_card", { required: !(props?.data?.vendor?.pan_card) })} />
+                    {...register("pan_card", { required: (props?.data?.vendor?.pan_card ? false : true) })} />
                 {props?.button == 'edit' && props?.data?.vendor?.pan_card != '' && props?.data?.vendor?.pan_card != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                     {props?.data?.vendor?.pan_card?.split('/').pop()}
                 </label>
@@ -639,7 +572,7 @@ const Step5 = (props) => {
                     multiple
                     accept='image/jpeg,image/jpg,image/png,application/pdf'
                     placeholder='Upload Images...'
-                    {...register("adhar_card", { required: !(props?.data?.vendor?.adhar_card) })} />
+                    {...register("adhar_card", { required: props?.data?.vendor?.adhar_card ? false : true })} />
                 {props?.button == 'edit' && props?.data?.vendor?.adhar_card != '' && props?.data?.vendor?.adhar_card != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
                     {props?.data?.vendor?.adhar_card?.split('/').pop()}
                 </label>}
@@ -696,7 +629,6 @@ export default function DashboardForm(props) {
     if (props.button == 'edit' && props.data) {
         const formattedStartTime = moment(props?.data?.vendor?.shop_start_time, 'h:mm A').format('HH:mm');
         const formattedEndTime = moment(props?.data?.vendor?.shop_end_time, 'h:mm A').format('HH:mm');
-
         methods = useForm({
             defaultValues: {
                 "shop_name": props?.data?.vendor?.shop_name,
@@ -790,11 +722,8 @@ export default function DashboardForm(props) {
     const onSubmit = async (data) => {
         console.log("🚀 ~ file: DashboardForm.jsx:773 ~ onSubmit ~ data:", data)
         isStepFalied()
-
-        const shopStartTime = moment(data?.shop_start_time, 'HH:mm').format('hh:mm A');
-        const shopEndTime = moment(data?.shop_end_time, 'HH:mm').format('hh:mm A');
-        data.shop_start_time = shopStartTime;
-        data.shop_end_time = shopEndTime;
+        const shopStartTime = moment(data?.shop_start_time);
+        const shopEndTime = moment(data?.shop_end_time);
         setLoader(true)
         if (activeStep == steps.length - 1) {
             if (props?.button != 'edit') {
@@ -951,6 +880,8 @@ export default function DashboardForm(props) {
                         ...data,
                         "type_of_cuisine": JSON.stringify(selectedCuisines),
                         "vendorId": LoggedUserDetails?.sellerId,
+                        "shop_start_time": shopStartTime,
+                        "shop_end_time": shopEndTime,
                     }
                     registerRestaurant(updatedData).then(res => {
                         if (res?.status == 'success') {
@@ -998,10 +929,40 @@ export default function DashboardForm(props) {
     }
 
     useEffect(() => {
+        if (isOpen && props?.data && props.button == 'edit') {
+            console.log("🚀 ~ file: DashboardForm.jsx:733 ~ useEffect ~ props?.data:", props?.data)
+            const formattedStartTime = moment(props?.data?.vendor?.shop_start_time, 'h:mm A').format('HH:mm');
+            const formattedEndTime = moment(props?.data?.vendor?.shop_end_time, 'h:mm A').format('HH:mm');
+            methods.reset({
+                "shop_name": props?.data?.vendor?.shop_name,
+                "shop_address": props?.data?.vendor?.shop_address,
+                "shop_contact_number": props?.data?.vendor?.shop_contact_number,
+                "about_restaurant": props?.data?.about_restaurant,
+                "latitude": props?.data?.vendor?.latitude,
+                "longitude": props?.data?.vendor?.longitude,
+                "veg_nonveg": props?.data?.veg_nonveg,
+                "restaurant_type": props?.data?.restaurant_type,
+                "shop_start_time": formattedStartTime,
+                "shop_end_time": formattedEndTime,
+                "type_of_cuisine": JSON.parse(props?.data?.type_of_cuisine.replace(/'/g, '"')),
+                "ambience_image": props?.data?.ambience_image,
+                "shop_image": props?.data?.vendor?.shop_image,
+                "pan_card": props?.data?.vendor?.pan_card,
+                "bank_name": props?.data?.vendor?.bank_name,
+                "account_number": props?.data?.vendor?.account_number,
+                "ifsc_code": props?.data?.vendor?.ifsc_code,
+                "adhar_card": props?.data?.vendor?.adhar_card,
+                "gst_number": props?.data?.vendor?.gst_number,
+
+            })
+        }
+
+    }, [isOpen])
+
+    useEffect(() => {
         restaurantCategories();
         setLoader(false);
     }, [])
-
 
     return (
         <>
@@ -1023,7 +984,7 @@ export default function DashboardForm(props) {
                         <div className="fixed inset-0 bg-black bg-opacity-25" />
                     </Transition.Child>
                     <div className="fixed inset-0 ">
-                        <div className="flex items-center justify-center min-h-full p-4 text-center">
+                        <div className="flex min-h-full items-center justify-center p-4 text-center">
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-out duration-300"
@@ -1033,7 +994,7 @@ export default function DashboardForm(props) {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl max-w-8xl">
+                                <Dialog.Panel className="w-full max-w-5xl transform overflow-hidden rounded-lg bg-white text-left align-middle shadow-xl transition-all opacity-100 scale-100">
 
                                     <Dialog.Title
                                         as="h2"

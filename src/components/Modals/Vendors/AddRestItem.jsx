@@ -1,14 +1,14 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Edit } from 'iconsax-react';
-import React, { useState, Fragment, useEffect } from 'react';
-import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import LoadBox from '../../Loader/LoadBox';
 import { useSelector } from 'react-redux';
-import { addFoodItem, editFoodItem, getRestaurantCategory, getRestaurantSubCategory, editAdminFinalFood } from '../../../api';
-import { ImageUpload, restaurantLink } from '../../../env';
 import { toast } from 'react-toastify';
+import { addFoodItem, editAdminFinalFood, editFoodItem, getRestaurantCategory, getRestaurantSubCategory } from '../../../api';
+import { ImageUpload, restaurantLink } from '../../../env';
+import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
 import Error from '../../Errors/Error';
+import LoadBox from '../../Loader/LoadBox';
 
 
 
@@ -21,8 +21,10 @@ export default function AddRestItem(props) {
     const [FinalPriceAdmin, setFinalPriceAdmin] = useState([]);
     const { register, handleSubmit, control, watch, reset, setValue, formState: { errors } } = useForm();
     const user = useSelector((state) => state?.user?.loggedUserDetails);
-    // console.log('user', user)
-    const toggle = () => setOpen(!isOpen)
+    const toggle = () => {
+        setOpen(!isOpen)
+        setLoader(!loader)
+    }
     const closeBtn = () => {
         toggle();
         reset();
@@ -190,33 +192,6 @@ export default function AddRestItem(props) {
             }
         }
     }, [])
-
-
-
-    //  ------------   Seller Calculations SetPrice --------------------------------
-    // const calculateRevenueRestaurant = watch('food_actual_price')
-
-    // useEffect(() => {
-    //     if (user?.role == 'admin') {
-    //         if (calculateRevenueRestaurant !== "") {
-    //             var mainUserPrice = calculateRevenueRestaurant * (props?.data.vendor?.insta_commison_percentage == null ? 0 : props?.row?.vendor?.insta_commison_percentage / 100);
-    //             console.log('mainUserPrice = ', (calculateRevenueRestaurant - mainUserPrice));
-    //             const final_price = (calculateRevenueRestaurant - mainUserPrice);
-
-    //             if (isNaN(final_price)) {
-    //                 setValue('product_revenue', 0);
-    //             } else {
-    //                 setFinalPriceSeller(parseFloat(final_price));
-    //                 setValue('product_revenue', final_price);
-    //             }
-    //         }
-    //     }
-    // }, [calculateRevenueRestaurant])
-
-
-
-
-
     //  ------------   Seller Calculations SetPrice --------------------------------
     const calculateRevenueRestaurant = watch('food_actual_price')
 

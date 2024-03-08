@@ -20,8 +20,6 @@ import Select from "react-select";
 function User() {
     const dispatch = useDispatch()
     const customersData = useSelector(state => state.users.customers)
-    console.log('customersData = ', customersData);
-
     const {
         control,
         register,
@@ -46,11 +44,11 @@ function User() {
                     setCustomerData(res?.data?.results)
                     toast.success("Filters applied successfully")
                 }).catch((err) => {
-                    console.log("🚀 ~ file: User.jsx:49 ~ awaitaxios.get ~ err:", err)         
+                    console.log("🚀 ~ file: User.jsx:49 ~ awaitaxios.get ~ err:", err)
                 })
-            } catch(err) {
-                console.log("🚀 ~ file: User.jsx:50 ~ onSubmit ~ err:", err)             
-            }       
+            } catch (err) {
+                console.log("🚀 ~ file: User.jsx:50 ~ onSubmit ~ err:", err)
+            }
         } else {
             toast.warn("No Selected Value !")
         }
