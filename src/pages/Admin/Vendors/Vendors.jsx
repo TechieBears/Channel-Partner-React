@@ -1,27 +1,20 @@
-import React, { useState, useEffect } from 'react'
-import { Eye } from 'iconsax-react';
-import { Add, Refresh, SearchNormal } from 'iconsax-react';
-import Table from '../../../components/Table/Table';
-import AddRestaurant from '../../../components/Modals/Resturant/AddRestaurant';
-import { NavLink, Link } from 'react-router-dom';
-import Switch from 'react-js-switch';
-import AddVendors from '../../../components/Modals/Vendors/AddVendors/AddVendors';
-import AddVendorShops from '../../../components/Modals/Vendors/AddVendors/AddVendorShops';
-import { Controller, useForm } from 'react-hook-form';
-import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
-import { useDispatch, useSelector } from "react-redux";
-import userImg from '../../../assets/user.jpg';
-import { setFranchiseVendors } from "../../../redux/Slices/masterSlice";
-import { GetFranchisee, GetFranchiseeVendors, verifyVendors } from "../../../api";
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { Eye } from 'iconsax-react';
 import _ from 'lodash';
+import React, { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import Switch from 'react-js-switch';
+import { useDispatch } from "react-redux";
+import { Link } from 'react-router-dom';
 import Select from "react-select";
+import { toast } from 'react-toastify';
+import { GetFranchisee, GetFranchiseeVendors, verifyVendors } from "../../../api";
+import userImg from '../../../assets/user.jpg';
+import AddVendors from '../../../components/Modals/Vendors/AddVendors/AddVendors';
+import Table from '../../../components/Table/Table';
 import { environment } from '../../../env';
-
-
-
-
+import { setFranchiseVendors } from "../../../redux/Slices/masterSlice";
+import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 
 function Vendors() {
     const [Vendors, SetVendors] = useState();
