@@ -66,10 +66,6 @@ const Step1 = (props) => {
                             latitude: latitude,
                             longitude: longitude
                         };
-                        // console.log("++", mergedData)
-                        // reset(mergedData);
-
-
                     }
                 })
                 .catch(error => console.error('Error fetching address:', error));
@@ -82,16 +78,6 @@ const Step1 = (props) => {
 
     useEffect(() => {
         getCurrentPostion()
-        // if (props) {
-        //     reset({
-        //         shop_name: props?.data?.vendor?.shop_name,
-        //         about_restaurant: props?.data?.about_restaurant,
-        //         shop_contact_number: props?.data?.vendor?.shop_contact_number,
-        //         shop_address: props?.data?.vendor?.shop_address,
-        //         latitude: props?.data?.vendor?.latitude,
-        //         longitude: props?.data?.vendor?.longitude,
-        //     })
-        // }
     }, [])
 
 
@@ -121,7 +107,6 @@ const Step1 = (props) => {
                         latitude: latitude,
                         longitude: longitude
                     };
-                    // console.log("++", mergedData)
                     reset(mergedData);
                 }
             })
@@ -320,12 +305,6 @@ const Step2 = (props) => {
                         />
                     )}
                 />
-                {/* <Select
-                    options={allCuisines}
-                    isMulti
-                    value={props?.selectedCuisines}
-                    onChange={(selectedOption) => props?.setSelectedCuisines(selectedOption)}
-                /> */}
                 {errors?.type_of_cuisine && <Error title='Type of Cuisine is required' />}
             </div>
             <div>
@@ -727,6 +706,7 @@ export default function DashboardForm(props) {
         setLoader(true)
         if (activeStep == steps.length - 1) {
             if (props?.button != 'edit') {
+                
                 if (data?.ambience_image.length != 0) {
                     await ImageUpload(data?.ambience_image[0], "restaurant", "ambience_image", data?.shop_name)
                     data.ambience_image = `${restaurantLink}${data?.shop_name}_ambience_image_${data?.ambience_image[0].name}`
@@ -878,7 +858,7 @@ export default function DashboardForm(props) {
                 if (props?.button != "edit") {
                     let updatedData = {
                         ...data,
-                        "type_of_cuisine": JSON.stringify(selectedCuisines),
+                        "type_of_cuisine": JSON.stringify(data.type_of_cuisine),
                         "vendorId": LoggedUserDetails?.sellerId,
                         "shop_start_time": shopStartTime,
                         "shop_end_time": shopEndTime,
@@ -894,11 +874,10 @@ export default function DashboardForm(props) {
                 } else {
                     let updatedData = {
                         ...data,
-                        // "type_of_cuisine": JSON.stringify(selectedCuisines),
-                        "type_of_cuisine": JSON.stringify(type_of_cuisine),
-
+                        "type_of_cuisine": JSON.stringify(data.type_of_cuisine),       
                         "vendorId": LoggedUserDetails?.sellerId,
                     }
+                    console.log("🚀 ~ file: DashboardForm.jsx:896 ~ onSubmit ~ updatedData:", updatedData)
                     editOnBoarding(LoggedUserDetails?.sellerId, updatedData).then((res) => {
                         if (res?.message === "Restaurant edited successfully") {
                             setTimeout(() => {
@@ -953,10 +932,8 @@ export default function DashboardForm(props) {
                 "ifsc_code": props?.data?.vendor?.ifsc_code,
                 "adhar_card": props?.data?.vendor?.adhar_card,
                 "gst_number": props?.data?.vendor?.gst_number,
-
             })
         }
-
     }, [isOpen])
 
     useEffect(() => {
