@@ -24,7 +24,6 @@ const animatedComponents = makeAnimated();
 
 
 const Step1 = (props) => {
-    console.log("🚀 ~ file: DashboardForm.jsx:25 ~ Step1 ~ props:", props.data)
     const [manually, setManally] = useState(false);
     const { register, getValues, setValue, control, reset, formState: { errors }, } = useFormContext()
 
@@ -143,129 +142,86 @@ const Step1 = (props) => {
 
 
     return (
-        <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-5 gap-x-3 gap-y-3 ">
-            <div className='col-span-3 gap-x-3'>
-                <div className='grid grid-cols-2 gap-3'>
-                    <div className="">
-                        <label className={labelClass}>
-                            Restaurant Name*
-                        </label>
-                        <input
-                            type="text"
-                            placeholder='Name'
-                            className={inputClass}
-                            {...register('shop_name', { required: true })}
-                        />
-                        {errors.shop_name && <Error title='Restaurant Name is required*' />}
-                    </div>
-                    <div className="">
-                        <label className={labelClass}>
-                            Restaurant Complete Address*
-                        </label>
-                        <input
-                            type="text"
-                            placeholder='Restaurant Address'
-                            className={inputClass}
-                            {...register('shop_address', { required: true })}
-                        />
-                        {errors.shop_address && <Error title='Restaurant Address is Required*' />}
-                    </div>
-                    <div className="">
-                        <label className={labelClass}>
-                            Restaurant Phone Number*
-                        </label>
-                        <input
-                            type="tel"
-                            placeholder='Restaurant Number'
-                            className={inputClass}
-                            {...register('shop_contact_number', { required: true, validate: validatePhoneNumber })}
-                        />
-                        {errors.shop_contact_number && <Error title='Restaurant Phone Number is required*' />}
-                    </div>
-                    <div className=''>
-                        <label className={`text-transparent ${labelClass}`}>
-                            Restaurant Phone Number*
-                        </label>
-                        <button type='button' className={`flex w-full justify-center ${formBtn1}`} onClick={getCurrentPostion}><LocateFixed className='me-3' />Get Current Location</button>
-                    </div>
-                    <div className="">
-                        <label className={labelClass}>
-                            Restaurant Description*
-                        </label>
-                        <input
-                            type="text"
-                            placeholder='Restaurant Description'
-                            className={inputClass}
-                            {...register('about_restaurant', { required: true, })}
-                        />
-                        {errors.about_restaurant && <Error title='Restaurant Description is required*' />}
-                    </div>
-
-                    <div className="">
-                        <label className={labelClass}>
-                            Latitude*
-                        </label>
-                        <input
-                            type="text"
-                            placeholder='Latitude'
-                            className={inputClass}
-                            {...register('latitude', { required: manually })}
-                        />
-                        {errors.latitude && <Error title='Latitude Is required' />}
-                    </div>
-                    <div className="">
-                        <label className={labelClass}>
-                            Longitude*
-                        </label>
-                        <input
-                            type="text"
-                            placeholder='Longitutde'
-                            className={inputClass}
-                            {...register('longitude', { required: manually })}
-                        />
-                        {errors.longitude && <Error title='Longitude' />}
-                    </div>
-
-                    {/* <div className="">
-                        <label className={labelClass}>
-                            State*
-                        </label>
-                        <input
-                            type="text"
-                            // readOnly
-                            placeholder='State'
-                            className={inputClass}
-                            {...register('state',)}
-                        />
-                    </div>
-                    <div className="">
-                        <label className={labelClass}>
-                            Pincode*
-                        </label>
-                        <input
-                            type="text"
-                            // readOnly
-                            placeholder='Pincode'
-                            className={inputClass}
-                            {...register('pincode',)}
-                        />
-                    </div>
-                    <div className="">
-                        <label className={labelClass}>
-                            City*
-                        </label>
-                        <input
-                            type="text"
-                            // readOnly
-                            placeholder='City'
-                            className={inputClass}
-                            {...register('city',)}
-                        />
-                    </div> */}
-
-                </div>
+        <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-x-3 gap-y-3 customBox">
+            <div className="">
+                <label className={labelClass}>
+                    Restaurant Name*
+                </label>
+                <input
+                    type="text"
+                    placeholder='Name'
+                    className={inputClass}
+                    {...register('shop_name', { required: true })}
+                />
+                {errors.shop_name && <Error title='Restaurant Name is required*' />}
             </div>
-            <div className='col-span-2'>
+            <div className="">
+                <label className={labelClass}>
+                    Restaurant Complete Address*
+                </label>
+                <input
+                    type="text"
+                    placeholder='Restaurant Address'
+                    className={inputClass}
+                    {...register('shop_address', { required: true })}
+                />
+                {errors.shop_address && <Error title='Restaurant Address is Required*' />}
+            </div>
+            <div className="">
+                <label className={labelClass}>
+                    Restaurant Phone Number*
+                </label>
+                <input
+                    type="tel"
+                    placeholder='Restaurant Number'
+                    className={inputClass}
+                    {...register('shop_contact_number', { required: true, validate: validatePhoneNumber })}
+                />
+                {errors.shop_contact_number && <Error title='Restaurant Phone Number is required*' />}
+            </div>
+            <div className="">
+                <label className={labelClass}>
+                    Restaurant Description*
+                </label>
+                <input
+                    type="text"
+                    placeholder='Restaurant Description'
+                    className={inputClass}
+                    {...register('about_restaurant', { required: true, })}
+                />
+                {errors.about_restaurant && <Error title='Restaurant Description is required*' />}
+            </div>
+            <div className=''>
+                <label className={`text-transparent ${labelClass}`}>
+                    Restaurant Phone Number*
+                </label>
+                <button type='button' className={`flex w-full justify-center ${formBtn1}`} onClick={getCurrentPostion}><LocateFixed className='me-3' />Get Current Location</button>
+            </div>
+            <div className="">
+                <label className={labelClass}>
+                    Latitude*
+                </label>
+                <input
+                    type="text"
+                    placeholder='Latitude'
+                    className={inputClass}
+                    {...register('latitude', { required: manually })}
+                />
+                {errors.latitude && <Error title='Latitude Is required' />}
+            </div>
+            <div className="">
+                <label className={labelClass}>
+                    Longitude*
+                </label>
+                <input
+                    type="text"
+                    placeholder='Longitutde'
+                    className={inputClass}
+                    {...register('longitude', { required: manually })}
+                />
+                {errors.longitude && <Error title='Longitude' />}
+            </div>
+            <div className='md:col-span-2 lg:col-span-3 xl:grid-cols-3'>
                 {/* ============================= Maps start ============================= */}
                 <div className='bg-slate-50 rounded-xl'>
                     {
@@ -273,7 +229,7 @@ const Step1 = (props) => {
                             <GoogleMap
                                 center={position}
                                 zoom={18}
-                                mapContainerStyle={{ width: '100%', height: '400px', backgroundColor: '#fff' }}
+                                mapContainerStyle={{ width: '100%', height: '200px', backgroundColor: '#fff' }}
                             >
                                 <Marker
                                     position={position}
@@ -309,20 +265,6 @@ const Step2 = (props) => {
         { value: "Maharashtrian Cuisine", label: "Maharashtrian Cuisine" },
         { value: "Goan Cuisine", label: "Goan Cuisine" },
     ]);
-
-    // useEffect(() => {
-    //     if (props) {
-    //         const cusine_data = JSON.parse(props?.data?.type_of_cuisine.replace(/'/g, '"'))           
-    //         reset({
-    //             veg_nonveg: props?.data?.veg_nonveg,
-    //             shop_start_time: props?.data?.vendor?.shop_start_time.split(" ")[0],
-    //             shop_end_time: props?.data?.vendor?.shop_end_time.split(" ")[0],
-    //             restaurant_type: props?.data?.restaurant_type,
-    //             type_of_cuisine: cusine_data
-    //         })
-    //     }
-    // }, [])
-
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
             <p className='text-lg font-semibold md:col-span-2 lg:col-span-3'>Establishment Type</p>
@@ -360,25 +302,6 @@ const Step2 = (props) => {
                 <label className={labelClass}>
                     Type of cuisines*
                 </label>
-                {/* <Controller
-                    control={control}
-                    name="type_of_cuisine"
-                    rules={{ required: true }}
-                    render={({
-                        field: { onChange, onBlur, value, name, ref },
-                        fieldState: { invalid, isTouched, isDirty, error },
-                        formState,
-                    }) => (
-                        <Select
-                            value={value}
-                            isMulti
-                            options={allCuisines}
-                            className="basic-multi-select w-100"
-                            components={animatedComponents}
-                            onChange={onChange}
-                        />
-                    )}
-                /> */}
                 <Select
                     options={allCuisines}
                     isMulti
@@ -549,16 +472,6 @@ const Step4 = (props) => {
 
 const Step5 = (props) => {
     const { register, formState: { errors }, reset } = useFormContext()
-    // useEffect(()=>{
-    //     if(props){
-    //         reset({
-    //             gst_number:props?.data?.vendor?.gst_number,
-    //             bank_name:props?.data?.vendor?.bank_name,
-    //             account_number:props?.data?.vendor?.account_number,
-    //             ifsc_code:props?.data?.vendor?.ifsc_code,
-    //         })
-    //     }
-    // },[])
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
             <div className="">
@@ -661,7 +574,6 @@ export default function DashboardForm(props) {
     const [selectedCuisines, setSelectedCuisines] = useState([])
     const [activeStep, setActiveStep] = useState(0);
     const toggle = () => setIsOpen(!isOpen);
-    // const { reset , setValue} = useForm()
     const steps = ['Restaurant Information', 'Restaurant Type and Timing', 'Upload Images', 'General Information', 'Legal Documentation',];
     // ============== Restaurant API ================
     const restaurantCategories = () => {
@@ -727,33 +639,11 @@ export default function DashboardForm(props) {
             }
         })
 
-       
+
     } else {
         methods = useForm()
     }
 
-
-    useEffect(()=>{
-        methods.setValue('shop_name', props?.data?.vendor?.shop_name)
-        methods.reset({
-            "shop_name": props?.data?.vendor?.shop_name
-        })
-    },[])
-
-    useEffect(()=>{
-        methods.setValue('shop_name', props.data?.vendor?.shop_name)
-    },[activeStep])
-
-
-    // useEffect(() => {
-    //     // you can do async server request and fill up form
-    //     setTimeout(() => {
-    //       reset({
-    //         shop_name: props?.data?.vendor?.shop_name,
-            
-    //       });
-    //     }, 2000);
-    //   }, [activeStep]);
     // =========================== back button =========================
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -790,8 +680,8 @@ export default function DashboardForm(props) {
         console.log("🚀 ~ file: DashboardForm.jsx:773 ~ onSubmit ~ data:", data)
         isStepFalied()
 
-        const shopStartTime = moment(data?.shop_start_time, 'HH:mm').format('hh:mm A');
-        const shopEndTime = moment(data?.shop_end_time, 'HH:mm').format('hh:mm A');
+        const shopStartTime = moment(data?.shop_start_time);
+        const shopEndTime = moment(data?.shop_end_time);
         data.shop_start_time = shopStartTime;
         data.shop_end_time = shopEndTime;
         setLoader(true)
@@ -1028,7 +918,7 @@ export default function DashboardForm(props) {
                         <div className="fixed inset-0 bg-black bg-opacity-25" />
                     </Transition.Child>
                     <div className="fixed inset-0 ">
-                        <div className="flex items-center justify-center min-h-full p-4 text-center">
+                        <div className="flex min-h-full items-center justify-center p-4 text-center">
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-out duration-300"
@@ -1038,7 +928,7 @@ export default function DashboardForm(props) {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl max-w-8xl">
+                                <Dialog.Panel className="w-full max-w-5xl transform overflow-hidden rounded-lg bg-white text-left align-middle shadow-xl transition-all opacity-100 scale-100">
 
                                     <Dialog.Title
                                         as="h2"
