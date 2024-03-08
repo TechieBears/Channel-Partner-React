@@ -124,7 +124,7 @@ export default function BannerForm(props) {
             // if (childData) {
             //   data.slide_url = childData
             // } else{
-              if (data?.slide_url?.length > 0 && props?.data?.slide_url && !childData) {
+              if (data?.slide_url?.length > 0 && props?.data?.slide_url) {
                 await ImageUpload(
                   data.slide_url[0],
                   "banner",
