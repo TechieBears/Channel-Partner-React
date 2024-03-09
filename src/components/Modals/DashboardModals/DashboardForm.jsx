@@ -606,8 +606,8 @@ export default function DashboardForm(props) {
     });
     // =================== default values ====================
     if (props.button == 'edit' && props.data) {
-        const formattedStartTime = moment(props?.data?.vendor?.shop_start_time, 'h:mm A').format('HH:mm');
-        const formattedEndTime = moment(props?.data?.vendor?.shop_end_time, 'h:mm A').format('HH:mm');
+        // const formattedStartTime = moment(props?.data?.vendor?.shop_start_time, 'h:mm A').format('HH:mm');
+        // const formattedEndTime = moment(props?.data?.vendor?.shop_end_time, 'h:mm A').format('HH:mm');
         methods = useForm({
             defaultValues: {
                 "shop_name": props?.data?.vendor?.shop_name,
@@ -618,8 +618,8 @@ export default function DashboardForm(props) {
                 "longitude": props?.data?.vendor?.longitude,
                 "veg_nonveg": props?.data?.veg_nonveg,
                 "restaurant_type": props?.data?.restaurant_type,
-                "shop_start_time": formattedStartTime,
-                "shop_end_time": formattedEndTime,
+                "shop_start_time": props?.data?.vendor?.shop_start_time,
+                "shop_end_time": props?.data?.vendor?.shop_end_time,
                 // "type_of_cuisine": JSON.parse(props?.data?.type_of_cuisine),
                 "ambience_image": props?.data?.ambience_image,
                 "shop_image": props?.data?.vendor?.shop_image,
@@ -640,8 +640,8 @@ export default function DashboardForm(props) {
     useEffect(() => {
         if (isOpen && props?.data && props.button == 'edit') {
             console.log("🚀 ~ file: DashboardForm.jsx:733 ~ useEffect ~ props?.data:", props?.data)
-            const formattedStartTime = moment(props?.data?.vendor?.shop_start_time, 'h:mm A').format('HH:mm');
-            const formattedEndTime = moment(props?.data?.vendor?.shop_end_time, 'h:mm A').format('HH:mm');
+            // const formattedStartTime = moment(props?.data?.vendor?.shop_start_time, 'h:mm A').format('HH:mm');
+            // const formattedEndTime = moment(props?.data?.vendor?.shop_end_time, 'h:mm A').format('HH:mm');
             methods.reset({
                 "shop_name": props?.data?.vendor?.shop_name,
                 "shop_address": props?.data?.vendor?.shop_address,
@@ -651,8 +651,8 @@ export default function DashboardForm(props) {
                 "longitude": props?.data?.vendor?.longitude,
                 "veg_nonveg": props?.data?.veg_nonveg,
                 "restaurant_type": props?.data?.restaurant_type,
-                "shop_start_time": formattedStartTime,
-                "shop_end_time": formattedEndTime,
+                "shop_start_time": props?.data?.vendor?.shop_start_time,
+                "shop_end_time": props?.data?.vendor?.shop_end_time,
                 "type_of_cuisine": JSON.parse(props?.data?.type_of_cuisine.replace(/'/g, '"')),
                 "ambience_image": props?.data?.ambience_image,
                 "shop_image": props?.data?.vendor?.shop_image,
@@ -772,12 +772,6 @@ export default function DashboardForm(props) {
                 } else {
                     data.pan_card = ''
                 }
-                if (data?.adhar_card?.length != 0) {
-                    await ImageUpload(data?.adhar_card[0], "restaurant", "adhar_card", data?.shop_name)
-                    data.adhar_card = `${restaurantLink}${data?.shop_name}_adhar_card_${data?.adhar_card[0].name}`
-                } else {
-                    data.adhar_card = ''
-                }
             }
             else {
                 if (data?.ambience_image?.length > 0 && (data?.ambience_image != props?.data?.ambience_image)) {
@@ -857,13 +851,13 @@ export default function DashboardForm(props) {
                         "vendorId": LoggedUserDetails?.sellerId,
                         "shop_start_time": shopStartTime,
                         "shop_end_time": shopEndTime,
+                        "is_registered": true,
                     }
                     registerRestaurant(updatedData).then(res => {
                         if (res?.status == 'success') {
                             toast?.success('Restaurants registered successfully')
                             toggle();
                             setLoader(false);
-                            toast.success(res?.message);
                         }
                     })
                 } else {

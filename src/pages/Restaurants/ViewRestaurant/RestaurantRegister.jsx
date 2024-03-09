@@ -1,37 +1,33 @@
 import React, { useEffect, useState } from 'react'
-import SimpleGallery from '../../../components/Gallary/SimpleGallery'
-import Rest1 from '../../../assets/RestaurantImages/Rest1.jpg'
-import Rest2 from '../../../assets/RestaurantImages/Rest2.jpg'
-import Rest3 from '../../../assets/RestaurantImages/Rest3.jpg'
-import Rest4 from '../../../assets/RestaurantImages/Rest4.jpg'
-import DashboardForm from '../../../components/Modals/DashboardModals/DashboardForm'
-import { getSingleRestaurant } from '../../../api'
 import { useSelector } from 'react-redux'
+import { getSingleRestaurant } from '../../../api'
+import SimpleGallery from '../../../components/Gallary/SimpleGallery'
+import DashboardForm from '../../../components/Modals/DashboardModals/DashboardForm'
 
 export default function RestaurantRegister() {
     const [data, setData] = useState();
     const User = useSelector((state) => state?.user?.loggedUserDetails);
     const images = [
         {
-            URL: Rest1,
+            URL: data?.ambience_image,
             width: 1500,
             height: 900,
         },
         {
-            URL: Rest2,
+            URL: data?.vendor?.shop_image,
             width: 1500,
             height: 900,
         },
         {
-            URL: Rest3,
+            URL: data?.vendor?.adhar_card,
             width: 1500,
             height: 900,
         },
         {
-            URL: Rest4,
+            URL: data?.vendor?.pan_card,
             width: 1500,
             height: 900,
-        },
+        }
     ].filter(image => image.URL !== '' || image.URL !== null);
 
     const getDetails = () => {
@@ -70,41 +66,17 @@ export default function RestaurantRegister() {
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Restaurant Closing Time</h5>
                                 <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.vendor?.shop_end_time == null ? 'Registration Pending' : data?.vendor?.shop_end_time}</h5>
-                                {/* <h5 className='font-tbPop text-slate-500 capitalize text-sm'>9:00 Pm</h5> */}
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Restaurant Pincode</h5>
-                                {/* <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.user?.pincode}</h5> */}
                                 <h5 className='font-tbPop text-slate-500 capitalize text-sm'>400708</h5>
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>State</h5>
-                                {/* <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.user?.state}</h5> */}
                                 <h5 className='font-tbPop text-slate-500 capitalize text-sm'>Maharashtra</h5>
                             </div>
                         </div>
                     </div>
-                    {/* <div className='bg-white rounded-xl mt-4 p-2'>
-                        <p className='font-semibold text-sky-400 text-xl p-2 '>Owner Details</p>
-                        <div className='mx-4 grid grid-cols-4 gap-y-4'>
-                            <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Owner Name</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.user?.first_name} {data?.user?.last_name}</h5>
-                            </div>
-                            <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Owner Email</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.user?.email == null || data?.user?.email == '' ? '-----' : data?.user?.email}</h5>
-                            </div>
-                            <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Owner Contact</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.user?.phone_no == null || data?.user?.phone_no == '' ? '-----' : data?.user?.phone_no}</h5>
-                            </div>
-                            <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Registration Date</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.user?.registration_date}</h5>
-                            </div>
-                        </div>
-                    </div> */}
                     <div className='bg-white rounded-xl mt-4 p-2 pb-4'>
                         <p className='font-semibold text-sky-400 text-xl p-2 '>Legal Details</p>
                         <div className='mx-4 grid grid-cols-4 gap-y-4'>
@@ -114,11 +86,11 @@ export default function RestaurantRegister() {
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Bank Account Number</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.vendor?.account_number == null || data?.vendor?.account_number == '' ? 'Registration Pending' : data?.account_number}</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.vendor?.account_number == null || data?.vendor?.account_number == '' ? 'Registration Pending' : data?.vendor?.account_number}</h5>
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>IFSC Code</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.vendor?.ifsc_code == null || data?.vendor?.ifsc_code == '' ? 'Registration Pending' : data?.ifsc_code}</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.vendor?.ifsc_code == null || data?.vendor?.ifsc_code == '' ? 'Registration Pending' : data?.vendor?.ifsc_code}</h5>
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Adhar Card Number</h5>

@@ -121,8 +121,8 @@ export default function AddRestaurant(props) {
                                         {/* React Hook Form */}
                                         <form onSubmit={handleSubmit(onSubmit)} >
                                             <div className="p-4 overflow-y-scroll scrollbars " >
-                                                <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-4 gap-x-3 gap-y-3 customBox">
-                                                    <h3 className='col-span-4 text-xl font-semibold'>Personal Details</h3>
+                                                <div className="grid py-4 mx-4 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-4 gap-x-3 gap-y-3 customBox">
+                                                    <h3 className='sm:col-span-1 md:col-span-1 lg:col-span-4 text-xl font-semibold'>Personal Details</h3>
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             First Name*
