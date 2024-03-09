@@ -12,6 +12,8 @@ import AddProduct from '../../../../components/Modals/Vendors/AddProduct';
 import AddRestItem from '../../../../components/Modals/Vendors/AddRestItem';
 import Table from '../../../../components/Table/Table';
 import { formBtn1, formBtn2, inputClass } from '../../../../utils/CustomClass';
+import axios from 'axios';
+import { environment } from '../../../../env';
 
 
 
@@ -21,6 +23,7 @@ const AdminProduct = (props) => {
     const [franchiseOptions, setFranchiseOptions] = useState()
     const [vendorOptions, setVendorOptions] = useState()
     const [categoryOptions, setCategoryOptions] = useState()
+    const [subcategoryOptions, setSubCategoryOptions] = useState()
     const [imageDetails, setImageDetails] = useState([]);
     const [category, setCategory] = useState([]);
     const [subCategory, setsubCategory] = useState([]);
@@ -53,22 +56,6 @@ const AdminProduct = (props) => {
             })
         } catch (error) {
             console.log("🚀 ~ file: AdminProducts.jsx:55 ~ GetVendorData ~ error:", error)
-        }
-    }
-
-    const GetCategory = () => {
-        try {
-            getCategory().then((res) => {
-                if (res?.length > 0) {
-                    const newData = res.map((data) => ({
-                        label: data?.category_name,
-                        value: data?.id,
-                    }))
-                    setCategoryOptions(newData)
-                }
-            })
-        } catch (error) {
-            console.log("🚀 ~ file: AdminProducts.jsx:66 ~ GetCategory ~ error:", error)
         }
     }
 
@@ -109,6 +96,13 @@ const AdminProduct = (props) => {
         try {
             getCategory().then(res => {
                 setCategory(res)
+                if (res?.length > 0) {
+                    const newData = res.map((data) => ({
+                        label: data?.category_name,
+                        value: data?.id,
+                    }))
+                    setCategoryOptions(newData)
+                }
             })
         } catch (error) {
             console.log('error fetch', error)
@@ -119,6 +113,13 @@ const AdminProduct = (props) => {
         try {
             getSubCategory().then(res => {
                 setsubCategory(res)
+                if (res?.length > 0) {
+                    const newData = res.map((data) => ({
+                        label: data?.subcat_name,
+                        value: data?.subcat_id,
+                    }))
+                    setSubCategoryOptions(newData)
+                }
             })
         } catch (error) {
             console.log('error fetch', error)
@@ -161,7 +162,6 @@ const AdminProduct = (props) => {
     useEffect(() => {
         GetFranchiseeData()
         GetVendorData()
-        GetCategory()
         fetchData();
     }, [])
 
@@ -175,12 +175,42 @@ const AdminProduct = (props) => {
 
 
     const onSubmit = async (data) => {
-        console.log("🚀 ~ file: AdminProducts.jsx:107 ~ onSubmit ~ data:", data)
+        const { product_name, product_msbcode, franchise_msbcode, vednor_msbcode, product_category, product_subcategory } = data
+        if (product_name != '' || product_msbcode != '' || franchise_msbcode != '' || franchise_msbcode != undefined || vednor_msbcode != '' || vednor_msbcode != undefined || product_category != '' || product_category != undefined || product_subcategory != '' || product_subcategory != undefined) {
+            try {
+                let url = `${environment.baseUrl}app/all_products?product_name=${product_name}&product_msbcode=${product_msbcode}&franchise_msbcode=${franchise_msbcode?.value ? franchise_msbcode?.value : ''}&vednor_msbcode=${vednor_msbcode?.value ? vednor_msbcode?.value : ''}&product_category=${product_category?.value ? product_category?.value : ''}&product_subcategory=${product_subcategory?.value ? product_subcategory?.value : ''}`
+                await axios.get(url).then((res) => {
+                    setShopProducts(res?.data?.results)
+                    toast.success("Filters applied successfully")
+                }).catch((err) => {
+                    console.log("🚀 ~ file: Resturant.jsx:75 ~ awaitaxios.get ~ err:", err)
+                })
+            } catch (err) {
+                console.log("🚀 ~ file: Resturant.jsx:76 ~ onSubmit ~ err:", err)
+            }
+        } else {
+            toast.warn("No Selected Value !")
+        }
     }
 
 
     const handleClear = () => {
-
+        reset({
+            product_name: '',
+            product_msbcode: '',
+            franchise_msbcode: '',
+            vednor_msbcode: '',
+            product_category: '',
+            product_subcategory: ''
+        })
+        toast.success("Filters clear successfully")
+        setShopProducts()
+        if (!props?.isrestaurant) {
+            getProducts()
+        }
+        if (props?.isrestaurant) {
+            getRestaurantFoodItems();
+        }
     }
 
 
@@ -436,14 +466,14 @@ const AdminProduct = (props) => {
                     onSubmit={handleSubmit(onSubmit)}
                     className="flex flex-col gap-2 md:items-center lg:flex-row"
                 >
-                    <div className="grid w-full grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-5 gap-y-3 gap-x-2">
+                    <div className="grid w-full grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-6 gap-y-3 gap-x-2">
                         <div className="">
                             <input
                                 type="text"
-                                placeholder='Name'
+                                placeholder='Product Name'
                                 autoComplete='off'
                                 className={`${inputClass} !bg-slate-100`}
-                                {...register('name')}
+                                {...register('product_name')}
                             />
                         </div>
                         <div className="">
@@ -452,13 +482,13 @@ const AdminProduct = (props) => {
                                 placeholder='MSB Code'
                                 autoComplete='off'
                                 className={`${inputClass} !bg-slate-100`}
-                                {...register('msbcode')}
+                                {...register('product_msbcode')}
                             />
                         </div>
                         <div className="">
                             <Controller
                                 control={control}
-                                name="franchise"
+                                name="franchise_msbcode"
                                 render={({
                                     field: { onChange, value, ref },
                                 }) => (
@@ -484,7 +514,7 @@ const AdminProduct = (props) => {
                         <div className="">
                             <Controller
                                 control={control}
-                                name="vendor"
+                                name="vednor_msbcode"
                                 render={({
                                     field: { onChange, value, ref },
                                 }) => (
@@ -510,13 +540,38 @@ const AdminProduct = (props) => {
                         <div className="">
                             <Controller
                                 control={control}
-                                name="category"
+                                name="product_category"
                                 render={({
                                     field: { onChange, value, ref },
                                 }) => (
                                     <Select
                                         value={value}
                                         options={categoryOptions}
+                                        className="w-100 text-gray-900"
+                                        placeholder="Category"
+                                        onChange={onChange}
+                                        inputRef={ref}
+                                        maxMenuHeight={200}
+                                        styles={{
+                                            placeholder: (provided) => ({
+                                                ...provided,
+                                                color: '#9CA3AF', // Light gray color
+                                            }),
+                                        }}
+                                    />
+                                )}
+                            />
+                        </div>
+                        <div className="">
+                            <Controller
+                                control={control}
+                                name="product_subcategory"
+                                render={({
+                                    field: { onChange, value, ref },
+                                }) => (
+                                    <Select
+                                        value={value}
+                                        options={subcategoryOptions}
                                         className="w-100 text-gray-900"
                                         placeholder="Category"
                                         onChange={onChange}
