@@ -66,10 +66,6 @@ const Step1 = (props) => {
                             latitude: latitude,
                             longitude: longitude
                         };
-                        // console.log("++", mergedData)
-                        // reset(mergedData);
-
-
                     }
                 })
                 .catch(error => console.error('Error fetching address:', error));
@@ -82,16 +78,6 @@ const Step1 = (props) => {
 
     useEffect(() => {
         getCurrentPostion()
-        // if (props) {
-        //     reset({
-        //         shop_name: props?.data?.vendor?.shop_name,
-        //         about_restaurant: props?.data?.about_restaurant,
-        //         shop_contact_number: props?.data?.vendor?.shop_contact_number,
-        //         shop_address: props?.data?.vendor?.shop_address,
-        //         latitude: props?.data?.vendor?.latitude,
-        //         longitude: props?.data?.vendor?.longitude,
-        //     })
-        // }
     }, [])
 
 
@@ -121,7 +107,6 @@ const Step1 = (props) => {
                         latitude: latitude,
                         longitude: longitude
                     };
-                    // console.log("++", mergedData)
                     reset(mergedData);
                 }
             })
@@ -249,7 +234,6 @@ const Step1 = (props) => {
 
 // =================== form steps 2 =================
 const Step2 = (props) => {
-    console.log("🚀 ~ file: DashboardForm.jsx:301 ~ Step2 ~ props:", props)
     const { register, formState: { errors }, reset, control } = useFormContext()
 
     const [allCuisines, setAllCuisines] = useState([
@@ -302,11 +286,24 @@ const Step2 = (props) => {
                 <label className={labelClass}>
                     Type of cuisines*
                 </label>
-                <Select
-                    options={allCuisines}
-                    isMulti
-                    value={props?.selectedCuisines}
-                    onChange={(selectedOption) => props?.setSelectedCuisines(selectedOption)}
+                <Controller
+                    control={control}
+                    name="type_of_cuisine"
+                    rules={{ required: true }}
+                    render={({
+                        field: { onChange, onBlur, value, name, ref },
+                        fieldState: { invalid, isTouched, isDirty, error },
+                        formState,
+                    }) => (
+                        <Select
+                            value={value}
+                            isMulti
+                            options={allCuisines}
+                            className="basic-multi-select w-100"
+                            components={animatedComponents}
+                            onChange={onChange}
+                        />
+                    )}
                 />
                 {errors?.type_of_cuisine && <Error title='Type of Cuisine is required' />}
             </div>
@@ -420,7 +417,6 @@ const Step3 = (props) => {
 
 // =================== form steps 4 =================
 const Step4 = (props) => {
-    console.log('props4 = ', props)
     const { register, setValue, formState: { errors }, setError, watch } = useFormContext()
     const deliveryTime = watch('delivery_time')
     return (
@@ -505,7 +501,7 @@ const Step5 = (props) => {
                     accept='image/jpeg,image/jpg,image/png,application/pdf'
                     placeholder='Upload Images...'
                     {...register("fssai_license", {})} />
-                {props?.button == 'edit' && props?.data?.vendor?.fssai_license != '' && props?.data?.vendor?.fssai_license != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
+               {props?.button == 'edit' && props?.data?.vendor?.fssai_license != '' && props?.data?.vendor?.fssai_license != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
                     {props?.data?.vendor?.fssai_license?.split('/').pop()}
                 </label>}
             </div>
@@ -610,8 +606,6 @@ export default function DashboardForm(props) {
     });
     // =================== default values ====================
     if (props.button == 'edit' && props.data) {
-        console.log("🚀 ~ file: DashboardForm.jsx:711 ~ DashboardForm ~ props.data:", props.data)
-
         const formattedStartTime = moment(props?.data?.vendor?.shop_start_time, 'h:mm A').format('HH:mm');
         const formattedEndTime = moment(props?.data?.vendor?.shop_end_time, 'h:mm A').format('HH:mm');
         methods = useForm({
@@ -638,10 +632,40 @@ export default function DashboardForm(props) {
             }
         })
 
-
     } else {
         methods = useForm()
     }
+
+
+    useEffect(() => {
+        if (isOpen && props?.data && props.button == 'edit') {
+            console.log("🚀 ~ file: DashboardForm.jsx:733 ~ useEffect ~ props?.data:", props?.data) 
+            const formattedStartTime = moment(props?.data?.vendor?.shop_start_time, 'h:mm A').format('HH:mm');
+            const formattedEndTime = moment(props?.data?.vendor?.shop_end_time, 'h:mm A').format('HH:mm');
+            methods.reset({
+                "shop_name": props?.data?.vendor?.shop_name,
+                "shop_address": props?.data?.vendor?.shop_address,
+                "shop_contact_number": props?.data?.vendor?.shop_contact_number,
+                "about_restaurant": props?.data?.about_restaurant,
+                "latitude": props?.data?.vendor?.latitude,
+                "longitude": props?.data?.vendor?.longitude,
+                "veg_nonveg": props?.data?.veg_nonveg,
+                "restaurant_type": props?.data?.restaurant_type,
+                "shop_start_time": formattedStartTime,
+                "shop_end_time": formattedEndTime,
+                "type_of_cuisine": JSON.parse(props?.data?.type_of_cuisine.replace(/'/g, '"'))  ,
+                "ambience_image": props?.data?.ambience_image,
+                "shop_image": props?.data?.vendor?.shop_image,
+                "pan_card": props?.data?.vendor?.pan_card,
+                "bank_name": props?.data?.vendor?.bank_name,
+                "account_number": props?.data?.vendor?.account_number,
+                "ifsc_code": props?.data?.vendor?.ifsc_code,
+                "adhar_card": props?.data?.vendor?.adhar_card,
+                "gst_number": props?.data?.vendor?.gst_number,
+            })
+        }
+    }, [isOpen])
+
     // =========================== back button =========================
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -756,84 +780,80 @@ export default function DashboardForm(props) {
                 }
             }
             else {
-                if (data?.ambience_image?.length > 0 && props?.data?.ambience_image) {
+                if (data?.ambience_image?.length > 0 && (data?.ambience_image != props?.data?.ambience_image)) {
                     await ImageUpload(data?.ambience_image[0], "restaurant", "ambience_image", data?.shop_name)
                     data.ambience_image = `${restaurantLink}${data?.shop_name}_ambience_image_${data?.ambience_image[0]?.name}`
                 } else {
                     data.ambience_image = props?.data?.ambience_image
                 }
-                if (data?.shop_image?.length > 0 && props?.data?.vendor?.shop_image) {
+                if (data?.shop_image?.length > 0 && (data?.shop_image != props?.data?.vendor?.shop_image)) {
                     await ImageUpload(data?.shop_image[0], "restaurant", "shop_image", data?.shop_name)
                     data.shop_image = `${restaurantLink}${data?.shop_name}_shop_image_${data?.shop_image[0]?.name}`
                 } else {
                     data.shop_image = props?.data?.vendor?.shop_image
                 }
-                if (data?.food_image1?.length > 0 && props?.data?.food_image1) {
+                if (data?.food_image1?.length > 0  && (data?.food_image1 != props?.data?.food_image1)) {
                     await ImageUpload(data?.food_image1[0], "restaurant", "food_image1", data?.shop_name)
                     data.food_image1 = `${restaurantLink}${data?.shop_name}_food_image1_${data?.food_image1[0]?.name}`
                 } else {
                     data.food_image1 = props?.data?.food_image1
                 }
-                if (data?.food_image2?.length > 0 && props?.data?.food_image2) {
+                if (data?.food_image2?.length > 0 && (data?.food_image2 != props?.data?.food_image2)) {
                     await ImageUpload(data?.food_image2[0], "restaurant", "food_image2", data?.shop_name)
                     data.food_image2 = `${restaurantLink}${data?.shop_name}_food_image2_${data?.food_image2[0]?.name}`
                 } else {
                     data.food_image2 = props?.data?.food_image2
                 }
-                if (data?.food_image3?.length > 0 && props?.data?.food_image3) {
+                if (data?.food_image3?.length > 0 && (data?.food_image3 != props?.data?.food_image3)) {
                     await ImageUpload(data?.food_image3[0], "restaurant", "food_image3", data?.shop_name)
                     data.food_image3 = `${restaurantLink}${data?.shop_name}_food_image3_${data?.food_image3[0]?.name}`
                 } else {
                     data.food_image3 = props?.data?.food_image3
                 }
-                if (data?.adhar_card?.length > 0 && props?.data?.adhar_card) {
+                if (data?.adhar_card?.length > 0  && (data?.adhar_card != props?.data?.vendor?.adhar_card)) {
                     await ImageUpload(data?.adhar_card[0], "restaurant", "adhar_card", data?.shop_name)
                     data.adhar_card = `${restaurantLink}${data?.shop_name}_adhar_card_${data?.adhar_card[0]?.name}`
                 } else {
-                    data.adhar_card = props?.data?.adhar_card
+                    data.adhar_card = props?.data?.vendor?.adhar_card
                 }
-                if (data?.fssai_license?.length > 0 && props?.data?.fssai_license) {
+                if (data?.fssai_license?.length > 0  && (data?.fssai_license != props?.data?.vendor?.fssai_license)) {
                     await ImageUpload(data?.fssai_license[0], "restaurant", "fssai_license", data?.shop_name)
                     data.fssai_license = `${restaurantLink}${data?.shop_name}_fssai_license_${data?.fssai_license[0]?.name}`
                 } else {
-                    data.fssai_license = props?.data?.fssai_license
+                    data.fssai_license = props?.data?.vendor?.fssai_license
                 }
-                if (data?.order_img1?.length > 0 && props?.data?.order_img1) {
+                if (data?.order_img1?.length > 0  && (data?.order_img1 != props?.data?.order_img1)) {
                     await ImageUpload(data?.order_img1[0], "restaurant", "order_img1", data?.shop_name)
                     data.order_img1 = `${restaurantLink}${data?.shop_name}_order_img1_${data?.order_img1[0]?.name}`
                 } else {
                     data.order_img1 = props?.data?.order_img1
                 }
-                if (data?.order_img2?.length > 0 && props?.data?.order_img2) {
+                if (data?.order_img2?.length > 0 && (data?.order_img2 != props?.data?.order_img2)) {
                     await ImageUpload(data?.order_img2[0], "restaurant", "order_img2", data?.shop_name)
                     data.order_img2 = `${restaurantLink}${data?.shop_name}_order_img2_${data?.order_img2[0]?.name}`
                 } else {
                     data.order_img2 = props?.data?.order_img2
                 }
-                if (data?.order_img3?.length > 0 && props?.data?.order_img3) {
+                if (data?.order_img3?.length > 0 && (data?.order_img3 != props?.data?.order_img3)) {
                     await ImageUpload(data?.order_img3[0], "restaurant", "order_img3", data?.shop_name)
                     data.order_img3 = `${restaurantLink}${data?.shop_name}_order_img3_${data?.order_img3[0]?.name}`
                 } else {
                     data.order_img3 = props?.data?.order_img3
                 }
-                if (data?.pan_card?.length > 0 && props?.data?.pan_card) {
+                if (data?.pan_card?.length != 0 && (data?.pan_card != props?.data?.vendor?.pan_card)) {
+                    console.log('pan card if ', data?.pan_card)
                     await ImageUpload(data?.pan_card[0], "restaurant", "pan_card", data?.shop_name)
                     data.pan_card = `${restaurantLink}${data?.shop_name}_pan_card_${data?.pan_card[0]?.name}`
                 } else {
-                    data.pan_card = props?.data?.pan_card
-                }
-                if (data?.adhar_card?.length > 0 && props?.data?.adhar_card) {
-                    await ImageUpload(data?.adhar_card[0], "restaurant", "adhar_card", data?.shop_name)
-                    data.adhar_card = `${restaurantLink}${data?.shop_name}_adhar_card_${data?.adhar_card[0]?.name}`
-                } else {
-                    data.adhar_card = props?.data?.adhar_card
+                    console.log('pan card else ')
+                    data.pan_card = props?.data?.vendor?.pan_card
                 }
             }
             try {
                 if (props?.button != "edit") {
                     let updatedData = {
                         ...data,
-                        "type_of_cuisine": JSON.stringify(selectedCuisines),
+                        "type_of_cuisine": JSON.stringify(data.type_of_cuisine),
                         "vendorId": LoggedUserDetails?.sellerId,
                         "shop_start_time": shopStartTime,
                         "shop_end_time": shopEndTime,
@@ -849,13 +869,10 @@ export default function DashboardForm(props) {
                 } else {
                     let updatedData = {
                         ...data,
-                        "type_of_cuisine": JSON.stringify(selectedCuisines),
-                        // "type_of_cuisine": JSON.stringify(data?.type_of_cuisine),
-
+                        "type_of_cuisine": JSON.stringify(data.type_of_cuisine),       
                         "vendorId": LoggedUserDetails?.sellerId,
                     }
-                    // console.log("🚀 ~ file: DashboardForm.jsx:948 ~ onSubmit ~ updatedData:", updatedData)
-                    return
+                    console.log("🚀 ~ file: DashboardForm.jsx:896 ~ onSubmit ~ updatedData:", updatedData)
                     editOnBoarding(LoggedUserDetails?.sellerId, updatedData).then((res) => {
                         if (res?.message === "Restaurant edited successfully") {
                             setTimeout(() => {
@@ -863,6 +880,7 @@ export default function DashboardForm(props) {
                                     setLoader(false),
                                     toast.success(res?.message);
                                 props?.getDetails()
+                                setActiveStep(0)
                             }, 1000)
                         }
                     })
@@ -909,10 +927,8 @@ export default function DashboardForm(props) {
                 "ifsc_code": props?.data?.vendor?.ifsc_code,
                 "adhar_card": props?.data?.vendor?.adhar_card,
                 "gst_number": props?.data?.vendor?.gst_number,
-
             })
         }
-
     }, [isOpen])
 
     useEffect(() => {
