@@ -364,7 +364,7 @@ const Step3 = (props) => {
                     // multiple
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("shop_image", { required: !props?.data?.shop_image })} />
+                    {...register("shop_image", { required: !props?.data?.vendor?.shop_image })} />
                 {props?.button == 'edit' && props?.data?.vendor?.shop_image != '' && props?.data?.vendor?.shop_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                     {props?.data?.vendor?.shop_image?.split('/').pop()}
                 </label>}
@@ -956,7 +956,7 @@ export default function DashboardForm(props) {
                         <div className="fixed inset-0 bg-black bg-opacity-25" />
                     </Transition.Child>
                     <div className="fixed inset-0 ">
-                        <div className="flex min-h-full items-center justify-center p-4 text-center">
+                        <div className="flex items-center justify-center min-h-full p-4 text-center">
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-out duration-300"
@@ -966,7 +966,7 @@ export default function DashboardForm(props) {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-5xl transform overflow-hidden rounded-lg bg-white text-left align-middle shadow-xl transition-all opacity-100 scale-100">
+                                <Dialog.Panel className="w-full max-w-5xl overflow-hidden text-left align-middle transition-all transform scale-100 bg-white rounded-lg shadow-xl opacity-100">
 
                                     <Dialog.Title
                                         as="h2"
