@@ -1,18 +1,18 @@
-import React, { useState } from "react";
 import {
-    ArrowSwapVertical, ShoppingCart, UserRemove,
-    ClipboardTick
+    ArrowSwapVertical,
+    ClipboardTick,
+    ShoppingCart, UserRemove
 } from "iconsax-react";
+import React, { useState } from "react";
 // import { deleteStorage, getPartnerStorage, getStorages } from "../../../api";
-import { formBtn2, inputClass } from "../../../utils/CustomClass";
-import { formBtn1 } from "../../../utils/CustomClass";
 import { Controller, useForm } from "react-hook-form";
-import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
+import { NavLink } from "react-router-dom";
 import AsyncSelect from "react-select/async";
-import DashboardForm from "../../../components/Modals/DashboardModals/DashboardForm"
+import { toast } from "react-toastify";
+import DashboardForm from "../../../components/Modals/DashboardModals/DashboardForm";
 import DeleteModal from "../../../components/Modals/DeleteModal/DeleteModal";
+import { formBtn1, formBtn2, inputClass } from "../../../utils/CustomClass";
 
 
 
@@ -144,7 +144,7 @@ const Dashboard = () => {
 
     return (
         <>
-            {user?.isverified_byadmin != true && user?.vendor_type == 'restaurant' ? <DashboardForm dashBoard={false} isOpen={modelOpen} /> : ''}
+            {user?.is_registered == false && user?.vendor_type == 'restaurant' ? <DashboardForm dashBoard={false} isOpen={modelOpen} /> : ''}
             <DeleteModal
                 title="Delete Stroage"
                 deleteBtn={deleteData}

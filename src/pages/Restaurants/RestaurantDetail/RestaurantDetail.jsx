@@ -15,6 +15,16 @@ export default function RestaurantDetail() {
             height: 900,
         },
         {
+            URL: data?.ambience_image,
+            width: 1500,
+            height: 900,
+        },
+        {
+            URL: data?.shop_image,
+            width: 1500,
+            height: 900,
+        },
+        {
             URL: data?.pan_card,
             width: 1500,
             height: 900,
