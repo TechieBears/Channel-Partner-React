@@ -1,16 +1,15 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState, useEffect, useRef } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from "../../../../utils/CustomClass";
 import { Edit } from "iconsax-react";
-import { addHomeBanners, editHomeBanners, getGalleryImages } from "../../../../api";
+import { addHomeBanners, editHomeBanners } from "../../../../api";
 import { useDispatch } from "react-redux";
 import { setBanner } from "../../../../redux/Slices/masterSlice";
 import { toast } from "react-toastify";
 import LoadBox from "../../../Loader/LoadBox";
 import Error from "../../../Errors/Error";
 import { ImageUpload, bannerLink } from "../../../../env";
-import MediaGallaryModal from "../../../../pages/Settings/MediaGallery/MediaGallery";
 
 export default function BannerForm(props) {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,162 +17,146 @@ export default function BannerForm(props) {
 
   const dispatch = useDispatch();
   const toggle = () => setIsOpen(!isOpen);
-  const { register, handleSubmit, setValue, reset, formState: { errors }} = useForm();
+  const { register, handleSubmit, setValue, watch, reset, formState: { errors }} = useForm();
 
-  const [openGallery, setopenGallery] = useState(false);
-  const [openGalleryModal, setopenGalleryModal] = useState(false);
-  const [imageDetails, setImageDetails] = useState([]);
-  const [childData, setChildData] = useState('');
-  const mediaGalleryModalRef = useRef(null);
+  // const [openGallery, setopenGallery] = useState(false);
+  // const [openGalleryModal, setopenGalleryModal] = useState(false);
+  // const [imageDetails, setImageDetails] = useState([]);
+  // const [childData, setChildData] = useState('');
+  // const mediaGalleryModalRef = useRef(null);
+  // console.log('childData == ', childData)
 
-  const openMediaModal = () => {
-    setopenGalleryModal(true);
-  };
   
-  const receiveDataFromChild = (data) => {
-    setChildData(data);
-    setValue("slide_url", childData);
-    console.log('childData = ', childData)
+  // ===================== close modals ===============================
+  const closeBtn = () => {
+    toggle();
+    setLoader(false);
+    // setopenGallery(false);
+    // setopenGalleryModal(false);
+    reset();
   };
+
+  // const handleSelectChange = (e) => {
+  //   if (e.target.value == 'true') {
+  //      setopenGallery(true);
+  //   }else{
+  //     setopenGallery(false);
+  //   }
+  // };
+
+
+  // const openMediaModal = () => {
+  //   setopenGalleryModal(!openGalleryModal);
+  // };
+  
+  // const receiveDataFromChild = (data) => {
+  //   setChildData(data);
+  //   setValue("slide_url", childData);
+  //   // console.log('childData = ', childData)
+  // };
 
 
   // ============== fetch data from api ================
-  const fetchData = () => {
-    try {
-      getGalleryImages().then((res) => {
-        // console.log("media gallery data = ", res);
-        setImageDetails(res);
-      });
-    } catch (err) {
-      console.log("error", err);
-    }
-  };
+  // const fetchData = () => {
+  //   try {
+  //     getGalleryImages().then((res) => {
+  //       console.log("media gallery data = ", res);
+  //       setImageDetails(res);
+  //     });
+  //   } catch (err) {
+  //     console.log("error", err);
+  //   }
+  // };
+
+
   useEffect(() => {
-    fetchData();
+    // fetchData();
     reset({
       'vendor_type': props?.data?.vendor_type 
     })
   }, []);
 
+
   // ============================ submit data  =====================================
   const onSubmit = async (data) => {
-    if (props?.button != "edit") {
-      try {
-        if (childData) {
-          data.slide_url = childData;
-        } else if (data?.slide_url?.length !== 0) {
-          await ImageUpload(
-            data.slide_url[0],
-            "banner",
-            "banner",
-            data.slide_url[0].name
-          );
-          data.slide_url = `${bannerLink}${data.slide_url[0].name}_banner_${data.slide_url[0].name}`;
-        } else {
-          data.slide_url = "";
-        }
-        setLoader(true);
-        addHomeBanners(data).then((res) => {
-          if (res?.message === "slide added successfully") {
-            setTimeout(() => {
-              dispatch(setBanner(res));
-              reset();
-              toggle(), setLoader(false), props?.getAllBannerList();
-              toast.success(res?.message);
-              setChildData('')
-            }, 1000);
-          }
-        });
-      } catch (error) {
-        setLoader(false);
-        console.log("error", error);
-      }
-    } else {
-      try {
-        if (data?.slide_url?.length > 0 && props?.data?.slide_url) {
-          await ImageUpload(
-            data.slide_url[0],
-            "banner",
-            "banner",
-            data.slide_url[0]?.name
-          );
-          data.slide_url = `${bannerLink}${data.slide_url[0]?.name}_banner_${data.slide_url[0]?.name}`;
-        } else {
-          data.slide_url = props?.data?.slide_url;
-        }
-        setLoader(true);
-        editHomeBanners(props?.data?.slide_id, data).then((res) => {
-          if (res?.message === "slide edited successfully") {
-            setTimeout(() => {
-              dispatch(setBanner(res));
-              reset();
-              toggle(), setLoader(false), props?.getAllBannerList();
-              toast.success(res?.message);
-              setChildData('')
-            }, 1000);
-          }
-        });
-      } catch (error) {
-        setLoader(false);
-        console.log("error", error);
-      }
-    }
-  };
-
-
-
+    // const slideUrl = watch('slide_url')
   
-  const GallerySubmit = async (data) => {
-    if (props?.button != "edit") {
-      try {
-        setLoader(true);
-        addHomeBanners(data).then((res) => {
-          if (res?.message === "slide added successfully") {
-            setTimeout(() => {
-              dispatch(setBanner(res));
-              reset();
-              toggle(), setLoader(false), props?.getAllBannerList();
-              toast.success(res?.message);
-            }, 1000);
+      // if (props?.button != "edit" && childData) {
+      if (props?.button != "edit") {
+        try {
+          // if (childData) {
+          //   data.slide_url = childData;
+          // } else 
+          if (data?.slide_url?.length !== 0) {
+            await ImageUpload(
+              data.slide_url[0],
+              "banner",
+              "banner",
+              data.slide_url[0].name
+            );
+            data.slide_url = `${bannerLink}${data.slide_url[0].name}_banner_${data.slide_url[0].name}`;
+          } else {
+            data.slide_url = "";
           }
-        });
-      } catch (error) {
-        setLoader(false);
-        console.log("error", error);
-      }
-    } else {
-      try {
-        setLoader(true);
-        editHomeBanners(props?.data?.slide_id, data).then((res) => {
-          if (res?.message === "slide edited successfully") {
-            setTimeout(() => {
-              dispatch(setBanner(res));
-              reset();
-              toggle(), setLoader(false), props?.getAllBannerList();
-              toast.success(res?.message);
-            }, 1000);
+          setLoader(true);
+          addHomeBanners(data).then((res) => {
+            if (res?.message === "slide added successfully") {
+              setTimeout(() => {
+                dispatch(setBanner(res));
+                reset();
+                toggle(), 
+                setLoader(false), 
+                props?.getAllBannerList();
+                toast.success(res?.message);
+                // setChildData('')
+                // setopenGallery(false);
+                // setopenGalleryModal(false);
+              }, 1000);
+            }
+          });
+        } catch (error) {
+          setLoader(false);
+          console.log("error", error);
+        }
+      } else {
+        if(props?.button == 'edit'){
+          try {
+            // if (childData) {
+            //   data.slide_url = childData
+            // } else{
+              if (data?.slide_url?.length > 0 && props?.data?.slide_url) {
+                await ImageUpload(
+                  data.slide_url[0],
+                  "banner",
+                  "banner",
+                  data.slide_url[0]?.name
+                );
+                data.slide_url = `${bannerLink}${data.slide_url[0]?.name}_banner_${data.slide_url[0]?.name}`;
+              } else {
+                data.slide_url = props?.data?.slide_url;
+              }
+            // }
+            setLoader(true);
+            editHomeBanners(props?.data?.slide_id, data).then((res) => {
+              if (res?.message === "slide edited successfully") {
+                setTimeout(() => {
+                  dispatch(setBanner(res));
+                  reset();
+                  toggle(), 
+                  setLoader(false),
+                  props?.getAllBannerList();
+                  toast.success(res?.message);
+                  // setChildData('')
+                  // setopenGallery(false);
+                  // setopenGalleryModal(false);
+                }, 1000);
+              }
+            });
+          } catch (error) {
+            setLoader(false);
+            console.log("error", error);
           }
-        });
-      } catch (error) {
-        setLoader(false);
-        console.log("error", error);
       }
-    }
-  };
-
-  // ===================== close modals ===============================
-  const closeBtn = () => {
-    reset();
-    toggle();
-    setLoader(false);
-    setopenGallery(false);
-  };
-
-  const handleSelectChange = (e) => {
-    if (e.target.value == 'true') {
-       setopenGallery(true);
-    }else{
-      setopenGallery(false);
     }
   };
 
@@ -228,7 +211,7 @@ export default function BannerForm(props) {
                     <form onSubmit={handleSubmit(onSubmit)}>
 
                       <div className="py-4 mx-4 customBox">
-                        <div className="mb-3">
+                        {/* <div className="mb-3">
                           <select
                             name=""
                             onChange={handleSelectChange}
@@ -237,11 +220,11 @@ export default function BannerForm(props) {
                             <option value="false">I have a own Images</option>
                             <option value="true">I Don't have a Images</option>
                           </select>
-                        </div>
+                        </div> */}
 
                         <div className="my-2">
                          <label className={labelClass} htmlFor="main_input">
-                            Vendor *
+                            Vendor Type*
                           </label>
                         <select
                             name=""
@@ -255,15 +238,8 @@ export default function BannerForm(props) {
                           {errors.vendor_type && <Error title='Vendor type is Required*' />}
                         </div>
 
-
-                       {openGallery && <div className="w-1/2 mt-3 mb-2">
-                          <span className={`cursor-pointer w-full ${formBtn1}`} onClick={openMediaModal}>
-                            Open Sample Images
-                          </span>
-                        </div>}
-
-
-                       {!openGallery && <div className="">
+                       {/* {!openGallery && <div className=""> */}
+                       <div className="">
                           <label className={labelClass} htmlFor="main_input">
                             Image*
                           </label>
@@ -275,7 +251,8 @@ export default function BannerForm(props) {
                             accept="image/jpeg,image/jpg,image/png"
                             placeholder="Upload Images..."
                             {...register("slide_url", {
-                              required: !childData && (props.button === "edit" ? false : true),
+                              // required: !childData && (props.button === "edit" ? false : true),
+                              required: (props.button === "edit" ? false : true),
                             })}
                           />
                           {props?.button == "edit" &&
@@ -288,11 +265,24 @@ export default function BannerForm(props) {
                           {errors.slide_url && (
                             <Error title="Main Image is required*" />
                           )}
-                        </div> }
+                        </div> 
 
-
+                        {/* {openGallery && (
+                          <div className="w-1/2 mt-3 mb-2">
+                            <span className={`cursor-pointer w-full ${formBtn1}`} onClick={openMediaModal}>
+                              Open Sample Images
+                            </span>
+                            <input
+                              type="text" 
+                              className="hidden"
+                            />
+                            {childData == undefined || childData == '' && (
+                              <Error title="Main Image is required*" />
+                            )}
+                          </div>
+                        )} */}
                     
-                        {childData && <span>{childData.split("/").pop()}</span>}
+                        {/* {childData && <span>{childData.split("/").pop()}</span>} */}
                       </div>
 
                       <footer className="flex justify-end px-4 py-2 space-x-3 bg-white">
@@ -315,16 +305,17 @@ export default function BannerForm(props) {
                       </footer>
 
                     </form>
-                       {openGalleryModal && <div className="hidden">
+                       {/* {openGalleryModal && <div className="hidden">
                           <MediaGallaryModal
                               ref={mediaGalleryModalRef}
                               id="mediaGalleryModal"
                               className="hidden"
                               title="Upload Image"
                               imageDetails={imageDetails}
+                              setopenGalleryModal={openMediaModal}
                               sendDataToParent={receiveDataFromChild}
                           />
-                        </div> }
+                        </div> } */}
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

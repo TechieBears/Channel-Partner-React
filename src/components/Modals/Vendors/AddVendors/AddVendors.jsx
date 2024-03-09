@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ImageUpload, vendorlink } from "../../../../env";
 import { toast } from 'react-toastify';
 import { validateEmail, validateGST, validatePIN, validatePhoneNumber } from '../../../Validations.jsx/Validations';
+import moment from 'moment';
 
 
 
@@ -41,6 +42,11 @@ export default function AddVendors(props) {
     };
     // ============================= form submiting ======================================
     const onSubmit = async (data) => {
+        const shopStartTime = moment(data?.shop_start_time, 'HH:mm').format('hh:mm A');
+        const shopEndTime = moment(data?.shop_end_time, 'HH:mm').format('hh:mm A');
+        data.shop_start_time = shopStartTime;
+        data.shop_end_time = shopEndTime;
+
         if (props.button != 'edit') {    // for create
             if (data?.bank_passbook.length != 0) {
                 await ImageUpload(data?.bank_passbook[0], "vendor", "BankPassbook", data?.first_name)
@@ -98,11 +104,11 @@ export default function AddVendors(props) {
                 setLoader(true);
                 let additionalPayload = {};
                 if (LoggedUserDetails?.role == 'franchise') {
-                    additionalPayload = { created_by: LoggedUserDetails?.userid, vendor_type: "seller" };
+                    additionalPayload = { created_by: LoggedUserDetails?.userid, vendor_type: "shop" };
                 }
                 let vendorType = {};
                 if (LoggedUserDetails?.role == 'admin') {
-                    vendorType = { vendor_type: "seller"  };
+                    vendorType = { vendor_type: "shop" };
                 }
 
                 const requestData = { ...data, ...additionalPayload, ...vendorType };
@@ -130,13 +136,13 @@ export default function AddVendors(props) {
                 setLoader(true)
                 let additionalPayload = {};
                 if (LoggedUserDetails?.role == 'franchise') {
-                    additionalPayload = { created_by: LoggedUserDetails?.userid, vendor_type: "seller"  };
+                    additionalPayload = { created_by: LoggedUserDetails?.userid, vendor_type: "shop" };
                 }
                 let vendorType = {};
                 if (LoggedUserDetails?.role == 'admin') {
-                    vendorType = { vendor_type: "seller"  };
+                    vendorType = { vendor_type: "shop" };
                 }
-                const requestData = { ...data, ...additionalPayload , ...vendorType};
+                const requestData = { ...data, ...additionalPayload, ...vendorType };
 
                 const response = await EditFranchiseeVendors(props?.data?.user?.id, requestData)
                 if (response?.status == "success") {
@@ -162,6 +168,8 @@ export default function AddVendors(props) {
 
     // ======================== Reset data into the form  =======================
     useMemo(() => {
+        const formattedStartTime = moment(props?.data?.shop_start_time, 'h:mm A').format('HH:mm');
+        const formattedEndTime = moment(props?.data?.shop_end_time, 'h:mm A').format('HH:mm');
         reset({
             first_name: props?.data?.user?.first_name,
             last_name: props?.data?.user?.last_name,
@@ -186,8 +194,8 @@ export default function AddVendors(props) {
             created_by: props?.data?.created_by?.id,
             shop_name: props?.data?.shop_name,
             hawker_shop_photo: props?.data?.hawker_shop_photo,
-            shop_start_time: props?.data?.shop_start_time,
-            shop_end_time: props?.data?.shop_end_time,
+            shop_start_time: formattedStartTime,
+            shop_end_time: formattedEndTime
         });
         setValue('created_by', props?.data?.created_by?.id)
     }, [props.data]);
@@ -253,10 +261,10 @@ export default function AddVendors(props) {
                                                             type="text"
                                                             placeholder="First Name"
                                                             className={inputClass}
-                                                            {...register("first_name", { required: true })}
+                                                            {...register("first_name", { required: true, pattern: /^[A-Za-z]+$/i })}
                                                         />
                                                         {errors.first_name && (
-                                                            <Error title="First Name is Required*" />
+                                                            <Error title={errors?.first_name ? 'First Name should Contain alphabets only' : 'First Name is Required'} />
                                                         )}
                                                     </div>
                                                     <div className="">
@@ -265,10 +273,10 @@ export default function AddVendors(props) {
                                                             type="text"
                                                             placeholder="Last Name"
                                                             className={inputClass}
-                                                            {...register("last_name", { required: true })}
+                                                            {...register("last_name", { required: true, pattern: /^[A-Za-z]+$/i })}
                                                         />
                                                         {errors.last_name && (
-                                                            <Error title="Last Name is Required*" />
+                                                            <Error title={errors?.last_name ? 'Last Name should Contain alphabets Only' : 'Last Name is Required'} />
                                                         )}
                                                     </div>
                                                     <div className="">
@@ -315,7 +323,7 @@ export default function AddVendors(props) {
                                                             {...register("email", { required: true, validate: validateEmail })}
                                                         />
                                                         {errors.email && (
-                                                            <Error title={errors?.email?.message} />
+                                                            <Error title={errors?.email?.message ? errors?.email?.message : 'Email is Required'} />
                                                         )}
                                                     </div>
                                                     <div className="">
@@ -350,7 +358,7 @@ export default function AddVendors(props) {
                                                         </label>
                                                         <input
                                                             type="date"
-                                                            // placeholder='Last Name'
+                                                            max={moment().format('YYYY-MM-DD')}
                                                             className={inputClass}
                                                             {...register("date_of_birth", { required: true })}
                                                         />
@@ -364,6 +372,7 @@ export default function AddVendors(props) {
                                                             className={inputClass}
                                                             {...register("gender", { required: true })}
                                                         >
+                                                            <option value="">select</option>
                                                             <option value="Male">Male</option>
                                                             <option value="Female">Female</option>
                                                             <option value="Other">Other</option>
@@ -425,24 +434,6 @@ export default function AddVendors(props) {
                                                             <Error title="shop end time is Required*" />
                                                         )}
                                                     </div>
-                                                    {/* <div className="">
-                                                        <label className={labelClass}>Vendor Type*</label>
-                                                        <select
-                                                            name="category Type"
-                                                            className={inputClass}
-                                                            {...register("vendor_type", { required: true })}
-                                                        >
-                                                            <option value="">Select Type</option>
-                                                            {categories?.map((category) => (
-                                                                <option key={category.id} value={category.category_name} selected={props?.data?.category === category.id}>
-                                                                    {category.category_name}
-                                                                </option>
-                                                            ))}
-                                                        </select>
-                                                        {errors.vendor_type && (
-                                                            <Error title="Vendor Type is required*" />
-                                                        )}
-                                                    </div> */}
                                                     <div className="">
                                                         <label className={labelClass}>PINCODE*</label>
                                                         <input
@@ -474,8 +465,11 @@ export default function AddVendors(props) {
                                                             type="text"
                                                             placeholder="Enter State"
                                                             className={inputClass}
-                                                            {...register("state")}
+                                                            {...register("state", { pattern: /^[A-Za-z]+$/i })}
                                                         />
+                                                        {errors.address && (
+                                                            <Error title={errors.address && 'State should contain All Alphabets'} />
+                                                        )}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>City*</label>
@@ -483,10 +477,10 @@ export default function AddVendors(props) {
                                                             type="text"
                                                             placeholder="City"
                                                             className={inputClass}
-                                                            {...register("city", { required: true })}
+                                                            {...register("city", { required: true, pattern: /^[A-Za-z]+$/i })}
                                                         />
                                                         {errors.address && (
-                                                            <Error title="City is Required*" />
+                                                            <Error title={errors?.address ? 'State should contain All Alphabets' : 'City is Required'} />
                                                         )}
                                                     </div>
 
@@ -498,7 +492,6 @@ export default function AddVendors(props) {
                                                                 placeholder="10"
                                                                 className={inputClass}
                                                                 {...register("insta_commison_percentage", { required: true })}
-                                                            // disabled={props?.button == 'edit' ? true : false}
                                                             />
                                                             {errors.address && (
                                                                 <Error title="Insta commison percentage is Required*" />
@@ -511,25 +504,27 @@ export default function AddVendors(props) {
                                                 <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-x-3 gap-y-3">
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Pan Card
+                                                            Pan Card*
                                                         </label>
                                                         <input
                                                             type="text"
                                                             placeholder='PAN  No'
                                                             className={inputClass}
-                                                            {...register('pan_card')}
+                                                            {...register('pan_card', { required: true })}
                                                         />
+                                                        {errors?.pan_card && <Error title='Pan Card Number is required' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Aadhar Card
+                                                            Aadhar Card*
                                                         </label>
                                                         <input
                                                             type="text"
                                                             placeholder='Aadhar No'
                                                             className={inputClass}
-                                                            {...register('adhar_card')}
+                                                            {...register('adhar_card', { required: true })}
                                                         />
+                                                        {errors?.adhar_card && <Error title='Aadhar Card Number is required' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -548,28 +543,30 @@ export default function AddVendors(props) {
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Bank Name
+                                                            Bank Name*
                                                         </label>
                                                         <div className="flex items-center space-x-2">
                                                             <input
                                                                 type="text"
                                                                 placeholder='Bank Name'
                                                                 className={inputClass}
-                                                                {...register('bank_name')}
+                                                                {...register('bank_name', { required: true })}
                                                             />
+                                                            {errors?.bank_name && <Error title='Bank name is Required' />}
                                                         </div>
                                                     </div>
 
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Bank Account Number
+                                                            Bank Account Number*
                                                         </label>
                                                         <input
                                                             type="text"
                                                             placeholder='Account Number'
                                                             className={inputClass}
-                                                            {...register('account_number')}
+                                                            {...register('account_number', { required: true })}
                                                         />
+                                                        {errors?.account_number && <Error title='Account Number is Required' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Bank PassBook Image*</label>

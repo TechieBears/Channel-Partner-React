@@ -6,8 +6,8 @@ import { NavLink } from "react-router-dom";
 import Switch from "react-js-switch";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import { useSelector } from "react-redux";
-import { getRestarant, verifyVendors, getFranchRestaurant } from "../../../api";
-import { useForm } from "react-hook-form";
+import { getRestarant, verifyVendors, getFranchRestaurant, GetFranchisee, getRestaurantCategory, getRestaurantSubCategory } from "../../../api";
+import { useForm, Controller } from "react-hook-form";
 import userImg from "../../../assets/user.jpg";
 import {
   formBtn1,
@@ -18,34 +18,85 @@ import {
 import axios from "axios";
 import AddItem from "../../../components/Modals/Resturant/AddItem";
 import { toast } from "react-toastify";
+import _ from 'lodash';
+import Select from "react-select";
+import { environment } from "../../../env";
 
 export default function Restaurant() {
   const [data, setData] = useState([]);
   const user = useSelector((state) => state?.user?.loggedUserDetails);
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm();
+  const [pincodeOptions, setPincodeOptions] = useState()
+  const [franchiseOptions, setFranchiseOptions] = useState()
+
+  const GetFranchiseeData = () => {
+    try {
+      GetFranchisee().then((res) => {
+        if (res?.length > 0) {
+          const newData = res.map((data) => ({
+            label: data?.user?.first_name + " " + data?.user?.last_name + `(${data?.msb_code})`,
+            value: data?.user?.id,
+          }))
+          setFranchiseOptions(newData)
+        }
+      })
+    } catch (error) {
+      console.log("🚀 ~ file: Vendors.jsx:57 ~ GetFranchiseeData ~ error:", error)
+    }
+  }
+
+  useEffect(() => {
+    if (data?.length > 0) {
+      const newData = data?.map((data) => ({
+        label: data?.user?.pincode,
+        value: data?.user?.pincode,
+      }))
+      const uniquePincodeData = _.uniqBy(newData, 'value')
+      setPincodeOptions(uniquePincodeData);
+    }
+  }, [data])
 
   // =================== filter data ========================
   const onSubmit = async (data) => {
-    if (
-      data?.name != "" ||
-      data?.email != "" ||
-      data?.city != "" ||
-      data?.role != ""
-    ) {
-      let url = `${environment.baseUrl}user-filter/?first_name=${data?.name}&email=${data?.email}&city=${data?.city}&role=${data?.role}`;
-      await axios.get(url).then((res) => {
-        dispatch(setUserList(res.data));
-        toast.success("Filters applied successfully");
-      });
+    if (data?.name != '' || data?.msbcode != '' || data?.franchise != '' || data?.franchise != undefined || data?.pincode != '' || data?.pincode != undefined) {
+      try {
+        let url = `${environment.baseUrl}vendor/vendor_list?name=${data?.name}&msbcode=${data?.msbcode}&franchise=${data?.franchise?.value ? data?.franchise?.value : ''}&pincode=${data?.pincode?.value ? data?.pincode?.value : ''}&vendor_type=restaurant`
+        await axios.get(url).then((res) => {
+          setData(res?.data?.results)
+          toast.success("Filters applied successfully")
+        }).catch((err) => {
+          console.log("🚀 ~ file: Resturant.jsx:75 ~ awaitaxios.get ~ err:", err)
+        })
+      } catch (err) {
+        console.log("🚀 ~ file: Resturant.jsx:76 ~ onSubmit ~ err:", err)
+      }
     } else {
-      toast.warn("No Selected Value !");
+      toast.warn("No Selected Value !")
     }
-  };
+  }
+
+
+  const handleClear = () => {
+    reset({
+      name: '',
+      msbcode: '',
+      franchise: '',
+      pincode: ''
+    })
+    toast.success("Filters clear successfully")
+    setData()
+    if (user?.role === 'admin') {
+      getAllRestaurant()
+    } else if (user?.role === 'franchise') {
+      getFranchiseRestaurants()
+    }
+  }
 
   const verifyActions = (row) => {
     const payload = {
@@ -86,6 +137,27 @@ export default function Restaurant() {
       });
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  // ============== Fetch All Admin Restaurants  ================
+  const getAllRestaurant = () => {
+    getRestarant().then((res) => {
+      const restaurantVendors = res.filter(
+        (item) => item?.vendor_type == "restaurant"
+      );
+      setData(restaurantVendors);
+    });
+  };
+
+  // ============== Fetch Franchisee Restaurant  ================
+  const getFranchiseRestaurants = () => {
+    try {
+      getFranchRestaurant(user?.userid).then((res) => {
+        setData(res);
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -137,7 +209,7 @@ export default function Restaurant() {
         title="Edit User"
         id={row?.user?.id}
         data={row}
-        getAllRestaurant={getAllRestaurant}
+        getAllRestaurant={user?.role == 'admin' ? getAllRestaurant : getFranchRestaurant}
       />
     </div>
   );
@@ -152,27 +224,6 @@ export default function Restaurant() {
     >
       {rowData?.isactive !== "false" ? "Active" : "Inactive"}
     </h6>
-  );
-
-  /*================================     column    ========================= */
-
-  const action = (row) => (
-    <div className="flex items-center gap-2">
-      <NavLink
-        to={`/resturants/restaurant-detail/${row?.vendor_id}`}
-        state={row}
-        className="bg-green-100 px-1.5 py-1 rounded-lg"
-      >
-        <Eye size="20" className="text-green-500" />
-      </NavLink>
-      <AddRestaurant
-        button="edit"
-        title="Edit User"
-        id={row?.user?.id}
-        data={row}
-        getAllRestaurant={getAllRestaurant}
-      />
-    </div>
   );
 
   const columns = [
@@ -194,35 +245,14 @@ export default function Restaurant() {
     { field: "isactive", header: "Franchise Verify", body: switchActive, sortable: true },
   ];
 
-
-
-  // ============== Fetch All Admin Restaurants  ================
-  const getAllRestaurant = () => {
-    getRestarant().then((res) => {
-      const restaurantVendors = res.filter(
-        (item) => item?.vendor_type == "restaurant"
-      );
-      setData(restaurantVendors);
-    });
-  };
-
-  // ============== Fetch Franchisee Restaurant  ================
-  const getFranchiseRestaurants = () => {
-    try {
-      getFranchRestaurant(user?.userid).then((res) => {
-        setData(res);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     if (user?.role == "admin") {
       getAllRestaurant();
+      GetFranchiseeData()
     }
     if (user?.role == "franchise") {
       getFranchiseRestaurants();
+      GetFranchiseeData()
     }
   }, []);
 
@@ -238,44 +268,72 @@ export default function Restaurant() {
             <div className="">
               <input
                 type="text"
-                placeholder="Search by name"
-                autoComplete="off"
+                placeholder='Search By Name'
+                autoComplete='off'
                 className={`${inputClass} !bg-slate-100`}
-                {...register("name")}
+                {...register('name')}
               />
             </div>
             <div className="">
               <input
                 type="text"
-                placeholder="Search by email"
-                autoComplete="off"
+                placeholder='Search By MSB Code'
+                autoComplete='off'
                 className={`${inputClass} !bg-slate-100`}
-                {...register("email")}
+                {...register('msbcode')}
               />
             </div>
+            {user?.role == 'admin' && (
+              <div className="">
+                <Controller
+                  control={control}
+                  name="franchise"
+                  render={({
+                    field: { onChange, value, ref },
+                  }) => (
+                    <Select
+                      value={value}
+                      options={franchiseOptions}
+                      className="w-100 text-gray-900"
+                      placeholder="Search By Franchise"
+                      onChange={onChange}
+                      inputRef={ref}
+                      maxMenuHeight={200}
+                      styles={{
+                        placeholder: (provided) => ({
+                          ...provided,
+                          color: '#9CA3AF', // Light gray color
+                        }),
+                      }}
+                    />
+                  )}
+                />
+              </div>
+            )}
             <div className="">
-              <select
-                name="City"
-                className={`${inputClass} !bg-slate-100`}
-                {...register("role")}
-              >
-                <option value="">Select by Role</option>
-                <option value="user">User</option>
-                <option value="admin">Admin</option>
-                <option value="provider">Provider</option>
-              </select>
-            </div>
-            <div className="">
-              <select
-                name="City"
-                className={`${inputClass} !bg-slate-100`}
-                {...register("city")}
-              >
-                <option value="">Select by city name</option>
-                <option value="Mumbai">Mumbai</option>
-                <option value="Bangalore">Bangalore</option>
-                <option value="Delhi">Delhi</option>
-              </select>
+              <Controller
+                control={control}
+                name="pincode"
+                render={({
+                  field: { onChange, value, ref },
+                }) => (
+                  <Select
+                    value={value}
+                    options={pincodeOptions}
+                    className="w-100 text-gray-900"
+                    placeholder="Search By Pincode"
+                    onChange={onChange}
+                    inputRef={ref}
+                    maxMenuHeight={200}
+                    styles={{
+                      placeholder: (provided) => ({
+                        ...provided,
+                        color: '#9CA3AF', // Light gray color
+                      }),
+                    }}
+                  />
+                )}
+              />
             </div>
           </div>
           <div className="flex items-center gap-x-2">
@@ -285,11 +343,9 @@ export default function Restaurant() {
             <button
               type="button"
               className={`${formBtn2} w-full text-center`}
-              onClick={() => {
-                reset(),
-                  toast.success("Filters clear successfully"),
-                  fetchData();
-              }}
+              onClick={() =>
+                handleClear()
+              }
             >
               Clear
             </button>
@@ -309,7 +365,7 @@ export default function Restaurant() {
           </div>
           <AddRestaurant
             title="Add Restaurant"
-            getAllRestaurant={getAllRestaurant}
+            getAllRestaurant={user?.role == 'admin' ? getAllRestaurant : getFranchRestaurant}
             id={user?.userid}
           />
         </div>

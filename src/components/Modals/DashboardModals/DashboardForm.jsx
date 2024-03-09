@@ -1,6 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useEffect, useState } from 'react';
-import { useForm, FormProvider, useFormContext } from "react-hook-form";
+import { useForm, FormProvider, useFormContext, Controller } from "react-hook-form";
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
 import { registerRestaurant, getRestaurantCategory, editOnBoarding } from '../../../api';
 import { useSelector } from 'react-redux';
@@ -16,6 +16,8 @@ import { ImageUpload, restaurantLink } from '../../../env';
 import moment from 'moment';
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 import { LocateFixed } from 'lucide-react';
+import makeAnimated from "react-select/animated";
+const animatedComponents = makeAnimated();
 
 // =================== form steps 1 =================
 
@@ -64,8 +66,6 @@ const Step1 = (props) => {
                             latitude: latitude,
                             longitude: longitude
                         };
-                        // console.log("++", mergedData)
-                        reset(mergedData);
                     }
                 })
                 .catch(error => console.error('Error fetching address:', error));
@@ -79,6 +79,7 @@ const Step1 = (props) => {
     useEffect(() => {
         getCurrentPostion()
     }, [])
+
 
     const onMarkerDragEnd = async (e) => {
         const latLng = e.latLng
@@ -106,7 +107,6 @@ const Step1 = (props) => {
                         latitude: latitude,
                         longitude: longitude
                     };
-                    // console.log("++", mergedData)
                     reset(mergedData);
                 }
             })
@@ -127,129 +127,86 @@ const Step1 = (props) => {
 
 
     return (
-        <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-5 gap-x-3 gap-y-3 ">
-            <div className='col-span-3 gap-x-3'>
-                <div className='grid grid-cols-2 gap-3'>
-                    <div className="">
-                        <label className={labelClass}>
-                            Restaurant Name*
-                        </label>
-                        <input
-                            type="text"
-                            placeholder='Name'
-                            className={inputClass}
-                            {...register('shop_name', { required: true })}
-                        />
-                        {errors.shop_name && <Error title='Restaurant Name is required*' />}
-                    </div>
-                    <div className="">
-                        <label className={labelClass}>
-                            Restaurant Complete Address*
-                        </label>
-                        <input
-                            type="text"
-                            placeholder='Restaurant Address'
-                            className={inputClass}
-                            {...register('shop_address', { required: true })}
-                        />
-                        {errors.shop_address && <Error title='Restaurant Address is Required*' />}
-                    </div>
-                    <div className="">
-                        <label className={labelClass}>
-                            Restaurant Phone Number*
-                        </label>
-                        <input
-                            type="tel"
-                            placeholder='Restaurant Number'
-                            className={inputClass}
-                            {...register('shop_contact_number', { required: true, validate: validatePhoneNumber })}
-                        />
-                        {errors.shop_contact_number && <Error title='Restaurant Phone Number is required*' />}
-                    </div>
-                    <div className=''>
-                        <label className={`text-transparent ${labelClass}`}>
-                            Restaurant Phone Number*
-                        </label>
-                        <button type='button' className={`flex w-full justify-center ${formBtn1}`} onClick={getCurrentPostion}><LocateFixed className='me-3' />Get Current Location</button>
-                    </div>
-                    <div className="">
-                        <label className={labelClass}>
-                            Restaurant Description*
-                        </label>
-                        <input
-                            type="text"
-                            placeholder='Restaurant Description'
-                            className={inputClass}
-                            {...register('about_restaurant', { required: true, })}
-                        />
-                        {errors.about_restaurant && <Error title='Restaurant Description is required*' />}
-                    </div>
-
-                    <div className="">
-                        <label className={labelClass}>
-                            Latitude*
-                        </label>
-                        <input
-                            type="text"
-                            placeholder='Latitude'
-                            className={inputClass}
-                            {...register('latitude', { required: manually })}
-                        />
-                        {errors.latitude && <Error title='Latitude Is required' />}
-                    </div>
-                    <div className="">
-                        <label className={labelClass}>
-                            Longitude*
-                        </label>
-                        <input
-                            type="text"
-                            placeholder='Longitutde'
-                            className={inputClass}
-                            {...register('longitude', { required: manually })}
-                        />
-                        {errors.longitude && <Error title='Longitude' />}
-                    </div>
-
-                    {/* <div className="">
-                        <label className={labelClass}>
-                            State*
-                        </label>
-                        <input
-                            type="text"
-                            // readOnly
-                            placeholder='State'
-                            className={inputClass}
-                            {...register('state',)}
-                        />
-                    </div>
-                    <div className="">
-                        <label className={labelClass}>
-                            Pincode*
-                        </label>
-                        <input
-                            type="text"
-                            // readOnly
-                            placeholder='Pincode'
-                            className={inputClass}
-                            {...register('pincode',)}
-                        />
-                    </div>
-                    <div className="">
-                        <label className={labelClass}>
-                            City*
-                        </label>
-                        <input
-                            type="text"
-                            // readOnly
-                            placeholder='City'
-                            className={inputClass}
-                            {...register('city',)}
-                        />
-                    </div> */}
-
-                </div>
+        <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-x-3 gap-y-3 customBox">
+            <div className="">
+                <label className={labelClass}>
+                    Restaurant Name*
+                </label>
+                <input
+                    type="text"
+                    placeholder='Name'
+                    className={inputClass}
+                    {...register('shop_name', { required: true })}
+                />
+                {errors.shop_name && <Error title='Restaurant Name is required*' />}
             </div>
-            <div className='col-span-2'>
+            <div className="">
+                <label className={labelClass}>
+                    Restaurant Complete Address*
+                </label>
+                <input
+                    type="text"
+                    placeholder='Restaurant Address'
+                    className={inputClass}
+                    {...register('shop_address', { required: true })}
+                />
+                {errors.shop_address && <Error title='Restaurant Address is Required*' />}
+            </div>
+            <div className="">
+                <label className={labelClass}>
+                    Restaurant Phone Number*
+                </label>
+                <input
+                    type="tel"
+                    placeholder='Restaurant Number'
+                    className={inputClass}
+                    {...register('shop_contact_number', { required: true, validate: validatePhoneNumber })}
+                />
+                {errors.shop_contact_number && <Error title='Restaurant Phone Number is required*' />}
+            </div>
+            <div className="">
+                <label className={labelClass}>
+                    Restaurant Description*
+                </label>
+                <input
+                    type="text"
+                    placeholder='Restaurant Description'
+                    className={inputClass}
+                    {...register('about_restaurant', { required: true, })}
+                />
+                {errors.about_restaurant && <Error title='Restaurant Description is required*' />}
+            </div>
+            <div className=''>
+                <label className={`text-transparent ${labelClass}`}>
+                    Restaurant Phone Number*
+                </label>
+                <button type='button' className={`flex w-full justify-center ${formBtn1}`} onClick={getCurrentPostion}><LocateFixed className='me-3' />Get Current Location</button>
+            </div>
+            <div className="">
+                <label className={labelClass}>
+                    Latitude*
+                </label>
+                <input
+                    type="text"
+                    placeholder='Latitude'
+                    className={inputClass}
+                    {...register('latitude', { required: manually })}
+                />
+                {errors.latitude && <Error title='Latitude Is required' />}
+            </div>
+            <div className="">
+                <label className={labelClass}>
+                    Longitude*
+                </label>
+                <input
+                    type="text"
+                    placeholder='Longitutde'
+                    className={inputClass}
+                    {...register('longitude', { required: manually })}
+                />
+                {errors.longitude && <Error title='Longitude' />}
+            </div>
+            <div className='md:col-span-2 lg:col-span-3 xl:grid-cols-3'>
                 {/* ============================= Maps start ============================= */}
                 <div className='bg-slate-50 rounded-xl'>
                     {
@@ -257,7 +214,7 @@ const Step1 = (props) => {
                             <GoogleMap
                                 center={position}
                                 zoom={18}
-                                mapContainerStyle={{ width: '100%', height: '400px', backgroundColor: '#fff' }}
+                                mapContainerStyle={{ width: '100%', height: '200px', backgroundColor: '#fff' }}
                             >
                                 <Marker
                                     position={position}
@@ -277,7 +234,7 @@ const Step1 = (props) => {
 
 // =================== form steps 2 =================
 const Step2 = (props) => {
-    const { register, formState: { errors }, } = useFormContext()
+    const { register, formState: { errors }, reset, control } = useFormContext()
 
     const [allCuisines, setAllCuisines] = useState([
         { value: "Fast Food", label: "Fast Food" },
@@ -292,7 +249,6 @@ const Step2 = (props) => {
         { value: "Maharashtrian Cuisine", label: "Maharashtrian Cuisine" },
         { value: "Goan Cuisine", label: "Goan Cuisine" },
     ]);
-
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
             <p className='text-lg font-semibold md:col-span-2 lg:col-span-3'>Establishment Type</p>
@@ -321,7 +277,7 @@ const Step2 = (props) => {
                 >
                     <option value=''>Select</option>
                     {props?.category?.map(item =>
-                        <option value={item?.category_name}>{item?.category_name}</option>
+                        <option value={item?.category_name} key={item?.category_name}>{item?.category_name}</option>
                     )}
                 </select>
                 {errors?.restaurant_type && <Error title='Select Your Describe is required' />}
@@ -330,11 +286,24 @@ const Step2 = (props) => {
                 <label className={labelClass}>
                     Type of cuisines*
                 </label>
-                <Select
-                    options={allCuisines}
-                    isMulti
-                    value={props?.selectedCuisines}
-                    onChange={(selectedOption) => props?.setSelectedCuisines(selectedOption)}
+                <Controller
+                    control={control}
+                    name="type_of_cuisine"
+                    rules={{ required: true }}
+                    render={({
+                        field: { onChange, onBlur, value, name, ref },
+                        fieldState: { invalid, isTouched, isDirty, error },
+                        formState,
+                    }) => (
+                        <Select
+                            value={value}
+                            isMulti
+                            options={allCuisines}
+                            className="basic-multi-select w-100"
+                            components={animatedComponents}
+                            onChange={onChange}
+                        />
+                    )}
                 />
                 {errors?.type_of_cuisine && <Error title='Type of Cuisine is required' />}
             </div>
@@ -388,18 +357,18 @@ const Step3 = (props) => {
                 {errors.ambience_image && <Error title='Image is required*' />}
             </div>
             <div className="">
-                <label className={labelClass} htmlFor="main_input">Image 2</label>
+                <label className={labelClass} htmlFor="main_input">Image 2*</label>
                 <input className={fileinput}
                     id="main_input"
                     type='file'
                     // multiple
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("shop_image")} />
+                    {...register("shop_image", { required: !props?.data?.shop_image })} />
                 {props?.button == 'edit' && props?.data?.vendor?.shop_image != '' && props?.data?.vendor?.shop_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                     {props?.data?.vendor?.shop_image?.split('/').pop()}
                 </label>}
-                {/* {errors.shop_image && <Error title='Image is required*' />} */}
+                {errors.shop_image && <Error title='Image is required*' />}
             </div>
             <p className='text-base font-normal md:col-span-2 lg:col-span-3'>Dish Images</p>
             <div className="">
@@ -448,7 +417,6 @@ const Step3 = (props) => {
 
 // =================== form steps 4 =================
 const Step4 = (props) => {
-    console.log('props4 = ', props)
     const { register, setValue, formState: { errors }, setError, watch } = useFormContext()
     const deliveryTime = watch('delivery_time')
     return (
@@ -499,8 +467,7 @@ const Step4 = (props) => {
 // // =================== form steps 5 =================
 
 const Step5 = (props) => {
-    console.log('props5 = ', props)
-    const { register, formState: { errors } } = useFormContext()
+    const { register, formState: { errors }, reset } = useFormContext()
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
             <div className="">
@@ -510,7 +477,7 @@ const Step5 = (props) => {
                     type='file'
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("pan_card", { required: true })} />
+                    {...register("pan_card", { required: (props?.data?.vendor?.pan_card ? false : true) })} />
                 {props?.button == 'edit' && props?.data?.vendor?.pan_card != '' && props?.data?.vendor?.pan_card != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                     {props?.data?.vendor?.pan_card?.split('/').pop()}
                 </label>
@@ -584,7 +551,7 @@ const Step5 = (props) => {
                     multiple
                     accept='image/jpeg,image/jpg,image/png,application/pdf'
                     placeholder='Upload Images...'
-                    {...register("adhar_card", { required: true })} />
+                    {...register("adhar_card", { required: props?.data?.vendor?.adhar_card ? false : true })} />
                 {props?.button == 'edit' && props?.data?.vendor?.adhar_card != '' && props?.data?.vendor?.adhar_card != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
                     {props?.data?.vendor?.adhar_card?.split('/').pop()}
                 </label>}
@@ -639,9 +606,8 @@ export default function DashboardForm(props) {
     });
     // =================== default values ====================
     if (props.button == 'edit' && props.data) {
-        const formattedStartTime = moment(props?.data?.vendor?.shop_start_time, 'h:mm A').format('HH:mm');
-        const formattedEndTime = moment(props?.data?.vendor?.shop_end_time, 'h:mm A').format('HH:mm');
-
+        // const formattedStartTime = moment(props?.data?.vendor?.shop_start_time, 'h:mm A').format('HH:mm');
+        // const formattedEndTime = moment(props?.data?.vendor?.shop_end_time, 'h:mm A').format('HH:mm');
         methods = useForm({
             defaultValues: {
                 "shop_name": props?.data?.vendor?.shop_name,
@@ -652,8 +618,8 @@ export default function DashboardForm(props) {
                 "longitude": props?.data?.vendor?.longitude,
                 "veg_nonveg": props?.data?.veg_nonveg,
                 "restaurant_type": props?.data?.restaurant_type,
-                "shop_start_time": formattedStartTime,
-                "shop_end_time": formattedEndTime,
+                "shop_start_time": props?.data?.vendor?.shop_start_time,
+                "shop_end_time": props?.data?.vendor?.shop_end_time,
                 // "type_of_cuisine": JSON.parse(props?.data?.type_of_cuisine),
                 "ambience_image": props?.data?.ambience_image,
                 "shop_image": props?.data?.vendor?.shop_image,
@@ -665,9 +631,41 @@ export default function DashboardForm(props) {
                 "gst_number": props?.data?.vendor?.gst_number,
             }
         })
+
     } else {
         methods = useForm()
     }
+
+
+    useEffect(() => {
+        if (isOpen && props?.data && props.button == 'edit') {
+            console.log("🚀 ~ file: DashboardForm.jsx:733 ~ useEffect ~ props?.data:", props?.data)
+            // const formattedStartTime = moment(props?.data?.vendor?.shop_start_time, 'h:mm A').format('HH:mm');
+            // const formattedEndTime = moment(props?.data?.vendor?.shop_end_time, 'h:mm A').format('HH:mm');
+            methods.reset({
+                "shop_name": props?.data?.vendor?.shop_name,
+                "shop_address": props?.data?.vendor?.shop_address,
+                "shop_contact_number": props?.data?.vendor?.shop_contact_number,
+                "about_restaurant": props?.data?.about_restaurant,
+                "latitude": props?.data?.vendor?.latitude,
+                "longitude": props?.data?.vendor?.longitude,
+                "veg_nonveg": props?.data?.veg_nonveg,
+                "restaurant_type": props?.data?.restaurant_type,
+                "shop_start_time": props?.data?.vendor?.shop_start_time,
+                "shop_end_time": props?.data?.vendor?.shop_end_time,
+                "type_of_cuisine": JSON.parse(props?.data?.type_of_cuisine.replace(/'/g, '"')),
+                "ambience_image": props?.data?.ambience_image,
+                "shop_image": props?.data?.vendor?.shop_image,
+                "pan_card": props?.data?.vendor?.pan_card,
+                "bank_name": props?.data?.vendor?.bank_name,
+                "account_number": props?.data?.vendor?.account_number,
+                "ifsc_code": props?.data?.vendor?.ifsc_code,
+                "adhar_card": props?.data?.vendor?.adhar_card,
+                "gst_number": props?.data?.vendor?.gst_number,
+            })
+        }
+    }, [isOpen])
+
     // =========================== back button =========================
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -701,12 +699,10 @@ export default function DashboardForm(props) {
 
     // ================= submit data  ===============================
     const onSubmit = async (data) => {
-        console.log('data', data)
+        console.log("🚀 ~ file: DashboardForm.jsx:773 ~ onSubmit ~ data:", data)
         isStepFalied()
-        const shopStartTime = moment(data?.shop_start_time, 'HH:mm').format('hh:mm A');
-        const shopEndTime = moment(data?.shop_end_time, 'HH:mm').format('hh:mm A');
-        data.shop_start_time = shopStartTime;
-        data.shop_end_time = shopEndTime;
+        const shopStartTime = moment(data?.shop_start_time);
+        const shopEndTime = moment(data?.shop_end_time);
         setLoader(true)
         if (activeStep == steps.length - 1) {
             if (props?.button != 'edit') {
@@ -776,108 +772,101 @@ export default function DashboardForm(props) {
                 } else {
                     data.pan_card = ''
                 }
-                if (data?.adhar_card?.length != 0) {
-                    await ImageUpload(data?.adhar_card[0], "restaurant", "adhar_card", data?.shop_name)
-                    data.adhar_card = `${restaurantLink}${data?.shop_name}_adhar_card_${data?.adhar_card[0].name}`
-                } else {
-                    data.adhar_card = ''
-                }
             }
             else {
-                if (data?.ambience_image?.length > 0 && props?.data?.ambience_image) {
+                if (data?.ambience_image?.length > 0 && (data?.ambience_image != props?.data?.ambience_image)) {
                     await ImageUpload(data?.ambience_image[0], "restaurant", "ambience_image", data?.shop_name)
                     data.ambience_image = `${restaurantLink}${data?.shop_name}_ambience_image_${data?.ambience_image[0]?.name}`
                 } else {
                     data.ambience_image = props?.data?.ambience_image
                 }
-                if (data?.shop_image?.length > 0 && props?.data?.vendor?.shop_image) {
+                if (data?.shop_image?.length > 0 && (data?.shop_image != props?.data?.vendor?.shop_image)) {
                     await ImageUpload(data?.shop_image[0], "restaurant", "shop_image", data?.shop_name)
                     data.shop_image = `${restaurantLink}${data?.shop_name}_shop_image_${data?.shop_image[0]?.name}`
                 } else {
                     data.shop_image = props?.data?.vendor?.shop_image
                 }
-                if (data?.food_image1?.length > 0 && props?.data?.food_image1) {
+                if (data?.food_image1?.length > 0 && (data?.food_image1 != props?.data?.food_image1)) {
                     await ImageUpload(data?.food_image1[0], "restaurant", "food_image1", data?.shop_name)
                     data.food_image1 = `${restaurantLink}${data?.shop_name}_food_image1_${data?.food_image1[0]?.name}`
                 } else {
                     data.food_image1 = props?.data?.food_image1
                 }
-                if (data?.food_image2?.length > 0 && props?.data?.food_image2) {
+                if (data?.food_image2?.length > 0 && (data?.food_image2 != props?.data?.food_image2)) {
                     await ImageUpload(data?.food_image2[0], "restaurant", "food_image2", data?.shop_name)
                     data.food_image2 = `${restaurantLink}${data?.shop_name}_food_image2_${data?.food_image2[0]?.name}`
                 } else {
                     data.food_image2 = props?.data?.food_image2
                 }
-                if (data?.food_image3?.length > 0 && props?.data?.food_image3) {
+                if (data?.food_image3?.length > 0 && (data?.food_image3 != props?.data?.food_image3)) {
                     await ImageUpload(data?.food_image3[0], "restaurant", "food_image3", data?.shop_name)
                     data.food_image3 = `${restaurantLink}${data?.shop_name}_food_image3_${data?.food_image3[0]?.name}`
                 } else {
                     data.food_image3 = props?.data?.food_image3
                 }
-                if (data?.adhar_card?.length > 0 && props?.data?.adhar_card) {
+                if (data?.adhar_card?.length > 0 && (data?.adhar_card != props?.data?.vendor?.adhar_card)) {
                     await ImageUpload(data?.adhar_card[0], "restaurant", "adhar_card", data?.shop_name)
                     data.adhar_card = `${restaurantLink}${data?.shop_name}_adhar_card_${data?.adhar_card[0]?.name}`
                 } else {
-                    data.adhar_card = props?.data?.adhar_card
+                    data.adhar_card = props?.data?.vendor?.adhar_card
                 }
-                if (data?.fssai_license?.length > 0 && props?.data?.fssai_license) {
+                if (data?.fssai_license?.length > 0 && (data?.fssai_license != props?.data?.vendor?.fssai_license)) {
                     await ImageUpload(data?.fssai_license[0], "restaurant", "fssai_license", data?.shop_name)
                     data.fssai_license = `${restaurantLink}${data?.shop_name}_fssai_license_${data?.fssai_license[0]?.name}`
                 } else {
-                    data.fssai_license = props?.data?.fssai_license
+                    data.fssai_license = props?.data?.vendor?.fssai_license
                 }
-                if (data?.order_img1?.length > 0 && props?.data?.order_img1) {
+                if (data?.order_img1?.length > 0 && (data?.order_img1 != props?.data?.order_img1)) {
                     await ImageUpload(data?.order_img1[0], "restaurant", "order_img1", data?.shop_name)
                     data.order_img1 = `${restaurantLink}${data?.shop_name}_order_img1_${data?.order_img1[0]?.name}`
                 } else {
                     data.order_img1 = props?.data?.order_img1
                 }
-                if (data?.order_img2?.length > 0 && props?.data?.order_img2) {
+                if (data?.order_img2?.length > 0 && (data?.order_img2 != props?.data?.order_img2)) {
                     await ImageUpload(data?.order_img2[0], "restaurant", "order_img2", data?.shop_name)
                     data.order_img2 = `${restaurantLink}${data?.shop_name}_order_img2_${data?.order_img2[0]?.name}`
                 } else {
                     data.order_img2 = props?.data?.order_img2
                 }
-                if (data?.order_img3?.length > 0 && props?.data?.order_img3) {
+                if (data?.order_img3?.length > 0 && (data?.order_img3 != props?.data?.order_img3)) {
                     await ImageUpload(data?.order_img3[0], "restaurant", "order_img3", data?.shop_name)
                     data.order_img3 = `${restaurantLink}${data?.shop_name}_order_img3_${data?.order_img3[0]?.name}`
                 } else {
                     data.order_img3 = props?.data?.order_img3
                 }
-                if (data?.pan_card?.length > 0 && props?.data?.pan_card) {
+                if (data?.pan_card?.length != 0 && (data?.pan_card != props?.data?.vendor?.pan_card)) {
+                    console.log('pan card if ', data?.pan_card)
                     await ImageUpload(data?.pan_card[0], "restaurant", "pan_card", data?.shop_name)
                     data.pan_card = `${restaurantLink}${data?.shop_name}_pan_card_${data?.pan_card[0]?.name}`
                 } else {
-                    data.pan_card = props?.data?.pan_card
-                }
-                if (data?.adhar_card?.length > 0 && props?.data?.adhar_card) {
-                    await ImageUpload(data?.adhar_card[0], "restaurant", "adhar_card", data?.shop_name)
-                    data.adhar_card = `${restaurantLink}${data?.shop_name}_adhar_card_${data?.adhar_card[0]?.name}`
-                } else {
-                    data.adhar_card = props?.data?.adhar_card
+                    console.log('pan card else ')
+                    data.pan_card = props?.data?.vendor?.pan_card
                 }
             }
             try {
                 if (props?.button != "edit") {
                     let updatedData = {
                         ...data,
-                        "type_of_cuisine": JSON.stringify(selectedCuisines),
+                        "type_of_cuisine": JSON.stringify(data.type_of_cuisine),
                         "vendorId": LoggedUserDetails?.sellerId,
+                        "shop_start_time": shopStartTime,
+                        "shop_end_time": shopEndTime,
+                        "is_registered": true,
                     }
                     registerRestaurant(updatedData).then(res => {
                         if (res?.status == 'success') {
                             toast?.success('Restaurants registered successfully')
                             toggle();
                             setLoader(false);
-                            toast.success(res?.message);
                         }
                     })
                 } else {
                     let updatedData = {
                         ...data,
-                        "type_of_cuisine": JSON.stringify(selectedCuisines),
+                        "type_of_cuisine": JSON.stringify(data.type_of_cuisine),
                         "vendorId": LoggedUserDetails?.sellerId,
                     }
+                    console.log("🚀 ~ file: DashboardForm.jsx:896 ~ onSubmit ~ updatedData:", updatedData)
                     editOnBoarding(LoggedUserDetails?.sellerId, updatedData).then((res) => {
                         if (res?.message === "Restaurant edited successfully") {
                             setTimeout(() => {
@@ -885,6 +874,7 @@ export default function DashboardForm(props) {
                                     setLoader(false),
                                     toast.success(res?.message);
                                 props?.getDetails()
+                                setActiveStep(0)
                             }, 1000)
                         }
                     })
@@ -905,6 +895,35 @@ export default function DashboardForm(props) {
         methods.reset();
         setLoader(false);
     }
+
+    useEffect(() => {
+        if (isOpen && props?.data && props.button == 'edit') {
+            console.log("🚀 ~ file: DashboardForm.jsx:733 ~ useEffect ~ props?.data:", props?.data)
+            const formattedStartTime = moment(props?.data?.vendor?.shop_start_time, 'h:mm A').format('HH:mm');
+            const formattedEndTime = moment(props?.data?.vendor?.shop_end_time, 'h:mm A').format('HH:mm');
+            methods.reset({
+                "shop_name": props?.data?.vendor?.shop_name,
+                "shop_address": props?.data?.vendor?.shop_address,
+                "shop_contact_number": props?.data?.vendor?.shop_contact_number,
+                "about_restaurant": props?.data?.about_restaurant,
+                "latitude": props?.data?.vendor?.latitude,
+                "longitude": props?.data?.vendor?.longitude,
+                "veg_nonveg": props?.data?.veg_nonveg,
+                "restaurant_type": props?.data?.restaurant_type,
+                "shop_start_time": formattedStartTime,
+                "shop_end_time": formattedEndTime,
+                "type_of_cuisine": JSON.parse(props?.data?.type_of_cuisine.replace(/'/g, '"')),
+                "ambience_image": props?.data?.ambience_image,
+                "shop_image": props?.data?.vendor?.shop_image,
+                "pan_card": props?.data?.vendor?.pan_card,
+                "bank_name": props?.data?.vendor?.bank_name,
+                "account_number": props?.data?.vendor?.account_number,
+                "ifsc_code": props?.data?.vendor?.ifsc_code,
+                "adhar_card": props?.data?.vendor?.adhar_card,
+                "gst_number": props?.data?.vendor?.gst_number,
+            })
+        }
+    }, [isOpen])
 
     useEffect(() => {
         restaurantCategories();
@@ -931,7 +950,7 @@ export default function DashboardForm(props) {
                         <div className="fixed inset-0 bg-black bg-opacity-25" />
                     </Transition.Child>
                     <div className="fixed inset-0 ">
-                        <div className="flex items-center justify-center min-h-full p-4 text-center">
+                        <div className="flex min-h-full items-center justify-center p-4 text-center">
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-out duration-300"
@@ -941,7 +960,7 @@ export default function DashboardForm(props) {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl max-w-8xl">
+                                <Dialog.Panel className="w-full max-w-5xl transform overflow-hidden rounded-lg bg-white text-left align-middle shadow-xl transition-all opacity-100 scale-100">
 
                                     <Dialog.Title
                                         as="h2"

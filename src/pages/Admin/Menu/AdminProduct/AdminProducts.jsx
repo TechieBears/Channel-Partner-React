@@ -1,29 +1,92 @@
-import React, { useEffect, useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
-import { useSelector } from 'react-redux';
-import AsyncSelect from "react-select/async";
-import { formBtn1, formBtn2, inputClass } from '../../../../utils/CustomClass';
-import { toast } from 'react-toastify';
-import Table from '../../../../components/Table/Table';
-import { Link } from 'react-router-dom';
 import { Eye, Trash } from 'iconsax-react';
-import { editVendorProduct, getProductsByAdmin, VerifyProductAdmin, makeFeatureProduct, getRestaurantFood, editAdminFinalFood } from '../../../../api';
+import React, { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import Switch from 'react-js-switch';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import Select from "react-select";
+import { toast } from 'react-toastify';
+import { GetFranchisee, GetFranchiseeVendors, VerifyProductAdmin, editAdminFinalFood, getCategory, getGalleryImages, getProductsByAdmin, getRestaurantCategory, getRestaurantFoodAdmin, getRestaurantSubCategory, getSubCategory, makeFeatureProduct } from '../../../../api';
 import userImg from '../../../../assets/user.jpg';
 import AddProduct from '../../../../components/Modals/Vendors/AddProduct';
 import AddRestItem from '../../../../components/Modals/Vendors/AddRestItem';
+import Table from '../../../../components/Table/Table';
+import { formBtn1, formBtn2, inputClass } from '../../../../utils/CustomClass';
 
 
 
 const AdminProduct = (props) => {
-    // console.log('props : ', props)
     const [shopProducts, setShopProducts] = useState([])
-    const storages = useSelector((state) => state?.storage?.list);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
+    const [franchiseOptions, setFranchiseOptions] = useState()
+    const [vendorOptions, setVendorOptions] = useState()
+    const [categoryOptions, setCategoryOptions] = useState()
+    const [imageDetails, setImageDetails] = useState([]);
+    const [category, setCategory] = useState([]);
+    const [subCategory, setsubCategory] = useState([]);
+    const GetFranchiseeData = () => {
+        try {
+            GetFranchisee().then((res) => {
+                if (res?.length > 0) {
+                    const newData = res.map((data) => ({
+                        label: data?.user?.first_name + " " + data?.user?.last_name + `(${data?.msb_code})`,
+                        value: data?.user?.id,
+                    }))
+                    setFranchiseOptions(newData)
+                }
+            })
+        } catch (error) {
+            console.log("🚀 ~ file: AdminProducts.jsx:39 ~ GetFranchiseeData ~ error:", error)
+        }
+    }
+
+    const GetVendorData = () => {
+        try {
+            GetFranchiseeVendors().then((res) => {
+                if (res?.length > 0) {
+                    const newData = res.map((data) => ({
+                        label: data?.shop_name + `(${data?.msb_code})`,
+                        value: data?.user?.id,
+                    }))
+                    setVendorOptions(newData)
+                }
+            })
+        } catch (error) {
+            console.log("🚀 ~ file: AdminProducts.jsx:55 ~ GetVendorData ~ error:", error)
+        }
+    }
+
+    const GetCategory = () => {
+        try {
+            getCategory().then((res) => {
+                if (res?.length > 0) {
+                    const newData = res.map((data) => ({
+                        label: data?.category_name,
+                        value: data?.id,
+                    }))
+                    setCategoryOptions(newData)
+                }
+            })
+        } catch (error) {
+            console.log("🚀 ~ file: AdminProducts.jsx:66 ~ GetCategory ~ error:", error)
+        }
+    }
+
+    // =================== Fetch Media Gallery Images =================
+    const fetchData = () => {
+        try {
+            getGalleryImages().then((res) => {
+                setImageDetails(res);
+            });
+        } catch (err) {
+            console.log("error", err);
+        }
+    };
+
     const getProducts = () => {
         try {
             getProductsByAdmin().then(res => {
-                setShopProducts(res)
+                setShopProducts(res?.results)
             });
         } catch (error) {
             console.log(error);
@@ -32,7 +95,7 @@ const AdminProduct = (props) => {
 
     const getRestaurantFoodItems = () => {
         try {
-            getRestaurantFood().then(res => {
+            getRestaurantFoodAdmin().then(res => {
                 setShopProducts(res)
             });
         } catch (error) {
@@ -40,14 +103,67 @@ const AdminProduct = (props) => {
         }
     }
 
+    //===================== Categories and sub category calls of restaurant and Shops ===============
+
+    const shopCat = () => {
+        try {
+            getCategory().then(res => {
+                setCategory(res)
+            })
+        } catch (error) {
+            console.log('error fetch', error)
+        }
+    }
+
+    const shopSubCat = () => {
+        try {
+            getSubCategory().then(res => {
+                setsubCategory(res)
+            })
+        } catch (error) {
+            console.log('error fetch', error)
+        }
+    }
+
+    const restCat = () => {
+        try {
+            getRestaurantCategory().then(res => {
+                setCategory(res)
+            })
+        } catch (error) {
+            console.log('error: ', error)
+        }
+    }
+
+    const restSubCat = () => {
+        try {
+            getRestaurantSubCategory().then(res => {
+                setsubCategory(res)
+            })
+        } catch (error) {
+            console.log('error', error)
+        }
+    }
+
     useEffect(() => {
         if (!props?.isrestaurant) {
             getProducts()
+            shopCat();
+            shopSubCat();
         }
         if (props?.isrestaurant) {
             getRestaurantFoodItems();
+            restCat();
+            restSubCat();
         }
     }, [props.isrestaurant]);
+
+    useEffect(() => {
+        GetFranchiseeData()
+        GetVendorData()
+        GetCategory()
+        fetchData();
+    }, [])
 
     const {
         register,
@@ -56,34 +172,17 @@ const AdminProduct = (props) => {
         formState: { errors },
         reset,
     } = useForm();
-    const loadOptions = (_, callback) => {
-        const uniqueNames = new Set();
-        const uniqueProducts = storages
-            ?.filter(
-                (res) =>
-                    res.name && !uniqueNames.has(res.name) && uniqueNames.add(res.name)
-            )
-            .map((res) => ({ label: res.name, value: res.name }));
-        callback(uniqueProducts || []);
-    };
+
 
     const onSubmit = async (data) => {
-        var updatedData = { ...data, vendor: props?.row?.vendor }
-        editVendorProduct(props?.row?.product_id, updatedData).then(res => {
-            if (res?.status == 'success') {
-                props?.getProducts()
-                toast.success('Product updated successfully')
-                toggle();
-            }
-        })
+        console.log("🚀 ~ file: AdminProducts.jsx:107 ~ onSubmit ~ data:", data)
     }
-    const filterReset = () => {
-        reset({
-            name: null,
-            location: "",
-        });
-        toast.success("Filters clear");
-    };
+
+
+    const handleClear = () => {
+
+    }
+
 
     //======================= Product Actions =======================
     const productaction = (row) => <div className='flex space-x-2'>
@@ -91,7 +190,7 @@ const AdminProduct = (props) => {
             <Eye size={24} className='text-sky-400' />
         </Link>
         {/* <ViewProduct /> */}
-        <AddProduct title='Edit Product' row={row} getProducts={getProducts} />
+        <AddProduct title='Edit Product' imageDetails={imageDetails} row={row} getProducts={getProducts} category={category} subCategory={subCategory} />
         <button className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
             <Trash size={24} className='text-red-400' />
         </button>
@@ -104,7 +203,7 @@ const AdminProduct = (props) => {
             <Eye size={24} className='text-sky-400' />
         </Link>
         {/* <ViewProduct /> */}
-        <AddRestItem title='edit' button='edit' data={row} getRestaurantFoodItems={getRestaurantFoodItems} />
+        <AddRestItem title='edit' button='edit' data={row} category={category} subCategory={subCategory} getRestaurantFoodItems={getRestaurantFoodItems} />
         <button className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
             <Trash size={24} className='text-red-400' />
         </button>
@@ -279,7 +378,7 @@ const AdminProduct = (props) => {
 
 
     const ProductColumns = [
-        { field: 'product_msbcode', header: 'Product MSB Code'},
+        { field: 'product_msbcode', header: 'Product MSB Code' },
         { field: 'profile_pic', header: 'Image', body: representativeBodyTemplate, sortable: false, style: true },
         { field: 'product_name', header: 'Product Name', sortable: true },
         { field: 'product_category', header: 'Product Category', body: (row) => <h6>{row?.product_category?.category_name}</h6>, sortable: true },
@@ -337,49 +436,114 @@ const AdminProduct = (props) => {
                     onSubmit={handleSubmit(onSubmit)}
                     className="flex flex-col gap-2 md:items-center lg:flex-row"
                 >
-                    <div className="grid w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-y-3 gap-x-2 ">
+                    <div className="grid w-full grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-5 gap-y-3 gap-x-2">
+                        <div className="">
+                            <input
+                                type="text"
+                                placeholder='Name'
+                                autoComplete='off'
+                                className={`${inputClass} !bg-slate-100`}
+                                {...register('name')}
+                            />
+                        </div>
+                        <div className="">
+                            <input
+                                type="text"
+                                placeholder='MSB Code'
+                                autoComplete='off'
+                                className={`${inputClass} !bg-slate-100`}
+                                {...register('msbcode')}
+                            />
+                        </div>
                         <div className="">
                             <Controller
                                 control={control}
-                                name="name"
-                                render={({ field }) => (
-                                    <AsyncSelect
-                                        placeholder="Search By Name"
-                                        cacheOptions
-                                        defaultOptions
-                                        value={field.value}
-                                        defaultValue={
-                                            field.value
-                                                ? { label: field.value, value: field.value }
-                                                : null
-                                        }
-                                        loadOptions={loadOptions}
-                                        onChange={field.onChange}
+                                name="franchise"
+                                render={({
+                                    field: { onChange, value, ref },
+                                }) => (
+
+                                    <Select
+                                        value={value}
+                                        options={franchiseOptions}
+                                        className="w-100 text-gray-900"
+                                        placeholder="Franchise"
+                                        onChange={onChange}
+                                        inputRef={ref}
+                                        maxMenuHeight={200}
+                                        styles={{
+                                            placeholder: (provided) => ({
+                                                ...provided,
+                                                color: '#9CA3AF', // Light gray color
+                                            }),
+                                        }}
                                     />
                                 )}
                             />
                         </div>
                         <div className="">
-                            <select
-                                name="City"
-                                className={`${inputClass} !bg-slate-100`}
-                                {...register("location")}
-                            >
-                                <option value="">City</option>
-                            </select>
+                            <Controller
+                                control={control}
+                                name="vendor"
+                                render={({
+                                    field: { onChange, value, ref },
+                                }) => (
+
+                                    <Select
+                                        value={value}
+                                        options={vendorOptions}
+                                        className="w-100 text-gray-900"
+                                        placeholder="Vendor"
+                                        onChange={onChange}
+                                        inputRef={ref}
+                                        maxMenuHeight={200}
+                                        styles={{
+                                            placeholder: (provided) => ({
+                                                ...provided,
+                                                color: '#9CA3AF', // Light gray color
+                                            }),
+                                        }}
+                                    />
+                                )}
+                            />
+                        </div>
+                        <div className="">
+                            <Controller
+                                control={control}
+                                name="category"
+                                render={({
+                                    field: { onChange, value, ref },
+                                }) => (
+                                    <Select
+                                        value={value}
+                                        options={categoryOptions}
+                                        className="w-100 text-gray-900"
+                                        placeholder="Category"
+                                        onChange={onChange}
+                                        inputRef={ref}
+                                        maxMenuHeight={200}
+                                        styles={{
+                                            placeholder: (provided) => ({
+                                                ...provided,
+                                                color: '#9CA3AF', // Light gray color
+                                            }),
+                                        }}
+                                    />
+                                )}
+                            />
                         </div>
                     </div>
-                    <div className="flex items-center gap-x-2">
+                    <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2">
                         <button
                             type="submit"
-                            className={`${formBtn1} w-full text-center`}
+                            className={`${formBtn1}`}
                         >
                             Filter
                         </button>
                         <button
                             type="button"
-                            className={`${formBtn2} w-full text-center`}
-                            onClick={filterReset}
+                            className={`${formBtn2}`}
+                            onClick={() => handleClear()}
                         >
                             Clear
                         </button>

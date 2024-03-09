@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ImageUpload, franchiselink } from '../../../env';
 import { toast } from 'react-toastify';
 import { validateEmail, validateGST, validatePIN, validatePhoneNumber } from "../../Validations.jsx/Validations";
+import moment from "moment";
 
 
 
@@ -207,10 +208,10 @@ export default function AddFranchiseForm(props) {
                               type="text"
                               placeholder="First Name"
                               className={inputClass}
-                              {...register("first_name", { required: true })}
+                              {...register("first_name", { required: true, pattern: /^[A-Za-z]+$/i })}
                             />
                             {errors.first_name && (
-                              <Error title="First Name is Required*" />
+                              <Error title={errors.first_name ? 'First Should Contain Alphabets Only' : 'First Name is Required'} />
                             )}
                           </div>
                           <div className="">
@@ -219,14 +220,14 @@ export default function AddFranchiseForm(props) {
                               type="text"
                               placeholder="Last Name"
                               className={inputClass}
-                              {...register("last_name", { required: true })}
+                              {...register("last_name", { required: true, pattern: /^[A-Za-z]+$/i })}
                             />
                             {errors.last_name && (
-                              <Error title="Last Name is Required*" />
+                              <Error title={errors?.last_name ? "Last Name Should Contain alphabets only" : "Last Name is Required"} />
                             )}
                           </div>
                           <div className="">
-                            <label className={labelClass} htmlFor="main_input">Profile Image*</label>
+                            <label className={labelClass} htmlFor="main_input">Profile Image</label>
                             <input className={fileinput}
                               id="main_input"
                               type='file'
@@ -248,7 +249,7 @@ export default function AddFranchiseForm(props) {
                               {...register("email", { required: true, validate: validateEmail })}
                             />
                             {errors.email && (
-                              <Error title={errors?.email?.message} />
+                              <Error title={errors?.email?.message ? errors?.email?.message : 'Email is Required'} />
                             )}
                           </div>
                           <div className="">
@@ -260,7 +261,7 @@ export default function AddFranchiseForm(props) {
                               {...register("phone_no", { required: true, validate: validatePhoneNumber })}
                             />
                             {errors.phone_no && (
-                              <Error title={errors?.phone_no?.message} />
+                              <Error title={errors?.phone_no?.message ? errors?.phone_no?.message : 'Phone Number is Required'} />
                             )}
                           </div>
                           {
@@ -273,22 +274,21 @@ export default function AddFranchiseForm(props) {
                                 type="text"
                                 placeholder="Password"
                                 className={inputClass}
-                                {...register("password", { required: true })}
+                                {...register("password", { required: true, pattern: /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).{8,}$/ })}
                               />
                               {errors.password && (
-                                <Error title="Password is Required*" />
+                                <Error title={errors?.password ? 'Password should contain one special character and 8 digit long and must be combination of number and alphabets' : 'Password is required'} />
                               )}
                             </div>
                           }
-
                           <div className="">
                             <label className={labelClass}>
                               Date Of Birth(DOB)*
                             </label>
                             <input
                               type="date"
-                              // placeholder='Last Name'
                               className={inputClass}
+                              max={moment().format('YYYY-MM-DD')}
                               {...register("date_of_birth", { required: true })}
                             />
                             {errors.date_of_birth && (
@@ -320,7 +320,7 @@ export default function AddFranchiseForm(props) {
                               {...register("pincode", { required: true, validate: validatePIN })}
                             />
                             {errors.pincode && (
-                              <Error title={errors?.pincode?.message} />
+                              <Error title={errors?.pincode?.message ? errors?.pincode?.message : 'PinCode is Required'} />
                             )}
                           </div>
                           <div className="">
@@ -341,10 +341,10 @@ export default function AddFranchiseForm(props) {
                               type="text"
                               placeholder="Enter State"
                               className={inputClass}
-                              {...register("state", { required: true })}
+                              {...register("state", { required: true, pattern: /^[A-Za-z]+$/i })}
                             />
                             {errors.state && (
-                              <Error title="State is Required*" />
+                              <Error title={errors.state ? 'State should contain Alphabets only' : 'State is required'} />
                             )}
                           </div>
                           <div className="">
@@ -353,10 +353,10 @@ export default function AddFranchiseForm(props) {
                               type="text"
                               placeholder="City"
                               className={inputClass}
-                              {...register("city", { required: true })}
+                              {...register("city", { required: true, pattern: /^[A-Za-z]+$/i })}
                             />
                             {errors.address && (
-                              <Error title="City is Required*" />
+                              <Error title={errors.address ? 'City should contain All Alphabets' : 'City is Required'} />
                             )}
                           </div>
                         </div>
@@ -365,27 +365,27 @@ export default function AddFranchiseForm(props) {
                         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-x-3 gap-y-3">
                           <div className="">
                             <label className={labelClass}>
-                              Pan Card
+                              Pan Card*
                             </label>
                             <div className="flex items-center space-x-2">
                               <input
                                 type="text"
                                 placeholder='PAN  No'
                                 className={inputClass}
-                                {...register('pan_card')}
+                                {...register('pan_card', { required: true })}
                               />
                             </div>
                           </div>
                           <div className="">
                             <label className={labelClass}>
-                              Aadhar Card
+                              Aadhar Card*
                             </label>
                             <div className="flex items-center space-x-2">
                               <input
                                 type="text"
                                 placeholder='Aadhar No'
                                 className={inputClass}
-                                {...register('adhar_card')}
+                                {...register('adhar_card', { required: true })}
                               />
                             </div>
                           </div>
@@ -404,36 +404,38 @@ export default function AddFranchiseForm(props) {
                                 })}
                               />
                             </div>
-                            {errors?.gst_number && <Error title={errors?.gst_number?.message} />}
+                            {errors?.gst_number && <Error title={errors?.gst_number?.message ? errors?.gst_number?.message : 'GST Number is Requried'} />}
                           </div>
                           <div className="">
                             <label className={labelClass}>
-                              Bank Name
+                              Bank Name*
                             </label>
-                            <div className="flex items-center space-x-2">
+                            <div className="">
                               <input
                                 type="text"
                                 placeholder='Bank Name'
                                 className={inputClass}
-                                {...register('bank_name')}
+                                {...register('bank_name', { required: true })}
                               />
+                              {errors?.bank_name && <Error title={'Bank Name is Requried'} />}
                             </div>
                           </div>
                           <div className="">
                             <label className={labelClass}>
-                              Bank Account Number
+                              Bank Account Number*
                             </label>
-                            <div className="flex items-center space-x-2">
+                            <div className="">
                               <input
                                 type="text"
                                 placeholder='Account Number'
                                 className={inputClass}
-                                {...register('account_number')}
+                                {...register('account_number', { required: true })}
                               />
+                              {errors?.account_number && <Error title={'Account Number is Requried'} />}
                             </div>
                           </div>
                           <div className="">
-                            <label className={labelClass} htmlFor="main_input">Bank PassBook Image*</label>
+                            <label className={labelClass} htmlFor="main_input">Bank PassBook Image</label>
                             <input className={fileinput}
                               id="main_input"
                               type='file'
@@ -444,7 +446,6 @@ export default function AddFranchiseForm(props) {
                             {props?.button == 'edit' && props?.data.bank_passbook != '' && props?.data.bank_passbook != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                               {props?.data?.bank_passbook?.split('/').pop()}
                             </label>}
-                            {/* {errors.bank_passbook && <Error title='Bank PassBook Image is required*' />} */}
                           </div>
                           <div className="">
                             <label className={labelClass}>IFSC Code*</label>
@@ -459,7 +460,7 @@ export default function AddFranchiseForm(props) {
                             )}
                           </div>
                           <div className="">
-                            <label className={labelClass} htmlFor="main_input">Address Proof*</label>
+                            <label className={labelClass} htmlFor="main_input">Address Proof</label>
                             <input className={fileinput}
                               id="main_input"
                               type='file'
@@ -470,7 +471,6 @@ export default function AddFranchiseForm(props) {
                             {props?.button == 'edit' && props?.data?.address_proof != '' && props?.data?.address_proof != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                               {props?.data?.address_proof?.split('/').pop()}
                             </label>}
-                            {/* {errors.address_proof && <Error title='Address Proof Image is required*' />} */}
                           </div>
                         </div>
                       </div>

@@ -1,21 +1,23 @@
-import React, { useEffect, useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
-import { useSelector } from 'react-redux';
-import AsyncSelect from "react-select/async";
-import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
-import { toast } from 'react-toastify';
-import Table from '../../../components/Table/Table';
-import { Link, NavLink } from 'react-router-dom';
-import AddProduct from '../../../components/Modals/Vendors/AddProduct';
-import { Edit, Eye, Trash } from 'iconsax-react';
-import ViewProduct from '../../../components/Modals/Vendors/ViewProduct';
-import { deleteFoodItem, getAllSeller, getAllShopProduct, getRestaurantFood, getSingleRestaurant } from '../../../api';
+import { Eye, Trash } from 'iconsax-react';
+import React, { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import Switch from 'react-js-switch';
+import userImg from '../../../assets/user.jpg';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import AsyncSelect from "react-select/async";
+import { toast } from 'react-toastify';
+import { getAllShopProduct, getRestaurantCategory, getRestaurantFood, getRestaurantSubCategory, getSingleRestaurant } from '../../../api';
+import AddProduct from '../../../components/Modals/Vendors/AddProduct';
 import AddRestItem from '../../../components/Modals/Vendors/AddRestItem';
+import Table from '../../../components/Table/Table';
+import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 
 const VendorProduct = () => {
     const [data, setData] = useState([])
     const [details, setDetails] = useState([]);
+    const [category, setCategory] = useState([]);
+    const [subCategory, setsubCategory] = useState([])
     const user = useSelector((state) => state?.user?.loggedUserDetails);
     const storages = useSelector((state) => state?.storage?.list);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
@@ -44,24 +46,11 @@ const VendorProduct = () => {
 
     const getRestFood = () => {
         try {
-            getRestaurantFood().then(res => {
+            getRestaurantFood(LoggedUserDetails?.sellerId).then(res => {
                 setData(res)
             });
         } catch (error) {
             console.log(error);
-        }
-    }
-
-    const deleteItem = (row) => {
-        try {
-            deleteFoodItem(row?.food_id).then(res => {
-                if (res?.status == 'success') {
-                    toast?.success('Food Items deleted successfully')
-                    getRestFood()
-                }
-            })
-        } catch (e) {
-            console.log('error occured while deleting food item')
         }
     }
 
@@ -80,10 +69,7 @@ const VendorProduct = () => {
         <Link to={`/food-list/food-details/${row?.product_id}`} state={row} className='items-center p-1 bg-sky-100 rounded-xl hover:bg-sky-200'>
             <Eye size={24} className='text-sky-400' />
         </Link>
-        <AddRestItem title='edit' button='edit' data={row} getRestFood={getRestFood} />
-        <button onClick={(row) => deleteItem(row)} className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
-            <Trash size={24} className='text-red-400' />
-        </button>
+        <AddRestItem title='edit' button='edit' data={row} getRestFood={getRestFood} category={category} subCategory={subCategory} />
     </div>
 
     const representativeBodyTemplate = (row) => {
@@ -117,6 +103,20 @@ const VendorProduct = () => {
     </div>)
 
 
+    // =============================== FOOD ITEMS Admin Verify SWITCHES =============================
+    const switchVerifyRes = (row) => {
+        return (
+            <div className="flex items-center justify-center gap-2 ">
+                <Switch
+                    value={row?.food_isverified_byadmin}
+                    disabled={true}
+                    size={50}
+                    backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
+                    borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
+            </div>
+        )
+    }
+
     const shopColumns = [
         { field: 'product_id', header: 'ID', sortable: false },
         { field: 'Product Image', header: 'Image', body: representativeBodyTemplate, sortable: true, style: true },
@@ -129,29 +129,30 @@ const VendorProduct = () => {
         { field: 'product_shelflife', header: 'Self Life', sortable: true },
         { field: 'product_Manufacturer_Name', header: 'Manufacturer Name', sortable: true },
         { field: 'product_country_of_origin', header: 'Country Of Origin', sortable: true },
-        { field: 'product_country_of_origin', header: 'Status', body: (row) => <h6>{row?.product_isactive == true ? 'Available' : 'Out Of Stock'}</h6>, sortable: true },
+        { field: 'status', header: 'Status', body: (row) => <h6>{row?.product_isactive == true ? 'Available' : 'Out Of Stock'}</h6>, sortable: true },
         { field: 'product_isverified_byadmin', header: 'Admin Verification', body: adminVerification, sortable: true },
         { field: 'product_isverified_byfranchise', header: 'Franchise Verification', body: franchiseVerification, sortable: true },
         { filed: 'action', header: 'Action', body: action, sortable: true },
     ]
 
     const restaurantColumns = [
-        { field: 'food_msbcode', header: 'Food MSB Code', sortable: false },
-        { field: 'food_image_1', header: 'Image', body: representativeBodyTemplate, sortable: true, style: true },
-        { field: 'food_name', header: 'Food Name', sortable: false },
-        { field: 'food_category', header: 'Category', body: (row) => <h6>{row?.food_category?.category_name}</h6>, sortable: false },
-        { field: 'food_subcategory', header: 'Sub-Category', body: (row) => <h6>{row?.food_subcategory?.subcat_name}</h6>, sortable: false },
-        { field: 'food_veg_nonveg', header: 'Type', sortable: false },
-        { field: 'food_details', header: 'Details', sortable: false },
+        { field: 'food_msbcode', header: 'Food MSB Code', sortable: true },
+        { field: 'food_image_1', header: 'Image', body: representativeBodyTemplate, sortable: false, style: true },
+        { field: 'food_name', header: 'Food Name', sortable: true },
+        { field: 'product_category', header: 'Food Category', body: (row) => <h6>{row?.food_category?.category_name}</h6>, sortable: true },
+        { field: 'product_subcategory', header: 'Food Sub-Category', body: (row) => <h6>{row?.food_subcategory?.subcat_name}</h6>, sortable: true },
         { field: 'food_actual_price', header: 'MRP', sortable: true },
-        { field: 'food_isverified_byadmin', header: 'Admin Verification', body: adminVerification, sortable: true },
-        { field: 'food_isverified_byfranchise', header: 'Franchise Verification', body: franchiseVerification, sortable: true },
-        { filed: 'action', header: 'Action', body: restAction, sortable: true }
+        { field: 'food_isactive', header: 'Food Availability', body: (row) => <h6>{row?.food_isactive == true ? 'Available' : 'Out Of Stock'}</h6>, sortable: true },
+        { field: 'food_veg_nonveg', header: 'Food Veg / Non-Veg', body: (row) => <h6>{row?.food_veg_nonveg}</h6>, sortable: true },
+        { field: 'menu_type', header: 'Menu Type', sortable: true },
+        { filed: 'action', header: 'Action', body: restAction, sortable: true },
+        { field: 'isverify', header: 'Admin Verify', body: switchVerifyRes, sortable: true }
     ]
 
     const getProducts = () => {
         getAllShopProduct(LoggedUserDetails?.sellerId).then(res => {
             setData(res)
+            console.log(res)
         })
     }
 
@@ -167,6 +168,20 @@ const VendorProduct = () => {
             getDetails()
         } else {
             getProducts();
+        }
+        try {
+            getRestaurantCategory().then(res => {
+                setCategory(res)
+            })
+        } catch (error) {
+            console.log('error', error)
+        }
+        try {
+            getRestaurantSubCategory().then(res => {
+                setsubCategory(res)
+            })
+        } catch (error) {
+
         }
     }, []);
 
@@ -228,11 +243,9 @@ const VendorProduct = () => {
                 </form>
             </div>
             <div className='p-4 m-4 bg-white sm:m-5 rounded-xl'>
-                <div className='grid items-center grid-cols-6'>
-                    <h2 className='col-span-5 text-xl font-semibold'>{user?.vendor_type == 'restaurant' ? 'Item List' : 'Product List'}</h2>
-                    {user?.isverified_byadmin == true && user?.vendor_type == 'restaurant' ? <AddRestItem title='Add Item' getRestFood={getRestFood} details={details} /> : user?.vendor_type == 'seller' ? <AddProduct title='Add Product' getProducts={getProducts} /> : ''}
-                    {/* <AddRestItem title='Add Item' button='add'  /> */}
-                    {/* <AddProduct title='Add Product' getProducts={getProducts} />  */}
+                <div className='grid items-center sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-6'>
+                    <h2 className='lg:col-span-5 text-xl font-semibold'>{user?.vendor_type == 'restaurant' ? 'Item List' : 'Product List'}</h2>
+                    {user?.isverified_byadmin == true && user?.vendor_type == 'restaurant' ? <AddRestItem title='Add Item' details={details} getRestFood={getRestFood} category={category} subCategory={subCategory} /> : user?.vendor_type == 'seller' ? <AddProduct title='Add Product' getProducts={getProducts} /> : ''}
                 </div>
                 <div className='mt-4'>
                     <Table data={data} columns={user?.vendor_type == 'restaurant' ? restaurantColumns : shopColumns} />

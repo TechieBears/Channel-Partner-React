@@ -16,8 +16,6 @@ import userImg from '../../../assets/user.jpg';
 
 
 function FranchiseeVendors() {
-    const [activeTab, setActiveTab] = useState(true);
-    const [rstatus, setStatus] = useState();
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const dispatch = useDispatch()
     const [Vendors, setVendors] = useState();
@@ -29,21 +27,13 @@ function FranchiseeVendors() {
     const FranchiseeVendors = () => {
         try {
             GetFranchiseeVendorsByID(LoggedDetails?.userid).then((res) => {
-                setVendors(res);
+                const shopVendors = res.filter(vendor => vendor.vendor_type === 'shop');
+                setVendors(shopVendors);
                 dispatch(setFranchiseVendors(res));
             });
         } catch (error) {
             console.log(error);
         }
-    };
-
-    useEffect(() => {
-        FranchiseeVendors()
-    }, [])
-
-
-    const changeTab = (tabNumber) => {
-        setActiveTab(tabNumber);
     };
 
     // =================== filter data ========================
@@ -124,7 +114,7 @@ function FranchiseeVendors() {
     const representativeBodyTemplate = (row) => {
         return (
             <div className="rounded-full w-11 h-11">
-                <img src={row?.user?.profile_pic == null || row?.user?.profile_pic == '' || row?.user?.profile_pic == undefined ? userImg : row?.user?.profile_pic} className="object-cover w-full h-full rounded-full" alt={row?.user?.first_name} />
+                <img src={row?.hawker_shop_photo == null || row?.hawker_shop_photo == '' || row?.hawker_shop_photo == undefined || row?.hawker_shop_photo.includes('undefined') ? userImg : row?.hawker_shop_photo} className="object-cover w-full h-full rounded-full" alt={row?.user?.first_name} />
             </div>
         );
     };
@@ -137,22 +127,12 @@ function FranchiseeVendors() {
         </h6>
     );
 
-
-
-
-    /*================================     column    ========================= */
-
-    // const status = (row) => <Switch checked={row?.id == rstatus ? true : false} onChange={() => setStatus(row?.id)} />
-    const status = (row) => <Switch checked={row?.id == rstatus ? true : false} onChange={() => setStatus(row?.id)} />
-    const action = (row) => <button className={`${tableBtn}`} >
-        View Analysis
-    </button>
-
     const columns = [
-        // { field: 'id', header: 'ID', sortable: false },
-        { field: 'profile_pic', header: 'Profile', body: representativeBodyTemplate, sortable: false, style: true },
-        { field: 'first_name', body: (row) => <div className="capitalize">{row?.user?.first_name + " " + row?.user?.last_name}</div>, header: 'Name' },
+        { field: 'hawker_shop_photo', header: 'Shop Image', body: representativeBodyTemplate, sortable: false, style: true },
+        { field: 'msb_code', header: 'MSB Code', sortable: false },
+        { field: 'shop_name', header: 'Shop Name', body: (row) => <div className="capitalize">{row?.shop_name ? row?.shop_name : 'Not Available'}</div> },
         { field: 'email', header: 'Email', body: (row) => <h6>{row?.user?.email}</h6>, sortable: false },
+        { field: 'insta_commison_percentage', header: 'Comission(%)', body: (row) => <h6>{row?.insta_commison_percentage}%</h6>, sortable: false },
         { field: 'phone_no', header: 'Phone No', body: (row) => <h6>{row?.user?.phone_no}</h6>, sortable: false },
         { field: 'pincode', header: 'Pincode', body: (row) => <h6>{row?.user?.pincode}</h6>, sortable: false },
         { field: 'state', header: 'state', body: (row) => <h6>{row?.user?.state}</h6>, sortable: false },
@@ -162,9 +142,11 @@ function FranchiseeVendors() {
         { field: 'id', header: 'Action', body: actionBodyTemplate, sortable: true },
         { field: 'isverify', header: 'Admin Verify', body: switchActive, sortable: true },
         { field: 'isactive', header: 'Franchise Verify', body: switchVerify, sortable: true },
-
-        // { header: 'Analyse', body: action, sortable: false },
     ]
+
+    useEffect(() => {
+        FranchiseeVendors()
+    }, [])
     return (
         <>
             {/* ========================= user filter ======================= */}
