@@ -1,31 +1,18 @@
-import React, { useEffect, useState } from "react";
 import { Trash } from "iconsax-react";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { delCategory, getCategory, getRestaurantCategory } from "../../../../api";
 import CategoryForm from "../../../../components/Modals/MenuModals/CategoryForm";
 import Table from "../../../../components/Table/Table";
-import { useDispatch, useSelector } from "react-redux";
-import { setCategory } from "../../../../redux/Slices/masterSlice";
-import { delCategory, getCategory, getRestaurantCategory } from "../../../../api";
-import { NavLink } from "react-router-dom";
-import { toast } from "react-toastify";
 
 
 const Category = (props) => {
-  // console.log('category isrestaurant = ', props?.isrestaurant);
-  // const category = useSelector((state) => state?.master?.Category);
-  const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
-
   const [category, setCategory] = useState([])
-  // console.log('category = ', category)
-
-  const dispatch = useDispatch();
-
-
   // ============== Products API ================
   const productCategories = () => {
     try {
       getCategory().then((res) => {
         setCategory(res)
-        // dispatch(setCategory(res));
       });
     } catch (error) {
       console.log(error);
@@ -36,9 +23,7 @@ const Category = (props) => {
   const restaurantCategories = () => {
     try {
       getRestaurantCategory().then((res) => {
-        console.log(res)
         setCategory(res)
-        // dispatch(setCategory(res));
       });
     } catch (error) {
       console.log(error);

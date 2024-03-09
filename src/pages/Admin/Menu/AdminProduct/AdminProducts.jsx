@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
-import { useSelector } from 'react-redux';
-import AsyncSelect from "react-select/async";
-import { formBtn1, formBtn2, inputClass } from '../../../../utils/CustomClass';
-import { toast } from 'react-toastify';
-import Table from '../../../../components/Table/Table';
-import { Link } from 'react-router-dom';
 import { Eye, Trash } from 'iconsax-react';
-import { editVendorProduct, getProductsByAdmin, VerifyProductAdmin, makeFeatureProduct, getRestaurantFood, editAdminFinalFood, getRestaurantFoodAdmin, GetFranchisee, GetFranchiseeVendors, getCategory, getSubCategory, getGalleryImages } from '../../../../api';
+import React, { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import Switch from 'react-js-switch';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import Select from "react-select";
+import { toast } from 'react-toastify';
+import { GetFranchisee, GetFranchiseeVendors, VerifyProductAdmin, editAdminFinalFood, getCategory, getGalleryImages, getProductsByAdmin, getRestaurantCategory, getRestaurantFoodAdmin, getRestaurantSubCategory, getSubCategory, makeFeatureProduct } from '../../../../api';
 import userImg from '../../../../assets/user.jpg';
 import AddProduct from '../../../../components/Modals/Vendors/AddProduct';
 import AddRestItem from '../../../../components/Modals/Vendors/AddRestItem';
-import Select from "react-select";
+import Table from '../../../../components/Table/Table';
+import { formBtn1, formBtn2, inputClass } from '../../../../utils/CustomClass';
 
 
 
@@ -104,12 +103,58 @@ const AdminProduct = (props) => {
         }
     }
 
+    //===================== Categories and sub category calls of restaurant and Shops ===============
+
+    const shopCat = () => {
+        try {
+            getCategory().then(res => {
+                setCategory(res)
+            })
+        } catch (error) {
+            console.log('error fetch', error)
+        }
+    }
+
+    const shopSubCat = () => {
+        try {
+            getSubCategory().then(res => {
+                setsubCategory(res)
+            })
+        } catch (error) {
+            console.log('error fetch', error)
+        }
+    }
+
+    const restCat = () => {
+        try {
+            getRestaurantCategory().then(res => {
+                setCategory(res)
+            })
+        } catch (error) {
+            console.log('error: ', error)
+        }
+    }
+
+    const restSubCat = () => {
+        try {
+            getRestaurantSubCategory().then(res => {
+                setsubCategory(res)
+            })
+        } catch (error) {
+            console.log('error', error)
+        }
+    }
+
     useEffect(() => {
         if (!props?.isrestaurant) {
             getProducts()
+            shopCat();
+            shopSubCat();
         }
         if (props?.isrestaurant) {
             getRestaurantFoodItems();
+            restCat();
+            restSubCat();
         }
     }, [props.isrestaurant]);
 
@@ -118,20 +163,6 @@ const AdminProduct = (props) => {
         GetVendorData()
         GetCategory()
         fetchData();
-        try {
-            getCategory().then(res => {
-                setCategory(res)
-            })
-        } catch (error) {
-            console.log('error fetch', error)
-        }
-        try {
-            getSubCategory().then(res => {
-                setsubCategory(res)
-            })
-        } catch (error) {
-            console.log('error fetch', error)
-        }
     }, [])
 
     const {
@@ -172,7 +203,7 @@ const AdminProduct = (props) => {
             <Eye size={24} className='text-sky-400' />
         </Link>
         {/* <ViewProduct /> */}
-        <AddRestItem title='edit' button='edit' data={row} getRestaurantFoodItems={getRestaurantFoodItems} />
+        <AddRestItem title='edit' button='edit' data={row} category={category} subCategory={subCategory} getRestaurantFoodItems={getRestaurantFoodItems} />
         <button className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
             <Trash size={24} className='text-red-400' />
         </button>
