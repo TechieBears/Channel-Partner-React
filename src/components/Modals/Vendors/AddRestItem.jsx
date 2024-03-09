@@ -421,7 +421,7 @@ export default function AddRestItem(props) {
                                                         <label className={labelClass}>Veg or Non-Veg*</label>
                                                         <select
                                                             className={inputClass}
-                                                            disabled={(user?.role == 'admin' || props?.details?.veg_nonveg == 'Veg')}
+                                                            disabled={(user?.role == 'admin')}
                                                             {...register('food_veg_nonveg', { required: true })}
                                                         >
                                                             <option value='' >Select</option>
