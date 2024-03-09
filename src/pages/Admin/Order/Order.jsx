@@ -1,26 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import Table from '../../../components/Table/Table';
-import { ArrowSwapVertical, Box, Eye, NotificationBing, ShoppingCart, Trash, Category, UserTick, UserRemove, Timer } from 'iconsax-react';
-// import { deleteStorage, getPartnerStorage, getStorages } from '../../../api';
-import { formBtn2, inputClass } from '../../../utils/CustomClass';
-import { formBtn1 } from '../../../utils/CustomClass';
-import { Controller, useForm } from 'react-hook-form';
 import axios from 'axios';
-import { NavLink } from 'react-router-dom';
-import { environment } from '../../../env';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { setStorageList } from '../../../redux/slices/storageSlice';
 import { toast } from 'react-toastify';
-import AsyncSelect from 'react-select/async';
-import DashboardForm from '../../../components/modals/DashboardModals/DashboardForm';
 import DeleteModal from '../../../components/Modals/DeleteModal/DeleteModal';
-import { getStorages } from '../../../api';
+import { environment } from '../../../env';
+import { setStorageList } from '../../../redux/slices/storageSlice';
+import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 
 const Order = () => {
     const user = useSelector((state) => state.user.loggedUserDetails)
-    const storages = useSelector((state) => state?.storage?.list)
-    const cityNames = useSelector((state) => state?.master?.city)
-    const tempretureRangeList = useSelector(state => state?.master?.temperatureRange)
     const dispatch = useDispatch()
     const [open, setOpen] = React.useState(false);
     const [delId, setDelId] = React.useState(0);
@@ -48,52 +37,6 @@ const Order = () => {
 
     }
 
-    // ====================== fetch data api ==================================
-
-    const StorageList = () => {
-        if (user.role == 'admin') {
-            getStorages().then(res => {
-                console.log(res)
-                dispatch(setStorageList(res))
-            }).catch(err => {
-                console.error('Error', err);
-            })
-        } else {
-            getPartnerStorage(user?.userid).then(res => {
-                dispatch(setStorageList(res))
-            }).catch(err => {
-                console.error('Error', err);
-            })
-        }
-    }
-
-    // ================================ Dropdown List =========================
-
-    const filterOptions = (options, inputValue) => {
-        return options.filter((i) =>
-            i.label.toLowerCase().includes(inputValue.toLowerCase())
-        );
-    };
-
-    const loadOptions = (_, callback) => {
-        const uniqueNames = new Set();
-        const uniqueProducts = storages?.filter(res => res.name && !uniqueNames.has(res.name) && uniqueNames.add(res.name))
-            .map(res => ({ label: res.name, value: res.name }));
-        callback(uniqueProducts || []);
-    }
-
-
-
-    // ================================ filter reset ============================
-    const filterReset = () => {
-        reset({
-            'name': null,
-            'location': ''
-        })
-        StorageList()
-        toast.success("Filters clear")
-    }
-
     // ================= delete storage data ===============
     const toggleModalBtn = (id) => {
         setOpen(!open)
@@ -102,41 +45,61 @@ const Order = () => {
     const deleteData = () => {
         deleteStorage(delId).then((form) => {
             if (form?.message === 'Data deleted successfully') {
-                StorageList();
                 toast.success(form?.message);
                 setOpen(!open)
             }
         })
     }
-    // ======================== table action =========================
-    const actionBodyTemplate = (row) => <div className="flex items-center gap-2">
-        <NavLink to={`/storage/${row.id}`} className="bg-green-100 px-1.5 py-2 rounded-sm"><Eye size="20" className='text-green-500' /></NavLink>
-        <DashboardForm button='edit' title='Edit Stroage' data={row} StorageList={StorageList} />
-        <button onClick={() => toggleModalBtn(row.id)} id={row.ID} className="bg-red-100  px-1.5 py-2 rounded-sm"><Trash size="20" className='text-red-500' /></button>
 
-    </div>
+    // const webSocketUrl = environment.WEB_SOCKET_API_URL;
+    // const ws = useRef(new WebSocket(webSocketUrl)).current;
+    // useEffect(() => {
+    //     // Function to send a general message
+    //     const sendMessage = (message) => {
+    //         if (ws.readyState === WebSocket.OPEN) {
+    //             ws.send(message);
+    //         } else {
+    //             console.log("WebSocket connection not open.");
+    //         }
+    //     };
 
-    // ====================== table columns ======================
-    const columns = [
-        { field: 'name', header: 'Name' },
-        { field: 'location', header: 'City' },
-        { field: 'rating', header: 'Rating' },
-        { field: 'spoc_name', header: 'SPOC Name' },
-        { field: 'spoc_contact', header: 'SPOC Contact' },
-        { field: 'spoc_email', header: 'SPOC Email' },
-        { field: 'id', header: 'Action', body: actionBodyTemplate, sortable: true },
-    ];
+    //     // Function to send a specific type of message
+    //     const sendHelloMessage = () => {
+    //         sendMessage("Hello!");
+    //     };
 
-    useEffect(() => {
-        StorageList()
-    }, [])
+    //     const sendCustomMessage = (customMessage) => {
+    //         sendMessage(customMessage);
+    //     };
 
+    //     // Event listener for WebSocket open
+    //     ws.onopen = () => {
+    //         console.log('WebSocket Client Connected');
+    //         // Example: Sending a specific type of message when the WebSocket connection is open
+    //         sendHelloMessage();
+    //     };
 
-    const [activeTab, setActiveTab] = useState(1);
+    //     // Event listener for incoming messages
+    //     ws.onmessage = (event) => {
+    //         console.log('Received message:', event);
+    //         // Handle incoming messages as needed
+    //     };
 
-    const changeTab = (tabNumber) => {
-        setActiveTab(tabNumber);
-    };
+    //     // Event listener for WebSocket close
+    //     ws.onclose = () => {
+    //         console.log('WebSocket Client Closed');
+    //     };
+
+    //     // Event listener for WebSocket errors
+    //     ws.onerror = (e) => {
+    //         console.log('WebSocket Error:', e.message);
+    //     };
+
+    //     // Cleanup function for useEffect
+    //     return () => {
+    //         ws.close(); // Close the WebSocket connection when component unmounts
+    //     };
+    // }, []);
 
     return (
         <>
@@ -149,29 +112,6 @@ const Order = () => {
             <section className='w-full h-full'>
 
                 <div className="mx-auto mt-8 sm:m-5">
-                    <div className="flex">
-                        <button
-                            onClick={() => changeTab(1)}
-                            className={`py-2 px-0 mx-5 ${activeTab === 1 ? 'border-b-2 border-blue-400 text-black' : 'bg-transparent'
-                                }`}
-                        >
-                            Pending
-                        </button>
-                        <button
-                            onClick={() => changeTab(2)}
-                            className={`py-2 px-0 mx-5 ${activeTab === 2 ? 'border-b-2 border-blue-400 text-black' : 'bg-transparent'
-                                }`}
-                        >
-                            Active
-                        </button>
-                        <button
-                            onClick={() => changeTab(3)}
-                            className={`py-2 px-0 mx-5 ${activeTab === 3 ? 'border-b-2 border-blue-400 text-black' : 'bg-transparent'
-                                }`}
-                        >
-                            History
-                        </button>
-                    </div>
 
                     {/* =========================  fileter ======================= */}
                     <div className="p-4 bg-white sm:m-5 rounded-xl" >

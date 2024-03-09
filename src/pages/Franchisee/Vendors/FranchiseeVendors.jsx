@@ -16,8 +16,6 @@ import userImg from '../../../assets/user.jpg';
 
 
 function FranchiseeVendors() {
-    const [activeTab, setActiveTab] = useState(true);
-    const [rstatus, setStatus] = useState();
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const dispatch = useDispatch()
     const [Vendors, setVendors] = useState();
@@ -29,21 +27,13 @@ function FranchiseeVendors() {
     const FranchiseeVendors = () => {
         try {
             GetFranchiseeVendorsByID(LoggedDetails?.userid).then((res) => {
-                setVendors(res);
+                const shopVendors = res.filter(vendor => vendor.vendor_type === 'shop');
+                setVendors(shopVendors);
                 dispatch(setFranchiseVendors(res));
             });
         } catch (error) {
             console.log(error);
         }
-    };
-
-    useEffect(() => {
-        FranchiseeVendors()
-    }, [])
-
-
-    const changeTab = (tabNumber) => {
-        setActiveTab(tabNumber);
     };
 
     // =================== filter data ========================
@@ -137,21 +127,7 @@ function FranchiseeVendors() {
         </h6>
     );
 
-
-
-
-    /*================================     column    ========================= */
-
-    // const status = (row) => <Switch checked={row?.id == rstatus ? true : false} onChange={() => setStatus(row?.id)} />
-    // const status = (row) => <Switch checked={row?.id == rstatus ? true : false} onChange={() => setStatus(row?.id)} />
-    // const action = (row) => <button className={`${tableBtn}`} >
-    //     View Analysis
-    // </button>
-
     const columns = [
-        // { field: 'id', header: 'ID', sortable: false },
-        // { field: 'profile_pic', header: 'Profile', body: representativeBodyTemplate, sortable: false, style: true },
-        // { field: 'shop_name', header: 'Franchise Name', body: (row) => <div className="capitalize">{row?.created_by?.first_name + " " +  row?.created_by?.last_name}</div> },
         { field: 'hawker_shop_photo', header: 'Shop Image', body: representativeBodyTemplate, sortable: false, style: true },
         { field: 'msb_code', header: 'MSB Code', sortable: false },
         { field: 'shop_name', header: 'Shop Name', body: (row) => <div className="capitalize">{row?.shop_name ? row?.shop_name : 'Not Available'}</div> },
@@ -166,9 +142,11 @@ function FranchiseeVendors() {
         { field: 'id', header: 'Action', body: actionBodyTemplate, sortable: true },
         { field: 'isverify', header: 'Admin Verify', body: switchActive, sortable: true },
         { field: 'isactive', header: 'Franchise Verify', body: switchVerify, sortable: true },
-
-        // { header: 'Analyse', body: action, sortable: false },
     ]
+
+    useEffect(() => {
+        FranchiseeVendors()
+    }, [])
     return (
         <>
             {/* ========================= user filter ======================= */}

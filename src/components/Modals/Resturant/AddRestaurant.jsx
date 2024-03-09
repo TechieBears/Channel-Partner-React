@@ -1,15 +1,14 @@
 import { Fragment, useEffect, useState } from 'react';
-import { Dialog, Transition } from '@headlessui/react'
+import { Dialog, Transition } from '@headlessui/react';
 import { useSelector } from 'react-redux';
-import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
+import { formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
 import LoadBox from '../../Loader/LoadBox';
 import { useForm } from 'react-hook-form';
 import Error from '../../Errors/Error';
-import { Add, Edit } from 'iconsax-react';
+import { Edit } from 'iconsax-react';
 import { addRestaurant, editRestaurant } from '../../../api';
 import { toast } from 'react-toastify';
-import { restaurantLink, ImageUpload } from '../../../env';
-import { validateCommision, validateEmail, validateGST, validatePIN, validatePhoneNumber } from '../../Validations.jsx/Validations';
+import { validateCommision, validateEmail, validatePIN, validatePhoneNumber } from '../../Validations.jsx/Validations';
 
 export default function AddRestaurant(props) {
     const [isOpen, setOpen] = useState(false);
@@ -28,28 +27,36 @@ export default function AddRestaurant(props) {
 
     const onSubmit = async (data) => {
         let additionalData;
-        if (LoggedUserDetails?.role == "franchise"){
-            additionalData = { 'created_by' : LoggedUserDetails?.userid }
+        if (LoggedUserDetails?.role == "franchise") {
+            additionalData = { 'created_by': LoggedUserDetails?.userid }
         }
         let updateData = { ...data, "vendor_type": 'restaurant', ...additionalData }
         if (props?.button == 'edit') {
-            editRestaurant(props?.data?.user?.id, updateData).then(res => {
-                if (res?.message == 'restaurant edited successfully') {
-                    toast.success('Restaurant edited Successfully')
-                    props?.getAllRestaurant()
-                    toggle()
-                }
-            })
+            try {
+                editRestaurant(props?.data?.user?.id, updateData).then(res => {
+                    if (res?.message == 'restaurant edited successfully') {
+                        toast.success('Restaurant edited Successfully')
+                        props?.getAllRestaurant()
+                        toggle()
+                    }
+                })
+            } catch (error) {
+                console.log('error', error)
+            }
         } else {
-            addRestaurant(updateData).then(res => {
-                if (res.message == 'restaurant added successfully') {
-                    toast.success('Resuraurant added successfully')
-                    toggle();
-                    props?.getAllRestaurant()
-                } else {
-                    toast.error('Error adding restaurant')
-                }
-            })
+            try {
+                addRestaurant(updateData).then(res => {
+                    if (res.message == 'restaurant added successfully') {
+                        toast.success('Resuraurant added successfully')
+                        toggle();
+                        props?.getAllRestaurant()
+                    } else {
+                        toast.error('Error adding restaurant')
+                    }
+                })
+            } catch (error) {
+                console.log('Error adding restaurant', error)
+            }
         }
     }
     useEffect(() => {
@@ -140,46 +147,6 @@ export default function AddRestaurant(props) {
                                                         />
                                                         {errors.last_name && <Error title='Last Name is Required*' />}
                                                     </div>
-                                                    {/* <div className="">
-                                                        <label className={labelClass}>
-                                                            Date of birth (DOB)*
-                                                        </label>
-                                                        <input
-                                                            type="date"
-                                                            placeholder='Last Name'
-                                                            className={inputClass}
-                                                            {...register('date_of_birth', { required: true })}
-                                                        />
-                                                        {errors.date_of_birth && <Error title='DOB is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Gender*
-                                                        </label>
-                                                        <select
-                                                            className={inputClass}
-                                                            {...register('gender', { required: true })}
-                                                        >
-                                                            <option value=''>Select</option>
-                                                            <option value='Male'>Male</option>
-                                                            <option value='Female'>Female</option>
-                                                        </select>
-                                                        {errors.gender && <Error title='Gender is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass} htmlFor="main_input">Profile Image*</label>
-                                                        <input className={fileinput}
-                                                            id="main_input"
-                                                            type='file'
-                                                            multiple
-                                                            accept='image/jpeg,image/jpg,image/png'
-                                                            placeholder='Upload Images...'
-                                                            {...register("profile_pic", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data?.user?.profile_pic != '' && props?.data?.user?.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.data?.user?.profile_pic?.split('/').pop()}
-                                                        </label>}
-                                                        {errors.profile_pic && <Error title='Profile Image is required*' />}
-                                                    </div> */}
                                                     {
                                                         LoggedUserDetails?.role == 'admin' &&
                                                         <div className="">
@@ -209,7 +176,7 @@ export default function AddRestaurant(props) {
                                                             type="email"
                                                             placeholder='Email'
                                                             className={inputClass}
-                                                            {...register('email', { required: "Email is required*", validate: validateEmail})}
+                                                            {...register('email', { required: "Email is required*", validate: validateEmail })}
                                                         />
                                                         {errors.email && <Error title={errors?.email?.message} />}
                                                     </div>
@@ -240,58 +207,6 @@ export default function AddRestaurant(props) {
                                                         />
                                                         {errors.phone_no && <Error title={errors?.phone_no?.message} />}
                                                     </div>
-
-                                                    {/* <h3 className='col-span-4 text-xl font-semibold'>Restaurant Details</h3>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Restaurant Name*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Restaurant Name'
-                                                            className={inputClass}
-                                                            {...register('shop_name', { required: true })}
-                                                        />
-                                                        {errors.shop_name && <Error title='Restaurant Name is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Restaurant Phone*
-                                                        </label>
-                                                        <input
-                                                            type="tel"
-                                                            placeholder='Restaurant Phone'
-                                                            className={inputClass}
-                                                            {...register('phone_no', { required: true, validate: validatePhoneNumber })}
-                                                        />
-                                                        {errors.phone_no && <Error title={errors?.phone_no?.message} />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Restaurant Address*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Restaurant Address'
-                                                            className={inputClass}
-                                                            {...register('address', { required: true })}
-                                                        />
-                                                        {errors.address && <Error title='Restaurant Address is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass} htmlFor="main_input">Restaurant Image*</label>
-                                                        <input className={fileinput}
-                                                            id="main_input"
-                                                            type='file'
-                                                            multiple
-                                                            accept='image/jpeg,image/jpg,image/png'
-                                                            placeholder='Upload Images...'
-                                                            {...register("shop_image", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data?.user?.shop_image != '' && props?.data?.user?.shop_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
-                                                            {props?.data?.user?.shop_image?.split('/').pop()}
-                                                        </label>}
-                                                        {errors.shop_image && <Error title='Restaurnat Image is required*' />}
-                                                    </div> */}
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             City*
@@ -341,64 +256,6 @@ export default function AddRestaurant(props) {
                                                         />
                                                         {errors.pincode && <Error title={errors?.pincode?.message} />}
                                                     </div>
-                                                    {/* <div className="">
-                                                        <label className={labelClass}>
-                                                            Opening Hours*
-                                                        </label>
-                                                        <input
-                                                            type="time"
-                                                            placeholder='PIN Code'
-                                                            className={inputClass}
-                                                            {...register('shop_start_time', { required: true })}
-                                                        />
-                                                        {errors.shop_start_time && <Error title='Restaurant Opening is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Closing Hours*
-                                                        </label>
-                                                        <input
-                                                            type="time"
-                                                            placeholder='PIN Code'
-                                                            className={inputClass}
-                                                            {...register('shop_end_time', { required: true })}
-                                                        />
-                                                        {errors.shop_end_time && <Error title='Restaurant Closing is Required*' />}
-                                                    </div> */}
-                                                    {/* <div className="">
-                                                        <label className={labelClass}>Closing Day*</label>
-                                                        <select
-                                                            className={inputClass}
-                                                            {...register("closing_day", { required: true })}
-                                                        >
-                                                            <option value="">--Select Type--</option>
-                                                            <option value="Monday">Monday</option>
-                                                            <option value="Tuesday">Tuesday</option>
-                                                            <option value="Wednesday">Wednesday</option>
-                                                            <option value="Thursday">Thursday</option>
-                                                            <option value="Friday">Friday</option>
-                                                            <option value="Saturday">Saturday</option>
-                                                            <option value="Sunday">Sunday</option>
-                                                        </select>
-                                                        {errors.closing_day && (
-                                                            <Error title="Clsoing day is Required*" />
-                                                        )}
-                                                    </div> */}
-                                                    {/* <div className="">
-                                                        <label className={labelClass}>
-                                                            Type *
-                                                        </label>
-                                                        <select
-                                                            className={inputClass}
-                                                            {...register('veg_or_nonveg', { required: true })}
-                                                        >
-                                                            <option value=''>Select</option>
-                                                            <option value='both'>Both</option>
-                                                            <option value='Veg'>Veg</option>
-                                                            <option value='Non Veg'>Non Veg</option>
-                                                        </select>
-                                                        {errors.veg_or_nonveg && <Error title='Type is Required*' />}
-                                                    </div> */}
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             Insta Commision (%)*
@@ -411,90 +268,6 @@ export default function AddRestaurant(props) {
                                                         />
                                                         {errors.insta_commison_percentage && <Error title='Restaurant Closing is Required*' />}
                                                     </div>
-                                                    {/* <div className="">
-                                                        <label className={labelClass}>
-                                                            Short Description
-                                                        </label>
-                                                        <textarea
-                                                            placeholder='Short Description'
-                                                            className={inputClass}
-                                                            {...register('short_description',)}
-                                                        />
-                                                    </div> */}
-                                                    {/* <h3 className='col-span-4 text-xl font-semibold'>Banking Details</h3>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Bank Name*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Bank Name'
-                                                            className={inputClass}
-                                                            {...register('bank_name', { required: true })}
-                                                        />
-                                                        {errors.bank_name && <Error title='Bank Name is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Bank Account Number*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Bank Account Number'
-                                                            className={inputClass}
-                                                            {...register('account_number', { required: true })}
-                                                        />
-                                                        {errors.account_number && <Error title='Bank Account Number is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            IFSC Code*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='IFSC Code'
-                                                            className={inputClass}
-                                                            {...register('ifsc_code', { required: true })}
-                                                        />
-                                                        {errors.ifsc_code && <Error title='IFSC Code is Required*' />}
-                                                    </div> */}
-                                                    {/* <h3 className='col-span-4 text-xl font-semibold'>Additional Details</h3>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Aadhar Card Number*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Aadhar Card Number'
-                                                            className={inputClass}
-                                                            {...register('adhar_card', { required: true })}
-                                                        />
-                                                        {errors.adhar_card && <Error title='Aadhar Card is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            PAN Card Number*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='PAN Card Number'
-                                                            className={inputClass}
-                                                            {...register('pan_card', { required: true })}
-                                                        />
-                                                        {errors.pan_card && <Error title='PAN Card is Required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            GST Number*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='GST Number'
-                                                            className={inputClass}
-                                                            {...register('gst_number', { required: true, })}
-                                                        />
-                                                        {errors.gst_number && <Error title={errors?.gst_number?.message} />}
-                                                    </div> */}
                                                 </div>
                                             </div>
                                             <footer className="flex justify-end px-4 py-2 space-x-3 bg-white">

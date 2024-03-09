@@ -365,27 +365,27 @@ export default function AddFranchiseForm(props) {
                         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-x-3 gap-y-3">
                           <div className="">
                             <label className={labelClass}>
-                              Pan Card
+                              Pan Card*
                             </label>
                             <div className="flex items-center space-x-2">
                               <input
                                 type="text"
                                 placeholder='PAN  No'
                                 className={inputClass}
-                                {...register('pan_card')}
+                                {...register('pan_card', { required: true })}
                               />
                             </div>
                           </div>
                           <div className="">
                             <label className={labelClass}>
-                              Aadhar Card
+                              Aadhar Card*
                             </label>
                             <div className="flex items-center space-x-2">
                               <input
                                 type="text"
                                 placeholder='Aadhar No'
                                 className={inputClass}
-                                {...register('adhar_card')}
+                                {...register('adhar_card', { required: true })}
                               />
                             </div>
                           </div>
@@ -446,7 +446,6 @@ export default function AddFranchiseForm(props) {
                             {props?.button == 'edit' && props?.data.bank_passbook != '' && props?.data.bank_passbook != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                               {props?.data?.bank_passbook?.split('/').pop()}
                             </label>}
-                            {/* {errors.bank_passbook && <Error title='Bank PassBook Image is required*' />} */}
                           </div>
                           <div className="">
                             <label className={labelClass}>IFSC Code*</label>
@@ -472,7 +471,6 @@ export default function AddFranchiseForm(props) {
                             {props?.button == 'edit' && props?.data?.address_proof != '' && props?.data?.address_proof != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                               {props?.data?.address_proof?.split('/').pop()}
                             </label>}
-                            {/* {errors.address_proof && <Error title='Address Proof Image is required*' />} */}
                           </div>
                         </div>
                       </div>
