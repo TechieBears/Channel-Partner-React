@@ -21,7 +21,6 @@ const AdminProduct = (props) => {
     const [franchiseOptions, setFranchiseOptions] = useState()
     const [vendorOptions, setVendorOptions] = useState()
     const [categoryOptions, setCategoryOptions] = useState()
-    const [imageDetails, setImageDetails] = useState([]);
     const [category, setCategory] = useState([]);
     const [subCategory, setsubCategory] = useState([]);
     const GetFranchiseeData = () => {
@@ -71,17 +70,6 @@ const AdminProduct = (props) => {
             console.log("🚀 ~ file: AdminProducts.jsx:66 ~ GetCategory ~ error:", error)
         }
     }
-
-    // =================== Fetch Media Gallery Images =================
-    const fetchData = () => {
-        try {
-            getGalleryImages().then((res) => {
-                setImageDetails(res);
-            });
-        } catch (err) {
-            console.log("error", err);
-        }
-    };
 
     const getProducts = () => {
         try {
@@ -190,7 +178,7 @@ const AdminProduct = (props) => {
             <Eye size={24} className='text-sky-400' />
         </Link>
         {/* <ViewProduct /> */}
-        <AddProduct title='Edit Product' imageDetails={imageDetails} row={row} getProducts={getProducts} category={category} subCategory={subCategory} />
+        <AddProduct title='Edit Product' row={row} getProducts={getProducts} category={category} subCategory={subCategory} />
         <button className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
             <Trash size={24} className='text-red-400' />
         </button>

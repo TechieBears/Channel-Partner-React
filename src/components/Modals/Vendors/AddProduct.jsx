@@ -12,6 +12,7 @@ import { ImageUpload, productLink } from '../../../env';
 import MediaGallaryModal from '../../../pages/Settings/MediaGallery/MediaGallery';
 
 const AddProduct = (props) => {
+    console.log('props = ', props)
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
     const [FinalPriceSeller, setFinalPriceSeller] = useState([]);
@@ -23,6 +24,7 @@ const AddProduct = (props) => {
     const [openGallery, setopenGallery] = useState(false);
     const [openGalleryModal, setopenGalleryModal] = useState(false);
     const [childData, setChildData] = useState([]);
+
     const closeBtn = () => {
         toggle();
         reset()
@@ -38,6 +40,7 @@ const AddProduct = (props) => {
             setopenGallery(false);
         }
     };
+
 
     const openMediaModal = () => {
         setopenGalleryModal(!openGalleryModal);
@@ -811,7 +814,7 @@ const AddProduct = (props) => {
                                                 id="mediaGalleryModal"
                                                 className="hidden"
                                                 title="Upload Image"
-                                                imageDetails={props?.imageDetails}
+                                                imageDetails={props?.ImageDetails}
                                                 setopenGalleryModal={openMediaModal}
                                                 sendDataToParent={receiveDataFromChild}
                                             />

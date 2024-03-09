@@ -1,6 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Edit } from 'iconsax-react';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -9,7 +9,7 @@ import { ImageUpload, restaurantLink } from '../../../env';
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
 import Error from '../../Errors/Error';
 import LoadBox from '../../Loader/LoadBox';
-
+import MediaGallaryModal from '../../../pages/Settings/MediaGallery/MediaGallery';
 
 
 export default function AddRestItem(props) {
@@ -19,6 +19,11 @@ export default function AddRestItem(props) {
     const [FinalPriceAdmin, setFinalPriceAdmin] = useState([]);
     const { register, handleSubmit, control, watch, reset, setValue, formState: { errors } } = useForm();
     const user = useSelector((state) => state?.user?.loggedUserDetails);
+    const mediaGalleryModalRef = useRef(null);
+    const [openGallery, setopenGallery] = useState(false);
+    const [openGalleryModal, setopenGalleryModal] = useState(false);
+    const [childData, setChildData] = useState([]);
+
     const categoryField = watch('food_category');
     let subCat;
     if (props?.category && props?.subCategory) {
@@ -32,6 +37,45 @@ export default function AddRestItem(props) {
         toggle();
         reset();
     }
+
+    const handleSelectChange = (e) => {
+        if (e.target.value == 'true') {
+            setopenGallery(true);
+        } else {
+            setopenGallery(false);
+        }
+    };
+
+    const openMediaModal = () => {
+        setopenGalleryModal(!openGalleryModal);
+    };
+
+    // ============== fetch data from api ================
+
+
+    const receiveDataFromChild = (data) => {
+        // console.log('-- child data --', data);
+        setChildData(data);
+
+        if (data) {
+            console.log(openGallery)
+            setopenGallery(!openGallery);
+        }
+        // setValue("slide_url", childData);
+        // console.log('childData = ', childData)
+    };
+
+    const handleImageChange = async (e) => {
+        console.log('e', e)
+        const file = e.target.files[0];
+        const { width, height } = await getImageDimensions(file);
+
+        if (width === 200 && height === 200) {
+            console.log('Image dimensions are valid (200x200).');
+        } else {
+            alert('Please upload an image with dimensions 200x200.');
+        }
+    };
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -492,6 +536,37 @@ export default function AddRestItem(props) {
                                                         </div>
                                                     }
                                                     <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Food Images</p>
+                                                    {user?.role != 'admin' && user?.role != 'franchise' && <div className="">
+                                                        <label className={labelClass}>
+                                                            Check Image Option*
+                                                        </label>
+                                                        <select
+                                                            name=""
+                                                            disabled={user?.role == 'admin' || user?.role == 'franchise'}
+                                                            onChange={handleSelectChange}
+                                                            className={`${inputClass} !bg-slate-100`}
+                                                        >
+                                                            <option value="false">I have a own Images</option>
+                                                            <option value="true">I Don't have a Images</option>
+                                                        </select>
+                                                    </div>}
+                                                    {openGallery && (
+                                                        <div className="w-full mt-3 mb-2">
+                                                            <span className={`cursor-pointer w-full ${formBtn1}`} onClick={openMediaModal}>
+                                                                Open Sample Images
+                                                            </span>
+                                                            <input
+                                                                type="text"
+                                                                className="hidden"
+                                                            />
+                                                            {childData == undefined || childData == '' && (
+                                                                <Error title="Main Image is required*" />
+                                                            )}
+                                                        </div>
+                                                    )}
+
+                                                {!openGallery &&
+                                                <>
                                                     <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Main Image*</label>
                                                         <input className={fileinput}
@@ -565,6 +640,7 @@ export default function AddRestItem(props) {
                                                             {props?.data?.food_image_5?.split('/').pop()}
                                                         </label>}
                                                     </div>
+                                                </>}
                                                 </div>
                                             </div>
                                             <footer className="flex justify-end px-4 py-2 space-x-3 bg-white">
@@ -572,6 +648,17 @@ export default function AddRestItem(props) {
                                                 <button type='button' className={formBtn2} onClick={closeBtn}>close</button>
                                             </footer>
                                         </form>
+                                        {openGalleryModal && <div className="hidden">
+                                            <MediaGallaryModal
+                                                ref={mediaGalleryModalRef}
+                                                id="mediaGalleryModal"
+                                                className="hidden"
+                                                title="Upload Image"
+                                                imageDetails={props?.ImageDetails}
+                                                setopenGalleryModal={openMediaModal}
+                                                sendDataToParent={receiveDataFromChild}
+                                            />
+                                        </div>}
                                     </div>
                                 </Dialog.Panel>
                             </Transition.Child>

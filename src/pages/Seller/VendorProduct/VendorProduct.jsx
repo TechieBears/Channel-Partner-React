@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import AsyncSelect from "react-select/async";
 import { toast } from 'react-toastify';
-import { getAllShopProduct, getRestaurantCategory, getRestaurantFood, getRestaurantSubCategory, getSingleRestaurant } from '../../../api';
+import { getAllShopProduct, getRestaurantCategory, getRestaurantFood, getRestaurantSubCategory, getSingleRestaurant, getGalleryImages } from '../../../api';
 import AddProduct from '../../../components/Modals/Vendors/AddProduct';
 import AddRestItem from '../../../components/Modals/Vendors/AddRestItem';
 import Table from '../../../components/Table/Table';
@@ -22,6 +22,8 @@ const VendorProduct = () => {
     const storages = useSelector((state) => state?.storage?.list);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     const { register, handleSubmit, control, formState: { errors }, reset } = useForm();
+    const [ImageDetails, setImageDetails] = useState([]);
+
     const loadOptions = (_, callback) => {
         const uniqueNames = new Set();
         const uniqueProducts = storages
@@ -59,7 +61,7 @@ const VendorProduct = () => {
         <Link to={`/product-list/product-details/${row?.product_id}`} state={row} className='items-center p-1 bg-sky-100 rounded-xl hover:bg-sky-200'>
             <Eye size={24} className='text-sky-400' />
         </Link>
-        <AddProduct title='Edit Product' row={row} getProducts={getProducts} />
+        <AddProduct title='Edit Product' row={row} getProducts={getProducts} ImageDetails={ImageDetails}/>
         <button className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
             <Trash size={24} className='text-red-400' />
         </button>
@@ -69,7 +71,7 @@ const VendorProduct = () => {
         <Link to={`/food-list/food-details/${row?.product_id}`} state={row} className='items-center p-1 bg-sky-100 rounded-xl hover:bg-sky-200'>
             <Eye size={24} className='text-sky-400' />
         </Link>
-        <AddRestItem title='edit' button='edit' data={row} getRestFood={getRestFood} category={category} subCategory={subCategory} />
+        <AddRestItem title='edit' button='edit' data={row} getRestFood={getRestFood} category={category} subCategory={subCategory} ImageDetails={ImageDetails} />
     </div>
 
     const representativeBodyTemplate = (row) => {
@@ -162,7 +164,21 @@ const VendorProduct = () => {
         })
     }
 
+        
+    // =================== fetching data ========================
+    const fetchData = () => {
+        try {
+        getGalleryImages().then((res) => {
+            setImageDetails(res);
+        });
+        } catch (err) {
+        console.log("error", err);
+        }
+    };
+
     useEffect(() => {
+        fetchData();
+
         if (user?.vendor_type == 'restaurant') {
             getRestFood()
             getDetails()
@@ -245,7 +261,7 @@ const VendorProduct = () => {
             <div className='p-4 m-4 bg-white sm:m-5 rounded-xl'>
                 <div className='grid items-center sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-6'>
                     <h2 className='lg:col-span-5 text-xl font-semibold'>{user?.vendor_type == 'restaurant' ? 'Item List' : 'Product List'}</h2>
-                    {user?.isverified_byadmin == true && user?.vendor_type == 'restaurant' ? <AddRestItem title='Add Item' details={details} getRestFood={getRestFood} category={category} subCategory={subCategory} /> : user?.vendor_type == 'seller' ? <AddProduct title='Add Product' getProducts={getProducts} /> : ''}
+                    {user?.isverified_byadmin == true && user?.vendor_type == 'restaurant' ? <AddRestItem title='Add Item' details={details} getRestFood={getRestFood} category={category} subCategory={subCategory} ImageDetails={ImageDetails} /> : user?.vendor_type == 'seller' ? <AddProduct title='Add Product' getProducts={getProducts} ImageDetails={ImageDetails} /> : ''}
                 </div>
                 <div className='mt-4'>
                     <Table data={data} columns={user?.vendor_type == 'restaurant' ? restaurantColumns : shopColumns} />
