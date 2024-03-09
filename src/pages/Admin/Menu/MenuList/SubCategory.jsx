@@ -9,21 +9,15 @@ import Switch from 'react-js-switch';
 
 
 const SubCategory = (props) => {
-  // const subcategory = useSelector((state) => state?.master?.SubCategory);
-  // const category = useSelector((state) => state?.master?.Category);
-  // console.log('category', category)
   const [category, setCategory] = useState([])
   const [subcategory, setSubcategory] = useState([])
   const dispatch = useDispatch();
-
-  
   // ============== Products API starts================
   const fetchData = () => {
     try {
       getSubCategory().then((res) => {
         setSubcategory(res)
         fetchData2();
-        // dispatch(setSubCategory(res));
       });
     } catch (error) {
       console.log(error);
@@ -34,13 +28,11 @@ const SubCategory = (props) => {
     try {
       getCategory().then((res) => {
         setCategory(res)
-        // dispatch(setCategory(res));
       });
     } catch (error) {
       console.log(error);
     }
   };
-  // ============== Products API ends================
 
   // ============== Products API starts================
   const restaurantSubCategories = () => {
@@ -48,7 +40,6 @@ const SubCategory = (props) => {
       getRestaurantSubCategory().then((res) => {
         setSubcategory(res)
         restaurantCategories();
-        // dispatch(setSubCategory(res));
       });
     } catch (error) {
       console.log(error);
@@ -59,15 +50,11 @@ const SubCategory = (props) => {
     try {
       getRestaurantCategory().then((res) => {
         setCategory(res)
-        // dispatch(setCategory(res));
       });
     } catch (error) {
       console.log(error);
     }
   };
-  // ============== Products API ends================
-
-
   // ============== delete data from api ================
   const deleteData = (data) => {
     deleteSubCategory(data).then((res) => {
@@ -77,20 +64,10 @@ const SubCategory = (props) => {
     });
   };
 
-
-  useEffect(() => {
-    if (!props?.isrestaurant){
-      fetchData();
-    }
-    if (props?.isrestaurant){
-      restaurantSubCategories();
-    }
-  }, [props.isrestaurant]);
-
   // ================= action of the table ===============
   const actionBodyTemplate = (row) => (
     <div className="flex items-center gap-2">
-      <SubCategoryForm button="edit" title="Edit SubCategory" data={row} isrestaurant={props?.isrestaurant} fetchData={fetchData} restaurantSubCategories={restaurantSubCategories}/>
+      <SubCategoryForm button="edit" title="Edit SubCategory" data={row} isrestaurant={props?.isrestaurant} fetchData={fetchData} restaurantSubCategories={restaurantSubCategories} />
       <button
         onClick={() => deleteData(row.subcat_id)}
         className="bg-red-100  px-1.5 py-2 rounded-sm"
@@ -100,65 +77,6 @@ const SubCategory = (props) => {
     </div>
   );
 
-
-  const imageBodyTemp = (row) => (
-    <div className="w-20 h-20">
-      <img
-        src={row?.subcat_image}
-        alt="image"
-        className="object-cover w-full h-full"
-      />
-    </div>
-  );
-
-  const verifyActions = (row) => {
-    const payload = { userId: row?.user?.id, isverifiedbyadmin: row?.user?.isverified_byadmin, isverifiedbyfranchise: !row?.isverifiedbyfranchise }
-    // try {
-    //     verifyDeliveryBoy(payload).then((form) => {
-    //         console.log(payload)
-    //         if (form.message == "delivery boy verified successfully") {
-    //             toast.success('Driver Verification Changed !');
-    //             DeliveryBoyDetails()
-    //         }
-    //         else {
-    //             console.log("err");
-    //         }
-    //     })
-    // }
-    // catch (err) {
-    //     console.log(err);
-    // }
-  }
-
-
-  // =============================== verify user switch =============================
-  const switchVerify = (row) => {
-    return (
-      <div className="flex items-center justify-center gap-2 ">
-        <Switch
-          value={row?.isverifiedbyfranchise}
-          onChange={() => verifyActions(row)}
-          size={50}
-          backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
-          borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
-      </div>
-    )
-  }
-  // =============================== active user switch =============================
-  const switchActive = (row) => {
-    return (
-      <div className="flex items-center justify-center gap-2">
-        <Switch
-          value={row?.user?.isverified_byadmin}
-          disabled={true}
-          onChange={() => activeActions(row)}
-          size={50}
-          backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
-          borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
-      </div>
-    )
-  }
-
   // =================== table user profile column ========================
   const representativeBodyTemplate = (row) => {
     return (
@@ -167,42 +85,52 @@ const SubCategory = (props) => {
       </div>
     );
   };
-  
-  
 
- // ================= columns of the table ===============
-       // ======================= Table Column Definitions =========================
-    const ProductColumns = [
-      { field: 'subcat_image', header: 'Image', body: representativeBodyTemplate, sortable: true, style: true },
-      { field: 'subcat_name', header: 'Name', sortable: true },
-      { field: 'category', header: 'Category',  
-        body: rowData => {
-          if (Array.isArray(category)) {
-              const matchingCategory = category.find(cat => cat?.id == rowData?.category);
-              return matchingCategory ? matchingCategory?.category_name : '';
-          } else {
-              return 'Category data is not available.';
-          }
-        }},
+  // ======================= Table Column Definitions =========================
+  const ProductColumns = [
+    { field: 'subcat_image', header: 'Image', body: representativeBodyTemplate, sortable: true, style: true },
+    { field: 'subcat_name', header: 'Name', sortable: true },
+    {
+      field: 'category', header: 'Category',
+      body: rowData => {
+        if (Array.isArray(category)) {
+          const matchingCategory = category.find(cat => cat?.id == rowData?.category);
+          return matchingCategory ? matchingCategory?.category_name : '';
+        } else {
+          return 'Category data is not available.';
+        }
+      }
+    },
     { field: "id", header: "Action", body: actionBodyTemplate, sortable: true },
-    ];
+  ];
 
-    // ======================= Table Column Definitions =========================
-    const RestaurantColumns = [
-      { field: 'subcat_image', header: 'Image', body: representativeBodyTemplate, sortable: true, style: true },
-      { field: 'subcat_name', header: 'Name', sortable: true },
-      { field: 'category', header: 'Category',  
-        body: rowData => {
-          if (Array.isArray(category)) {
-              const matchingCategory = category.find(cat => cat?.id == rowData?.category);
-              return matchingCategory ? matchingCategory?.category_name : '';
-          } else {
-              return 'Category data is not available.';
-          }
-      }},
-        { field: "id", header: "Action", body: actionBodyTemplate, sortable: true },
-    ];
+  // ======================= Table Column Definitions =========================
+  const RestaurantColumns = [
+    { field: 'subcat_image', header: 'Image', body: representativeBodyTemplate, sortable: true, style: true },
+    { field: 'subcat_name', header: 'Name', sortable: true },
+    {
+      field: 'category', header: 'Category',
+      body: rowData => {
+        if (Array.isArray(category)) {
+          const matchingCategory = category.find(cat => cat?.id == rowData?.category);
+          return matchingCategory ? matchingCategory?.category_name : '';
+        } else {
+          return 'Category data is not available.';
+        }
+      }
+    },
+    { field: "id", header: "Action", body: actionBodyTemplate, sortable: true },
+  ];
 
+
+  useEffect(() => {
+    if (!props?.isrestaurant) {
+      fetchData();
+    }
+    if (props?.isrestaurant) {
+      restaurantSubCategories();
+    }
+  }, [props.isrestaurant]);
 
   return (
     <>
@@ -213,9 +141,9 @@ const SubCategory = (props) => {
               SubCategory List
             </h1>
           </div>
-          <SubCategoryForm title="Add SubCategory" isrestaurant={props?.isrestaurant} fetchData={fetchData} restaurantSubCategories={restaurantSubCategories}/>
+          <SubCategoryForm title="Add SubCategory" isrestaurant={props?.isrestaurant} fetchData={fetchData} restaurantSubCategories={restaurantSubCategories} category={category} />
         </div>
-          {subcategory?.length > 0 && <Table data={subcategory} columns={props?.isrestaurant ? RestaurantColumns : ProductColumns} />}
+        <Table data={subcategory} columns={props?.isrestaurant ? RestaurantColumns : ProductColumns} />
       </div>
     </>
   );

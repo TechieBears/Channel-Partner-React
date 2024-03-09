@@ -357,18 +357,18 @@ const Step3 = (props) => {
                 {errors.ambience_image && <Error title='Image is required*' />}
             </div>
             <div className="">
-                <label className={labelClass} htmlFor="main_input">Image 2</label>
+                <label className={labelClass} htmlFor="main_input">Image 2*</label>
                 <input className={fileinput}
                     id="main_input"
                     type='file'
                     // multiple
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
-                    {...register("shop_image")} />
+                    {...register("shop_image", { required: !props?.data?.shop_image })} />
                 {props?.button == 'edit' && props?.data?.vendor?.shop_image != '' && props?.data?.vendor?.shop_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                     {props?.data?.vendor?.shop_image?.split('/').pop()}
                 </label>}
-                {/* {errors.shop_image && <Error title='Image is required*' />} */}
+                {errors.shop_image && <Error title='Image is required*' />}
             </div>
             <p className='text-base font-normal md:col-span-2 lg:col-span-3'>Dish Images</p>
             <div className="">
@@ -501,7 +501,7 @@ const Step5 = (props) => {
                     accept='image/jpeg,image/jpg,image/png,application/pdf'
                     placeholder='Upload Images...'
                     {...register("fssai_license", {})} />
-               {props?.button == 'edit' && props?.data?.vendor?.fssai_license != '' && props?.data?.vendor?.fssai_license != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
+                {props?.button == 'edit' && props?.data?.vendor?.fssai_license != '' && props?.data?.vendor?.fssai_license != undefined && <label className='block mb-1 font-medium text-blue-800 capitalize text-md font-tb'>
                     {props?.data?.vendor?.fssai_license?.split('/').pop()}
                 </label>}
             </div>
@@ -639,7 +639,7 @@ export default function DashboardForm(props) {
 
     useEffect(() => {
         if (isOpen && props?.data && props.button == 'edit') {
-            console.log("🚀 ~ file: DashboardForm.jsx:733 ~ useEffect ~ props?.data:", props?.data) 
+            console.log("🚀 ~ file: DashboardForm.jsx:733 ~ useEffect ~ props?.data:", props?.data)
             const formattedStartTime = moment(props?.data?.vendor?.shop_start_time, 'h:mm A').format('HH:mm');
             const formattedEndTime = moment(props?.data?.vendor?.shop_end_time, 'h:mm A').format('HH:mm');
             methods.reset({
@@ -653,7 +653,7 @@ export default function DashboardForm(props) {
                 "restaurant_type": props?.data?.restaurant_type,
                 "shop_start_time": formattedStartTime,
                 "shop_end_time": formattedEndTime,
-                "type_of_cuisine": JSON.parse(props?.data?.type_of_cuisine.replace(/'/g, '"'))  ,
+                "type_of_cuisine": JSON.parse(props?.data?.type_of_cuisine.replace(/'/g, '"')),
                 "ambience_image": props?.data?.ambience_image,
                 "shop_image": props?.data?.vendor?.shop_image,
                 "pan_card": props?.data?.vendor?.pan_card,
@@ -792,7 +792,7 @@ export default function DashboardForm(props) {
                 } else {
                     data.shop_image = props?.data?.vendor?.shop_image
                 }
-                if (data?.food_image1?.length > 0  && (data?.food_image1 != props?.data?.food_image1)) {
+                if (data?.food_image1?.length > 0 && (data?.food_image1 != props?.data?.food_image1)) {
                     await ImageUpload(data?.food_image1[0], "restaurant", "food_image1", data?.shop_name)
                     data.food_image1 = `${restaurantLink}${data?.shop_name}_food_image1_${data?.food_image1[0]?.name}`
                 } else {
@@ -810,19 +810,19 @@ export default function DashboardForm(props) {
                 } else {
                     data.food_image3 = props?.data?.food_image3
                 }
-                if (data?.adhar_card?.length > 0  && (data?.adhar_card != props?.data?.vendor?.adhar_card)) {
+                if (data?.adhar_card?.length > 0 && (data?.adhar_card != props?.data?.vendor?.adhar_card)) {
                     await ImageUpload(data?.adhar_card[0], "restaurant", "adhar_card", data?.shop_name)
                     data.adhar_card = `${restaurantLink}${data?.shop_name}_adhar_card_${data?.adhar_card[0]?.name}`
                 } else {
                     data.adhar_card = props?.data?.vendor?.adhar_card
                 }
-                if (data?.fssai_license?.length > 0  && (data?.fssai_license != props?.data?.vendor?.fssai_license)) {
+                if (data?.fssai_license?.length > 0 && (data?.fssai_license != props?.data?.vendor?.fssai_license)) {
                     await ImageUpload(data?.fssai_license[0], "restaurant", "fssai_license", data?.shop_name)
                     data.fssai_license = `${restaurantLink}${data?.shop_name}_fssai_license_${data?.fssai_license[0]?.name}`
                 } else {
                     data.fssai_license = props?.data?.vendor?.fssai_license
                 }
-                if (data?.order_img1?.length > 0  && (data?.order_img1 != props?.data?.order_img1)) {
+                if (data?.order_img1?.length > 0 && (data?.order_img1 != props?.data?.order_img1)) {
                     await ImageUpload(data?.order_img1[0], "restaurant", "order_img1", data?.shop_name)
                     data.order_img1 = `${restaurantLink}${data?.shop_name}_order_img1_${data?.order_img1[0]?.name}`
                 } else {
@@ -869,7 +869,7 @@ export default function DashboardForm(props) {
                 } else {
                     let updatedData = {
                         ...data,
-                        "type_of_cuisine": JSON.stringify(data.type_of_cuisine),       
+                        "type_of_cuisine": JSON.stringify(data.type_of_cuisine),
                         "vendorId": LoggedUserDetails?.sellerId,
                     }
                     console.log("🚀 ~ file: DashboardForm.jsx:896 ~ onSubmit ~ updatedData:", updatedData)
