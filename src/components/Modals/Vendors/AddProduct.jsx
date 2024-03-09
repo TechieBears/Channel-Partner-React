@@ -12,26 +12,17 @@ import { ImageUpload, productLink } from '../../../env';
 import MediaGallaryModal from '../../../pages/Settings/MediaGallery/MediaGallery';
 
 const AddProduct = (props) => {
-    console.log('props= ', props)
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
-    const [category, setCategory] = useState([]);
-    const [subCategory, setsubCategory] = useState([]);
     const [FinalPriceSeller, setFinalPriceSeller] = useState([]);
     const [FinalPriceAdmin, setFinalPriceAdmin] = useState([]);
     const { register, handleSubmit, control, watch, reset, setValue, formState: { errors } } = useForm();
     const toggle = () => setOpen(!isOpen)
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     const mediaGalleryModalRef = useRef(null);
-
-
     const [openGallery, setopenGallery] = useState(false);
     const [openGalleryModal, setopenGalleryModal] = useState(false);
-    const [imageDetails, setImageDetails] = useState([]);
     const [childData, setChildData] = useState([]);
-    // console.log('childData  ==', childData);
-
-
     const closeBtn = () => {
         toggle();
         reset()
@@ -50,20 +41,10 @@ const AddProduct = (props) => {
 
     const openMediaModal = () => {
         setopenGalleryModal(!openGalleryModal);
-        // console.log('openGalleryModal', openGalleryModal)
     };
 
     // ============== fetch data from api ================
-    const fetchData = () => {
-        try {
-            getGalleryImages().then((res) => {
-                // console.log("media gallery data = ", res);
-                setImageDetails(res);
-            });
-        } catch (err) {
-            console.log("error", err);
-        }
-    };
+
 
     const receiveDataFromChild = (data) => {
         // console.log('-- child data --', data);
@@ -88,12 +69,10 @@ const AddProduct = (props) => {
             alert('Please upload an image with dimensions 200x200.');
         }
     };
-    
+
     const calculateRevenueSeller = watch('product_actual_price')
 
     useEffect(() => {
-        fetchData();
-
         if (LoggedUserDetails?.role == 'seller') {
             if (calculateRevenueSeller !== "") {
                 var mainUserPrice = calculateRevenueSeller * (LoggedUserDetails?.insta_commission == null ? 0 : LoggedUserDetails?.insta_commission / 100);
@@ -193,7 +172,7 @@ const AddProduct = (props) => {
             } else {
                 if (childData[0]?.media_url) {
                     data.product_image_1 = childData[0]?.media_url
-                }else{
+                } else {
                     data.product_image_1 = ''
                 }
             }
@@ -203,7 +182,7 @@ const AddProduct = (props) => {
             } else {
                 if (childData[1]?.media_url) {
                     data.product_image_2 = childData[1]?.media_url
-                }else{
+                } else {
                     data.product_image_2 = ''
                 }
             }
@@ -213,7 +192,7 @@ const AddProduct = (props) => {
             } else {
                 if (childData[2]?.media_url) {
                     data.product_image_3 = childData[2]?.media_url
-                }else{
+                } else {
                     data.product_image_3 = ''
                 }
             }
@@ -223,7 +202,7 @@ const AddProduct = (props) => {
             } else {
                 if (childData[3]?.media_url) {
                     data.product_image_4 = childData[3]?.media_url
-                }else{
+                } else {
                     data.product_image_4 = ''
                 }
             }
@@ -233,7 +212,7 @@ const AddProduct = (props) => {
             } else {
                 if (childData[4]?.media_url) {
                     data.product_image_5 = childData[4]?.media_url
-                }else{
+                } else {
                     data.product_image_5 = ''
                 }
             }
@@ -289,12 +268,6 @@ const AddProduct = (props) => {
     }
 
     useEffect(() => {
-        getCategory().then(res => {
-            setCategory(res)
-        })
-        getSubCategory().then(res => {
-            setsubCategory(res)
-        })
         if (LoggedUserDetails?.role == 'seller') {
             reset({
                 'product_name': props?.row?.product_name,
@@ -429,7 +402,7 @@ const AddProduct = (props) => {
                                                             {...register('product_category', { required: true })}
                                                         >
                                                             <option value=''>Select</option>
-                                                            {category?.map(item =>
+                                                            {props?.category?.map(item =>
                                                                 // {
                                                                 // console.log(item?.id)
                                                                 <option key={item?.id} value={item?.id}>{item?.category_name}</option>
@@ -449,7 +422,7 @@ const AddProduct = (props) => {
                                                         >
                                                             <option value=''>Select</option>
                                                             {
-                                                                subCategory?.map(item => (
+                                                                props?.subCategory?.map(item => (
                                                                     <option key={item?.subcat_id} value={item?.subcat_id} >{item?.subcat_name}</option>
                                                                 ))
                                                             }
@@ -737,14 +710,15 @@ const AddProduct = (props) => {
                                                                     placeholder='Upload Images...'
                                                                     onChange={(e) => handleImageChange(e)}
                                                                     {...register("product_image_1", {
-                                                                         required: props.title == 'Edit Product' && (!childData[0]?.media_url || childData[0]?.media_url == '') && !props?.row?.product_image_1 })} />
+                                                                        required: props.title == 'Edit Product' && (!childData[0]?.media_url || childData[0]?.media_url == '') && !props?.row?.product_image_1
+                                                                    })} />
                                                                 {props?.title == 'Edit Product' && props?.row?.product_image_1 != '' && props?.row?.product_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
                                                                     {!childData[0] && props?.row?.product_image_1?.split('/').pop()}
                                                                 </label>}
                                                                 <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
                                                                     {childData[0]?.media_url?.split('/').pop()}
                                                                 </label>
-                                                                
+
                                                                 {errors.product_image_1 && <Error title='Main Image is required*' />}
                                                             </div>
 
@@ -837,7 +811,7 @@ const AddProduct = (props) => {
                                                 id="mediaGalleryModal"
                                                 className="hidden"
                                                 title="Upload Image"
-                                                imageDetails={imageDetails}
+                                                imageDetails={props?.imageDetails}
                                                 setopenGalleryModal={openMediaModal}
                                                 sendDataToParent={receiveDataFromChild}
                                             />

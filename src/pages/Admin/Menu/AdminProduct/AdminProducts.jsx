@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import Table from '../../../../components/Table/Table';
 import { Link } from 'react-router-dom';
 import { Eye, Trash } from 'iconsax-react';
-import { editVendorProduct, getProductsByAdmin, VerifyProductAdmin, makeFeatureProduct, getRestaurantFood, editAdminFinalFood, getRestaurantFoodAdmin, GetFranchisee, GetFranchiseeVendors, getCategory } from '../../../../api';
+import { editVendorProduct, getProductsByAdmin, VerifyProductAdmin, makeFeatureProduct, getRestaurantFood, editAdminFinalFood, getRestaurantFoodAdmin, GetFranchisee, GetFranchiseeVendors, getCategory, getSubCategory, getGalleryImages } from '../../../../api';
 import Switch from 'react-js-switch';
 import userImg from '../../../../assets/user.jpg';
 import AddProduct from '../../../../components/Modals/Vendors/AddProduct';
@@ -19,11 +19,12 @@ import Select from "react-select";
 const AdminProduct = (props) => {
     const [shopProducts, setShopProducts] = useState([])
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
-
     const [franchiseOptions, setFranchiseOptions] = useState()
     const [vendorOptions, setVendorOptions] = useState()
     const [categoryOptions, setCategoryOptions] = useState()
-
+    const [imageDetails, setImageDetails] = useState([]);
+    const [category, setCategory] = useState([]);
+    const [subCategory, setsubCategory] = useState([]);
     const GetFranchiseeData = () => {
         try {
             GetFranchisee().then((res) => {
@@ -59,49 +60,34 @@ const AdminProduct = (props) => {
     const GetCategory = () => {
         try {
             getCategory().then((res) => {
-                console.log("🚀 ~ file: AdminProducts.jsx:62 ~ getCategory ~ res:", res)
                 if (res?.length > 0) {
                     const newData = res.map((data) => ({
                         label: data?.category_name,
                         value: data?.id,
                     }))
                     setCategoryOptions(newData)
-                }       
+                }
             })
         } catch (error) {
-            console.log("🚀 ~ file: AdminProducts.jsx:66 ~ GetCategory ~ error:", error)   
+            console.log("🚀 ~ file: AdminProducts.jsx:66 ~ GetCategory ~ error:", error)
         }
     }
 
-    // const GetCategory = () => {
-    //     try {
-    //         getCategory().then((res) => {
-    //             console.log("🚀 ~ file: AdminProducts.jsx:62 ~ getCategory ~ res:", res)
-    //             if (res?.length > 0) {
-    //                 const newData = res.map((data) => ({
-    //                     label: data?.category_name,
-    //                     value: data?.id,
-    //                 }))
-    //                 setCategoryOptions(newData)
-    //             }       
-    //         })
-    //     } catch (error) {
-    //         console.log("🚀 ~ file: AdminProducts.jsx:66 ~ GetCategory ~ error:", error)   
-    //     }
-    // }
-
-    useEffect(()=>{
-        GetFranchiseeData()
-        GetVendorData()
-        GetCategory()
-    },[])
-
-
+    // =================== Fetch Media Gallery Images =================
+    const fetchData = () => {
+        try {
+            getGalleryImages().then((res) => {
+                setImageDetails(res);
+            });
+        } catch (err) {
+            console.log("error", err);
+        }
+    };
 
     const getProducts = () => {
         try {
             getProductsByAdmin().then(res => {
-                setShopProducts(res)
+                setShopProducts(res?.results)
             });
         } catch (error) {
             console.log(error);
@@ -127,6 +113,27 @@ const AdminProduct = (props) => {
         }
     }, [props.isrestaurant]);
 
+    useEffect(() => {
+        GetFranchiseeData()
+        GetVendorData()
+        GetCategory()
+        fetchData();
+        try {
+            getCategory().then(res => {
+                setCategory(res)
+            })
+        } catch (error) {
+            console.log('error fetch', error)
+        }
+        try {
+            getSubCategory().then(res => {
+                setsubCategory(res)
+            })
+        } catch (error) {
+            console.log('error fetch', error)
+        }
+    }, [])
+
     const {
         register,
         handleSubmit,
@@ -134,18 +141,10 @@ const AdminProduct = (props) => {
         formState: { errors },
         reset,
     } = useForm();
-    
+
 
     const onSubmit = async (data) => {
         console.log("🚀 ~ file: AdminProducts.jsx:107 ~ onSubmit ~ data:", data)
-        // var updatedData = { ...data, vendor: props?.row?.vendor }
-        // editVendorProduct(props?.row?.product_id, updatedData).then(res => {
-        //     if (res?.status == 'success') {
-        //         props?.getProducts()
-        //         toast.success('Product updated successfully')
-        //         toggle();
-        //     }
-        // })
     }
 
 
@@ -160,7 +159,7 @@ const AdminProduct = (props) => {
             <Eye size={24} className='text-sky-400' />
         </Link>
         {/* <ViewProduct /> */}
-        <AddProduct title='Edit Product' row={row} getProducts={getProducts} />
+        <AddProduct title='Edit Product' imageDetails={imageDetails} row={row} getProducts={getProducts} category={category} subCategory={subCategory} />
         <button className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
             <Trash size={24} className='text-red-400' />
         </button>
@@ -406,11 +405,11 @@ const AdminProduct = (props) => {
                     onSubmit={handleSubmit(onSubmit)}
                     className="flex flex-col gap-2 md:items-center lg:flex-row"
                 >
-                    <div className="grid w-full grid-cols-1 sm:grid-cols-6 gap-y-3 gap-x-2">
+                    <div className="grid w-full grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-5 gap-y-3 gap-x-2">
                         <div className="">
                             <input
                                 type="text"
-                                placeholder='Search by Name'
+                                placeholder='Name'
                                 autoComplete='off'
                                 className={`${inputClass} !bg-slate-100`}
                                 {...register('name')}
@@ -419,7 +418,7 @@ const AdminProduct = (props) => {
                         <div className="">
                             <input
                                 type="text"
-                                placeholder='Search by MSB Code'
+                                placeholder='MSB Code'
                                 autoComplete='off'
                                 className={`${inputClass} !bg-slate-100`}
                                 {...register('msbcode')}
@@ -437,7 +436,7 @@ const AdminProduct = (props) => {
                                         value={value}
                                         options={franchiseOptions}
                                         className="w-100 text-gray-900"
-                                        placeholder="Search by Franchise"
+                                        placeholder="Franchise"
                                         onChange={onChange}
                                         inputRef={ref}
                                         maxMenuHeight={200}
@@ -463,7 +462,7 @@ const AdminProduct = (props) => {
                                         value={value}
                                         options={vendorOptions}
                                         className="w-100 text-gray-900"
-                                        placeholder="Search by Vendor"
+                                        placeholder="Vendor"
                                         onChange={onChange}
                                         inputRef={ref}
                                         maxMenuHeight={200}
@@ -484,12 +483,11 @@ const AdminProduct = (props) => {
                                 render={({
                                     field: { onChange, value, ref },
                                 }) => (
-
                                     <Select
                                         value={value}
                                         options={categoryOptions}
                                         className="w-100 text-gray-900"
-                                        placeholder="Search by Category"
+                                        placeholder="Category"
                                         onChange={onChange}
                                         inputRef={ref}
                                         maxMenuHeight={200}
@@ -503,19 +501,18 @@ const AdminProduct = (props) => {
                                 )}
                             />
                         </div>
-
                     </div>
-                    <div className="flex items-center gap-x-2">
+                    <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2">
                         <button
                             type="submit"
-                            className={`${formBtn1} w-full text-center`}
+                            className={`${formBtn1}`}
                         >
                             Filter
                         </button>
                         <button
                             type="button"
-                            className={`${formBtn2} w-full text-center`}
-                            onClick={()=>handleClear()}
+                            className={`${formBtn2}`}
+                            onClick={() => handleClear()}
                         >
                             Clear
                         </button>
