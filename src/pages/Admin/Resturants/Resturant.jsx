@@ -268,7 +268,7 @@ export default function Restaurant() {
             <div className="">
               <input
                 type="text"
-                placeholder='Search By Name'
+                placeholder='Search By Owner Name'
                 autoComplete='off'
                 className={`${inputClass} !bg-slate-100`}
                 {...register('name')}
