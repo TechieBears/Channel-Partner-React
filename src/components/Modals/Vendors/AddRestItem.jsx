@@ -24,10 +24,9 @@ export default function AddRestItem(props) {
     if (props?.category && props?.subCategory) {
         subCat = props?.subCategory.filter(cat => cat?.category == categoryField)
     }
-    // let filteredSubCat = subCategory.filter()
     const toggle = () => {
         setOpen(!isOpen)
-        setLoader(!loader)
+        setLoader(false)
     }
     const closeBtn = () => {
         toggle();

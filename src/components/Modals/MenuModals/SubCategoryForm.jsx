@@ -1,62 +1,22 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useMemo, useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
 import { Edit } from "iconsax-react";
+import { Fragment, useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { createRestaurantSubCategory, createSubCategory, editRestaurantSubCategory, editSubCategory } from "../../../api";
+import { ImageUpload, restaurantsubcatLink, subcategoryLink } from "../../../env";
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from "../../../utils/CustomClass";
-import { getCategory, getSubCategory, editSubCategory, createSubCategory, createRestaurantSubCategory, editRestaurantSubCategory, getRestaurantCategory } from "../../../api";
-import { setCategory, setSubCategory } from "../../../redux/Slices/masterSlice";
-import LoadBox from "../../Loader/LoadBox";
-import { useDispatch, useSelector } from "react-redux";
 import Error from "../../Errors/Error";
-import { ImageUpload, subcategoryLink , restaurantsubcatLink} from "../../../env";
+import LoadBox from "../../Loader/LoadBox";
 
 export default function SubCategoryForm(props) {
-  // console.log('props = ', props)
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
-  // const categories = useSelector((state) => state?.master?.Category);
   const { register, handleSubmit, control, watch, reset, formState: { errors } } = useForm();
-  const dispatch = useDispatch();
-  const [categories, setCategories] = useState([]);
 
   const toggle = async () => {
     setIsOpen(!isOpen);
   };
-
-  // // ========================= fetch data from api ==============================
-  const fetchData2 = () => {
-    try {
-      getCategory().then((res) => {
-        setCategories(res)
-        // dispatch(setCategory(res));
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const restaurantCategories = () => {
-    try {
-      getRestaurantCategory().then((res) => {
-        setCategories(res)
-        // dispatch(setCategory(res));
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-
-
-  useEffect(() => {
-    if (!props?.isrestaurant){
-      fetchData2();
-    }
-    if (props?.isrestaurant){
-      restaurantCategories();
-    }
-  }, [props.isrestaurant]);
-
 
   // ============================ submit data  =====================================
   const onSubmit = async (data) => {
@@ -80,9 +40,9 @@ export default function SubCategoryForm(props) {
               setTimeout(() => {
                 // dispatch(setCategory(res));
                 reset();
-                toggle(), 
-                setLoader(false), 
-                props?.isrestaurant ? props?.restaurantSubCategories() : props?.fetchData();
+                toggle(),
+                  setLoader(false),
+                  props?.isrestaurant ? props?.restaurantSubCategories() : props?.fetchData();
                 toast.success(res.message);
               }, 1000);
             }
@@ -107,11 +67,10 @@ export default function SubCategoryForm(props) {
         editSubCategory(props?.data?.subcat_id, data).then((res) => {
           if (res?.status == "success") {
             setTimeout(() => {
-              // dispatch(setSubCategory(res));
               reset();
               toggle(),
-              setLoader(false), 
-              props?.isrestaurant ? props?.restaurantSubCategories() : props?.fetchData();
+                setLoader(false),
+                props?.isrestaurant ? props?.restaurantSubCategories() : props?.fetchData();
               toast.success(res.message);
             }, 1000);
           }
@@ -127,7 +86,7 @@ export default function SubCategoryForm(props) {
     if (props?.button !== "edit") {
       try {
         if (data.subcat_image.length != 0) {
-          await ImageUpload( data.subcat_image[0], "restaurantsubcategory", "restaurantsubcategory", data.subcat_name);
+          await ImageUpload(data.subcat_image[0], "restaurantsubcategory", "restaurantsubcategory", data.subcat_name);
           data.subcat_image = `${restaurantsubcatLink}${data.subcat_name}_restaurantsubcategory_${data.subcat_image[0].name}`;
         } else {
           data.subcat_image = "";
@@ -137,10 +96,9 @@ export default function SubCategoryForm(props) {
           .then((res) => {
             if (res?.status === "success") {
               setTimeout(() => {
-                // dispatch(setCategory(res));
                 reset();
-                toggle(), setLoader(false), 
-                props?.isrestaurant ? props?.restaurantSubCategories() : props?.fetchData();
+                toggle(), setLoader(false),
+                  props?.isrestaurant ? props?.restaurantSubCategories() : props?.fetchData();
                 toast.success(res.message);
               }, 1000);
             }
@@ -165,10 +123,9 @@ export default function SubCategoryForm(props) {
         editRestaurantSubCategory(props?.data?.subcat_id, data).then((res) => {
           if (res?.message === "subcategory edited successfully") {
             setTimeout(() => {
-              // dispatch(setSubCategory(res));
               reset();
-              toggle(), setLoader(false), 
-              props?.isrestaurant ? props?.restaurantSubCategories() : props?.fetchData();
+              toggle(), setLoader(false),
+                props?.isrestaurant ? props?.restaurantSubCategories() : props?.fetchData();
               toast.success(res.message);
             }, 1000);
           }
@@ -240,7 +197,7 @@ export default function SubCategoryForm(props) {
                   </Dialog.Title>
                   <div className=" bg-gray-200/70">
                     {/* React Hook Form */}
-                    <form  onSubmit={props?.isrestaurant ? handleSubmit(onRestaurantSubmit) : handleSubmit(onSubmit)}>
+                    <form onSubmit={props?.isrestaurant ? handleSubmit(onRestaurantSubmit) : handleSubmit(onSubmit)}>
                       <div className="grid grid-cols-2 py-4 mx-4 gap-x-3 gap-y-3 customBox">
                         <div className="">
                           <label className={labelClass}>
@@ -291,7 +248,7 @@ export default function SubCategoryForm(props) {
                             {...register("category", { required: true })}
                           >
                             <option value="" selected>Select Type</option>
-                            {categories?.length > 0 && categories.map(category => (
+                            {props?.category?.length > 0 && props?.category.map(category => (
                               <option key={category.id} value={category.id} selected={props?.data?.category === category.id}>
                                 {category.category_name}
                               </option>
