@@ -13,7 +13,6 @@ import MediaGallaryModal from '../../../pages/Settings/MediaGallery/MediaGallery
 
 
 export default function AddRestItem(props) {
-    console.log('props', props);
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false);
     const [FinalPriceSeller, setFinalPriceSeller] = useState([]);

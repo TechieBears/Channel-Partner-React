@@ -150,7 +150,6 @@ const AdminProduct = (props) => {
         GetFranchiseeData()
         GetVendorData()
         GetCategory()
-        fetchData();
     }, [])
 
     const {
