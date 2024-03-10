@@ -1,10 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
+import { Trash } from 'iconsax-react';
 import { useForm } from "react-hook-form";
 // import { makeRequest } from "@/app/functions/apiCall";
 // import { ADMIN_MEDIA_GALLARY, GET } from "@/app/utils/constant";
 import { ImageUpload, mediaGalleryLink } from "../../../env";
-import { addGalleryImages, getGalleryImages } from "../../../api";
+import { addGalleryImages, getGalleryImages, deleteMediagallery} from "../../../api";
 import { toast } from "react-toastify";
+import { inputClass } from '../../../utils/CustomClass';
+
 
 const CustomFileUpload = () => {
   const [imageDetails, setImageDetails] = useState([]);
@@ -12,6 +15,15 @@ const CustomFileUpload = () => {
   const [imgName, setImgName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const uploadFormRef = useRef(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredImages = imageDetails.filter(data =>
+    data.media_name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleSearchInputChange = event => {
+    setSearchQuery(event.target.value);
+  };
 
   const {
     register,
@@ -26,6 +38,7 @@ const CustomFileUpload = () => {
     try {
       getGalleryImages().then((res) => {
         setImageDetails(res);
+        console.log(res)
       });
     } catch (err) {
       console.log("error", err);
@@ -71,8 +84,22 @@ const CustomFileUpload = () => {
     });
   };
 
+
+  const handleDeleteImage = (id) => {
+    deleteMediagallery(id).then(res => {
+      if (res?.status == 'success') {
+          toast.success('Gallery Image Deleted successfully')
+          reset();
+          fetchData();
+      }
+  })
+
+    
+  };
+
   return (
     <>
+    
       <div className="w-full p-5 my-3 bg-white shadow-lg">
         <form onSubmit={handleSubmit(onSubmit)} id="uploadForm">
           <div className="relative flex items-center gap-2">
@@ -111,9 +138,18 @@ const CustomFileUpload = () => {
         </form>
 
         <div className="mt-5">
+          <div className="flex justify-end my-3">
+            <input
+              type="text"
+              placeholder="Search by Image Name..."
+              value={searchQuery}
+              className={`${inputClass} !bg-slate-100 !w-1/4`}
+              onChange={handleSearchInputChange}
+            />
+          </div>
           <ul className="grid lg:grid-cols-6 lg:gap-4 md:grid-cols-4 sm:grid-cols-3 md:gap-3 sm:gap-1">
-            {imageDetails.length > 0 &&
-              imageDetails?.map((data, index) => (
+            {filteredImages.length > 0 ? (
+              filteredImages?.map((data, index) => (
                 <li
                   key={index}
                   className="text-center bg-gray-100 rounded-sm shadow-lg"
@@ -123,11 +159,19 @@ const CustomFileUpload = () => {
                     alt={data?.media_name}
                     className="object-cover h-40 min-w-full bg-slate-100"
                   />
-                  <div className="py-2 text-xs font-semibold">
-                    {data?.media_name}
+                  <div className="flex justify-evenly py-3">
+                    <div className="py-2 text-xs font-semibold">
+                      {data?.media_name}
+                    </div>
+                      <Trash  onClick={() => handleDeleteImage(data?.media_id)}  size={21} className='text-red-400 cursor-pointer' />
                   </div>
                 </li>
-              ))}
+              )) 
+            ) : (
+                <li className="text-center bg-gray-100 rounded-sm shadow-lg p-4">
+                  No data found
+                </li>
+            )}
           </ul>
         </div>
       </div>

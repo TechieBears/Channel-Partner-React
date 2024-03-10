@@ -498,6 +498,19 @@ export const getGalleryImages = async (data) => {
         console.log('error creating product', error)
     }
 }
+export const deleteMediagallery = async (id) => {
+    const url = `${environment.baseUrl}app/edit_media/${id}`;
+    try {
+        const response = await axios.delete(url)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+
+
 
 /* =============== User API ================= */
 
