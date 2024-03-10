@@ -1,8 +1,8 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-// import Button from '../buttons/Button';
-import { formBtn1, formBtn2, tableBtn } from "../../../utils/CustomClass";
+import { formBtn1, formBtn2, tableBtn, inputClass } from "../../../utils/CustomClass";
 import { useForm } from "react-hook-form";
+
 
 
 const MediaGallaryModal = ({sendDataToParent, ...props}) => {
@@ -11,6 +11,7 @@ const MediaGallaryModal = ({sendDataToParent, ...props}) => {
   const [loader, setLoader] = useState(false);
   const [imageDetails, setImageDetails] = useState([]);
   const [selectedImage, setSelectedImage] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const toggle = () => setIsOpen(!isOpen);
   // console.log('selectedImage', selectedImage)
   // console.log('isOpen', isOpen)
@@ -40,6 +41,14 @@ const MediaGallaryModal = ({sendDataToParent, ...props}) => {
         setSelectedImage([...selectedImage, data]);
       }
     }
+  };
+
+  const filteredImages = props?.imageDetails.filter(data =>
+    data.media_name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleSearchInputChange = event => {
+    setSearchQuery(event.target.value);
   };
 
   const uploadImg = () => {
@@ -99,24 +108,24 @@ const MediaGallaryModal = ({sendDataToParent, ...props}) => {
                 <Dialog.Panel className="w-full max-w-full overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl">
                   <Dialog.Title
                     as="h2"
-                    className="w-full px-3 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
+                    className="w-full flex items-center justify-between px-6 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
                   >
                     Media Gallery
+                    {/* <div className="col-span-1 flex justify-end"> */}
+                      <input
+                        type="text"
+                        placeholder="Search by Image Name..."
+                        value={searchQuery}
+                        className={`${inputClass} !bg-slate-100 w-3/12`}
+                        onChange={handleSearchInputChange}
+                      />
+                    {/* </div> */}
                   </Dialog.Title>
                   <div className="modal-body tennis-secondary-font bg-gray-200 min-h-[calc(100vh-12rem)] px-6 py-4 sidebar-scroll scroll-smooth focus:scroll-auto overflow-y-auto">
                     <ul className="grid lg:grid-cols-6 lg:gap-4 md:grid-cols-4 sm:grid-cols-3 md:gap-3 sm:gap-1">
-                      {props?.imageDetails?.length > 0 &&
-                        props?.imageDetails?.map((data, index) => (
-                          // <li
-                          //   key={index}
-                          //   className={`shadow-lg cursor-pointer text-center bg-gray-50 rounded-sm ${
-                          //     selectedImage === data
-                          //       ? "border-2 border-yellow-500 p-2"
-                          //       : ""
-                          //   }`}
-                          //   onClick={() => handleImageClick(data)}
-                          // >
-                             <li
+                       {filteredImages.length > 0 ? (
+                          filteredImages?.map((data, index) => (
+                            <li
                                 key={index}
                                 className={`shadow-lg cursor-pointer text-center bg-gray-50 rounded-sm ${
                                   selectedImage?.find((image) => image.media_id === data.media_id)
@@ -134,7 +143,12 @@ const MediaGallaryModal = ({sendDataToParent, ...props}) => {
                               {data.media_name}
                             </div>
                           </li>
-                        ))}
+                          )) 
+                         ) : (
+                        <li className="text-center bg-gray-100 rounded-sm shadow-lg p-4">
+                          No data found
+                        </li>
+                        )}
                     </ul>
                   </div>
                   <div className="gap-3 p-3 bg-white modal-foote sm:flex sm:flex-row-reverse">
