@@ -13,6 +13,7 @@ import MediaGallaryModal from '../../../pages/Settings/MediaGallery/MediaGallery
 
 
 export default function AddRestItem(props) {
+    console.log('props', props);
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false);
     const [FinalPriceSeller, setFinalPriceSeller] = useState([]);
@@ -35,7 +36,10 @@ export default function AddRestItem(props) {
     }
     const closeBtn = () => {
         toggle();
-        reset();
+        reset()
+        setChildData([])
+        setopenGallery(false);
+        setopenGalleryModal(false);
     }
 
     const handleSelectChange = (e) => {
@@ -89,37 +93,37 @@ export default function AddRestItem(props) {
         console.log('data ==', data)
         if (props?.title != 'Add Item') {      // for edit
             console.log('image edit')
-            if (data?.food_image_1?.length > 0 && props?.data?.food_image_1) {
+            if (data?.food_image_1?.length > 0) {
                 await ImageUpload(data?.food_image_1[0], "restaurant", "mainImage", data?.food_name)
                 data.food_image_1 = `${restaurantLink}${data?.food_name}_mainImage_${data?.food_image_1[0]?.name}`
             } else {
                 data.food_image_1 = props?.data?.food_image_1
             }
-            if (data?.food_image_2?.length > 0 && props?.data?.food_image_2) {
+            if (data?.food_image_2?.length > 0) {
                 await ImageUpload(data?.food_image_2[0], "restaurant", "img2", data?.food_name)
                 data.food_image_2 = `${restaurantLink}${data?.food_name}_img2_${data?.food_image_2[0]?.name}`
             } else {
                 data.food_image_2 = props?.data?.food_image_2
             }
-            if (data?.food_image_3?.length > 0 && props?.data?.food_image_3) {
+            if (data?.food_image_3?.length > 0) {
                 await ImageUpload(data?.food_image_3[0], "restaurant", "img3", data?.food_name)
                 data.food_image_3 = `${restaurantLink}${data?.food_name}_img3_${data?.food_image_3[0]?.name}`
             } else {
                 data.food_image_3 = props?.data?.food_image_3
             }
-            if (data?.food_image_4?.length > 0 && props?.data?.food_image_4) {
+            if (data?.food_image_4?.length > 0) {
                 await ImageUpload(data?.food_image_4[0], "restaurant", "img4", data?.food_name)
                 data.food_image_4 = `${restaurantLink}${data?.food_name}_img4_${data?.food_image_4[0]?.name}`
             } else {
                 data.food_image_4 = props?.data?.food_image_4
             }
-            if (data?.food_image_5?.length > 0 && props?.data?.food_image_5) {
+            if (data?.food_image_5?.length > 0) {
                 await ImageUpload(data?.food_image_5[0], "restaurant", "img5", data?.food_name)
                 data.food_image_5 = `${restaurantLink}${data?.food_name}_img5_${data?.food_image_5[0]?.name}`
             } else {
                 data.food_image_5 = props?.data?.food_image_5
             }
-            if (data?.food_video_url?.length > 0 && props?.data?.food_video_url) {
+            if (data?.food_video_url?.length > 0) {
                 await ImageUpload(data?.food_video_url[0], "restaurant", "img5", data?.food_name)
                 data.food_video_url = `${restaurantLink}${data?.food_name}_img5_${data?.food_video_url[0]?.name}`
             } else {
@@ -127,35 +131,55 @@ export default function AddRestItem(props) {
             }
         } else {               // for create
             // console.log('image create')
-            if (data?.food_image_1?.length != 0) {
+            if (data?.food_image_1?.length > 0  && childData[0]?.media_url == '') {
                 await ImageUpload(data?.food_image_1[0], "restaurant", "mainImage", data?.food_name)
                 data.food_image_1 = `${restaurantLink}${data?.food_name}_mainImage_${data.food_image_1[0]?.name}`
             } else {
-                data.food_image_1 = ''
+                if (childData[0]?.media_url) {
+                    data.food_image_1 = childData[0]?.media_url
+                } else {
+                    data.food_image_1 = ''
+                }
             }
-            if (data?.food_image_2?.length != 0) {
+            if (data?.food_image_2?.length != 0 && childData[1]?.media_url == '') {
                 await ImageUpload(data?.food_image_2[0], "restaurant", "img2", data?.food_name)
                 data.food_image_2 = `${restaurantLink}${data?.food_name}_img2_${data.food_image_2[0]?.name}`
             } else {
-                data.food_image_2 = ''
+                if (childData[1]?.media_url) {
+                    data.food_image_2 = childData[1]?.media_url
+                } else {
+                    data.food_image_2 = ''
+                }
             }
-            if (data?.food_image_3?.length != 0) {
+            if (data?.food_image_3?.length != 0 && childData[2]?.media_url == '') {
                 await ImageUpload(data?.food_image_3[0], "restaurant", "img3", data?.food_name)
                 data.food_image_3 = `${restaurantLink}${data?.food_name}_img3_${data.food_image_3[0]?.name}`
             } else {
-                data.food_image_3 = ''
+                 if (childData[2]?.media_url) {
+                    data.food_image_3 = childData[2]?.media_url
+                } else {
+                    data.food_image_3 = ''
+                }
             }
-            if (data?.food_image_4?.length != 0) {
+            if (data?.food_image_4?.length != 0 && childData[3]?.media_url == '') {
                 await ImageUpload(data?.food_image_4[0], "restaurant", "img4", data?.food_name)
                 data.food_image_4 = `${restaurantLink}${data?.food_name}_img4_${data.food_image_4[0]?.name}`
             } else {
-                data.food_image_4 = ''
+                 if (childData[3]?.media_url) {
+                    data.food_image_4 = childData[3]?.media_url
+                } else {
+                    data.food_image_4 = ''
+                }
             }
-            if (data?.food_image_5?.length != 0) {
+            if (data?.food_image_5?.length != 0 && childData[4]?.media_url == '') {
                 await ImageUpload(data?.food_image_5[0], "restaurant", "img5", data?.food_name)
                 data.food_image_5 = `${restaurantLink}${data?.food_name}_img5_${data.food_image_5[0]?.name}`
             } else {
-                data.food_image_5 = ''
+                 if (childData[4]?.media_url) {
+                    data.food_image_5 = childData[4]?.media_url
+                } else {
+                    data.food_image_5 = ''
+                }
             }
             if (data?.food_video_url?.length != 0) {
                 await ImageUpload(data?.food_video_url[0], "restaurant", "img5", data?.food_name)
@@ -175,6 +199,9 @@ export default function AddRestItem(props) {
                     toggle();
                     setLoader(false);
                     reset();
+                    setopenGallery(false);
+                    setopenGalleryModal(false);
+                    setChildData([])
                 }
             })
         } else {
@@ -186,6 +213,9 @@ export default function AddRestItem(props) {
                     toggle();
                     setLoader(false);
                     reset();
+                    setopenGallery(false);
+                    setopenGalleryModal(false);
+                    setChildData([])
                 }
             })
         }
@@ -215,6 +245,13 @@ export default function AddRestItem(props) {
                 'food_isactive': props?.data?.food_isactive,
                 'food_veg_nonveg': props?.data?.food_veg_nonveg,
                 'menu_type': props?.data?.menu_type,
+                'food_video_url': props?.row?.food_video_url,
+                'food_image_1': props?.row?.food_image_1,
+                'food_image_2': props?.row?.food_image_2,
+                'food_image_3': props?.row?.food_image_3,
+                'food_image_4': props?.row?.food_image_4,
+                'food_image_5': props?.row?.food_image_5
+
             })
         } else {
             if (props?.button == 'edit') {
@@ -229,6 +266,12 @@ export default function AddRestItem(props) {
                     'food_isactive': props?.data.food_isactive,
                     'food_veg_nonveg': props?.data.food_veg_nonveg,
                     'menu_type': props?.data?.menu_type,
+                    'food_video_url': props?.row?.food_video_url,
+                    'food_image_1': props?.row?.food_image_1,
+                    'food_image_2': props?.row?.food_image_2,
+                    'food_image_3': props?.row?.food_image_3,
+                    'food_image_4': props?.row?.food_image_4,
+                    'food_image_5': props?.row?.food_image_5
                 })
             }
         }
@@ -466,11 +509,13 @@ export default function AddRestItem(props) {
                                                             className={inputClass}
                                                             disabled={(user?.role == 'admin')}
                                                             {...register('food_veg_nonveg', { required: true })}
+                                                            value={props?.details?.veg_nonveg}
                                                         >
                                                             <option value='' >Select</option>
                                                             <option value='Both'>Both</option>
-                                                            <option value='Veg' selected={props?.details?.veg_nonveg == 'Veg'}>Veg</option>
+                                                            <option value='Veg'>Veg</option>
                                                             <option value='Non-Veg'>Non-Veg</option>
+                                                            {/* <option value='Veg' selected={props?.details?.veg_nonveg == 'Veg'}>Veg</option> */}
                                                         </select>
                                                         {errors?.food_veg_nonveg && <Error title='This is required' />}
                                                     </div>
@@ -577,11 +622,15 @@ export default function AddRestItem(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             // onChange={(e) => handleImageChange(e)}
-                                                            {...register("food_image_1",
-                                                                { required: props.button == 'edit' ? false : true })} />
+                                                            {...register("food_image_1",{ 
+                                                                required: props.button == 'edit' && (!childData[0]?.media_url || childData[0]?.media_url == '') && !props?.data?.food_image_1
+                                                              })}  />
                                                         {props?.button == 'edit' && props?.data?.food_image_1 != '' && props?.data?.food_image_1 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
-                                                            {props?.data?.food_image_1?.split('/').pop()}
+                                                             {!childData[0] && props?.data?.food_image_1?.split('/').pop()}
                                                         </label>}
+                                                        <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                            {childData[0]?.media_url?.split('/').pop()}
+                                                        </label>
                                                         {errors.food_image_1 && <Error title='Main Image is required*' />}
                                                     </div>
                                                     <div className="">
@@ -595,8 +644,11 @@ export default function AddRestItem(props) {
                                                             placeholder='Upload Images...'
                                                             {...register("food_image_2")} />
                                                         {props?.button == 'edit' && props?.data?.food_image_2 != '' && props?.data?.food_image_2 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
-                                                            {props?.data?.food_image_2?.split('/').pop()}
+                                                            {!childData[1] && props?.data?.food_image_2?.split('/').pop()}
                                                         </label>}
+                                                        <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                            {childData[1]?.media_url?.split('/').pop()}
+                                                        </label>
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Image 3</label>
@@ -609,8 +661,11 @@ export default function AddRestItem(props) {
                                                             placeholder='Upload Images...'
                                                             {...register("food_image_3")} />
                                                         {props?.button == 'edit' && props?.data?.food_image_3 != '' && props?.data?.food_image_3 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
-                                                            {props?.data?.food_image_3?.split('/').pop()}
+                                                            {!childData[2] && props?.data?.food_image_3?.split('/').pop()}
                                                         </label>}
+                                                        <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                            {childData[2]?.media_url?.split('/').pop()}
+                                                        </label>
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Image 4</label>
@@ -623,8 +678,11 @@ export default function AddRestItem(props) {
                                                             placeholder='Upload Images...'
                                                             {...register("food_image_4")} />
                                                         {props?.button == 'edit' && props?.data?.food_image_4 != '' && props?.data?.food_image_4 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
-                                                            {props?.data?.food_image_4?.split('/').pop()}
+                                                            {!childData[3] && props?.data?.food_image_4?.split('/').pop()}
                                                         </label>}
+                                                        <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                            {childData[3]?.media_url?.split('/').pop()}
+                                                        </label>
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Image 5</label>
@@ -637,8 +695,11 @@ export default function AddRestItem(props) {
                                                             placeholder='Upload Images...'
                                                             {...register("food_image_5")} />
                                                         {props?.button == 'edit' && props?.data?.food_image_5 != '' && props?.data?.food_image_5 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
-                                                            {props?.data?.food_image_5?.split('/').pop()}
+                                                            {!childData[4] && props?.data?.food_image_5?.split('/').pop()}
                                                         </label>}
+                                                        <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                            {childData[4]?.media_url?.split('/').pop()}
+                                                        </label>
                                                     </div>
                                                 </>}
                                                 </div>
