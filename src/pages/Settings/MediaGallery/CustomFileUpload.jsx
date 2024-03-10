@@ -1,15 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Trash } from 'iconsax-react';
 import { useForm } from "react-hook-form";
-// import { makeRequest } from "@/app/functions/apiCall";
-// import { ADMIN_MEDIA_GALLARY, GET } from "@/app/utils/constant";
 import { ImageUpload, mediaGalleryLink } from "../../../env";
-import { addGalleryImages, getGalleryImages, deleteMediagallery} from "../../../api";
+import { addGalleryImages, getGalleryImages, deleteMediagallery, editMediagallery } from "../../../api";
 import { toast } from "react-toastify";
 import { Edit } from 'iconsax-react';
 import LoadBox from "../../../components/Loader/LoadBox";
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
-
 
 
 const CustomFileUpload = () => {
@@ -21,7 +18,6 @@ const CustomFileUpload = () => {
   const uploadFormRef = useRef(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [EditingData, setEditingData] = useState(null);
-  console.log(EditingData)
 
   const filteredImages = imageDetails.filter(data =>
     data.media_name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -67,10 +63,35 @@ const CustomFileUpload = () => {
     }
   };
 
+  const handleClear = () => {
+    setEditingData(null);
+    reset();
+  }
+
   const onSubmit = async (data) => {
     setLoader(true);
     if (EditingData) {
-
+      console.log('edit called', data?.media_url)
+      if (data?.media_url?.length > 0 && (data?.media_url != EditingData?.media_url)) {
+        await ImageUpload(
+          data?.media_url[0],
+          "mediagallery",
+          "mediagallery",
+          data?.media_name
+        );
+        EditingData.media_url = `${mediaGalleryLink}${data?.media_name}_mediagallery_${data?.media_url[0]?.name}`;
+      } else {
+        EditingData.media_url = EditingData?.media_url;
+      }
+      editMediagallery(EditingData?.media_id, EditingData).then(res => {
+        if (res?.status == 'success') {
+            fetchData();
+            toast.success('Gallery Image Edited successfully')
+            reset();
+            setLoader(false);
+            setEditingData(null);
+        }
+    })
     }
     else{
       if (data?.media_url.length != 0) {
@@ -122,7 +143,6 @@ const CustomFileUpload = () => {
                 className={`h-9 w-full text-sm rounded-xs ring-1 leading-6 file:bg-green-50 file:text-teal-500 file:font-semibold file:border-none file:px-4 file:py-1 file:mr-6 focus:outline-none hover:text-teal-500 border border-gray-300`}
                 type="file"
                 placeholder="Select Image"
-                multiple={true}
                 onChange={handleFileChange}
                 {...register("media_url")}
               />
@@ -141,7 +161,8 @@ const CustomFileUpload = () => {
                 {...register("media_name")}
               />
             </div>
-            <div className="col-span-1 flex">
+            <div className="col-span-1">
+              <div className="flex">
               {loader ? <LoadBox className="relative block w-auto px-5 transition-colors font-tb tracking-wide duration-200 py-2.5 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize" /> : <button type='submit' className={formBtn1}>Submit</button>}
               <button
                   type="button"
@@ -150,6 +171,7 @@ const CustomFileUpload = () => {
               >
                   Clear
               </button>
+              </div>
             </div>
             <div className="col-span-1">
               <input
