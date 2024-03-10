@@ -13,6 +13,7 @@ import MediaGallaryModal from '../../../pages/Settings/MediaGallery/MediaGallery
 
 
 export default function AddRestItem(props) {
+    console.log('props = ', props);
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false);
     const [FinalPriceSeller, setFinalPriceSeller] = useState([]);
@@ -93,34 +94,55 @@ export default function AddRestItem(props) {
         if (props?.title != 'Add Item') {      // for edit
             console.log('image edit')
             if (data?.food_image_1?.length > 0) {
+                console.log('food image if ')
                 await ImageUpload(data?.food_image_1[0], "restaurant", "mainImage", data?.food_name)
                 data.food_image_1 = `${restaurantLink}${data?.food_name}_mainImage_${data?.food_image_1[0]?.name}`
             } else {
-                data.food_image_1 = props?.data?.food_image_1
+                if (childData[0]?.media_url) {
+                    data.food_image_1 = childData[0]?.media_url
+                } else {
+                    data.food_image_1 = props?.data?.food_image_1
+                }
             }
             if (data?.food_image_2?.length > 0) {
                 await ImageUpload(data?.food_image_2[0], "restaurant", "img2", data?.food_name)
                 data.food_image_2 = `${restaurantLink}${data?.food_name}_img2_${data?.food_image_2[0]?.name}`
             } else {
-                data.food_image_2 = props?.data?.food_image_2
+                if (childData[1]?.media_url) {
+                    data.food_image_2 = childData[1]?.media_url
+                } else {
+                    data.food_image_2 = props?.data?.food_image_2
+                }
             }
             if (data?.food_image_3?.length > 0) {
                 await ImageUpload(data?.food_image_3[0], "restaurant", "img3", data?.food_name)
                 data.food_image_3 = `${restaurantLink}${data?.food_name}_img3_${data?.food_image_3[0]?.name}`
             } else {
-                data.food_image_3 = props?.data?.food_image_3
+                if (childData[2]?.media_url) {
+                    data.food_image_3 = childData[2]?.media_url
+                } else {
+                    data.food_image_3 = props?.data?.food_image_3
+                }
             }
             if (data?.food_image_4?.length > 0) {
                 await ImageUpload(data?.food_image_4[0], "restaurant", "img4", data?.food_name)
                 data.food_image_4 = `${restaurantLink}${data?.food_name}_img4_${data?.food_image_4[0]?.name}`
             } else {
-                data.food_image_4 = props?.data?.food_image_4
+                if (childData[3]?.media_url) {
+                    data.food_image_4 = childData[3]?.media_url
+                } else {
+                    data.food_image_4 = props?.data?.food_image_4
+                }
             }
             if (data?.food_image_5?.length > 0) {
                 await ImageUpload(data?.food_image_5[0], "restaurant", "img5", data?.food_name)
                 data.food_image_5 = `${restaurantLink}${data?.food_name}_img5_${data?.food_image_5[0]?.name}`
             } else {
-                data.food_image_5 = props?.data?.food_image_5
+                if (childData[4]?.media_url) {
+                    data.food_image_5 = childData[4]?.media_url
+                } else {
+                    data.food_image_5 = props?.data?.food_image_5
+                }
             }
             if (data?.food_video_url?.length > 0) {
                 await ImageUpload(data?.food_video_url[0], "restaurant", "img5", data?.food_name)
