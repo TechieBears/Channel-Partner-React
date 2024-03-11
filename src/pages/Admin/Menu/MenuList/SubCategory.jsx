@@ -67,7 +67,7 @@ const SubCategory = (props) => {
   // ================= action of the table ===============
   const actionBodyTemplate = (row) => (
     <div className="flex items-center gap-2">
-      <SubCategoryForm button="edit" title="Edit SubCategory" data={row} isrestaurant={props?.isrestaurant} fetchData={fetchData} restaurantSubCategories={restaurantSubCategories} />
+      <SubCategoryForm button="edit" title="Edit SubCategory" data={row} isrestaurant={props?.isrestaurant} fetchData={fetchData} restaurantSubCategories={restaurantSubCategories} category={category} />
       <button
         onClick={() => deleteData(row.subcat_id)}
         className="bg-red-100  px-1.5 py-2 rounded-sm"
