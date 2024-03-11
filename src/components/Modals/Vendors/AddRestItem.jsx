@@ -1,6 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Edit } from 'iconsax-react';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -9,16 +9,22 @@ import { ImageUpload, restaurantLink } from '../../../env';
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
 import Error from '../../Errors/Error';
 import LoadBox from '../../Loader/LoadBox';
-
+import MediaGallaryModal from '../../../pages/Settings/MediaGallery/MediaGallery';
 
 
 export default function AddRestItem(props) {
+    console.log('props = ', props);
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false);
     const [FinalPriceSeller, setFinalPriceSeller] = useState([]);
     const [FinalPriceAdmin, setFinalPriceAdmin] = useState([]);
     const { register, handleSubmit, control, watch, reset, setValue, formState: { errors } } = useForm();
     const user = useSelector((state) => state?.user?.loggedUserDetails);
+    const mediaGalleryModalRef = useRef(null);
+    const [openGallery, setopenGallery] = useState(false);
+    const [openGalleryModal, setopenGalleryModal] = useState(false);
+    const [childData, setChildData] = useState([]);
+
     const categoryField = watch('food_category');
     let subCat;
     if (props?.category && props?.subCategory) {
@@ -30,8 +36,50 @@ export default function AddRestItem(props) {
     }
     const closeBtn = () => {
         toggle();
-        reset();
+        reset()
+        setChildData([])
+        setopenGallery(false);
+        setopenGalleryModal(false);
     }
+
+    const handleSelectChange = (e) => {
+        if (e.target.value == 'true') {
+            setopenGallery(true);
+        } else {
+            setopenGallery(false);
+        }
+    };
+
+    const openMediaModal = () => {
+        setopenGalleryModal(!openGalleryModal);
+    };
+
+    // ============== fetch data from api ================
+
+
+    const receiveDataFromChild = (data) => {
+        // console.log('-- child data --', data);
+        setChildData(data);
+
+        if (data) {
+            console.log(openGallery)
+            setopenGallery(!openGallery);
+        }
+        // setValue("slide_url", childData);
+        // console.log('childData = ', childData)
+    };
+
+    const handleImageChange = async (e) => {
+        console.log('e', e)
+        const file = e.target.files[0];
+        const { width, height } = await getImageDimensions(file);
+
+        if (width === 200 && height === 200) {
+            console.log('Image dimensions are valid (200x200).');
+        } else {
+            alert('Please upload an image with dimensions 200x200.');
+        }
+    };
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -45,37 +93,58 @@ export default function AddRestItem(props) {
         console.log('data ==', data)
         if (props?.title != 'Add Item') {      // for edit
             console.log('image edit')
-            if (data?.food_image_1?.length > 0 && props?.data?.food_image_1) {
+            if (data?.food_image_1?.length > 0) {
+                console.log('food image if ')
                 await ImageUpload(data?.food_image_1[0], "restaurant", "mainImage", data?.food_name)
                 data.food_image_1 = `${restaurantLink}${data?.food_name}_mainImage_${data?.food_image_1[0]?.name}`
             } else {
-                data.food_image_1 = props?.data?.food_image_1
+                if (childData[0]?.media_url) {
+                    data.food_image_1 = childData[0]?.media_url
+                } else {
+                    data.food_image_1 = props?.data?.food_image_1
+                }
             }
-            if (data?.food_image_2?.length > 0 && props?.data?.food_image_2) {
+            if (data?.food_image_2?.length > 0) {
                 await ImageUpload(data?.food_image_2[0], "restaurant", "img2", data?.food_name)
                 data.food_image_2 = `${restaurantLink}${data?.food_name}_img2_${data?.food_image_2[0]?.name}`
             } else {
-                data.food_image_2 = props?.data?.food_image_2
+                if (childData[1]?.media_url) {
+                    data.food_image_2 = childData[1]?.media_url
+                } else {
+                    data.food_image_2 = props?.data?.food_image_2
+                }
             }
-            if (data?.food_image_3?.length > 0 && props?.data?.food_image_3) {
+            if (data?.food_image_3?.length > 0) {
                 await ImageUpload(data?.food_image_3[0], "restaurant", "img3", data?.food_name)
                 data.food_image_3 = `${restaurantLink}${data?.food_name}_img3_${data?.food_image_3[0]?.name}`
             } else {
-                data.food_image_3 = props?.data?.food_image_3
+                if (childData[2]?.media_url) {
+                    data.food_image_3 = childData[2]?.media_url
+                } else {
+                    data.food_image_3 = props?.data?.food_image_3
+                }
             }
-            if (data?.food_image_4?.length > 0 && props?.data?.food_image_4) {
+            if (data?.food_image_4?.length > 0) {
                 await ImageUpload(data?.food_image_4[0], "restaurant", "img4", data?.food_name)
                 data.food_image_4 = `${restaurantLink}${data?.food_name}_img4_${data?.food_image_4[0]?.name}`
             } else {
-                data.food_image_4 = props?.data?.food_image_4
+                if (childData[3]?.media_url) {
+                    data.food_image_4 = childData[3]?.media_url
+                } else {
+                    data.food_image_4 = props?.data?.food_image_4
+                }
             }
-            if (data?.food_image_5?.length > 0 && props?.data?.food_image_5) {
+            if (data?.food_image_5?.length > 0) {
                 await ImageUpload(data?.food_image_5[0], "restaurant", "img5", data?.food_name)
                 data.food_image_5 = `${restaurantLink}${data?.food_name}_img5_${data?.food_image_5[0]?.name}`
             } else {
-                data.food_image_5 = props?.data?.food_image_5
+                if (childData[4]?.media_url) {
+                    data.food_image_5 = childData[4]?.media_url
+                } else {
+                    data.food_image_5 = props?.data?.food_image_5
+                }
             }
-            if (data?.food_video_url?.length > 0 && props?.data?.food_video_url) {
+            if (data?.food_video_url?.length > 0) {
                 await ImageUpload(data?.food_video_url[0], "restaurant", "img5", data?.food_name)
                 data.food_video_url = `${restaurantLink}${data?.food_name}_img5_${data?.food_video_url[0]?.name}`
             } else {
@@ -83,35 +152,55 @@ export default function AddRestItem(props) {
             }
         } else {               // for create
             // console.log('image create')
-            if (data?.food_image_1?.length != 0) {
+            if (data?.food_image_1?.length > 0  && childData[0]?.media_url == '') {
                 await ImageUpload(data?.food_image_1[0], "restaurant", "mainImage", data?.food_name)
                 data.food_image_1 = `${restaurantLink}${data?.food_name}_mainImage_${data.food_image_1[0]?.name}`
             } else {
-                data.food_image_1 = ''
+                if (childData[0]?.media_url) {
+                    data.food_image_1 = childData[0]?.media_url
+                } else {
+                    data.food_image_1 = ''
+                }
             }
-            if (data?.food_image_2?.length != 0) {
+            if (data?.food_image_2?.length != 0 && childData[1]?.media_url == '') {
                 await ImageUpload(data?.food_image_2[0], "restaurant", "img2", data?.food_name)
                 data.food_image_2 = `${restaurantLink}${data?.food_name}_img2_${data.food_image_2[0]?.name}`
             } else {
-                data.food_image_2 = ''
+                if (childData[1]?.media_url) {
+                    data.food_image_2 = childData[1]?.media_url
+                } else {
+                    data.food_image_2 = ''
+                }
             }
-            if (data?.food_image_3?.length != 0) {
+            if (data?.food_image_3?.length != 0 && childData[2]?.media_url == '') {
                 await ImageUpload(data?.food_image_3[0], "restaurant", "img3", data?.food_name)
                 data.food_image_3 = `${restaurantLink}${data?.food_name}_img3_${data.food_image_3[0]?.name}`
             } else {
-                data.food_image_3 = ''
+                 if (childData[2]?.media_url) {
+                    data.food_image_3 = childData[2]?.media_url
+                } else {
+                    data.food_image_3 = ''
+                }
             }
-            if (data?.food_image_4?.length != 0) {
+            if (data?.food_image_4?.length != 0 && childData[3]?.media_url == '') {
                 await ImageUpload(data?.food_image_4[0], "restaurant", "img4", data?.food_name)
                 data.food_image_4 = `${restaurantLink}${data?.food_name}_img4_${data.food_image_4[0]?.name}`
             } else {
-                data.food_image_4 = ''
+                 if (childData[3]?.media_url) {
+                    data.food_image_4 = childData[3]?.media_url
+                } else {
+                    data.food_image_4 = ''
+                }
             }
-            if (data?.food_image_5?.length != 0) {
+            if (data?.food_image_5?.length != 0 && childData[4]?.media_url == '') {
                 await ImageUpload(data?.food_image_5[0], "restaurant", "img5", data?.food_name)
                 data.food_image_5 = `${restaurantLink}${data?.food_name}_img5_${data.food_image_5[0]?.name}`
             } else {
-                data.food_image_5 = ''
+                 if (childData[4]?.media_url) {
+                    data.food_image_5 = childData[4]?.media_url
+                } else {
+                    data.food_image_5 = ''
+                }
             }
             if (data?.food_video_url?.length != 0) {
                 await ImageUpload(data?.food_video_url[0], "restaurant", "img5", data?.food_name)
@@ -131,6 +220,9 @@ export default function AddRestItem(props) {
                     toggle();
                     setLoader(false);
                     reset();
+                    setopenGallery(false);
+                    setopenGalleryModal(false);
+                    setChildData([])
                 }
             })
         } else {
@@ -142,6 +234,9 @@ export default function AddRestItem(props) {
                     toggle();
                     setLoader(false);
                     reset();
+                    setopenGallery(false);
+                    setopenGalleryModal(false);
+                    setChildData([])
                 }
             })
         }
@@ -171,6 +266,13 @@ export default function AddRestItem(props) {
                 'food_isactive': props?.data?.food_isactive,
                 'food_veg_nonveg': props?.data?.food_veg_nonveg,
                 'menu_type': props?.data?.menu_type,
+                'food_video_url': props?.row?.food_video_url,
+                'food_image_1': props?.row?.food_image_1,
+                'food_image_2': props?.row?.food_image_2,
+                'food_image_3': props?.row?.food_image_3,
+                'food_image_4': props?.row?.food_image_4,
+                'food_image_5': props?.row?.food_image_5
+
             })
         } else {
             if (props?.button == 'edit') {
@@ -185,6 +287,12 @@ export default function AddRestItem(props) {
                     'food_isactive': props?.data.food_isactive,
                     'food_veg_nonveg': props?.data.food_veg_nonveg,
                     'menu_type': props?.data?.menu_type,
+                    'food_video_url': props?.row?.food_video_url,
+                    'food_image_1': props?.row?.food_image_1,
+                    'food_image_2': props?.row?.food_image_2,
+                    'food_image_3': props?.row?.food_image_3,
+                    'food_image_4': props?.row?.food_image_4,
+                    'food_image_5': props?.row?.food_image_5
                 })
             }
         }
@@ -420,13 +528,15 @@ export default function AddRestItem(props) {
                                                         <label className={labelClass}>Veg or Non-Veg*</label>
                                                         <select
                                                             className={inputClass}
-                                                            disabled={(user?.role == 'admin' || props?.details?.veg_nonveg == 'Veg')}
+                                                            disabled={(user?.role == 'admin')}
                                                             {...register('food_veg_nonveg', { required: true })}
+                                                            value={props?.details?.veg_nonveg}
                                                         >
                                                             <option value='' >Select</option>
                                                             <option value='Both'>Both</option>
-                                                            <option value='Veg' selected={props?.details?.veg_nonveg == 'Veg'}>Veg</option>
+                                                            <option value='Veg'>Veg</option>
                                                             <option value='Non-Veg'>Non-Veg</option>
+                                                            {/* <option value='Veg' selected={props?.details?.veg_nonveg == 'Veg'}>Veg</option> */}
                                                         </select>
                                                         {errors?.food_veg_nonveg && <Error title='This is required' />}
                                                     </div>
@@ -492,6 +602,37 @@ export default function AddRestItem(props) {
                                                         </div>
                                                     }
                                                     <p className='text-xl font-semibold md:col-span-1 lg:col-span-4'>Food Images</p>
+                                                    {user?.role != 'admin' && user?.role != 'franchise' && <div className="">
+                                                        <label className={labelClass}>
+                                                            Check Image Option*
+                                                        </label>
+                                                        <select
+                                                            name=""
+                                                            disabled={user?.role == 'admin' || user?.role == 'franchise'}
+                                                            onChange={handleSelectChange}
+                                                            className={`${inputClass} !bg-slate-100`}
+                                                        >
+                                                            <option value="false">I have a own Images</option>
+                                                            <option value="true">I Don't have a Images</option>
+                                                        </select>
+                                                    </div>}
+                                                    {openGallery && (
+                                                        <div className="w-full mt-3 mb-2">
+                                                            <span className={`cursor-pointer w-full ${formBtn1}`} onClick={openMediaModal}>
+                                                                Open Sample Images
+                                                            </span>
+                                                            <input
+                                                                type="text"
+                                                                className="hidden"
+                                                            />
+                                                            {childData == undefined || childData == '' && (
+                                                                <Error title="Main Image is required*" />
+                                                            )}
+                                                        </div>
+                                                    )}
+
+                                                {!openGallery &&
+                                                <>
                                                     <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Main Image*</label>
                                                         <input className={fileinput}
@@ -502,11 +643,15 @@ export default function AddRestItem(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             // onChange={(e) => handleImageChange(e)}
-                                                            {...register("food_image_1",
-                                                                { required: props.button == 'edit' ? false : true })} />
+                                                            {...register("food_image_1",{ 
+                                                                required: props.button == 'edit' && (!childData[0]?.media_url || childData[0]?.media_url == '') && !props?.data?.food_image_1
+                                                              })}  />
                                                         {props?.button == 'edit' && props?.data?.food_image_1 != '' && props?.data?.food_image_1 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
-                                                            {props?.data?.food_image_1?.split('/').pop()}
+                                                             {!childData[0] && props?.data?.food_image_1?.split('/').pop()}
                                                         </label>}
+                                                        <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                            {childData[0]?.media_url?.split('/').pop()}
+                                                        </label>
                                                         {errors.food_image_1 && <Error title='Main Image is required*' />}
                                                     </div>
                                                     <div className="">
@@ -520,8 +665,11 @@ export default function AddRestItem(props) {
                                                             placeholder='Upload Images...'
                                                             {...register("food_image_2")} />
                                                         {props?.button == 'edit' && props?.data?.food_image_2 != '' && props?.data?.food_image_2 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
-                                                            {props?.data?.food_image_2?.split('/').pop()}
+                                                            {!childData[1] && props?.data?.food_image_2?.split('/').pop()}
                                                         </label>}
+                                                        <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                            {childData[1]?.media_url?.split('/').pop()}
+                                                        </label>
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Image 3</label>
@@ -534,8 +682,11 @@ export default function AddRestItem(props) {
                                                             placeholder='Upload Images...'
                                                             {...register("food_image_3")} />
                                                         {props?.button == 'edit' && props?.data?.food_image_3 != '' && props?.data?.food_image_3 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
-                                                            {props?.data?.food_image_3?.split('/').pop()}
+                                                            {!childData[2] && props?.data?.food_image_3?.split('/').pop()}
                                                         </label>}
+                                                        <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                            {childData[2]?.media_url?.split('/').pop()}
+                                                        </label>
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Image 4</label>
@@ -548,8 +699,11 @@ export default function AddRestItem(props) {
                                                             placeholder='Upload Images...'
                                                             {...register("food_image_4")} />
                                                         {props?.button == 'edit' && props?.data?.food_image_4 != '' && props?.data?.food_image_4 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
-                                                            {props?.data?.food_image_4?.split('/').pop()}
+                                                            {!childData[3] && props?.data?.food_image_4?.split('/').pop()}
                                                         </label>}
+                                                        <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                            {childData[3]?.media_url?.split('/').pop()}
+                                                        </label>
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass} htmlFor="main_input">Image 5</label>
@@ -562,9 +716,13 @@ export default function AddRestItem(props) {
                                                             placeholder='Upload Images...'
                                                             {...register("food_image_5")} />
                                                         {props?.button == 'edit' && props?.data?.food_image_5 != '' && props?.data?.food_image_5 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
-                                                            {props?.data?.food_image_5?.split('/').pop()}
+                                                            {!childData[4] && props?.data?.food_image_5?.split('/').pop()}
                                                         </label>}
+                                                        <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                            {childData[4]?.media_url?.split('/').pop()}
+                                                        </label>
                                                     </div>
+                                                </>}
                                                 </div>
                                             </div>
                                             <footer className="flex justify-end px-4 py-2 space-x-3 bg-white">
@@ -572,6 +730,17 @@ export default function AddRestItem(props) {
                                                 <button type='button' className={formBtn2} onClick={closeBtn}>close</button>
                                             </footer>
                                         </form>
+                                        {openGalleryModal && <div className="hidden">
+                                            <MediaGallaryModal
+                                                ref={mediaGalleryModalRef}
+                                                id="mediaGalleryModal"
+                                                className="hidden"
+                                                title="Upload Image"
+                                                imageDetails={props?.ImageDetails}
+                                                setopenGalleryModal={openMediaModal}
+                                                sendDataToParent={receiveDataFromChild}
+                                            />
+                                        </div>}
                                     </div>
                                 </Dialog.Panel>
                             </Transition.Child>

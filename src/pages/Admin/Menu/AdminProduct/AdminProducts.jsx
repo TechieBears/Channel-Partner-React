@@ -24,7 +24,6 @@ const AdminProduct = (props) => {
     const [vendorOptions, setVendorOptions] = useState()
     const [categoryOptions, setCategoryOptions] = useState()
     const [subcategoryOptions, setSubCategoryOptions] = useState()
-    const [imageDetails, setImageDetails] = useState([]);
     const [category, setCategory] = useState([]);
     const [subCategory, setsubCategory] = useState([]);
     const GetFranchiseeData = () => {
@@ -59,16 +58,21 @@ const AdminProduct = (props) => {
         }
     }
 
-    // =================== Fetch Media Gallery Images =================
-    const fetchData = () => {
+    const GetCategory = () => {
         try {
-            getGalleryImages().then((res) => {
-                setImageDetails(res);
-            });
-        } catch (err) {
-            console.log("error", err);
+            getCategory().then((res) => {
+                if (res?.length > 0) {
+                    const newData = res.map((data) => ({
+                        label: data?.category_name,
+                        value: data?.id,
+                    }))
+                    setCategoryOptions(newData)
+                }
+            })
+        } catch (error) {
+            console.log("🚀 ~ file: AdminProducts.jsx:66 ~ GetCategory ~ error:", error)
         }
-    };
+    }
 
     const getProducts = () => {
         try {
@@ -162,7 +166,7 @@ const AdminProduct = (props) => {
     useEffect(() => {
         GetFranchiseeData()
         GetVendorData()
-        fetchData();
+        GetCategory()
     }, [])
 
     const {
@@ -220,7 +224,7 @@ const AdminProduct = (props) => {
             <Eye size={24} className='text-sky-400' />
         </Link>
         {/* <ViewProduct /> */}
-        <AddProduct title='Edit Product' imageDetails={imageDetails} row={row} getProducts={getProducts} category={category} subCategory={subCategory} />
+        <AddProduct title='Edit Product' row={row} getProducts={getProducts} category={category} subCategory={subCategory} />
         <button className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
             <Trash size={24} className='text-red-400' />
         </button>

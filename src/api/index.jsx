@@ -489,6 +489,16 @@ export const addGalleryImages = async (data) => {
         console.log('error creating product', error)
     }
 }
+export const editMediagallery = async (id, data) => {
+    const url = `${environment.baseUrl}app/edit_media/${id}`;
+    try {
+        const response = await axios.put(url, data)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
 export const getGalleryImages = async (data) => {
     const url = `${environment.baseUrl}app/create_media`
     try {
@@ -498,6 +508,19 @@ export const getGalleryImages = async (data) => {
         console.log('error creating product', error)
     }
 }
+export const deleteMediagallery = async (id) => {
+    const url = `${environment.baseUrl}app/edit_media/${id}`;
+    try {
+        const response = await axios.delete(url)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
+
+
 
 /* =============== User API ================= */
 
