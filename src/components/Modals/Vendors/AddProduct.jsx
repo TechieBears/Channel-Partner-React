@@ -361,8 +361,7 @@ const AddProduct = (props) => {
                 <button className='items-center p-1 bg-yellow-100 rounded-xl hover:bg-yellow-200' onClick={() => setOpen(true)}>
                     <Edit size={24} className='text-yellow-400' />
                 </button> :
-                <button className={`${formBtn1} flex`} onClick={() => setOpen(true)}>
-                    <Add className='text-white' />
+                <button className={`${formBtn1}`} onClick={() => setOpen(true)}>
                     {props?.title}
                 </button>}
             <Transition appear show={isOpen} as={Fragment}>
