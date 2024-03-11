@@ -208,8 +208,6 @@ const AdminProduct = (props) => {
 
     useEffect(() => {
         GetFranchiseeData()
-        GetVendorData()
-        GetCategory()
         fetchData();
 
     }, [])
@@ -227,7 +225,6 @@ const AdminProduct = (props) => {
         const { product_name, product_msbcode, franchise_msbcode, vendor_msbcode, product_category, product_subcategory } = data
         if (product_name != '' || product_msbcode != '' || franchise_msbcode != '' || franchise_msbcode != undefined || vendor_msbcode != '' || vendor_msbcode != undefined || product_category != '' || product_category != undefined || product_subcategory != '' || product_subcategory != undefined) {
             try {
-                // console.log("🚀 ~ file: AdminProducts.jsx:206 ~ onSubmit ~  props?.isrestaurant:", props?.isrestaurant)
 
                 let restauranturl = `${environment.baseUrl}app/all_fooditems?product_name=${product_name}&product_msbcode=${product_msbcode}&franchise_msbcode=${franchise_msbcode?.value ? franchise_msbcode?.value : ''}&vendor_msbcode=${vendor_msbcode?.value ? vendor_msbcode?.value : ''}&product_category=${product_category?.value ? product_category?.value : ''}&product_subcategory=${product_subcategory?.value ? product_subcategory?.value : ''}`
 
