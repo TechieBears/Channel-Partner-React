@@ -13,7 +13,7 @@ export const Admin = [
         link: '/menu',
         subMenu: [
             {
-                title: 'Menu',
+                title: 'Vendor Menu',
                 icon: <Menu size="24" />,
                 link: '/menu',
             },

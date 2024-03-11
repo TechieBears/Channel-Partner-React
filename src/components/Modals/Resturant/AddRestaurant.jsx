@@ -81,6 +81,15 @@ export default function AddRestaurant(props) {
             });
         }
     }, []);
+    useEffect(() => {
+        if(LoggedUserDetails?.role === 'franchise'){
+            reset({
+                pincode: LoggedUserDetails?.pincode,
+                city: LoggedUserDetails?.city,
+                state: LoggedUserDetails?.state,
+            })
+        }
+    },[LoggedUserDetails])
     return (
         <>
             {
@@ -221,6 +230,7 @@ export default function AddRestaurant(props) {
                                                             type="text"
                                                             placeholder='City'
                                                             className={inputClass}
+                                                            readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
                                                             {...register('city', { required: true })}
                                                         />
                                                         {errors.city && <Error title='Restaurant City is Required*' />}
@@ -233,6 +243,7 @@ export default function AddRestaurant(props) {
                                                             type="text"
                                                             placeholder='State'
                                                             className={inputClass}
+                                                            readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
                                                             {...register('state', { required: true })}
                                                         />
                                                         {errors.state && <Error title='Restaurant State is Required*' />}
@@ -258,6 +269,7 @@ export default function AddRestaurant(props) {
                                                             maxLength={6}
                                                             placeholder='PIN Code'
                                                             className={inputClass}
+                                                            readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
                                                             {...register('pincode', { required: "Pincode is required*", validate: validatePIN })}
                                                         />
                                                         {errors.pincode && <Error title={errors?.pincode?.message} />}
