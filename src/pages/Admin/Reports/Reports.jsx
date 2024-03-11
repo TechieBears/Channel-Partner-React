@@ -1,22 +1,19 @@
+import { Eye } from "iconsax-react";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { formBtn1, formBtn2, inputClass } from "../../../utils/CustomClass";
-import Table from "../../../components/Table/Table";
 import { Link } from "react-router-dom";
-import { Eye, Trash } from "iconsax-react";
+import Table from "../../../components/Table/Table";
+import { formBtn1, formBtn2, inputClass } from "../../../utils/CustomClass";
 // import CreateUserForm from '../../../components/Modals/UserModals/CreateUserForm';
-import { delUser, editUser, getUser } from "../../../api";
+import { editUser, getUser } from "../../../api";
 // import userImg from '../../../assets/user.webp';
-import Switch from "react-js-switch";
 import axios from "axios";
+import Switch from "react-js-switch";
+import { useDispatch, useSelector } from "react-redux";
+import { Tab, TabList, Tabs } from 'react-tabs';
 import { toast } from "react-toastify";
 import { environment } from "../../../env";
-import { useDispatch, useSelector } from "react-redux";
 import { setUserList } from "../../../redux/Slices/userSlice";
-import DeleteModal from "../../../components/Modals/DeleteModal/DeleteModal";
-import AddDriverFrom from "../../../components/Modals/DriverModals/AddDriverForm";
-import DriverTipForm from "../../../components/Modals/DriverModals/DriverTipForm";
-import { Tab, TabList, Tabs, TabPanel } from 'react-tabs'
 
 
 function Reports() {
@@ -66,17 +63,6 @@ function Reports() {
     setOpen(!open);
     setDelId(id);
   };
-  const deleteUser = () => {
-    delUser(delId).then((res) => {
-      if (res.code == 2002) {
-        toast.success("User deleted!!");
-        fetchData();
-        setOpen(!open);
-      } else {
-        console.log("err");
-      }
-    });
-  };
 
   // =================== table action ========================
   const actionBodyTemplate = (row) => (
@@ -101,8 +87,8 @@ function Reports() {
         <img
           src={
             row?.profile == null ||
-            row?.profile == "" ||
-            row?.profile == undefined
+              row?.profile == "" ||
+              row?.profile == undefined
               ? userImg
               : row?.profile
           }
@@ -116,13 +102,12 @@ function Reports() {
   // =================== table user verify column  ========================
   const activeActionsRole = (rowData) => (
     <h6
-      className={`${
-        rowData?.role == "admin"
+      className={`${rowData?.role == "admin"
           ? "bg-orange-100 text-sky-400"
           : rowData?.role !== "user"
-          ? "bg-red-100 text-red-500"
-          : "bg-green-100 text-green-500"
-      } py-2 px-5 text-center capitalize rounded-full`}
+            ? "bg-red-100 text-red-500"
+            : "bg-green-100 text-green-500"
+        } py-2 px-5 text-center capitalize rounded-full`}
     >
       {rowData?.role}
     </h6>
@@ -262,38 +247,34 @@ function Reports() {
         >
           <TabList className="flex mx-6 space-x-4 border-b">
             <Tab
-              className={`p-3 cursor-pointer font-tbPop font-medium   ${
-                selectedTab === 0
+              className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 0
                   ? "text-sky-500  border-b-2 border-sky-400 outline-0"
                   : "text-gray-500 border-b"
-              }`}
+                }`}
             >
               User report
             </Tab>
             <Tab
-              className={`p-3 cursor-pointer font-tbPop font-medium   ${
-                selectedTab === 1
+              className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 1
                   ? "text-sky-500  border-b-2 border-sky-400 outline-0"
                   : "text-gray-500 border-b"
-              }`}
+                }`}
             >
               Order Report
             </Tab>
             <Tab
-              className={`p-3 cursor-pointer font-tbPop font-medium   ${
-                selectedTab === 2
+              className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 2
                   ? "text-sky-500  border-b-2 border-sky-400 outline-0"
                   : "text-gray-500 border-b"
-              }`}
+                }`}
             >
               Restaurent Report
             </Tab>
             <Tab
-              className={`p-3 cursor-pointer font-tbPop font-medium   ${
-                selectedTab === 3
+              className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 3
                   ? "text-sky-500  border-b-2 border-sky-400 outline-0"
                   : "text-gray-500 border-b"
-              }`}
+                }`}
             >
               Driver Report
             </Tab>
@@ -312,14 +293,6 @@ function Reports() {
           </TabPanel> */}
         </Tabs>
       </div>
-
-      <DeleteModal
-        title="Delete Register User"
-        deleteBtn={deleteUser}
-        toggleModalBtn={toggleModalBtn}
-        description="Are you sure you want to delete this User"
-        open={open}
-      />
       {/* ========================= user fileter ======================= */}
       <div className="p-4 bg-white sm:m-5 rounded-xl">
         <form

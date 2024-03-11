@@ -336,7 +336,7 @@ const AdminProduct = (props) => {
                 <Switch
                     value={row?.product_isverified_byadmin}
                     onChange={() => verifyActions(row)}
-                    disabled={row?.markup_percentage == 0 || row?.markup_percentage == undefined ? true : false}
+                    disabled={LoggedUserDetails?.role == 'franchise' || row?.markup_percentage == 0 || row?.markup_percentage == undefined ? true : false}
                     size={50}
                     backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
                     borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
@@ -351,7 +351,7 @@ const AdminProduct = (props) => {
                 <Switch
                     value={row?.featured}
                     onChange={() => verifyFeatured(row)}
-                    disabled={row?.markup_percentage == 0 || row?.markup_percentage == undefined ? true : false}
+                    disabled={LoggedUserDetails?.role == 'franchise' || row?.markup_percentage == 0 || row?.markup_percentage == undefined ? true : false}
                     size={50}
                     backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
                     borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
@@ -366,7 +366,7 @@ const AdminProduct = (props) => {
                 <Switch
                     value={row?.food_isverified_byadmin}
                     onChange={() => itemVerifyAdmin(row)}
-                    disabled={row?.markup_percentage == 0 || row?.markup_percentage == undefined ? true : false}
+                    disabled={LoggedUserDetails?.role == 'franchise' || row?.markup_percentage == 0 || row?.markup_percentage == undefined ? true : false}
                     size={50}
                     backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
                     borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
@@ -382,7 +382,7 @@ const AdminProduct = (props) => {
                 <Switch
                     value={row?.featured}
                     onChange={() => featureItem(row)}
-                    disabled={row?.markup_percentage == 0 || row?.markup_percentage == undefined ? true : false}
+                    disabled={LoggedUserDetails?.role == 'franchise' || row?.markup_percentage == 0 || row?.markup_percentage == undefined ? true : false}
                     size={50}
                     backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
                     borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
@@ -614,7 +614,7 @@ const AdminProduct = (props) => {
                     <h2 className='col-span-5 text-xl font-semibold'>{props?.isrestaurant ? "Food Items" : "Product List"}</h2>
                 </div>
                 <div className='mt-4'>
-                    {props?.isrestaurant ? <Table data={shopProducts} columns={LoggedUserDetails?.role == 'franchise' ? restaurantColumns : FoodItemColumns} /> :
+                    {props?.isrestaurant ? <Table data={shopProducts} columns={FoodItemColumns} /> :
                         <Table data={shopProducts} columns={LoggedUserDetails?.role == 'franchise' ? restaurantColumns : ProductColumns} />}
                 </div>
             </div>

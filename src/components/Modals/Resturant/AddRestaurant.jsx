@@ -23,18 +23,19 @@ export default function AddRestaurant(props) {
         toggle();
         reset()
     }
-    const categories = ['Asian', 'Mexican', 'Italian', 'Russian cussion', 'Spanish', 'Comfort', 'American', 'North Indian', 'South Indian']
-
     const onSubmit = async (data) => {
-        // let additionalData;
-        // if (LoggedUserDetails?.role == "franchise") {
-        //     additionalData = { 'created_by': LoggedUserDetails?.userid }
-        // }
-        // let updateData = { ...data, "vendor_type": 'restaurant', ...additionalData }
-        let updateData = {
-            ...data,
-            "vendor_type": 'restaurant',
-            'created_by': LoggedUserDetails?.userid
+        let updateData
+        if (LoggedUserDetails?.role == 'franchise') {
+            updateData = {
+                ...data,
+                "vendor_type": 'restaurant',
+                'created_by': LoggedUserDetails?.userid
+            }
+        } else {
+            updateData = {
+                ...data,
+                "vendor_type": 'restaurant',
+            }
         }
         if (props?.button == 'edit') {
             try {

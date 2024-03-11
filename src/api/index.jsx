@@ -557,31 +557,6 @@ export const editUser = async (id, data) => {
     }
 };
 
-export const delUser = async (id) => {
-    const url = `${environment.baseUrl}edit-user/${id}`;
-    try {
-        const response = await axios.delete(url)
-        return response.data
-    }
-    catch (err) {
-        console.log(err);
-    }
-};
-
-//============================================ Movable Product ===============================
-
-export const getMovableProduct = async () => {
-    const url = `${environment.baseUrl}movable-product`;
-    try {
-        const response = await axios.get(url)
-        return response.data
-    }
-    catch (err) {
-        console.log(err);
-    }
-};
-
-
 export const editCategory = async (id, data) => {
     const url = `${environment.baseUrl}app/edit-category/${id}`;
     try {
@@ -921,7 +896,6 @@ export const editVendorProduct = async (id, data) => {
     const url = `${environment.baseUrl}vendor/edit_product/${id}`;
     try {
         const response = await axios.put(url, data);
-        console.log('responseeeeeeeeeeeeeeeeeeeeeeeee', response)
         return response.data
     } catch (err) {
         console.log('error while getting vendor by id', err)
@@ -932,7 +906,6 @@ export const editRestaurantFood = async (id, data) => {
     const url = `${environment.baseUrl}vendor/edit_restaurant_food/${id}`;
     try {
         const response = await axios.put(url, data);
-        // console.log('responseeeeeeeeeeeeeeeeeeeeeeeee', response)
         return response.data
     } catch (err) {
         console.log('error while getting vendor by id', err)
@@ -946,7 +919,6 @@ export const editAdminFinalProduct = async (id, data) => {
     const url = `${environment.baseUrl}vendor/edit_product_admin/${id}`;
     try {
         const response = await axios.put(url, data);
-        // console.log('response = ', response)
         return response.data
     } catch (err) {
         console.log('error while getting vendor by id', err)
@@ -958,7 +930,6 @@ export const editAdminFinalFood = async (id, data) => {
     const url = `${environment.baseUrl}vendor/edit_food_admin/${id}`;
     try {
         const response = await axios.put(url, data);
-        console.log('response = ', response)
         return response.data
     } catch (err) {
         console.log('error while getting vendor by id', err)
