@@ -212,7 +212,7 @@ const AddProduct = (props) => {
                     data.product_image_2 = ''
                 }
             }
-            if (data?.product_image_3?.length != 0 (childData[2]?.media_url == undefined || childData[2]?.media_url == '')) {
+            if (data?.product_image_3?.length != 0 && (childData[2]?.media_url == undefined || childData[2]?.media_url == '')) {
                 await ImageUpload(data?.product_image_3[0], "shopProduct", "Image3", data?.product_name)
                 data.product_image_3 = `${productLink}${data?.product_name}_Image3_${data?.product_image_3[0]?.name}`
             } else {
