@@ -23,7 +23,11 @@ const AddProduct = (props) => {
     const [openGallery, setopenGallery] = useState(false);
     const [openGalleryModal, setopenGalleryModal] = useState(false);
     const [childData, setChildData] = useState([]);
-
+    let CatField = watch('product_category');
+    let subCatField
+    if (props?.category && props?.subCategory) {
+        subCatField = props?.subCategory.filter(item => item?.category == CatField);
+    }
     const closeBtn = () => {
         toggle();
         reset()
@@ -426,7 +430,7 @@ const AddProduct = (props) => {
                                                             {props?.category?.map(item =>
                                                                 // {
                                                                 // console.log(item?.id)
-                                                                <option key={item?.id} value={item?.id}>{item?.category_name}</option>
+                                                                <option key={item?.value} value={item?.value}>{item?.label}</option>
                                                                 // }
                                                             )}
                                                         </select>
@@ -443,7 +447,7 @@ const AddProduct = (props) => {
                                                         >
                                                             <option value=''>Select</option>
                                                             {
-                                                                props?.subCategory?.map(item => (
+                                                                subCatField?.map(item => (
                                                                     <option key={item?.subcat_id} value={item?.subcat_id} >{item?.subcat_name}</option>
                                                                 ))
                                                             }
