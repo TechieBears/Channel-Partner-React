@@ -229,6 +229,16 @@ function AddDriverFrom(props) {
         FranchiseeDetails()
     }, [])
 
+    useEffect(() => {
+        if (LoggedUserDetails?.role === 'franchise') {
+            reset({
+                pincode: LoggedUserDetails?.pincode,
+                state: LoggedUserDetails?.state,
+                city: LoggedUserDetails?.city,
+            })
+        }
+    }, [LoggedUserDetails])
+
     return (
         <>
 
@@ -387,6 +397,7 @@ function AddDriverFrom(props) {
                                                             maxLength={6}
                                                             placeholder='Pincode'
                                                             className={inputClass}
+                                                            readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
                                                             {...register('pincode', { required: "Pincode is required*", validate: validatePIN })}
                                                         />
                                                         {errors.pincode && <Error title={errors?.pincode?.message} />}
@@ -400,6 +411,7 @@ function AddDriverFrom(props) {
                                                             // maxLength={6}
                                                             placeholder='City'
                                                             className={inputClass}
+                                                            readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
                                                             {...register('city', { required: true, })}
                                                         />
                                                         {errors.city && <Error title="City is required*" />}
@@ -413,6 +425,7 @@ function AddDriverFrom(props) {
                                                             // maxLength={6}
                                                             placeholder='State'
                                                             className={inputClass}
+                                                            readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
                                                             {...register('state', { required: true, })}
                                                         />
                                                         {errors.state && <Error title="State is required*" />}
