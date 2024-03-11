@@ -347,11 +347,10 @@ export default function AddVendors(props) {
                                                                 type="text"
                                                                 placeholder="Password"
                                                                 className={inputClass}
-                                                                {...register("password")}
+                                                                {...register("password", { required: true, pattern: /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).{8,}$/ })}
                                                             />
+                                                            {errors.password && <Error title={errors?.password ? 'Password should contain one special character and 8 digit long and must be combination of number and alphabets' : 'Password is required'} />}
                                                         </div>}
-
-
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             Date Of Birth(DOB)*
