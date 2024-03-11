@@ -341,9 +341,8 @@ const Step3 = (props) => {
     return (
         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 customBox">
             <p className='text-lg font-semibold md:col-span-2 lg:col-span-3'>Upload Images</p>
-            <p className='text-base font-normal md:col-span-2 lg:col-span-3'>Ambience Images</p>
             <div className="">
-                <label className={labelClass} htmlFor="main_input">Image 1 *</label>
+                <label className={labelClass} htmlFor="main_input">Ambience Images*</label>
                 <input className={fileinput}
                     id="main_input"
                     type='file'
@@ -357,7 +356,7 @@ const Step3 = (props) => {
                 {errors.ambience_image && <Error title='Image is required*' />}
             </div>
             <div className="">
-                <label className={labelClass} htmlFor="main_input">Image 2*</label>
+                <label className={labelClass} htmlFor="main_input">Shop Image*</label>
                 <input className={fileinput}
                     id="main_input"
                     type='file'
@@ -653,7 +652,7 @@ export default function DashboardForm(props) {
                 "restaurant_type": props?.data?.restaurant_type,
                 "shop_start_time": props?.data?.vendor?.shop_start_time,
                 "shop_end_time": props?.data?.vendor?.shop_end_time,
-                "type_of_cuisine": JSON.parse(props?.data?.type_of_cuisine.replace(/'/g, '"')),
+                "type_of_cuisine": JSON.parse(props?.data?.type_of_cuisine?.replace(/'/g, '"')),
                 "ambience_image": props?.data?.ambience_image,
                 "shop_image": props?.data?.vendor?.shop_image,
                 "pan_card": props?.data?.vendor?.pan_card,
@@ -912,7 +911,7 @@ export default function DashboardForm(props) {
                 "restaurant_type": props?.data?.restaurant_type,
                 "shop_start_time": formattedStartTime,
                 "shop_end_time": formattedEndTime,
-                "type_of_cuisine": JSON.parse(props?.data?.type_of_cuisine.replace(/'/g, '"')),
+                "type_of_cuisine": JSON.parse(props?.data?.type_of_cuisine?.replace(/'/g, '"')),
                 "ambience_image": props?.data?.ambience_image,
                 "shop_image": props?.data?.vendor?.shop_image,
                 "pan_card": props?.data?.vendor?.pan_card,
