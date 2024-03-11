@@ -44,7 +44,7 @@ export default function FoodDetails() {
                     <div className='p-4 '>
                         <div className='mt-2'>
                             <p className='text-2xl font-semibold'>{food?.food_name}</p>
-                            <div className='grid grid-cols-3'>
+                            <div className='grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4'>
                                 <div className='items-center p-2 text-sm '>
                                     <p className='text-lg font-semibold'>MSBS Code</p>
                                     <p className='text-sm text-gray-600'>{food?.food_msbcode ? food?.food_msbcode : '------'}</p>
@@ -66,7 +66,7 @@ export default function FoodDetails() {
                     </div>
                     <div className='p-4 space-y-2 '>
                         <p className='text-2xl font-semibold'>Product Details</p>
-                        <div className='grid grid-cols-4 gap-5'>
+                        <div className='grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5'>
                             <div>
                                 <p className='text-lg font-semibold'>Category</p>
                                 <p className='text-sm text-gray-600'>{food?.food_category?.category_name ? food?.food_category?.category_name : '------'}</p>
@@ -91,7 +91,7 @@ export default function FoodDetails() {
                     </div>
                     <div className='p-4 space-y-2 '>
                         <p className='text-2xl font-semibold'>Verification Details</p>
-                        <div className='grid grid-cols-4 gap-5'>
+                        <div className='grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5'>
                             <div>
                                 <p className='text-lg font-semibold'>Admin </p>
                                 <p className='text-sm text-gray-600'>{food?.food_isverified_byadmin == true ? 'Verified' : 'Verification Pending'}</p>

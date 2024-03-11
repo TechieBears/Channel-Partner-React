@@ -91,9 +91,9 @@ export default function Restaurant() {
     })
     toast.success("Filters clear successfully")
     setData()
-    if (user?.role === 'admin') {
+    if (user?.role == 'admin') {
       getAllRestaurant()
-    } else if (user?.role === 'franchise') {
+    } else if (user?.role == 'franchise') {
       getFranchiseRestaurants()
     }
   }
@@ -365,7 +365,7 @@ export default function Restaurant() {
           </div>
           <AddRestaurant
             title="Add Restaurant"
-            getAllRestaurant={user?.role == 'admin' ? getAllRestaurant : getFranchRestaurant}
+            getAllRestaurant={user?.role == 'admin' ? getAllRestaurant : getFranchiseRestaurants}
             id={user?.userid}
           />
         </div>

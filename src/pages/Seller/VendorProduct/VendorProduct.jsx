@@ -61,14 +61,14 @@ const VendorProduct = () => {
         <Link to={`/product-list/product-details/${row?.product_id}`} state={row} className='items-center p-1 bg-sky-100 rounded-xl hover:bg-sky-200'>
             <Eye size={24} className='text-sky-400' />
         </Link>
-        <AddProduct title='Edit Product' row={row} getProducts={getProducts} ImageDetails={ImageDetails}/>
+        <AddProduct title='Edit Product' row={row} getProducts={getProducts} ImageDetails={ImageDetails} />
         <button className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
             <Trash size={24} className='text-red-400' />
         </button>
     </div>
     //======================= Table =======================
     const restAction = (row) => <div className='flex space-x-2'>
-        <Link to={`/food-list/food-details/${row?.product_id}`} state={row} className='items-center p-1 bg-sky-100 rounded-xl hover:bg-sky-200'>
+        <Link to={`/food-list/food-details/${row?.food_id}`} state={row} className='items-center p-1 bg-sky-100 rounded-xl hover:bg-sky-200'>
             <Eye size={24} className='text-sky-400' />
         </Link>
         <AddRestItem title='edit' button='edit' data={row} getRestFood={getRestFood} category={category} subCategory={subCategory} ImageDetails={ImageDetails} />
@@ -164,15 +164,15 @@ const VendorProduct = () => {
         })
     }
 
-        
+
     // =================== fetching data ========================
     const fetchData = () => {
         try {
-        getGalleryImages().then((res) => {
-            setImageDetails(res);
-        });
+            getGalleryImages().then((res) => {
+                setImageDetails(res);
+            });
         } catch (err) {
-        console.log("error", err);
+            console.log("error", err);
         }
     };
 

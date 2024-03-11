@@ -13,7 +13,7 @@ import MediaGallaryModal from '../../../pages/Settings/MediaGallery/MediaGallery
 
 
 export default function AddRestItem(props) {
-    console.log('props = ', props);
+    // console.log('props = ', props?.data);
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false);
     const [FinalPriceSeller, setFinalPriceSeller] = useState([]);
@@ -152,7 +152,7 @@ export default function AddRestItem(props) {
             }
         } else {               // for create
             // console.log('image create')
-            if (data?.food_image_1?.length > 0  && childData[0]?.media_url == '') {
+            if (data?.food_image_1?.length > 0 && childData[0]?.media_url == '') {
                 await ImageUpload(data?.food_image_1[0], "restaurant", "mainImage", data?.food_name)
                 data.food_image_1 = `${restaurantLink}${data?.food_name}_mainImage_${data.food_image_1[0]?.name}`
             } else {
@@ -176,7 +176,7 @@ export default function AddRestItem(props) {
                 await ImageUpload(data?.food_image_3[0], "restaurant", "img3", data?.food_name)
                 data.food_image_3 = `${restaurantLink}${data?.food_name}_img3_${data.food_image_3[0]?.name}`
             } else {
-                 if (childData[2]?.media_url) {
+                if (childData[2]?.media_url) {
                     data.food_image_3 = childData[2]?.media_url
                 } else {
                     data.food_image_3 = ''
@@ -186,7 +186,7 @@ export default function AddRestItem(props) {
                 await ImageUpload(data?.food_image_4[0], "restaurant", "img4", data?.food_name)
                 data.food_image_4 = `${restaurantLink}${data?.food_name}_img4_${data.food_image_4[0]?.name}`
             } else {
-                 if (childData[3]?.media_url) {
+                if (childData[3]?.media_url) {
                     data.food_image_4 = childData[3]?.media_url
                 } else {
                     data.food_image_4 = ''
@@ -196,7 +196,7 @@ export default function AddRestItem(props) {
                 await ImageUpload(data?.food_image_5[0], "restaurant", "img5", data?.food_name)
                 data.food_image_5 = `${restaurantLink}${data?.food_name}_img5_${data.food_image_5[0]?.name}`
             } else {
-                 if (childData[4]?.media_url) {
+                if (childData[4]?.media_url) {
                     data.food_image_5 = childData[4]?.media_url
                 } else {
                     data.food_image_5 = ''
@@ -296,7 +296,7 @@ export default function AddRestItem(props) {
                 })
             }
         }
-    }, [])
+    }, [isOpen])
     //  ------------   Seller Calculations SetPrice --------------------------------
     const calculateRevenueRestaurant = watch('food_actual_price')
 
@@ -631,98 +631,98 @@ export default function AddRestItem(props) {
                                                         </div>
                                                     )}
 
-                                                {!openGallery &&
-                                                <>
-                                                    <div className="">
-                                                        <label className={labelClass} htmlFor="main_input">Main Image*</label>
-                                                        <input className={fileinput}
-                                                            id="main_input"
-                                                            type='file'
-                                                            // multiple
-                                                            disabled={user?.role != 'admin' ? false : true}
-                                                            accept='image/jpeg,image/jpg,image/png'
-                                                            placeholder='Upload Images...'
-                                                            // onChange={(e) => handleImageChange(e)}
-                                                            {...register("food_image_1",{ 
-                                                                required: props.button == 'edit' && (!childData[0]?.media_url || childData[0]?.media_url == '') && !props?.data?.food_image_1
-                                                              })}  />
-                                                        {props?.button == 'edit' && props?.data?.food_image_1 != '' && props?.data?.food_image_1 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
-                                                             {!childData[0] && props?.data?.food_image_1?.split('/').pop()}
-                                                        </label>}
-                                                        <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
-                                                            {childData[0]?.media_url?.split('/').pop()}
-                                                        </label>
-                                                        {errors.food_image_1 && <Error title='Main Image is required*' />}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass} htmlFor="main_input">Image 2</label>
-                                                        <input className={fileinput}
-                                                            id="main_input"
-                                                            type='file'
-                                                            // multiple
-                                                            disabled={user?.role == 'admin' ? true : false}
-                                                            accept='image/jpeg,image/jpg,image/png'
-                                                            placeholder='Upload Images...'
-                                                            {...register("food_image_2")} />
-                                                        {props?.button == 'edit' && props?.data?.food_image_2 != '' && props?.data?.food_image_2 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
-                                                            {!childData[1] && props?.data?.food_image_2?.split('/').pop()}
-                                                        </label>}
-                                                        <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
-                                                            {childData[1]?.media_url?.split('/').pop()}
-                                                        </label>
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass} htmlFor="main_input">Image 3</label>
-                                                        <input className={fileinput}
-                                                            id="main_input"
-                                                            type='file'
-                                                            // multiple
-                                                            disabled={user?.role != 'admin' ? false : true}
-                                                            accept='image/jpeg,image/jpg,image/png'
-                                                            placeholder='Upload Images...'
-                                                            {...register("food_image_3")} />
-                                                        {props?.button == 'edit' && props?.data?.food_image_3 != '' && props?.data?.food_image_3 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
-                                                            {!childData[2] && props?.data?.food_image_3?.split('/').pop()}
-                                                        </label>}
-                                                        <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
-                                                            {childData[2]?.media_url?.split('/').pop()}
-                                                        </label>
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass} htmlFor="main_input">Image 4</label>
-                                                        <input className={fileinput}
-                                                            id="main_input"
-                                                            type='file'
-                                                            // multiple
-                                                            disabled={user?.role != 'admin' ? false : true}
-                                                            accept='image/jpeg,image/jpg,image/png'
-                                                            placeholder='Upload Images...'
-                                                            {...register("food_image_4")} />
-                                                        {props?.button == 'edit' && props?.data?.food_image_4 != '' && props?.data?.food_image_4 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
-                                                            {!childData[3] && props?.data?.food_image_4?.split('/').pop()}
-                                                        </label>}
-                                                        <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
-                                                            {childData[3]?.media_url?.split('/').pop()}
-                                                        </label>
-                                                    </div>
-                                                    <div className="">
-                                                        <label className={labelClass} htmlFor="main_input">Image 5</label>
-                                                        <input className={fileinput}
-                                                            id="main_input"
-                                                            type='file'
-                                                            // multiple
-                                                            disabled={user?.role != 'admin' ? false : true}
-                                                            accept='image/jpeg,image/jpg,image/png'
-                                                            placeholder='Upload Images...'
-                                                            {...register("food_image_5")} />
-                                                        {props?.button == 'edit' && props?.data?.food_image_5 != '' && props?.data?.food_image_5 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
-                                                            {!childData[4] && props?.data?.food_image_5?.split('/').pop()}
-                                                        </label>}
-                                                        <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
-                                                            {childData[4]?.media_url?.split('/').pop()}
-                                                        </label>
-                                                    </div>
-                                                </>}
+                                                    {!openGallery &&
+                                                        <>
+                                                            <div className="">
+                                                                <label className={labelClass} htmlFor="main_input">Main Image*</label>
+                                                                <input className={fileinput}
+                                                                    id="main_input"
+                                                                    type='file'
+                                                                    // multiple
+                                                                    disabled={user?.role != 'admin' ? false : true}
+                                                                    accept='image/jpeg,image/jpg,image/png'
+                                                                    placeholder='Upload Images...'
+                                                                    // onChange={(e) => handleImageChange(e)}
+                                                                    {...register("food_image_1", {
+                                                                        required: props.button == 'edit' && (!childData[0]?.media_url || childData[0]?.media_url == '') && !props?.data?.food_image_1
+                                                                    })} />
+                                                                {props?.button == 'edit' && props?.data?.food_image_1 != '' && props?.data?.food_image_1 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
+                                                                    {!childData[0] && props?.data?.food_image_1?.split('/').pop()}
+                                                                </label>}
+                                                                <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                    {childData[0]?.media_url?.split('/').pop()}
+                                                                </label>
+                                                                {errors.food_image_1 && <Error title='Main Image is required*' />}
+                                                            </div>
+                                                            <div className="">
+                                                                <label className={labelClass} htmlFor="main_input">Image 2</label>
+                                                                <input className={fileinput}
+                                                                    id="main_input"
+                                                                    type='file'
+                                                                    // multiple
+                                                                    disabled={user?.role == 'admin' ? true : false}
+                                                                    accept='image/jpeg,image/jpg,image/png'
+                                                                    placeholder='Upload Images...'
+                                                                    {...register("food_image_2")} />
+                                                                {props?.button == 'edit' && props?.data?.food_image_2 != '' && props?.data?.food_image_2 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
+                                                                    {!childData[1] && props?.data?.food_image_2?.split('/').pop()}
+                                                                </label>}
+                                                                <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                    {childData[1]?.media_url?.split('/').pop()}
+                                                                </label>
+                                                            </div>
+                                                            <div className="">
+                                                                <label className={labelClass} htmlFor="main_input">Image 3</label>
+                                                                <input className={fileinput}
+                                                                    id="main_input"
+                                                                    type='file'
+                                                                    // multiple
+                                                                    disabled={user?.role != 'admin' ? false : true}
+                                                                    accept='image/jpeg,image/jpg,image/png'
+                                                                    placeholder='Upload Images...'
+                                                                    {...register("food_image_3")} />
+                                                                {props?.button == 'edit' && props?.data?.food_image_3 != '' && props?.data?.food_image_3 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
+                                                                    {!childData[2] && props?.data?.food_image_3?.split('/').pop()}
+                                                                </label>}
+                                                                <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                    {childData[2]?.media_url?.split('/').pop()}
+                                                                </label>
+                                                            </div>
+                                                            <div className="">
+                                                                <label className={labelClass} htmlFor="main_input">Image 4</label>
+                                                                <input className={fileinput}
+                                                                    id="main_input"
+                                                                    type='file'
+                                                                    // multiple
+                                                                    disabled={user?.role != 'admin' ? false : true}
+                                                                    accept='image/jpeg,image/jpg,image/png'
+                                                                    placeholder='Upload Images...'
+                                                                    {...register("food_image_4")} />
+                                                                {props?.button == 'edit' && props?.data?.food_image_4 != '' && props?.data?.food_image_4 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
+                                                                    {!childData[3] && props?.data?.food_image_4?.split('/').pop()}
+                                                                </label>}
+                                                                <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                    {childData[3]?.media_url?.split('/').pop()}
+                                                                </label>
+                                                            </div>
+                                                            <div className="">
+                                                                <label className={labelClass} htmlFor="main_input">Image 5</label>
+                                                                <input className={fileinput}
+                                                                    id="main_input"
+                                                                    type='file'
+                                                                    // multiple
+                                                                    disabled={user?.role != 'admin' ? false : true}
+                                                                    accept='image/jpeg,image/jpg,image/png'
+                                                                    placeholder='Upload Images...'
+                                                                    {...register("food_image_5")} />
+                                                                {props?.button == 'edit' && props?.data?.food_image_5 != '' && props?.data?.food_image_5 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
+                                                                    {!childData[4] && props?.data?.food_image_5?.split('/').pop()}
+                                                                </label>}
+                                                                <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                    {childData[4]?.media_url?.split('/').pop()}
+                                                                </label>
+                                                            </div>
+                                                        </>}
                                                 </div>
                                             </div>
                                             <footer className="flex justify-end px-4 py-2 space-x-3 bg-white">

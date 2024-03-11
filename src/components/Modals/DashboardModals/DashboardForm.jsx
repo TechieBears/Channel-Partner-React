@@ -187,7 +187,7 @@ const Step1 = (props) => {
                     Latitude*
                 </label>
                 <input
-                    type="number"
+                    type="text"
                     placeholder='Latitude'
                     className={inputClass}
                     {...register('latitude', { required: manually })}
@@ -199,7 +199,7 @@ const Step1 = (props) => {
                     Longitude*
                 </label>
                 <input
-                    type="number"
+                    type="text"
                     placeholder='Longitutde'
                     className={inputClass}
                     {...register('longitude', { required: manually })}
@@ -701,8 +701,8 @@ export default function DashboardForm(props) {
     const onSubmit = async (data) => {
         console.log("🚀 ~ file: DashboardForm.jsx:773 ~ onSubmit ~ data:", data)
         isStepFalied()
-        const shopStartTime = moment(data?.shop_start_time);
-        const shopEndTime = moment(data?.shop_end_time);
+        // const shopStartTime = moment(data?.shop_start_time);
+        // const shopEndTime = moment(data?.shop_end_time);
         setLoader(true)
         if (activeStep == steps.length - 1) {
             if (props?.button != 'edit') {
@@ -849,8 +849,8 @@ export default function DashboardForm(props) {
                         ...data,
                         "type_of_cuisine": JSON.stringify(data.type_of_cuisine),
                         "vendorId": LoggedUserDetails?.sellerId,
-                        "shop_start_time": shopStartTime,
-                        "shop_end_time": shopEndTime,
+                        // "shop_start_time": shopStartTime,
+                        // "shop_end_time": shopEndTime,
                         "is_registered": true,
                     }
                     registerRestaurant(updatedData).then(res => {
