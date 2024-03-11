@@ -60,14 +60,14 @@ const VendorProduct = () => {
             getCategory().then(res => {
                 console.log('res', res)
                 setCategory(res)
-                if (res?.length > 0) {
-                    const newData = res.map((data) => ({
-                        label: data?.category_name,
-                        value: data?.id,
-                    }))
-                    setCategory(newData)
-                    console.log('newData', newData)
-                }
+                // if (res?.length > 0) {
+                //     const newData = res.map((data) => ({
+                //         label: data?.category_name,
+                //         value: data?.id,
+                //     }))
+                //     setCategory(newData)
+                //     console.log('newData', newData)
+                // }
             })
         } catch (error) {
             console.log('error fetch', error)

@@ -12,6 +12,7 @@ import { ImageUpload, productLink } from '../../../env';
 import MediaGallaryModal from '../../../pages/Settings/MediaGallery/MediaGallery';
 
 const AddProduct = (props) => {
+    console.log('props', props)
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
     const [FinalPriceSeller, setFinalPriceSeller] = useState([]);
@@ -429,7 +430,7 @@ const AddProduct = (props) => {
                                                             {props?.category?.map(item =>
                                                                 // {
                                                                 // console.log(item?.id)
-                                                                <option key={item?.value} value={item?.value}>{item?.label}</option>
+                                                                <option key={item?.id} value={item?.id}>{item?.category_name}</option>
                                                                 // }
                                                             )}
                                                         </select>
