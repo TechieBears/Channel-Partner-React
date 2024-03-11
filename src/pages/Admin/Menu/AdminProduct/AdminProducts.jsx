@@ -47,7 +47,7 @@ const AdminProduct = (props) => {
             GetFranchiseeVendors().then((res) => {
                 if (res?.length > 0) {
                     const newData = res.map((data) => ({
-                        label: data?.shop_name + `(${data?.msb_code})`,
+                        label: data?.shop_name + `(${data?.user?.pincode})`,
                         value: data?.vendor_id,
                     }))
                     setVendorOptions(newData)
