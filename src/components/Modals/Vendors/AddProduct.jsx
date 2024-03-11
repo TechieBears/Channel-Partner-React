@@ -135,32 +135,51 @@ const AddProduct = (props) => {
                 await ImageUpload(data?.product_image_1[0], "shopProduct", "MainImage", data?.product_name)
                 data.product_image_1 = `${productLink}${data?.product_name}_MainImage_${data?.product_image_1[0]?.name}`
             } else {
-                console.log('Product image1 else')
-                data.product_image_1 = props?.row?.product_image_1
+                if (childData[0]?.media_url) {
+                    data.product_image_1 = childData[0]?.media_url
+                } else {
+                    data.product_image_1 = props?.row?.product_image_1
+                }
             }
             if (data?.product_image_2?.length > 0) {
                 await ImageUpload(data?.product_image_2[0], "shopProduct", "Image2", data?.product_name)
                 data.product_image_2 = `${productLink}${data?.product_name}_Image2_${data?.product_image_2[0]?.name}`
             } else {
-                data.product_image_2 = props?.row?.product_image_2
+                if (childData[1]?.media_url) {
+                    data.product_image_2 = childData[1]?.media_url
+                } else {
+                    data.product_image_2 = props?.row?.product_image_2
+                }
             }
             if (data?.product_image_3?.length > 0) {
                 await ImageUpload(data?.product_image_3[0], "shopProduct", "Image3", data?.product_name)
                 data.product_image_3 = `${productLink}${data?.product_name}_Image3_${data?.product_image_3[0]?.name}`
             } else {
-                data.product_image_3 = props?.row?.product_image_3
+                if (childData[2]?.media_url) {
+                    data.product_image_3 = childData[2]?.media_url
+                } else {
+                    data.product_image_3 = props?.row?.product_image_3
+                }
             }
             if (data?.product_image_4?.length > 0) {
                 await ImageUpload(data?.product_image_4[0], "shopProduct", "Image4", data?.product_name)
                 data.product_image_4 = `${productLink}${data?.product_name}_Image4_${data?.product_image_4[0]?.name}`
             } else {
-                data.product_image_4 = props?.row?.product_image_4
+                if (childData[3]?.media_url) {
+                    data.product_image_4 = childData[3]?.media_url
+                } else {
+                    data.product_image_4 = props?.row?.product_image_4
+                }
             }
             if (data?.product_image_5?.length > 0) {
                 await ImageUpload(data?.product_image_5[0], "shopProduct", "Image5", data?.product_name)
                 data.product_image_5 = `${productLink}${data?.product_name}_Image5_${data?.product_image_5[0]?.name}`
             } else {
-                data.product_image_5 = props?.row?.product_image_5
+                if (childData[4]?.media_url) {
+                    data.product_image_5 = childData[4]?.media_url
+                } else {
+                    data.product_image_5 = props?.row?.product_image_5
+                }
             }
             if (data?.product_video_url?.length > 0) {
                 await ImageUpload(data?.product_video_url[0], "shopProduct", "Image5", data?.product_name)
