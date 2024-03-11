@@ -299,7 +299,7 @@ const VendorProduct = () => {
             <div className='p-4 m-4 bg-white sm:m-5 rounded-xl'>
                 <div className='grid items-center sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-6'>
                     <h2 className='lg:col-span-5 text-xl font-semibold'>{user?.vendor_type == 'restaurant' ? 'Item List' : 'Product List'}</h2>
-                    {user?.isverified_byadmin == true && user?.vendor_type == 'restaurant' ? <AddRestItem title='Add Item' details={details} getRestFood={getRestFood} category={category} subCategory={subCategory} ImageDetails={ImageDetails} /> : user?.vendor_type == 'seller' ? <AddProduct title='Add Product' getProducts={getProducts} ImageDetails={ImageDetails} category={category} subCategory={subCategory} /> : ''}
+                    {user?.isverified_byadmin == true && user?.vendor_type == 'restaurant' ? <AddRestItem title='Add Item' details={details} getRestFood={getRestFood} category={category} subCategory={subCategory} ImageDetails={ImageDetails} /> : user?.vendor_type == 'shop' ? <AddProduct title='Add Product' getProducts={getProducts} ImageDetails={ImageDetails} category={category} subCategory={subCategory} /> : ''}
                 </div>
                 <div className='mt-4'>
                     <Table data={data} columns={user?.vendor_type == 'restaurant' ? restaurantColumns : shopColumns} />
