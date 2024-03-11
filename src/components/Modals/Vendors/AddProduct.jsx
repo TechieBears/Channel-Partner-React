@@ -12,6 +12,7 @@ import { ImageUpload, productLink } from '../../../env';
 import MediaGallaryModal from '../../../pages/Settings/MediaGallery/MediaGallery';
 
 const AddProduct = (props) => {
+    console.log('props', props)
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
     const [FinalPriceSeller, setFinalPriceSeller] = useState([]);
@@ -361,8 +362,7 @@ const AddProduct = (props) => {
                 <button className='items-center p-1 bg-yellow-100 rounded-xl hover:bg-yellow-200' onClick={() => setOpen(true)}>
                     <Edit size={24} className='text-yellow-400' />
                 </button> :
-                <button className={`${formBtn1} flex`} onClick={() => setOpen(true)}>
-                    <Add className='text-white' />
+                <button className={`${formBtn1}`} onClick={() => setOpen(true)}>
                     {props?.title}
                 </button>}
             <Transition appear show={isOpen} as={Fragment}>
@@ -430,7 +430,7 @@ const AddProduct = (props) => {
                                                             {props?.category?.map(item =>
                                                                 // {
                                                                 // console.log(item?.id)
-                                                                <option key={item?.value} value={item?.value}>{item?.label}</option>
+                                                                <option key={item?.id} value={item?.id}>{item?.category_name}</option>
                                                                 // }
                                                             )}
                                                         </select>

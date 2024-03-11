@@ -79,13 +79,13 @@ const AdminProduct = (props) => {
     const fetchData = () => {
         try {
             getCategory().then((res) => {
-                if (res?.length > 0) {
-                    const newData = res.map((data) => ({
-                        label: data?.category_name,
-                        value: data?.id,
-                    }))
-                    setCategoryOptions(newData)
-                }
+                // if (res?.length > 0) {
+                //     const newData = res.map((data) => ({
+                //         label: data?.category_name,
+                //         value: data?.id,
+                //     }))
+                //     setCategoryOptions(newData)
+                // }
             })
         } catch (error) {
             console.log("🚀 ~ file: AdminProducts.jsx:66 ~ GetCategory ~ error:", error)
@@ -135,13 +135,13 @@ const AdminProduct = (props) => {
         try {
             getSubCategory().then(res => {
                 setsubCategory(res)
-                if (res?.length > 0) {
-                    const newData = res.map((data) => ({
-                        label: data?.subcat_name,
-                        value: data?.subcat_name,
-                    }))
-                    setSubCategoryOptions(newData)
-                }
+                // if (res?.length > 0) {
+                //     const newData = res.map((data) => ({
+                //         label: data?.subcat_name,
+                //         value: data?.subcat_name,
+                //     }))
+                //     setSubCategoryOptions(newData)
+                // }
             })
         } catch (error) {
             console.log('error fetch', error)
@@ -169,13 +169,13 @@ const AdminProduct = (props) => {
         try {
             getRestaurantSubCategory().then(res => {
                 setsubCategory(res)
-                if (res?.length > 0) {
-                    const newData = res.map((data) => ({
-                        label: data?.subcat_name,
-                        value: data?.subcat_name,
-                    }))
-                    setSubCategoryOptions(newData)
-                }
+                // if (res?.length > 0) {
+                //     const newData = res.map((data) => ({
+                //         label: data?.subcat_name,
+                //         value: data?.subcat_name,
+                //     }))
+                //     setSubCategoryOptions(newData)
+                // }
             })
         } catch (error) {
             console.log('error', error)
