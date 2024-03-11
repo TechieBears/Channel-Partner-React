@@ -80,7 +80,9 @@ const CustomFileUpload = () => {
           data?.media_name
         );
         EditingData.media_url = `${mediaGalleryLink}${data?.media_name}_mediagallery_${data?.media_url[0]?.name}`;
+        EditingData.media_name =  data?.media_name;
       } else {
+        EditingData.media_name =  data?.media_name;
         EditingData.media_url = EditingData?.media_url;
       }
       editMediagallery(EditingData?.media_id, EditingData).then(res => {
@@ -157,7 +159,7 @@ const CustomFileUpload = () => {
                 type="text"
                 placeholder="Enter Image Name"
                 // value={imgName}
-                // onChange={(e) => setImgName(e.target.value)}
+                // onChange={(e) => onChangeMediaName(e)}
                 {...register("media_name")}
               />
             </div>
