@@ -26,11 +26,16 @@ export default function AddRestaurant(props) {
     const categories = ['Asian', 'Mexican', 'Italian', 'Russian cussion', 'Spanish', 'Comfort', 'American', 'North Indian', 'South Indian']
 
     const onSubmit = async (data) => {
-        let additionalData;
-        if (LoggedUserDetails?.role == "franchise") {
-            additionalData = { 'created_by': LoggedUserDetails?.userid }
+        // let additionalData;
+        // if (LoggedUserDetails?.role == "franchise") {
+        //     additionalData = { 'created_by': LoggedUserDetails?.userid }
+        // }
+        // let updateData = { ...data, "vendor_type": 'restaurant', ...additionalData }
+        let updateData = {
+            ...data,
+            "vendor_type": 'restaurant',
+            'created_by': LoggedUserDetails?.userid
         }
-        let updateData = { ...data, "vendor_type": 'restaurant', ...additionalData }
         if (props?.button == 'edit') {
             try {
                 editRestaurant(props?.data?.user?.id, updateData).then(res => {

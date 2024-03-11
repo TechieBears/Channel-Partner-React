@@ -9,16 +9,16 @@ export default function RestaurantDetail() {
     console.log('data', data)
     const navigate = useNavigate()
     const images = [
-        {
-            URL: data?.created_by?.profile_pic,
-            width: 1500,
-            height: 900,
-        },
-        {
-            URL: data?.ambience_image,
-            width: 1500,
-            height: 900,
-        },
+        // {
+        //     URL: data?.created_by?.profile_pic,
+        //     width: 1500,
+        //     height: 900,
+        // },
+        // {
+        //     URL: data?.ambience_image,
+        //     width: 1500,
+        //     height: 900,
+        // },
         {
             URL: data?.shop_image,
             width: 1500,

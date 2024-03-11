@@ -225,9 +225,9 @@ const AdminProduct = (props) => {
         </Link>
         {/* <ViewProduct /> */}
         <AddProduct title='Edit Product' row={row} getProducts={getProducts} category={category} subCategory={subCategory} />
-        <button className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
+        {/* <button className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
             <Trash size={24} className='text-red-400' />
-        </button>
+        </button> */}
     </div>
 
 
@@ -238,9 +238,9 @@ const AdminProduct = (props) => {
         </Link>
         {/* <ViewProduct /> */}
         <AddRestItem title='edit' button='edit' data={row} category={category} subCategory={subCategory} getRestaurantFoodItems={getRestaurantFoodItems} />
-        <button className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
+        {/* <button className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
             <Trash size={24} className='text-red-400' />
-        </button>
+        </button> */}
     </div>
 
     const verifyActions = (row) => {
