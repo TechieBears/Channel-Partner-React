@@ -7,12 +7,48 @@ import DeleteModal from '../../../components/Modals/DeleteModal/DeleteModal';
 import { environment } from '../../../env';
 import { setStorageList } from '../../../redux/slices/storageSlice';
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import AdminProduct from '../Menu/AdminProduct/AdminProducts';
+import SubCategory from '../Menu/MenuList/SubCategory';
+import Category from '../Menu/MenuList/Category';
+import Table from '../../../components/Table/Table';
 
 const Order = () => {
     const user = useSelector((state) => state.user.loggedUserDetails)
     const dispatch = useDispatch()
     const [open, setOpen] = React.useState(false);
     const [delId, setDelId] = React.useState(0);
+    const [selectedTab, setSelectedTab] = useState(0);
+    const data = [{
+        "order_id": "123456789",
+        "customer_name": "John Doe",
+        "customer_phone": "+1234567890",
+        "customer_address": "123 Main St, City, Country",
+        "restaurant_name": "Delicious Bites",
+        "restaurant_address": "456 Elm St, City, Country",
+        "items_ordered": [
+            {
+                "item_name": "Cheeseburger",
+                "item_quantity": 2,
+                "item_price": 9.99
+            },
+            {
+                "item_name": "French Fries",
+                "item_quantity": 1,
+                "item_price": 3.99
+            },
+            {
+                "item_name": "Cola",
+                "item_quantity": 3,
+                "item_price": 1.99
+            }
+        ],
+        "order_total": 33.94,
+        "order_status": "Placed",
+        "delivery_time": "ASAP",
+        "payment_method": "Credit Card"
+    },
+    ]
 
 
     const {
@@ -50,6 +86,24 @@ const Order = () => {
             }
         })
     }
+
+    // ================= Restaurant Table Columns =================
+
+    const restaurantAction = (row) => (
+        <div>
+        </div>
+    )
+
+    const columns = [
+        { field: "order_id", header: "Order Id", style: true },
+        { field: "restaurant_name", header: "Restaurant Name", style: true, sortable: true },
+        { field: "restaurant_address", header: "Restaurant Address", style: true, sortable: true },
+        { field: "items_ordered", header: "Items Ordered", body: (row) => <h6>{row?.items_ordered?.length}</h6>, style: true, sortable: true },
+        { field: "order_total", header: "Order Total", style: true, sortable: true },
+        { field: "order_status", header: "Order Status", style: true, sortable: true },
+        { field: "payment_method", header: "Payment Method", style: true, sortable: true },
+        { field: "action", header: "Action", body: (row) => restaurantAction, style: true, sortable: true },
+    ]
 
     // const webSocketUrl = environment.WEB_SOCKET_API_URL;
     // const ws = useRef(new WebSocket(webSocketUrl)).current;
@@ -112,7 +166,6 @@ const Order = () => {
             <section className='w-full h-full'>
 
                 <div className="mx-auto mt-8 sm:m-5">
-
                     {/* =========================  fileter ======================= */}
                     <div className="p-4 bg-white sm:m-5 rounded-xl" >
                         <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2 md:items-center lg:flex-row'>
@@ -157,123 +210,35 @@ const Order = () => {
                             </div>
                         </form>
                     </div>
-
-                    <div className="mt-8">
-                        {/* {activeTab === 1 && <p>Content for Tab 1</p>}
-                        {activeTab === 2 && <p>Content for Tab 2</p>} */}
-                        <div className='grid gap-6 mt-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2'>
-                            <div className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg " previewlistener="true">
-                                <div className="items-center gap-x-3">
-                                    <div className='flex flex-wrap justify-between p-4'>
-                                        <p className='text-sm'>Order Id -  <span className='text-sky-400'>753</span></p>
-                                        <p className='text-sm'>Order Date - <span className='text-base font-semibold text-center text-gray-800'>Jan 1, 2024 , 05:56 PM</span> </p>
-                                    </div>
-                                    <div className="flex-1 p-4 my-2">
-                                        <div className="flex items-center justify-between">
-                                            <div className='flex items-center justify-between'>
-                                                <img className='w-16' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU" alt="" />
-                                                <div>
-                                                    <h2 className="text-sm font-semibold tracking-wide text-gray-800 ">Butter Milk x 7 more</h2>
-                                                    <p>Lorem ipsum dolor, sit amet </p>
-                                                </div>
-                                            </div>
-                                            <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 ">Payment - Cash</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
-                                        <p className='text-base font-medium'>Order Price - $ 1,000</p>
-                                        <div className="flex items-center gap-x-2">
-                                            <button type="button" className="relative block w-full px-4 py-2 overflow-hidden text-base font-semibold tracking-wide text-center text-gray-800 capitalize transition-colors duration-200 bg-gray-200 rounded-lg font-tb hover:text-black hover:bg-gray-300">Reject</button>
-                                            <button type="submit" className="relative block w-full px-4 py-2 overflow-hidden text-base font-semibold tracking-wide text-center text-white capitalize transition-colors duration-200 rounded-lg font-tb bg-sky-400 hover:bg-sky-400">Confirm</button>
-                                        </div>
-                                    </div>
+                    <div className="mx-5 mt-2" >
+                        <Tabs selectedIndex={selectedTab} onSelect={index => setSelectedTab(index)} >
+                            <TabList className="flex mx-6 space-x-4 border-b">
+                                <Tab
+                                    className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 0 ? 'text-sky-500  border-b-2 border-sky-400 outline-0' : 'text-gray-500 border-b'
+                                        }`}
+                                >
+                                    Restaurant
+                                </Tab>
+                                <Tab
+                                    className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 1 ? 'text-sky-500  border-b-2 border-sky-400 outline-0' : 'text-gray-500 border-b'
+                                        }`}
+                                >
+                                    Shops
+                                </Tab>
+                            </TabList>
+                            {/* ================= Restaurant Order component ============== */}
+                            <TabPanel >
+                                <div className='mt-4'>
+                                    <Table data={data} columns={columns} />
                                 </div>
-                            </div>
-
-                            <div className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg " previewlistener="true">
-                                <div className="items-center gap-x-3">
-                                    <div className='flex flex-wrap justify-between p-4'>
-                                        <p className='text-sm'>Order Id -  <span className='text-sky-400'>753</span></p>
-                                        <p className='text-sm'>Order Date - <span className='text-base font-semibold text-center text-gray-800'>Jan 1, 2024 , 05:56 PM</span> </p>
-                                    </div>
-                                    <div className="flex-1 p-4 my-2">
-                                        <div className="flex items-center justify-between">
-                                            <div className='flex items-center justify-between'>
-                                                <img className='w-16' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU" alt="" />
-                                                <div>
-                                                    <h2 className="text-sm font-semibold tracking-wide text-gray-800 ">Butter Milk x 7 more</h2>
-                                                    <p>Lorem ipsum dolor, sit amet </p>
-                                                </div>
-                                            </div>
-                                            <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 ">Payment - Cash</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
-                                        <p className='text-base font-medium'>Order Price - $ 1,000</p>
-                                        <div className="flex items-center gap-x-2">
-                                            <button type="button" className="relative block w-full px-4 py-2 overflow-hidden text-base font-semibold tracking-wide text-center text-gray-800 capitalize transition-colors duration-200 bg-gray-200 rounded-lg font-tb hover:text-black hover:bg-gray-300">Reject</button>
-                                            <button type="submit" className="relative block w-full px-4 py-2 overflow-hidden text-base font-semibold tracking-wide text-center text-white capitalize transition-colors duration-200 rounded-lg font-tb bg-sky-400 hover:bg-sky-400">Confirm</button>
-                                        </div>
-                                    </div>
+                            </TabPanel>
+                            {/* ================= Shop Order component ============== */}
+                            <TabPanel >
+                                <div className='mt-4'>
+                                    <Table data={data} columns={columns} />
                                 </div>
-                            </div>
-
-                            <div className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg " previewlistener="true">
-                                <div className="items-center gap-x-3">
-                                    <div className='flex flex-wrap justify-between p-4'>
-                                        <p className='text-sm'>Order Id -  <span className='text-sky-400'>753</span></p>
-                                        <p className='text-sm'>Order Date - <span className='text-base font-semibold text-center text-gray-800'>Jan 1, 2024 , 05:56 PM</span> </p>
-                                    </div>
-                                    <div className="flex-1 p-4 my-2">
-                                        <div className="flex items-center justify-between">
-                                            <div className='flex items-center justify-between'>
-                                                <img className='w-16' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU" alt="" />
-                                                <div>
-                                                    <h2 className="text-sm font-semibold tracking-wide text-gray-800 ">Butter Milk x 7 more</h2>
-                                                    <p>Lorem ipsum dolor, sit amet </p>
-                                                </div>
-                                            </div>
-                                            <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 ">Payment - Cash</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
-                                        <p className='text-base font-medium'>Order Price - $ 1,000</p>
-                                        <div className="flex items-center gap-x-2">
-                                            <button type="button" className="relative block w-full px-4 py-2 overflow-hidden text-base font-semibold tracking-wide text-center text-gray-800 capitalize transition-colors duration-200 bg-gray-200 rounded-lg font-tb hover:text-black hover:bg-gray-300">Reject</button>
-                                            <button type="submit" className="relative block w-full px-4 py-2 overflow-hidden text-base font-semibold tracking-wide text-center text-white capitalize transition-colors duration-200 rounded-lg font-tb bg-sky-400 hover:bg-sky-400">Confirm</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg " previewlistener="true">
-                                <div className="items-center gap-x-3">
-                                    <div className='flex flex-wrap justify-between p-4'>
-                                        <p className='text-sm'>Order Id -  <span className='text-sky-400'>753</span></p>
-                                        <p className='text-sm'>Order Date - <span className='text-base font-semibold text-center text-gray-800'>Jan 1, 2024 , 05:56 PM</span> </p>
-                                    </div>
-                                    <div className="flex-1 p-4 my-2">
-                                        <div className="flex items-center justify-between">
-                                            <div className='flex items-center justify-between'>
-                                                <img className='w-16' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU" alt="" />
-                                                <div>
-                                                    <h2 className="text-sm font-semibold tracking-wide text-gray-800 ">Butter Milk x 7 more</h2>
-                                                    <p>Lorem ipsum dolor, sit amet </p>
-                                                </div>
-                                            </div>
-                                            <p className="mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 ">Payment - Cash</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
-                                        <p className='text-base font-medium'>Order Price - $ 1,000</p>
-                                        <div className="flex items-center gap-x-2">
-                                            <button type="button" className="relative block w-full px-4 py-2 overflow-hidden text-base font-semibold tracking-wide text-center text-gray-800 capitalize transition-colors duration-200 bg-gray-200 rounded-lg font-tb hover:text-black hover:bg-gray-300">Reject</button>
-                                            <button type="submit" className="relative block w-full px-4 py-2 overflow-hidden text-base font-semibold tracking-wide text-center text-white capitalize transition-colors duration-200 rounded-lg font-tb bg-sky-400 hover:bg-sky-400">Confirm</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                            </TabPanel>
+                        </Tabs>
                     </div>
                 </div>
             </section >

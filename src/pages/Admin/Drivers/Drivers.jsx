@@ -1,22 +1,20 @@
+import axios from 'axios';
+import { Eye } from 'iconsax-react';
+import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import Table from '../../../components/Table/Table';
-import { Link } from 'react-router-dom';
-import { Eye, Trash } from 'iconsax-react';
-import { delUser, verifyDeliveryBoy, getUser, getDeliveryBoy, GetFranchisee } from '../../../api';
 import Switch from 'react-js-switch';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import { environment } from '../../../env';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUserList } from '../../../redux/Slices/userSlice';
-import { setDeliveryList } from '../../../redux/Slices/deliverySlice';
-import DeleteModal from '../../../components/Modals/DeleteModal/DeleteModal';
+import { Link } from 'react-router-dom';
+import Select from "react-select";
+import { toast } from 'react-toastify';
+import { GetFranchisee, getDeliveryBoy, verifyDeliveryBoy } from '../../../api';
 import userImg from '../../../assets/user.jpg';
 import AddDriverFrom from '../../../components/Modals/DriverModals/AddDriverForm';
+import Table from '../../../components/Table/Table';
+import { environment } from '../../../env';
+import { setDeliveryList } from '../../../redux/Slices/deliverySlice';
 import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
-import _ from 'lodash';
-import Select from "react-select";
 
 function Drivers() {
     const dispatch = useDispatch()
@@ -124,18 +122,6 @@ function Drivers() {
     const toggleModalBtn = (id) => {
         setOpen(!open)
         setDelId(id)
-    }
-    const deleteUser = () => {
-        delUser(delId).then((res) => {
-            if (res.code == 2002) {
-                toast.success("User deleted!!");
-                DeliveryBoyDetails();
-                setOpen(!open)
-            }
-            else {
-                console.log("err");
-            }
-        })
     }
 
     // =================== table action ========================
@@ -260,13 +246,6 @@ function Drivers() {
 
     return (
         <>
-            <DeleteModal
-                title='Delete Register User'
-                deleteBtn={deleteUser}
-                toggleModalBtn={toggleModalBtn}
-                description="Are you sure you want to delete this User" open={open}
-            />
-
             {/* ========================= user fileter ======================= */}
             <div className="p-4 bg-white sm:m-5 rounded-xl" >
                 <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2 md:items-center lg:flex-row'>

@@ -8,7 +8,6 @@ import { useSelector } from 'react-redux';
 
 
 const Menu = (props) => {
-    console.log('isrestaurant = ', props?.isrestaurant);
     const [selectedTab, setSelectedTab] = useState(0);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     return (
@@ -31,7 +30,7 @@ const Menu = (props) => {
                         className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 2 ? 'text-sky-500  border-b-2 border-sky-400 outline-0' : 'text-gray-500 border-b'
                             }`}
                     >
-                     {props?.isrestaurant ? "Food Items" : "Products"}
+                        {props?.isrestaurant ? "Food Items" : "Products"}
                     </Tab>}
                 </TabList>
                 {/* ================= Category component ============== */}
@@ -44,7 +43,7 @@ const Menu = (props) => {
                 </TabPanel>
                 {/* ================= Product component ============== */}
                 {LoggedUserDetails?.role != 'seller' && <TabPanel>
-                    <AdminProduct  isrestaurant={props?.isrestaurant} />
+                    <AdminProduct isrestaurant={props?.isrestaurant} />
                 </TabPanel>}
             </Tabs>
         </div>

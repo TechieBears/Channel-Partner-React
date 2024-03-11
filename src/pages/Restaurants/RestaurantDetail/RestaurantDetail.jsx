@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'iconsax-react';
 import SimpleGallery from '../../../components/Gallary/SimpleGallery';
+import moment from 'moment';
 
 export default function RestaurantDetail() {
     const location = useLocation();
     const data = location.state;
-    console.log('data', data)
     const navigate = useNavigate()
     const images = [
         // {
@@ -59,11 +59,11 @@ export default function RestaurantDetail() {
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Restaurant Opening Time</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_start_time == null ? 'Registration Pending' : data?.shop_start_time}</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_start_time == null ? 'Registration Pending' : moment(data?.shop_start_time, 'HH:mm').local().format('hh:mm A')}</h5>
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Restaurant Closing Time</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_end_time == null ? 'Registration Pending' : data?.shop_end_time}</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_end_time == null ? 'Registration Pending' : moment(data?.shop_start_time, 'HH:mm').local().format('hh:mm A')}</h5>
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Restaurant Pincode</h5>
