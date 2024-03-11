@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState, useMemo } from 'react';
+import { Fragment, useRef, useState, useMemo, useEffect } from 'react';
 import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom';
@@ -199,6 +199,16 @@ export default function AddVendors(props) {
         });
         setValue('created_by', props?.data?.created_by?.id)
     }, [props.data]);
+
+    useEffect(() => {
+        if (LoggedUserDetails?.role === 'franchise') {
+            reset({
+                pincode: LoggedUserDetails?.pincode,
+                state: LoggedUserDetails?.state,
+                city: LoggedUserDetails?.city,
+            })
+        }
+    }, [LoggedUserDetails])
     return (
         <>
             {props.button !== "edit" ? (
@@ -441,6 +451,7 @@ export default function AddVendors(props) {
                                                             maxLength={6}
                                                             placeholder="PINCODE"
                                                             className={inputClass}
+                                                            readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
                                                             {...register("pincode", { required: true, validate: validatePIN })}
                                                         />
                                                         {errors.pincode && (
@@ -465,6 +476,7 @@ export default function AddVendors(props) {
                                                             type="text"
                                                             placeholder="Enter State"
                                                             className={inputClass}
+                                                            readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
                                                             {...register("state", { pattern: /^[A-Za-z]+$/i })}
                                                         />
                                                         {errors.address && (
@@ -477,6 +489,7 @@ export default function AddVendors(props) {
                                                             type="text"
                                                             placeholder="City"
                                                             className={inputClass}
+                                                            readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
                                                             {...register("city", { required: true, pattern: /^[A-Za-z]+$/i })}
                                                         />
                                                         {errors.address && (
