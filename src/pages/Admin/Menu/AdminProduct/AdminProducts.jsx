@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Select from "react-select";
 import { toast } from 'react-toastify';
-import { GetFranchisee, GetFranchiseeVendors, VerifyProductAdmin, editAdminFinalFood, getCategory, getGalleryImages, getProductsByAdmin, getRestaurantCategory, getRestaurantFoodAdmin, getRestaurantSubCategory, getSubCategory, makeFeatureProduct } from '../../../../api';
+import { GetFranchisee, GetFranchiseeVendors, VerifyProductAdmin, editAdminFinalFood, getCategory, getGalleryImages, getProductsByAdmin, getRestarant, getRestaurantCategory, getRestaurantFoodAdmin, getRestaurantSubCategory, getSubCategory, makeFeatureProduct } from '../../../../api';
 import userImg from '../../../../assets/user.jpg';
 import AddProduct from '../../../../components/Modals/Vendors/AddProduct';
 import AddRestItem from '../../../../components/Modals/Vendors/AddRestItem';
@@ -48,7 +48,7 @@ const AdminProduct = (props) => {
                 if (res?.length > 0) {
                     const newData = res.map((data) => ({
                         label: data?.shop_name + `(${data?.msb_code})`,
-                        value: data?.user?.id,
+                        value: data?.vendor_id,
                     }))
                     setVendorOptions(newData)
                 }
@@ -58,7 +58,25 @@ const AdminProduct = (props) => {
         }
     }
 
-    const GetCategory = () => {
+    const GetVendorDataByRestaurant = () => {
+        try {
+            getRestarant().then((res) => {
+                if (res?.length > 0) {
+                    const newData = res.map((data) => ({
+                        label: data?.vendor?.shop_name + `(${data?.vendor?.msb_code})`,
+                        value: data?.vendor?.vendor_id,
+                    }))
+                    setVendorOptions(newData)
+                }
+
+            })
+        } catch (error) {
+            console.log("🚀 ~ file: AdminProducts.jsx:69 ~ GetVendorDataByRestaurant ~ catch:", error)
+        }
+    }
+
+    // =================== Fetch Media Gallery Images =================
+    const fetchData = () => {
         try {
             getCategory().then((res) => {
                 if (res?.length > 0) {
@@ -103,7 +121,7 @@ const AdminProduct = (props) => {
                 if (res?.length > 0) {
                     const newData = res.map((data) => ({
                         label: data?.category_name,
-                        value: data?.id,
+                        value: data?.category_name,
                     }))
                     setCategoryOptions(newData)
                 }
@@ -120,7 +138,7 @@ const AdminProduct = (props) => {
                 if (res?.length > 0) {
                     const newData = res.map((data) => ({
                         label: data?.subcat_name,
-                        value: data?.subcat_id,
+                        value: data?.subcat_name,
                     }))
                     setSubCategoryOptions(newData)
                 }
@@ -134,6 +152,13 @@ const AdminProduct = (props) => {
         try {
             getRestaurantCategory().then(res => {
                 setCategory(res)
+                if (res?.length > 0) {
+                    const newData = res.map((data) => ({
+                        label: data?.category_name,
+                        value: data?.category_name,
+                    }))
+                    setCategoryOptions(newData)
+                }
             })
         } catch (error) {
             console.log('error: ', error)
@@ -144,6 +169,13 @@ const AdminProduct = (props) => {
         try {
             getRestaurantSubCategory().then(res => {
                 setsubCategory(res)
+                if (res?.length > 0) {
+                    const newData = res.map((data) => ({
+                        label: data?.subcat_name,
+                        value: data?.subcat_name,
+                    }))
+                    setSubCategoryOptions(newData)
+                }
             })
         } catch (error) {
             console.log('error', error)
@@ -151,15 +183,26 @@ const AdminProduct = (props) => {
     }
 
     useEffect(() => {
+        reset({
+            product_name: '',
+            product_msbcode: '',
+            franchise_msbcode: '',
+            vendor_msbcode: '',
+            product_category: '',
+            product_subcategory: ''
+        })
         if (!props?.isrestaurant) {
             getProducts()
             shopCat();
             shopSubCat();
+            GetVendorData()
+
         }
         if (props?.isrestaurant) {
             getRestaurantFoodItems();
             restCat();
             restSubCat();
+            GetVendorDataByRestaurant()
         }
     }, [props.isrestaurant]);
 
@@ -167,6 +210,8 @@ const AdminProduct = (props) => {
         GetFranchiseeData()
         GetVendorData()
         GetCategory()
+        fetchData();
+
     }, [])
 
     const {
@@ -179,11 +224,15 @@ const AdminProduct = (props) => {
 
 
     const onSubmit = async (data) => {
-        const { product_name, product_msbcode, franchise_msbcode, vednor_msbcode, product_category, product_subcategory } = data
-        if (product_name != '' || product_msbcode != '' || franchise_msbcode != '' || franchise_msbcode != undefined || vednor_msbcode != '' || vednor_msbcode != undefined || product_category != '' || product_category != undefined || product_subcategory != '' || product_subcategory != undefined) {
+        const { product_name, product_msbcode, franchise_msbcode, vendor_msbcode, product_category, product_subcategory } = data
+        if (product_name != '' || product_msbcode != '' || franchise_msbcode != '' || franchise_msbcode != undefined || vendor_msbcode != '' || vendor_msbcode != undefined || product_category != '' || product_category != undefined || product_subcategory != '' || product_subcategory != undefined) {
             try {
-                let url = `${environment.baseUrl}app/all_products?product_name=${product_name}&product_msbcode=${product_msbcode}&franchise_msbcode=${franchise_msbcode?.value ? franchise_msbcode?.value : ''}&vednor_msbcode=${vednor_msbcode?.value ? vednor_msbcode?.value : ''}&product_category=${product_category?.value ? product_category?.value : ''}&product_subcategory=${product_subcategory?.value ? product_subcategory?.value : ''}`
-                await axios.get(url).then((res) => {
+                // console.log("🚀 ~ file: AdminProducts.jsx:206 ~ onSubmit ~  props?.isrestaurant:", props?.isrestaurant)
+
+                let restauranturl = `${environment.baseUrl}app/all_fooditems?product_name=${product_name}&product_msbcode=${product_msbcode}&franchise_msbcode=${franchise_msbcode?.value ? franchise_msbcode?.value : ''}&vendor_msbcode=${vendor_msbcode?.value ? vendor_msbcode?.value : ''}&product_category=${product_category?.value ? product_category?.value : ''}&product_subcategory=${product_subcategory?.value ? product_subcategory?.value : ''}`
+
+                let url = `${environment.baseUrl}app/all_products?product_name=${product_name}&product_msbcode=${product_msbcode}&franchise_msbcode=${franchise_msbcode?.value ? franchise_msbcode?.value : ''}&vendor_msbcode=${vendor_msbcode?.value ? vendor_msbcode?.value : ''}&product_category=${product_category?.value ? product_category?.value : ''}&product_subcategory=${product_subcategory?.value ? product_subcategory?.value : ''}`
+                await axios.get((props?.isrestaurant === false || props?.isrestaurant === undefined) ? url : restauranturl).then((res) => {
                     setShopProducts(res?.data?.results)
                     toast.success("Filters applied successfully")
                 }).catch((err) => {
@@ -203,7 +252,7 @@ const AdminProduct = (props) => {
             product_name: '',
             product_msbcode: '',
             franchise_msbcode: '',
-            vednor_msbcode: '',
+            vendor_msbcode: '',
             product_category: '',
             product_subcategory: ''
         })
@@ -470,11 +519,11 @@ const AdminProduct = (props) => {
                     onSubmit={handleSubmit(onSubmit)}
                     className="flex flex-col gap-2 md:items-center lg:flex-row"
                 >
-                    <div className="grid w-full grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-6 gap-y-3 gap-x-2">
+                    <div className="grid w-full grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-5 gap-y-3 gap-x-2">
                         <div className="">
                             <input
                                 type="text"
-                                placeholder='Product Name'
+                                placeholder={`${props?.isrestaurant === true ? 'Search By Restaurant Name' : 'Search By Product Name'}`}
                                 autoComplete='off'
                                 className={`${inputClass} !bg-slate-100`}
                                 {...register('product_name')}
@@ -492,33 +541,7 @@ const AdminProduct = (props) => {
                         <div className="">
                             <Controller
                                 control={control}
-                                name="franchise_msbcode"
-                                render={({
-                                    field: { onChange, value, ref },
-                                }) => (
-
-                                    <Select
-                                        value={value}
-                                        options={franchiseOptions}
-                                        className="w-100 text-gray-900"
-                                        placeholder="Franchise"
-                                        onChange={onChange}
-                                        inputRef={ref}
-                                        maxMenuHeight={200}
-                                        styles={{
-                                            placeholder: (provided) => ({
-                                                ...provided,
-                                                color: '#9CA3AF', // Light gray color
-                                            }),
-                                        }}
-                                    />
-                                )}
-                            />
-                        </div>
-                        <div className="">
-                            <Controller
-                                control={control}
-                                name="vednor_msbcode"
+                                name="vendor_msbcode"
                                 render={({
                                     field: { onChange, value, ref },
                                 }) => (
@@ -577,7 +600,7 @@ const AdminProduct = (props) => {
                                         value={value}
                                         options={subcategoryOptions}
                                         className="w-100 text-gray-900"
-                                        placeholder="Category"
+                                        placeholder="SubCategory"
                                         onChange={onChange}
                                         inputRef={ref}
                                         maxMenuHeight={200}
