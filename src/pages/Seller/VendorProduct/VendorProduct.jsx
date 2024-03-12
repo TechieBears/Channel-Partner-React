@@ -1,5 +1,5 @@
 import { Eye, Trash } from 'iconsax-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import Switch from 'react-js-switch';
 import userImg from '../../../assets/user.jpg';
@@ -13,6 +13,8 @@ import AddRestItem from '../../../components/Modals/Vendors/AddRestItem';
 import Table from '../../../components/Table/Table';
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 
+
+
 const VendorProduct = () => {
     const [data, setData] = useState([])
     const [details, setDetails] = useState([]);
@@ -22,6 +24,8 @@ const VendorProduct = () => {
     const storages = useSelector((state) => state?.storage?.list);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     const { register, handleSubmit, control, formState: { errors }, reset } = useForm();
+    
+
     const loadOptions = (_, callback) => {
         const uniqueNames = new Set();
         const uniqueProducts = storages

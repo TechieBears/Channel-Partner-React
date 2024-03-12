@@ -1,11 +1,11 @@
 export const environment = {
     // --------------------Local Server Api URL--------------------
-    // baseUrl: 'http://192.168.0.151:8009/',
-    // baseUrl: 'http://127.0.0.1:8000/',
-
+    baseUrl: ' http://192.168.0.103:8005/',
+    WEB_SOCKET_API_URL: 'ws://192.168.0.103:8005/ws/socket/'
+    
 
     // --------------------Live Server Api URL--------------------
-    baseUrl: 'https://cpapi.techiebears.com/',
+    // baseUrl: 'https://cpapi.techiebears.com/',
 }
 
 // ====================== AWS S3 Image/File Upload =========================

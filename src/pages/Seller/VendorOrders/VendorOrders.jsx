@@ -9,8 +9,10 @@ import Table from '../../../components/Table/Table';
 import { NavLink } from 'react-router-dom';
 import { ClipboardTick, Eye, Trash } from 'iconsax-react';
 import moment from 'moment';
+import { environment } from '../../../env';
 
 const VendorOrders = () => {
+    const ws = useRef(new WebSocket(environment.WEB_SOCKET_API_URL)).current;
     const [selectedTab, setSelectedTab] = useState(0);
     const storages = useSelector((state) => state?.storage?.list);
     const {
@@ -200,6 +202,8 @@ const VendorOrders = () => {
         { field: "orderPrice", header: "Total Price", sortable: true },
         { field: "action", header: "Action", body: action, sortable: true },
     ];
+
+    
 
     return (
         <>
