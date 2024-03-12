@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { useSelector } from 'react-redux';
 import { formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/CustomClass';
@@ -15,14 +15,36 @@ export default function AddRestaurant(props) {
     const [loader, setLoader] = useState(false)
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     const Franchisee = useSelector((state) => state?.master?.Franchise);
-    const { register, handleSubmit, control, watch, reset, formState: { errors } } = useForm();
+    const { register, handleSubmit, control, watch, reset,setValue, formState: { errors } } = useForm();
+    const SelectedFranchise = watch('created_by')
+
     const toggle = () => {
         setOpen(!isOpen)
     }
     const closeBtn = () => {
         toggle();
         reset()
+        if(props?.button !== 'edit' && LoggedUserDetails?.role === 'admin'){
+            reset({ 
+                pincode: '',
+                state: '',
+                city: '',
+            })
+        }
     }
+
+    useEffect(() => {
+        // if (SelectedFranchise?.length > 0 && props?.button !== 'edit' && isOpen && LoggedUserDetails?.role === 'admin') {
+        if (SelectedFranchise?.length > 0 && isOpen && LoggedUserDetails?.role === 'admin') {
+            Franchisee.map((data) => {
+                if (data?.user?.id == SelectedFranchise) {
+                    setValue('pincode',data?.user?.pincode)
+                    setValue('state',data?.user?.state)
+                    setValue('city',data?.user?.city)
+                }
+            });
+        }
+    }, [SelectedFranchise]);
 
 
     const onSubmit = async (data) => {
@@ -57,6 +79,7 @@ export default function AddRestaurant(props) {
                     if (res.message == 'restaurant added successfully') {
                         toast.success('Resuraurant added successfully')
                         toggle();
+                        reset();
                         props?.getAllRestaurant()
                     } else {
                         toast.error('Error adding restaurant')
@@ -84,7 +107,7 @@ export default function AddRestaurant(props) {
         }
     }, []);
     useEffect(() => {
-        if (LoggedUserDetails?.role === 'franchise') {
+        if (LoggedUserDetails?.role === 'franchise' && props?.button !== 'edit') {
             reset({
                 pincode: LoggedUserDetails?.pincode,
                 city: LoggedUserDetails?.city,
@@ -132,7 +155,7 @@ export default function AddRestaurant(props) {
                                         as="h2"
                                         className="w-full px-3 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
                                     >
-                                        Add Restaurant
+                                        {props?.title}
                                     </Dialog.Title>
                                     <div className=" bg-gray-200/70">
                                         {/* React Hook Form */}
@@ -232,7 +255,7 @@ export default function AddRestaurant(props) {
                                                             type="text"
                                                             placeholder='City'
                                                             className={inputClass}
-                                                            readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
+                                                            readOnly={true}
                                                             {...register('city', { required: true })}
                                                         />
                                                         {errors.city && <Error title='Restaurant City is Required*' />}
@@ -245,7 +268,7 @@ export default function AddRestaurant(props) {
                                                             type="text"
                                                             placeholder='State'
                                                             className={inputClass}
-                                                            readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
+                                                            readOnly={true}
                                                             {...register('state', { required: true })}
                                                         />
                                                         {errors.state && <Error title='Restaurant State is Required*' />}
@@ -271,7 +294,7 @@ export default function AddRestaurant(props) {
                                                             maxLength={6}
                                                             placeholder='PIN Code'
                                                             className={inputClass}
-                                                            readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
+                                                            readOnly={true}
                                                             {...register('pincode', { required: "Pincode is required*", validate: validatePIN })}
                                                         />
                                                         {errors.pincode && <Error title={errors?.pincode?.message} />}

@@ -218,7 +218,7 @@ export default function Restaurant() {
       </NavLink>
       <AddRestaurant
         button="edit"
-        title="Edit User"
+        title="Edit Restaurant"
         id={row?.user?.id}
         data={row}
         getAllRestaurant={user?.role == 'admin' ? getAllRestaurant : getFranchRestaurant}
