@@ -15,6 +15,21 @@ import { setPromotions } from '../../../../redux/Slices/masterSlice';
 export default function AddPromo(props) {
   const [isOpen, setIsOpen] = useState(false)
   const [loader, setLoader] = useState(false)
+
+  const [selectedOption, setSelectedOption] = useState('');
+  const [inputValue, setInputValue] = useState('');
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const handleRadioChange = (option) => {
+    setSelectedOption(option);
+    setShowDropdown(option === 'dropdown');
+    setInputValue('');
+  };
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
   // const [openGallery, setopenGallery] = useState(false);
   // const [openGalleryModal, setopenGalleryModal] = useState(false);
   // const [imageDetails, setImageDetails] = useState([]);
@@ -223,7 +238,7 @@ export default function AddPromo(props) {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-xl overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl">
+                <Dialog.Panel className="w-full max-w-6xl overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl">
 
                   <Dialog.Title
                     as="h2"
@@ -236,7 +251,7 @@ export default function AddPromo(props) {
                     {/* <form onSubmit={childData == '' ? handleSubmit(onSubmit) : handleSubmit(GallerySubmit)}> */}
                     <form onSubmit={handleSubmit(onSubmit)}>
 
-                      <div className="py-4 mx-4 customBox">
+                    <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-2 gap-x-3 gap-y-3 customBox">
                         {/* <div className="mb-3">
                           <select
                             name=""
@@ -248,14 +263,14 @@ export default function AddPromo(props) {
                           </select>
                         </div> */}
 
-                        <div className="my-2">
+                        <div className="">
                           <label className={labelClass} htmlFor="main_input">
                             Vendor *
                           </label>
                           <select
                             name=""
                             {...register('vendor_type', { required: true })}
-                            className={`${inputClass} !bg-slate-100`}
+                            className={`${inputClass} !bg-white`}
                           >
                             <option value="">select</option>
                             <option value="Restaurant">Restaurant</option>
@@ -264,8 +279,8 @@ export default function AddPromo(props) {
                           {errors.vendor_type && <Error title='Vendor type is Required*' />}
                         </div>
 
-                        {/* {!openGallery && <div className=""> */}
-                        <div className="">
+                         {/* {!openGallery && <div className=""> */}
+                         <div className="mt-1">
                           <label className={labelClass} htmlFor="main_input">
                             Image*
                           </label>
@@ -292,6 +307,104 @@ export default function AddPromo(props) {
                             <Error title={errors.slide_url?.message} />
                           )}
                         </div>
+
+                        <div className=" flex items-center gap-3" >
+                          <input
+                            type="radio"
+                            className='w-5 h-5'
+                            id="radio-dropdown"
+                            name="radio-option"
+                            value="dropdown"
+                            checked={selectedOption === 'dropdown'}
+                            onChange={() => handleRadioChange('dropdown')}
+                          />
+                          <label htmlFor="radio-dropdown">Internal Redirection</label>
+                          <input
+                            type="radio"
+                            className='w-5 h-5'
+                            id="radio-input"
+                            name="radio-option"
+                            value="input"
+                            checked={selectedOption === 'input'}
+                            onChange={() => handleRadioChange('input')}
+                          />
+                          <label htmlFor="radio-input">External Redirection</label>
+                        </div>
+
+                        <div className="my-2">
+                          <label className={labelClass} htmlFor="main_input">
+                            Screen *
+                          </label>
+                          <select
+                            name=""
+                            // {...register('screen_type', { required: true })}
+                            className={`${inputClass} !bg-white`}
+                          >
+                            <option value="">select</option>
+                            <option value="Home Screen">Home Screen</option>
+                            <option value="Detail Screen">Detail Screen</option>
+                          </select>
+                          {/* {errors.screen_type && <Error title='Screen type is Required*' />} */}
+                        </div>
+                     
+                        {showDropdown && (
+                          <div className="">
+                            <label className={labelClass} htmlFor="main_input">
+                              Internal Redirection *
+                            </label>
+                            <select
+                              id="dropdown"
+                              name=""
+                              // {...register('internal_link', { required: true })}
+                              className={`${inputClass} !bg-white`}
+                            >
+                             <option value="">select</option>
+                            <option value="Home Screen">Home Screen</option>
+                            <option value="Detail Screen">Detail Screen</option>
+                            </select>
+                            {/* {errors.internal_link && <Error title='Vendor type is Required*' />} */}
+                          </div>
+
+
+
+                          // <div>
+                          //   <label htmlFor="dropdown">Dropdown:</label>
+                          //   <select id="dropdown">
+                          //     <option value="option1">Option 1</option>
+                          //     <option value="option2">Option 2</option>
+                          //     <option value="option3">Option 3</option>
+                          //   </select>
+                          // </div>
+                        )}
+                        {selectedOption === 'input' && (
+                          <div className="">
+                            <label className={labelClass}>
+                                External Redirection Link*
+                            </label>
+                            <input
+                                type="text"
+                                placeholder='External link'
+                                className={inputClass}
+                                // {...register('external_link', { required: true })}
+                            />
+                            {/* {errors.external_link && <Error title='Product Name is Required*' />} */}
+                        </div>
+
+
+                          // <div>
+                          //   <label htmlFor="input">Input:</label>
+                          //   <input
+                          //     type="text"
+                          //     id="input"
+                          //     value={inputValue}
+                          //     onChange={handleInputChange}
+                          //   />
+                          // </div>
+                        )}
+
+                  
+
+                       
 
                         {/* {openGallery && (
                           <div className="w-1/2 mt-3 mb-2">
