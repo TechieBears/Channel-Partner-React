@@ -239,7 +239,7 @@ export default function Restaurant() {
   );
 
   const columns = [
-    { field: "id", header: "ID", body: (row) => <h6>{row?.user?.id}</h6>, sortable: false, },
+    // { field: "id", header: "ID", body: (row) => <h6>{row?.user?.id}</h6>, sortable: false, },
     { field: "msb_code", header: "MSB", sortable: false },
     { field: "shop_name", header: "Restaurant Name", body: (row) => (<h6>  {row?.shop_name == null ? "Registration Pending" : row?.shop_name}</h6>) },
     { field: "shop_contact_number", header: "Restaurant Contact", body: (row) => (<h6>{row?.shop_contact_number == null ? "Registration Pending" : row?.shop_contact_number}</h6>) },

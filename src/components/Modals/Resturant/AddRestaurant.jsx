@@ -23,6 +23,8 @@ export default function AddRestaurant(props) {
         toggle();
         reset()
     }
+
+
     const onSubmit = async (data) => {
         let updateData
         if (LoggedUserDetails?.role == 'franchise') {
@@ -82,14 +84,14 @@ export default function AddRestaurant(props) {
         }
     }, []);
     useEffect(() => {
-        if(LoggedUserDetails?.role === 'franchise'){
+        if (LoggedUserDetails?.role === 'franchise') {
             reset({
                 pincode: LoggedUserDetails?.pincode,
                 city: LoggedUserDetails?.city,
                 state: LoggedUserDetails?.state,
             })
         }
-    },[LoggedUserDetails])
+    }, [LoggedUserDetails])
     return (
         <>
             {
@@ -284,7 +286,7 @@ export default function AddRestaurant(props) {
                                                             className={inputClass}
                                                             {...register('insta_commison_percentage', { required: true, validate: validateCommision })}
                                                         />
-                                                        {errors.insta_commison_percentage && <Error title='Restaurant Closing is Required*' />}
+                                                        {errors.insta_commison_percentage && <Error title='Insta Commision is Required*' />}
                                                     </div>
                                                 </div>
                                             </div>
