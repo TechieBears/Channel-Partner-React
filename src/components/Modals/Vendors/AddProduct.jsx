@@ -294,7 +294,7 @@ const AddProduct = (props) => {
     }
 
     useEffect(() => {
-        if (LoggedUserDetails?.role == 'seller') {
+        if (LoggedUserDetails?.vendor_type == 'shop') {
             reset({
                 'product_name': props?.row?.product_name,
                 'product_category': props?.row?.product_category?.id,
