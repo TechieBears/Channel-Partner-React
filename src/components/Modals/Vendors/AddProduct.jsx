@@ -131,7 +131,6 @@ const AddProduct = (props) => {
     };
 
     const onSellerSubmit = async (data) => {
-        console.log('seller payload = ', data);
         if (props?.title == 'Edit Product') {
             if (data?.product_image_1?.length > 0) {
                 console.log('Product image1 if')
