@@ -33,20 +33,15 @@ export default function Coupon() {
             </button>
         </div>
 
-   // =============================== active user switch =============================
-   const expiryStatus = (row) => {
-    console.log('row', row)
-
-    const isCouponExpired = expiryDate => moment().isAfter(moment(expiryDate));
-    const couponExpired = isCouponExpired(row?.expiry_date);
+    // =============================== active user switch =============================
+    const expiryStatus = (row) => {
+        const isCouponExpired = expiryDate => moment().isAfter(moment(expiryDate));
+        const couponExpired = isCouponExpired(row?.expiry_date);
         return <h6 className={`${!couponExpired ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"} py-2 px-5 text-center capitalize rounded-full`}>
-        {couponExpired ? "Expired" : "Active"}
-        {/* {rowData?.role} */}
-            </h6>
-
-  
-}
-
+            {couponExpired ? "Expired" : "Active"}
+            {/* {rowData?.role} */}
+        </h6>
+    }
 
     const columns = [
         { field: 'coupon_name', header: 'Coupon Name', sortable: true },
@@ -54,7 +49,7 @@ export default function Coupon() {
         { field: 'discount_percent', header: 'Coupon Percentage', sortable: true },
         { field: 'expiry_date', header: 'Expiry Date', },
         { field: 'coupon_type', header: 'Coupon Type', sortable: true },
-        { field: 'status', header: 'Expiry Status', body: expiryStatus,  sortable: true },
+        { field: 'status', header: 'Expiry Status', body: expiryStatus, sortable: true },
         { field: 'action', header: 'Action', body: action, sortable: true },
     ]
 

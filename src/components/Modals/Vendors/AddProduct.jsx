@@ -12,7 +12,6 @@ import { ImageUpload, productLink } from '../../../env';
 import MediaGallaryModal from '../../../pages/Settings/MediaGallery/MediaGallery';
 
 const AddProduct = (props) => {
-    console.log('props', props)
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
     const [FinalPriceSeller, setFinalPriceSeller] = useState([]);
@@ -285,17 +284,25 @@ const AddProduct = (props) => {
 
     const onAdminSubmit = async (data) => {
         var updatedData = { ...data, vendor: props?.row?.vendor?.vendor_id }
-        editAdminFinalProduct(props?.row?.product_id, updatedData).then(res => {
-            if (res?.status == 'success') {
-                props?.getProducts()
-                toast.success('Product updated successfully')
-                toggle();
+        if (updatedData?.final_price != '0' && updatedData?.markup_percentage != '0') {
+            try {
+                editAdminFinalProduct(props?.row?.product_id, updatedData).then(res => {
+                    if (res?.status == 'success') {
+                        props?.getProducts()
+                        toast.success('Product updated successfully')
+                        toggle();
+                    }
+                })
+            } catch (error) {
+                console.log('error', error)
             }
-        })
+        } else {
+            toast.error('Please add markup')
+        }
     }
 
     useEffect(() => {
-        if (LoggedUserDetails?.vendor_type == 'shop') {
+        if (LoggedUserDetails?.vendor_type == 'seller' || LoggedUserDetails?.vendor_type == 'shop') {
             reset({
                 'product_name': props?.row?.product_name,
                 'product_category': props?.row?.product_category?.id,

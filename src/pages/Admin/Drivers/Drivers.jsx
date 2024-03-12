@@ -29,9 +29,6 @@ function Drivers() {
     const [delId, setDelId] = React.useState(0);
     const DeliveryList = useSelector((state) => state?.delivery?.deliveryList);
     const [deliveryBoyData, setDeliveryBoyData] = useState()
-    console.log('driverList', DeliveryList)
-
-
     const [pincodeOptions, setPincodeOptions] = useState()
     const [franchiseOptions, setFranchiseOptions] = useState()
 

@@ -7,24 +7,42 @@ import { ArrowDown2, HambergerMenu, LogoutCurve, NotificationBing, Setting2, Use
 import { useSelector } from 'react-redux';
 import { NavLink } from "react-router-dom";
 import { CalendarDays } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import LogoutModal from '../Modals/NavbarModals/LogoutModal';
+import { getSingleRestaurant } from '../../api';
 // import DashboardForm from '../modals/DashboardModals/DashboardForm';
 
 const Navbar = ({ mobileSidebar, setMobileSidebar }) => {
     const user = useSelector(state => state?.user?.loggedUserDetails)
     const [open, setOpen] = useState(false)
+    const [data, setData] = useState();
     const [card, setCard] = useState(true)
     // ============================= logout user dashbaord ================================
     const logOut = () => {
         setOpen(!open)
         setCard(!card)
     }
+
+    const getDetails = () => {
+        try {
+            getSingleRestaurant(user?.sellerId).then(res => {
+                setData(res)
+            })
+        } catch (error) {
+            console.log('error', error)
+        }
+    }
+
+    useEffect(() => {
+        getDetails()
+    }, [])
+
     return (
         <div className="flex items-center justify-between px-5 py-5 pt-24 pb-0 sm:px-6 sm:pt-4 sm:pb-5">
             <div className="flex-1 min-w-0">
                 <h2 className="text-2xl font-bold font-tb md:text-2xl lg:text-2xl whitespace-nowrap ">
-                    {greetingTime(new Date())},<span className="capitalize text-sky-400">{user?.first_name}</span>
+                    {greetingTime(new Date())},{user?.role == 'admin' ? <span className="capitalize text-sky-400">{user?.first_name}</span> :
+                        <span className="capitalize text-sky-400">{user?.vendor_type == 'restaurant' && (data?.vendor?.shop_name != null || data?.vendor?.shop_name != undefined) ? data?.vendor?.shop_name : null}</span>}
                 </h2>
                 <div className="flex flex-col mt-1 sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6 ">
                     <div className="flex items-center mt-2 text-base font-semibold text-gray-500 font-tbPop">

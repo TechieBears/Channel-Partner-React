@@ -228,30 +228,42 @@ export default function AddRestItem(props) {
             })
         } else {
             setLoader(true)
-            addFoodItem(updatedData).then(res => {
-                if (res?.status == 'success') {
-                    toast.success('Food Item Added Successfully')
-                    props?.getRestFood();
-                    toggle();
-                    setLoader(false);
-                    reset();
-                    setopenGallery(false);
-                    setopenGalleryModal(false);
-                    setChildData([])
-                }
-            })
+            try {
+                addFoodItem(updatedData).then(res => {
+                    if (res?.status == 'success') {
+                        toast.success('Food Item Added Successfully')
+                        props?.getRestFood();
+                        toggle();
+                        setLoader(false);
+                        reset();
+                        setopenGallery(false);
+                        setopenGalleryModal(false);
+                        setChildData([])
+                    }
+                })
+            } catch (error) {
+                console.log('error', error);
+            }
         }
     }
 
     const onAdminSubmit = async (data) => {
         var updatedData = { ...data, vendor: props?.data?.vendor?.vendor_id }
-        editAdminFinalFood(props?.data?.food_id, updatedData).then(res => {
-            if (res?.status == 'success') {
-                props?.getRestaurantFoodItems();
-                toast.success('Food item updated successfully')
-                toggle();
+        if (updatedData?.final_price != 0 && updatedData?.insta_commison_percentage != '0') {
+            try {
+                editAdminFinalFood(props?.data?.food_id, updatedData).then(res => {
+                    if (res?.status == 'success') {
+                        props?.getRestaurantFoodItems();
+                        toast.success('Food item updated successfully')
+                        toggle();
+                    }
+                })
+            } catch (error) {
+                console.log('error', error);
             }
-        })
+        } else {
+            toast.error('Please add markup')
+        }
     }
 
     useEffect(() => {
