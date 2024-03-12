@@ -212,19 +212,22 @@ export default function AddRestItem(props) {
         let updatedData = { ...data, vendor: user?.sellerId }
         if (props?.title != 'Add Item') {
             setLoader(true)
-            console.log('in function edit')
-            editFoodItem(props?.data?.food_id, updatedData).then(res => {
-                if (res?.status == 'success') {
-                    toast?.success('Food item updated successfully')
-                    props?.getRestFood();
-                    toggle();
-                    setLoader(false);
-                    reset();
-                    setopenGallery(false);
-                    setopenGalleryModal(false);
-                    setChildData([])
-                }
-            })
+            try {
+                editFoodItem(props?.data?.food_id, updatedData).then(res => {
+                    if (res?.status == 'success') {
+                        toast?.success('Food item updated successfully')
+                        props?.getRestFood();
+                        toggle();
+                        setLoader(false);
+                        reset();
+                        setopenGallery(false);
+                        setopenGalleryModal(false);
+                        setChildData([])
+                    }
+                })
+            } catch (error) {
+                console.log('error', error);
+            }
         } else {
             setLoader(true)
             try {
