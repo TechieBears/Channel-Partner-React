@@ -77,7 +77,7 @@ export default function AddPolicyForm(props) {
                                         {/* React Hook Form */}
                                         <form onSubmit={handleSubmit(onSubmit)} >
                                             <div className="py-4 mx-4 customBox">
-                                                <div className="">
+                                                <div className="pb-3">
                                                     <label className={labelClass}>Policy Title*</label>
                                                     <input className={inputClass}
                                                         type='text'
@@ -85,7 +85,7 @@ export default function AddPolicyForm(props) {
                                                         {...register("title", { required: true })} />
                                                     {errors.title && <Error title='Policy Title is required*' />}
                                                 </div>
-                                                <div className="">
+                                                <div className="pb-3">
                                                     <label className={labelClass} >Policy Description*</label>
                                                     <textarea className={`${inputClass} h-36`}
                                                         type='text'
