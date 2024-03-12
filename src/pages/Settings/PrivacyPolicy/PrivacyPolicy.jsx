@@ -5,18 +5,28 @@ import AddPolicyForm from '../AddPolicy/AddPolicyForm';
 function PrivacyPolicy() {
     const [polices, setPolicy] = useState([])
     const [selectedTab, setSelectedTab] = useState(1);
+
+    const getAllPrivacyPolicy = () => {
+        try {
+            getPolicy().then((res) => {
+                setPolicy(res)
+            })
+        } catch (err) {
+            console.log(err);
+        }       
+    }
+
     useEffect(() => {
-        getPolicy().then((res) => {
-            setPolicy(res)
-        })
+        getAllPrivacyPolicy();
     }, [])
+
     return (
         <div className="bg-white rounded-xl m-4 sm:m-5 shadow-sm  p-5  " >
             <div className="flex justify-between flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 mb-6">
                 <div className="">
                     <h1 className='font-tbPop text-xl font-semibold text-gray-900 '>Privacy Policy</h1>
                 </div>
-                <AddPolicyForm title='Add Privacy Policy' />
+                <AddPolicyForm title='Add Privacy Policy' getAllPrivacyPolicy={getAllPrivacyPolicy}/>
             </div>
             <>
                 <div className=''>
