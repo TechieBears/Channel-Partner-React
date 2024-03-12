@@ -937,7 +937,7 @@ export default function DashboardForm(props) {
         <>
             {props?.dashBoard &&
                 <button onClick={toggle} className={formBtn1}>
-                    Edit
+                    Edit Details
                 </button>}
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-[100]" onClose={() => toggle}>
