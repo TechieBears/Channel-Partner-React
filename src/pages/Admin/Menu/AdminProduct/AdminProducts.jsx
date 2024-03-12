@@ -79,13 +79,6 @@ const AdminProduct = (props) => {
     const fetchData = () => {
         try {
             getCategory().then((res) => {
-                // if (res?.length > 0) {
-                //     const newData = res.map((data) => ({
-                //         label: data?.category_name,
-                //         value: data?.id,
-                //     }))
-                //     setCategoryOptions(newData)
-                // }
             })
         } catch (error) {
             console.log("🚀 ~ file: AdminProducts.jsx:66 ~ GetCategory ~ error:", error)
@@ -135,13 +128,13 @@ const AdminProduct = (props) => {
         try {
             getSubCategory().then(res => {
                 setsubCategory(res)
-                // if (res?.length > 0) {
-                //     const newData = res.map((data) => ({
-                //         label: data?.subcat_name,
-                //         value: data?.subcat_name,
-                //     }))
-                //     setSubCategoryOptions(newData)
-                // }
+                if (res?.length > 0) {
+                    const newData = res.map((data) => ({
+                        label: data?.subcat_name,
+                        value: data?.subcat_name,
+                    }))
+                    setSubCategoryOptions(newData)
+                }
             })
         } catch (error) {
             console.log('error fetch', error)
@@ -169,13 +162,13 @@ const AdminProduct = (props) => {
         try {
             getRestaurantSubCategory().then(res => {
                 setsubCategory(res)
-                // if (res?.length > 0) {
-                //     const newData = res.map((data) => ({
-                //         label: data?.subcat_name,
-                //         value: data?.subcat_name,
-                //     }))
-                //     setSubCategoryOptions(newData)
-                // }
+                if (res?.length > 0) {
+                    const newData = res.map((data) => ({
+                        label: data?.subcat_name,
+                        value: data?.subcat_name,
+                    }))
+                    setSubCategoryOptions(newData)
+                }
             })
         } catch (error) {
             console.log('error', error)
@@ -230,7 +223,11 @@ const AdminProduct = (props) => {
 
                 let url = `${environment.baseUrl}app/all_products?product_name=${product_name}&product_msbcode=${product_msbcode}&franchise_msbcode=${franchise_msbcode?.value ? franchise_msbcode?.value : ''}&vendor_msbcode=${vendor_msbcode?.value ? vendor_msbcode?.value : ''}&product_category=${product_category?.value ? product_category?.value : ''}&product_subcategory=${product_subcategory?.value ? product_subcategory?.value : ''}`
                 await axios.get((props?.isrestaurant === false || props?.isrestaurant === undefined) ? url : restauranturl).then((res) => {
-                    setShopProducts(res?.data?.results)
+                    if ((props?.isrestaurant === false || props?.isrestaurant === undefined)) {
+                        setShopProducts(res?.data)
+                    } else {
+                        setShopProducts(res?.data?.results)
+                    }
                     toast.success("Filters applied successfully")
                 }).catch((err) => {
                     console.log("🚀 ~ file: Resturant.jsx:75 ~ awaitaxios.get ~ err:", err)
