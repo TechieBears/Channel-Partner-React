@@ -131,6 +131,7 @@ const AddProduct = (props) => {
     };
 
     const onSellerSubmit = async (data) => {
+        setLoader(true);
         console.log('seller payload = ', data);
         if (props?.title == 'Edit Product') {
             if (data?.product_image_1?.length > 0) {
@@ -253,6 +254,7 @@ const AddProduct = (props) => {
             var updatedData = { ...data, vendor: props?.row?.vendor?.vendor_id }
             editVendorProduct(props?.row?.product_id, updatedData).then(res => {
                 if (res?.status == 'success') {
+                    setLoader(false);
                     props?.getProducts()
                     toast.success('Product updated successfully')
                     toggle();
@@ -275,8 +277,10 @@ const AddProduct = (props) => {
                     setopenGallery(false);
                     setopenGalleryModal(false);
                     setChildData([])
+                    setLoader(false);
                 } else {
                     toast.error('Error while creating product')
+                    setLoader(false);
                 }
             })
         }
@@ -284,17 +288,25 @@ const AddProduct = (props) => {
 
     const onAdminSubmit = async (data) => {
         var updatedData = { ...data, vendor: props?.row?.vendor?.vendor_id }
-        editAdminFinalProduct(props?.row?.product_id, updatedData).then(res => {
-            if (res?.status == 'success') {
-                props?.getProducts()
-                toast.success('Product updated successfully')
-                toggle();
+        if (updatedData?.final_price != '0' && updatedData?.markup_percentage != '0') {
+            try {
+                editAdminFinalProduct(props?.row?.product_id, updatedData).then(res => {
+                    if (res?.status == 'success') {
+                        props?.getProducts()
+                        toast.success('Product updated successfully')
+                        toggle();
+                    }
+                })
+            } catch (error) {
+                console.log('error', error)
             }
-        })
+        } else {
+            toast.error('Please add markup')
+        }
     }
 
     useEffect(() => {
-        if (LoggedUserDetails?.vendor_type == 'shop') {
+        if (LoggedUserDetails?.vendor_type == 'seller' || LoggedUserDetails?.vendor_type == 'shop') {
             reset({
                 'product_name': props?.row?.product_name,
                 'product_category': props?.row?.product_category?.id,
