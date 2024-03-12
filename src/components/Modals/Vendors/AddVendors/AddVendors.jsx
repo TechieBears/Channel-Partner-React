@@ -496,7 +496,7 @@ export default function AddVendors(props) {
                                                         )}
                                                     </div>
 
-                                                    {LoggedUserDetails?.role == 'admin' &&
+                                                    {LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise' &&
                                                         <div className="">
                                                             <label className={labelClass}>Insta Commission (%)*</label>
                                                             <input

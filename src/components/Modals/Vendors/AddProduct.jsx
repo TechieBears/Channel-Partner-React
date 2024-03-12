@@ -131,6 +131,7 @@ const AddProduct = (props) => {
     };
 
     const onSellerSubmit = async (data) => {
+        setLoader(true);
         if (props?.title == 'Edit Product') {
             if (data?.product_image_1?.length > 0) {
                 console.log('Product image1 if')
@@ -190,7 +191,7 @@ const AddProduct = (props) => {
                 data.product_video_url = props?.row?.product_video_url
             }
         } else {
-            if (data?.product_image_1?.length > 0 && childData[0]?.media_url == '') {
+            if (data?.product_image_1?.length > 0 && (childData[0]?.media_url == undefined || childData[0]?.media_url == '')) {
                 await ImageUpload(data?.product_image_1[0], "shopProduct", "MainImage", data?.product_name)
                 data.product_image_1 = `${productLink}${data?.product_name}_MainImage_${data?.product_image_1[0]?.name}`
             } else {
@@ -200,7 +201,8 @@ const AddProduct = (props) => {
                     data.product_image_1 = ''
                 }
             }
-            if (data?.product_image_2?.length > 0 && childData[1]?.media_url == '') {
+            if (data?.product_image_2?.length > 0 && (childData[1]?.media_url == undefined || childData[1]?.media_url == '')) {
+                console.log('product 2 inside')
                 await ImageUpload(data?.product_image_2[0], "shopProduct", "Image2", data?.product_name)
                 data.product_image_2 = `${productLink}${data?.product_name}_Image2_${data?.product_image_2[0]?.name}`
             } else {
@@ -210,7 +212,7 @@ const AddProduct = (props) => {
                     data.product_image_2 = ''
                 }
             }
-            if (data?.product_image_3?.length > 0 && childData[2]?.media_url == '') {
+            if (data?.product_image_3?.length > 0 && (childData[2]?.media_url == undefined || childData[2]?.media_url == '')) {
                 await ImageUpload(data?.product_image_3[0], "shopProduct", "Image3", data?.product_name)
                 data.product_image_3 = `${productLink}${data?.product_name}_Image3_${data?.product_image_3[0]?.name}`
             } else {
@@ -220,7 +222,7 @@ const AddProduct = (props) => {
                     data.product_image_3 = ''
                 }
             }
-            if (data?.product_image_4?.length > 0 && childData[3]?.media_url == '') {
+            if (data?.product_image_4?.length > 0 && (childData[3]?.media_url == undefined || childData[3]?.media_url == '')) {
                 await ImageUpload(data?.product_image_4[0], "shopProduct", "Image4", data?.product_name)
                 data.product_image_4 = `${productLink}${data?.product_name}_Image4_${data?.product_image_4[0]?.name}`
             } else {
@@ -230,7 +232,7 @@ const AddProduct = (props) => {
                     data.product_image_4 = ''
                 }
             }
-            if (data?.product_image_5?.length > 0 && childData[4]?.media_url == '') {
+            if (data?.product_image_5?.length > 0 && (childData[4]?.media_url == undefined || childData[4]?.media_url == '')) {
                 await ImageUpload(data?.product_image_5[0], "shopProduct", "Image5", data?.product_name)
                 data.product_image_5 = `${productLink}${data?.product_name}_Image5_${data?.product_image_5[0]?.name}`
             } else {
@@ -251,6 +253,7 @@ const AddProduct = (props) => {
             var updatedData = { ...data, vendor: props?.row?.vendor?.vendor_id }
             editVendorProduct(props?.row?.product_id, updatedData).then(res => {
                 if (res?.status == 'success') {
+                    setLoader(false);
                     props?.getProducts()
                     toast.success('Product updated successfully')
                     toggle();
@@ -273,8 +276,10 @@ const AddProduct = (props) => {
                     setopenGallery(false);
                     setopenGalleryModal(false);
                     setChildData([])
+                    setLoader(false);
                 } else {
                     toast.error('Error while creating product')
+                    setLoader(false);
                 }
             })
         }

@@ -187,7 +187,8 @@ const Step1 = (props) => {
                     Latitude*
                 </label>
                 <input
-                    type="text"
+                    type="number"
+                    step="any"
                     placeholder='Latitude'
                     className={inputClass}
                     {...register('latitude', { required: manually })}
@@ -199,7 +200,8 @@ const Step1 = (props) => {
                     Longitude*
                 </label>
                 <input
-                    type="text"
+                    type="number"
+                    step="any"
                     placeholder='Longitutde'
                     className={inputClass}
                     {...register('longitude', { required: manually })}

@@ -333,7 +333,7 @@ export const addRestaurant = async (data) => {
     }
 }
 
-/* ========================== get all Restaurant =========================== */
+/* ========================== get all Restaurant for Admin =========================== */
 export const getRestarant = async () => {
     const url = `${environment.baseUrl}vendor/create_restaurant`;
     try {

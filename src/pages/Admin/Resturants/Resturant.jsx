@@ -52,6 +52,17 @@ export default function Restaurant() {
   }
 
   useEffect(() => {
+    if (user?.role == "admin") {
+      getAllRestaurant();
+      GetFranchiseeData()
+    }
+    if (user?.role == "franchise") {
+      getFranchiseRestaurants();
+      GetFranchiseeData()
+    }
+  }, []);
+
+  useEffect(() => {
     if (data?.length > 0) {
       const newData = data?.map((data) => ({
         label: data?.user?.pincode,
@@ -143,6 +154,7 @@ export default function Restaurant() {
   // ============== Fetch All Admin Restaurants  ================
   const getAllRestaurant = () => {
     getRestarant().then((res) => {
+      console.log('restaurants = ', res)
       const restaurantVendors = res.filter(
         (item) => item?.vendor_type == "restaurant"
       );
@@ -245,16 +257,7 @@ export default function Restaurant() {
     { field: "isactive", header: "Franchise Verify", body: switchActive, sortable: true },
   ];
 
-  useEffect(() => {
-    if (user?.role == "admin") {
-      getAllRestaurant();
-      GetFranchiseeData()
-    }
-    if (user?.role == "franchise") {
-      getFranchiseRestaurants();
-      GetFranchiseeData()
-    }
-  }, []);
+
 
   return (
     <>
