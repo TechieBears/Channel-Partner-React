@@ -12,7 +12,6 @@ import { ImageUpload, productLink } from '../../../env';
 import MediaGallaryModal from '../../../pages/Settings/MediaGallery/MediaGallery';
 
 const AddProduct = (props) => {
-    console.log('props', props)
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
     const [FinalPriceSeller, setFinalPriceSeller] = useState([]);
@@ -294,7 +293,7 @@ const AddProduct = (props) => {
     }
 
     useEffect(() => {
-        if (LoggedUserDetails?.role == 'seller') {
+        if (LoggedUserDetails?.vendor_type == 'shop') {
             reset({
                 'product_name': props?.row?.product_name,
                 'product_category': props?.row?.product_category?.id,

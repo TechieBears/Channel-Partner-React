@@ -327,7 +327,7 @@ const Step2 = (props) => {
                 <input
                     type='time'
                     className={inputClass}
-                    step={1800}
+                    // step={1800}
                     {...register('shop_end_time', { required: true })}
                 />
                 {errors?.shop_closing_time && <Error title='Closing Hour is required' />}
@@ -702,8 +702,8 @@ export default function DashboardForm(props) {
     const onSubmit = async (data) => {
         console.log("🚀 ~ file: DashboardForm.jsx:773 ~ onSubmit ~ data:", data)
         isStepFalied()
-        // const shopStartTime = moment(data?.shop_start_time);
-        // const shopEndTime = moment(data?.shop_end_time);
+        const shopStartTime = new Date(data?.shop_start_time);
+        const shopEndTime = new Date(data?.shop_end_time);
         setLoader(true)
         if (activeStep == steps.length - 1) {
             if (props?.button != 'edit') {
@@ -850,8 +850,8 @@ export default function DashboardForm(props) {
                         ...data,
                         "type_of_cuisine": JSON.stringify(data.type_of_cuisine),
                         "vendorId": LoggedUserDetails?.sellerId,
-                        // "shop_start_time": shopStartTime,
-                        // "shop_end_time": shopEndTime,
+                        "shop_start_time": shopStartTime,
+                        "shop_end_time": shopEndTime,
                         "is_registered": true,
                     }
                     registerRestaurant(updatedData).then(res => {
@@ -866,6 +866,8 @@ export default function DashboardForm(props) {
                         ...data,
                         "type_of_cuisine": JSON.stringify(data.type_of_cuisine),
                         "vendorId": LoggedUserDetails?.sellerId,
+                        "shop_start_time": shopStartTime,
+                        "shop_end_time": shopEndTime,
                     }
                     console.log("🚀 ~ file: DashboardForm.jsx:896 ~ onSubmit ~ updatedData:", updatedData)
                     editOnBoarding(LoggedUserDetails?.sellerId, updatedData).then((res) => {

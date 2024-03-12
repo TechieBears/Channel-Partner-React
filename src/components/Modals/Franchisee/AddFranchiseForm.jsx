@@ -17,7 +17,6 @@ import moment from "moment";
 
 
 export default function AddFranchiseForm(props) {
-  console.log('props', props);
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const dispatch = useDispatch()

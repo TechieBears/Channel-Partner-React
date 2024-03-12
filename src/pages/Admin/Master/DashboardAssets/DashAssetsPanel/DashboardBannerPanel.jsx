@@ -25,7 +25,6 @@ const DashboardBannerPanel = () => {
   const getAllPromotionList = () => {
     try {
       addHomePromotion().then((res) => {
-        console.log(res.data)
         setpromotionList(res.data);
         dispatch(setPromotions(res))
       })
@@ -50,7 +49,6 @@ const DashboardBannerPanel = () => {
   const getAllBannerList = () => {
     try {
       getHomeBanners().then((res) => {
-        console.log(res.data);
         setBannerList(res.data);
       });
     } catch (error) {
