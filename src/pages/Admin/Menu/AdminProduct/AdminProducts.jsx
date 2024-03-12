@@ -375,7 +375,7 @@ const AdminProduct = (props) => {
     // =============================== PRODUCTS SWITCHES  =============================
     const switchVerify = (row) => {
         return (
-            <div className="text-white hover:text-red-500">
+            <div className="text-transparent hover:text-red-500">
                 <Switch
                     value={row?.product_isverified_byadmin}
                     onChange={() => verifyActions(row)}
@@ -406,7 +406,7 @@ const AdminProduct = (props) => {
     // =============================== FOOD ITEMS Admin Verify SWITCHES =============================
     const switchVerifyRes = (row) => {
         return (
-            <div className="text-white hover:text-red-500">
+            <div className="text-transparent hover:text-red-500">
                 <Switch
                     value={row?.food_isverified_byadmin}
                     onChange={() => itemVerifyAdmin(row)}
