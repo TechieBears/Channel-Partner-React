@@ -378,14 +378,15 @@ const AdminProduct = (props) => {
     // =============================== PRODUCTS SWITCHES  =============================
     const switchVerify = (row) => {
         return (
-            <div className="flex items-center justify-center gap-2 ">
+            <div className="">
                 <Switch
                     value={row?.product_isverified_byadmin}
                     onChange={() => verifyActions(row)}
-                    disabled={LoggedUserDetails?.role == 'franchise' || row?.markup_percentage == 0 || row?.markup_percentage == undefined ? true : false}
+                    disabled={LoggedUserDetails?.role == 'franchise' || row?.markup_percentage == 0 || row?.markup_percentage == undefined || row?.final_price == 0 ? true : false}
                     size={50}
                     backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
                     borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
+                {row?.markup_percentage == 0 || row?.markup_percentage == undefined || row?.final_price == 0 ? <h6 className='text-xs text-gray-500'>Please Add Markup</h6> : null}
             </div>
         )
     }
@@ -408,14 +409,15 @@ const AdminProduct = (props) => {
     // =============================== FOOD ITEMS Admin Verify SWITCHES =============================
     const switchVerifyRes = (row) => {
         return (
-            <div className="flex items-center justify-center gap-2 ">
+            <div className="">
                 <Switch
                     value={row?.food_isverified_byadmin}
                     onChange={() => itemVerifyAdmin(row)}
-                    disabled={LoggedUserDetails?.role == 'franchise' || row?.markup_percentage == 0 || row?.markup_percentage == undefined ? true : false}
+                    disabled={LoggedUserDetails?.role == 'franchise' || row?.markup_percentage == 0 || row?.markup_percentage == undefined || row?.final_price == 0 ? true : false}
                     size={50}
                     backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
                     borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
+                {row?.markup_percentage == 0 || row?.markup_percentage == undefined || row?.final_price == 0 ? <h6 className='text-xs text-gray-500'>Please Add Markup</h6> : null}
             </div>
         )
     }
@@ -473,8 +475,8 @@ const AdminProduct = (props) => {
         { field: 'product_Manufacturer_Name', header: 'Manufacturer Name', sortable: true },
         { field: 'product_country_of_origin', header: 'Country Of Origin', sortable: true },
         { filed: 'action', header: 'Action', body: productaction, sortable: true },
-        { field: 'isverify', header: 'Admin Verify', body: switchVerify, sortable: true },
-        { field: 'featured', header: 'Featured Products', body: switchFeatured, sortable: true },
+        { field: 'isverify', header: 'Admin Verify', body: switchVerify, sortable: true, style: true },
+        { field: 'featured', header: 'Featured Products', body: switchFeatured, sortable: true, style: true },
     ]
 
     const FoodItemColumns = [
