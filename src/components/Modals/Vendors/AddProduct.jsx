@@ -134,7 +134,6 @@ const AddProduct = (props) => {
         setLoader(true);
         if (props?.title == 'Edit Product') {
             if (data?.product_image_1?.length > 0) {
-                console.log('Product image1 if')
                 await ImageUpload(data?.product_image_1[0], "shopProduct", "MainImage", data?.product_name)
                 data.product_image_1 = `${productLink}${data?.product_name}_MainImage_${data?.product_image_1[0]?.name}`
             } else {
@@ -202,7 +201,6 @@ const AddProduct = (props) => {
                 }
             }
             if (data?.product_image_2?.length > 0 && (childData[1]?.media_url == undefined || childData[1]?.media_url == '')) {
-                console.log('product 2 inside')
                 await ImageUpload(data?.product_image_2[0], "shopProduct", "Image2", data?.product_name)
                 data.product_image_2 = `${productLink}${data?.product_name}_Image2_${data?.product_image_2[0]?.name}`
             } else {
@@ -251,37 +249,44 @@ const AddProduct = (props) => {
         }
         if (props?.title == 'Edit Product') {
             var updatedData = { ...data, vendor: props?.row?.vendor?.vendor_id }
-            editVendorProduct(props?.row?.product_id, updatedData).then(res => {
-                if (res?.status == 'success') {
-                    setLoader(false);
-                    props?.getProducts()
-                    toast.success('Product updated successfully')
-                    toggle();
-                    reset();
-                    setopenGallery(false);
-                    setopenGalleryModal(false);
-                    setChildData([])
-                }
-            })
+            try {
+                editVendorProduct(props?.row?.product_id, updatedData).then(res => {
+                    if (res?.status == 'success') {
+                        setLoader(false);
+                        props?.getProducts()
+                        toast.success('Product updated successfully')
+                        toggle();
+                        reset();
+                        setopenGallery(false);
+                        setopenGalleryModal(false);
+                        setChildData([])
+                    }
+                })
+            } catch (error) {
+                console.log('error', error)
+            }
         } else {
             var updatedData = { ...data, vendor: LoggedUserDetails?.sellerId, final_price: FinalPriceSeller }
-            console.log(updatedData)
-            addProduct(updatedData).then((res) => {
-                if (res?.status == 'success') {
-                    props?.getProducts()
-                    toast.success('Product Added Successfully')
-                    toggle();
-                    props?.getProducts();
-                    reset();
-                    setopenGallery(false);
-                    setopenGalleryModal(false);
-                    setChildData([])
-                    setLoader(false);
-                } else {
-                    toast.error('Error while creating product')
-                    setLoader(false);
-                }
-            })
+            try {
+                addProduct(updatedData).then((res) => {
+                    if (res?.status == 'success') {
+                        props?.getProducts()
+                        toast.success('Product Added Successfully')
+                        toggle();
+                        props?.getProducts();
+                        reset();
+                        setopenGallery(false);
+                        setopenGalleryModal(false);
+                        setChildData([])
+                        setLoader(false);
+                    } else {
+                        toast.error('Error while creating product')
+                        setLoader(false);
+                    }
+                })
+            } catch (error) {
+                console.log('error', error);
+            }
         }
     }
 
