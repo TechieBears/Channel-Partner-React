@@ -4,7 +4,7 @@ import { formBtn1, formBtn2, inputClass, labelClass } from '../../../utils/Custo
 import Error from '../../../components/Errors/Error'
 import LoadBox from '../../../components/Loader/LoadBox';
 import { ConfigurationCharges, GetConfigurationCharges } from "../../../api";
-import {setConfigurations } from '../../../redux/Slices/loginSlice';
+import { setConfigurations } from '../../../redux/Slices/loginSlice';
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from 'react-toastify';
 
@@ -20,7 +20,6 @@ function Tax() {
     const [editable, setEditable] = useState(false);
     const [saveButtonVisible, setSaveButtonVisible] = useState(false);
     const [configData, setConfigData] = useState();
-    console.log('editable = ', editable)
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -55,7 +54,6 @@ function Tax() {
     const getconfig = () => {
         try {
             GetConfigurationCharges().then((res) => {
-                console.log('config data = ', res);
                 setFormData(res[0]);
                 setConfigData(res);
                 dispatch(setConfigurations(res));
@@ -66,7 +64,7 @@ function Tax() {
     };
 
     useEffect(() => {
-        getconfig();    
+        getconfig();
     }, []);
 
     // ============================= form submiting ======================================
@@ -74,30 +72,29 @@ function Tax() {
         event.preventDefault();
         if (data?.gst == '') {
             data.gst = formData?.gst
-        } 
+        }
         if (data?.tds == '') {
             data.tds = formData?.tds
-        } 
+        }
         if (data?.tcs == '') {
             data.tcs = formData?.tcs
-        } 
+        }
         if (data?.handling_charges == '') {
             data.handling_charges = formData?.handling_charges
-        } 
+        }
         if (data?.platform_fee == '') {
             data.platform_fee = formData?.platform_fee
-        } 
+        }
         if (data?.mini_cart == '') {
             data.mini_cart = formData?.mini_cart
-        } 
+        }
         if (data?.multi_cart == '') {
             data.multi_cart = formData?.multi_cart
-        } 
+        }
         if (data?.delivery_charges == '') {
             data.delivery_charges = formData?.delivery_charges
-        } 
+        }
         try {
-            console.log('data', data)
             setLoader(true);
             const response = await ConfigurationCharges(configData[0]?.charges_id, data)
             if (response?.message == "edited successfully") {
@@ -117,7 +114,7 @@ function Tax() {
             console.log('error', error);
         }
     }
-   
+
     return (
         <div className='p-4 m-4'>
             <div className="p-4 mb-6 bg-white rounded-lg">
@@ -165,7 +162,7 @@ function Tax() {
                                 </select>
                                 {/* {errors.tds && <Error title='TDS is Required*' />} */}
                             </div>
-                    
+
                             <div className="">
                                 <label className={labelClass}>
                                     TCS*
@@ -186,9 +183,9 @@ function Tax() {
                                 </select>
                                 {/* {errors.tcs && <Error title='TCS is Required*' />} */}
                             </div>
-                            
+
                             <div className="">
-                            <label className={labelClass}>Handling Charges*</label>
+                                <label className={labelClass}>Handling Charges*</label>
                                 <input
                                     type="number"
                                     placeholder="20"
@@ -254,10 +251,10 @@ function Tax() {
                         </div>
                     </div>
                     <footer className="flex justify-end px-4 py-2 space-x-3 bg-white">
-                        { !editable  && <button type='button' className={formBtn1} onClick={handleEdit}>
+                        {!editable && <button type='button' className={formBtn1} onClick={handleEdit}>
                             Edit
-                        </button> }
-                   
+                        </button>}
+
                         {/* {!editable && <button type='submit' className={formBtn1}>Save</button>} */}
                         {saveButtonVisible && editable && <button type='submit' className={formBtn1}>Save</button>}
                         {saveButtonVisible && <button type='button' className={formBtn2} onClick={closeBtn}>Cancel</button>}

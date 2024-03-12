@@ -10,7 +10,6 @@ import Error from "../../Errors/Error";
 import LoadBox from "../../Loader/LoadBox";
 
 export default function SubCategoryForm(props) {
-  console.log('props -', props)
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const { register, handleSubmit, control, watch, reset, formState: { errors } } = useForm();
