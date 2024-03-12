@@ -112,7 +112,7 @@ const VendorProduct = () => {
     const representativeBodyTemplate = (row) => {
         return (
             <div className="rounded-full w-11 h-11">
-                {user?.vendor_type == 'seller' && <img src={row?.product_image_1 == null || row?.product_image_1 == '' || row?.product_image_1 == undefined ? userImg : row?.product_image_1} className="object-cover w-full h-full rounded-full" alt={row.first_name} />}
+                {user?.vendor_type == 'shop' && <img src={row?.product_image_1 == null || row?.product_image_1 == '' || row?.product_image_1 == undefined ? userImg : row?.product_image_1} className="object-cover w-full h-full rounded-full" alt={row.first_name} />}
                 {user?.vendor_type == 'restaurant' && <img src={row?.food_image_1 == null || row?.food_image_1 == '' || row?.food_image_1 == undefined ? userImg : row?.food_image_1} className="object-cover w-full h-full rounded-full" alt={row.food_name} />}
             </div>
         );
@@ -121,7 +121,7 @@ const VendorProduct = () => {
     const adminVerification = (row) =>
     (<div className="flex items-center justify-center gap-2">
         <Switch
-            value={user?.vendor_type == 'seller' ? row?.product_isverified_byadmin : row?.food_isverified_byadmin}
+            value={user?.vendor_type == 'shop' ? row?.product_isverified_byadmin : row?.food_isverified_byadmin}
             disabled={true}
             size={50}
             backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
@@ -132,7 +132,7 @@ const VendorProduct = () => {
     const franchiseVerification = (row) =>
     (<div className="flex items-center justify-center gap-2">
         <Switch
-            value={user?.vendor_type == 'seller' ? row?.product_isverified_byfranchise : row?.food_isverified_byfranchise}
+            value={user?.vendor_type == 'shop' ? row?.product_isverified_byfranchise : row?.food_isverified_byfranchise}
             disabled={true}
             size={50}
             backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}

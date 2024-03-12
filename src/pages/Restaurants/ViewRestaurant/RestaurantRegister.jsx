@@ -32,9 +32,13 @@ export default function RestaurantRegister() {
     ].filter(image => image.URL !== '' || image.URL !== null);
 
     const getDetails = () => {
-        getSingleRestaurant(User?.sellerId).then(res => {
-            setData(res)
-        })
+        try {
+            getSingleRestaurant(User?.sellerId).then(res => {
+                setData(res)
+            })
+        } catch (error) {
+            console.log('error', error)
+        }
     }
 
     useEffect(() => {

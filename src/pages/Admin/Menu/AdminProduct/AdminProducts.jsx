@@ -95,7 +95,7 @@ const AdminProduct = (props) => {
     const getProducts = () => {
         try {
             getProductsByAdmin().then(res => {
-                setShopProducts(res?.results)
+                setShopProducts(res)
             });
         } catch (error) {
             console.log(error);
