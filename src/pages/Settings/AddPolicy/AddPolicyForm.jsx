@@ -7,6 +7,8 @@ import { Dialog, Transition } from '@headlessui/react';
 import Error from '../../../components/Errors/Error';
 import LoadBox from '../../../components/Loader/LoadBox';
 import { addPolicy } from '../../../api';
+import { toast } from 'react-toastify';
+
 
 export default function AddPolicyForm(props) {
     const [isOpen, setIsOpen] = useState(false)
@@ -19,12 +21,30 @@ export default function AddPolicyForm(props) {
         reset,
         formState: { errors },
     } = useForm();
-    const onSubmit = (data) => {
-        console.log('data', data);
-        addPolicy([data]).then((res) => {
-            console.log('res', res);
-        })
+
+
+
+    const onSubmit = async (data) => {
+        setLoader(true)
+        try{
+            const response = await addPolicy([data]);
+            if (response?.length > 0) {
+                props?.getAllPrivacyPolicy()
+                toast.success('Privacy Policy added successfully');
+                toggle();
+                reset();
+                setLoader(false)
+            } else{
+                setLoader(false)
+                toast.error('Error while adding privacy policy');
+            }
+        }catch(err){
+            setLoader(false)
+            console.log('err', err);
+        }
     }
+
+
     const closeBtn = () => {
         toggle();
         setLoader(false);
