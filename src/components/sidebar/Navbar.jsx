@@ -1,8 +1,5 @@
-import moment from "moment/moment";
-import "../../css/Navbar.css";
-import greetingTime from "greeting-time";
-import userImg from "../../assets/user.jpg";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import greetingTime from "greeting-time";
 import {
   ArrowDown2,
   HambergerMenu,
@@ -11,12 +8,18 @@ import {
   Setting2,
   User,
 } from "iconsax-react";
+import { CalendarDays } from "lucide-react";
+import moment from "moment/moment";
+import { useEffect, useState } from "react";
+import Switch from "react-js-switch";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
-import { CalendarDays } from "lucide-react";
-import { useEffect, useState } from "react";
-import LogoutModal from "../Modals/NavbarModals/LogoutModal";
 import { getSingleRestaurant } from "../../api";
+import userImg from "../../assets/user.jpg";
+import "../../css/Navbar.css";
+import LoginModal from "../Modals/NavbarModals/LoginModal";
+import LogoutModal from "../Modals/NavbarModals/LogoutModal";
+import SessionStartModal from "../Modals/NavbarModals/SessionStartModal";
 // import DashboardForm from '../modals/DashboardModals/DashboardForm';
 
 const Navbar = ({ mobileSidebar, setMobileSidebar }) => {
@@ -24,11 +27,18 @@ const Navbar = ({ mobileSidebar, setMobileSidebar }) => {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState();
   const [card, setCard] = useState(true);
+  const sessionStarted = useSelector(state => state.session.isSessionStarted)
+  const [sessionModal, setSessionModal] = useState(false);
+  const [loginModal, setLoginModal] = useState(false);
   // ============================= logout user dashbaord ================================
   const logOut = () => {
     setOpen(!open);
     setCard(!card);
   };
+
+  const loginFunc = () => {
+    setLoginModal(!loginModal)
+  }
 
   const getDetails = () => {
     try {
@@ -42,6 +52,9 @@ const Navbar = ({ mobileSidebar, setMobileSidebar }) => {
 
   useEffect(() => {
     getDetails();
+    if (user?.role == 'seller' && user?.shopisopen == false && sessionStarted == false) {
+      setSessionModal(true);
+    }
   }, []);
 
   return (
@@ -54,8 +67,8 @@ const Navbar = ({ mobileSidebar, setMobileSidebar }) => {
           ) : (
             <span className="capitalize text-sky-400">
               {user?.vendor_type == "restaurant" &&
-              (data?.vendor?.shop_name != null ||
-                data?.vendor?.shop_name != undefined)
+                (data?.vendor?.shop_name != null ||
+                  data?.vendor?.shop_name != undefined)
                 ? data?.vendor?.shop_name
                 : null}
             </span>
@@ -69,6 +82,14 @@ const Navbar = ({ mobileSidebar, setMobileSidebar }) => {
         </div>
       </div>
       <div className="flex items-center justify-between md:justify-center lg:justify-start bg-white fixed top-0 right-0 py-4 px-4 sm:rounded-bl-[2rem] z-50 md:px-3 w-full md:w-[14rem] lg:w-[24rem] xl:w-[22rem] ">
+        {user?.role == 'seller' && user?.is_registered == true ? <Switch
+          value={sessionStarted}
+          // disabled={true}
+          size={50}
+          onChange={loginFunc}
+          backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
+          borderColor={{ on: '#86d993', off: '#c6c6c6' }}
+        /> : null}
         <button
           className="relative shadow-none xl:hidden "
           onClick={() => setMobileSidebar(!mobileSidebar)}
@@ -108,28 +129,26 @@ const Navbar = ({ mobileSidebar, setMobileSidebar }) => {
                 {user?.role == "admin"
                   ? "Admin"
                   : user?.role == "seller"
-                  ? user?.vendor_type
-                  : user?.role == "franchise"
-                  ? "Franchise"
-                  : ""}
+                    ? user?.vendor_type
+                    : user?.role == "franchise"
+                      ? "Franchise"
+                      : ""}
               </h4>
             </div>
 
             <button className="hidden px-3 lg:block ">
               <ArrowDown2
                 size={22}
-                className={`text-slate-400 duration-700 ease-in-out transition-all ${
-                  !card ? "-rotate-180" : ""
-                }`}
+                className={`text-slate-400 duration-700 ease-in-out transition-all ${!card ? "-rotate-180" : ""
+                  }`}
               />
             </button>
           </div>
         </div>
       </div>
       <div
-        className={`${
-          card ? "-top-96 opacity-0" : "top-20 opacity-100"
-        } bg-white  transition-all ease-in-out duration-700 fixed shadow-sm border right-6 py-2 rounded-lg z-20 px-4 lg:px-6 lg:py-1`}
+        className={`${card ? "-top-96 opacity-0" : "top-20 opacity-100"
+          } bg-white  transition-all ease-in-out duration-700 fixed shadow-sm border right-6 py-2 rounded-lg z-20 px-4 lg:px-6 lg:py-1`}
       >
         <div className="flex items-center pb-3 border-b border-slate-200 lg:hidden">
           <div className="flex-shrink-0">
@@ -187,6 +206,8 @@ const Navbar = ({ mobileSidebar, setMobileSidebar }) => {
         </div>
       </div>
       <LogoutModal setOpen={setOpen} open={open} />
+      <LoginModal setOpen={setLoginModal} open={loginModal} id={user?.sellerId} />
+      <SessionStartModal setOpen={setSessionModal} open={sessionModal} />
     </div>
   );
 };

@@ -1047,3 +1047,16 @@ export const getSingleRestaurant = async (id) => {
         console.log('error while getting data', error)
     }
 }
+
+//====================== session start api =================
+
+export const startSession = async (data) => {
+    const url = `${environment.baseUrl}vendor/seller_isopen`
+    try {
+        const response = await axios.post(url, data);
+        console.log('response', response)
+        return response.data
+    } catch (error) {
+        console.log('error', error)
+    }
+}
