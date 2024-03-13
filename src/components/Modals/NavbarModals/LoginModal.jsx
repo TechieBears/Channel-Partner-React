@@ -20,14 +20,18 @@ export default function LoginModal({ open, setOpen, id }) {
             'vendorID': id,
             'isshopopen': true,
         }
-        startSession(data).then(res => {
-            if (res?.status == 'success') {
-                // setLogin(true)
-                dispatch(setSessionStarted(true))
-                toast?.success(res?.message);
-                toggle();
-            }
-        })
+        try {
+            startSession(data).then(res => {
+                if (res?.status == 'success') {
+                    // setLogin(true)
+                    dispatch(setSessionStarted(true))
+                    toast?.success(res?.message);
+                    toggle();
+                }
+            })
+        } catch (error) {
+            console.log('error', error)
+        }
     }
 
     const logout = () => {
@@ -35,14 +39,18 @@ export default function LoginModal({ open, setOpen, id }) {
             'vendorID': id,
             'isshopopen': false,
         }
-        startSession(data).then(res => {
-            if (res?.status == 'success') {
-                // setLogin(false)
-                dispatch(setSessionStarted(false))
-                toast?.success(res?.message);
-                toggle();
-            }
-        })
+        try {
+            startSession(data).then(res => {
+                if (res?.status == 'success') {
+                    // setLogin(false)
+                    dispatch(setSessionStarted(false))
+                    toast?.success(res?.message);
+                    toggle();
+                }
+            })
+        } catch (error) {
+            console.log('error', error);
+        }
     }
 
     return (
