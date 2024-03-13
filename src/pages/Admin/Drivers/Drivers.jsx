@@ -127,7 +127,7 @@ function Drivers() {
             <Link to={`/drivers/driver-detail/${row.driver_id}`} state={row} className="bg-green-100 px-1.5 py-2 rounded-sm">
                 <Eye size="20" className='text-green-500' />
             </Link>
-            <AddDriverFrom button='edit' title='Edit User' data={row} DeliveryBoyDetails={DeliveryBoyDetails} />
+            <AddDriverFrom button='edit' title='Edit Driver' data={row} DeliveryBoyDetails={DeliveryBoyDetails} />
         </div>
     );
 

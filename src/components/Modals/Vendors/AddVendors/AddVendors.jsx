@@ -352,7 +352,7 @@ export default function AddVendors(props) {
                                                     <div className="">
                                                         <label className={labelClass}>Mobile Number*</label>
                                                         <input
-                                                            type='tel'
+                                                            type='number'
                                                             placeholder="Phone"
                                                             maxLength={10}
                                                             className={inputClass}
