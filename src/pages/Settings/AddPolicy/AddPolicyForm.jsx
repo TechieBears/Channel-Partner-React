@@ -1,5 +1,5 @@
 import { Edit } from 'iconsax-react';
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../utils/CustomClass';
@@ -26,21 +26,40 @@ export default function AddPolicyForm(props) {
 
     const onSubmit = async (data) => {
         setLoader(true)
-        try{
-            const response = await addPolicy([data]);
-            if (response?.length > 0) {
-                props?.getAllPrivacyPolicy()
-                toast.success('Privacy Policy added successfully');
-                toggle();
-                reset();
+        if (props.title != "Edit Privacy Policy") {      
+            try{
+                const response = await addPolicy([data]);
+                if (response?.length > 0) {
+                    props?.getAllPrivacyPolicy()
+                    toast.success('Privacy Policy added successfully');
+                    toggle();
+                    reset();
+                    setLoader(false)
+                } else{
+                    setLoader(false)
+                    toast.error('Error while adding privacy policy');
+                }
+            }catch(err){
                 setLoader(false)
-            } else{
-                setLoader(false)
-                toast.error('Error while adding privacy policy');
+                console.log('err', err);
             }
-        }catch(err){
-            setLoader(false)
-            console.log('err', err);
+        }else{
+            try{
+                const response = await addPolicy([data]);
+                if (response?.length > 0) {
+                    props?.getAllPrivacyPolicy()
+                    toast.success('Privacy Policy added successfully');
+                    toggle();
+                    reset();
+                    setLoader(false)
+                } else{
+                    setLoader(false)
+                    toast.error('Error while adding privacy policy');
+                }
+            }catch(err){
+                setLoader(false)
+                console.log('err', err);
+            }
         }
     }
 
@@ -49,9 +68,17 @@ export default function AddPolicyForm(props) {
         toggle();
         setLoader(false);
     }
+
+    useEffect(() => {
+        reset({
+            "title": props?.policytitle,
+            "description": props?.policydesc
+        })
+    }, [])
+
     return (
         <>
-            {props.button !== "edit" ? (
+            {props.title != "Edit Privacy Policy" ? (
                 <button onClick={toggle} className={tableBtn}>
                     {props?.title}
                 </button>

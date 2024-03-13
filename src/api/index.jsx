@@ -741,6 +741,66 @@ export const getPolicy = async () => {
         console.log(error)
     }
 }
+export const editHelpCenter = async (id, data) => {
+    const url = `${environment.baseUrl}app/edit_customer_support/${id}`
+    try {
+        const response = await axios.put(url, data);
+        return response.data;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const addHelpCenter = async (data) => {
+    const url = `${environment.baseUrl}app/customer-support`
+    try {
+        const response = await axios.post(url, data);
+        return response.data
+    }
+    catch (error) {
+        console.log(error)
+    }
+}
+
+export const getHelpCenter = async () => {
+    const url = `${environment.baseUrl}app/customer-support`
+    try {
+        const response = await axios.get(url);
+        return response.data
+    }
+    catch (error) {
+        console.log(error)
+    }
+}
+
+export const deletePrivacyPolicy = async (id) => {
+    const url = `${environment.baseUrl}app/edit_privacy_policy/${id}`;
+    try {
+        const response = await axios.delete(url);
+        return response.data;
+    } catch (err) {
+        console.log('error while posting data', err)
+    }
+}
+export const deleteHelpSupportbyId = async (id) => {
+    const url = `${environment.baseUrl}app/edit_privacy_policy/${id}`;
+    try {
+        const response = await axios.delete(url);
+        return response.data;
+    } catch (err) {
+        console.log('error while posting data', err)
+    }
+}
+
+export const deleteHelpCenter = async (id) => {
+    const url = `${environment.baseUrl}app/edit_privacy_policy/${id}`;
+    try {
+        const response = await axios.delete(url);
+        return response.data;
+    } catch (err) {
+        console.log('error while posting data', err)
+    }
+}
 
 export const addSubAdmin = async (data) => {
     const url = `${environment.baseUrl}app/registration`
