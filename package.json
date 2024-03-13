@@ -27,6 +27,7 @@
     "axios": "^1.4.0",
     "core-js": "^3.32.2",
     "dayjs": "^1.11.9",
+    "firebase": "^10.8.1",
     "greeting-time": "^1.0.0",
     "iconsax-react": "^0.0.8",
     "india-pincode-search": "^1.0.2",
