@@ -352,10 +352,11 @@ export default function AddVendors(props) {
                                                     <div className="">
                                                         <label className={labelClass}>Mobile Number*</label>
                                                         <input
-                                                            type='number'
+                                                            type='tel'
                                                             placeholder="Phone"
                                                             maxLength={10}
                                                             className={inputClass}
+                                                            onKeyDown={(e) => (e.key < '0' || e.key > '9') && e.key !== 'Backspace' && e.preventDefault()}
                                                             {...register("phone_no", { required: true, validate: validatePhoneNumber })}
                                                         />
                                                         {errors.phone_no && (
@@ -517,6 +518,7 @@ export default function AddVendors(props) {
                                                                 type="number"
                                                                 placeholder="10"
                                                                 className={inputClass}
+                                                                min={0}
                                                                 {...register("insta_commison_percentage", { required: true })}
                                                             />
                                                             {errors.address && (

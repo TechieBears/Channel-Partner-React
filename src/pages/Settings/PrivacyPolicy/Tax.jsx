@@ -190,6 +190,7 @@ function Tax() {
                                     type="number"
                                     placeholder="20"
                                     className={inputClass}
+                                    min={0}
                                     value={formData?.handling_charges}
                                     {...register("handling_charges")}
                                     readOnly={!editable}
@@ -203,6 +204,7 @@ function Tax() {
                                     type="number"
                                     placeholder="25"
                                     className={inputClass}
+                                    min={0}
                                     value={formData?.platform_fee}
                                     {...register("platform_fee")}
                                     readOnly={!editable}
@@ -217,6 +219,7 @@ function Tax() {
                                     placeholder="25"
                                     className={inputClass}
                                     value={formData?.mini_cart}
+                                    min={0}
                                     {...register("mini_cart")}
                                     readOnly={!editable}
                                     onChange={handleChange}
@@ -230,6 +233,7 @@ function Tax() {
                                     placeholder="25"
                                     className={inputClass}
                                     value={formData?.multi_cart}
+                                    min={0}
                                     {...register("multi_cart")}
                                     readOnly={!editable}
                                     onChange={handleChange}
@@ -243,6 +247,7 @@ function Tax() {
                                     placeholder="25"
                                     className={inputClass}
                                     value={formData?.delivery_charges}
+                                    min={0}
                                     {...register("delivery_charges")}
                                     readOnly={!editable}
                                     onChange={handleChange}

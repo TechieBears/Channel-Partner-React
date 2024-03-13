@@ -110,6 +110,7 @@ export default function AddFranchiseForm(props) {
   const closeBtn = () => {
     toggle();
     setLoader(false);
+    reset()
     // resetData();
   };
 
@@ -257,7 +258,9 @@ export default function AddFranchiseForm(props) {
                             <input
                               type="tel"
                               placeholder="+91"
+                              maxLength={10}
                               className={inputClass}
+                              onKeyDown={(e) => (e.key < '0' || e.key > '9') && e.key !== 'Backspace' && e.preventDefault()}
                               {...register("phone_no", { required: true, validate: validatePhoneNumber })}
                             />
                             {errors.phone_no && (
@@ -356,8 +359,8 @@ export default function AddFranchiseForm(props) {
                               className={inputClass}
                               {...register("city", { required: true, pattern: /^[A-Za-z]+$/i })}
                             />
-                            {errors.address && (
-                              <Error title={errors.address ? 'City should contain All Alphabets' : 'City is Required'} />
+                            {errors.city && (
+                              <Error title={errors.city ? 'City should contain All Alphabets' : 'City is Required'} />
                             )}
                           </div>
                         </div>

@@ -63,7 +63,7 @@ export default function Coupon() {
                     <div className="">
                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop '>Coupons</h1>
                     </div>
-                    <AddCoupon fetchCoupon={fetchCoupon} title='Add New Coupom' />
+                    <AddCoupon fetchCoupon={fetchCoupon} title='Add New Coupon' />
                 </div>
                 {<Table data={couponData} columns={columns} />}
             </div>
