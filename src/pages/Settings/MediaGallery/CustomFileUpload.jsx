@@ -19,7 +19,7 @@ const CustomFileUpload = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [EditingData, setEditingData] = useState(null);
 
-  const filteredImages = imageDetails.filter(data =>
+  const filteredImages = imageDetails?.filter(data =>
     data.media_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -189,34 +189,34 @@ const CustomFileUpload = () => {
 
         <div className="mt-5">
           <ul className="grid lg:grid-cols-6 lg:gap-4 md:grid-cols-4 sm:grid-cols-3 md:gap-3 sm:gap-1">
-            {filteredImages.length > 0 ? (
-              filteredImages?.map((data, index) => (
-                <li
-                  key={index}
-                  className="text-center bg-gray-100 rounded-sm shadow-lg"
-                >
-                  <img
-                    src={data?.media_url}
-                    alt={data?.media_name}
-                    className="object-cover h-40 min-w-full bg-slate-100"
-                  />
-                  <div className="flex justify-evenly py-3 items-center">
-                    <div className="py-2 text-xs font-semibold">
-                      {data?.media_name}
+              {filteredImages.length > 0 ? (
+                filteredImages?.map((data, index) => (
+                  <li
+                    key={index}
+                    className="text-center bg-gray-100 rounded-sm shadow-lg"
+                  >
+                    <img
+                      src={data?.media_url}
+                      alt={data?.media_name}
+                      className="object-cover h-40 min-w-full bg-slate-100"
+                    />
+                    <div className="flex justify-evenly py-3 items-center">
+                      <div className="py-2 text-xs font-semibold">
+                        {data?.media_name}
+                      </div>
+                      <button className='items-center p-1 bg-yellow-100 rounded-xl hover:bg-yellow-200' 
+                      onClick={() => handleEditClick(data)}>
+                        <Edit size={21} className='text-yellow-600' />
+                      </button>
+                        <Trash  onClick={() => handleDeleteImage(data?.media_id)}  size={21} className='text-red-400 cursor-pointer' />
                     </div>
-                    <button className='items-center p-1 bg-yellow-100 rounded-xl hover:bg-yellow-200' 
-                    onClick={() => handleEditClick(data)}>
-                      <Edit size={21} className='text-yellow-600' />
-                    </button>
-                      <Trash  onClick={() => handleDeleteImage(data?.media_id)}  size={21} className='text-red-400 cursor-pointer' />
-                  </div>
-                </li>
-              )) 
-            ) : (
-                <li className="text-center bg-gray-100 rounded-sm shadow-lg p-4">
-                  No data found
-                </li>
-            )}
+                  </li>
+                )) 
+              ) : (
+                  <li className="text-center bg-gray-100 rounded-sm shadow-lg p-4">
+                    No data found
+                  </li>
+              )}
           </ul>
         </div>
       </div>

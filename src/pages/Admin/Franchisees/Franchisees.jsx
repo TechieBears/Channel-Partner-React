@@ -175,7 +175,7 @@ function Franchisees() {
         // { field: 'gender', header: 'Gender', body: (row) => <h6>{row?.user?.gender}</h6>, sortable: false },
         { field: 'phone_no', header: 'Phone No', body: (row) => <h6>{row?.user?.phone_no}</h6>, sortable: false, style: true },
         { field: 'pincode', header: 'Pincode', body: (row) => <h6>{row?.user?.pincode}</h6>, sortable: false, style: true },
-        { field: 'address', header: 'Address', body: (row) => <h6>{row?.user?.address}</h6>, sortable: false, style: true },
+        // { field: 'address', header: 'Address', body: (row) => <h6>{row?.user?.address}</h6>, sortable: false, style: true },
         // { field: 'state', header: 'state', body: (row) => <h6>{row?.user?.state}</h6>, sortable: false },
         // { field: 'city', header: 'city', body: (row) => <h6>{row?.user?.city}</h6>, sortable: false },
         // { field: 'registration_date', header: 'Registration Date', body: (row) => <h6>{row?.user?.registration_date}</h6>, sortable: false },
