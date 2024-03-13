@@ -32,7 +32,7 @@ const Sidebar = ({ children }) => {
                             <NavLink className="flex items-center space-x-2" >
                                 <img src={logoImg} className={isActiveLink ? " object-contain w-16 h-16 transition-all duration-700" : 'object-contain w-16 h-16 transition-all duration-700'} />
                                 <NavLink className={"border-none decoration-0"} >
-                                    <h1 className={isActiveLink ? ' transition-all duration-700 delay-200 hidden' : "font-tb font-black text-2xl tracking-wide  transition-all duration-700 delay-200 text-orange-500"}>INSTA</h1>
+                                    <h1 className={isActiveLink ? ' transition-all duration-700 delay-200 hidden' : "font-tb font-black text-2xl tracking-wide  transition-all duration-700 delay-200 text-orange-500"}>MAX</h1>
                                     <h6 className={isActiveLink ? ' transition-all duration-700 delay-200 hidden' : "font-tb font-extrabold text-lg text-black transition-all duration-700 whitespace-nowrap delay-200 capitalize tracking-wide leading-4"}>Smart Bazaar</h6>
                                 </NavLink>
                             </NavLink>
