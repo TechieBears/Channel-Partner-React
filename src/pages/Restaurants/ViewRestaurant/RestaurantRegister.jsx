@@ -47,11 +47,14 @@ export default function RestaurantRegister() {
 
     return (
         <div className='px-5 gap-5'>
-            <div className='grid grid-cols-8 gap-x-4'>
-                <div className='col-span-6'>
+            <div className='gap-x-4'>
+                <div className='flex justify-end'>
+                    <DashboardForm data={data} dashBoard={true} button="edit" getDetails={getDetails} />
+                </div>
+                <div className=''>
                     <div className='bg-white rounded-xl mt-4 p-2 pb-4'>
                         <p className='font-semibold text-sky-400 text-xl p-2 '>Restaurant Details</p>
-                        <div className='mx-4 grid grid-cols-4 gap-y-4 '>
+                        <div className='mx-4 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-4 '>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Restaurant Name</h5>
                                 <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.vendor?.shop_name == null ? 'Registration Pending' : data?.vendor?.shop_name}</h5>
@@ -62,7 +65,7 @@ export default function RestaurantRegister() {
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Restaurant Contact</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.vendor?.shop_contact_number == null || data?.vendor?.shop_contact_number == '' ? 'Registration Pending' : data?.Restaurant_contact_number}</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.vendor?.shop_contact_number == null || data?.vendor?.shop_contact_number == '' ? 'Registration Pending' : data?.vendor?.shop_contact_number}</h5>
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Restaurant Opening Time</h5>
@@ -84,7 +87,7 @@ export default function RestaurantRegister() {
                     </div>
                     <div className='bg-white rounded-xl mt-4 p-2 pb-4'>
                         <p className='font-semibold text-sky-400 text-xl p-2 '>Legal Details</p>
-                        <div className='mx-4 grid grid-cols-4 gap-y-4'>
+                        <div className='mx-4 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-4'>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Bank Name</h5>
                                 <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.vendor?.bank_name == null ? 'Registration Pending' : data?.vendor?.bank_name}</h5>
@@ -119,16 +122,24 @@ export default function RestaurantRegister() {
                             </div>
                         </div>
                     </div>
-                    <div className='mt-4'>
-                        <DashboardForm data={data} dashBoard={true} button="edit" getDetails={getDetails} />
-                    </div>
                 </div>
-                <div className=' col-span-2 bg-white rounded-xl mt-4 p-2'>
-                    <p className='font-semibold text-sky-400 text-xl p-2 '>Restaurant Images</p>
-                    <SimpleGallery
-                        galleryID="my-test-gallery"
-                        images={images}
-                    />
+                <div className=' bg-white rounded-xl mt-4 p-2'>
+                    <p className='font-semibold text-sky-400 text-xl p-2'>Restaurant Images</p>
+                    <div className='p-2'>
+                        <p className='font-semibold text-lg '>Restaurant Images</p>
+                        <div className='grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-2'>
+                            {data?.ambience_image != '' && <img src={data?.ambience_image} alt='ambinece_image' />}
+                            {data?.vendor?.shop_image != '' && <img src={data?.vendor?.shop_image} alt='shop_image' />}
+                        </div>
+                    </div>
+                    <div className='p-2'>
+                        <p className='font-semibold text-lg '>Dish Images</p>
+                        <div className='grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-2'>
+                            {data?.food_image1 != '' && <img src={data?.food_image1} alt='food_image' />}
+                            {data?.food_image2 != '' && <img src={data?.food_image2} alt='food_image' />}
+                            {data?.food_image3 != '' && <img src={data?.food_image3} alt='food_image' />}
+                        </div>
+                    </div>
                 </div>
             </div>
 

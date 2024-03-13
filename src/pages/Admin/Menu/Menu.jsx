@@ -13,7 +13,7 @@ const Menu = (props) => {
     return (
         <div className="mx-5 mt-2" >
             <Tabs selectedIndex={selectedTab} onSelect={index => setSelectedTab(index)} >
-                <TabList className="flex mx-6 space-x-4 border-b">
+                <TabList className="flex sm:flex-col md:flex-row lg:flex-row mx-6 space-x-4 border-b">
                     {LoggedUserDetails?.role != 'seller' && <Tab
                         className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 0 ? 'text-sky-500  border-b-2 border-sky-400 outline-0' : 'text-gray-500 border-b'
                             }`}
