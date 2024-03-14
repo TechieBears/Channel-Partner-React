@@ -161,7 +161,7 @@ function Vendors() {
             <Link to={`/vendors/vendors-detail/${row?.vendor_id}`} state={row} className="bg-green-100 px-1.5 py-2 rounded-sm">
                 <Eye size="20" className='text-green-500' />
             </Link>
-            <AddVendors button='edit' title='Edit User' data={row} FranchiseeVendors={FranchiseeVendors} />
+            <AddVendors button='edit' title='Edit Vendor' data={row} FranchiseeVendors={FranchiseeVendors} />
         </div>
     );
 

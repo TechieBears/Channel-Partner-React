@@ -243,6 +243,7 @@ export default function AddRestaurant(props) {
                                                             maxLength={10}
                                                             placeholder='+91'
                                                             className={inputClass}
+                                                            onKeyDown={(e) => (e.key < '0' || e.key > '9') && e.key !== 'Backspace' && e.preventDefault()}
                                                             {...register('phone_no', { required: "Phone Number is required", validate: validatePhoneNumber })}
                                                         />
                                                         {errors.phone_no && <Error title={errors?.phone_no?.message} />}
@@ -307,6 +308,7 @@ export default function AddRestaurant(props) {
                                                             type="number"
                                                             placeholder='Insta Commision (%)'
                                                             className={inputClass}
+                                                            min={0}
                                                             {...register('insta_commison_percentage', { required: true, validate: validateCommision })}
                                                         />
                                                         {errors.insta_commison_percentage && <Error title='Insta Commision is Required*' />}

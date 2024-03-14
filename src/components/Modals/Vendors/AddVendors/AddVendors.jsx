@@ -26,10 +26,18 @@ export default function AddVendors(props) {
     const [loader, setLoader] = useState(false)
     const dispatch = useDispatch();
     const { register, handleSubmit, control, watch, reset, formState: { errors }, setValue } = useForm();
+    const SelectedFranchise = watch('created_by')
+
+
     const toggle = () => setOpen(!isOpen)
     const closeBtn = () => {
         toggle();
-        reset()
+        reset();
+        if (LoggedUserDetails?.role === 'franchise') {
+            setValue('pincode', LoggedUserDetails?.pincode)
+            setValue('state', LoggedUserDetails?.state)
+            setValue('city', LoggedUserDetails?.city)
+        }
     }
     const FranchiseeVendors = () => {
         try {
@@ -201,14 +209,25 @@ export default function AddVendors(props) {
     }, [props.data]);
 
     useEffect(() => {
+        if (SelectedFranchise?.length > 0 && isOpen && LoggedUserDetails?.role === 'admin') {
+            Franchisee.map((data) => {
+                if (data?.user?.id == SelectedFranchise) {
+                    setValue('pincode', data?.user?.pincode)
+                    setValue('state', data?.user?.state)
+                    setValue('city', data?.user?.city)
+                }
+            });
+        }
+    }, [SelectedFranchise]);
+
+    useEffect(() => {
         if (LoggedUserDetails?.role === 'franchise') {
-            reset({
-                pincode: LoggedUserDetails?.pincode,
-                state: LoggedUserDetails?.state,
-                city: LoggedUserDetails?.city,
-            })
+            setValue('pincode', LoggedUserDetails?.pincode)
+            setValue('state', LoggedUserDetails?.state)
+            setValue('city', LoggedUserDetails?.city)
         }
     }, [LoggedUserDetails])
+
     return (
         <>
             {props.button !== "edit" ? (
@@ -221,12 +240,6 @@ export default function AddVendors(props) {
                     className="bg-yellow-100 px-1.5 py-2 rounded-sm"><Edit size="20" className='text-yellow-500' />
                 </button>
             )}
-
-
-            {/* <button className={`${formBtn1} flex`} onClick={() => setOpen(true)}>
-                <Add className='text-white' />
-                {props?.title}
-            </button> */}
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-[100]" onClose={() => toggle}>
                     <Transition.Child
@@ -257,7 +270,7 @@ export default function AddVendors(props) {
                                         as="h2"
                                         className="w-full px-3 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
                                     >
-                                        Add Vendor
+                                        {props?.title}
                                     </Dialog.Title>
                                     <div className=" bg-gray-200/70">
                                         {/* React Hook Form */}
@@ -339,13 +352,15 @@ export default function AddVendors(props) {
                                                     <div className="">
                                                         <label className={labelClass}>Mobile Number*</label>
                                                         <input
-                                                            type="tel"
+                                                            type='tel'
                                                             placeholder="Phone"
+                                                            maxLength={10}
                                                             className={inputClass}
+                                                            onKeyDown={(e) => (e.key < '0' || e.key > '9') && e.key !== 'Backspace' && e.preventDefault()}
                                                             {...register("phone_no", { required: true, validate: validatePhoneNumber })}
                                                         />
                                                         {errors.phone_no && (
-                                                            <Error title={errors?.phone_no?.message} />
+                                                            <Error title={errors?.phone_no?.message ? errors?.phone_no?.message : 'Mobile Number Required'} />
                                                         )}
                                                     </div>
                                                     {props.button != 'edit' &&
@@ -450,11 +465,11 @@ export default function AddVendors(props) {
                                                             maxLength={6}
                                                             placeholder="PINCODE"
                                                             className={inputClass}
-                                                            readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
+                                                            readOnly={true}
                                                             {...register("pincode", { required: true, validate: validatePIN })}
                                                         />
                                                         {errors.pincode && (
-                                                            <Error title={errors?.pincode?.message} />
+                                                            <Error title={errors?.pincode?.message ? errors?.pincode?.message : "Pincode is required"} />
                                                         )}
                                                     </div>
                                                     <div className="">
@@ -475,11 +490,11 @@ export default function AddVendors(props) {
                                                             type="text"
                                                             placeholder="Enter State"
                                                             className={inputClass}
-                                                            readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
-                                                            {...register("state", { pattern: /^[A-Za-z]+$/i })}
+                                                            readOnly={true}
+                                                            {...register("state", { required: true, pattern: /^[A-Za-z]+$/i })}
                                                         />
-                                                        {errors.address && (
-                                                            <Error title={errors.address && 'State should contain All Alphabets'} />
+                                                        {errors.state && (
+                                                            <Error title={errors.state && 'State should contain All Alphabets'} />
                                                         )}
                                                     </div>
                                                     <div className="">
@@ -488,11 +503,11 @@ export default function AddVendors(props) {
                                                             type="text"
                                                             placeholder="City"
                                                             className={inputClass}
-                                                            readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
+                                                            readOnly={true}
                                                             {...register("city", { required: true, pattern: /^[A-Za-z]+$/i })}
                                                         />
-                                                        {errors.address && (
-                                                            <Error title={errors?.address ? 'State should contain All Alphabets' : 'City is Required'} />
+                                                        {errors.city && (
+                                                            <Error title={errors?.city ? 'State should contain All Alphabets' : 'City is Required'} />
                                                         )}
                                                     </div>
 
@@ -503,6 +518,7 @@ export default function AddVendors(props) {
                                                                 type="number"
                                                                 placeholder="10"
                                                                 className={inputClass}
+                                                                min={0}
                                                                 {...register("insta_commison_percentage", { required: true })}
                                                             />
                                                             {errors.address && (
@@ -557,7 +573,7 @@ export default function AddVendors(props) {
                                                         <label className={labelClass}>
                                                             Bank Name*
                                                         </label>
-                                                        <div className="flex items-center space-x-2">
+                                                        <div className="">
                                                             <input
                                                                 type="text"
                                                                 placeholder='Bank Name'

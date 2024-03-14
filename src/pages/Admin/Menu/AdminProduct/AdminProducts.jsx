@@ -223,11 +223,7 @@ const AdminProduct = (props) => {
 
                 let url = `${environment.baseUrl}app/all_products?product_name=${product_name}&product_msbcode=${product_msbcode}&franchise_msbcode=${franchise_msbcode?.value ? franchise_msbcode?.value : ''}&vendor_msbcode=${vendor_msbcode?.value ? vendor_msbcode?.value : ''}&product_category=${product_category?.value ? product_category?.value : ''}&product_subcategory=${product_subcategory?.value ? product_subcategory?.value : ''}`
                 await axios.get((props?.isrestaurant === false || props?.isrestaurant === undefined) ? url : restauranturl).then((res) => {
-                    if ((props?.isrestaurant === false || props?.isrestaurant === undefined)) {
                         setShopProducts(res?.data)
-                    } else {
-                        setShopProducts(res?.data?.results)
-                    }
                     toast.success("Filters applied successfully")
                 }).catch((err) => {
                     console.log("🚀 ~ file: Resturant.jsx:75 ~ awaitaxios.get ~ err:", err)

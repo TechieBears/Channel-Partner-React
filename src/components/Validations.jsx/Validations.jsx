@@ -8,13 +8,24 @@ export const validatePIN = (value) => {
 };
 
 // =================== Custom validation function for a 10-digit US phone number ============
+// export const validatePhoneNumber = (value) => {
+//     const pattern = /^\d{10}$/;
+//     if (pattern.test(value)) {
+//         return true;
+//     }
+//     return 'Phone Number must be 10-digit';
+// };
+
+
+// Custom validation function for a 10-digit US phone number
 export const validatePhoneNumber = (value) => {
-    const pattern = /^\d{10}$/;
-    if (pattern.test(value)) {
-        return true;
+    const isValid = /^(\+91)?[6-9][0-9]{9}$/.test(value);
+    if (!isValid) {
+        return "Phone Number must be 10-digit";
     }
-    return 'Phone Number must be 10-digit';
+    return true;
 };
+
 
 // ==================== Custom validation function for email ========================
 export const validateEmail = (value) => {

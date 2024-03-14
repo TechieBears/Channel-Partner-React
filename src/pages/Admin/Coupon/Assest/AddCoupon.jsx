@@ -141,6 +141,7 @@ export default function AddCoupon(props) {
                                                         placeholder='Percentage (%) '
                                                         type='number'
                                                         className={inputClass}
+                                                        min={0}
                                                         {...register('discount_percent', { required: true })}
                                                     />
                                                     {errors.discount_percent && <Error title='Percentage is required*' />}
@@ -151,6 +152,7 @@ export default function AddCoupon(props) {
                                                         placeholder='Discount Price (₹)'
                                                         type='number'
                                                         className={inputClass}
+                                                        min={0}
                                                         {...register('discount_price', { required: true })}
                                                     />
                                                     {errors.discount_price && <Error title='Discounted Price is required*' />}
@@ -175,7 +177,7 @@ export default function AddCoupon(props) {
                                                         <option value='Restaurant'>Restaurant</option>
                                                         <option value='Vendor'>Vendor</option>
                                                     </select>
-                                                    {errors.discount_percent && <Error title='Coupon Type is required*' />}
+                                                    {errors.coupon_type && <Error title='Coupon Type is required*' />}
                                                 </div>
                                             </div>
 

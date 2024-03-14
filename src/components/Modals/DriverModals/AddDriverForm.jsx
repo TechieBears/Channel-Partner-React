@@ -18,12 +18,25 @@ import { validateEmail, validatePIN, validatePhoneNumber } from '../../Validatio
 
 
 function AddDriverFrom(props) {
+    console.log("🚀 ~ file: AddDriverForm.jsx:21 ~ AddDriverFrom ~ props:", props)
     const [isOpen, setIsOpen] = useState(false);
     const [loader, setLoader] = useState(false);
     const Franchisee = useSelector((state) => state?.master?.Franchise);
+    const dispatch = useDispatch()
+    const {
+        register,
+        handleSubmit,
+        reset,
+        watch,
+        setValue,
+        formState: { errors },
+    } = useForm();
     const toggle = () => setIsOpen(!isOpen);
     const user = useSelector((state) => state?.user?.FranchiseeDetails);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
+    const SelectedFranchise = watch('created_by')
+    console.log("🚀 ~ file: AddDriverForm.jsx:38 ~ AddDriverFrom ~ SelectedFranchise:", SelectedFranchise)
+
     // // ========================= fetch data from api ==============================
     const FranchiseeDetails = () => {
         try {
@@ -50,15 +63,7 @@ function AddDriverFrom(props) {
         }
     };
 
-    const dispatch = useDispatch()
-    const {
-        register,
-        handleSubmit,
-        reset,
-        watch,
-        setValue,
-        formState: { errors },
-    } = useForm();
+   
 
     // ============================= form submiting ======================================
     const onSubmit = async (data) => {
@@ -230,6 +235,20 @@ function AddDriverFrom(props) {
     }, [])
 
     useEffect(() => {
+        // if (SelectedFranchise?.length > 0 && props?.button !== 'edit' && isOpen && LoggedUserDetails?.role === 'admin') {
+        if (SelectedFranchise?.length > 0 && isOpen && LoggedUserDetails?.role === 'admin') {
+            Franchisee.map((data) => {
+                if (data?.user?.id == SelectedFranchise) {
+                    setValue('pincode',data?.user?.pincode)
+                    setValue('state',data?.user?.state)
+                    setValue('city',data?.user?.city)
+                }
+            });
+        }
+    }, [SelectedFranchise]);
+
+
+    useEffect(() => {
         if (LoggedUserDetails?.role === 'franchise') {
             reset({
                 pincode: LoggedUserDetails?.pincode,
@@ -282,7 +301,7 @@ function AddDriverFrom(props) {
                                         as="h2"
                                         className="w-full px-3 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
                                     >
-                                        Add Delivery Boy
+                                        {props?.title}
                                     </Dialog.Title>
 
                                     <div className=" bg-gray-200/70">
@@ -361,7 +380,7 @@ function AddDriverFrom(props) {
                                                             className={inputClass}
                                                             {...register('email', { required: true, validate: validateEmail })}
                                                         />
-                                                        {errors.email && <Error title={errors?.email?.message} />
+                                                        {errors.email && <Error title={errors?.email?.message? errors?.email?.message: "Email is required*"} />
                                                         }
                                                     </div>
                                                     {/* <div className="">
@@ -397,7 +416,7 @@ function AddDriverFrom(props) {
                                                             maxLength={6}
                                                             placeholder='Pincode'
                                                             className={inputClass}
-                                                            readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
+                                                            readOnly={true}
                                                             {...register('pincode', { required: "Pincode is required*", validate: validatePIN })}
                                                         />
                                                         {errors.pincode && <Error title={errors?.pincode?.message} />}
@@ -411,7 +430,7 @@ function AddDriverFrom(props) {
                                                             // maxLength={6}
                                                             placeholder='City'
                                                             className={inputClass}
-                                                            readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
+                                                            readOnly={true}
                                                             {...register('city', { required: true, })}
                                                         />
                                                         {errors.city && <Error title="City is required*" />}
@@ -425,7 +444,7 @@ function AddDriverFrom(props) {
                                                             // maxLength={6}
                                                             placeholder='State'
                                                             className={inputClass}
-                                                            readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
+                                                            readOnly={true}
                                                             {...register('state', { required: true, })}
                                                         />
                                                         {errors.state && <Error title="State is required*" />}
@@ -435,13 +454,14 @@ function AddDriverFrom(props) {
                                                             Phone Number*
                                                         </label>
                                                         <input
-                                                            type="number"
+                                                            type="tel"
                                                             maxLength={10}
                                                             placeholder='+91'
                                                             className={inputClass}
+                                                            onKeyDown={(e) => (e.key < '0' || e.key > '9') && e.key !== 'Backspace' && e.preventDefault()}
                                                             {...register('phone_no', { required: true, validate: validatePhoneNumber })}
                                                         />
-                                                        {errors.phone_no && <Error title={errors?.phone_no?.message} />}
+                                                        {errors.phone_no && <Error title={errors?.phone_no?.message? errors?.phone_no?.message:'Phone number required*'} />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
