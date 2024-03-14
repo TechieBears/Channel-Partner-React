@@ -1,19 +1,25 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { CheckBadgeIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import React, { Fragment, useRef } from 'react'
-import { startSession } from '../../../api'
-import { toast } from 'react-toastify'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
+import { startSession } from '../../../api'
 import { setSessionStarted } from '../../../redux/Slices/SessionSlice'
+import { inputClass, labelClass } from '../../../utils/CustomClass'
+import Error from '../../Errors/Error'
 
 export default function LoginModal({ open, setOpen, id }) {
     const cancelButtonRef = useRef(null)
     const dispatch = useDispatch();
-    const { handleSubmit } = useForm();
+    const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
     const sessionStarted = useSelector(state => state?.session?.isSessionStarted)
     const toggle = () => {
         setOpen(false);
+        reset();
+    }
+    const specific = watch('session_timeout');
+    if (specific == 'specific') {
     }
     const logIn = () => {
         const data = {
@@ -90,11 +96,27 @@ export default function LoginModal({ open, setOpen, id }) {
                                             <Dialog.Title as="h3" className="text-lg font-semibold leading-6 text-gray-900 font-tbPop">
                                                 {sessionStarted == true ? 'Are You Sure you want to send session' : "Start your session"}
                                             </Dialog.Title>
-                                            <div className="mt-2">
+                                            {/* <div className="mt-2">
                                                 <p className="text-sm font-tbPop font-medium text-slate-500">
                                                     {sessionStarted == true ? 'Your will go offline for the day' : 'Confirm to start your session'}
                                                 </p>
-                                            </div>
+                                            </div> */}
+                                            {sessionStarted == true && <div className='mt-2'>
+                                                <label className={labelClass}>
+                                                    Session Out Timing
+                                                </label>
+                                                <select
+                                                    className={inputClass}
+                                                    {...register('session_timeout', { required: true })}
+                                                >
+                                                    <option value=''>Select</option>
+                                                    <option value='2 hours'>2 hours</option>
+                                                    <option value='4 hours'>4 hours</option>
+                                                    <option value='tommarow'>Tommarow</option>
+                                                    <option value='specific'>Specific date & time</option>
+                                                </select>
+                                                {errors?.session_timeout && <Error title='This is required' />}
+                                            </div>}
                                         </div>
                                     </div>
                                 </div>
@@ -108,7 +130,7 @@ export default function LoginModal({ open, setOpen, id }) {
                                     <button
                                         type="button"
                                         className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-100 sm:mt-0 sm:w-auto"
-                                        onClick={() => setOpen(false)}
+                                        onClick={() => toggle()}
                                         ref={cancelButtonRef}
                                     >
                                         Cancel

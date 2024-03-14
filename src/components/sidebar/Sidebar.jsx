@@ -1,19 +1,42 @@
-import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
 import { DirectLeft } from 'iconsax-react';
-import SidebarLink from './SidebarLink';
-import Navbar from './Navbar';
+import { useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Admin, Seller, Franchise } from './SidebarApi';
+import { NavLink, useLocation } from 'react-router-dom';
 import logoImg from '../../assets/logo_white.png';
+import { environment } from '../../env';
+import Navbar from './Navbar';
+import { Admin, Franchise, Seller } from './SidebarApi';
+import SidebarLink from './SidebarLink';
 
 const Sidebar = ({ children }) => {
+    const route = useLocation();
     const user = useSelector(state => state?.user?.loggedUserDetails)
-    // console.log('user = ', user)
+    const WebSocketUrl = `${environment.webSocketUrl}user_to_seller/${user?.msb_code}`;
+    const ws = useRef(new WebSocket(WebSocketUrl)).current
 
     const [isActiveLink, setIsActiveLink] = useState(false);
     const [mobileSidebar, setMobileSidebar] = useState(false);
     const dispatch = useDispatch()
+
+    useMemo(() => {
+        if (user?.role == 'seller' && (route?.pathname == '/vendor-orders' || route?.pathname == '/')) {
+            ws.open = () => {
+                console.log('WebSocket Client Connected');
+            };
+
+            ws.onerror = (e) => {
+                console.log(e.message);
+            };
+
+            ws.onmessage = (e) => {
+                const data = JSON.parse(e.data);
+                console.log("🚀 ~ file: VendorOrders.jsx:63 ~ useEffect ~ data:", data)
+                // window.alert(data?.orderId)
+            };
+        } else {
+            // ws.close();
+        }
+    }, [route])
 
     return (
         <>

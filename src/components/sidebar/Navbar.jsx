@@ -19,7 +19,7 @@ import userImg from "../../assets/user.jpg";
 import "../../css/Navbar.css";
 import LoginModal from "../Modals/NavbarModals/LoginModal";
 import LogoutModal from "../Modals/NavbarModals/LogoutModal";
-import SessionStartModal from "../Modals/NavbarModals/SessionStartModal";
+import SessionModal from "../Modals/NavbarModals/SessionModal";
 // import DashboardForm from '../modals/DashboardModals/DashboardForm';
 
 const Navbar = ({ mobileSidebar, setMobileSidebar }) => {
@@ -51,10 +51,11 @@ const Navbar = ({ mobileSidebar, setMobileSidebar }) => {
   };
 
   useEffect(() => {
-    getDetails();
-    if (user?.role == 'seller' && user?.shopisopen == false && sessionStarted == false) {
+    if (user?.role == 'seller' && sessionStarted == false) {
+      console.log('Ran if and useEffect')
       setSessionModal(true);
     }
+    getDetails();
   }, []);
 
   return (
@@ -207,7 +208,7 @@ const Navbar = ({ mobileSidebar, setMobileSidebar }) => {
       </div>
       <LogoutModal setOpen={setOpen} open={open} />
       <LoginModal setOpen={setLoginModal} open={loginModal} id={user?.sellerId} />
-      <SessionStartModal setOpen={setSessionModal} open={sessionModal} />
+      <SessionModal setOpen={setSessionModal} open={sessionModal} />
     </div>
   );
 };
