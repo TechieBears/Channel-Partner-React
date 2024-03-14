@@ -753,10 +753,10 @@ const AddProduct = (props) => {
                                                                     {...register("product_image_1", {
                                                                         required: props.title == 'Edit Product' && (!childData[0]?.media_url || childData[0]?.media_url == '') && !props?.row?.product_image_1
                                                                     })} />
-                                                                {props?.title == 'Edit Product' && props?.row?.product_image_1 != '' && props?.row?.product_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                {props?.title == 'Edit Product' && props?.row?.product_image_1 != '' && props?.row?.product_image_1 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {!childData[0] && props?.row?.product_image_1?.split('/').pop()}
                                                                 </label>}
-                                                                <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {childData[0]?.media_url?.split('/').pop()}
                                                                 </label>
 
@@ -776,10 +776,10 @@ const AddProduct = (props) => {
                                                                     {...register("product_image_2",
                                                                     )}
                                                                 />
-                                                                {props?.title == 'Edit Product' && props?.row?.product_image_2 != '' && props?.row?.product_image_2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                {props?.title == 'Edit Product' && props?.row?.product_image_2 != '' && props?.row?.product_image_2 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {!childData[1] && props?.row?.product_image_2?.split('/').pop()}
                                                                 </label>}
-                                                                <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {childData[1]?.media_url?.split('/').pop()}
                                                                 </label>
                                                                 {/* {errors.product_image_2 && <Error title='Profile Image is required*' />} */}
@@ -794,10 +794,10 @@ const AddProduct = (props) => {
                                                                     accept='image/jpeg,image/jpg,image/png'
                                                                     placeholder='Upload Images...'
                                                                     {...register("product_image_3")} />
-                                                                {props?.title == 'Edit Product' && props?.row?.product_image_3 != '' && props?.row?.product_image_3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                {props?.title == 'Edit Product' && props?.row?.product_image_3 != '' && props?.row?.product_image_3 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {!childData[2] && props?.row?.product_image_3?.split('/').pop()}
                                                                 </label>}
-                                                                <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {childData[2]?.media_url?.split('/').pop()}
                                                                 </label>
                                                                 {/* {errors.product_image_3 && <Error title='Profile Image is required*' />} */}
@@ -812,10 +812,10 @@ const AddProduct = (props) => {
                                                                     accept='image/jpeg,image/jpg,image/png'
                                                                     placeholder='Upload Images...'
                                                                     {...register("product_image_4")} />
-                                                                {props?.title == 'Edit Product' && props?.row?.product_image_4 != '' && props?.row?.product_image_4 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                {props?.title == 'Edit Product' && props?.row?.product_image_4 != '' && props?.row?.product_image_4 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {!childData[3] && props?.row?.product_image_4?.split('/').pop()}
                                                                 </label>}
-                                                                <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {childData[3]?.media_url?.split('/').pop()}
                                                                 </label>
                                                                 {/* {errors.product_image_4 && <Error title='Profile Image is required*' />} */}
@@ -830,10 +830,10 @@ const AddProduct = (props) => {
                                                                     accept='image/jpeg,image/jpg,image/png'
                                                                     placeholder='Upload Images...'
                                                                     {...register("product_image_5")} />
-                                                                {props?.title == 'Edit Product' && props?.row?.product_image_5 != '' && props?.row?.product_image_5 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                {props?.title == 'Edit Product' && props?.row?.product_image_5 != '' && props?.row?.product_image_5 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {!childData[4] && props?.row?.product_image_5?.split('/').pop()}
                                                                 </label>}
-                                                                <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {childData[4]?.media_url?.split('/').pop()}
                                                                 </label>
                                                                 {/* {errors.product_image_5 && <Error title='Profile Image is required*' />} */}

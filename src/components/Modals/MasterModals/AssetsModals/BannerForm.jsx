@@ -10,6 +10,12 @@ import { toast } from "react-toastify";
 import LoadBox from "../../../Loader/LoadBox";
 import Error from "../../../Errors/Error";
 import { ImageUpload, bannerLink } from "../../../../env";
+import { ImageCropDialog } from "../../ImageCropperModal/ImageCropper";
+
+
+const ASPECT_RATIO = 1;
+const MIN_DIMENSION = 3000;
+
 
 export default function BannerForm(props) {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,6 +25,41 @@ export default function BannerForm(props) {
   const [inputValue, setInputValue] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
 
+  // const imgRef = useRef(null);
+  // const previewCanvasRef = useRef(null);
+  const [imgSrc, setImgSrc] = useState("");
+  const [crop, setCrop] = useState();
+  const [imageError, setimageError] = useState("");
+  
+  const onSelectFile = (e) => {
+    const file = e.target.files?.[0];
+    console.log('e', e.target.files?.[0])
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+      const imageElement = new Image();
+      const imageUrl = reader.result?.toString() || "";
+      imageElement.src = imageUrl;
+
+      imageElement.addEventListener("load", (e) => {
+        if (imageError) setimageError("");
+        const { naturalWidth, naturalHeight } = e.currentTarget;
+        if (naturalWidth < MIN_DIMENSION || naturalHeight < MIN_DIMENSION) {
+          setimageError("Image must be at least 150 x 150 pixels.");
+          return setImgSrc("");
+        }
+      });
+      setImgSrc(imageUrl);
+      console.log('== imageUrl ==', imageUrl);
+      console.log('== imgSrc ==', imgSrc);
+
+    });
+    reader.readAsDataURL(file);
+  };
+
+
+
   const handleRadioChange = (option) => {
     setSelectedOption(option);
     setShowDropdown(option === 'dropdown');
@@ -27,8 +68,8 @@ export default function BannerForm(props) {
 
   const dispatch = useDispatch();
   const toggle = () => setIsOpen(!isOpen);
-  const {  register, handleSubmit, setValue, watch, reset, formState: { errors }, setError } = useForm({ criteriaMode: 'all' });
-  const [imageError, setImageError] = useState('');
+  const { register, handleSubmit, setValue, watch, reset, formState: { errors }, setError } = useForm({ criteriaMode: 'all' });
+
 
   // ===================== close modals ===============================
   const closeBtn = () => {
@@ -56,7 +97,7 @@ export default function BannerForm(props) {
   const onSubmit = async (data) => {
     if (imageError) {
       // Set error message using setError if image dimensions are not valid
-      setError("slide_url", {
+      setimageError("slide_url", {
         type: "manual",
         message: imageError
       });
@@ -129,15 +170,9 @@ export default function BannerForm(props) {
       }
     }
   };
-
-
-  
-
   
   const handleImageChange = (event,) => {
-
     const file = event.target.files[0];
-
     if (file) {
       const reader = new FileReader();
 
@@ -148,10 +183,11 @@ export default function BannerForm(props) {
         img.onload = () => {
           if (img.width === 3556 && img.height === 2000) {
             console.log('File uploaded successfully');
-            setImageError('');
+            setimageError('');
           } else {
-            console.log('errorr')
-            setImageError('Image dimensions should be 3556 x 2000');
+            alert('Image dimensions should be less than 3556 x 2000')
+            console.log('error')
+            setimageError('Image dimensions should be 3556 x 2000');
           }
         };
       };
@@ -234,9 +270,11 @@ export default function BannerForm(props) {
                             multiple
                             accept="image/jpeg,image/jpg,image/png"
                             placeholder="Upload Images..."
+                            // onChange={onSelectFile}
+                            // onChange={(e) => onSelectFile(e)}
                             {...register("slide_url", {
                               required: props.button === "edit" ? false : "Image is Required*",
-                              onChange: (e) => { handleImageChange(e) },
+                              onChange: (e) => {onSelectFile(e)},
                             })}
                           />
                           {props?.button == "edit" &&
@@ -250,7 +288,7 @@ export default function BannerForm(props) {
                             <Error title={errors.slide_url?.message} />
                           )}
                         </div>
-                        <div className="flex items-center gap-3 " >
+                        <div className="flex items-center gap-3">
                           <input
                             type="radio"
                             className='w-5 h-5'
@@ -340,9 +378,24 @@ export default function BannerForm(props) {
                         >
                           close
                         </button>
+
+                        {imgSrc != '' &&
+                        <button
+                          type="button"
+                          className={formBtn2}
+                          onClick={closeBtn}
+                        >
+                          close
+                        </button>}
                       </footer>
                     </form>
+
+                    {imgSrc &&  
+                      <ImageCropDialog 
+                      // className="hidden"
+                      imgSrc={imgSrc}/> }
                   </div>
+
                 </Dialog.Panel>
               </Transition.Child>
             </div>

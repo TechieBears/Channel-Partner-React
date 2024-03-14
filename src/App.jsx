@@ -6,7 +6,7 @@ import persistStore from "redux-persist/es/persistStore";
 import { PersistGate } from "redux-persist/integration/react";
 let persistor = persistStore(store);
 import { PrimeReactProvider } from 'primereact/api';
-
+import "react-image-crop/dist/ReactCrop.css";
 
 const App = () => {
 
