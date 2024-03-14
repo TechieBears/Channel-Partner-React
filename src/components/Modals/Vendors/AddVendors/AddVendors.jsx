@@ -14,7 +14,7 @@ import { setLoggedUser, setLoggedUserDetails, setRoleIs, setFranchiseeDetails } 
 import { useDispatch, useSelector } from "react-redux";
 import { ImageUpload, vendorlink } from "../../../../env";
 import { toast } from 'react-toastify';
-import { validateEmail, validateGST, validatePIN, validatePhoneNumber } from '../../../Validations.jsx/Validations';
+import { handleMobileNoNumericInput, validateEmail, validateGST, validatePIN, validatePhoneNumber } from '../../../Validations.jsx/Validations';
 import moment from 'moment';
 
 
@@ -356,7 +356,7 @@ export default function AddVendors(props) {
                                                             placeholder="Phone"
                                                             maxLength={10}
                                                             className={inputClass}
-                                                            onKeyDown={(e) => (e.key < '0' || e.key > '9') && e.key !== 'Backspace' && e.preventDefault()}
+                                                            onKeyDown={handleMobileNoNumericInput}
                                                             {...register("phone_no", { required: true, validate: validatePhoneNumber })}
                                                         />
                                                         {errors.phone_no && (

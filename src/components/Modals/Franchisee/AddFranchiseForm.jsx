@@ -10,7 +10,7 @@ import { setFranchise } from "../../../redux/Slices/masterSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { ImageUpload, franchiselink } from '../../../env';
 import { toast } from 'react-toastify';
-import { validateEmail, validateGST, validatePIN, validatePhoneNumber } from "../../Validations.jsx/Validations";
+import { handleMobileNoNumericInput, handlePincodeMaxLength, validateEmail, validateGST, validatePIN, validatePhoneNumber } from "../../Validations.jsx/Validations";
 import moment from "moment";
 
 
@@ -260,7 +260,7 @@ export default function AddFranchiseForm(props) {
                               placeholder="+91"
                               maxLength={10}
                               className={inputClass}
-                              onKeyDown={(e) => (e.key < '0' || e.key > '9') && e.key !== 'Backspace' && e.preventDefault()}
+                              onKeyDown={handleMobileNoNumericInput}
                               {...register("phone_no", { required: true, validate: validatePhoneNumber })}
                             />
                             {errors.phone_no && (
@@ -317,10 +317,12 @@ export default function AddFranchiseForm(props) {
                             <label className={labelClass}>PINCODE*</label>
                             <input
                               type="number"
-                              maxLength={6}
+                              max={6}
+                              min={0}
                               placeholder="PINCODE"
                               readOnly={props?.button == 'edit' ? true : false}
                               className={inputClass}
+                              onKeyDown={handlePincodeMaxLength}
                               {...register("pincode", { required: true, validate: validatePIN })}
                             />
                             {errors.pincode && (

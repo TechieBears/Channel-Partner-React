@@ -8,7 +8,7 @@ import Error from '../../Errors/Error';
 import { Edit } from 'iconsax-react';
 import { addRestaurant, editRestaurant } from '../../../api';
 import { toast } from 'react-toastify';
-import { validateCommision, validateEmail, validatePIN, validatePhoneNumber } from '../../Validations.jsx/Validations';
+import { handleMobileNoNumericInput, validateCommision, validateEmail, validatePIN, validatePhoneNumber } from '../../Validations.jsx/Validations';
 
 export default function AddRestaurant(props) {
     const [isOpen, setOpen] = useState(false);
@@ -243,7 +243,7 @@ export default function AddRestaurant(props) {
                                                             maxLength={10}
                                                             placeholder='+91'
                                                             className={inputClass}
-                                                            onKeyDown={(e) => (e.key < '0' || e.key > '9') && e.key !== 'Backspace' && e.preventDefault()}
+                                                            onKeyDown={handleMobileNoNumericInput}
                                                             {...register('phone_no', { required: "Phone Number is required", validate: validatePhoneNumber })}
                                                         />
                                                         {errors.phone_no && <Error title={errors?.phone_no?.message} />}

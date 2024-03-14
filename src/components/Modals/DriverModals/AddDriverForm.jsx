@@ -12,7 +12,7 @@ import { ImageUpload, deliveryBoylink } from '../../../env';
 import { setFranchise } from "../../../redux/Slices/masterSlice";
 import "../../../redux/Slices/loginSlice";
 import { GetFranchisee } from "../../../api";
-import { validateEmail, validatePIN, validatePhoneNumber } from '../../Validations.jsx/Validations';
+import { handleMobileNoNumericInput, validateEmail, validatePIN, validatePhoneNumber } from '../../Validations.jsx/Validations';
 
 
 
@@ -458,7 +458,7 @@ function AddDriverFrom(props) {
                                                             maxLength={10}
                                                             placeholder='+91'
                                                             className={inputClass}
-                                                            onKeyDown={(e) => (e.key < '0' || e.key > '9') && e.key !== 'Backspace' && e.preventDefault()}
+                                                            onKeyDown={handleMobileNoNumericInput}
                                                             {...register('phone_no', { required: true, validate: validatePhoneNumber })}
                                                         />
                                                         {errors.phone_no && <Error title={errors?.phone_no?.message? errors?.phone_no?.message:'Phone number required*'} />}
