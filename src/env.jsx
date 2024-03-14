@@ -4,6 +4,8 @@ export const environment = {
     // baseUrl: 'http://127.0.0.1:8000/',
     // baseUrl:'https://8191-103-172-226-7.ngrok-free.app/',
 
+    // ---------------- Staging Server --------------------------------
+    // baseUrl: 'https://5932-43-252-33-152.ngrok-free.app/',
 
     // --------------------Live Server Api URL--------------------
     baseUrl: 'https://cpapi.techiebears.com/',
