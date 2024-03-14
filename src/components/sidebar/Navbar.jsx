@@ -41,7 +41,9 @@ const Navbar = ({ mobileSidebar, setMobileSidebar }) => {
   };
 
   useEffect(() => {
-    getDetails();
+    if (user?.role == 'seller'){
+      getDetails();
+    }
   }, []);
 
   return (

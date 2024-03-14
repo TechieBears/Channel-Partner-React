@@ -6,7 +6,7 @@ import { formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../u
 import { Dialog, Transition } from '@headlessui/react';
 import Error from '../../../components/Errors/Error';
 import LoadBox from '../../../components/Loader/LoadBox';
-import { addPolicy } from '../../../api';
+import { addPolicy, editPrivacyPolicy } from '../../../api';
 import { toast } from 'react-toastify';
 
 
@@ -28,8 +28,8 @@ export default function AddPolicyForm(props) {
         setLoader(true)
         if (props.title != "Edit Privacy Policy") {      
             try{
-                const response = await addPolicy([data]);
-                if (response?.length > 0) {
+                const response = await addPolicy(data);
+                if (response?.status == 'success') {
                     props?.getAllPrivacyPolicy()
                     toast.success('Privacy Policy added successfully');
                     toggle();
@@ -45,10 +45,10 @@ export default function AddPolicyForm(props) {
             }
         }else{
             try{
-                const response = await editPrivacyPolicy([data]);
-                if (response?.length > 0) {
+                const response = await editPrivacyPolicy(props?.id, data);
+                if (response?.status == 'success') {
                     props?.getAllPrivacyPolicy()
-                    toast.success('Privacy Policy added successfully');
+                    toast.success('Privacy Policy Edited successfully');
                     toggle();
                     reset();
                     setLoader(false)

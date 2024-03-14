@@ -47,6 +47,7 @@ export default function AddTerm(props) {
             try {
                 editHelpCenter(props?.id ,data).then((res) => {
                     if (res?.status == 'success') {
+                        props?.getAllHelpCenter();
                         toast.success('Privacy Policy edited successfully')
                         toggle();
                         reset();
