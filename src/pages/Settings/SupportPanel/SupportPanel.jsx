@@ -57,8 +57,8 @@ const SupportPanel = () => {
     try{
       deleteHelpSupportbyId(id).then(res => {
           if (res?.status == 'success') {
-              toast.success('Privacy policy Deleted successfully')
-              getAllPrivacyPolicy();
+              toast.success('Help Center Deleted successfully')
+              getAllHelpCenter();
           }else{
               toast.error('Error while deleting privacy policy')
         }});

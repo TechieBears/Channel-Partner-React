@@ -730,6 +730,15 @@ export const addPolicy = async (data) => {
         console.log(error)
     }
 }
+export const editPrivacyPolicy = async (id, data) => {
+    const url = `${environment.baseUrl}app/edit_privacy_policy/${id}`
+    try {
+        const response = await axios.put(url, data);
+        return response.data;
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 export const getPolicy = async () => {
     const url = `${environment.baseUrl}app/privacy-policy`
@@ -783,17 +792,7 @@ export const deletePrivacyPolicy = async (id) => {
     }
 }
 export const deleteHelpSupportbyId = async (id) => {
-    const url = `${environment.baseUrl}app/edit_privacy_policy/${id}`;
-    try {
-        const response = await axios.delete(url);
-        return response.data;
-    } catch (err) {
-        console.log('error while posting data', err)
-    }
-}
-
-export const deleteHelpCenter = async (id) => {
-    const url = `${environment.baseUrl}app/edit_privacy_policy/${id}`;
+    const url = `${environment.baseUrl}app/edit_customer_support/${id}`;
     try {
         const response = await axios.delete(url);
         return response.data;
