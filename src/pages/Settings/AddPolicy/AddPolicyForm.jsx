@@ -45,7 +45,7 @@ export default function AddPolicyForm(props) {
             }
         }else{
             try{
-                const response = await addPolicy([data]);
+                const response = await editPrivacyPolicy([data]);
                 if (response?.length > 0) {
                     props?.getAllPrivacyPolicy()
                     toast.success('Privacy Policy added successfully');
