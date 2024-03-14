@@ -9,7 +9,7 @@ import { setBanner } from "../../../../redux/Slices/masterSlice";
 import { toast } from "react-toastify";
 import LoadBox from "../../../Loader/LoadBox";
 import Error from "../../../Errors/Error";
-import { ImageUpload, bannerLink, ImageUpload2 } from "../../../../env";
+import { ImageUpload, bannerLink } from "../../../../env";
 import { ImageCropDialog } from "../../ImageCropperModal/ImageCropper";
 
 
@@ -44,8 +44,6 @@ export default function BannerForm(props) {
     const file = e.target.files?.[0];
     console.log('e', e.target.files?.[0])
     setUrlName(e.target.files?.[0]?.name)
-    console.log('urlname = ', e.target.files?.[0]?.name)
-    console.log('urlname == ', urlName)
     if (!file) return;
 
     const reader = new FileReader();
@@ -132,7 +130,7 @@ export default function BannerForm(props) {
           // data.slide_url[0].name = urlName
         }
         if (childData) {
-          await ImageUpload2(
+          await ImageUpload(
             // data.slide_url[0],
             childData,
             "banner",

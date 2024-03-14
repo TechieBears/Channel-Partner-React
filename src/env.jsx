@@ -42,7 +42,7 @@ export const ImageUpload = async (data, folder, imgname, name) => {
 export const ImageUpload2 = async (data, folder, imgname, name) => {
     const command = new PutObjectCommand({
         Bucket: "channel-partner-media",
-        Key: `${folder}/${name}_${imgname}_${name}`,
+        Key: `${folder}/${imgname}_${imgname}_${name}`,
         Body: data,
     });
     try {
