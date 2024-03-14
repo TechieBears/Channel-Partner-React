@@ -14,7 +14,7 @@ import { ImageCropDialog } from "../../ImageCropperModal/ImageCropper";
 
 
 const ASPECT_RATIO = 1;
-const MIN_DIMENSION = 3000;
+const MIN_DIMENSION = 100;
 
 
 export default function BannerForm(props) {
@@ -181,7 +181,7 @@ export default function BannerForm(props) {
         img.src = event.target.result;
 
         img.onload = () => {
-          if (img.width === 3556 && img.height === 2000) {
+          if (img.width > 3556 && img.height > 2000) {
             console.log('File uploaded successfully');
             setimageError('');
           } else {
@@ -390,7 +390,7 @@ export default function BannerForm(props) {
                       </footer>
                     </form>
 
-                    {imgSrc &&  
+                    {imgSrc != '' &&  
                       <ImageCropDialog 
                       // className="hidden"
                       imgSrc={imgSrc}/> }
