@@ -1,5 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState, useEffect, useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from "../../../../utils/CustomClass";
 import { Edit } from "iconsax-react";
@@ -9,7 +9,7 @@ import { setBanner } from "../../../../redux/Slices/masterSlice";
 import { toast } from "react-toastify";
 import LoadBox from "../../../Loader/LoadBox";
 import Error from "../../../Errors/Error";
-import { ImageUpload, bannerLink } from "../../../../env";
+import { ImageUpload, bannerLink, ImageUpload2 } from "../../../../env";
 import { ImageCropDialog } from "../../ImageCropperModal/ImageCropper";
 
 
@@ -20,6 +20,8 @@ const MIN_DIMENSION = 100;
 export default function BannerForm(props) {
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [childData, setChildData] = useState('');
+
 
   const [selectedOption, setSelectedOption] = useState('dropdown');
   const [inputValue, setInputValue] = useState('');
@@ -30,10 +32,20 @@ export default function BannerForm(props) {
   const [imgSrc, setImgSrc] = useState("");
   const [crop, setCrop] = useState();
   const [imageError, setimageError] = useState("");
+  const [urlName, setUrlName] = useState("");
+
+  const avatarUrl = useRef(imgSrc);
+
+  const updateAvatar = (imgSrc) => {
+    avatarUrl.current = imgSrc;
+  };
   
   const onSelectFile = (e) => {
     const file = e.target.files?.[0];
     console.log('e', e.target.files?.[0])
+    setUrlName(e.target.files?.[0]?.name)
+    console.log('urlname = ', e.target.files?.[0]?.name)
+    console.log('urlname == ', urlName)
     if (!file) return;
 
     const reader = new FileReader();
@@ -51,8 +63,8 @@ export default function BannerForm(props) {
         }
       });
       setImgSrc(imageUrl);
-      console.log('== imageUrl ==', imageUrl);
-      console.log('== imgSrc ==', imgSrc);
+      // console.log('== imageUrl ==', imageUrl);
+      // console.log('== imgSrc ==', imgSrc);
 
     });
     reader.readAsDataURL(file);
@@ -70,6 +82,15 @@ export default function BannerForm(props) {
   const toggle = () => setIsOpen(!isOpen);
   const { register, handleSubmit, setValue, watch, reset, formState: { errors }, setError } = useForm({ criteriaMode: 'all' });
 
+  
+  const receiveDataFromChild = (data) => {
+    console.log('-- child data --', data);
+    setChildData(data);
+
+    if (data) {
+      setValue('slide_url', data)
+    }
+};
 
   // ===================== close modals ===============================
   const closeBtn = () => {
@@ -107,14 +128,18 @@ export default function BannerForm(props) {
 
     if (props?.button != "edit") {
       try {
-        if (data?.slide_url?.length !== 0) {
-          await ImageUpload(
-            data.slide_url[0],
+        if (urlName) {
+          // data.slide_url[0].name = urlName
+        }
+        if (childData) {
+          await ImageUpload2(
+            // data.slide_url[0],
+            childData,
             "banner",
             "banner",
-            data.slide_url[0].name
+            urlName
           );
-          data.slide_url = `${bannerLink}${data.slide_url[0].name}_banner_${data.slide_url[0].name}`;
+          data.slide_url = `${bannerLink}${urlName}_banner_${urlName}`;
         } else {
           data.slide_url = "";
         }
@@ -125,9 +150,11 @@ export default function BannerForm(props) {
               dispatch(setBanner(res));
               reset();
               toggle(),
-                setLoader(false),
-                props?.getAllBannerList();
+              setLoader(false),
+              props?.getAllBannerList();
+              setChildData('')
               toast.success(res?.message);
+              setImgSrc('')
             }, 1000);
           }
         });
@@ -157,9 +184,11 @@ export default function BannerForm(props) {
                 dispatch(setBanner(res));
                 reset();
                 toggle(),
-                  setLoader(false),
-                  props?.getAllBannerList();
+                setLoader(false),
+                props?.getAllBannerList();
                 toast.success(res?.message);
+                setChildData('')
+                setImgSrc('')
               }, 1000);
             }
           });
@@ -273,7 +302,7 @@ export default function BannerForm(props) {
                             // onChange={onSelectFile}
                             // onChange={(e) => onSelectFile(e)}
                             {...register("slide_url", {
-                              required: props.button === "edit" ? false : "Image is Required*",
+                              required: props.button == "edit" ? false : childData ? false : "Image is Required*",
                               onChange: (e) => {onSelectFile(e)},
                             })}
                           />
@@ -287,6 +316,11 @@ export default function BannerForm(props) {
                           {errors.slide_url && (
                             <Error title={errors.slide_url?.message} />
                           )}
+                             <label className="block mb-1 font-medium text-blue-800 text-md font-tb">
+                                {/* {childData?.split("/").pop()} */}
+                                {childData}
+                              </label>
+                          
                         </div>
                         <div className="flex items-center gap-3">
                           <input
@@ -378,20 +412,13 @@ export default function BannerForm(props) {
                         >
                           close
                         </button>
-
-                        {imgSrc != '' &&
-                        <button
-                          type="button"
-                          className={formBtn2}
-                          onClick={closeBtn}
-                        >
-                          close
-                        </button>}
                       </footer>
                     </form>
 
                     {imgSrc != '' &&  
                       <ImageCropDialog 
+                      updateAvatar={updateAvatar}
+                      sendDataToParent={receiveDataFromChild}
                       // className="hidden"
                       imgSrc={imgSrc}/> }
                   </div>

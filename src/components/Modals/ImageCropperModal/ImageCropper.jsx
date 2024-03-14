@@ -2,11 +2,12 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState, useRef } from "react";
 import { tableBtn, formBtn1 } from "../../../utils/CustomClass";
 import ReactCrop, { centerCrop, convertToPixelCrop, makeAspectCrop } from "react-image-crop";
+import setCanvasPreview from "./SetCanvasPreview";
 
 const ASPECT_RATIO = 1;
 const MIN_DIMENSION = 150;
 
-export const ImageCropDialog = (props) => {
+export const ImageCropDialog = ({sendDataToParent, updateAvatar, ...props}) => {
   const imgRef = useRef(null);
   const previewCanvasRef = useRef(null);
 
@@ -14,7 +15,7 @@ export const ImageCropDialog = (props) => {
   const [loader, setLoader] = useState(false);
   const [crop, setCrop] = useState();
   const [error, setError] = useState("");
-  console.log('props?.imgSrc = ', props?.imgSrc);
+  // console.log('props?.imgSrc = ', props?.imgSrc);
   const toggle = () => setOpen(!isOpen);
 
   const onImageLoad = (e) => {
@@ -65,7 +66,7 @@ export const ImageCropDialog = (props) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full h-full max-w-7xl overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl">
+                <Dialog.Panel className="w-full max-w-7xl overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl">
                   <Dialog.Title
                     as="h2"
                     className="w-full px-3 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
@@ -73,7 +74,7 @@ export const ImageCropDialog = (props) => {
                     Image Crop
                   </Dialog.Title>
 
-                  <div className="flex flex-col items-center">
+                  <div className="h-96 flex flex-col items-center">
                     <ReactCrop
                       crop={crop}
                       onChange={(pixelCrop, percentCrop) =>
@@ -95,21 +96,24 @@ export const ImageCropDialog = (props) => {
                     <button
                       className="px-4 py-2 mt-4 font-mono text-xs text-white rounded-2xl bg-sky-500 hover:bg-sky-600"
                       onClick={() => {
-                        setCanvasPreview(
-                          imgRef.current,
-                          previewCanvasRef.current,
-                          convertToPixelCrop(
-                            crop,
-                            imgRef.current.width,
-                            imgRef.current.height
-                          )
-                        );
-                        const dataUrl = previewCanvasRef.current.toDataURL();
-                        updateAvatar(dataUrl);
-                        closeModal();
+                        sendDataToParent(props?.imgSrc)
+                        setOpen(!isOpen);
+                        // reset();
+                        // setCanvasPreview(
+                        //   imgRef.current,
+                        //   previewCanvasRef.current,
+                        //   convertToPixelCrop(
+                        //     crop,
+                        //     imgRef.current.width,
+                        //     imgRef.current.height
+                        //   )
+                        // );
+                        // const dataUrl = previewCanvasRef.current.toDataURL();
+                        // updateAvatar(dataUrl);
+                        // closeModal();
                       }}
                     >
-                      Crop Image
+                      Crop Image Set
                     </button>
                   </div>
 

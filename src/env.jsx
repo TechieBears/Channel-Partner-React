@@ -39,6 +39,21 @@ export const ImageUpload = async (data, folder, imgname, name) => {
 };
 
 
+export const ImageUpload2 = async (data, folder, imgname, name) => {
+    const command = new PutObjectCommand({
+        Bucket: "channel-partner-media",
+        Key: `${folder}/${name}_${imgname}_${name}`,
+        Body: data,
+    });
+    try {
+        const response = await client.send(command);
+        console.log(response);
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+
 //  ----------------------- S3 Bucket Links --------------------------
 export const categoryLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/category/'
 export const restaurantcategoryLink = 'https://channel-partner-media.s3.ap-south-1.amazonaws.com/restaurantcategory/'
