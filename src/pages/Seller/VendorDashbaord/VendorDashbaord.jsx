@@ -114,6 +114,58 @@ const Dashboard = () => {
                         "date_of_birth": "2024-02-23",
                         "gender": "Female"
                     },
+                    "product_qty": 2,
+                    "product_price": 120,
+                    "product": {
+                        "product_id": 7,
+                        "product_name": "Faith Cole",
+                        "product_description": "jhdsjadhajkd",
+                        "product_brand": "Non eos sequi aut re",
+                        "product_country_of_origin": "Facilis tenetur null",
+                        "product_shelflife": "Ex sint quae aliquid",
+                        "product_Manufacturer_Name": "Ursa Michael",
+                        "product_Manufacturer_Address": null,
+                        "product_nutritional_info": "Consequatur Ullam b",
+                        "product_additional_details": null,
+                        "product_available_qty": 762,
+                        "product_msbcode": null,
+                        "product_image_1": "https://channel-partner-media.s3.ap-south-1.amazonaws.com/shopProduct/Faith Cole_MainImage_egg.png",
+                        "product_image_2": "",
+                        "product_image_3": "",
+                        "product_image_4": "",
+                        "product_image_5": "",
+                        "product_video_url": "",
+                        "product_isactive": true,
+                        "product_actual_price": 100,
+                        "product_unit_type": null,
+                        "product_unit": null,
+                        "product_rating": 3,
+                        "product_isverified_byadmin": true,
+                        "product_isverified_byfranchise": false,
+                        "insta_commison_percentage": 10,
+                        "markup_percentage": 10,
+                        "offers": 10,
+                        "featured": true,
+                        "final_price": 120,
+                        "vendor": 14,
+                        "product_category": 15,
+                        "product_subcategory": 3
+                    }
+                },
+                {
+                    "orderitem_id": 173,
+                    "user": {
+                        "first_name": "shubham",
+                        "last_name": "Shubbb",
+                        "phone_no": "7796500494",
+                        "email": "shubham786@gmail.com",
+                        "profile_pic": "https://s3-ap-south-1.amazonaws.com/channel-partner-media/profile%2Fshubham1708667013030.jpg",
+                        "city": "",
+                        "state": "",
+                        "pincode": "",
+                        "date_of_birth": "2024-02-23",
+                        "gender": "Female"
+                    },
                     "product_qty": 1,
                     "product_price": 120,
                     "product": {
@@ -151,7 +203,111 @@ const Dashboard = () => {
                         "product_category": 15,
                         "product_subcategory": 3
                     }
-                }
+                },
+                {
+                    "orderitem_id": 173,
+                    "user": {
+                        "first_name": "shubham",
+                        "last_name": "Shubbb",
+                        "phone_no": "7796500494",
+                        "email": "shubham786@gmail.com",
+                        "profile_pic": "https://s3-ap-south-1.amazonaws.com/channel-partner-media/profile%2Fshubham1708667013030.jpg",
+                        "city": "",
+                        "state": "",
+                        "pincode": "",
+                        "date_of_birth": "2024-02-23",
+                        "gender": "Female"
+                    },
+                    "product_qty": 1,
+                    "product_price": 120,
+                    "product": {
+                        "product_id": 7,
+                        "product_name": "Faith Cole",
+                        "product_description": "jhdsjadhajkd",
+                        "product_brand": "Non eos sequi aut re",
+                        "product_country_of_origin": "Facilis tenetur null",
+                        "product_shelflife": "Ex sint quae aliquid",
+                        "product_Manufacturer_Name": "Ursa Michael",
+                        "product_Manufacturer_Address": null,
+                        "product_nutritional_info": "Consequatur Ullam b",
+                        "product_additional_details": null,
+                        "product_available_qty": 762,
+                        "product_msbcode": null,
+                        "product_image_1": "https://channel-partner-media.s3.ap-south-1.amazonaws.com/shopProduct/Faith Cole_MainImage_egg.png",
+                        "product_image_2": "",
+                        "product_image_3": "",
+                        "product_image_4": "",
+                        "product_image_5": "",
+                        "product_video_url": "",
+                        "product_isactive": true,
+                        "product_actual_price": 100,
+                        "product_unit_type": null,
+                        "product_unit": null,
+                        "product_rating": 3,
+                        "product_isverified_byadmin": true,
+                        "product_isverified_byfranchise": false,
+                        "insta_commison_percentage": 10,
+                        "markup_percentage": 10,
+                        "offers": 10,
+                        "featured": true,
+                        "final_price": 120,
+                        "vendor": 14,
+                        "product_category": 15,
+                        "product_subcategory": 3
+                    }
+                },
+                {
+                    "orderitem_id": 173,
+                    "user": {
+                        "first_name": "shubham",
+                        "last_name": "Shubbb",
+                        "phone_no": "7796500494",
+                        "email": "shubham786@gmail.com",
+                        "profile_pic": "https://s3-ap-south-1.amazonaws.com/channel-partner-media/profile%2Fshubham1708667013030.jpg",
+                        "city": "",
+                        "state": "",
+                        "pincode": "",
+                        "date_of_birth": "2024-02-23",
+                        "gender": "Female"
+                    },
+                    "product_qty": 1,
+                    "product_price": 120,
+                    "product": {
+                        "product_id": 7,
+                        "product_name": "Faith Cole",
+                        "product_description": "jhdsjadhajkd",
+                        "product_brand": "Non eos sequi aut re",
+                        "product_country_of_origin": "Facilis tenetur null",
+                        "product_shelflife": "Ex sint quae aliquid",
+                        "product_Manufacturer_Name": "Ursa Michael",
+                        "product_Manufacturer_Address": null,
+                        "product_nutritional_info": "Consequatur Ullam b",
+                        "product_additional_details": null,
+                        "product_available_qty": 762,
+                        "product_msbcode": null,
+                        "product_image_1": "https://channel-partner-media.s3.ap-south-1.amazonaws.com/shopProduct/Faith Cole_MainImage_egg.png",
+                        "product_image_2": "",
+                        "product_image_3": "",
+                        "product_image_4": "",
+                        "product_image_5": "",
+                        "product_video_url": "",
+                        "product_isactive": true,
+                        "product_actual_price": 100,
+                        "product_unit_type": null,
+                        "product_unit": null,
+                        "product_rating": 3,
+                        "product_isverified_byadmin": true,
+                        "product_isverified_byfranchise": false,
+                        "insta_commison_percentage": 10,
+                        "markup_percentage": 10,
+                        "offers": 10,
+                        "featured": true,
+                        "final_price": 120,
+                        "vendor": 14,
+                        "product_category": 15,
+                        "product_subcategory": 3
+                    }
+                },
             ]
         }
     ]
@@ -300,7 +456,12 @@ const Dashboard = () => {
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <IndianRupeeIcon size={18} className="text-gray-500" />
-                                        <p className="text-gray-500">290</p>
+                                        <div className="flex gap-2">
+                                            <p className="text-gray-500">290</p>
+                                            <div className="border border-sky-200 bg-sky-50 p-1 text-xs text-sky-400 rounded-lg">
+                                                PAID ONLINE
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
@@ -337,27 +498,33 @@ const Dashboard = () => {
                                 </div>
                             </div>
                             {
-                                details && <div className="ml-14 mt-4">
-                                    <p className="text-lg font-semibold">Order Details</p>
-                                    <p className="text-base font-medium">Products</p>
-                                    {
-                                        product?.orderedItems?.map(item => (
-                                            <div className="grid grid-cols-3">
-                                                <div className="grid grid-cols-2">
-                                                    <div>
-                                                        <img src={item?.product?.product_image_1} alt="img" className="w-20 h-20" />
-                                                    </div>
+                                details && <div className=" mt-4 border-t-2">
+                                    <div className="ml-14 mt-2">
+                                        <p className="text-lg font-semibold text-sky-400">Order Details</p>
+                                        <p className="text-base font-medium">Products</p>
+                                    </div>
+                                    <div className="ml-14 grid grid-cols-3 gap-4">
+                                        {
+                                            product?.orderedItems?.map(item => (
+                                                <div className="flex justify-around border-r-2 border-slate-300">
+                                                    <img src={item?.product?.product_image_1} alt="img" className="w-20 h-20" />
                                                     <div className="flex items-center gap-4">
                                                         <div className="flex flex-col ">
                                                             <p className="font-semibold text-lg">{item?.product?.product_name}</p>
-                                                            <p className="text-xs">{item?.product?.product_description}</p>
+                                                            <p className="text-xs font-medium text-gray-400">{item?.product?.product_description}</p>
                                                         </div>
                                                         <p className="text-base font-semibold ">Qty: {item?.product_qty}</p>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        ))
-                                    }
+                                            ))
+                                        }
+                                    </div>
+                                    <div className="border-t border-slate-300 mt-2">
+                                        <div className="ml-14 mt-2">
+                                            <p className="text-lg font-semibold text-sky-400">Order Instuction's</p>
+                                            <p className="text-base font-medium border-2 rounded-lg p-2">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dignissimos veritatis impedit tempore provident laudantium quasi itaque distinctio suscipit ipsam, necessitatibus ab expedita dolore qui dicta odio quo vero repudiandae reprehenderit pariatur! Facere odio fugit veniam, ab alias at vitae et voluptatibus quos voluptate assumenda officia omnis accusamus, nobis obcaecati voluptas dolore tenetur quis consequuntur sit nesciunt maxime. Suscipit, consectetur sint?</p>
+                                        </div>
+                                    </div>
                                 </div>
                             }
                         </div>
