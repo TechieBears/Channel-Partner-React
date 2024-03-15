@@ -1,5 +1,5 @@
 import { DirectLeft } from 'iconsax-react';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useLocation } from 'react-router-dom';
 import logoImg from '../../assets/logo_white.png';
@@ -7,17 +7,22 @@ import { environment } from '../../env';
 import Navbar from './Navbar';
 import { Admin, Franchise, Seller } from './SidebarApi';
 import SidebarLink from './SidebarLink';
+import { setOrders } from '../../redux/Slices/masterSlice';
+import { setSessionStarted } from '../../redux/Slices/SessionSlice';
+import { startSession } from '../../api';
 
 const Sidebar = ({ children }) => {
     const route = useLocation();
     const user = useSelector(state => state?.user?.loggedUserDetails)
     const WebSocketUrl = `${environment.webSocketUrl}user_to_seller/${user?.msb_code}`;
     const ws = useRef(new WebSocket(WebSocketUrl)).current
-
+    let orders = [];
     const [isActiveLink, setIsActiveLink] = useState(false);
     const [mobileSidebar, setMobileSidebar] = useState(false);
     const dispatch = useDispatch()
-
+    const sessionStatus = useSelector(state => state.session.isSessionStarted)
+    const timeoutId = useRef(null);
+    const logoutTimeoutId = useRef(null);
     useMemo(() => {
         if (user?.role == 'seller' && (route?.pathname == '/vendor-orders' || route?.pathname == '/')) {
             ws.open = () => {
@@ -30,13 +35,67 @@ const Sidebar = ({ children }) => {
 
             ws.onmessage = (e) => {
                 const data = JSON.parse(e.data);
-                console.log("🚀 ~ file: VendorOrders.jsx:63 ~ useEffect ~ data:", data)
+                orders.push(data);
+                dispatch(setOrders(orders))
+                // console.log("🚀 ~ file: VendorOrders.jsx:63 ~ useEffect ~ data:", data)
                 // window.alert(data?.orderId)
             };
         } else {
             // ws.close();
         }
     }, [route])
+
+    useEffect(() => {
+        if (user?.role == 'seller') {
+            const handleMouseMove = () => {
+                // Clear the previous timeouts if they exist
+                if (timeoutId.current) {
+                    clearTimeout(timeoutId.current);
+                }
+                if (logoutTimeoutId.current) {
+                    clearTimeout(logoutTimeoutId.current);
+                }
+
+                // Set a new timeout
+                if (sessionStatus == true) {
+                    timeoutId.current = setTimeout(() => {
+                        const data = {
+                            'vendorID': user?.sellerId,
+                            'isshopopen': false,
+                        }
+                        try {
+                            startSession(data).then(res => {
+                                if (res?.status == 'success') {
+                                    dispatch(setSessionStarted(false))
+                                }
+                            })
+                        } catch (error) {
+                            console.log('error', error);
+                        }
+                        alert('Your session has expired dues to 30 sec inactivity please start your session to get orders.')
+                    }, 30 * 1000);
+                } // 30 seconds
+            };
+
+            // Add the event listener
+            window.addEventListener('mousemove', handleMouseMove);
+
+            // Cleanup function
+            return () => {
+                // Remove the event listener
+                window.removeEventListener('mousemove', handleMouseMove);
+
+                // Clear the timeouts
+                if (timeoutId.current) {
+                    clearTimeout(timeoutId.current);
+                }
+                if (logoutTimeoutId.current) {
+                    clearTimeout(logoutTimeoutId.current);
+                }
+            };
+        }
+    }, []);
+
 
     return (
         <>

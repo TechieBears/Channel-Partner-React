@@ -10,6 +10,7 @@ import { NavLink } from 'react-router-dom';
 import { ArrowDown2, ArrowUp2, ClipboardTick, Eye, Trash, User } from 'iconsax-react';
 import moment from 'moment';
 import { IndianRupeeIcon } from 'lucide-react';
+import Orders from '../../../components/Cards/Orders/Orders';
 
 const VendorOrders = () => {
     const [selectedTab, setSelectedTab] = useState(0);
@@ -348,54 +349,6 @@ const VendorOrders = () => {
     ];
 
 
-    // ===================== New Order ======================
-
-    const NewOrderData = [
-        {
-            "orderId": 753,
-            "orderDate": "Jan 1, 2024 , 05:56 PM",
-            "items": [
-                {
-                    "itemName": "Butter Milk",
-                    "itemDescription": "Lorem ipsum dolor, sit amet",
-                    "imageSrc": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU",
-                    "quantity": 2,
-                    'price': 50,
-                    'category': 'dairy'
-                }
-            ],
-            "orderPrice": "$1,000",
-            "paymentMethod": "Cash",
-            "location": 'Parel',
-
-        },
-        {
-            "orderId": 754,
-            "orderDate": "Jan 2, 2024 , 10:30 AM",
-            "items": [
-                {
-                    "itemName": "Coffee",
-                    "itemDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-                    "imageSrc": "https://example.com/coffee.jpg",
-                    "quantity": 2,
-                    'price': 20,
-                    'category': 'grocery'
-                },
-                {
-                    "itemName": "Croissant",
-                    "itemDescription": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
-                    "imageSrc": "https://example.com/croissant.jpg",
-                    "quantity": 2,
-                    'price': 200,
-                    'category': 'food'
-                }
-            ],
-            "orderPrice": "$25",
-            "paymentMethod": "UPI",
-            "location": 'Thane',
-        }
-    ]
-
     const name = (row) => row?.items?.map(item => <h6 key={item?.itemName}>{item?.itemName}</h6>);
     const quantity = (row) => row?.items?.map(item => <h6 key={item?.itemQuantity}>{item?.quantity}</h6>)
     const description = (row) => row?.items?.map(item => <h6 className="w-52" key={item?.itemDescription}>{item?.itemDescription}</h6>)
@@ -530,96 +483,7 @@ const VendorOrders = () => {
                             <div>
                                 <p className="font-semibold text-lg">Current Orders</p>
                             </div>
-                            {data.map(product => (
-                                <div className="border-slate-200 border-2 p-2 rounded-lg bg-white">
-                                    <div className=" grid grid-cols-5 gap-4" key={product?.orderId}>
-                                        <div className="space-y-1 items-center flex flex-col ">
-                                            <div className="flex gap-2">
-                                                <p className="font-semibold">Order ID</p>
-                                                <p className="text-sky-400">#{product?.orderId}</p>
-                                            </div>
-                                            <p className="text-xs font-light">{moment(product?.order_details?.order_created_at).format('LLL')}</p>
-                                        </div>
-                                        <div className="space-y-1 flex flex-col items-start">
-                                            <div className="flex gap-2 items-center">
-                                                <User variant="Bold" size={18} />
-                                                <p className="font-semibold">{product?.orderedItems[0]?.user?.first_name} {product?.orderedItems[0]?.user?.last_name}</p>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <IndianRupeeIcon size={18} className="text-gray-500" />
-                                                <div className="flex gap-2">
-                                                    <p className="text-gray-500">290</p>
-                                                    <div className="border border-sky-200 bg-sky-50 p-1 text-xs text-sky-400 rounded-lg">
-                                                        PAID ONLINE
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <div className={`${status == 'pending' ? 'bg-red-500' : status == 'accepted' ? 'bg-yellow-500' : 'bg-green-500'} p-2 font-sans rounded-full w-1 h-1/4`} />
-                                            <p className={`font-semibold font-san ${status == 'pending' ? 'text-red-500' : status == 'accepted' ? 'text-yellow-500' : 'text-green-500'}`}>{status == 'pending' ? 'Pending' : status == 'accepted' ? 'Preparing' : 'Prepared'}</p>
-                                        </div>
-                                        <div className="space-x-2 flex items-center">
-                                            {status == 'pending' ?
-                                                <>
-                                                    <button className="bg-green-500 hover:bg-green-700 py-2 px-4 rounded-lg font-medium" onClick={() => setstatus('accepted')}>
-                                                        <p className="text-white ">{product?.order_details?.order_delivery_status == 'placed' ? 'Accecpt' : 'Euuu'}</p>
-                                                    </button>
-                                                    <button className={formBtn2}>Decline</button>
-                                                </> : null
-                                            }
-                                            {
-                                                status == 'accepted' && <button className="bg-gray-200 hover:bg-gray-300 py-2 px-4 rounded-lg font-medium" onClick={() => setstatus('prepared')}>Mark as prepared</button>
-                                            }
-                                            {
-                                                status == 'prepared' && <button className="bg-black py-2 px-4 rounded-lg font-medium text-white" onClick={() => setstatus('pending')}>Mark as Picked-up</button>
-                                            }
-                                        </div>
-                                        <div className="flex items-center justify-center">
-                                            {!details && <button onClick={() => setDetails(true)}>
-                                                <ArrowDown2 />
-                                            </button>}
-                                            {
-                                                details && <div className="flex items-center justify-center">
-                                                    <button onClick={() => setDetails(false)}>
-                                                        <ArrowUp2 />
-                                                    </button>
-                                                </div>
-                                            }
-                                        </div>
-                                    </div>
-                                    {
-                                        details && <div className=" mt-4 border-t-2">
-                                            <div className="ml-14 mt-2">
-                                                <p className="text-lg font-semibold text-sky-400">Order Details</p>
-                                                <p className="text-base font-medium">Products</p>
-                                            </div>
-                                            <div className="ml-14 grid grid-cols-3 gap-4">
-                                                {
-                                                    product?.orderedItems?.map(item => (
-                                                        <div className="flex justify-around">
-                                                            <img src={item?.product?.product_image_1} alt="img" className="w-20 h-20" />
-                                                            <div className="flex items-center gap-4">
-                                                                <div className="flex flex-col ">
-                                                                    <p className="font-semibold text-lg">{item?.product?.product_name}</p>
-                                                                    <p className="text-xs font-medium text-gray-400">{item?.product?.product_description}</p>
-                                                                </div>
-                                                                <p className="text-base font-semibold ">Qty: {item?.product_qty}</p>
-                                                            </div>
-                                                        </div>
-                                                    ))
-                                                }
-                                            </div>
-                                            <div className="border-t border-slate-300 mt-2">
-                                                <div className="ml-14 mt-2">
-                                                    <p className="text-lg font-semibold text-sky-400">Order Instuction's</p>
-                                                    <p className="text-base font-medium border-2 rounded-lg p-2">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dignissimos veritatis impedit tempore provident laudantium quasi itaque distinctio suscipit ipsam, necessitatibus ab expedita dolore qui dicta odio quo vero repudiandae reprehenderit pariatur! Facere odio fugit veniam, ab alias at vitae et voluptatibus quos voluptate assumenda officia omnis accusamus, nobis obcaecati voluptas dolore tenetur quis consequuntur sit nesciunt maxime. Suscipit, consectetur sint?</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
-                                </div>
-                            ))}
+                            <Orders data={data} />
                         </div>
                     </TabPanel>
                     <TabPanel className='mt-5 bg-white'>

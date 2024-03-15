@@ -1,14 +1,14 @@
-import ProjectRoutes from "../routes/ProjectRoutes";
-import "./App.css";
-import { Provider } from 'react-redux'
-import store from "./redux/store";
+import { getToken } from "firebase/messaging";
+import { PrimeReactProvider } from 'primereact/api';
+import { useEffect } from "react";
+import { Provider } from 'react-redux';
 import persistStore from "redux-persist/es/persistStore";
 import { PersistGate } from "redux-persist/integration/react";
-let persistor = persistStore(store);
-import { PrimeReactProvider } from 'primereact/api';
-import { getToken } from "firebase/messaging";
-import { useEffect } from "react";
+import ProjectRoutes from "../routes/ProjectRoutes";
+import "./App.css";
 import { messaging } from "./firebase";
+import store from "./redux/store";
+let persistor = persistStore(store);
 
 
 const App = () => {
