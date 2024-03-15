@@ -52,7 +52,6 @@ const Navbar = ({ mobileSidebar, setMobileSidebar }) => {
 
   useEffect(() => {
     if (user?.role == 'seller' && sessionStarted == false) {
-      console.log('Ran if and useEffect')
       setSessionModal(true);
     }
     getDetails();

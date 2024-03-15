@@ -11,6 +11,7 @@ import userSlice from "./Slices/userSlice";
 import deliverySlice from "./Slices/deliverySlice";
 import VendorSlices from "./VendorSlices";
 import SessionSlice from "./Slices/SessionSlice";
+import orderSlice from "./Slices/orderSlice";
 
 const reducers = combineReducers({
   user: loginSlice,
@@ -19,7 +20,8 @@ const reducers = combineReducers({
   users: userSlice,
   vendor: VendorSlices,
   delivery: deliverySlice,
-  session: SessionSlice
+  session: SessionSlice,
+  orders: orderSlice
 });
 
 const persistConfig = {

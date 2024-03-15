@@ -1,5 +1,5 @@
 import { DirectLeft } from 'iconsax-react';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useLocation } from 'react-router-dom';
 import logoImg from '../../assets/logo_white.png';
@@ -7,18 +7,19 @@ import { environment } from '../../env';
 import Navbar from './Navbar';
 import { Admin, Franchise, Seller } from './SidebarApi';
 import SidebarLink from './SidebarLink';
+import { setNewOrdersList } from '../../redux/Slices/orderSlice';
 
 const Sidebar = ({ children }) => {
     const route = useLocation();
     const user = useSelector(state => state?.user?.loggedUserDetails)
-    // const WebSocketUrl = `${environment.webSocketUrl}user_to_seller/${user?.msb_code}`;
-    // const ws = useRef(new WebSocket(WebSocketUrl)).current
+    const WebSocketUrl = `${environment.webSocketUrl}user_to_seller/${user?.msb_code}`;
+    const ws = useRef(new WebSocket(WebSocketUrl)).current
 
     const [isActiveLink, setIsActiveLink] = useState(false);
     const [mobileSidebar, setMobileSidebar] = useState(false);
     const dispatch = useDispatch()
 
-    useMemo(() => {
+    useEffect(() => {
         if (user?.role == 'seller' && (route?.pathname == '/vendor-orders' || route?.pathname == '/')) {
             ws.open = () => {
                 console.log('WebSocket Client Connected');
@@ -30,8 +31,10 @@ const Sidebar = ({ children }) => {
 
             ws.onmessage = (e) => {
                 const data = JSON.parse(e.data);
-                console.log("🚀 ~ file: VendorOrders.jsx:63 ~ useEffect ~ data:", data)
+                console.log("🚀 ~ file: Sidebar.jsx:34 ~ useEffect ~ data:", data)
                 // window.alert(data?.orderId)
+                alert("New order:", data?.orderId)
+                dispatch(setNewOrdersList(data))
             };
         } else {
             // ws.close();
