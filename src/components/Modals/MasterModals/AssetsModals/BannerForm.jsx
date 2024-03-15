@@ -9,7 +9,7 @@ import { setBanner } from "../../../../redux/Slices/masterSlice";
 import { toast } from "react-toastify";
 import LoadBox from "../../../Loader/LoadBox";
 import Error from "../../../Errors/Error";
-import { ImageUpload, bannerLink } from "../../../../env";
+import { ImageUpload, ImageUpload2, bannerLink } from "../../../../env";
 import { ImageCropDialog } from "../../ImageCropperModal/ImageCropper";
 
 
@@ -21,6 +21,7 @@ export default function BannerForm(props) {
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const [childData, setChildData] = useState('');
+  console.log('childData', childData)
 
 
   const [selectedOption, setSelectedOption] = useState('dropdown');
@@ -80,10 +81,32 @@ export default function BannerForm(props) {
   const toggle = () => setIsOpen(!isOpen);
   const { register, handleSubmit, setValue, watch, reset, formState: { errors }, setError } = useForm({ criteriaMode: 'all' });
 
+
+  const getImageInfo = (imageUrl) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        resolve({
+          resolution: `${img.naturalWidth}×${img.naturalHeight}`,
+          mimeType: 'image/png', // You may need to determine this dynamically
+          extension: 'png', // You may need to determine this dynamically
+          size: `${Math.round(img.src.length / 1024 * 100) / 100} KB`,
+          download: 'image.png', // You may need to determine this dynamically
+          bitDepth: 8 // You may need to determine this dynamically
+        });
+      };
+      img.onerror = (err) => {
+        reject(err);
+      };
+      img.src = imageUrl;
+      console.log('img', imageUrl, img.src)
+    });
+  };
   
   const receiveDataFromChild = (data) => {
     console.log('-- child data --', data);
     setChildData(data);
+    // getImageInfo(data)
 
     if (data) {
       setValue('slide_url', data)
@@ -130,14 +153,14 @@ export default function BannerForm(props) {
           // data.slide_url[0].name = urlName
         }
         if (childData) {
-          await ImageUpload(
+          await ImageUpload2(
             // data.slide_url[0],
             childData,
             "banner",
-            "banner",
-            urlName
+            data.screen_name,
+            urlName,
           );
-          data.slide_url = `${bannerLink}${urlName}_banner_${urlName}`;
+          data.slide_url = `${bannerLink}${data.screen_name}_banner_${urlName}`;
         } else {
           data.slide_url = "";
         }

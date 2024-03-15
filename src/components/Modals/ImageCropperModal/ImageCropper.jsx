@@ -18,6 +18,11 @@ export const ImageCropDialog = ({updateAvatar, sendDataToParent,  ...props}) => 
   const [imageUrl, setImageUrl] = useState('');
   const [base64Url, setBase64Url] = useState('');
   
+
+  const closeModal = (data) => {
+    sendDataToParent(data);
+    setOpen(!isOpen)
+  }
   
   // console.log('== imageUrl == ', imageUrl)
 
@@ -79,24 +84,24 @@ const dataURLtoBlob = (dataURL) => {
   };
 
 
-const convertBase64ToUrl = (canvasRef) => {
-    // Retrieve the base64 data URL from the canvas
-    const dataUrl = canvasRef.current.toDataURL();
+// const convertBase64ToUrl = (canvasRef) => {
+//     // Retrieve the base64 data URL from the canvas
+//     const dataUrl = canvasRef.current.toDataURL();
 
-    // Create a blob from the base64 string
-    const blob = dataURLtoBlob(dataUrl);
+//     // Create a blob from the base64 string
+//     const blob = dataURLtoBlob(dataUrl);
 
-    // Create an object URL from the blob
-    const url = URL.createObjectURL(blob);
+//     // Create an object URL from the blob
+//     const url = URL.createObjectURL(blob);
 
-    // Set the image URL state
-    setImageUrl(url);
-    sendDataToParent(url)
-    setOpen(!isOpen);
+//     // Set the image URL state
+//     setImageUrl(url);
+//     sendDataToParent(url)
+//     setOpen(!isOpen);
 
 
-    // console.log('url = ', url)
-};
+//     // console.log('url = ', url)
+// };
 
 
 //   useEffect(() => {
@@ -210,7 +215,8 @@ const convertBase64ToUrl = (canvasRef) => {
                     />
                         <div>
                             <button 
-                              onClick={() => convertBase64ToUrl(previewCanvasRef)}
+                              // onClick={() => convertBase64ToUrl(previewCanvasRef)}
+                              onClick={() => closeModal(base64Url)}
                               className={formBtn1}>Submit</button>
                         </div>
                         {/* <div>
