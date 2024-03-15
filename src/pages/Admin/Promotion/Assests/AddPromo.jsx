@@ -10,6 +10,7 @@ import Error from '../../../../components/Errors/Error';
 import { ImageUpload, promotionLink } from '../../../../env';
 import LoadBox from '../../../../components/Loader/LoadBox';
 import { setPromotions } from '../../../../redux/Slices/masterSlice';
+import { validateEmail, validatePhoneNumber } from '../../../../components/Validations.jsx/Validations';
 
 
 export default function AddPromo(props) {
@@ -38,8 +39,8 @@ export default function AddPromo(props) {
   // console.log('childData == ', childData)
   const dispatch = useDispatch()
   const toggle = () => setIsOpen(!isOpen);
-  const { register, handleSubmit, setValue, watch, reset, formState: { errors }, setError } = useForm({criteriaMode:'all'});
-
+  const { register, handleSubmit, setValue, watch, reset, formState: { errors }, setError } = useForm({ criteriaMode: 'all' });
+  const vendorType = watch('vendor_type');
   const [imageError, setImageError] = useState('');
   // ===================== close modals ===============================
   const closeBtn = () => {
@@ -101,7 +102,6 @@ export default function AddPromo(props) {
       });
       return;
     }
-    console.log("🚀 ~ file: AddPromo.jsx:81 ~ data:", data)
     // const slideUrl = watch('slide_url')
     // if (props?.title != 'Edit Promotions' && childData) {
 
@@ -251,7 +251,7 @@ export default function AddPromo(props) {
                     {/* <form onSubmit={childData == '' ? handleSubmit(onSubmit) : handleSubmit(GallerySubmit)}> */}
                     <form onSubmit={handleSubmit(onSubmit)}>
 
-                    <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-2 gap-x-3 gap-y-3 customBox">
+                      <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-2 gap-x-3 gap-y-3 customBox">
                         {/* <div className="mb-3">
                           <select
                             name=""
@@ -275,12 +275,13 @@ export default function AddPromo(props) {
                             <option value="">select</option>
                             <option value="Restaurant">Restaurant</option>
                             <option value="Seller">Seller</option>
+                            <option value="External">External</option>
                           </select>
                           {errors.vendor_type && <Error title='Vendor type is Required*' />}
                         </div>
 
-                         {/* {!openGallery && <div className=""> */}
-                         <div className="mt-1">
+                        {/* {!openGallery && <div className=""> */}
+                        <div className="mt-1">
                           <label className={labelClass} htmlFor="main_input">
                             Image*
                           </label>
@@ -303,12 +304,12 @@ export default function AddPromo(props) {
                                 {props?.data?.slide_url?.split("/").pop()}
                               </label>
                             )}
-                         {errors.slide_url && (
+                          {errors.slide_url && (
                             <Error title={errors.slide_url?.message} />
                           )}
                         </div>
 
-                        <div className=" flex items-center gap-3" >
+                        {/* <div className=" flex items-center gap-3" >
                           <input
                             type="radio"
                             className='w-5 h-5'
@@ -329,7 +330,7 @@ export default function AddPromo(props) {
                             onChange={() => handleRadioChange('input')}
                           />
                           <label htmlFor="radio-input">External Redirection</label>
-                        </div>
+                        </div> */}
 
                         <div className="my-2">
                           <label className={labelClass} htmlFor="main_input">
@@ -346,66 +347,58 @@ export default function AddPromo(props) {
                           </select>
                           {/* {errors.screen_type && <Error title='Screen type is Required*' />} */}
                         </div>
-                     
-                        {showDropdown && (
-                          <div className="">
-                            <label className={labelClass} htmlFor="main_input">
-                              Internal Redirection *
-                            </label>
-                            <select
-                              id="dropdown"
-                              name=""
-                              // {...register('internal_link', { required: true })}
-                              className={`${inputClass} !bg-white`}
-                            >
-                             <option value="">select</option>
-                            <option value="Home Screen">Home Screen</option>
-                            <option value="Detail Screen">Detail Screen</option>
-                            </select>
-                            {/* {errors.internal_link && <Error title='Vendor type is Required*' />} */}
-                          </div>
-
-
-
-                          // <div>
-                          //   <label htmlFor="dropdown">Dropdown:</label>
-                          //   <select id="dropdown">
-                          //     <option value="option1">Option 1</option>
-                          //     <option value="option2">Option 2</option>
-                          //     <option value="option3">Option 3</option>
-                          //   </select>
-                          // </div>
-                        )}
-                        {selectedOption === 'input' && (
-                          <div className="">
-                            <label className={labelClass}>
+                        {vendorType === 'External' && (
+                          <>
+                            <div className="">
+                              <label className={labelClass}>
                                 External Redirection Link*
-                            </label>
-                            <input
+                              </label>
+                              <input
                                 type="text"
-                                placeholder='External link'
+                                placeholder='xyz.com'
                                 className={inputClass}
-                                // {...register('external_link', { required: true })}
-                            />
-                            {/* {errors.external_link && <Error title='Product Name is Required*' />} */}
-                        </div>
-
-
-                          // <div>
-                          //   <label htmlFor="input">Input:</label>
-                          //   <input
-                          //     type="text"
-                          //     id="input"
-                          //     value={inputValue}
-                          //     onChange={handleInputChange}
-                          //   />
-                          // </div>
+                                {...register('external_link', ({ required: true }))}
+                              />
+                              {errors?.external_link && <Error title='External Link is required' />}
+                            </div>
+                            <div>
+                              <label className={labelClass}>
+                                User Name*
+                              </label>
+                              <input
+                                type="text"
+                                placeholder='Ravi Kumar'
+                                className={inputClass}
+                                {...register('external_user_name', ({ required: true }))}
+                              />
+                              {errors?.external_user_name && <Error title='External User Name is required' />}
+                            </div>
+                            <div>
+                              <label className={labelClass}>
+                                Email*
+                              </label>
+                              <input
+                                type="email"
+                                placeholder='Ravi@xyz.com'
+                                className={inputClass}
+                                {...register('external_user_email', ({ required: true, validate: validateEmail }))}
+                              />
+                              {errors?.external_user_email && <Error title='External User Email is required' />}
+                            </div>
+                            <div>
+                              <label className={labelClass}>
+                                Phone Number*
+                              </label>
+                              <input
+                                type="tel"
+                                placeholder='+91'
+                                className={inputClass}
+                                {...register('external_user_number', ({ required: true, validate: validatePhoneNumber }))}
+                              />
+                              {errors?.external_user_number && <Error title='External User Email is required' />}
+                            </div>
+                          </>
                         )}
-
-                  
-
-                       
-
                         {/* {openGallery && (
                           <div className="w-1/2 mt-3 mb-2">
                             <span className={`cursor-pointer w-full ${formBtn1}`} onClick={openMediaModal}>
