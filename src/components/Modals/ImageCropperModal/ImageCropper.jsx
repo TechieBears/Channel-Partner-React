@@ -19,7 +19,7 @@ export const ImageCropDialog = ({updateAvatar, sendDataToParent,  ...props}) => 
   const [base64Url, setBase64Url] = useState('');
   
   
-  console.log('== imageUrl == ', imageUrl)
+  // console.log('== imageUrl == ', imageUrl)
 
   
   // console.log('props?.imgSrc = ', props?.imgSrc);
@@ -91,7 +91,11 @@ const convertBase64ToUrl = (canvasRef) => {
 
     // Set the image URL state
     setImageUrl(url);
-    console.log('url = ', url)
+    sendDataToParent(url)
+    setOpen(!isOpen);
+
+
+    // console.log('url = ', url)
 };
 
 
@@ -182,7 +186,7 @@ const convertBase64ToUrl = (canvasRef) => {
                         // updateAvatar(dataUrl);
                         // convertBase64ToUrl(base64Url)
                         // closeModal();
-                         // convertBase64ToUrl(props?.imgSrc)
+                        // convertBase64ToUrl(props?.imgSrc)
                         // sendDataToParent(props?.imgSrc)
                         // setOpen(!isOpen);
                         // reset();
@@ -198,7 +202,6 @@ const convertBase64ToUrl = (canvasRef) => {
                             ref={previewCanvasRef}
                             className="mx-2 my-10"
                             style={{
-                            // display: "none",
                             border: "1px solid black",
                             objectFit: "contain",
                             width: 150,
@@ -206,11 +209,13 @@ const convertBase64ToUrl = (canvasRef) => {
                         }}
                     />
                         <div>
-                            <button onClick={() => convertBase64ToUrl(previewCanvasRef)} className={formBtn1}>Submit</button>
+                            <button 
+                              onClick={() => convertBase64ToUrl(previewCanvasRef)}
+                              className={formBtn1}>Submit</button>
                         </div>
-                        <div>
+                        {/* <div>
                             <img src={imageUrl} alt="Converted Image" />
-                        </div>
+                        </div> */}
                     </div>
                 )}
 

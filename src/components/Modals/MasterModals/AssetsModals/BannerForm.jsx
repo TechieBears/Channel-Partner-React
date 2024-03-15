@@ -318,6 +318,7 @@ export default function BannerForm(props) {
                                 {/* {childData?.split("/").pop()} */}
                                 {childData}
                               </label>
+                              <img src={childData} alt="" />
                           
                         </div>
                         <div className="flex items-center gap-3">
