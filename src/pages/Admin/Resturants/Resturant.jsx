@@ -229,17 +229,16 @@ export default function Restaurant() {
   // =================== table user verify column  ========================
   const activeActionsRole = (rowData) => (
     <h6
-      className={`${rowData?.isactive !== "false"
+      className={`${rowData?.user?.isverified_byadmin !== false
         ? "bg-green-100 text-green-500"
         : "bg-red-100 text-red-500"
         } py-2 px-5 text-center capitalize rounded-full`}
     >
-      {rowData?.isactive !== "false" ? "Active" : "Inactive"}
+      {rowData?.user?.isverified_byadmin !== false ? "Active" : "Inactive"}
     </h6>
   );
 
   const columns = [
-    // { field: "id", header: "ID", body: (row) => <h6>{row?.user?.id}</h6>, sortable: false, },
     { field: "msb_code", header: "MSB", sortable: false },
     { field: "shop_name", header: "Restaurant Name", body: (row) => (<h6>  {row?.shop_name == null ? "Registration Pending" : row?.shop_name}</h6>) },
     { field: "shop_contact_number", header: "Restaurant Contact", body: (row) => (<h6>{row?.shop_contact_number == null ? "Registration Pending" : row?.shop_contact_number}</h6>) },

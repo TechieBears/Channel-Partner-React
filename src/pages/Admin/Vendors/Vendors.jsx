@@ -18,10 +18,8 @@ import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 
 function Vendors() {
     const [Vendors, SetVendors] = useState();
-
     const [pincodeOptions, setPincodeOptions] = useState()
     const [franchiseOptions, setFranchiseOptions] = useState()
-
     const { control, register, handleSubmit, formState: { errors }, reset } = useForm();
     const dispatch = useDispatch()
     // // ========================= fetch data from api ==============================
@@ -178,8 +176,8 @@ function Vendors() {
 
     // =================== table user verify column  ========================
     const activeActionsRole = (rowData) => (
-        <h6 className={`${rowData?.isactive !== "false" ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"} py-2 px-5 text-center capitalize rounded-full`}>
-            {rowData?.isactive !== "false" ? "Active" : "Inactive"}
+        <h6 className={`${rowData?.user?.isverified_byadmin !== false ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"} py-2 px-5 text-center capitalize rounded-full`}>
+            {rowData?.user?.isverified_byadmin !== false ? "Active" : "Inactive"}
         </h6>
     );
 
@@ -191,7 +189,6 @@ function Vendors() {
         { field: 'insta_commison_percentage', header: 'Comission(%)', body: (row) => <h6>{row?.insta_commison_percentage}%</h6>, sortable: false },
         { field: 'phone_no', header: 'Phone No', body: (row) => <h6>{row?.user?.phone_no}</h6>, sortable: false },
         { field: 'pincode', header: 'Pincode', body: (row) => <h6>{row?.user?.pincode}</h6>, sortable: false },
-        // { field: 'state', header: 'state', body: (row) => <h6>{row?.user?.state}</h6>, sortable: false },
         { field: 'city', header: 'city', body: (row) => <h6>{row?.user?.city}</h6>, sortable: false },
         { field: 'registration_date', header: 'Registration Date', body: (row) => <h6>{row?.user?.registration_date}</h6>, sortable: false },
         { field: 'status', header: 'Status', body: activeActionsRole, sortable: false },

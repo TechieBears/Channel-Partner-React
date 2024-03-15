@@ -144,8 +144,8 @@ function Drivers() {
 
     // =================== table user verify column  ========================
     const activeActionsRole = (rowData) => (
-        <h6 className={`${rowData?.user?.isactive !== "false" ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"} py-2 px-5 text-center capitalize rounded-full`}>
-            {rowData?.user?.isactive !== "false" ? "Active" : "Inactive"}
+        <h6 className={`${rowData?.user?.isverified_byadmin !== false ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"} py-2 px-5 text-center capitalize rounded-full`}>
+            {rowData?.user?.isverified_byadmin !== false ? "Active" : "Inactive"}
         </h6>
     );
 
