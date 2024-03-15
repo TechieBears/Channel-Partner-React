@@ -415,10 +415,10 @@ export default function BannerForm(props) {
 
                     {imgSrc != '' &&  
                       <ImageCropDialog 
-                      updateAvatar={updateAvatar}
-                      sendDataToParent={receiveDataFromChild}
+                        updateAvatar={updateAvatar}
+                        sendDataToParent={receiveDataFromChild}
                       // className="hidden"
-                      imgSrc={imgSrc}/> }
+                        imgSrc={imgSrc}/> }
                   </div>
 
                 </Dialog.Panel>
