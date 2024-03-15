@@ -1,24 +1,19 @@
-import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useEffect, useMemo, useState } from 'react';
-import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../utils/CustomClass';
-import { useForm } from 'react-hook-form';
-import { editUser, createDeliveryBoy, editDriverBoy } from '../../../api';
+import { Dialog, Transition } from '@headlessui/react';
 import { Edit } from 'iconsax-react';
+import { Fragment, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { GetFranchisee, createDeliveryBoy, editDriverBoy } from '../../../api';
+import { ImageUpload, deliveryBoylink } from '../../../env';
+import "../../../redux/Slices/loginSlice";
+import { setFranchise } from "../../../redux/Slices/masterSlice";
+import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../utils/CustomClass';
 import Error from '../../Errors/Error';
 import LoadBox from '../../Loader/LoadBox';
-import { toast } from 'react-toastify';
-import { ImageUpload, deliveryBoylink } from '../../../env';
-import { setFranchise } from "../../../redux/Slices/masterSlice";
-import "../../../redux/Slices/loginSlice";
-import { GetFranchisee } from "../../../api";
 import { validateEmail, validatePIN, validatePhoneNumber } from '../../Validations.jsx/Validations';
 
-
-
-
 function AddDriverFrom(props) {
-    console.log("🚀 ~ file: AddDriverForm.jsx:21 ~ AddDriverFrom ~ props:", props)
     const [isOpen, setIsOpen] = useState(false);
     const [loader, setLoader] = useState(false);
     const Franchisee = useSelector((state) => state?.master?.Franchise);
@@ -35,8 +30,7 @@ function AddDriverFrom(props) {
     const user = useSelector((state) => state?.user?.FranchiseeDetails);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     const SelectedFranchise = watch('created_by')
-    console.log("🚀 ~ file: AddDriverForm.jsx:38 ~ AddDriverFrom ~ SelectedFranchise:", SelectedFranchise)
-
+    const vehicleType = watch('vehicle_type');
     // // ========================= fetch data from api ==============================
     const FranchiseeDetails = () => {
         try {
@@ -62,8 +56,6 @@ function AddDriverFrom(props) {
             return;
         }
     };
-
-   
 
     // ============================= form submiting ======================================
     const onSubmit = async (data) => {
@@ -239,9 +231,9 @@ function AddDriverFrom(props) {
         if (SelectedFranchise?.length > 0 && isOpen && LoggedUserDetails?.role === 'admin') {
             Franchisee.map((data) => {
                 if (data?.user?.id == SelectedFranchise) {
-                    setValue('pincode',data?.user?.pincode)
-                    setValue('state',data?.user?.state)
-                    setValue('city',data?.user?.city)
+                    setValue('pincode', data?.user?.pincode)
+                    setValue('state', data?.user?.state)
+                    setValue('city', data?.user?.city)
                 }
             });
         }
@@ -380,7 +372,7 @@ function AddDriverFrom(props) {
                                                             className={inputClass}
                                                             {...register('email', { required: true, validate: validateEmail })}
                                                         />
-                                                        {errors.email && <Error title={errors?.email?.message? errors?.email?.message: "Email is required*"} />
+                                                        {errors.email && <Error title={errors?.email?.message ? errors?.email?.message : "Email is required*"} />
                                                         }
                                                     </div>
                                                     {/* <div className="">
@@ -461,7 +453,7 @@ function AddDriverFrom(props) {
                                                             onKeyDown={(e) => (e.key < '0' || e.key > '9') && e.key !== 'Backspace' && e.preventDefault()}
                                                             {...register('phone_no', { required: true, validate: validatePhoneNumber })}
                                                         />
-                                                        {errors.phone_no && <Error title={errors?.phone_no?.message? errors?.phone_no?.message:'Phone number required*'} />}
+                                                        {errors.phone_no && <Error title={errors?.phone_no?.message ? errors?.phone_no?.message : 'Phone number required*'} />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -512,18 +504,6 @@ function AddDriverFrom(props) {
                                                 <h1 className='pt-4 mx-4 text-xl font-semibold text-gray-900 font-tbPop '>Additional Details:</h1>
                                                 <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-x-3 gap-y-3">
                                                     <div className="">
-                                                        <label className={labelClass}>
-                                                            Driving License Number*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Driving License Number'
-                                                            className={inputClass}
-                                                            {...register('driver_license', { required: true })}
-                                                        />
-                                                        {errors.driver_license && <Error title='Driving License Number is required' />}
-                                                    </div>
-                                                    <div className="">
                                                         <label className={labelClass}>  Vehicle Type*</label>
                                                         <select
                                                             className={inputClass}
@@ -533,24 +513,39 @@ function AddDriverFrom(props) {
                                                             <option value="Cycle">Cycle</option>
                                                             <option value="Bike">Bike</option>
                                                             <option value="Electric Bike">Electric Bike</option>
-                                                            <option value="I don't own a vehicle">I don't own a vehicle</option>
                                                         </select>
                                                         {errors.vehicle_type && (
                                                             <Error title="Vehicle Type is Required*" />
                                                         )}
                                                     </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>
-                                                            Vehicle RC*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Vehicle RC'
-                                                            className={inputClass}
-                                                            {...register('vehicle_rc', { required: true, })}
-                                                        />
-                                                        {errors.vehicle_rc && <Error title='Vehicle RC is required' />}
-                                                    </div>
+                                                    {(vehicleType != 'Cycle' && vehicleType != '') &&
+                                                        <>
+                                                            <div className="">
+                                                                <label className={labelClass}>
+                                                                    Driving License Number*
+                                                                </label>
+                                                                <input
+                                                                    type="text"
+                                                                    placeholder='Driving License Number'
+                                                                    className={inputClass}
+                                                                    {...register('driver_license', { required: true })}
+                                                                />
+                                                                {errors.driver_license && <Error title='Driving License Number is required' />}
+                                                            </div>
+                                                            <div className="">
+                                                                <label className={labelClass}>
+                                                                    Vehicle RC*
+                                                                </label>
+                                                                <input
+                                                                    type="text"
+                                                                    placeholder='Vehicle RC'
+                                                                    className={inputClass}
+                                                                    {...register('vehicle_rc', { required: true, })}
+                                                                />
+                                                                {errors.vehicle_rc && <Error title='Vehicle RC is required' />}
+                                                            </div>
+                                                        </>
+                                                    }
                                                     <div className="">
                                                         <label className={labelClass}>Job Type*</label>
                                                         <select

@@ -14,7 +14,7 @@ import AddDriverFrom from '../../../components/Modals/DriverModals/AddDriverForm
 import Table from '../../../components/Table/Table';
 import { environment } from '../../../env';
 import { setDeliveryList } from '../../../redux/Slices/deliverySlice';
-import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
+import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 
 function Drivers() {
     const dispatch = useDispatch()
@@ -148,27 +148,6 @@ function Drivers() {
             {rowData?.user?.isverified_byadmin !== false ? "Active" : "Inactive"}
         </h6>
     );
-
-
-    // ======================= Table Column Definitions =========================
-    // const columns = [
-    //     { field: 'id', header: 'ID', body: representativeBodyTemplate, sortable: true, style: true },
-    //     { field: 'image', header: 'IMAGE', body: (row) => <img src={row.image} alt={row.name} className="rounded-full w-11 h-11" />,  sortable: true},
-    //     { field: 'name', header: 'NAME', body: (row) => <div className="uppercase">{row.name}</div> },
-    //     { field: 'email', header: 'EMAIL', sortable: true },
-    //     { field: 'phone', header: 'PHONE', body: (row) => row.phone , sortable: true},
-    //     { field: 'occupation', header: 'OCCUPATION', body: (row) => row.occupation , sortable: true },
-    //     { field: 'restaurant', header: 'RESTAURANT', body: (row) => row.restaurant , sortable: true },
-    //     { field: 'Commission', header: 'COMMISSION', body: (row) => row.restaurantCommission },
-    //     { field: 'revenue', header: 'REVENUE', body: (row) => row.revenue },
-    //     { field: 'status', header: 'STATUS', sortable: true},
-    //     { field: 'action', header: 'ACTION', body: actionBodyTemplate, sortable: true },
-    // ];
-
-    const action = (row) => <button className={`${tableBtn}`} >
-        View Analysis
-    </button>
-
 
     // =============================== active user switch =============================
     const switchActive = (row) => {
