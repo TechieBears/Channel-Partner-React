@@ -18,6 +18,7 @@ const Order = () => {
     const [open, setOpen] = React.useState(false);
     const [delId, setDelId] = React.useState(0);
     const [selectedTab, setSelectedTab] = useState(0);
+    const orders = useSelector((state) => { state?.orders?.orders })
     const data = [{
         "order_id": "123456789",
         "customer_name": "John Doe",

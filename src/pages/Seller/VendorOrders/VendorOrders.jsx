@@ -14,6 +14,7 @@ import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 const VendorOrders = () => {
     const [selectedTab, setSelectedTab] = useState(0);
     const storages = useSelector((state) => state?.storage?.list);
+    const orders = useSelector((state) => { state?.orders?.orders })
     const [status, setstatus] = useState('pending')
     const [details, setDetails] = useState(false)
     const {

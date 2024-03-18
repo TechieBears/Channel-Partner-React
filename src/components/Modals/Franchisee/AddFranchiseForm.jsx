@@ -1,4 +1,4 @@
-import { Fragment, useState, useMemo } from "react";
+import { Fragment, useState, useMemo, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import LoadBox from "../../Loader/LoadBox";
 import { useForm } from "react-hook-form";
@@ -19,9 +19,28 @@ import moment from "moment";
 export default function AddFranchiseForm(props) {
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [emailError, setEmailError] = useState('');
   const dispatch = useDispatch()
   const { register, handleSubmit, reset, watch, control, setValue, formState: { errors }, } = useForm();
   const gstNumber = watch('gst_number');
+  const emailField = watch('email');
+
+  const checkEmail = () => {
+    if (props?.emails) {
+      const isDuplicate = props.emails.some((item) => item === emailField);
+      if (isDuplicate) {
+        setEmailError('Email field is duplicate, please try another.');
+      } else {
+        setEmailError('');
+      }
+    }
+  };
+
+  // Call checkEmail whenever emailField changes
+  useEffect(() => {
+    checkEmail();
+  }, [emailField]);
+
   // ============================= form submiting ======================================
   const onSubmit = async (data) => {
     console.log(data)
@@ -66,6 +85,7 @@ export default function AddFranchiseForm(props) {
       }
     }
     if (props.button !== 'edit') {   // for create
+      checkEmail()
       try {
         setLoader(true)
         const response = await CreateFranchisee(data);
@@ -252,6 +272,7 @@ export default function AddFranchiseForm(props) {
                             {errors.email && (
                               <Error title={errors?.email?.message ? errors?.email?.message : 'Email is Required'} />
                             )}
+                            {emailError != '' && <Error title={emailError} />}
                           </div>
                           <div className="">
                             <label className={labelClass}>Mobile Number*</label>
@@ -409,7 +430,7 @@ export default function AddFranchiseForm(props) {
                                 type="text"
                                 placeholder='GST Number'
                                 className={inputClass}
-                                {...register('gst_number', { validate:(gstNumber != "" && gstNumber!= null) ? validateGST : '' })}
+                                {...register('gst_number', { validate: (gstNumber != "" && gstNumber != null) ? validateGST : '' })}
                               />
                             </div>
                             {errors?.gst_number && <Error title={errors?.gst_number?.message ? errors?.gst_number?.message : 'GST Number is Requried'} />}
@@ -450,7 +471,7 @@ export default function AddFranchiseForm(props) {
                               multiple
                               accept='image/jpeg,image/jpg,image/png'
                               placeholder='Upload Images...'
-                              {...register("bank_passbook",{required: props?.button == 'edit' ? false : 'Bank PassBook Image Required'})} />
+                              {...register("bank_passbook", { required: props?.button == 'edit' ? false : 'Bank PassBook Image Required' })} />
                             {props?.button == 'edit' && props?.data.bank_passbook != '' && props?.data.bank_passbook != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                               {props?.data?.bank_passbook?.split('/').pop()}
                             </label>}

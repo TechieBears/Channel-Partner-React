@@ -24,6 +24,7 @@ import { environment } from "../../../env";
 
 export default function Restaurant() {
   const [data, setData] = useState([]);
+  const emails = data?.map(item => item?.user?.email)
   const user = useSelector((state) => state?.user?.loggedUserDetails);
   const {
     control,
@@ -154,7 +155,6 @@ export default function Restaurant() {
   // ============== Fetch All Admin Restaurants  ================
   const getAllRestaurant = () => {
     getRestarant().then((res) => {
-      console.log('restaurants = ', res)
       const restaurantVendors = res.filter(
         (item) => item?.vendor_type == "restaurant"
       );
@@ -369,6 +369,7 @@ export default function Restaurant() {
             title="Add Restaurant"
             getAllRestaurant={user?.role == 'admin' ? getAllRestaurant : getFranchiseRestaurants}
             id={user?.userid}
+            emails={emails}
           />
         </div>
         {<Table columns={columns} data={data} />}

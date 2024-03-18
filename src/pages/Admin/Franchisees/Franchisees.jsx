@@ -25,6 +25,7 @@ function Franchisees() {
     const [rstatus, setStatus] = useState();
     const [franchiseData, setFranchiseData] = useState()
     console.log('franchsie', franchiseData)
+    const emails = franchiseData?.map(item => item?.user?.email)
     const [pincodeOptions, setPincodeOptions] = useState()
 
     // // ========================= fetch data from api ==============================
@@ -233,7 +234,7 @@ function Franchisees() {
                     <div className="">
                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>  Franchisee Details</h1>
                     </div>
-                    <AddFranchisee title='Add Franchisee' FranchiseeDetails={FranchiseeDetails} />
+                    <AddFranchisee title='Add Franchisee' FranchiseeDetails={FranchiseeDetails} emails={emails} />
                 </div>
                 <Table data={franchiseData} columns={columns} />
             </div>
