@@ -590,6 +590,7 @@ const AddProduct = (props) => {
                                                                 </label>
                                                                 <input
                                                                     type="number"
+                                                                    min={0}
                                                                     placeholder='0.00'
                                                                     className={inputClass}
                                                                     {...register('markup_percentage', { required: true })} />
@@ -649,7 +650,7 @@ const AddProduct = (props) => {
                                                             onChange={handleFileChange}
                                                         />
                                                         {props?.button === 'edit' && props?.data.product_video_url && (
-                                                            <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
+                                                            <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                                                                 {props?.data?.product_video_url?.name}
                                                             </label>
                                                         )}
