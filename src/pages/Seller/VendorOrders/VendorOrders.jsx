@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import { Controller, useForm } from 'react-hook-form';
-import AsyncSelect from "react-select/async";
-import { toast } from 'react-toastify';
-import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
-import { useDispatch, useSelector } from 'react-redux';
-import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import Table from '../../../components/Table/Table';
-import { NavLink } from 'react-router-dom';
-import { ArrowDown2, ArrowUp2, ClipboardTick, Eye, Trash, User } from 'iconsax-react';
+import { ClipboardTick, Eye, Trash } from 'iconsax-react';
 import moment from 'moment';
-import { IndianRupeeIcon } from 'lucide-react';
+import React, { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+import { NavLink } from 'react-router-dom';
+import AsyncSelect from "react-select/async";
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import { toast } from 'react-toastify';
 import Orders from '../../../components/Cards/Orders/Orders';
-import { setMyData } from '../../../redux/Slices/orderSlice';
+import Table from '../../../components/Table/Table';
+import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 
 const VendorOrders = () => {
     const [selectedTab, setSelectedTab] = useState(0);
@@ -25,13 +23,7 @@ const VendorOrders = () => {
         formState: { errors },
         reset,
     } = useForm();
-    const dispatch = useDispatch();
-    const OrderData = useSelector((state) => state?.orders?.newOrders)
-    console.log("🚀 ~ file: VendorOrders.jsx:27 ~ VendorOrders ~ OrderData:", OrderData)
 
-    useEffect(() => {
-        console.log("🚀 ~ file: VendorOrders.jsx:32 ~ useEffect ~ OrderData:", OrderData)
-    }, [OrderData])
 
     const filterReset = () => {
         reset({

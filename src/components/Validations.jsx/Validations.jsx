@@ -67,7 +67,7 @@ export const validatePANCard = (value) => {
 
 export const validateAadharCard = (value) => {
     // Aadhar card pattern for India
-    const aadharPattern = /^\d{4}\s\d{4}\s\d{4}$/;
+    const aadharPattern = /^(?:\d{4}\s?\d{4}\s?\d{4}|^\d{12})$/;
 
     if (aadharPattern.test(value)) {
         return true;

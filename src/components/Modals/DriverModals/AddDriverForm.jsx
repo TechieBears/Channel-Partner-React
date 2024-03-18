@@ -11,11 +11,6 @@ import { setFranchise } from "../../../redux/Slices/masterSlice";
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../utils/CustomClass';
 import Error from '../../Errors/Error';
 import LoadBox from '../../Loader/LoadBox';
-import { toast } from 'react-toastify';
-import { ImageUpload, deliveryBoylink } from '../../../env';
-import { setFranchise } from "../../../redux/Slices/masterSlice";
-import "../../../redux/Slices/loginSlice";
-import { GetFranchisee } from "../../../api";
 import { handleMobileNoNumericInput, handlePancardUpperCase, validateAadharCard, validateEmail, validatePANCard, validatePIN, validatePhoneNumber } from '../../Validations.jsx/Validations';
 
 function AddDriverFrom(props) {

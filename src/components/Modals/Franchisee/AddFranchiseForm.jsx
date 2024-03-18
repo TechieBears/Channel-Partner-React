@@ -392,7 +392,6 @@ export default function AddFranchiseForm(props) {
                             <div className="flex items-center space-x-2">
                               <input
                                 type="text"
-                                max={14}
                                 maxLength={14}
                                 placeholder='Aadhar No'
                                 className={inputClass}
@@ -410,7 +409,7 @@ export default function AddFranchiseForm(props) {
                                 type="text"
                                 placeholder='GST Number'
                                 className={inputClass}
-                                {...register('gst_number', { validate: gstNumber != "" ? validateGST : '' })}
+                                {...register('gst_number', { validate:(gstNumber != "" && gstNumber!= null) ? validateGST : '' })}
                               />
                             </div>
                             {errors?.gst_number && <Error title={errors?.gst_number?.message ? errors?.gst_number?.message : 'GST Number is Requried'} />}
@@ -444,18 +443,20 @@ export default function AddFranchiseForm(props) {
                             </div>
                           </div>
                           <div className="">
-                            <label className={labelClass} htmlFor="main_input">Bank PassBook Image</label>
+                            <label className={labelClass} htmlFor="main_input">Bank PassBook Image*</label>
                             <input className={fileinput}
                               id="main_input"
                               type='file'
                               multiple
                               accept='image/jpeg,image/jpg,image/png'
                               placeholder='Upload Images...'
-                              {...register("bank_passbook")} />
+                              {...register("bank_passbook",{required: props?.button == 'edit' ? false : 'Bank PassBook Image Required'})} />
                             {props?.button == 'edit' && props?.data.bank_passbook != '' && props?.data.bank_passbook != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                               {props?.data?.bank_passbook?.split('/').pop()}
                             </label>}
+                            {errors?.bank_passbook && <Error title={errors?.bank_passbook?.message} />}
                           </div>
+
                           <div className="">
                             <label className={labelClass}>IFSC Code*</label>
                             <input
