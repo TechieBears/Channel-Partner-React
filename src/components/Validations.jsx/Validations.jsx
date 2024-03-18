@@ -72,7 +72,6 @@ export const validateAadharCard = (value) => {
     if (aadharPattern.test(value)) {
         return true;
     }
-
     return 'Invalid AadharCard number*';
 };
 
@@ -92,7 +91,6 @@ export const handleMobileNoNumericInput = (e) => {
 
 export const handlePancardUpperCase = (e) => {
     if(e.target.value){
-        console.log(e.target.value.toUpperCase())
         return e.target.value.toUpperCase()
     }
 }
