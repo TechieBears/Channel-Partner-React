@@ -3,7 +3,7 @@ import { Trash } from "iconsax-react";
 import SubCategoryForm from "../../../../components/Modals/MenuModals/SubCategoryForm";
 import Table from "../../../../components/Table/Table";
 import { useDispatch, useSelector } from "react-redux";
-import { setSubCategory, setCategory } from "../../../../redux/Slices/masterSlice";
+import { setSubCategory, setCategory, setSubCategoryCount } from "../../../../redux/Slices/masterSlice";
 import { deleteSubCategory, getSubCategory, getCategory, getRestaurantCategory, getRestaurantSubCategory } from "../../../../api";
 import Switch from 'react-js-switch';
 
@@ -17,6 +17,7 @@ const SubCategory = (props) => {
     try {
       getSubCategory().then((res) => {
         setSubcategory(res)
+        dispatch(setSubCategoryCount(res.length))
         fetchData2();
       });
     } catch (error) {
@@ -39,6 +40,7 @@ const SubCategory = (props) => {
     try {
       getRestaurantSubCategory().then((res) => {
         setSubcategory(res)
+        dispatch(setSubCategoryCount(res.length))
         restaurantCategories();
       });
     } catch (error) {

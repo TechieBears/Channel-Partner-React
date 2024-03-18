@@ -2,7 +2,7 @@ import { Eye, Trash } from 'iconsax-react';
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import Switch from 'react-js-switch';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Select from "react-select";
 import { toast } from 'react-toastify';
@@ -14,6 +14,7 @@ import Table from '../../../../components/Table/Table';
 import { formBtn1, formBtn2, inputClass } from '../../../../utils/CustomClass';
 import axios from 'axios';
 import { environment } from '../../../../env';
+import { setCategoryCount, setProductCount, setSubCategoryCount } from '../../../../redux/Slices/masterSlice';
 
 
 
@@ -26,6 +27,7 @@ const AdminProduct = (props) => {
     const [subcategoryOptions, setSubCategoryOptions] = useState()
     const [category, setCategory] = useState([]);
     const [subCategory, setsubCategory] = useState([]);
+    const dispatch = useDispatch()
     const GetFranchiseeData = () => {
         try {
             GetFranchisee().then((res) => {
