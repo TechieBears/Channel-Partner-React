@@ -649,7 +649,7 @@ const AddProduct = (props) => {
                                                             onChange={handleFileChange}
                                                         />
                                                         {props?.button === 'edit' && props?.data.product_video_url && (
-                                                            <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
                                                                 {props?.data?.product_video_url?.name}
                                                             </label>
                                                         )}

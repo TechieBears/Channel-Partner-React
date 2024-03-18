@@ -227,7 +227,7 @@ export default function AddPromo(props) {
                           {props?.button == "edit" &&
                             props?.data?.slide_url != "" &&
                             props?.data?.slide_url != undefined && (
-                              <label className="block mb-1 font-medium text-blue-800 text-md font-tb">
+                              <label className="block mb-1 font-medium text-blue-800 text-md font-tb truncate">
                                 {props?.data?.slide_url?.split("/").pop()}
                               </label>
                             )}

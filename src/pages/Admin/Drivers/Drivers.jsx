@@ -239,32 +239,8 @@ function Drivers() {
         { field: 'profile_pic', header: 'Profile', body: representativeBodyTemplate, sortable: false, style: true },
         { field: 'first_name', body: (row) => <div className="capitalize">{row?.user?.first_name + " " + row?.user?.last_name}</div>, header: 'Name' },
         { field: 'email', header: 'Email', body: (row) => <h6>{row?.user?.email}</h6>, sortable: false },
-        {
-            field: 'shift', 
-            header: 'Shift', 
-            body: (row) => {
-              const shift = parseShift(row?.shift);
-              return (
-                <div>
-                    {Object.keys(shift).map(key => (
-                        <h6 key={key}>{key}: {shift['subTitle']}</h6>
-                        // <h6>Title: {shift?.title}</h6>
-                    ))}
-                </div>
-              );
-            },
-            sortable: false
-        },
-        // { field: 'job_type', header: 'Job Type', body: (row) =>  {
-        //     const jobType = JSON.parse(row.job_type);
-        //     return (
-        //         <div>
-        //             <div><strong>Title:</strong> {jobType.title}</div>
-        //             <div><strong>Sub Title:</strong> {jobType.subTitle}</div>
-        //         </div>
-        //     );
-        // }, sortable: false },
-        
+        { field: 'shift',  header: 'Shift Timing', body: (row) => <h6>{JSON.parse(row?.shift)?.title}</h6>, sortable: false },
+        { field: 'job_type',  header: 'Job Type', body: (row) => <h6>{JSON.parse(row?.job_type)?.title}</h6>, sortable: false },
         { field: 'gender', header: 'Gender', body: (row) => <h6>{row?.user?.gender}</h6>, sortable: false },
         { field: 'phone_no', header: 'Phone No', body: (row) => <h6>{row?.user?.phone_no}</h6>, sortable: false },
         { field: 'pincode', header: 'Pincode', body: (row) => <h6>{row?.user?.pincode}</h6>, sortable: false },

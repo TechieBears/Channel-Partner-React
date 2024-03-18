@@ -569,7 +569,7 @@ export default function AddRestItem(props) {
                                                             onChange={handleFileChange}
                                                         />
                                                         {props?.button === 'edit' && props?.data.food_video_url && (
-                                                            <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
                                                                 {props?.data.food_video_url?.name}
                                                             </label>
                                                         )}

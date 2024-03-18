@@ -340,7 +340,7 @@ export default function AddVendors(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("profile_pic", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data?.user?.profile_pic != '' && props?.data?.user?.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                        {props?.button == 'edit' && props?.data?.user?.profile_pic != '' && props?.data?.user?.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
                                                             {props?.data?.user?.profile_pic?.split('/').pop()}
                                                         </label>}
                                                         {errors.profile_pic && <Error title='Profile Image is required*' />}
@@ -453,7 +453,7 @@ export default function AddVendors(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("hawker_shop_photo", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data.hawker_shop_photo != '' && props?.data.hawker_shop_photo != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                        {props?.button == 'edit' && props?.data.hawker_shop_photo != '' && props?.data.hawker_shop_photo != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
                                                             {props?.data?.hawker_shop_photo?.split('/').pop()}
                                                         </label>}
                                                         {errors.hawker_shop_photo && <Error title='Shop Image is required*' />}
@@ -611,7 +611,7 @@ export default function AddVendors(props) {
                                                                     Upload
                                                                 </label>
                                                                 <input className="hidden"
-                                                                    id="pan"
+                                                                    id="adhar"
                                                                     type='file'
                                                                     multiple
                                                                     accept='image/jpeg,image/jpg,image/png,application/pdf'
@@ -713,7 +713,7 @@ export default function AddVendors(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("bank_passbook", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data.bank_passbook != '' && props?.data.bank_passbook != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                        {props?.button == 'edit' && props?.data.bank_passbook != '' && props?.data.bank_passbook != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
                                                             {props?.data?.bank_passbook?.split('/').pop()}
                                                         </label>}
                                                         {errors.bank_passbook && <Error title='Bank PassBook Image is required*' />}
@@ -739,7 +739,7 @@ export default function AddVendors(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("address_proof", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data.address_proof != '' && props?.data.address_proof != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                        {props?.button == 'edit' && props?.data.address_proof != '' && props?.data.address_proof != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
                                                             {props?.data?.address_proof?.split('/').pop()}
                                                         </label>}
                                                         {errors.address_proof && <Error title='Address Proof Image is required*' />}

@@ -352,7 +352,7 @@ const Step3 = (props) => {
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
                     {...register("ambience_image", { required: !props?.data?.ambience_image })} />
-                {props?.button == 'edit' && props?.data.ambience_image != '' && props?.data?.ambience_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                {props?.button == 'edit' && props?.data.ambience_image != '' && props?.data?.ambience_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
                     {props?.data?.ambience_image?.split('/').pop()}
                 </label>}
                 {errors.ambience_image && <Error title='Image is required*' />}
@@ -366,7 +366,7 @@ const Step3 = (props) => {
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
                     {...register("shop_image", { required: !props?.data?.vendor?.shop_image })} />
-                {props?.button == 'edit' && props?.data?.vendor?.shop_image != '' && props?.data?.vendor?.shop_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                {props?.button == 'edit' && props?.data?.vendor?.shop_image != '' && props?.data?.vendor?.shop_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
                     {props?.data?.vendor?.shop_image?.split('/').pop()}
                 </label>}
                 {errors.shop_image && <Error title='Image is required*' />}
@@ -381,7 +381,7 @@ const Step3 = (props) => {
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
                     {...register("food_image1", { required: !props?.data?.food_image1 })} />
-                {props?.button == 'edit' && props?.data.food_image1 != '' && props?.data.food_image1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                {props?.button == 'edit' && props?.data.food_image1 != '' && props?.data.food_image1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
                     {props?.data?.food_image1?.split('/').pop()}
                 </label>}
                 {errors.food_image1 && <Error title='Dish Image is required*' />}
@@ -395,7 +395,7 @@ const Step3 = (props) => {
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
                     {...register("food_image2", {})} />
-                {props?.button == 'edit' && props?.data.food_image2 != '' && props?.data.food_image2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                {props?.button == 'edit' && props?.data.food_image2 != '' && props?.data.food_image2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
                     {props?.data?.food_image2?.split('/').pop()}
                 </label>}
             </div>
@@ -408,7 +408,7 @@ const Step3 = (props) => {
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
                     {...register("food_image3", {})} />
-                {props?.button == 'edit' && props?.data.food_image3 != '' && props?.data.food_image3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                {props?.button == 'edit' && props?.data.food_image3 != '' && props?.data.food_image3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
                     {props?.data?.food_image3?.split('/').pop()}
                 </label>}
             </div>
@@ -432,7 +432,7 @@ const Step4 = (props) => {
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
                     {...register("order_img1", {})} />
-                {props?.button == 'edit' && props?.data.order_img1 != '' && props?.data.order_img1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                {props?.button == 'edit' && props?.data.order_img1 != '' && props?.data.order_img1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
                     {props?.data?.order_img1?.split('/').pop()}
                 </label>}
             </div>
@@ -445,7 +445,7 @@ const Step4 = (props) => {
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
                     {...register("order_img2", {})} />
-                {props?.button == 'edit' && props?.data?.order_img2 != '' && props?.data?.order_img2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                {props?.button == 'edit' && props?.data?.order_img2 != '' && props?.data?.order_img2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
                     {props?.data?.order_img2?.split('/').pop()}
                 </label>}
             </div>
@@ -458,7 +458,7 @@ const Step4 = (props) => {
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
                     {...register("order_img3", {})} />
-                {props?.button == 'edit' && props?.data?.order_img3 != '' && props?.data?.order_img3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                {props?.button == 'edit' && props?.data?.order_img3 != '' && props?.data?.order_img3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
                     {props?.data?.order_img3?.split('/').pop()}
                 </label>}
             </div>
@@ -479,7 +479,7 @@ const Step5 = (props) => {
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
                     {...register("pan_card", { required: (props?.data?.vendor?.pan_card ? false : true) })} />
-                {props?.button == 'edit' && props?.data?.vendor?.pan_card != '' && props?.data?.vendor?.pan_card != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                {props?.button == 'edit' && props?.data?.vendor?.pan_card != '' && props?.data?.vendor?.pan_card != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
                     {props?.data?.vendor?.pan_card?.split('/').pop()}
                 </label>
                 }

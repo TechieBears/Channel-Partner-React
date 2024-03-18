@@ -15,9 +15,8 @@ import { GetFranchisee } from "../../../api";
 import { validateEmail, validatePIN, validatePhoneNumber } from '../../Validations.jsx/Validations';
 
 
-
-
 function AddDriverFrom(props) {
+    console.log('props ', props)
     const [isOpen, setIsOpen] = useState(false);
     const [loader, setLoader] = useState(false);
     const Franchisee = useSelector((state) => state?.master?.Franchise);
@@ -102,31 +101,31 @@ function AddDriverFrom(props) {
               }
         }
         else {          // for edit
-            if (data?.bank_passbook.length != props?.data.bank_passbook) {
+            if (data?.bank_passbook?.length > 0) {
                 await ImageUpload(data?.bank_passbook[0], "deliveryboy", "BankPassbook", data?.first_name)
                 data.bank_passbook = `${deliveryBoylink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0]?.name}`
             } else {
                 data.bank_passbook = props?.data.bank_passbook
             }
-            if (data?.video_url.length != props?.data?.video_url) {
+            if (data?.video_url?.length > 0) {
                 await ImageUpload(data?.video_url[0], "deliveryboy", "AddressProof", data?.first_name)
                 data.video_url = `${deliveryBoylink}${data?.first_name}_AddressProof_${data?.video_url[0]?.name}`
             } else {
                 data.video_url = props?.data?.video_url
             }
-            if (data?.profile_pic.length != props?.data?.user?.profile_pic) {
+            if (data?.profile_pic?.length > 0) {
                 await ImageUpload(data?.profile_pic[0], "deliveryboy", "ProfileImage", data?.first_name)
                 data.profile_pic = `${deliveryBoylink}${data?.first_name}_ProfileImage_${data?.profile_pic[0]?.name}`
             } else {
                 data.profile_pic = props?.data?.user?.profile_pic
             }
-            if (props?.data?.adhar_url != data?.adhar_url) {
+            if (data?.adhar_url?.length > 0) {
                 await ImageUpload(data?.adhar_url[0], "deliveryboy", "adharImage", data?.first_name)
                 data.adhar_url = `${deliveryBoylink}${data?.first_name}_adharImage_${data?.adhar_url[0].name}`
               } else {
                 data.adhar_url = props?.data?.adhar_url
               }
-              if (props?.data?.pan_url != data?.pan_url) {
+              if (data?.pan_url?.length > 0) {
                 await ImageUpload(data?.pan_url[0], "deliveryboy", "panImage", data?.first_name)
                 data.pan_url = `${deliveryBoylink}${data?.first_name}_panImage_${data?.pan_url[0].name}`
               } else {
@@ -151,7 +150,7 @@ function AddDriverFrom(props) {
                     data.shift = {
                         "subTitle": "4 hours",
                         "title": "Morning 9AM to Afternoon 1PM"
-                    };
+                    }
                 } else if (data.shift === "Afternoon 4PM to Evening 8PM 4 Hours") {
                     data.shift = {
                         "subTitle": "4 hours",
@@ -162,9 +161,9 @@ function AddDriverFrom(props) {
                 let requestData;
                 if (LoggedUserDetails?.role == 'franchise') {
                     const additionalPayload = { created_by: user?.user?.id };
-                    requestData = { ...data, ...additionalPayload };
+                    requestData = { ...data, ...additionalPayload, shift: JSON.stringify(data.shift), job_type: JSON.stringify(data.job_type)};
                 } else if (LoggedUserDetails?.role == 'admin') {
-                    requestData = { ...data, created_by: user?.user?.id };
+                    requestData = { ...data, created_by: user?.user?.id, shift: JSON.stringify(data.shift), job_type: JSON.stringify(data.job_type) };
                 }
 
                 const response = await createDeliveryBoy(requestData);
@@ -186,7 +185,32 @@ function AddDriverFrom(props) {
             }
         } else {            // for edit
             setLoader(true)
-            const response = await editDriverBoy(props?.data?.user?.id, data)
+            if (data.job_type === "Part Time (4-5 Hours/Day)") {
+                data.job_type = {
+                    "subTitle": "4-5 hours per day",
+                    "title": "Part Time"
+                };
+            } else if (data.job_type === "Full Time (9 Hours/Day)") {
+                data.job_type = {
+                    "subTitle": "9 hours per day",
+                    "title": "Full Time"
+                };
+            }
+            if (data.shift === "Morning 9AM to Afternoon 1PM 4 Hours") {
+                data.shift = {
+                    "subTitle": "4 hours",
+                    "title": "Morning 9AM to Afternoon 1PM"
+                }
+            } else if (data.shift === "Afternoon 4PM to Evening 8PM 4 Hours") {
+                data.shift = {
+                    "subTitle": "4 hours",
+                    "title": "Afternoon 4PM to Evening 8PM"
+                };
+            }
+
+            let requestData ;
+            requestData =  {...data, shift: JSON.stringify(data.shift), job_type: JSON.stringify(data.job_type)}
+            const response = await editDriverBoy(props?.data?.user?.id, requestData)
             if (response?.message == "delivery boy edited successfully") {
                 setTimeout(() => {
                     toggle();
@@ -354,7 +378,7 @@ function AddDriverFrom(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("profile_pic", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data?.user?.profile_pic != '' && props?.data?.user?.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                        {props?.button == 'edit' && props?.data?.user?.profile_pic != '' && props?.data?.user?.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                                                             {props?.data?.user?.profile_pic?.split('/').pop()}
                                                         </label>}
                                                         {errors.profile_pic && <Error title='Profile Image is required*' />}
@@ -623,7 +647,7 @@ function AddDriverFrom(props) {
                                                             {...register("video_url", { required: props.button === 'edit' ? false : true })}
                                                             onChange={handleFileChange}
                                                         />
-                                                        {props?.button == 'edit' && props?.data?.video_url != '' && props?.data?.video_url != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                        {props?.button == 'edit' && props?.data?.video_url != '' && props?.data?.video_url != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                                                             {props?.data?.video_url?.split('/').pop()}
                                                         </label>}
                                                         {errors.video_url && <Error title='Video file is required*' />}
@@ -634,7 +658,7 @@ function AddDriverFrom(props) {
                                                 <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-x-3 gap-y-3">
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Pan Card
+                                                            Pan Card*
                                                         </label>
                                                         <div className="flex items-center space-x-2">
                                                             <input
@@ -653,9 +677,12 @@ function AddDriverFrom(props) {
                                                                     multiple
                                                                     accept='image/jpeg,image/jpg,image/png,application/pdf'
                                                                     placeholder='Upload Images...'
-                                                                    {...register("pan_url", { required: true })} />
+                                                                    {...register("pan_url", { required: props.button == 'edit' ? false : true })} />
                                                             </div>
                                                         </div>
+                                                        {props?.button == 'edit' && props?.data?.pan_url != '' && props?.data?.pan_url != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
+                                                            {props?.data?.pan_url?.split('/').pop()}
+                                                        </label>}
                                                             {errors.pan_card && <Error title='PAN Card Number & Image is required' />}
                                                     </div>
                                                     {/* <div className="">
@@ -687,14 +714,17 @@ function AddDriverFrom(props) {
                                                                     Upload
                                                                 </label>
                                                                 <input className="hidden"
-                                                                    id="pan"
+                                                                    id="adhar"
                                                                     type='file'
                                                                     multiple
                                                                     accept='image/jpeg,image/jpg,image/png,application/pdf'
                                                                     placeholder='Upload Images...'
-                                                                    {...register("adhar_url", { required: true })} />
+                                                                    {...register("adhar_url", { required: props.button == 'edit' ? false : true })} />
                                                             </div>
                                                         </div>
+                                                        {props?.button == 'edit' && props?.data?.adhar_url != '' && props?.data?.adhar_url != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
+                                                            {props?.data?.adhar_url?.split('/').pop()}
+                                                        </label>}
                                                             {errors.adhar_card && <Error title='Aadhar Card Number & Image is required' />}
                                                     </div>
                                                     {/* <div className="">
@@ -754,7 +784,7 @@ function AddDriverFrom(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("bank_passbook", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data.bank_passbook != '' && props?.data.bank_passbook != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                        {props?.button == 'edit' && props?.data.bank_passbook != '' && props?.data.bank_passbook != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                                                             {props?.data?.bank_passbook?.split('/').pop()}
                                                         </label>}
                                                         {errors.bank_passbook && <Error title='Bank PassBook Image is required*' />}
