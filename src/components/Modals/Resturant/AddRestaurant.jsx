@@ -33,7 +33,6 @@ export default function AddRestaurant(props) {
 
     // Call checkEmail whenever emailField changes
     useEffect(() => {
-        console.log('called')
         checkEmail();
     }, [emailField]);
     const toggle = () => {

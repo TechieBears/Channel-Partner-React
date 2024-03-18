@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import Switch from "react-js-switch";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
-import { getSingleRestaurant } from "../../api";
+import { getSingleRestaurant, getSingleShop } from "../../api";
 import userImg from "../../assets/user.jpg";
 import "../../css/Navbar.css";
 import LoginModal from "../Modals/NavbarModals/LoginModal";
@@ -40,7 +40,7 @@ const Navbar = ({ mobileSidebar, setMobileSidebar }) => {
     setLoginModal(!loginModal)
   }
 
-  const getDetails = () => {
+  const getRestaurantDetails = () => {
     try {
       getSingleRestaurant(user?.sellerId).then((res) => {
         setData(res);
@@ -50,11 +50,25 @@ const Navbar = ({ mobileSidebar, setMobileSidebar }) => {
     }
   };
 
+  const getShopDetails = () => {
+    try {
+      getSingleShop(user?.userid).then(res => {
+        setData(res[0]);
+      })
+    } catch (error) {
+      console.log('error', error);
+    }
+  }
+
   useEffect(() => {
     if (user?.role == 'seller' && sessionStarted == false) {
       setSessionModal(true);
     }
-    getDetails();
+    if (user?.role == 'seller' && user?.vendor_type == 'restaurant') {
+      getRestaurantDetails();
+    } else if (user?.role == 'seller' && user?.vendor_type == 'shop') {
+      getShopDetails();
+    }
   }, []);
 
   return (
@@ -66,11 +80,8 @@ const Navbar = ({ mobileSidebar, setMobileSidebar }) => {
             <span className="capitalize text-sky-400">{user?.first_name}</span>
           ) : (
             <span className="capitalize text-sky-400">
-              {user?.vendor_type == "restaurant" &&
-                (data?.vendor?.shop_name != null ||
-                  data?.vendor?.shop_name != undefined)
-                ? data?.vendor?.shop_name
-                : null}
+              {user?.vendor_type == "restaurant" ? data?.vendor?.shop_name
+                : user?.vendor_type == "shop" ? data?.shop_name : null}
             </span>
           )}
         </h2>

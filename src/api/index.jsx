@@ -271,6 +271,18 @@ export const EditFranchiseeVendors = async (id, data) => {
     }
 };
 
+//================= get single vendor =======================
+export const getSingleShop = async (id,) => {
+    const url = `${environment.baseUrl}vendor/edit_vendor/${id}`;
+    try {
+        const response = await axios.get(url)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
 /* ================== Get Vendors For Admin Api =========== */
 export const GetFranchiseeVendors = async (data) => {
     const url = `${environment.baseUrl}vendor/create_vendor`;
