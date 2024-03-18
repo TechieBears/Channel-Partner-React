@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form';
 import AsyncSelect from "react-select/async";
 import { toast } from 'react-toastify';
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import Table from '../../../components/Table/Table';
 import { NavLink } from 'react-router-dom';
@@ -11,6 +11,7 @@ import { ArrowDown2, ArrowUp2, ClipboardTick, Eye, Trash, User } from 'iconsax-r
 import moment from 'moment';
 import { IndianRupeeIcon } from 'lucide-react';
 import Orders from '../../../components/Cards/Orders/Orders';
+import { setMyData } from '../../../redux/Slices/orderSlice';
 
 const VendorOrders = () => {
     const [selectedTab, setSelectedTab] = useState(0);
@@ -24,6 +25,14 @@ const VendorOrders = () => {
         formState: { errors },
         reset,
     } = useForm();
+    const dispatch = useDispatch();
+    const OrderData = useSelector((state) => state?.orders?.newOrders)
+    console.log("🚀 ~ file: VendorOrders.jsx:27 ~ VendorOrders ~ OrderData:", OrderData)
+
+    useEffect(() => {
+        console.log("🚀 ~ file: VendorOrders.jsx:32 ~ useEffect ~ OrderData:", OrderData)
+    }, [OrderData])
+
     const filterReset = () => {
         reset({
             name: null,
@@ -44,7 +53,7 @@ const VendorOrders = () => {
     };
 
     const onSubmit = (data) => {
-        console.log('data', data)
+        // console.log('data', data)
     }
 
     //================== fake data order =============================
@@ -481,7 +490,7 @@ const VendorOrders = () => {
                         {/* ===================== New Order Section ===================== */}
                         <div className="space-y-2 p-4">
                             <div>
-                                <p className="font-semibold text-lg">Current Orders</p>
+                                <p className="font-semibold text-lg">Current Orders11</p>
                             </div>
                             <Orders data={data} />
                         </div>

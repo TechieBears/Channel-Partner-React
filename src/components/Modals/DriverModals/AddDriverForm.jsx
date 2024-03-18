@@ -11,7 +11,12 @@ import { setFranchise } from "../../../redux/Slices/masterSlice";
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../utils/CustomClass';
 import Error from '../../Errors/Error';
 import LoadBox from '../../Loader/LoadBox';
-import { validateEmail, validatePIN, validatePhoneNumber } from '../../Validations.jsx/Validations';
+import { toast } from 'react-toastify';
+import { ImageUpload, deliveryBoylink } from '../../../env';
+import { setFranchise } from "../../../redux/Slices/masterSlice";
+import "../../../redux/Slices/loginSlice";
+import { GetFranchisee } from "../../../api";
+import { handleMobileNoNumericInput, handlePancardUpperCase, validateAadharCard, validateEmail, validatePANCard, validatePIN, validatePhoneNumber } from '../../Validations.jsx/Validations';
 
 function AddDriverFrom(props) {
     const [isOpen, setIsOpen] = useState(false);
@@ -450,7 +455,7 @@ function AddDriverFrom(props) {
                                                             maxLength={10}
                                                             placeholder='+91'
                                                             className={inputClass}
-                                                            onKeyDown={(e) => (e.key < '0' || e.key > '9') && e.key !== 'Backspace' && e.preventDefault()}
+                                                            onKeyDown={handleMobileNoNumericInput}
                                                             {...register('phone_no', { required: true, validate: validatePhoneNumber })}
                                                         />
                                                         {errors.phone_no && <Error title={errors?.phone_no?.message ? errors?.phone_no?.message : 'Phone number required*'} />}
@@ -621,9 +626,10 @@ function AddDriverFrom(props) {
                                                             type="text"
                                                             placeholder='PAN Card Number'
                                                             className={inputClass}
-                                                            {...register('pan_card', { required: true })}
+                                                            maxLength={10}
+                                                            {...register('pan_card', { required: true, validate: validatePANCard })}
                                                         />
-                                                        {errors.pan_card && <Error title='PAN Card Number is required' />}
+                                                        {errors?.pan_card && <Error title={errors?.pan_card?.message ? errors?.pan_card?.message : 'Pancard Number is Requried'} />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -633,9 +639,10 @@ function AddDriverFrom(props) {
                                                             type="text"
                                                             placeholder='Aadhar Card Number'
                                                             className={inputClass}
-                                                            {...register('adhar_card', { required: true })}
+                                                            maxLength={14}
+                                                            {...register('adhar_card', { required: true, validate: validateAadharCard })}
                                                         />
-                                                        {errors?.adhar_card && <Error title='Aadhar Card Number is required' />}
+                                                        {errors?.adhar_card && <Error title={errors?.adhar_card?.message ? errors?.adhar_card?.message : 'AadharCard Number is Requried'} />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>

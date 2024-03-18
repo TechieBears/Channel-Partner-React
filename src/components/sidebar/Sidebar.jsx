@@ -7,7 +7,6 @@ import { environment } from '../../env';
 import Navbar from './Navbar';
 import { Admin, Franchise, Seller } from './SidebarApi';
 import SidebarLink from './SidebarLink';
-import { setOrders } from '../../redux/Slices/masterSlice';
 import { setSessionStarted } from '../../redux/Slices/SessionSlice';
 import { startSession } from '../../api';
 
@@ -17,6 +16,7 @@ const Sidebar = ({ children }) => {
     // const WebSocketUrl = `${environment.webSocketUrl}user_to_seller/${user?.msb_code}`;
     // const ws = useRef(new WebSocket(WebSocketUrl)).current
     let orders = [];
+
     const [isActiveLink, setIsActiveLink] = useState(false);
     const [mobileSidebar, setMobileSidebar] = useState(false);
     const dispatch = useDispatch()
@@ -96,6 +96,27 @@ const Sidebar = ({ children }) => {
         }
     }, []);
 
+    // useEffect(() => {
+    //     if (user?.role == 'seller' && (route?.pathname == '/vendor-orders' || route?.pathname == '/')) {
+    //         ws.open = () => {
+    //             console.log('WebSocket Client Connected');
+    //         };
+
+    //         ws.onerror = (e) => {
+    //             console.log(e.message);
+    //         };
+
+    //         ws.onmessage = (e) => {
+    //             const data = JSON.parse(e.data);
+    //             console.log("🚀 ~ file: Sidebar.jsx:34 ~ useEffect ~ data:", data)
+    //             // window.alert(data?.orderId)
+    //             alert("New order:", data?.orderId)
+    //             dispatch(setNewOrdersList(data))
+    //         };
+    //     } else {
+    //         // ws.close();
+    //     }
+    // }, [route])
 
     return (
         <>

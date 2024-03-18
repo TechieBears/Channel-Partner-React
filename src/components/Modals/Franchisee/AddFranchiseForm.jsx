@@ -10,7 +10,7 @@ import { setFranchise } from "../../../redux/Slices/masterSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { ImageUpload, franchiselink } from '../../../env';
 import { toast } from 'react-toastify';
-import { validateEmail, validateGST, validatePIN, validatePhoneNumber } from "../../Validations.jsx/Validations";
+import { handleMobileNoNumericInput, handlePincodeMaxLength, validateEmail, validateGST, validatePANCard, validatePIN, validatePhoneNumber,validateAadharCard } from "../../Validations.jsx/Validations";
 import moment from "moment";
 
 
@@ -260,7 +260,7 @@ export default function AddFranchiseForm(props) {
                               placeholder="+91"
                               maxLength={10}
                               className={inputClass}
-                              onKeyDown={(e) => (e.key < '0' || e.key > '9') && e.key !== 'Backspace' && e.preventDefault()}
+                              onKeyDown={handleMobileNoNumericInput}
                               {...register("phone_no", { required: true, validate: validatePhoneNumber })}
                             />
                             {errors.phone_no && (
@@ -317,10 +317,12 @@ export default function AddFranchiseForm(props) {
                             <label className={labelClass}>PINCODE*</label>
                             <input
                               type="number"
-                              maxLength={6}
+                              max={6}
+                              min={0}
                               placeholder="PINCODE"
                               readOnly={props?.button == 'edit' ? true : false}
                               className={inputClass}
+                              onKeyDown={handlePincodeMaxLength}
                               {...register("pincode", { required: true, validate: validatePIN })}
                             />
                             {errors.pincode && (
@@ -375,10 +377,13 @@ export default function AddFranchiseForm(props) {
                               <input
                                 type="text"
                                 placeholder='PAN  No'
+                                maxLength={10}
                                 className={inputClass}
-                                {...register('pan_card', { required: true })}
+                                {...register('pan_card', { required: true, validate: validatePANCard })}
                               />
                             </div>
+                            {errors?.pan_card && <Error title={errors?.pan_card?.message ? errors?.pan_card?.message : 'Pancard Number is Requried'} />}
+
                           </div>
                           <div className="">
                             <label className={labelClass}>
@@ -387,25 +392,25 @@ export default function AddFranchiseForm(props) {
                             <div className="flex items-center space-x-2">
                               <input
                                 type="text"
+                                max={14}
+                                maxLength={14}
                                 placeholder='Aadhar No'
                                 className={inputClass}
-                                {...register('adhar_card', { required: true })}
+                                {...register('adhar_card', { required: true, validate:validateAadharCard })}
                               />
                             </div>
+                            {errors?.adhar_card && <Error title={errors?.adhar_card?.message ? errors?.adhar_card?.message : 'AadharCard Number is Requried'} />}
                           </div>
                           <div className="">
                             <label className={labelClass}>
-                              GST Number*
+                              GST Number
                             </label>
                             <div className="flex items-center space-x-2">
                               <input
                                 type="text"
                                 placeholder='GST Number'
                                 className={inputClass}
-                                {...register('gst_number', {
-                                  required: 'GST is required',
-                                  validate: validateGST
-                                })}
+                                {...register('gst_number')}
                               />
                             </div>
                             {errors?.gst_number && <Error title={errors?.gst_number?.message ? errors?.gst_number?.message : 'GST Number is Requried'} />}

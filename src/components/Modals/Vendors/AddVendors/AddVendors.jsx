@@ -14,8 +14,9 @@ import { setLoggedUser, setLoggedUserDetails, setRoleIs, setFranchiseeDetails } 
 import { useDispatch, useSelector } from "react-redux";
 import { ImageUpload, vendorlink } from "../../../../env";
 import { toast } from 'react-toastify';
-import { validateEmail, validateGST, validatePIN, validatePhoneNumber } from '../../../Validations.jsx/Validations';
+import { handleMobileNoNumericInput, validateEmail, validateGST, validatePANCard, validatePIN, validatePhoneNumber } from '../../../Validations.jsx/Validations';
 import moment from 'moment';
+import { validateAadharCard } from './../../../Validations.jsx/Validations';
 
 
 
@@ -356,7 +357,7 @@ export default function AddVendors(props) {
                                                             placeholder="Phone"
                                                             maxLength={10}
                                                             className={inputClass}
-                                                            onKeyDown={(e) => (e.key < '0' || e.key > '9') && e.key !== 'Backspace' && e.preventDefault()}
+                                                            onKeyDown={handleMobileNoNumericInput}
                                                             {...register("phone_no", { required: true, validate: validatePhoneNumber })}
                                                         />
                                                         {errors.phone_no && (
@@ -538,9 +539,10 @@ export default function AddVendors(props) {
                                                             type="text"
                                                             placeholder='PAN  No'
                                                             className={inputClass}
-                                                            {...register('pan_card', { required: true })}
+                                                            maxLength={10}
+                                                            {...register('pan_card', { required: true, validate: validatePANCard })}
                                                         />
-                                                        {errors?.pan_card && <Error title='Pan Card Number is required' />}
+                                                        {errors?.pan_card && <Error title={errors?.pan_card?.message ? errors?.pan_card?.message : 'Pancard Number is Requried'} />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -549,25 +551,26 @@ export default function AddVendors(props) {
                                                         <input
                                                             type="text"
                                                             placeholder='Aadhar No'
+                                                            maxLength={14}
                                                             className={inputClass}
-                                                            {...register('adhar_card', { required: true })}
+                                                            {...register('adhar_card', { required: true, validate: validateAadharCard })}
                                                         />
-                                                        {errors?.adhar_card && <Error title='Aadhar Card Number is required' />}
+                                                        {errors?.adhar_card && <Error title={errors?.adhar_card?.message ? errors?.adhar_card?.message : 'AadharCard Number is Requried'} />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            GST Number*
+                                                            GST Number
                                                         </label>
                                                         <input
                                                             type="text"
                                                             placeholder='GST Number'
                                                             className={inputClass}
                                                             {...register('gst_number', {
-                                                                required: 'GST is required*',
+                                                                required:false,
                                                                 validate: validateGST
                                                             })}
                                                         />
-                                                        {errors?.gst && <Error title={errors?.gst?.message} />}
+                                                        {errors?.gst_number && <Error title={errors?.gst_number?.message} />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
