@@ -3,12 +3,12 @@ export const environment = {
     // baseUrl: 'http://192.168.0.152:8005/',
     // baseUrl: 'http://127.0.0.1:8000/',
     // baseUrl: 'https://5932-43-252-33-152.ngrok-free.app/',
-    // baseUrl: 'https://0852-43-252-33-152.ngrok-free.app',
+    baseUrl: 'https://fa63-58-146-123-202.ngrok-free.app/',
 
 
 
     // --------------------Live Server Api URL--------------------
-    baseUrl: 'https://cpapi.techiebears.com/',
+    // baseUrl: 'https://cpapi.techiebears.com/',
 }
 
 // ====================== AWS S3 Image/File Upload =========================

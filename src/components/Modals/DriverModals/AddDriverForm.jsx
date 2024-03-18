@@ -60,6 +60,11 @@ function AddDriverFrom(props) {
         formState: { errors },
     } = useForm();
 
+    // ============================ file uplaod watch ===============================
+    const pan_watch = watch('pan_url')
+    const adhar_watch = watch('adhar_url')
+
+
     // ============================= form submiting ======================================
     const onSubmit = async (data) => {
         console.log(data)
@@ -361,8 +366,10 @@ function AddDriverFrom(props) {
                                                             className={inputClass}
                                                             {...register('email', { required: true, validate: validateEmail })}
                                                         />
-                                                        {errors.email && <Error title={errors?.email?.message} />
-                                                        }
+                                                         {errors.email && (
+                                                            <Error title={errors?.email?.message ? errors?.email?.message : 'Email is Required'} />
+                                                        )}
+                                                        {/* {errors.email && <Error title={errors?.email?.message} />} */}
                                                     </div>
                                                     {/* <div className="">
                                                         <label className={labelClass}>
@@ -441,7 +448,10 @@ function AddDriverFrom(props) {
                                                             className={inputClass}
                                                             {...register('phone_no', { required: true, validate: validatePhoneNumber })}
                                                         />
-                                                        {errors.phone_no && <Error title={errors?.phone_no?.message} />}
+                                                         {errors.phone_no && (
+                                                            <Error title={errors?.phone_no?.message ? errors?.phone_no?.message : 'Phone Number is Required'} />
+                                                            )}
+                                                        {/* {errors.phone_no && <Error title={errors?.phone_no?.message} />} */}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -600,6 +610,32 @@ function AddDriverFrom(props) {
                                                 <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-x-3 gap-y-3">
                                                     <div className="">
                                                         <label className={labelClass}>
+                                                            Pan Card
+                                                        </label>
+                                                        <div className="flex items-center space-x-2">
+                                                            <input
+                                                                type="text"
+                                                                placeholder='PAN'
+                                                                className={inputClass}
+                                                                {...register('pan_card', { required: true })}
+                                                            />
+                                                            <div className="">
+                                                                <label htmlFor='pan' className={`${pan_watch?.length || props?.data?.pan_url ? "bg-sky-400 text-white" : " bg-gray-300/80"}  transition-colors hover:bg-sky-400 font-tb font-semibold hover:text-white py-3 mt-10 px-5 rounded-md cursor-pointer`}>
+                                                                    Upload
+                                                                </label>
+                                                                <input className="hidden"
+                                                                    id="pan"
+                                                                    type='file'
+                                                                    multiple
+                                                                    accept='image/jpeg,image/jpg,image/png,application/pdf'
+                                                                    placeholder='Upload Images...'
+                                                                    {...register("pan_url", { required: true })} />
+                                                            </div>
+                                                        </div>
+                                                            {errors.pan_card && <Error title='PAN Card Number & Image is required' />}
+                                                    </div>
+                                                    {/* <div className="">
+                                                        <label className={labelClass}>
                                                             PAN Card Number*
                                                         </label>
                                                         <input
@@ -609,8 +645,35 @@ function AddDriverFrom(props) {
                                                             {...register('pan_card', { required: true })}
                                                         />
                                                         {errors.pan_card && <Error title='PAN Card Number is required' />}
+                                                    </div> */}
+                                                     <div className="">
+                                                        <label className={labelClass}>
+                                                            Aadhar Card Number*
+                                                        </label>
+                                                        <div className="flex items-center space-x-2">
+                                                            <input
+                                                                type="number"
+                                                                maxLength={12}
+                                                                placeholder='Aadhar Card Number'
+                                                                className={inputClass}
+                                                                {...register('adhar_card', { required: true })}
+                                                            />
+                                                            <div className="">
+                                                                <label htmlFor='adhar' className={`${adhar_watch?.length || props?.data?.adhar_url ? "bg-sky-400 text-white" : " bg-gray-300/80"}  transition-colors hover:bg-sky-400 font-tb font-semibold hover:text-white py-3 mt-10 px-5 rounded-md cursor-pointer`}>
+                                                                    Upload
+                                                                </label>
+                                                                <input className="hidden"
+                                                                    id="pan"
+                                                                    type='file'
+                                                                    multiple
+                                                                    accept='image/jpeg,image/jpg,image/png,application/pdf'
+                                                                    placeholder='Upload Images...'
+                                                                    {...register("adhar_url", { required: true })} />
+                                                            </div>
+                                                        </div>
+                                                            {errors.adhar_card && <Error title='Aadhar Card Number & Image is required' />}
                                                     </div>
-                                                    <div className="">
+                                                    {/* <div className="">
                                                         <label className={labelClass}>
                                                             Aadhar Card Number*
                                                         </label>
@@ -621,7 +684,7 @@ function AddDriverFrom(props) {
                                                             {...register('adhar_card', { required: true })}
                                                         />
                                                         {errors?.adhar_card && <Error title='Aadhar Card Number is required' />}
-                                                    </div>
+                                                    </div> */}
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             Bank Name*

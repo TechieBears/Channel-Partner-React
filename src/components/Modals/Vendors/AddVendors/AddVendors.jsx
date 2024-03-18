@@ -27,6 +27,12 @@ export default function AddVendors(props) {
     const dispatch = useDispatch();
     const { register, handleSubmit, control, watch, reset, formState: { errors }, setValue } = useForm();
     const toggle = () => setOpen(!isOpen)
+
+    const pan_watch = watch('pan_url')
+    const adhar_watch = watch('adhar_url')
+    const gst_watch = watch('gst_url')
+
+
     const closeBtn = () => {
         toggle();
         reset()
@@ -344,9 +350,9 @@ export default function AddVendors(props) {
                                                             className={inputClass}
                                                             {...register("phone_no", { required: true, validate: validatePhoneNumber })}
                                                         />
-                                                        {errors.phone_no && (
-                                                            <Error title={errors?.phone_no?.message} />
-                                                        )}
+                                                          {errors.phone_no && (
+                                                            <Error title={errors?.phone_no?.message ? errors?.phone_no?.message : 'Phone Number is Required'} />
+                                                            )}
                                                     </div>
                                                     {props.button != 'edit' &&
                                                         <div className="">
@@ -453,8 +459,8 @@ export default function AddVendors(props) {
                                                             readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
                                                             {...register("pincode", { required: true, validate: validatePIN })}
                                                         />
-                                                        {errors.pincode && (
-                                                            <Error title={errors?.pincode?.message} />
+                                                         {errors.pincode && (
+                                                            <Error title={errors?.pincode?.message ? errors?.pincode?.message : 'PinCode is Required'} />
                                                         )}
                                                     </div>
                                                     <div className="">
@@ -470,7 +476,7 @@ export default function AddVendors(props) {
                                                         )}
                                                     </div>
                                                     <div className="">
-                                                        <label className={labelClass}>State</label>
+                                                        <label className={labelClass}>State*</label>
                                                         <input
                                                             type="text"
                                                             placeholder="Enter State"
@@ -492,7 +498,7 @@ export default function AddVendors(props) {
                                                             {...register("city", { required: true, pattern: /^[A-Za-z]+$/i })}
                                                         />
                                                         {errors.address && (
-                                                            <Error title={errors?.address ? 'State should contain All Alphabets' : 'City is Required'} />
+                                                            <Error title={errors?.address ? 'City should contain All Alphabets' : 'City is Required'} />
                                                         )}
                                                     </div>
 
@@ -518,6 +524,32 @@ export default function AddVendors(props) {
                                                         <label className={labelClass}>
                                                             Pan Card*
                                                         </label>
+                                                        <div className="flex items-center space-x-2">
+                                                            <input
+                                                                type="text"
+                                                                placeholder='PAN'
+                                                                className={inputClass}
+                                                                {...register('pan_card', { required: true })}
+                                                            />
+                                                            <div className="">
+                                                                <label htmlFor='pan' className={`${pan_watch?.length || props?.data?.pan_url ? "bg-sky-400 text-white" : " bg-gray-300/80"}  transition-colors hover:bg-sky-400 font-tb font-semibold hover:text-white py-3 mt-10 px-5 rounded-md cursor-pointer`}>
+                                                                    Upload
+                                                                </label>
+                                                                <input className="hidden"
+                                                                    id="pan"
+                                                                    type='file'
+                                                                    multiple
+                                                                    accept='image/jpeg,image/jpg,image/png,application/pdf'
+                                                                    placeholder='Upload Images...'
+                                                                    {...register("pan_url", { required: true })} />
+                                                            </div>
+                                                        </div>
+                                                            {errors.pan_card && <Error title='PAN Card Number & Image is required' />}
+                                                    </div>
+                                                    {/* <div className="">
+                                                        <label className={labelClass}>
+                                                            Pan Card*
+                                                        </label>
                                                         <input
                                                             type="text"
                                                             placeholder='PAN  No'
@@ -525,8 +557,35 @@ export default function AddVendors(props) {
                                                             {...register('pan_card', { required: true })}
                                                         />
                                                         {errors?.pan_card && <Error title='Pan Card Number is required' />}
+                                                    </div> */}
+                                                     <div className="">
+                                                        <label className={labelClass}>
+                                                            Aadhar Card Number*
+                                                        </label>
+                                                        <div className="flex items-center space-x-2">
+                                                            <input
+                                                                type="number"
+                                                                maxLength={12}
+                                                                placeholder='Aadhar Card Number'
+                                                                className={inputClass}
+                                                                {...register('adhar_card', { required: true })}
+                                                            />
+                                                            <div className="">
+                                                                <label htmlFor='adhar' className={`${adhar_watch?.length || props?.data?.adhar_url ? "bg-sky-400 text-white" : " bg-gray-300/80"}  transition-colors hover:bg-sky-400 font-tb font-semibold hover:text-white py-3 mt-10 px-5 rounded-md cursor-pointer`}>
+                                                                    Upload
+                                                                </label>
+                                                                <input className="hidden"
+                                                                    id="pan"
+                                                                    type='file'
+                                                                    multiple
+                                                                    accept='image/jpeg,image/jpg,image/png,application/pdf'
+                                                                    placeholder='Upload Images...'
+                                                                    {...register("adhar_url", { required: true })} />
+                                                            </div>
+                                                        </div>
+                                                            {errors.adhar_card && <Error title='Aadhar Card Number & Image is required' />}
                                                     </div>
-                                                    <div className="">
+                                                    {/* <div className="">
                                                         <label className={labelClass}>
                                                             Aadhar Card*
                                                         </label>
@@ -537,8 +596,37 @@ export default function AddVendors(props) {
                                                             {...register('adhar_card', { required: true })}
                                                         />
                                                         {errors?.adhar_card && <Error title='Aadhar Card Number is required' />}
+                                                    </div> */}
+                                                       <div className="">
+                                                        <label className={labelClass}>
+                                                            GST Number*
+                                                        </label>
+                                                        <div className="flex items-center space-x-2">
+                                                            <input
+                                                                type="text"
+                                                                placeholder='GST Number*'
+                                                                className={inputClass}
+                                                                {...register('gst_number', {
+                                                                    required: 'GST Number is required*',
+                                                                    validate: validateGST
+                                                                })}
+                                                            />
+                                                            <div className="">
+                                                                <label htmlFor='gst' className={`${gst_watch?.length || props?.data?.gst_url ? "bg-sky-400 text-white" : " bg-gray-300/80"}  transition-colors hover:bg-sky-400 font-tb font-semibold hover:text-white py-3 mt-10 px-5 rounded-md cursor-pointer`}>
+                                                                    Upload
+                                                                </label>
+                                                                <input className="hidden"
+                                                                    id="gst"
+                                                                    type='file'
+                                                                    multiple
+                                                                    accept='image/jpeg,image/jpg,image/png,application/pdf'
+                                                                    placeholder='Upload Images...'
+                                                                    {...register("gst_url")} />
+                                                            </div>
+                                                        </div>
+                                                        {errors?.gst_number && <Error title={errors?.gst_number?.message} />}
                                                     </div>
-                                                    <div className="">
+                                                    {/* <div className="">
                                                         <label className={labelClass}>
                                                             GST Number*
                                                         </label>
@@ -552,7 +640,7 @@ export default function AddVendors(props) {
                                                             })}
                                                         />
                                                         {errors?.gst && <Error title={errors?.gst?.message} />}
-                                                    </div>
+                                                    </div> */}
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             Bank Name*
@@ -564,8 +652,8 @@ export default function AddVendors(props) {
                                                                 className={inputClass}
                                                                 {...register('bank_name', { required: true })}
                                                             />
-                                                            {errors?.bank_name && <Error title='Bank name is Required' />}
                                                         </div>
+                                                        {errors?.bank_name && <Error title='Bank name is Required' />}
                                                     </div>
 
                                                     <div className="">
@@ -618,7 +706,7 @@ export default function AddVendors(props) {
                                                         {props?.button == 'edit' && props?.data.address_proof != '' && props?.data.address_proof != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
                                                             {props?.data?.address_proof?.split('/').pop()}
                                                         </label>}
-                                                        {errors.address_proof && <Error title='Main Image is required*' />}
+                                                        {errors.address_proof && <Error title='Address Proof Image is required*' />}
                                                     </div>
                                                 </div>
                                             </div>
