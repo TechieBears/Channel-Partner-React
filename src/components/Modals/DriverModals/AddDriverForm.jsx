@@ -88,6 +88,18 @@ function AddDriverFrom(props) {
             } else {
                 data.profile_pic = ''
             }
+            if (data?.adhar_url.length != 0) {
+                await ImageUpload(data?.adhar_url[0], "deliveryboy", "adharImage", data?.first_name)
+                data.adhar_url = `${deliveryBoylink}${data?.first_name}_adharImage_${data?.adhar_url[0].name}`
+              } else {
+                data.adhar_url = ''
+              }
+              if (data?.pan_url.length != 0) {
+                await ImageUpload(data?.pan_url[0], "deliveryboy", "panImage", data?.first_name)
+                data.pan_url = `${deliveryBoylink}${data?.first_name}_panImage_${data?.pan_url[0].name}`
+              } else {
+                data.pan_url = ''
+              }
         }
         else {          // for edit
             if (data?.bank_passbook.length != props?.data.bank_passbook) {
@@ -108,6 +120,18 @@ function AddDriverFrom(props) {
             } else {
                 data.profile_pic = props?.data?.user?.profile_pic
             }
+            if (props?.data?.adhar_url != data?.adhar_url) {
+                await ImageUpload(data?.adhar_url[0], "deliveryboy", "adharImage", data?.first_name)
+                data.adhar_url = `${deliveryBoylink}${data?.first_name}_adharImage_${data?.adhar_url[0].name}`
+              } else {
+                data.adhar_url = props?.data?.adhar_url
+              }
+              if (props?.data?.pan_url != data?.pan_url) {
+                await ImageUpload(data?.pan_url[0], "deliveryboy", "panImage", data?.first_name)
+                data.pan_url = `${deliveryBoylink}${data?.first_name}_panImage_${data?.pan_url[0].name}`
+              } else {
+                data.pan_url = props?.data?.pan_url
+              }
         }
         if (props.button != 'edit') {   // for create
             try {

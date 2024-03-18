@@ -78,6 +78,24 @@ export default function AddVendors(props) {
             } else {
                 data.hawker_shop_photo = ''
             }
+            if (data?.gst_url.length != 0) {
+                await ImageUpload(data?.gst_url[0], "vendor", "GstImage", data?.first_name)
+                data.gst_url = `${vendorlink}${data?.first_name}_GstImage_${data?.gst_url[0].name}`
+              } else {
+                data.gst_url = ''
+              }
+              if (data?.adhar_url.length != 0) {
+                await ImageUpload(data?.adhar_url[0], "vendor", "adharImage", data?.first_name)
+                data.adhar_url = `${vendorlink}${data?.first_name}_adharImage_${data?.adhar_url[0].name}`
+              } else {
+                data.adhar_url = ''
+              }
+              if (data?.pan_url.length != 0) {
+                await ImageUpload(data?.pan_url[0], "vendor", "panImage", data?.first_name)
+                data.pan_url = `${vendorlink}${data?.first_name}_panImage_${data?.pan_url[0].name}`
+              } else {
+                data.pan_url = ''
+              }
         }
         else {          // for edit
             if (data?.bank_passbook != props?.data?.bank_passbook) {
@@ -104,6 +122,24 @@ export default function AddVendors(props) {
             } else {
                 data.hawker_shop_photo = props?.data?.hawker_shop_photo
             }
+            if (props?.data?.gst_url != data?.gst_url) {
+                await ImageUpload(data?.gst_url[0], "vendor", "GstImage", data?.first_name)
+                data.gst_url = `${vendorlink}${data?.first_name}_GstImage_${data?.gst_url[0].name}`
+              } else {
+                data.gst_url = props?.data?.gst_url
+              }
+              if (props?.data?.adhar_url != data?.adhar_url) {
+                await ImageUpload(data?.adhar_url[0], "vendor", "adharImage", data?.first_name)
+                data.adhar_url = `${vendorlink}${data?.first_name}_adharImage_${data?.adhar_url[0].name}`
+              } else {
+                data.adhar_url = props?.data?.adhar_url
+              }
+              if (props?.data?.pan_url != data?.pan_url) {
+                await ImageUpload(data?.pan_url[0], "vendor", "panImage", data?.first_name)
+                data.pan_url = `${vendorlink}${data?.first_name}_panImage_${data?.pan_url[0].name}`
+              } else {
+                data.pan_url = props?.data?.pan_url
+              }
         }
         if (props.button != 'edit') {   // for create
             try {

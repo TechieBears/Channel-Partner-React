@@ -17,6 +17,7 @@ import moment from "moment";
 
 
 export default function AddFranchiseForm(props) {
+  console.log('props', props)
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const dispatch = useDispatch()
@@ -48,6 +49,30 @@ export default function AddFranchiseForm(props) {
       } else {
         data.profile_pic = ''
       }
+      if (data?.bank_passbook.length != 0) {
+        await ImageUpload(data?.bank_passbook[0], "franchisee", "BankPassbook", data?.first_name)
+        data.bank_passbook = `${franchiselink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
+      } else {
+        data.bank_passbook = ''
+      }
+      if (data?.gst_url.length != 0) {
+        await ImageUpload(data?.gst_url[0], "franchisee", "GstImage", data?.first_name)
+        data.gst_url = `${franchiselink}${data?.first_name}_GstImage_${data?.gst_url[0].name}`
+      } else {
+        data.gst_url = ''
+      }
+      if (data?.adhar_url.length != 0) {
+        await ImageUpload(data?.adhar_url[0], "franchisee", "adharImage", data?.first_name)
+        data.adhar_url = `${franchiselink}${data?.first_name}_adharImage_${data?.adhar_url[0].name}`
+      } else {
+        data.adhar_url = ''
+      }
+      if (data?.pan_url.length != 0) {
+        await ImageUpload(data?.pan_url[0], "franchisee", "panImage", data?.first_name)
+        data.pan_url = `${franchiselink}${data?.first_name}_panImage_${data?.pan_url[0].name}`
+      } else {
+        data.pan_url = ''
+      }
     }
     else {          // for edit
       if (props?.data?.bank_passbook != data?.bank_passbook) {
@@ -67,6 +92,24 @@ export default function AddFranchiseForm(props) {
         data.profile_pic = `${franchiselink}${data?.first_name}_ProfileImage_${data?.profile_pic[0].name}`
       } else {
         data.profile_pic = props?.data?.user?.profile_pic
+      }
+      if (props?.data?.gst_url != data?.gst_url) {
+        await ImageUpload(data?.gst_url[0], "franchisee", "GstImage", data?.first_name)
+        data.gst_url = `${franchiselink}${data?.first_name}_GstImage_${data?.gst_url[0].name}`
+      } else {
+        data.gst_url = props?.data?.gst_url
+      }
+      if (props?.data?.adhar_url != data?.adhar_url) {
+        await ImageUpload(data?.adhar_url[0], "franchisee", "adharImage", data?.first_name)
+        data.adhar_url = `${franchiselink}${data?.first_name}_adharImage_${data?.adhar_url[0].name}`
+      } else {
+        data.adhar_url = props?.data?.adhar_url
+      }
+      if (props?.data?.pan_url != data?.pan_url) {
+        await ImageUpload(data?.pan_url[0], "franchisee", "panImage", data?.first_name)
+        data.pan_url = `${franchiselink}${data?.first_name}_panImage_${data?.pan_url[0].name}`
+      } else {
+        data.pan_url = props?.data?.pan_url
       }
     }
     if (props.button !== 'edit') {   // for create
@@ -424,7 +467,7 @@ export default function AddFranchiseForm(props) {
                                         Upload
                                     </label>
                                     <input className="hidden"
-                                        id="pan"
+                                        id="adhar"
                                         type='file'
                                         multiple
                                         accept='image/jpeg,image/jpg,image/png,application/pdf'
