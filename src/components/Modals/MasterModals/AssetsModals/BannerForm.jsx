@@ -10,68 +10,49 @@ import { toast } from "react-toastify";
 import LoadBox from "../../../Loader/LoadBox";
 import Error from "../../../Errors/Error";
 import { ImageUpload, bannerLink } from "../../../../env";
+import { DatePicker, Space } from "antd";
+import moment from "moment";
 
 export default function BannerForm(props) {
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [imageError, setImageError] = useState('');
+  const [promoDuration, setPromoDuration] = useState({});
+  const { register, handleSubmit, setValue, watch, reset, formState: { errors }, setError } = useForm({ criteriaMode: 'all' });
+  const today = moment().startOf('day');
+  const promoDurationField = watch('promo_duration');
+  const { RangePicker } = DatePicker
 
+  const disabledDate = current => {
+    return current && current < moment(today);
+  };
+  const rangeHandler = (e) => {
+    console.log('e', e)
+    if (e[0] == undefined) {
+      setPromoDuration({
+        ...promoDuration,
+        "start_date": e.format("YYYY-MM-DD"),
+        "end_date": e.format("YYYY-MM-DD")
+      });
+    } else {
+      setPromoDuration({
+        ...promoDuration,
+        "start_date": e[0].format("YYYY-MM-DD"),
+        "end_date": e[1].format("YYYY-MM-DD")
+      });
+    }
+  }
   const dispatch = useDispatch();
   const toggle = () => setIsOpen(!isOpen);
-  const {  register, handleSubmit, setValue, watch, reset, formState: { errors }, setError } = useForm({ criteriaMode: 'all' });
-  const [imageError, setImageError] = useState('');
-
-  // const [openGallery, setopenGallery] = useState(false);
-  // const [openGalleryModal, setopenGalleryModal] = useState(false);
-  // const [imageDetails, setImageDetails] = useState([]);
-  // const [childData, setChildData] = useState('');
-  // const mediaGalleryModalRef = useRef(null);
-  // console.log('childData == ', childData)
-
-
   // ===================== close modals ===============================
   const closeBtn = () => {
     toggle();
     setLoader(false);
-    // setopenGallery(false);
-    // setopenGalleryModal(false);
     reset();
   };
 
-  // const handleSelectChange = (e) => {
-  //   if (e.target.value == 'true') {
-  //      setopenGallery(true);
-  //   }else{
-  //     setopenGallery(false);
-  //   }
-  // };
-
-
-  // const openMediaModal = () => {
-  //   setopenGalleryModal(!openGalleryModal);
-  // };
-
-  // const receiveDataFromChild = (data) => {
-  //   setChildData(data);
-  //   setValue("slide_url", childData);
-  //   // console.log('childData = ', childData)
-  // };
-
-
-  // ============== fetch data from api ================
-  // const fetchData = () => {
-  //   try {
-  //     getGalleryImages().then((res) => {
-  //       console.log("media gallery data = ", res);
-  //       setImageDetails(res);
-  //     });
-  //   } catch (err) {
-  //     console.log("error", err);
-  //   }
-  // };
-
 
   useEffect(() => {
-    // fetchData();
     reset({
       'vendor_type': props?.data?.vendor_type
     })
@@ -80,37 +61,33 @@ export default function BannerForm(props) {
 
   // ============================ submit data  =====================================
   const onSubmit = async (data) => {
+    const updatedData = {
+      ...data,
+      'promoDuration': promoDuration
+    }
     if (imageError) {
-      // Set error message using setError if image dimensions are not valid
       setError("slide_url", {
         type: "manual",
         message: imageError
       });
       return;
     }
-    console.log("🚀 ~ file: BannerForm.jsx:82 ~ data:", data)
-
-    // const slideUrl = watch('slide_url')
-
-    // if (props?.button != "edit" && childData) {
+    console.log("🚀 ~ file: BannerForm.jsx:82 ~ data:", updatedData)
     if (props?.button != "edit") {
       try {
-        // if (childData) {
-        //   data.slide_url = childData;
-        // } else 
-        if (data?.slide_url?.length !== 0) {
+        if (updatedData?.slide_url?.length !== 0) {
           await ImageUpload(
-            data.slide_url[0],
+            updatedData.slide_url[0],
             "banner",
             "banner",
-            data.slide_url[0].name
+            updatedData.slide_url[0].name
           );
-          data.slide_url = `${bannerLink}${data.slide_url[0].name}_banner_${data.slide_url[0].name}`;
+          updatedData.slide_url = `${bannerLink}${updatedData.slide_url[0].name}_banner_${updatedData.slide_url[0].name}`;
         } else {
-          data.slide_url = "";
+          updatedData.slide_url = "";
         }
         setLoader(true);
-        addHomeBanners(data).then((res) => {
+        addHomeBanners(updatedData).then((res) => {
           if (res?.message === "slide added successfully") {
             setTimeout(() => {
               dispatch(setBanner(res));
@@ -119,9 +96,6 @@ export default function BannerForm(props) {
                 setLoader(false),
                 props?.getAllBannerList();
               toast.success(res?.message);
-              // setChildData('')
-              // setopenGallery(false);
-              // setopenGalleryModal(false);
             }, 1000);
           }
         });
@@ -132,23 +106,20 @@ export default function BannerForm(props) {
     } else {
       if (props?.button == 'edit') {
         try {
-          // if (childData) {
-          //   data.slide_url = childData
-          // } else{
-          if (data?.slide_url?.length > 0 && props?.data?.slide_url) {
+          if (updatedData?.slide_url?.length > 0 && props?.updatedData?.slide_url) {
             await ImageUpload(
-              data.slide_url[0],
+              updatedData.slide_url[0],
               "banner",
               "banner",
-              data.slide_url[0]?.name
+              updatedData.slide_url[0]?.name
             );
-            data.slide_url = `${bannerLink}${data.slide_url[0]?.name}_banner_${data.slide_url[0]?.name}`;
+            updatedData.slide_url = `${bannerLink}${updatedData.slide_url[0]?.name}_banner_${updatedData.slide_url[0]?.name}`;
           } else {
-            data.slide_url = props?.data?.slide_url;
+            updatedData.slide_url = props?.updatedData?.slide_url;
           }
           // }
           setLoader(true);
-          editHomeBanners(props?.data?.slide_id, data).then((res) => {
+          editHomeBanners(props?.updatedData?.slide_id, updatedData).then((res) => {
             if (res?.message === "slide edited successfully") {
               setTimeout(() => {
                 dispatch(setBanner(res));
@@ -157,9 +128,6 @@ export default function BannerForm(props) {
                   setLoader(false),
                   props?.getAllBannerList();
                 toast.success(res?.message);
-                // setChildData('')
-                // setopenGallery(false);
-                // setopenGalleryModal(false);
               }, 1000);
             }
           });
@@ -171,10 +139,6 @@ export default function BannerForm(props) {
     }
   };
 
-
-  
-
-  
   const handleImageChange = (event,) => {
 
     const file = event.target.files[0];
@@ -246,22 +210,32 @@ export default function BannerForm(props) {
                     {props?.title}
                   </Dialog.Title>
                   <div className=" bg-gray-200/70">
-                    {/* React Hook Form */}
-                    {/* <form onSubmit={childData == '' ? handleSubmit(onSubmit) : handleSubmit(GallerySubmit)}> */}
                     <form onSubmit={handleSubmit(onSubmit)}>
-
                       <div className="py-4 mx-4 customBox">
-                        {/* <div className="mb-3">
+                        <div>
+                          <label className={labelClass}>Select Duration</label>
                           <select
-                            name=""
-                            onChange={handleSelectChange}
-                            className={`${inputClass} !bg-slate-100`}
-                            >
-                            <option value="false">I have a own Images</option>
-                            <option value="true">I Don't have a Images</option>
+                            className={inputClass}
+                            {...register('promo_duration', { required: true })}
+                          >
+                            <option value=''>Select</option>
+                            <option value='single_day'>For a Day</option>
+                            <option value='aboveDay'>Above a Day</option>
                           </select>
-                        </div> */}
-
+                          {errors?.promo_duration && <Error message='Promo Duration is Required' />}
+                        </div>
+                        <div className='mt-2'>
+                          {promoDurationField === 'single_day' ? (
+                            <Space>
+                              <DatePicker disabledDate={disabledDate} onChange={rangeHandler} />
+                            </Space>
+                          ) : promoDurationField === 'aboveDay' ? (
+                            <Space>
+                              <RangePicker disabledDate={disabledDate} onChange={rangeHandler} />
+                            </Space>
+                          ) : null}
+                          {Object.keys(promoDuration).length == 0 && <Error title='Date or Duration is required' />}
+                        </div>
                         <div className="my-2">
                           <label className={labelClass} htmlFor="main_input">
                             Vendor Type*
@@ -278,7 +252,6 @@ export default function BannerForm(props) {
                           {errors.vendor_type && <Error title='Vendor type is Required*' />}
                         </div>
 
-                        {/* {!openGallery && <div className=""> */}
                         <div className="">
                           <label className={labelClass} htmlFor="main_input">
                             Image*
@@ -306,25 +279,7 @@ export default function BannerForm(props) {
                             <Error title={errors.slide_url?.message} />
                           )}
                         </div>
-
-                        {/* {openGallery && (
-                          <div className="w-1/2 mt-3 mb-2">
-                            <span className={`cursor-pointer w-full ${formBtn1}`} onClick={openMediaModal}>
-                              Open Sample Images
-                            </span>
-                            <input
-                              type="text" 
-                              className="hidden"
-                            />
-                            {childData == undefined || childData == '' && (
-                              <Error title="Main Image is required*" />
-                            )}
-                          </div>
-                        )} */}
-
-                        {/* {childData && <span>{childData.split("/").pop()}</span>} */}
                       </div>
-
                       <footer className="flex justify-end px-4 py-2 space-x-3 bg-white">
                         {loader ? (
                           <LoadBox className="relative block w-auto px-5 transition-colors font-tb tracking-wide duration-200 py-2.5 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize" />
@@ -343,19 +298,7 @@ export default function BannerForm(props) {
                           close
                         </button>
                       </footer>
-
                     </form>
-                    {/* {openGalleryModal && <div className="hidden">
-                          <MediaGallaryModal
-                              ref={mediaGalleryModalRef}
-                              id="mediaGalleryModal"
-                              className="hidden"
-                              title="Upload Image"
-                              imageDetails={imageDetails}
-                              setopenGalleryModal={openMediaModal}
-                              sendDataToParent={receiveDataFromChild}
-                          />
-                        </div> } */}
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
