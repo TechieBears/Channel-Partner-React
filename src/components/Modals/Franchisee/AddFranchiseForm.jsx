@@ -10,7 +10,7 @@ import { setFranchise } from "../../../redux/Slices/masterSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { ImageUpload, franchiselink } from '../../../env';
 import { toast } from 'react-toastify';
-import { handleMobileNoNumericInput, handlePincodeMaxLength, validateEmail, validateGST, validatePANCard, validatePIN, validatePhoneNumber,validateAadharCard } from "../../Validations.jsx/Validations";
+import { handleMobileNoNumericInput, handlePincodeMaxLength, validateEmail, validateGST, validatePANCard, validatePIN, validatePhoneNumber, validateAadharCard } from "../../Validations.jsx/Validations";
 import moment from "moment";
 
 
@@ -21,7 +21,7 @@ export default function AddFranchiseForm(props) {
   const [loader, setLoader] = useState(false);
   const dispatch = useDispatch()
   const { register, handleSubmit, reset, watch, control, setValue, formState: { errors }, } = useForm();
-
+  const gstNumber = watch('gst_number');
   // ============================= form submiting ======================================
   const onSubmit = async (data) => {
     console.log(data)
@@ -317,8 +317,8 @@ export default function AddFranchiseForm(props) {
                             <label className={labelClass}>PINCODE*</label>
                             <input
                               type="number"
-                              max={6}
-                              min={0}
+                              // max={6}
+                              // min={0}
                               placeholder="PINCODE"
                               readOnly={props?.button == 'edit' ? true : false}
                               className={inputClass}
@@ -396,7 +396,7 @@ export default function AddFranchiseForm(props) {
                                 maxLength={14}
                                 placeholder='Aadhar No'
                                 className={inputClass}
-                                {...register('adhar_card', { required: true, validate:validateAadharCard })}
+                                {...register('adhar_card', { required: true, validate: validateAadharCard })}
                               />
                             </div>
                             {errors?.adhar_card && <Error title={errors?.adhar_card?.message ? errors?.adhar_card?.message : 'AadharCard Number is Requried'} />}
@@ -410,7 +410,7 @@ export default function AddFranchiseForm(props) {
                                 type="text"
                                 placeholder='GST Number'
                                 className={inputClass}
-                                {...register('gst_number')}
+                                {...register('gst_number', { validate: gstNumber != "" ? validateGST : '' })}
                               />
                             </div>
                             {errors?.gst_number && <Error title={errors?.gst_number?.message ? errors?.gst_number?.message : 'GST Number is Requried'} />}
