@@ -12,13 +12,12 @@ import { ImageUpload, deliveryBoylink } from '../../../env';
 import { setFranchise } from "../../../redux/Slices/masterSlice";
 import "../../../redux/Slices/loginSlice";
 import { GetFranchisee } from "../../../api";
-import { handleMobileNoNumericInput, validateEmail, validatePIN, validatePhoneNumber } from '../../Validations.jsx/Validations';
+import { handleMobileNoNumericInput, handlePancardUpperCase, validateAadharCard, validateEmail, validatePANCard, validatePIN, validatePhoneNumber } from '../../Validations.jsx/Validations';
 
 
 
 
 function AddDriverFrom(props) {
-    console.log("🚀 ~ file: AddDriverForm.jsx:21 ~ AddDriverFrom ~ props:", props)
     const [isOpen, setIsOpen] = useState(false);
     const [loader, setLoader] = useState(false);
     const Franchisee = useSelector((state) => state?.master?.Franchise);
@@ -35,7 +34,6 @@ function AddDriverFrom(props) {
     const user = useSelector((state) => state?.user?.FranchiseeDetails);
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     const SelectedFranchise = watch('created_by')
-    console.log("🚀 ~ file: AddDriverForm.jsx:38 ~ AddDriverFrom ~ SelectedFranchise:", SelectedFranchise)
 
     // // ========================= fetch data from api ==============================
     const FranchiseeDetails = () => {
@@ -626,9 +624,10 @@ function AddDriverFrom(props) {
                                                             type="text"
                                                             placeholder='PAN Card Number'
                                                             className={inputClass}
-                                                            {...register('pan_card', { required: true })}
+                                                            maxLength={10}
+                                                            {...register('pan_card', { required: true, validate:validatePANCard })}
                                                         />
-                                                        {errors.pan_card && <Error title='PAN Card Number is required' />}
+                                                        {errors?.pan_card && <Error title={errors?.pan_card?.message ? errors?.pan_card?.message : 'Pancard Number is Requried'} />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -638,9 +637,10 @@ function AddDriverFrom(props) {
                                                             type="text"
                                                             placeholder='Aadhar Card Number'
                                                             className={inputClass}
-                                                            {...register('adhar_card', { required: true })}
+                                                            maxLength={14}
+                                                            {...register('adhar_card', { required: true, validate:validateAadharCard })}
                                                         />
-                                                        {errors?.adhar_card && <Error title='Aadhar Card Number is required' />}
+                                                        {errors?.adhar_card && <Error title={errors?.adhar_card?.message ? errors?.adhar_card?.message : 'AadharCard Number is Requried'} />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>

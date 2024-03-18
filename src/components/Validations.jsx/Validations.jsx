@@ -54,6 +54,30 @@ export const validateCommision = (value) => {
 };
 
 
+export const validatePANCard = (value) => {
+    // PAN card pattern for India
+    const panPattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+
+    if (panPattern.test(value)) {
+        return true;
+    }
+
+    return 'Invalid PAN number*';
+};
+
+export const validateAadharCard = (value) => {
+    // Aadhar card pattern for India
+    const aadharPattern = /^\d{4}\s\d{4}\s\d{4}$/;
+
+    if (aadharPattern.test(value)) {
+        return true;
+    }
+
+    return 'Invalid AadharCard number*';
+};
+
+
+
 export const handlePincodeMaxLength = (e) => {
     if (e.target.value.length >= 6 && !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
         e.preventDefault();
@@ -65,3 +89,10 @@ export const handleMobileNoNumericInput = (e) => {
         e.preventDefault();
     }
 };
+
+export const handlePancardUpperCase = (e) => {
+    if(e.target.value){
+        console.log(e.target.value.toUpperCase())
+        return e.target.value.toUpperCase()
+    }
+}

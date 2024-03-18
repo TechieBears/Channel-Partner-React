@@ -12,34 +12,34 @@ import { setNewOrdersList } from '../../redux/Slices/orderSlice';
 const Sidebar = ({ children }) => {
     const route = useLocation();
     const user = useSelector(state => state?.user?.loggedUserDetails)
-    const WebSocketUrl = `${environment.webSocketUrl}user_to_seller/${user?.msb_code}`;
-    const ws = useRef(new WebSocket(WebSocketUrl)).current
+    // const WebSocketUrl = `${environment.webSocketUrl}user_to_seller/${user?.msb_code}`;
+    // const ws = useRef(new WebSocket(WebSocketUrl)).current
 
     const [isActiveLink, setIsActiveLink] = useState(false);
     const [mobileSidebar, setMobileSidebar] = useState(false);
     const dispatch = useDispatch()
 
-    useEffect(() => {
-        if (user?.role == 'seller' && (route?.pathname == '/vendor-orders' || route?.pathname == '/')) {
-            ws.open = () => {
-                console.log('WebSocket Client Connected');
-            };
+    // useEffect(() => {
+    //     if (user?.role == 'seller' && (route?.pathname == '/vendor-orders' || route?.pathname == '/')) {
+    //         ws.open = () => {
+    //             console.log('WebSocket Client Connected');
+    //         };
 
-            ws.onerror = (e) => {
-                console.log(e.message);
-            };
+    //         ws.onerror = (e) => {
+    //             console.log(e.message);
+    //         };
 
-            ws.onmessage = (e) => {
-                const data = JSON.parse(e.data);
-                console.log("🚀 ~ file: Sidebar.jsx:34 ~ useEffect ~ data:", data)
-                // window.alert(data?.orderId)
-                alert("New order:", data?.orderId)
-                dispatch(setNewOrdersList(data))
-            };
-        } else {
-            // ws.close();
-        }
-    }, [route])
+    //         ws.onmessage = (e) => {
+    //             const data = JSON.parse(e.data);
+    //             console.log("🚀 ~ file: Sidebar.jsx:34 ~ useEffect ~ data:", data)
+    //             // window.alert(data?.orderId)
+    //             alert("New order:", data?.orderId)
+    //             dispatch(setNewOrdersList(data))
+    //         };
+    //     } else {
+    //         // ws.close();
+    //     }
+    // }, [route])
 
     return (
         <>
