@@ -14,8 +14,8 @@ import { startSession } from '../../api';
 const Sidebar = ({ children }) => {
     const route = useLocation();
     const user = useSelector(state => state?.user?.loggedUserDetails)
-    const WebSocketUrl = `${environment.webSocketUrl}user_to_seller/${user?.msb_code}`;
-    const ws = useRef(new WebSocket(WebSocketUrl)).current
+    // const WebSocketUrl = `${environment.webSocketUrl}user_to_seller/${user?.msb_code}`;
+    // const ws = useRef(new WebSocket(WebSocketUrl)).current
     let orders = [];
     const [isActiveLink, setIsActiveLink] = useState(false);
     const [mobileSidebar, setMobileSidebar] = useState(false);
@@ -23,27 +23,27 @@ const Sidebar = ({ children }) => {
     const sessionStatus = useSelector(state => state.session.isSessionStarted)
     const timeoutId = useRef(null);
     const logoutTimeoutId = useRef(null);
-    useMemo(() => {
-        if (user?.role == 'seller' && (route?.pathname == '/vendor-orders' || route?.pathname == '/')) {
-            ws.open = () => {
-                console.log('WebSocket Client Connected');
-            };
+    // useMemo(() => {
+    //     if (user?.role == 'seller' && (route?.pathname == '/vendor-orders' || route?.pathname == '/')) {
+    //         ws.open = () => {
+    //             console.log('WebSocket Client Connected');
+    //         };
 
-            ws.onerror = (e) => {
-                console.log(e.message);
-            };
+    //         ws.onerror = (e) => {
+    //             console.log(e.message);
+    //         };
 
-            ws.onmessage = (e) => {
-                const data = JSON.parse(e.data);
-                orders.push(data);
-                dispatch(setOrders(orders))
-                // console.log("🚀 ~ file: VendorOrders.jsx:63 ~ useEffect ~ data:", data)
-                // window.alert(data?.orderId)
-            };
-        } else {
-            // ws.close();
-        }
-    }, [route])
+    //         ws.onmessage = (e) => {
+    //             const data = JSON.parse(e.data);
+    //             orders.push(data);
+    //             dispatch(setOrders(orders))
+    //             // console.log("🚀 ~ file: VendorOrders.jsx:63 ~ useEffect ~ data:", data)
+    //             // window.alert(data?.orderId)
+    //         };
+    //     } else {
+    //         // ws.close();
+    //     }
+    // }, [route])
 
     useEffect(() => {
         if (user?.role == 'seller') {
