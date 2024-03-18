@@ -28,6 +28,8 @@ export default function AddVendors(props) {
     const dispatch = useDispatch();
     const { register, handleSubmit, control, watch, reset, formState: { errors }, setValue } = useForm();
     const SelectedFranchise = watch('created_by')
+    const gstNumber = watch('gst_number');
+
 
 
     const toggle = () => setOpen(!isOpen)
@@ -565,12 +567,10 @@ export default function AddVendors(props) {
                                                             type="text"
                                                             placeholder='GST Number'
                                                             className={inputClass}
-                                                            {...register('gst_number', {
-                                                                required:false,
-                                                                validate: validateGST
-                                                            })}
+                                                            {...register('gst_number', { validate: (gstNumber != "" && gstNumber != null) ? validateGST : '' })}
+
                                                         />
-                                                        {errors?.gst_number && <Error title={errors?.gst_number?.message} />}
+                                                        {errors?.gst_number && <Error title={errors?.gst_number?.message ? errors?.gst_number?.message : 'GST Number is Requried'} />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
