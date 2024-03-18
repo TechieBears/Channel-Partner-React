@@ -63,7 +63,7 @@ export default function BannerForm(props) {
   const onSubmit = async (data) => {
     const updatedData = {
       ...data,
-      'promoDuration': promoDuration
+      'slideDuration': promoDuration
     }
     if (imageError) {
       setError("slide_url", {

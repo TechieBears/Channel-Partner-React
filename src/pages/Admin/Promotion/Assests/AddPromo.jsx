@@ -11,15 +11,19 @@ import { ImageUpload, promotionLink } from '../../../../env';
 import LoadBox from '../../../../components/Loader/LoadBox';
 import { setPromotions } from '../../../../redux/Slices/masterSlice';
 import { validateEmail, validatePhoneNumber } from '../../../../components/Validations.jsx/Validations';
-
+import { DatePicker, Space } from "antd";
+import moment from "moment";
 
 export default function AddPromo(props) {
   const [isOpen, setIsOpen] = useState(false)
   const [loader, setLoader] = useState(false)
-
+  const [promoDuration, setPromoDuration] = useState({});
   const [selectedOption, setSelectedOption] = useState('');
   const [inputValue, setInputValue] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
+  const { register, handleSubmit, setValue, watch, reset, formState: { errors }, setError } = useForm({ criteriaMode: 'all' });
+  const promoDurationField = watch('promo_duration');
+  const { RangePicker } = DatePicker
 
   const handleRadioChange = (option) => {
     setSelectedOption(option);
@@ -39,9 +43,29 @@ export default function AddPromo(props) {
   // console.log('childData == ', childData)
   const dispatch = useDispatch()
   const toggle = () => setIsOpen(!isOpen);
-  const { register, handleSubmit, setValue, watch, reset, formState: { errors }, setError } = useForm({ criteriaMode: 'all' });
   const vendorType = watch('vendor_type');
   const [imageError, setImageError] = useState('');
+
+  // ========== Date picker =================================
+  const disabledDate = current => {
+    return current && current < moment(today);
+  };
+  const rangeHandler = (e) => {
+    console.log('e', e)
+    if (e[0] == undefined) {
+      setPromoDuration({
+        ...promoDuration,
+        "start_date": e.format("YYYY-MM-DD"),
+        "end_date": e.format("YYYY-MM-DD")
+      });
+    } else {
+      setPromoDuration({
+        ...promoDuration,
+        "start_date": e[0].format("YYYY-MM-DD"),
+        "end_date": e[1].format("YYYY-MM-DD")
+      });
+    }
+  }
   // ===================== close modals ===============================
   const closeBtn = () => {
     toggle();
@@ -94,6 +118,10 @@ export default function AddPromo(props) {
 
   // ============================ submit data  =====================================
   const onSubmit = async (data) => {
+    const updatedData = {
+      ...data,
+      'promoDuration': promoDuration
+    }
     if (imageError) {
       // Set error message using setError if image dimensions are not valid
       setError("slide_url", {
@@ -110,14 +138,14 @@ export default function AddPromo(props) {
         // if (childData) {
         //     data.slide_url = childData;
         // } else if (data?.slide_url?.length != 0) {
-        if (data?.slide_url?.length != 0) {
-          await ImageUpload(data.slide_url[0], "promotion", "promotion", data.slide_url[0].name)
-          data.slide_url = `${promotionLink}${data.slide_url[0].name}_promotion_${data.slide_url[0].name}`
+        if (updatedData?.slide_url?.length != 0) {
+          await ImageUpload(updatedData.slide_url[0], "promotion", "promotion", updatedData.slide_url[0].name)
+          updatedData.slide_url = `${promotionLink}${updatedData.slide_url[0].name}_promotion_${updatedData.slide_url[0].name}`
         } else {
-          data.slide_url = ''
+          updatedData.slide_url = ''
         }
         setLoader(true)
-        postHomePromotion(data).then((res) => {
+        postHomePromotion(updatedData).then((res) => {
           if (res?.message === "slide added successfully") {
             setTimeout(() => {
               dispatch(setPromotions(res));
@@ -279,7 +307,30 @@ export default function AddPromo(props) {
                           </select>
                           {errors.vendor_type && <Error title='Vendor type is Required*' />}
                         </div>
-
+                        <div>
+                          <label className={labelClass}>Select Duration</label>
+                          <select
+                            className={inputClass}
+                            {...register('promo_duration', { required: true })}
+                          >
+                            <option value=''>Select</option>
+                            <option value='single_day'>For a Day</option>
+                            <option value='aboveDay'>Above a Day</option>
+                          </select>
+                          {errors?.promo_duration && <Error message='Promo Duration is Required' />}
+                        </div>
+                        <div className='mt-2'>
+                          {promoDurationField === 'single_day' ? (
+                            <Space>
+                              <DatePicker disabledDate={disabledDate} onChange={rangeHandler} />
+                            </Space>
+                          ) : promoDurationField === 'aboveDay' ? (
+                            <Space>
+                              <RangePicker disabledDate={disabledDate} onChange={rangeHandler} />
+                            </Space>
+                          ) : null}
+                          {(Object.keys(promoDuration).length == 0 && promoDurationField != '') && <Error title='Date or Duration is required' />}
+                        </div>
                         {/* {!openGallery && <div className=""> */}
                         <div className="mt-1">
                           <label className={labelClass} htmlFor="main_input">
