@@ -20,29 +20,18 @@ function Orders({ data }) {
             {data.map(product => (
                 <div className="border-slate-200 border-2 p-2 rounded-lg bg-white ">
                     <div className=" grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-5 xl:grid-cols-5 gap-4 " key={product?.orderId}>
-                        <div className="space-y-1 items-center flex flex-col ">
+                        <div className="space-y-1 items-center flex flex-col justify-start">
                             <div className="flex gap-2">
                                 <p className="font-semibold">Order ID</p>
                                 <p className="text-sky-400">#{product?.orderId}</p>
                             </div>
                             <p className="text-xs font-light">{moment(product?.order_details?.order_created_at).format('LLL')}</p>
                         </div>
-                        <div className="space-y-1 flex flex-col items-start sm:items-center ">
-                            <div className="flex gap-2 items-center">
-                                <User variant="Bold" size={18} />
-                                <p className="font-semibold">{product?.orderedItems[0]?.user?.first_name} {product?.orderedItems[0]?.user?.last_name}</p>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <IndianRupeeIcon size={18} className="text-gray-500" />
-                                <div className="flex gap-2">
-                                    <p className="text-gray-500">290</p>
-                                    <div className="border border-sky-200 bg-sky-50 p-1 text-xs text-sky-400 rounded-lg">
-                                        PAID ONLINE
-                                    </div>
-                                </div>
-                            </div>
+                        <div className="flex gap-2 items-center">
+                            <User variant="Bold" size={18} />
+                            <p className="font-semibold">{product?.orderedItems[0]?.user?.first_name} {product?.orderedItems[0]?.user?.last_name}</p>
                         </div>
-                        <div className="flex items-center justify-center">
+                        <div className="flex items-center justify-start gap-2">
                             <div className={`${status == 'pending' ? 'bg-red-500' : status == 'accepted' ? 'bg-yellow-500' : 'bg-green-500'} p-2 font-sans rounded-full w-1 h-1/4`} />
                             <p className={`font-semibold font-san ${status == 'pending' ? 'text-red-500' : status == 'accepted' ? 'text-yellow-500' : 'text-green-500'}`}>{status == 'pending' ? 'Pending' : status == 'accepted' ? 'Preparing' : 'Prepared'}</p>
                         </div>
@@ -79,7 +68,6 @@ function Orders({ data }) {
                         details && <div className=" mt-4 border-t-2">
                             <div className="ml-4 mt-2">
                                 <p className="text-lg font-semibold text-sky-400">Order Details</p>
-                                <p className="text-base font-medium">Products</p>
                             </div>
                             <div className=" grid items-center sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
                                 {
@@ -100,7 +88,7 @@ function Orders({ data }) {
                             <div className="border-t border-slate-300 mt-2">
                                 <div className="ml-4 mt-2">
                                     <p className="text-lg font-semibold text-sky-400">Order Instuction's</p>
-                                    <p className="text-base font-medium border-2 rounded-lg p-2">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dignissimos veritatis impedit tempore provident laudantium quasi itaque distinctio suscipit ipsam, necessitatibus ab expedita dolore qui dicta odio quo vero repudiandae reprehenderit pariatur! Facere odio fugit veniam, ab alias at vitae et voluptatibus quos voluptate assumenda officia omnis accusamus, nobis obcaecati voluptas dolore tenetur quis consequuntur sit nesciunt maxime. Suscipit, consectetur sint?</p>
+                                    <p className="text-base font-medium p-2">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dignissimos veritatis impedit tempore provident laudantium quasi itaque distinctio suscipit ipsam, necessitatibus ab expedita dolore qui dicta odio quo vero repudiandae reprehenderit pariatur! Facere odio fugit veniam, ab alias at vitae et voluptatibus quos voluptate assumenda officia omnis accusamus, nobis obcaecati voluptas dolore tenetur quis consequuntur sit nesciunt maxime. Suscipit, consectetur sint?</p>
                                 </div>
                             </div>
                         </div>

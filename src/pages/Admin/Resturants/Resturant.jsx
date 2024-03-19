@@ -5,7 +5,7 @@ import AddRestaurant from "../../../components/Modals/Resturant/AddRestaurant";
 import { NavLink } from "react-router-dom";
 import Switch from "react-js-switch";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getRestarant, verifyVendors, getFranchRestaurant, GetFranchisee, getRestaurantCategory, getRestaurantSubCategory } from "../../../api";
 import { useForm, Controller } from "react-hook-form";
 import userImg from "../../../assets/user.jpg";
@@ -21,10 +21,13 @@ import { toast } from "react-toastify";
 import _ from 'lodash';
 import Select from "react-select";
 import { environment } from "../../../env";
+import { setAllRestaurant } from "../../../redux/Slices/restauantSlice";
 
 export default function Restaurant() {
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
+  const data = useSelector(state => state.restaurants.allRestaurants)
   const emails = data?.map(item => item?.user?.email)
+  const dispatch = useDispatch();
   const user = useSelector((state) => state?.user?.loggedUserDetails);
   const {
     control,
@@ -54,11 +57,11 @@ export default function Restaurant() {
 
   useEffect(() => {
     if (user?.role == "admin") {
-      getAllRestaurant();
+      // getAllRestaurant();
       GetFranchiseeData()
     }
     if (user?.role == "franchise") {
-      getFranchiseRestaurants();
+      // getFranchiseRestaurants();
       GetFranchiseeData()
     }
   }, []);
@@ -80,7 +83,8 @@ export default function Restaurant() {
       try {
         let url = `${environment.baseUrl}vendor/vendor_list?name=${data?.name}&msbcode=${data?.msbcode}&franchise=${data?.franchise?.value ? data?.franchise?.value : ''}&pincode=${data?.pincode?.value ? data?.pincode?.value : ''}&vendor_type=restaurant`
         await axios.get(url).then((res) => {
-          setData(res?.data?.results)
+          // setData(res?.data?.results)
+          dispatch(setAllRestaurant(res?.data?.results))
           toast.success("Filters applied successfully")
         }).catch((err) => {
           console.log("🚀 ~ file: Resturant.jsx:75 ~ awaitaxios.get ~ err:", err)
@@ -102,7 +106,7 @@ export default function Restaurant() {
       pincode: ''
     })
     toast.success("Filters clear successfully")
-    setData()
+    // setData()
     if (user?.role == 'admin') {
       getAllRestaurant()
     } else if (user?.role == 'franchise') {
@@ -158,7 +162,8 @@ export default function Restaurant() {
       const restaurantVendors = res.filter(
         (item) => item?.vendor_type == "restaurant"
       );
-      setData(restaurantVendors);
+      // setData(restaurantVendors);
+      dispatch(setAllRestaurant(restaurantVendors))
     });
   };
 
@@ -166,7 +171,8 @@ export default function Restaurant() {
   const getFranchiseRestaurants = () => {
     try {
       getFranchRestaurant(user?.userid).then((res) => {
-        setData(res);
+        // setData(res);
+        dispatch(setAllRestaurant(res?.data?.results))
       });
     } catch (error) {
       console.log(error);

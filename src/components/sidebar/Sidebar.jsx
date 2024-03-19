@@ -8,8 +8,9 @@ import Navbar from './Navbar';
 import { Admin, Franchise, Seller } from './SidebarApi';
 import SidebarLink from './SidebarLink';
 import { setSessionStarted } from '../../redux/Slices/SessionSlice';
-import { startSession } from '../../api';
+import { getFranchRestaurant, getRestarant, startSession } from '../../api';
 import { setOrders } from '../../redux/Slices/orderSlice';
+import { setAllRestaurant } from '../../redux/Slices/restauantSlice';
 
 const Sidebar = ({ children }) => {
     const route = useLocation();
@@ -97,27 +98,39 @@ const Sidebar = ({ children }) => {
         }
     }, []);
 
-    // useEffect(() => {
-    //     if (user?.role == 'seller' && (route?.pathname == '/vendor-orders' || route?.pathname == '/')) {
-    //         ws.open = () => {
-    //             console.log('WebSocket Client Connected');
-    //         };
+    // ================== Restaurants API =================
 
-    //         ws.onerror = (e) => {
-    //             console.log(e.message);
-    //         };
+    const getAllRestaurant = () => {
+        try {
+            getRestarant().then((res) => {
+                const restaurantVendors = res.filter(
+                    (item) => item?.vendor_type == "restaurant"
+                );
+                dispatch(setAllRestaurant(restaurantVendors))
+                setData(restaurantVendors);
+            });
+        } catch (error) {
+            console.log('error', error);
+        }
+    };
 
-    //         ws.onmessage = (e) => {
-    //             const data = JSON.parse(e.data);
-    //             console.log("🚀 ~ file: Sidebar.jsx:34 ~ useEffect ~ data:", data)
-    //             // window.alert(data?.orderId)
-    //             alert("New order:", data?.orderId)
-    //             dispatch(setNewOrdersList(data))
-    //         };
-    //     } else {
-    //         // ws.close();
-    //     }
-    // }, [route])
+    const getFranchiseRestaurants = () => {
+        try {
+            getFranchRestaurant(user?.userid).then((res) => {
+                dispatch(setAllRestaurant(res))
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        if (user?.role == 'admin') {
+            getAllRestaurant();
+        } else if (user?.role == 'franchise') {
+            getFranchiseRestaurants();
+        }
+    }, [])
 
     return (
         <>

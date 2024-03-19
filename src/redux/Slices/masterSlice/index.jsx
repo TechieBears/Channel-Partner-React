@@ -66,7 +66,7 @@ export const masterSlice = createSlice({
         },
         setProductCount: (state, action) => {
             state.ProductCount = action.payload;
-        }
+        },
     }
 })
 
