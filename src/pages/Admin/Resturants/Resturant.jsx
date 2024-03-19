@@ -5,7 +5,7 @@ import AddRestaurant from "../../../components/Modals/Resturant/AddRestaurant";
 import { NavLink } from "react-router-dom";
 import Switch from "react-js-switch";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getRestarant, verifyVendors, getFranchRestaurant, GetFranchisee, getRestaurantCategory, getRestaurantSubCategory } from "../../../api";
 import { useForm, Controller } from "react-hook-form";
 import userImg from "../../../assets/user.jpg";
@@ -21,9 +21,13 @@ import { toast } from "react-toastify";
 import _ from 'lodash';
 import Select from "react-select";
 import { environment } from "../../../env";
+import { setAllRestaurant } from "../../../redux/Slices/restauantSlice";
 
 export default function Restaurant() {
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
+  const data = useSelector(state => state.restaurants.allRestaurants)
+  const emails = data?.map(item => item?.user?.email)
+  const dispatch = useDispatch();
   const user = useSelector((state) => state?.user?.loggedUserDetails);
   const {
     control,
@@ -53,11 +57,11 @@ export default function Restaurant() {
 
   useEffect(() => {
     if (user?.role == "admin") {
-      getAllRestaurant();
+      // getAllRestaurant();
       GetFranchiseeData()
     }
     if (user?.role == "franchise") {
-      getFranchiseRestaurants();
+      // getFranchiseRestaurants();
       GetFranchiseeData()
     }
   }, []);
@@ -79,7 +83,8 @@ export default function Restaurant() {
       try {
         let url = `${environment.baseUrl}vendor/vendor_list?name=${data?.name}&msbcode=${data?.msbcode}&franchise=${data?.franchise?.value ? data?.franchise?.value : ''}&pincode=${data?.pincode?.value ? data?.pincode?.value : ''}&vendor_type=restaurant`
         await axios.get(url).then((res) => {
-          setData(res?.data?.results)
+          // setData(res?.data?.results)
+          dispatch(setAllRestaurant(res?.data?.results))
           toast.success("Filters applied successfully")
         }).catch((err) => {
           console.log("🚀 ~ file: Resturant.jsx:75 ~ awaitaxios.get ~ err:", err)
@@ -101,7 +106,7 @@ export default function Restaurant() {
       pincode: ''
     })
     toast.success("Filters clear successfully")
-    setData()
+    // setData()
     if (user?.role == 'admin') {
       getAllRestaurant()
     } else if (user?.role == 'franchise') {
@@ -154,11 +159,11 @@ export default function Restaurant() {
   // ============== Fetch All Admin Restaurants  ================
   const getAllRestaurant = () => {
     getRestarant().then((res) => {
-      console.log('restaurants = ', res)
       const restaurantVendors = res.filter(
         (item) => item?.vendor_type == "restaurant"
       );
-      setData(restaurantVendors);
+      // setData(restaurantVendors);
+      dispatch(setAllRestaurant(restaurantVendors))
     });
   };
 
@@ -166,7 +171,8 @@ export default function Restaurant() {
   const getFranchiseRestaurants = () => {
     try {
       getFranchRestaurant(user?.userid).then((res) => {
-        setData(res);
+        // setData(res);
+        dispatch(setAllRestaurant(res?.data?.results))
       });
     } catch (error) {
       console.log(error);
@@ -229,17 +235,16 @@ export default function Restaurant() {
   // =================== table user verify column  ========================
   const activeActionsRole = (rowData) => (
     <h6
-      className={`${rowData?.isactive !== "false"
+      className={`${rowData?.user?.isverified_byadmin !== false
         ? "bg-green-100 text-green-500"
         : "bg-red-100 text-red-500"
         } py-2 px-5 text-center capitalize rounded-full`}
     >
-      {rowData?.isactive !== "false" ? "Active" : "Inactive"}
+      {rowData?.user?.isverified_byadmin !== false ? "Active" : "Inactive"}
     </h6>
   );
 
   const columns = [
-    // { field: "id", header: "ID", body: (row) => <h6>{row?.user?.id}</h6>, sortable: false, },
     { field: "msb_code", header: "MSB", sortable: false },
     { field: "shop_name", header: "Restaurant Name", body: (row) => (<h6>  {row?.shop_name == null ? "Registration Pending" : row?.shop_name}</h6>) },
     { field: "shop_contact_number", header: "Restaurant Contact", body: (row) => (<h6>{row?.shop_contact_number == null ? "Registration Pending" : row?.shop_contact_number}</h6>) },
@@ -370,6 +375,7 @@ export default function Restaurant() {
             title="Add Restaurant"
             getAllRestaurant={user?.role == 'admin' ? getAllRestaurant : getFranchiseRestaurants}
             id={user?.userid}
+            emails={emails}
           />
         </div>
         {<Table columns={columns} data={data} />}

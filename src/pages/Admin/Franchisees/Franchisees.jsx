@@ -21,20 +21,11 @@ import AsyncSelect from 'react-select/async';
 
 function Franchisees() {
     const dispatch = useDispatch()
-    const Franchisee = useSelector((state) => state?.master?.Franchise);
     const { control, register, handleSubmit, formState: { errors }, reset, setValue } = useForm();
-    const [open, setOpen] = React.useState(false);
-    const [delId, setDelId] = React.useState(0);
-
-
-    const [activeTab, setActiveTab] = useState(true);
     const [rstatus, setStatus] = useState();
-
-    const changeTab = (tabNumber) => {
-        setActiveTab(tabNumber);
-    };
-
     const [franchiseData, setFranchiseData] = useState()
+    console.log('franchsie', franchiseData)
+    const emails = franchiseData?.map(item => item?.user?.email)
     const [pincodeOptions, setPincodeOptions] = useState()
 
     // // ========================= fetch data from api ==============================
@@ -155,8 +146,8 @@ function Franchisees() {
 
     // =================== table user verify column  ========================
     const activeActionsRole = (rowData) => (
-        <h6 className={`${rowData?.user?.isactive !== "false" ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"} py-2 px-5 text-center capitalize rounded-full`}>
-            {rowData?.user?.isactive !== "false" ? "Active" : "Inactive"}
+        <h6 className={`${rowData?.user?.isverified_byadmin !== false ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"} py-2 px-5 text-center capitalize rounded-full`}>
+            {rowData?.user?.isverified_byadmin !== false ? "Active" : "Inactive"}
         </h6>
     );
 
@@ -167,22 +158,15 @@ function Franchisees() {
     </button>
 
     const columns = [
-        // { field: 'id', header: 'ID', sortable: false },
         { field: 'profile_pic', header: 'Profile', body: representativeBodyTemplate, sortable: false, style: true },
         { field: 'msb_code', header: 'MSB Code', sortable: false, style: true },
         { field: 'first_name', body: (row) => <div className="capitalize">{row?.user?.first_name + " " + row?.user?.last_name}</div>, header: 'Name', style: true },
         { field: 'email', header: 'Email', body: (row) => <h6>{row?.user?.email}</h6>, sortable: false },
-        // { field: 'gender', header: 'Gender', body: (row) => <h6>{row?.user?.gender}</h6>, sortable: false },
         { field: 'phone_no', header: 'Phone No', body: (row) => <h6>{row?.user?.phone_no}</h6>, sortable: false, style: true },
         { field: 'pincode', header: 'Pincode', body: (row) => <h6>{row?.user?.pincode}</h6>, sortable: false, style: true },
-        // { field: 'address', header: 'Address', body: (row) => <h6>{row?.user?.address}</h6>, sortable: false, style: true },
-        // { field: 'state', header: 'state', body: (row) => <h6>{row?.user?.state}</h6>, sortable: false },
-        // { field: 'city', header: 'city', body: (row) => <h6>{row?.user?.city}</h6>, sortable: false },
-        // { field: 'registration_date', header: 'Registration Date', body: (row) => <h6>{row?.user?.registration_date}</h6>, sortable: false },
         { field: 'status', header: 'Status', body: activeActionsRole, sortable: false, style: true },
         { field: 'id', header: 'Action', body: actionBodyTemplate, sortable: true, style: true },
         { field: 'isverify', header: 'Admin Verify', body: switchVerify, sortable: true, style: true },
-        // { header: 'Analyse', body: action, sortable: false },
     ]
     return (
 
@@ -250,9 +234,9 @@ function Franchisees() {
                     <div className="">
                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>  Franchisee Details</h1>
                     </div>
-                    <AddFranchisee title='Add Franchisee' FranchiseeDetails={FranchiseeDetails} />
+                    <AddFranchisee title='Add Franchisee' FranchiseeDetails={FranchiseeDetails} emails={emails} />
                 </div>
-                {franchiseData?.length > 0 && <Table data={franchiseData} columns={columns} />}
+                <Table data={franchiseData} columns={columns} />
             </div>
         </>
     )

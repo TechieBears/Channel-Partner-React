@@ -10,15 +10,20 @@ import Error from '../../../../components/Errors/Error';
 import { ImageUpload, promotionLink } from '../../../../env';
 import LoadBox from '../../../../components/Loader/LoadBox';
 import { setPromotions } from '../../../../redux/Slices/masterSlice';
-
+import { validateEmail, validatePhoneNumber } from '../../../../components/Validations.jsx/Validations';
+import { DatePicker, Space } from "antd";
+import moment from "moment";
 
 export default function AddPromo(props) {
   const [isOpen, setIsOpen] = useState(false)
   const [loader, setLoader] = useState(false)
-
+  const [promoDuration, setPromoDuration] = useState({});
   const [selectedOption, setSelectedOption] = useState('dropdown');
   const [inputValue, setInputValue] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
+  const { register, handleSubmit, setValue, watch, reset, formState: { errors }, setError } = useForm({ criteriaMode: 'all' });
+  const promoDurationField = watch('promo_duration');
+  const { RangePicker } = DatePicker
 
   const handleRadioChange = (option) => {
     setSelectedOption(option);
@@ -28,9 +33,29 @@ export default function AddPromo(props) {
 
   const dispatch = useDispatch()
   const toggle = () => setIsOpen(!isOpen);
-  const { register, handleSubmit, setValue, watch, reset, formState: { errors }, setError } = useForm({criteriaMode:'all'});
-
+  const vendorType = watch('vendor_type');
   const [imageError, setImageError] = useState('');
+
+  // ========== Date picker =================================
+  const disabledDate = current => {
+    return current && current < moment(today);
+  };
+  const rangeHandler = (e) => {
+    console.log('e', e)
+    if (e[0] == undefined) {
+      setPromoDuration({
+        ...promoDuration,
+        "start_date": e.format("YYYY-MM-DD"),
+        "end_date": e.format("YYYY-MM-DD")
+      });
+    } else {
+      setPromoDuration({
+        ...promoDuration,
+        "start_date": e[0].format("YYYY-MM-DD"),
+        "end_date": e[1].format("YYYY-MM-DD")
+      });
+    }
+  }
   // ===================== close modals ===============================
   const closeBtn = () => {
     toggle();
@@ -54,6 +79,10 @@ export default function AddPromo(props) {
 
   // ============================ submit data  =====================================
   const onSubmit = async (data) => {
+    const updatedData = {
+      ...data,
+      'promoDuration': promoDuration
+    }
     if (imageError) {
       // Set error message using setError if image dimensions are not valid
       setError("slide_url", {
@@ -62,17 +91,22 @@ export default function AddPromo(props) {
       });
       return;
     }
-    console.log("promotion data ", data)
+    // const slideUrl = watch('slide_url')
+    // if (props?.title != 'Edit Promotions' && childData) {
+
     if (props?.title != 'Edit Promotions') {
       try {
-        if (data?.slide_url?.length != 0) {
-          await ImageUpload(data.slide_url[0], "promotion", "promotion", data.slide_url[0].name)
-          data.slide_url = `${promotionLink}${data.slide_url[0].name}_promotion_${data.slide_url[0].name}`
+        // if (childData) {
+        //     data.slide_url = childData;
+        // } else if (data?.slide_url?.length != 0) {
+        if (updatedData?.slide_url?.length != 0) {
+          await ImageUpload(updatedData.slide_url[0], "promotion", "promotion", updatedData.slide_url[0].name)
+          updatedData.slide_url = `${promotionLink}${updatedData.slide_url[0].name}_promotion_${updatedData.slide_url[0].name}`
         } else {
-          data.slide_url = ''
+          updatedData.slide_url = ''
         }
         setLoader(true)
-        postHomePromotion(data).then((res) => {
+        postHomePromotion(updatedData).then((res) => {
           if (res?.message === "slide added successfully") {
             setTimeout(() => {
               dispatch(setPromotions(res));
@@ -192,7 +226,19 @@ export default function AddPromo(props) {
                   </Dialog.Title>
                   <div className=" bg-gray-200/70">
                     <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-2 gap-x-3 gap-y-3 customBox">
+
+                      <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-2 gap-x-3 gap-y-3 customBox">
+                        {/* <div className="mb-3">
+                          <select
+                            name=""
+                            onChange={handleSelectChange}
+                            className={`${inputClass} !bg-slate-100`}
+                            >
+                            <option value="false">I have a own Images</option>
+                            <option value="true">I Don't have a Images</option>
+                          </select>
+                        </div> */}
+
                         <div className="">
                           <label className={labelClass} htmlFor="main_input">
                             Vendor Type*
@@ -205,9 +251,35 @@ export default function AddPromo(props) {
                             <option value="">select</option>
                             <option value="Restaurant">Restaurant</option>
                             <option value="Seller">Seller</option>
+                            <option value="External">External</option>
                           </select>
                           {errors.vendor_type && <Error title='Vendor type is Required*' />}
                         </div>
+                        <div>
+                          <label className={labelClass}>Select Duration</label>
+                          <select
+                            className={inputClass}
+                            {...register('promo_duration', { required: true })}
+                          >
+                            <option value=''>Select</option>
+                            <option value='single_day'>For a Day</option>
+                            <option value='aboveDay'>Above a Day</option>
+                          </select>
+                          {errors?.promo_duration && <Error message='Promo Duration is Required' />}
+                        </div>
+                        <div className='mt-2'>
+                          {promoDurationField === 'single_day' ? (
+                            <Space>
+                              <DatePicker disabledDate={disabledDate} onChange={rangeHandler} />
+                            </Space>
+                          ) : promoDurationField === 'aboveDay' ? (
+                            <Space>
+                              <RangePicker disabledDate={disabledDate} onChange={rangeHandler} />
+                            </Space>
+                          ) : null}
+                          {(Object.keys(promoDuration).length == 0 && promoDurationField != '') && <Error title='Date or Duration is required' />}
+                        </div>
+                        {/* {!openGallery && <div className=""> */}
                         <div className="mt-1">
                           <label className={labelClass} htmlFor="main_input">
                             Image*
@@ -227,11 +299,11 @@ export default function AddPromo(props) {
                           {props?.button == "edit" &&
                             props?.data?.slide_url != "" &&
                             props?.data?.slide_url != undefined && (
-                              <label className="block mb-1 font-medium text-blue-800 text-md font-tb truncate">
+                              <label className="block mb-1 font-medium text-blue-800 truncate text-md font-tb">
                                 {props?.data?.slide_url?.split("/").pop()}
                               </label>
                             )}
-                         {errors.slide_url && (
+                          {errors.slide_url && (
                             <Error title={errors.slide_url?.message} />
                           )}
                         </div>
@@ -297,10 +369,10 @@ export default function AddPromo(props) {
                           <div className="">
                             <label className={labelClass}>
                                 External Redirection Link*
-                            </label>
-                            <input
+                              </label>
+                              <input
                                 type="text"
-                                placeholder='External link'
+                                placeholder='xyz.com'
                                 className={inputClass}
                                 {...register('redirect_link', { required: true })}
                             />

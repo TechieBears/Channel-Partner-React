@@ -423,7 +423,7 @@ export default function AddRestItem(props) {
                                                                 <option key={item?.id} value={item?.id}>{item?.category_name}</option>
                                                             )}
                                                         </select>
-                                                        {errors.good_category && <Error title='Category is Required*' />}
+                                                        {errors.food_category && <Error title='Category is Required*' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>

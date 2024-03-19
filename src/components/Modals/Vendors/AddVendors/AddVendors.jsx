@@ -14,8 +14,9 @@ import { setLoggedUser, setLoggedUserDetails, setRoleIs, setFranchiseeDetails } 
 import { useDispatch, useSelector } from "react-redux";
 import { ImageUpload, vendorlink } from "../../../../env";
 import { toast } from 'react-toastify';
-import { validateEmail, validateGST, validatePIN, validatePhoneNumber } from '../../../Validations.jsx/Validations';
+import { handleMobileNoNumericInput, validateEmail, validateGST, validatePANCard, validatePIN, validatePhoneNumber } from '../../../Validations.jsx/Validations';
 import moment from 'moment';
+import { validateAadharCard } from './../../../Validations.jsx/Validations';
 
 
 
@@ -26,6 +27,11 @@ export default function AddVendors(props) {
     const [loader, setLoader] = useState(false)
     const dispatch = useDispatch();
     const { register, handleSubmit, control, watch, reset, formState: { errors }, setValue } = useForm();
+    const SelectedFranchise = watch('created_by')
+    const gstNumber = watch('gst_number');
+
+
+
     const toggle = () => setOpen(!isOpen)
 
     const pan_watch = watch('pan_url')
@@ -35,7 +41,12 @@ export default function AddVendors(props) {
 
     const closeBtn = () => {
         toggle();
-        reset()
+        reset();
+        if (LoggedUserDetails?.role === 'franchise') {
+            setValue('pincode', LoggedUserDetails?.pincode)
+            setValue('state', LoggedUserDetails?.state)
+            setValue('city', LoggedUserDetails?.city)
+        }
     }
     const FranchiseeVendors = () => {
         try {
@@ -243,14 +254,25 @@ export default function AddVendors(props) {
     }, [props.data]);
 
     useEffect(() => {
+        if (SelectedFranchise?.length > 0 && isOpen && LoggedUserDetails?.role === 'admin') {
+            Franchisee.map((data) => {
+                if (data?.user?.id == SelectedFranchise) {
+                    setValue('pincode', data?.user?.pincode)
+                    setValue('state', data?.user?.state)
+                    setValue('city', data?.user?.city)
+                }
+            });
+        }
+    }, [SelectedFranchise]);
+
+    useEffect(() => {
         if (LoggedUserDetails?.role === 'franchise') {
-            reset({
-                pincode: LoggedUserDetails?.pincode,
-                state: LoggedUserDetails?.state,
-                city: LoggedUserDetails?.city,
-            })
+            setValue('pincode', LoggedUserDetails?.pincode)
+            setValue('state', LoggedUserDetails?.state)
+            setValue('city', LoggedUserDetails?.city)
         }
     }, [LoggedUserDetails])
+
     return (
         <>
             {props.button !== "edit" ? (
@@ -263,12 +285,6 @@ export default function AddVendors(props) {
                     className="bg-yellow-100 px-1.5 py-2 rounded-sm"><Edit size="20" className='text-yellow-500' />
                 </button>
             )}
-
-
-            {/* <button className={`${formBtn1} flex`} onClick={() => setOpen(true)}>
-                <Add className='text-white' />
-                {props?.title}
-            </button> */}
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-[100]" onClose={() => toggle}>
                     <Transition.Child
@@ -299,7 +315,7 @@ export default function AddVendors(props) {
                                         as="h2"
                                         className="w-full px-3 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
                                     >
-                                        Add Vendor
+                                        {props?.title}
                                     </Dialog.Title>
                                     <div className=" bg-gray-200/70">
                                         {/* React Hook Form */}
@@ -340,7 +356,7 @@ export default function AddVendors(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("profile_pic", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data?.user?.profile_pic != '' && props?.data?.user?.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
+                                                        {props?.button == 'edit' && props?.data?.user?.profile_pic != '' && props?.data?.user?.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                                                             {props?.data?.user?.profile_pic?.split('/').pop()}
                                                         </label>}
                                                         {errors.profile_pic && <Error title='Profile Image is required*' />}
@@ -381,9 +397,11 @@ export default function AddVendors(props) {
                                                     <div className="">
                                                         <label className={labelClass}>Mobile Number*</label>
                                                         <input
-                                                            type="tel"
+                                                            type='tel'
                                                             placeholder="Phone"
+                                                            maxLength={10}
                                                             className={inputClass}
+                                                            onKeyDown={handleMobileNoNumericInput}
                                                             {...register("phone_no", { required: true, validate: validatePhoneNumber })}
                                                         />
                                                           {errors.phone_no && (
@@ -453,7 +471,7 @@ export default function AddVendors(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("hawker_shop_photo", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data.hawker_shop_photo != '' && props?.data.hawker_shop_photo != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
+                                                        {props?.button == 'edit' && props?.data.hawker_shop_photo != '' && props?.data.hawker_shop_photo != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                                                             {props?.data?.hawker_shop_photo?.split('/').pop()}
                                                         </label>}
                                                         {errors.hawker_shop_photo && <Error title='Shop Image is required*' />}
@@ -492,7 +510,7 @@ export default function AddVendors(props) {
                                                             maxLength={6}
                                                             placeholder="PINCODE"
                                                             className={inputClass}
-                                                            readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
+                                                            readOnly={true}
                                                             {...register("pincode", { required: true, validate: validatePIN })}
                                                         />
                                                          {errors.pincode && (
@@ -517,11 +535,11 @@ export default function AddVendors(props) {
                                                             type="text"
                                                             placeholder="Enter State"
                                                             className={inputClass}
-                                                            readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
-                                                            {...register("state", { pattern: /^[A-Za-z]+$/i })}
+                                                            readOnly={true}
+                                                            {...register("state", { required: true, pattern: /^[A-Za-z]+$/i })}
                                                         />
-                                                        {errors.address && (
-                                                            <Error title={errors.address && 'State should contain All Alphabets'} />
+                                                        {errors.state && (
+                                                            <Error title={errors.state && 'State should contain All Alphabets'} />
                                                         )}
                                                     </div>
                                                     <div className="">
@@ -530,11 +548,11 @@ export default function AddVendors(props) {
                                                             type="text"
                                                             placeholder="City"
                                                             className={inputClass}
-                                                            readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
+                                                            readOnly={true}
                                                             {...register("city", { required: true, pattern: /^[A-Za-z]+$/i })}
                                                         />
-                                                        {errors.address && (
-                                                            <Error title={errors?.address ? 'City should contain All Alphabets' : 'City is Required'} />
+                                                        {errors.city && (
+                                                            <Error title={errors?.city ? 'City should contain All Alphabets' : 'City is Required'} />
                                                         )}
                                                     </div>
 
@@ -545,6 +563,7 @@ export default function AddVendors(props) {
                                                                 type="number"
                                                                 placeholder="10"
                                                                 className={inputClass}
+                                                                min={0}
                                                                 {...register("insta_commison_percentage", { required: true })}
                                                             />
                                                             {errors.address && (
@@ -565,7 +584,8 @@ export default function AddVendors(props) {
                                                                 type="text"
                                                                 placeholder='PAN'
                                                                 className={inputClass}
-                                                                {...register('pan_card', { required: true })}
+                                                                maxLength={10}
+                                                                {...register('pan_card', { required: true, validate: validatePANCard })}
                                                             />
                                                             <div className="">
                                                                 <label htmlFor='pan' className={`${pan_watch?.length || props?.data?.pan_url ? "bg-sky-400 text-white" : " bg-gray-300/80"}  transition-colors hover:bg-sky-400 font-tb font-semibold hover:text-white py-3 mt-10 px-5 rounded-md cursor-pointer`}>
@@ -590,7 +610,8 @@ export default function AddVendors(props) {
                                                             type="text"
                                                             placeholder='PAN  No'
                                                             className={inputClass}
-                                                            {...register('pan_card', { required: true })}
+                                                            maxLength={10}
+                                                            {...register('pan_card', { required: true, validate: validatePANCard })}
                                                         />
                                                         {errors?.pan_card && <Error title='Pan Card Number is required' />}
                                                     </div> */}
@@ -601,10 +622,10 @@ export default function AddVendors(props) {
                                                         <div className="flex items-center space-x-2">
                                                             <input
                                                                 type="number"
-                                                                maxLength={12}
+                                                                maxLength={14}
                                                                 placeholder='Aadhar Card Number'
                                                                 className={inputClass}
-                                                                {...register('adhar_card', { required: true })}
+                                                                {...register('adhar_card', { required: true , validate: validateAadharCard })}
                                                             />
                                                             <div className="">
                                                                 <label htmlFor='adhar' className={`${adhar_watch?.length || props?.data?.adhar_url ? "bg-sky-400 text-white" : " bg-gray-300/80"}  transition-colors hover:bg-sky-400 font-tb font-semibold hover:text-white py-3 mt-10 px-5 rounded-md cursor-pointer`}>
@@ -619,7 +640,7 @@ export default function AddVendors(props) {
                                                                     {...register("adhar_url", { required: true })} />
                                                             </div>
                                                         </div>
-                                                            {errors.adhar_card && <Error title='Aadhar Card Number & Image is required' />}
+                                                        {errors?.adhar_card && <Error title={errors?.adhar_card?.message ? errors?.adhar_card?.message : 'Aadhar Card Number & Image is required'} />}
                                                     </div>
                                                     {/* <div className="">
                                                         <label className={labelClass}>
@@ -628,8 +649,9 @@ export default function AddVendors(props) {
                                                         <input
                                                             type="text"
                                                             placeholder='Aadhar No'
+                                                            maxLength={14}
                                                             className={inputClass}
-                                                            {...register('adhar_card', { required: true })}
+                                                            {...register('adhar_card', { required: true, validate: validateAadharCard })}
                                                         />
                                                         {errors?.adhar_card && <Error title='Aadhar Card Number is required' />}
                                                     </div> */}
@@ -660,20 +682,18 @@ export default function AddVendors(props) {
                                                                     {...register("gst_url")} />
                                                             </div>
                                                         </div>
-                                                        {errors?.gst_number && <Error title={errors?.gst_number?.message} />}
+                                                        {errors?.gst_number && <Error title={errors?.gst_number?.message ? errors?.gst_number?.message : 'GST Number is Requried'} />}
                                                     </div>
                                                     {/* <div className="">
                                                         <label className={labelClass}>
-                                                            GST Number*
+                                                            GST Number
                                                         </label>
                                                         <input
                                                             type="text"
                                                             placeholder='GST Number'
                                                             className={inputClass}
-                                                            {...register('gst_number', {
-                                                                required: 'GST is required*',
-                                                                validate: validateGST
-                                                            })}
+                                                            {...register('gst_number', { validate: (gstNumber != "" && gstNumber != null) ? validateGST : '' })}
+
                                                         />
                                                         {errors?.gst && <Error title={errors?.gst?.message} />}
                                                     </div> */}
@@ -681,7 +701,7 @@ export default function AddVendors(props) {
                                                         <label className={labelClass}>
                                                             Bank Name*
                                                         </label>
-                                                        <div className="flex items-center space-x-2">
+                                                        <div className="">
                                                             <input
                                                                 type="text"
                                                                 placeholder='Bank Name'
@@ -713,7 +733,7 @@ export default function AddVendors(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("bank_passbook", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data.bank_passbook != '' && props?.data.bank_passbook != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
+                                                        {props?.button == 'edit' && props?.data.bank_passbook != '' && props?.data.bank_passbook != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                                                             {props?.data?.bank_passbook?.split('/').pop()}
                                                         </label>}
                                                         {errors.bank_passbook && <Error title='Bank PassBook Image is required*' />}
@@ -739,7 +759,7 @@ export default function AddVendors(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("address_proof", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data.address_proof != '' && props?.data.address_proof != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
+                                                        {props?.button == 'edit' && props?.data.address_proof != '' && props?.data.address_proof != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                                                             {props?.data?.address_proof?.split('/').pop()}
                                                         </label>}
                                                         {errors.address_proof && <Error title='Address Proof Image is required*' />}

@@ -269,6 +269,18 @@ export const EditFranchiseeVendors = async (id, data) => {
     }
 };
 
+//================= get single vendor =======================
+export const getSingleShop = async (id,) => {
+    const url = `${environment.baseUrl}vendor/edit_vendor/${id}`;
+    try {
+        const response = await axios.get(url)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
 /* ================== Get Vendors For Admin Api =========== */
 export const GetFranchiseeVendors = async (data) => {
     const url = `${environment.baseUrl}vendor/create_vendor`;
@@ -1095,5 +1107,18 @@ export const getSingleRestaurant = async (id) => {
         return response.data
     } catch (error) {
         console.log('error while getting data', error)
+    }
+}
+
+//====================== session start api =================
+
+export const startSession = async (data) => {
+    const url = `${environment.baseUrl}vendor/seller_isopen`
+    try {
+        const response = await axios.post(url, data);
+        console.log('response', response)
+        return response.data
+    } catch (error) {
+        console.log('error', error)
     }
 }

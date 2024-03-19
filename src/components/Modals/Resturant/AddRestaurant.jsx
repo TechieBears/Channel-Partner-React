@@ -8,24 +8,41 @@ import Error from '../../Errors/Error';
 import { Edit } from 'iconsax-react';
 import { addRestaurant, editRestaurant } from '../../../api';
 import { toast } from 'react-toastify';
-import { validateCommision, validateEmail, validatePIN, validatePhoneNumber } from '../../Validations.jsx/Validations';
+import { handleMobileNoNumericInput, validateCommision, validateEmail, validatePIN, validatePhoneNumber } from '../../Validations.jsx/Validations';
 
 export default function AddRestaurant(props) {
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
+    const [emailError, setEmailError] = useState('');
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     const Franchisee = useSelector((state) => state?.master?.Franchise);
-    const { register, handleSubmit, control, watch, reset,setValue, formState: { errors } } = useForm();
+    const { register, handleSubmit, control, watch, reset, setValue, formState: { errors } } = useForm();
     const SelectedFranchise = watch('created_by')
+    const emailField = watch('email');
 
+    const checkEmail = () => {
+        if (props?.emails) {
+            const isDuplicate = props.emails.some((item) => item === emailField);
+            if (isDuplicate) {
+                setEmailError('Email field is duplicate, please try another.');
+            } else {
+                setEmailError('');
+            }
+        }
+    };
+
+    // Call checkEmail whenever emailField changes
+    useEffect(() => {
+        checkEmail();
+    }, [emailField]);
     const toggle = () => {
         setOpen(!isOpen)
     }
     const closeBtn = () => {
         toggle();
         reset()
-        if(props?.button !== 'edit' && LoggedUserDetails?.role === 'admin'){
-            reset({ 
+        if (props?.button !== 'edit' && LoggedUserDetails?.role === 'admin') {
+            reset({
                 pincode: '',
                 state: '',
                 city: '',
@@ -38,9 +55,9 @@ export default function AddRestaurant(props) {
         if (SelectedFranchise?.length > 0 && isOpen && LoggedUserDetails?.role === 'admin') {
             Franchisee.map((data) => {
                 if (data?.user?.id == SelectedFranchise) {
-                    setValue('pincode',data?.user?.pincode)
-                    setValue('state',data?.user?.state)
-                    setValue('city',data?.user?.city)
+                    setValue('pincode', data?.user?.pincode)
+                    setValue('state', data?.user?.state)
+                    setValue('city', data?.user?.city)
                 }
             });
         }
@@ -219,6 +236,9 @@ export default function AddRestaurant(props) {
                                                             {...register('email', { required: "Email is required*", validate: validateEmail })}
                                                         />
                                                         {errors.email && <Error title={errors?.email?.message} />}
+                                                        {
+                                                            emailError != '' && <Error title={emailError} />
+                                                        }
                                                     </div>
                                                     {props?.button != 'edit' &&
                                                         <div className="">
@@ -243,6 +263,7 @@ export default function AddRestaurant(props) {
                                                             maxLength={10}
                                                             placeholder='+91'
                                                             className={inputClass}
+                                                            onKeyDown={handleMobileNoNumericInput}
                                                             {...register('phone_no', { required: "Phone Number is required", validate: validatePhoneNumber })}
                                                         />
                                                         {errors.phone_no && <Error title={errors?.phone_no?.message} />}
@@ -307,6 +328,7 @@ export default function AddRestaurant(props) {
                                                             type="number"
                                                             placeholder='Insta Commision (%)'
                                                             className={inputClass}
+                                                            min={0}
                                                             {...register('insta_commison_percentage', { required: true, validate: validateCommision })}
                                                         />
                                                         {errors.insta_commison_percentage && <Error title='Insta Commision is Required*' />}

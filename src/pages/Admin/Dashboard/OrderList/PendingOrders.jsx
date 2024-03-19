@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setOrders } from "../../../../redux/Slices/masterSlice";
 import { getAllOrders } from "../../../../api";
+import { setOrders } from '../../../../redux/Slices/orderSlice/index'
 // import { NavLink } from "react-router-dom";
 
 const PendingOrders = () => {
-  const Orders = useSelector((state) => state?.master?.Orders);
+  const Orders = useSelector((state) => state?.orders?.Orders);
   const dispatch = useDispatch();
 
   // ============== fetch data from api ================

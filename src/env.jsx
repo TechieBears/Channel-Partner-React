@@ -2,6 +2,9 @@ export const environment = {
     // --------------------Local Server Api URL--------------------
     // baseUrl: 'http://192.168.0.152:8005/',
     // baseUrl: 'http://127.0.0.1:8000/',
+    // baseUrl: 'https://fa63-58-146-123-202.ngrok-free.app/',
+
+    // ---------------- Staging Server --------------------------------
     // baseUrl: 'https://5932-43-252-33-152.ngrok-free.app/',
     baseUrl: 'https://fa63-58-146-123-202.ngrok-free.app/',
 
@@ -9,6 +12,9 @@ export const environment = {
 
     // --------------------Live Server Api URL--------------------
     // baseUrl: 'https://cpapi.techiebears.com/',
+    // webSocketUrl: `wss://cpapi.techiebears.com/ws/socket/`
+
+
 }
 
 // ====================== AWS S3 Image/File Upload =========================

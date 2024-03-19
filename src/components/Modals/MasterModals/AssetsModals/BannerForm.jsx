@@ -87,10 +87,10 @@ export default function BannerForm(props) {
       const img = new Image();
       img.onload = () => {
         resolve({
-          resolution: `${img.naturalWidth}×${img.naturalHeight}`,
+          resolution: ${img.naturalWidth}×${img.naturalHeight},
           mimeType: 'image/png', // You may need to determine this dynamically
           extension: 'png', // You may need to determine this dynamically
-          size: `${Math.round(img.src.length / 1024 * 100) / 100} KB`,
+          size: ${Math.round(img.src.length / 1024 * 100) / 100} KB,
           download: 'image.png', // You may need to determine this dynamically
           bitDepth: 8 // You may need to determine this dynamically
         });
@@ -160,7 +160,7 @@ export default function BannerForm(props) {
             data.screen_name,
             urlName,
           );
-          data.slide_url = `${bannerLink}${data.screen_name}_banner_${urlName}`;
+          data.slide_url = ${bannerLink}${data.screen_name}_banner_${urlName};
         } else {
           data.slide_url = "";
         }
@@ -193,7 +193,7 @@ export default function BannerForm(props) {
               "banner",
               data.slide_url[0]?.name
             );
-            data.slide_url = `${bannerLink}${data.slide_url[0]?.name}_banner_${data.slide_url[0]?.name}`;
+            data.slide_url = ${bannerLink}${data.slide_url[0]?.name}_banner_${data.slide_url[0]?.name};
           } else {
             data.slide_url = props?.data?.slide_url;
           }
@@ -300,7 +300,7 @@ export default function BannerForm(props) {
                           <select
                             name=""
                             {...register('vendor_type', { required: true })}
-                            className={`${inputClass} !bg-slate-100`}
+                            className={${inputClass} !bg-slate-100}
                           >
                             <option value="">select</option>
                             <option value="Restaurant">Restaurant</option>
@@ -330,14 +330,14 @@ export default function BannerForm(props) {
                           {props?.button == "edit" &&
                             props?.data?.slide_url != "" &&
                             props?.data?.slide_url != undefined && (
-                              <label className="block mb-1 font-medium text-blue-800 text-md font-tb truncate">
+                              <label className="block mb-1 font-medium text-blue-800 text-md font-tb">
                                 {props?.data?.slide_url?.split("/").pop()}
                               </label>
                             )}
                           {errors.slide_url && (
                             <Error title={errors.slide_url?.message} />
                           )}
-                             <label className="block mb-1 font-medium text-blue-800 text-md font-tb truncate">
+                             <label className="block mb-1 font-medium text-blue-800 text-md font-tb">
                                 {/* {childData?.split("/").pop()} */}
                                 {childData}
                               </label>
@@ -374,7 +374,7 @@ export default function BannerForm(props) {
                           <select
                             name=""
                             {...register('screen_name', { required: true })}
-                            className={`${inputClass} !bg-white`}
+                            className={${inputClass} !bg-white}
                           >
                             <option value="">select</option>
                             <option value="Home Screen">Home Screen</option>
@@ -392,7 +392,7 @@ export default function BannerForm(props) {
                               id="dropdown"
                               name=""
                               {...register('redirection_type', { required: true })}
-                              className={`${inputClass} !bg-white`}
+                              className={${inputClass} !bg-white}
                             >
                              <option value="">select</option>
                             <option value="Home Screen">Home Screen</option>

@@ -1,18 +1,22 @@
-import React, { useState } from 'react'
-import { Controller, useForm } from 'react-hook-form';
-import AsyncSelect from "react-select/async";
-import { toast } from 'react-toastify';
-import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
-import { useSelector } from 'react-redux';
-import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import Table from '../../../components/Table/Table';
-import { NavLink } from 'react-router-dom';
 import { ClipboardTick, Eye, Trash } from 'iconsax-react';
 import moment from 'moment';
+import React, { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+import { NavLink } from 'react-router-dom';
+import AsyncSelect from "react-select/async";
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import { toast } from 'react-toastify';
+import Orders from '../../../components/Cards/Orders/Orders';
+import Table from '../../../components/Table/Table';
+import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 
 const VendorOrders = () => {
     const [selectedTab, setSelectedTab] = useState(0);
     const storages = useSelector((state) => state?.storage?.list);
+    const orders = useSelector((state) => { state?.orders?.orders })
+    const [status, setstatus] = useState('pending')
+    const [details, setDetails] = useState(false)
     const {
         register,
         handleSubmit,
@@ -20,6 +24,8 @@ const VendorOrders = () => {
         formState: { errors },
         reset,
     } = useForm();
+
+
     const filterReset = () => {
         reset({
             name: null,
@@ -40,8 +46,232 @@ const VendorOrders = () => {
     };
 
     const onSubmit = (data) => {
-        console.log('data', data)
+        // console.log('data', data)
     }
+
+    //================== fake data order =============================
+    const data = [
+        {
+            "type": "order_message_echo",
+            "orderId": 142,
+            "orderfor": "vendor",
+            "order_details": {
+                "order_delivery_status": "placed",
+                "order_created_at": "2024-03-14T15:18:39.976467+05:30",
+                "order_instruction": null
+            },
+            "orderedItems": [
+                {
+                    "orderitem_id": 173,
+                    "user": {
+                        "first_name": "shubham",
+                        "last_name": "Shubbb",
+                        "phone_no": "7796500494",
+                        "email": "shubham786@gmail.com",
+                        "profile_pic": "https://s3-ap-south-1.amazonaws.com/channel-partner-media/profile%2Fshubham1708667013030.jpg",
+                        "city": "",
+                        "state": "",
+                        "pincode": "",
+                        "date_of_birth": "2024-02-23",
+                        "gender": "Female"
+                    },
+                    "product_qty": 2,
+                    "product_price": 120,
+                    "product": {
+                        "product_id": 7,
+                        "product_name": "Faith Cole",
+                        "product_description": "jhdsjadhajkd",
+                        "product_brand": "Non eos sequi aut re",
+                        "product_country_of_origin": "Facilis tenetur null",
+                        "product_shelflife": "Ex sint quae aliquid",
+                        "product_Manufacturer_Name": "Ursa Michael",
+                        "product_Manufacturer_Address": null,
+                        "product_nutritional_info": "Consequatur Ullam b",
+                        "product_additional_details": null,
+                        "product_available_qty": 762,
+                        "product_msbcode": null,
+                        "product_image_1": "https://channel-partner-media.s3.ap-south-1.amazonaws.com/shopProduct/Faith Cole_MainImage_egg.png",
+                        "product_image_2": "",
+                        "product_image_3": "",
+                        "product_image_4": "",
+                        "product_image_5": "",
+                        "product_video_url": "",
+                        "product_isactive": true,
+                        "product_actual_price": 100,
+                        "product_unit_type": null,
+                        "product_unit": null,
+                        "product_rating": 3,
+                        "product_isverified_byadmin": true,
+                        "product_isverified_byfranchise": false,
+                        "insta_commison_percentage": 10,
+                        "markup_percentage": 10,
+                        "offers": 10,
+                        "featured": true,
+                        "final_price": 120,
+                        "vendor": 14,
+                        "product_category": 15,
+                        "product_subcategory": 3
+                    }
+                },
+                {
+                    "orderitem_id": 173,
+                    "user": {
+                        "first_name": "shubham",
+                        "last_name": "Shubbb",
+                        "phone_no": "7796500494",
+                        "email": "shubham786@gmail.com",
+                        "profile_pic": "https://s3-ap-south-1.amazonaws.com/channel-partner-media/profile%2Fshubham1708667013030.jpg",
+                        "city": "",
+                        "state": "",
+                        "pincode": "",
+                        "date_of_birth": "2024-02-23",
+                        "gender": "Female"
+                    },
+                    "product_qty": 1,
+                    "product_price": 120,
+                    "product": {
+                        "product_id": 7,
+                        "product_name": "Faith Cole",
+                        "product_description": "jhdsjadhajkd",
+                        "product_brand": "Non eos sequi aut re",
+                        "product_country_of_origin": "Facilis tenetur null",
+                        "product_shelflife": "Ex sint quae aliquid",
+                        "product_Manufacturer_Name": "Ursa Michael",
+                        "product_Manufacturer_Address": null,
+                        "product_nutritional_info": "Consequatur Ullam b",
+                        "product_additional_details": null,
+                        "product_available_qty": 762,
+                        "product_msbcode": null,
+                        "product_image_1": "https://channel-partner-media.s3.ap-south-1.amazonaws.com/shopProduct/Faith Cole_MainImage_egg.png",
+                        "product_image_2": "",
+                        "product_image_3": "",
+                        "product_image_4": "",
+                        "product_image_5": "",
+                        "product_video_url": "",
+                        "product_isactive": true,
+                        "product_actual_price": 100,
+                        "product_unit_type": null,
+                        "product_unit": null,
+                        "product_rating": 3,
+                        "product_isverified_byadmin": true,
+                        "product_isverified_byfranchise": false,
+                        "insta_commison_percentage": 10,
+                        "markup_percentage": 10,
+                        "offers": 10,
+                        "featured": true,
+                        "final_price": 120,
+                        "vendor": 14,
+                        "product_category": 15,
+                        "product_subcategory": 3
+                    }
+                },
+                {
+                    "orderitem_id": 173,
+                    "user": {
+                        "first_name": "shubham",
+                        "last_name": "Shubbb",
+                        "phone_no": "7796500494",
+                        "email": "shubham786@gmail.com",
+                        "profile_pic": "https://s3-ap-south-1.amazonaws.com/channel-partner-media/profile%2Fshubham1708667013030.jpg",
+                        "city": "",
+                        "state": "",
+                        "pincode": "",
+                        "date_of_birth": "2024-02-23",
+                        "gender": "Female"
+                    },
+                    "product_qty": 1,
+                    "product_price": 120,
+                    "product": {
+                        "product_id": 7,
+                        "product_name": "Faith Cole",
+                        "product_description": "jhdsjadhajkd",
+                        "product_brand": "Non eos sequi aut re",
+                        "product_country_of_origin": "Facilis tenetur null",
+                        "product_shelflife": "Ex sint quae aliquid",
+                        "product_Manufacturer_Name": "Ursa Michael",
+                        "product_Manufacturer_Address": null,
+                        "product_nutritional_info": "Consequatur Ullam b",
+                        "product_additional_details": null,
+                        "product_available_qty": 762,
+                        "product_msbcode": null,
+                        "product_image_1": "https://channel-partner-media.s3.ap-south-1.amazonaws.com/shopProduct/Faith Cole_MainImage_egg.png",
+                        "product_image_2": "",
+                        "product_image_3": "",
+                        "product_image_4": "",
+                        "product_image_5": "",
+                        "product_video_url": "",
+                        "product_isactive": true,
+                        "product_actual_price": 100,
+                        "product_unit_type": null,
+                        "product_unit": null,
+                        "product_rating": 3,
+                        "product_isverified_byadmin": true,
+                        "product_isverified_byfranchise": false,
+                        "insta_commison_percentage": 10,
+                        "markup_percentage": 10,
+                        "offers": 10,
+                        "featured": true,
+                        "final_price": 120,
+                        "vendor": 14,
+                        "product_category": 15,
+                        "product_subcategory": 3
+                    }
+                },
+                {
+                    "orderitem_id": 173,
+                    "user": {
+                        "first_name": "shubham",
+                        "last_name": "Shubbb",
+                        "phone_no": "7796500494",
+                        "email": "shubham786@gmail.com",
+                        "profile_pic": "https://s3-ap-south-1.amazonaws.com/channel-partner-media/profile%2Fshubham1708667013030.jpg",
+                        "city": "",
+                        "state": "",
+                        "pincode": "",
+                        "date_of_birth": "2024-02-23",
+                        "gender": "Female"
+                    },
+                    "product_qty": 1,
+                    "product_price": 120,
+                    "product": {
+                        "product_id": 7,
+                        "product_name": "Faith Cole",
+                        "product_description": "jhdsjadhajkd",
+                        "product_brand": "Non eos sequi aut re",
+                        "product_country_of_origin": "Facilis tenetur null",
+                        "product_shelflife": "Ex sint quae aliquid",
+                        "product_Manufacturer_Name": "Ursa Michael",
+                        "product_Manufacturer_Address": null,
+                        "product_nutritional_info": "Consequatur Ullam b",
+                        "product_additional_details": null,
+                        "product_available_qty": 762,
+                        "product_msbcode": null,
+                        "product_image_1": "https://channel-partner-media.s3.ap-south-1.amazonaws.com/shopProduct/Faith Cole_MainImage_egg.png",
+                        "product_image_2": "",
+                        "product_image_3": "",
+                        "product_image_4": "",
+                        "product_image_5": "",
+                        "product_video_url": "",
+                        "product_isactive": true,
+                        "product_actual_price": 100,
+                        "product_unit_type": null,
+                        "product_unit": null,
+                        "product_rating": 3,
+                        "product_isverified_byadmin": true,
+                        "product_isverified_byfranchise": false,
+                        "insta_commison_percentage": 10,
+                        "markup_percentage": 10,
+                        "offers": 10,
+                        "featured": true,
+                        "final_price": 120,
+                        "vendor": 14,
+                        "product_category": 15,
+                        "product_subcategory": 3
+                    }
+                },
+            ]
+        }
+    ]
 
     // ====================== table columns ======================
     // ====================== Accepted Order =====================
@@ -120,54 +350,6 @@ const VendorOrders = () => {
         { field: "status", header: "Status", sortable: true },
     ];
 
-
-    // ===================== New Order ======================
-
-    const NewOrderData = [
-        {
-            "orderId": 753,
-            "orderDate": "Jan 1, 2024 , 05:56 PM",
-            "items": [
-                {
-                    "itemName": "Butter Milk",
-                    "itemDescription": "Lorem ipsum dolor, sit amet",
-                    "imageSrc": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU",
-                    "quantity": 2,
-                    'price': 50,
-                    'category': 'dairy'
-                }
-            ],
-            "orderPrice": "$1,000",
-            "paymentMethod": "Cash",
-            "location": 'Parel',
-
-        },
-        {
-            "orderId": 754,
-            "orderDate": "Jan 2, 2024 , 10:30 AM",
-            "items": [
-                {
-                    "itemName": "Coffee",
-                    "itemDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-                    "imageSrc": "https://example.com/coffee.jpg",
-                    "quantity": 2,
-                    'price': 20,
-                    'category': 'grocery'
-                },
-                {
-                    "itemName": "Croissant",
-                    "itemDescription": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
-                    "imageSrc": "https://example.com/croissant.jpg",
-                    "quantity": 2,
-                    'price': 200,
-                    'category': 'food'
-                }
-            ],
-            "orderPrice": "$25",
-            "paymentMethod": "UPI",
-            "location": 'Thane',
-        }
-    ]
 
     const name = (row) => row?.items?.map(item => <h6 key={item?.itemName}>{item?.itemName}</h6>);
     const quantity = (row) => row?.items?.map(item => <h6 key={item?.itemQuantity}>{item?.quantity}</h6>)
@@ -298,16 +480,22 @@ const VendorOrders = () => {
                     </TabList>
                     {/* ================= NewPending Orders component ============== */}
                     <TabPanel className='mt-5 bg-white'>
-                        <Table data={NewOrderData} columns={NewOrdercolumns} />
+                        {/* ===================== New Order Section ===================== */}
+                        <div className="space-y-2 p-4">
+                            <div>
+                                <p className="font-semibold text-lg">Current Orders11</p>
+                            </div>
+                            <Orders data={data} />
+                        </div>
                     </TabPanel>
                     <TabPanel className='mt-5 bg-white'>
                         <Table data={AcceptedOrderData} columns={AcceptedOrderColumn} />
                     </TabPanel>
                     <TabPanel className='mt-5 bg-white'>
-                        {/* <Table data={AcceptedOrderData} columns={AcceptedOrderColumn} /> */}
+                        <Table data={AcceptedOrderData} columns={AcceptedOrderColumn} />
                     </TabPanel>
                     <TabPanel className='mt-5 bg-white'>
-                        {/* <Table data={AcceptedOrderData} columns={AcceptedOrderColumn} /> */}
+                        <Table data={AcceptedOrderData} columns={AcceptedOrderColumn} />
                     </TabPanel>
                 </Tabs>
             </div>

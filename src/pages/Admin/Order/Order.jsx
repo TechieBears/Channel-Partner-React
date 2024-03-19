@@ -1,17 +1,16 @@
 import axios from 'axios';
+import { Eye } from 'iconsax-react';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { toast } from 'react-toastify';
 import DeleteModal from '../../../components/Modals/DeleteModal/DeleteModal';
+import Table from '../../../components/Table/Table';
 import { environment } from '../../../env';
 import { setStorageList } from '../../../redux/slices/storageSlice';
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
-import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import AdminProduct from '../Menu/AdminProduct/AdminProducts';
-import SubCategory from '../Menu/MenuList/SubCategory';
-import Category from '../Menu/MenuList/Category';
-import Table from '../../../components/Table/Table';
+import { Link } from 'react-router-dom';
 
 const Order = () => {
     const user = useSelector((state) => state.user.loggedUserDetails)
@@ -19,6 +18,7 @@ const Order = () => {
     const [open, setOpen] = React.useState(false);
     const [delId, setDelId] = React.useState(0);
     const [selectedTab, setSelectedTab] = useState(0);
+    const orders = useSelector((state) => { state?.orders?.orders })
     const data = [{
         "order_id": "123456789",
         "customer_name": "John Doe",
@@ -90,7 +90,10 @@ const Order = () => {
     // ================= Restaurant Table Columns =================
 
     const restaurantAction = (row) => (
-        <div>
+        <div className='w-full'>
+            <Link className=''>
+                <Eye className='text-sky-400' />
+            </Link>
         </div>
     )
 
@@ -102,7 +105,7 @@ const Order = () => {
         { field: "order_total", header: "Order Total", style: true, sortable: true },
         { field: "order_status", header: "Order Status", style: true, sortable: true },
         { field: "payment_method", header: "Payment Method", style: true, sortable: true },
-        { field: "action", header: "Action", body: (row) => restaurantAction, style: true, sortable: true },
+        { field: "action", header: "Action", body: restaurantAction, style: true, sortable: true },
     ]
 
     // const webSocketUrl = environment.WEB_SOCKET_API_URL;

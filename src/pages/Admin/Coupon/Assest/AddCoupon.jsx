@@ -1,12 +1,11 @@
 import { Dialog, Transition } from '@headlessui/react'
-import React, { useState, Fragment, useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
-import { formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../../utils/CustomClass'
 import { Edit } from 'iconsax-react'
-import { addCoupon, editCoupon } from '../../../../api'
+import React, { Fragment, useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
+import { addCoupon, editCoupon } from '../../../../api'
 import Error from '../../../../components/Errors/Error'
+import { formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../../utils/CustomClass'
 
 
 export default function AddCoupon(props) {
@@ -20,18 +19,8 @@ export default function AddCoupon(props) {
         formState: { errors },
     } = useForm();
 
-    const [username, setUsername] = useState("");
-    const handleInput = (event) => {
-        event.preventDefault();
-        setUsername(event.target.value);
-    };
-    const changeCase = (event) => {
-        event.preventDefault();
-        setUsername(event.target.value.toUpperCase());
-    };
-
     const onSubmit = (data) => {
-        const payload= {...data, coupon_name: data?.coupon_name?.toUpperCase() }
+        const payload = { ...data, coupon_name: data?.coupon_name?.toUpperCase() }
         console.log('data', data);
         if (props?.button == 'edit') {
             editCoupon(payload, props?.data?.coupon_id).then(res => {
@@ -56,8 +45,8 @@ export default function AddCoupon(props) {
                 }
             })
         }
-    } 
-    
+    }
+
 
     // ===================== close modals ===============================
     const closeBtn = () => {
@@ -76,7 +65,7 @@ export default function AddCoupon(props) {
                 'discount_price': props?.data?.discount_price,
             })
         }
-    }, [])
+    }, [isOpen])
     return (
         <>
             {props.button !== "edit" ? (
@@ -141,6 +130,7 @@ export default function AddCoupon(props) {
                                                         placeholder='Percentage (%) '
                                                         type='number'
                                                         className={inputClass}
+                                                        min={0}
                                                         {...register('discount_percent', { required: true })}
                                                     />
                                                     {errors.discount_percent && <Error title='Percentage is required*' />}
@@ -151,6 +141,7 @@ export default function AddCoupon(props) {
                                                         placeholder='Discount Price (₹)'
                                                         type='number'
                                                         className={inputClass}
+                                                        min={0}
                                                         {...register('discount_price', { required: true })}
                                                     />
                                                     {errors.discount_price && <Error title='Discounted Price is required*' />}
@@ -175,7 +166,7 @@ export default function AddCoupon(props) {
                                                         <option value='Restaurant'>Restaurant</option>
                                                         <option value='Vendor'>Vendor</option>
                                                     </select>
-                                                    {errors.discount_percent && <Error title='Coupon Type is required*' />}
+                                                    {errors.coupon_type && <Error title='Coupon Type is required*' />}
                                                 </div>
                                             </div>
 

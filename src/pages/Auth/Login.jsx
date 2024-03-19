@@ -1,17 +1,18 @@
-import { useForm } from 'react-hook-form';
-import { inputClass } from '../../utils/CustomClass'
-import leftImage from '../../assets/leftImage.png'
-import { useState } from 'react';
 import { Eye, EyeSlash } from 'iconsax-react';
-import { setLoggedUser, setLoggedUserDetails, setRoleIs, setFranchiseeDetails } from '../../redux/Slices/loginSlice';
-import LoadBox from '../../components/Loader/LoadBox';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useDispatch } from "react-redux";
 import { toast } from 'react-toastify';
+import { getFranchiseDetails, login } from '../../api/index';
+import leftImage from '../../assets/leftImage.png';
 import Error from '../../components/Errors/Error';
-import { login, getFranchiseDetails } from '../../api/index';
-import { useDispatch, useSelector } from "react-redux";
+import LoadBox from '../../components/Loader/LoadBox';
+import { setFranchiseeDetails, setLoggedUser, setLoggedUserDetails, setRoleIs } from '../../redux/Slices/loginSlice';
+import { inputClass } from '../../utils/CustomClass';
 
 
 const Login = () => {
+
     const [eyeIcon, setEyeIcon] = useState(false)
     const [loader, setLoader] = useState(false)
     const dispatch = useDispatch()
@@ -47,7 +48,7 @@ const Login = () => {
                     }
                 } else {
                     setLoader(false)
-                    toast.error(res?.message)
+                    toast.error('Please Enter Valid Credentails')
                 }
             })
         } catch (error) {
@@ -78,8 +79,6 @@ const Login = () => {
             console.log(error)
         }
     }
-
-
     return (
         <div className="flex items-center justify-center w-full h-screen bgbackground">
             <div className="p-5 md:p-3 flex items-center justify-center glass border-4 border-gray-50 shrink-0  w-[30%] rounded-3xl px-7 min-w-max" data-aos="fade-up" data-aos-duration="1000" delay="100">

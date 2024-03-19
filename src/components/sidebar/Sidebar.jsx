@@ -1,19 +1,136 @@
-import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
 import { DirectLeft } from 'iconsax-react';
-import SidebarLink from './SidebarLink';
-import Navbar from './Navbar';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Admin, Seller, Franchise } from './SidebarApi';
+import { NavLink, useLocation } from 'react-router-dom';
 import logoImg from '../../assets/logo_white.png';
+import { environment } from '../../env';
+import Navbar from './Navbar';
+import { Admin, Franchise, Seller } from './SidebarApi';
+import SidebarLink from './SidebarLink';
+import { setSessionStarted } from '../../redux/Slices/SessionSlice';
+import { getFranchRestaurant, getRestarant, startSession } from '../../api';
+import { setOrders } from '../../redux/Slices/orderSlice';
+import { setAllRestaurant } from '../../redux/Slices/restauantSlice';
 
 const Sidebar = ({ children }) => {
+    const route = useLocation();
     const user = useSelector(state => state?.user?.loggedUserDetails)
-    // console.log('user = ', user)
+    const WebSocketUrl = `${environment.webSocketUrl}user_to_seller/${user?.msb_code}`;
+    const ws = useRef(new WebSocket(WebSocketUrl)).current
+    let orders = [];
 
     const [isActiveLink, setIsActiveLink] = useState(false);
     const [mobileSidebar, setMobileSidebar] = useState(false);
     const dispatch = useDispatch()
+    const sessionStatus = useSelector(state => state.session.isSessionStarted)
+    const timeoutId = useRef(null);
+    const logoutTimeoutId = useRef(null);
+    useMemo(() => {
+        if (user?.role == 'seller' && (route?.pathname == '/vendor-orders' || route?.pathname == '/')) {
+            ws.open = () => {
+                console.log('WebSocket Client Connected');
+            };
+
+            ws.onerror = (e) => {
+                console.log(e.message);
+            };
+
+            ws.onmessage = (e) => {
+                const data = JSON.parse(e.data);
+                console.log("🚀 ~ file: VendorOrders.jsx:63 ~ useEffect ~ data:", data)
+                window.alert(data?.orderId)
+                orders.push(data);
+                dispatch(setOrders(orders))
+            };
+        } else {
+            // ws.close();
+        }
+    }, [route])
+
+    useEffect(() => {
+        if (user?.role == 'seller') {
+            const handleMouseMove = () => {
+                // Clear the previous timeouts if they exist
+                if (timeoutId.current) {
+                    clearTimeout(timeoutId.current);
+                }
+                if (logoutTimeoutId.current) {
+                    clearTimeout(logoutTimeoutId.current);
+                }
+
+                // Set a new timeout
+                if (sessionStatus == true) {
+                    timeoutId.current = setTimeout(() => {
+                        const data = {
+                            'vendorID': user?.sellerId,
+                            'isshopopen': false,
+                        }
+                        try {
+                            startSession(data).then(res => {
+                                if (res?.status == 'success') {
+                                    dispatch(setSessionStarted(false))
+                                }
+                            })
+                        } catch (error) {
+                            console.log('error', error);
+                        }
+                        alert('Your session has expired dues to 30 sec inactivity please start your session to get orders.')
+                    }, 30 * 1000);
+                } // 30 seconds
+            };
+
+            // Add the event listener
+            window.addEventListener('mousemove', handleMouseMove);
+
+            // Cleanup function
+            return () => {
+                // Remove the event listener
+                window.removeEventListener('mousemove', handleMouseMove);
+
+                // Clear the timeouts
+                if (timeoutId.current) {
+                    clearTimeout(timeoutId.current);
+                }
+                if (logoutTimeoutId.current) {
+                    clearTimeout(logoutTimeoutId.current);
+                }
+            };
+        }
+    }, []);
+
+    // ================== Restaurants API =================
+
+    const getAllRestaurant = () => {
+        try {
+            getRestarant().then((res) => {
+                const restaurantVendors = res.filter(
+                    (item) => item?.vendor_type == "restaurant"
+                );
+                dispatch(setAllRestaurant(restaurantVendors))
+                setData(restaurantVendors);
+            });
+        } catch (error) {
+            console.log('error', error);
+        }
+    };
+
+    const getFranchiseRestaurants = () => {
+        try {
+            getFranchRestaurant(user?.userid).then((res) => {
+                dispatch(setAllRestaurant(res))
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        if (user?.role == 'admin') {
+            getAllRestaurant();
+        } else if (user?.role == 'franchise') {
+            getFranchiseRestaurants();
+        }
+    }, [])
 
     return (
         <>

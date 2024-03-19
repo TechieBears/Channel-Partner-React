@@ -1,32 +1,12 @@
-import { Fragment, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react'
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
-import { useNavigate } from 'react-router-dom';
-import { setLoggedUser, setLoggedUserDetails, setRoleIs } from '../../../redux/Slices/loginSlice';
-import { useDispatch, useSelector } from "react-redux";
-import { setSessionStarted } from '../../../redux/Slices/SessionSlice';
+import { CheckBadgeIcon } from '@heroicons/react/24/outline'
+import React, { Fragment, useRef } from 'react'
 
-
-export default function LogoutModal({ open, setOpen }) {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const user = useSelector(state => state?.user?.loggedUserDetails);
-
-    // ============================= logout user dashbaord ================================
-    const logOut = () => {
-        dispatch(setLoggedUserDetails(undefined))
-        dispatch(setRoleIs(undefined))
-        dispatch(setLoggedUser(false))
-        dispatch(setSessionStarted(false))
-        setOpen(!open)
-        if (user?.role != 'admin' && user?.role != 'franchise') {
-            navigate('/')
-        } else {
-            navigate('/admin')
-        }
-    }
+export default function SessionModal({ setOpen, open }) {
     const cancelButtonRef = useRef(null)
-
+    const logIn = () => {
+        setOpen(!open)
+    }
     return (
         <Transition.Root show={open} as={Fragment}>
             <Dialog as="div" className="relative z-[99]" initialFocus={cancelButtonRef} onClose={setOpen}>
@@ -56,16 +36,17 @@ export default function LogoutModal({ open, setOpen }) {
                             <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
                                 <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                                     <div className="sm:flex sm:items-start">
-                                        <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-12 sm:w-12">
-                                            <ExclamationTriangleIcon className="h-7 w-7 text-red-500" aria-hidden="true" />
+                                        <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-sky-100 sm:mx-0 sm:h-12 sm:w-12">
+                                            {/* <ExclamationTriangleIcon className="h-7 w-7 text-red-500" aria-hidden="true" /> */}
+                                            <CheckBadgeIcon className="h-7 w-7 text-sky-400" aria-hidden="true" />
                                         </div>
                                         <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                                             <Dialog.Title as="h3" className="text-lg font-semibold leading-6 text-gray-900 font-tbPop">
-                                                Are you sure you want to logout?
+                                                Please start your session
                                             </Dialog.Title>
                                             <div className="mt-2">
                                                 <p className="text-sm font-tbPop font-medium text-slate-500">
-                                                    Are you sure you want to <span className='text-red-500'>logout</span> your account? This action will cannot be undone.
+                                                    Confirm to start your session
                                                 </p>
                                             </div>
                                         </div>
@@ -74,19 +55,20 @@ export default function LogoutModal({ open, setOpen }) {
                                 <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                                     <button
                                         type="button"
-                                        className="inline-flex w-full justify-center rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-400 sm:ml-3 sm:w-auto"
-                                        onClick={logOut}
+                                        className="inline-flex w-full justify-center rounded-md bg-sky-400 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 sm:ml-3 sm:w-auto"
+                                        onClick={() => setOpen(false)}
+                                        ref={cancelButtonRef}
                                     >
-                                        Logout
+                                        Login
                                     </button>
-                                    <button
+                                    {/* <button
                                         type="button"
-                                        className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                                        className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-100 sm:mt-0 sm:w-auto"
                                         onClick={() => setOpen(false)}
                                         ref={cancelButtonRef}
                                     >
                                         Cancel
-                                    </button>
+                                    </button> */}
                                 </div>
                             </Dialog.Panel>
                         </Transition.Child>

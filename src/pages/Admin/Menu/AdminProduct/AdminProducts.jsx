@@ -2,7 +2,7 @@ import { Eye, Trash } from 'iconsax-react';
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import Switch from 'react-js-switch';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Select from "react-select";
 import { toast } from 'react-toastify';
@@ -14,6 +14,7 @@ import Table from '../../../../components/Table/Table';
 import { formBtn1, formBtn2, inputClass } from '../../../../utils/CustomClass';
 import axios from 'axios';
 import { environment } from '../../../../env';
+import { setCategoryCount, setProductCount, setSubCategoryCount } from '../../../../redux/Slices/masterSlice';
 
 
 
@@ -26,6 +27,7 @@ const AdminProduct = (props) => {
     const [subcategoryOptions, setSubCategoryOptions] = useState()
     const [category, setCategory] = useState([]);
     const [subCategory, setsubCategory] = useState([]);
+    const dispatch = useDispatch()
     const GetFranchiseeData = () => {
         try {
             GetFranchisee().then((res) => {
@@ -223,11 +225,7 @@ const AdminProduct = (props) => {
 
                 let url = `${environment.baseUrl}app/all_products?product_name=${product_name}&product_msbcode=${product_msbcode}&franchise_msbcode=${franchise_msbcode?.value ? franchise_msbcode?.value : ''}&vendor_msbcode=${vendor_msbcode?.value ? vendor_msbcode?.value : ''}&product_category=${product_category?.value ? product_category?.value : ''}&product_subcategory=${product_subcategory?.value ? product_subcategory?.value : ''}`
                 await axios.get((props?.isrestaurant === false || props?.isrestaurant === undefined) ? url : restauranturl).then((res) => {
-                    if ((props?.isrestaurant === false || props?.isrestaurant === undefined)) {
                         setShopProducts(res?.data)
-                    } else {
-                        setShopProducts(res?.data?.results)
-                    }
                     toast.success("Filters applied successfully")
                 }).catch((err) => {
                     console.log("🚀 ~ file: Resturant.jsx:75 ~ awaitaxios.get ~ err:", err)

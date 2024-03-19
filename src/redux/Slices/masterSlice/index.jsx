@@ -11,9 +11,12 @@ const initialState = {
     Category: [],
     SubCategory: [],
     Product: [],
-    Orders: [],
-    Franchise : [],
-    FranchiseVendors : [],
+    Franchise: [],
+    FranchiseVendors: [],
+    CategoryCount: 0,
+    SubCategoryCount: 0,
+    ProductCount: 0,
+
 }
 export const masterSlice = createSlice({
     name: 'master',
@@ -49,17 +52,23 @@ export const masterSlice = createSlice({
         setProduct: (state, action) => {
             state.Product = action.payload;
         },
-        setOrders: (state, action) => {
-            state.Orders = action.payload;
-        },
         setFranchise: (state, action) => {
             state.Franchise = action.payload;
         },
         setFranchiseVendors: (state, action) => {
             state.FranchiseVendors = action.payload;
         },
+        setCategoryCount: (state, action) => {
+            state.CategoryCount = action.payload;
+        },
+        setSubCategoryCount: (state, action) => {
+            state.SubCategoryCount = action.payload;
+        },
+        setProductCount: (state, action) => {
+            state.ProductCount = action.payload;
+        },
     }
 })
 
-export const { setCityNames, setDesignation, setTempRange, setProductNames, setStoreCategory, setCategory, setSubCategory, setProduct, setBanner, setPromotions, setOrders, setFranchise, setFranchiseVendors } = masterSlice.actions;
+export const { setCityNames, setDesignation, setTempRange, setProductNames, setStoreCategory, setCategory, setSubCategory, setProduct, setBanner, setPromotions, setFranchise, setFranchiseVendors, setCategoryCount, setSubCategoryCount, setProductCount } = masterSlice.actions;
 export default masterSlice.reducer;
