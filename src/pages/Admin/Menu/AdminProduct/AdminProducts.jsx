@@ -543,7 +543,7 @@ const AdminProduct = (props) => {
                                     <Select
                                         value={value}
                                         options={vendorOptions}
-                                        className="w-100 text-gray-900"
+                                        className="text-gray-900 w-100"
                                         placeholder="Vendor"
                                         onChange={onChange}
                                         inputRef={ref}
@@ -568,7 +568,7 @@ const AdminProduct = (props) => {
                                     <Select
                                         value={value}
                                         options={categoryOptions}
-                                        className="w-100 text-gray-900"
+                                        className="text-gray-900 w-100"
                                         placeholder="Category"
                                         onChange={onChange}
                                         inputRef={ref}
@@ -593,7 +593,7 @@ const AdminProduct = (props) => {
                                     <Select
                                         value={value}
                                         options={subcategoryOptions}
-                                        className="w-100 text-gray-900"
+                                        className="text-gray-900 w-100"
                                         placeholder="SubCategory"
                                         onChange={onChange}
                                         inputRef={ref}
@@ -609,7 +609,7 @@ const AdminProduct = (props) => {
                             />
                         </div>
                     </div>
-                    <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2">
+                    <div className="grid gap-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
                         <button
                             type="submit"
                             className={`${formBtn1}`}

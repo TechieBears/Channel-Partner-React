@@ -103,11 +103,13 @@ const Sidebar = ({ children }) => {
     const getAllRestaurant = () => {
         try {
             getRestarant().then((res) => {
-                const restaurantVendors = res.filter(
-                    (item) => item?.vendor_type == "restaurant"
-                );
-                dispatch(setAllRestaurant(restaurantVendors))
-                setData(restaurantVendors);
+                if (Array.isArray(res)){
+                    const restaurantVendors = res.filter(
+                        (item) => item?.vendor_type == "restaurant"
+                    );
+                    dispatch(setAllRestaurant(restaurantVendors))
+                    setData(restaurantVendors);
+                }
             });
         } catch (error) {
             console.log('error', error);

@@ -1,36 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { Tab, TabList, Tabs, TabPanel } from "react-tabs";
-import Table from "../../../components/Table/Table";
-import {
-  ArrowSwapVertical,
-  Box,
-  Eye,
-  NotificationBing,
-  ShoppingCart,
-  Trash,
-  Category,
-  UserTick,
-  UserRemove,
-  Timer,
-} from "iconsax-react";
-// import { deleteStorage, getPartnerStorage, getStorages } from "../../../api";
-import { formBtn2, inputClass } from "../../../utils/CustomClass";
-import { formBtn1 } from "../../../utils/CustomClass";
-import { Controller, useForm } from "react-hook-form";
+import React, { useState } from "react";
+import { ArrowSwapVertical, Box, Eye, NotificationBing, ShoppingCart, Trash, Category, UserTick, UserRemove, Timer } from "iconsax-react";
+import { Handshake, PersonSimpleBike   } from "@phosphor-icons/react";
+// import { Bike, Handshake } from "lucide-react";
+import { useForm } from "react-hook-form";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 import { environment } from "../../../env";
 import { useDispatch, useSelector } from "react-redux";
 import { setStorageList } from "../../../redux/slices/storageSlice";
 import { toast } from "react-toastify";
-import AsyncSelect from "react-select/async";
 import DashboardForm from "../../../components/modals/DashboardModals/DashboardForm";
 import DeleteModal from "../../../components/Modals/DeleteModal/DeleteModal";
-import ActiveOrders from "./OrderList/ActiveOrders";
-import PendingOrders from "./OrderList/PendingOrders";
+
 
 const Dashboard = () => {
   const [selectedTab, setSelectedTab] = useState(0);
+
+  const categoryCount = useSelector((state) => state?.master?.CategoryCount);
+  const subCategoryCount = useSelector((state) => state?.master?.SubCategoryCount);
+  const productCount = useSelector((state) => state?.master?.ProductCount);
+  // const deliveryBoysCount = useSelector((state) => state?.vendor?.deliveryList);
+  console.log(categoryCount, subCategoryCount, productCount) 
 
   const user = useSelector((state) => state.user.loggedUserDetails);
   const storages = useSelector((state) => state?.storage?.list);
@@ -185,7 +175,7 @@ const Dashboard = () => {
       />
       <section className="w-full h-full">
         {/* =====================Dashboard header===================== */}
-        <div className="grid grid-cols-1 p-4 sm:m-5 rounded-xl sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-y-4 ">
+        <div className="grid grid-cols-1 p-4 sm:m-5 rounded-xl sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-5 xl:grid-cols-5 gap-y-4 ">
           <div className="flex items-center p-4 mr-4 space-x-3 bg-white border-r-0 rounded-xl sm:border-r border-gray-200/70 ">
             <div className="p-3.5 rounded-xl bg-sky-50">
               <ShoppingCart size={26} className="text-sky-400" />
@@ -234,14 +224,17 @@ const Dashboard = () => {
               </h6>
             </div>
           </div>
-          <div className="flex items-center p-4 mr-4 space-x-3 bg-white border-r-0 rounded-xl sm:border-r border-gray-200/70">
-            <div className="p-3.5 rounded-xl bg-sky-50">
-              <UserTick size={26} className="text-sky-600" />
+          <div className="flex items-center p-4 mr-4 space-x-3 bg-white border-r-0 rounded-xl sm:border-r border-gray-200/70 ">
+            <div className="p-3.5 rounded-xl bg-purple-50">
+              <PersonSimpleBike  size={26} className="text-purple-600" />
             </div>
             <div className="space-y-1">
-              <h6 className="text-sm text-gray-500 font-tb">Vendors</h6>
-              <h6 className="text-base font-semibold text-sky-400 font-tb">
-                55
+              <h6 className="text-sm text-purple-600 font-tb">
+                Drivers
+              </h6>
+              <h6 className="text-base font-semibold text-purple-600 font-tb">
+                {/* {deliveryBoysCount?.length} */}
+                20
               </h6>
             </div>
           </div>
@@ -252,7 +245,7 @@ const Dashboard = () => {
             <div className="space-y-1">
               <h6 className="text-sm text-gray-500 font-tb">Categories</h6>
               <h6 className="text-base font-semibold text-orange-400 font-tb">
-                25
+                {categoryCount}
               </h6>
             </div>
           </div>
@@ -263,7 +256,7 @@ const Dashboard = () => {
             <div className="space-y-1">
               <h6 className="text-sm text-gray-500 font-tb">Products</h6>
               <h6 className="text-base font-semibold text-purple-600 font-tb">
-                1507
+                {productCount}
               </h6>
             </div>
           </div>
@@ -275,6 +268,31 @@ const Dashboard = () => {
               <h6 className="text-sm text-gray-500 font-tb">Promotions</h6>
               <h6 className="text-base font-semibold text-red-500 font-tb">
                 19
+              </h6>
+            </div>
+          </div>
+          <div className="flex items-center p-4 mr-4 space-x-3 bg-white border-r-0 rounded-xl sm:border-r border-gray-200/70 ">
+            <div className="p-3.5 rounded-xl bg-sky-50">
+              <Handshake size={26} className="text-sky-400" />
+            </div>
+            <div className="space-y-1">
+              <h6 className="text-sm text-gray-500 font-tb">
+                Franchisee
+              </h6>
+              <h6 className="text-base font-semibold text-sky-400 font-tb">
+                980
+              </h6>
+            </div>
+          </div>
+       
+          <div className="flex items-center p-4 mr-4 space-x-3 bg-white border-r-0 rounded-xl sm:border-r border-gray-200/70">
+            <div className="p-3.5 rounded-xl bg-sky-50">
+              <UserTick size={26} className="text-sky-600" />
+            </div>
+            <div className="space-y-1">
+              <h6 className="text-sm text-gray-500 font-tb">Vendors</h6>
+              <h6 className="text-base font-semibold text-sky-400 font-tb">
+                55
               </h6>
             </div>
           </div>

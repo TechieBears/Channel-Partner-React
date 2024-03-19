@@ -6,12 +6,12 @@ export const environment = {
 
     // ---------------- Staging Server --------------------------------
     // baseUrl: 'https://5932-43-252-33-152.ngrok-free.app/',
-    baseUrl: 'https://fa63-58-146-123-202.ngrok-free.app/',
+    // baseUrl: 'https://fa63-58-146-123-202.ngrok-free.app/',
 
 
 
     // --------------------Live Server Api URL--------------------
-    // baseUrl: 'https://cpapi.techiebears.com/',
+    baseUrl: 'https://cpapi.techiebears.com/',
     // webSocketUrl: `wss://cpapi.techiebears.com/ws/socket/`
 
 
