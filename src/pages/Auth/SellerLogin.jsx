@@ -48,7 +48,7 @@ const SellerLogin = () => {
                     }
                 } else {
                     setLoader(false)
-                    toast.error('Please provide valid credentails')
+                    toast.error(res?.message)
                 }
             })
         } catch (error) {
