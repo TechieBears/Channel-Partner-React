@@ -1,18 +1,13 @@
 import { useEffect, useState } from "react";
 import { Trash } from "iconsax-react";
 import Table from "../../../../../components/Table/Table";
-import {
-  getHomeBanners,
-  delHomeBanners,
-  editHomeBanners,
-  addHomePromotion,
-} from "../../../../../api";
+import { getHomeBanners, delHomeBanners, editHomeBanners, addHomePromotion} from "../../../../../api";
 import { useDispatch } from "react-redux";
 import { setPromotions } from "../../../../../redux/Slices/masterSlice";
 import { toast } from "react-toastify";
 import Switch from "react-js-switch";
 import BannerForm from "../../../../../components/Modals/MasterModals/AssetsModals/BannerForm";
-import { getGalleryImages, delHomePromotion, editHomePromotion } from '../../../../../api';
+import { delHomePromotion, editHomePromotion } from '../../../../../api';
 import AddPromo from "../../../Promotion/Assests/AddPromo";
 
 
@@ -33,18 +28,6 @@ const DashboardBannerPanel = () => {
     }
   }
 
-
-  // =================== fetching data ========================
-  const fetchData = () => {
-    try {
-      getGalleryImages().then((res) => {
-        // setImageDetails(res);
-      });
-    } catch (err) {
-      console.log("error", err);
-    }
-  };
-
   // ============== fetch data from api ================
   const getAllBannerList = () => {
     try {
@@ -58,7 +41,6 @@ const DashboardBannerPanel = () => {
 
   useEffect(() => {
     getAllBannerList();
-    fetchData();
     getAllPromotionList();
   }, []);
 
@@ -126,13 +108,7 @@ const DashboardBannerPanel = () => {
       />
     </div>
   );
-
-  const vendorTypeStyle = (row) => (
-    <div className="items-center h-24 w-28">
-      <h5>{row?.vendor_type}</h5>
-    </div>
-  );
-
+ 
   // ------ Active/ Deactive banners -----
   const verifyActions = (row) => {
     const payload = {
@@ -211,6 +187,8 @@ const DashboardBannerPanel = () => {
   const bannercolumns = [
     { field: "image", header: "Image", body: imageBodyTemp, style: true },
     { field: 'vendor_type', header: 'Vendor Type', sortable: true, style: true },
+    { field: 'redirection_type', header: 'Redirection Type', body: (row) => <h5>{row?.redirection_type ? row?.redirection_type : row?.redirect_link}</h5>, sortable: true, style: true },
+    { field: 'screen_name', header: 'Screen Name', sortable: true, style: true },
     { field: "id", header: "Action", body: actionBodyTemplateBanner, sortable: true, style: true },
     { field: "isactive", header: "Active", body: switchActive, sortable: true, style: true },
   ];
@@ -219,6 +197,8 @@ const DashboardBannerPanel = () => {
   const promotioncolumns = [
     { field: "image", header: "Image", body: imageBodyTemp, style: true },
     { field: 'vendor_type', header: 'Vendor Type', sortable: true, style: true },
+    { field: 'Redirection Type', header: 'Redirection Type', body: (row) => <h5>{row?.redirection_type ? row?.redirection_type : row?.redirect_link}</h5>, sortable: true, style: true },
+    { field: 'screen_name', header: 'Screen Name', sortable: true, style: true },
     { field: "id", header: "Action", body: actionBodyTemplatePromotion, sortable: true, style: true },
     { field: "isactive", header: "Active", body: switchActivePromo, sortable: true, style: true },
   ];

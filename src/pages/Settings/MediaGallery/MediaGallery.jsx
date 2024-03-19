@@ -108,10 +108,10 @@ const MediaGallaryModal = ({sendDataToParent, ...props}) => {
                 <Dialog.Panel className="w-full max-w-full overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl">
                   <Dialog.Title
                     as="h2"
-                    className="w-full flex items-center justify-between px-6 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
+                    className="flex items-center justify-between w-full px-6 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
                   >
                     Media Gallery
-                    {/* <div className="col-span-1 flex justify-end"> */}
+                    {/* <div className="flex justify-end col-span-1"> */}
                       <input
                         type="text"
                         placeholder="Search by Image Name..."
@@ -145,7 +145,7 @@ const MediaGallaryModal = ({sendDataToParent, ...props}) => {
                           </li>
                           )) 
                          ) : (
-                        <li className="text-center bg-gray-100 rounded-sm shadow-lg p-4">
+                        <li className="p-4 text-center bg-gray-100 rounded-sm shadow-lg">
                           No data found
                         </li>
                         )}

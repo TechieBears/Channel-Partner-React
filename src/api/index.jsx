@@ -145,7 +145,6 @@ export const createCategory = async (data) => {
 
 /* ================== Restaurant Category Post API =========== */
 export const createRestaurantCategory = async (data) => {
-    // const url = `${environment.baseUrl}movable-category`;
     const url = `${environment.baseUrl}app/rescategory-list`;
     try {
         const response = await axios.post(url, data)
@@ -168,7 +167,6 @@ export const createSubCategory = async (data) => {
     }
 };
 export const createRestaurantSubCategory = async (data) => {
-    // const url = `${environment.baseUrl}movable-category`;
     const url = `${environment.baseUrl}app/get-ressubcategory`;
     try {
         const response = await axios.post(url, data)
@@ -956,7 +954,6 @@ export const getProductById = async (id) => {
     const url = `${environment.baseUrl}vendor/edit_product/${id}`;
     try {
         const response = await axios.get(url, id);
-        // console.log('response', response)
         return response.data
     } catch (err) {
         console.log('error while getting vendor by id', err)
@@ -1045,7 +1042,6 @@ export const deleteCoupon = async (id) => {
     const url = `${environment.baseUrl}app/edit_coupon/${id}`;
     try {
         const response = await axios.delete(url);
-        // console.log('response', response)
         return response.data;
     } catch (err) {
         console.log('error while posting data', err)
@@ -1058,7 +1054,6 @@ export const registerRestaurant = async (data) => {
     const url = `${environment.baseUrl}vendor/onboard_restaurant`;
     try {
         const response = await axios.post(url, data);
-        // console.log('response', response)
         return response.data;
     } catch (err) {
         console.log('error while posting data', err)
@@ -1069,7 +1064,6 @@ export const editOnBoarding = async (id, data) => {
     const url = `${environment.baseUrl}vendor/editonboard_restaurant/${id}`;
     try {
         const response = await axios.put(url, data);
-        // console.log('response', response)
         return response.data;
     } catch (err) {
         console.log('error while posting data', err)
@@ -1080,7 +1074,6 @@ export const addFoodItem = async (data) => {
     const url = `${environment.baseUrl}vendor/add_restaurant_food`;
     try {
         const response = await axios.post(url, data);
-        // console.log('response', response)
         return response.data;
     } catch (err) {
         console.log('error while posting data', err)
@@ -1091,7 +1084,6 @@ export const editFoodItem = async (id, data) => {
     const url = `${environment.baseUrl}vendor/edit_restaurant_food/${id}`;
     try {
         const response = await axios.put(url, data);
-        // console.log('response', response)
         return response.data;
     } catch (err) {
         console.log('error while posting data', err)
@@ -1102,7 +1094,6 @@ export const deleteFoodItem = async (id) => {
     const url = `${environment.baseUrl}vendor/edit_restaurant_food/${id}`;
     try {
         const response = await axios.delete(url);
-        // console.log('response', response)
         return response.data;
     } catch (err) {
         console.log('error while posting data', err)

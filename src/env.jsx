@@ -1,12 +1,14 @@
 export const environment = {
     // --------------------Local Server Api URL--------------------
     // baseUrl: 'http://192.168.0.152:8005/',
-    webSocketUrl: `wss://fa63-58-146-123-202.ngrok-free.app/ws/socket/`,
     // baseUrl: 'http://127.0.0.1:8000/',
-    baseUrl: 'https://fa63-58-146-123-202.ngrok-free.app/',
+    // baseUrl: 'https://fa63-58-146-123-202.ngrok-free.app/',
 
     // ---------------- Staging Server --------------------------------
     // baseUrl: 'https://5932-43-252-33-152.ngrok-free.app/',
+    baseUrl: 'https://fa63-58-146-123-202.ngrok-free.app/',
+
+
 
     // --------------------Live Server Api URL--------------------
     // baseUrl: 'https://cpapi.techiebears.com/',
@@ -32,6 +34,21 @@ export const ImageUpload = async (data, folder, imgname, name) => {
     const command = new PutObjectCommand({
         Bucket: "channel-partner-media",
         Key: `${folder}/${name}_${imgname}_${data?.name}`,
+        Body: data,
+    });
+    try {
+        const response = await client.send(command);
+        console.log(response);
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+
+export const ImageUpload2 = async (data, folder, imgname, name) => {
+    const command = new PutObjectCommand({
+        Bucket: "channel-partner-media",
+        Key: `${folder}/${imgname}_${folder}_${name}`,
         Body: data,
     });
     try {

@@ -199,17 +199,36 @@ function Drivers() {
     }
 
 
+    function parseShift(shiftString) {
+        const shift = {};
+        const lines = shiftString.split('\n');
+        lines.forEach(line => {
+          const [key, value] = line.split(':');
+          shift[key.trim()] = value?.trim();
+        });
+        console.log(shift)
+        return shift;
+      }
+
+
     const columns = [
         // { field: 'id', header: 'ID', sortable: false },
+        
+        { field: 'msb_code', header: 'MSBD Code', body: (row) => <h6>{row?.msb_code}</h6>, sortable: false },
         { field: 'profile_pic', header: 'Profile', body: representativeBodyTemplate, sortable: false, style: true },
         { field: 'first_name', body: (row) => <div className="capitalize">{row?.user?.first_name + " " + row?.user?.last_name}</div>, header: 'Name' },
         { field: 'email', header: 'Email', body: (row) => <h6>{row?.user?.email}</h6>, sortable: false },
+        { field: 'shift',  header: 'Shift Timing', body: (row) => <h6>{JSON.parse(row?.shift)?.title}</h6>, sortable: false },
+        { field: 'job_type',  header: 'Job Type', body: (row) => <h6>{JSON.parse(row?.job_type)?.title}</h6>, sortable: false },
         { field: 'gender', header: 'Gender', body: (row) => <h6>{row?.user?.gender}</h6>, sortable: false },
         { field: 'phone_no', header: 'Phone No', body: (row) => <h6>{row?.user?.phone_no}</h6>, sortable: false },
         { field: 'pincode', header: 'Pincode', body: (row) => <h6>{row?.user?.pincode}</h6>, sortable: false },
         { field: 'address', header: 'Address', body: (row) => <h6>{row?.user?.address}</h6>, sortable: false },
         { field: 'state', header: 'state', body: (row) => <h6>{row?.user?.state}</h6>, sortable: false },
         { field: 'city', header: 'city', body: (row) => <h6>{row?.user?.city}</h6>, sortable: false },
+        { field: 'week_off', header: 'Week Off', body: (row) => <h6>{row?.week_off}</h6>, sortable: false },
+        { field: 'vehicle_type', header: 'Vehicle Type', body: (row) => <h6>{row?.vehicle_type}</h6>, sortable: false },
+
         { field: 'registration_date', header: 'Registration Date', body: (row) => <h6>{row?.user?.registration_date}</h6>, sortable: false },
         { field: 'status', header: 'Status', body: activeActionsRole, sortable: false },
         { field: 'id', header: 'Action', body: actionBodyTemplate, sortable: true },
@@ -254,7 +273,7 @@ function Drivers() {
                                     <Select
                                         value={value}
                                         options={franchiseOptions}
-                                        className="w-100 text-gray-900"
+                                        className="text-gray-900 w-100"
                                         placeholder="Search By Franchise"
                                         onChange={onChange}
                                         inputRef={ref}
@@ -279,7 +298,7 @@ function Drivers() {
                                     <Select
                                         value={value}
                                         options={pincodeOptions}
-                                        className="w-100 text-gray-900"
+                                        className="text-gray-900 w-100"
                                         placeholder="Search By Pincode"
                                         onChange={onChange}
                                         inputRef={ref}

@@ -122,7 +122,7 @@ const SupportPanel = () => {
                                       id={support_id} 
                                       termname={support_name} 
                                       termdesc={support_contact}
-                                     title="Edit Help Center" />
+                                     title="Edit Help Center" getAllHelpCenter={getAllHelpCenter}/>
                                     <button>
                                         <Trash  onClick={() => deleteHelpSupport(support_id)}  size={24} className='mx-1 text-red-400 cursor-pointer' />
                                     </button>
