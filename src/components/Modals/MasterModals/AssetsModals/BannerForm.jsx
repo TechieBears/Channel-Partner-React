@@ -135,6 +135,21 @@ export default function BannerForm(props) {
   }, []);
 
 
+  function base64ToBlob(base64String) {
+    try {
+        const byteCharacters = atob(base64String);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        return new Blob([byteArray], { type: 'image/jpeg' });
+    } catch (error) {
+        console.error('Error decoding base64 string:', error);
+        return null;
+    }
+}
+
   // ============================ submit data  =====================================
   const onSubmit = async (data) => {
     if (imageError) {
@@ -153,12 +168,13 @@ export default function BannerForm(props) {
           // data.slide_url[0].name = urlName
         }
         if (childData) {
+          const imageBlob = base64ToBlob(childData) 
           await ImageUpload2(
             // data.slide_url[0],
-            childData,
+            imageBlob,
             "banner",
-            data.screen_name,
             urlName,
+            data.screen_name,
           );
           data.slide_url = `${bannerLink}${data.screen_name}_banner_${urlName}`;
         } else {
@@ -341,7 +357,7 @@ export default function BannerForm(props) {
                                 {/* {childData?.split("/").pop()} */}
                                 {childData}
                               </label>
-                              <img src={childData} alt="" />
+                             {childData && <img className="w-28 h-28" src={childData} alt="" />} 
                           
                         </div>
                         <div className="flex items-center gap-3">

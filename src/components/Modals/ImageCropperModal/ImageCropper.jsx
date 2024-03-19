@@ -259,7 +259,11 @@ const dataURLtoBlob = (dataURL) => {
                   </div>
 
                 {crop && crop != '' && (
-                    <div className="flex items-center justify-center">
+                    <div className="flex flex-wrap items-center justify-center">
+                      <div>
+                        <span className="text-lg font-medium">
+                          Preview
+                        </span>
                         <canvas
                             ref={previewCanvasRef}
                             className="mx-2 my-10"
@@ -269,16 +273,16 @@ const dataURLtoBlob = (dataURL) => {
                               width: 100,
                               height: 100,
                               maxHeight: "30vh",
-                              // width: "100%", 
                               transform: `scale(${scale}) rotate(${rotate}deg)`
-                        }}
-                    />
+                          }}
+                        />
                         <div>
                             <button 
                               // onClick={() => convertBase64ToUrl(previewCanvasRef)}
                               onClick={() => closeModal(base64Url)}
                               className={formBtn1}>Submit</button>
                         </div>
+                      </div>
                         {/* <div>
                             <img src={imageUrl} alt="Converted Image" />
                         </div> */}
