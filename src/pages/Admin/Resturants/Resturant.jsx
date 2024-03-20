@@ -91,9 +91,9 @@ export default function Restaurant() {
     })
     toast.success("Filters clear successfully")
     setData()
-    if (user?.role === 'admin') {
+    if (user?.role == 'admin') {
       getAllRestaurant()
-    } else if (user?.role === 'franchise') {
+    } else if (user?.role == 'franchise') {
       getFranchiseRestaurants()
     }
   }
@@ -268,7 +268,7 @@ export default function Restaurant() {
             <div className="">
               <input
                 type="text"
-                placeholder='Search By Name'
+                placeholder='Owner Name'
                 autoComplete='off'
                 className={`${inputClass} !bg-slate-100`}
                 {...register('name')}
@@ -277,7 +277,7 @@ export default function Restaurant() {
             <div className="">
               <input
                 type="text"
-                placeholder='Search By MSB Code'
+                placeholder='MSB Code'
                 autoComplete='off'
                 className={`${inputClass} !bg-slate-100`}
                 {...register('msbcode')}
@@ -295,7 +295,7 @@ export default function Restaurant() {
                       value={value}
                       options={franchiseOptions}
                       className="w-100 text-gray-900"
-                      placeholder="Search By Franchise"
+                      placeholder="Franchise"
                       onChange={onChange}
                       inputRef={ref}
                       maxMenuHeight={200}
@@ -321,7 +321,7 @@ export default function Restaurant() {
                     value={value}
                     options={pincodeOptions}
                     className="w-100 text-gray-900"
-                    placeholder="Search By Pincode"
+                    placeholder="Pincode"
                     onChange={onChange}
                     inputRef={ref}
                     maxMenuHeight={200}
@@ -365,7 +365,7 @@ export default function Restaurant() {
           </div>
           <AddRestaurant
             title="Add Restaurant"
-            getAllRestaurant={user?.role == 'admin' ? getAllRestaurant : getFranchRestaurant}
+            getAllRestaurant={user?.role == 'admin' ? getAllRestaurant : getFranchiseRestaurants}
             id={user?.userid}
           />
         </div>

@@ -25,7 +25,6 @@ const DashboardBannerPanel = () => {
   const getAllPromotionList = () => {
     try {
       addHomePromotion().then((res) => {
-        console.log(res.data)
         setpromotionList(res.data);
         dispatch(setPromotions(res))
       })
@@ -50,7 +49,6 @@ const DashboardBannerPanel = () => {
   const getAllBannerList = () => {
     try {
       getHomeBanners().then((res) => {
-        console.log(res.data);
         setBannerList(res.data);
       });
     } catch (error) {
@@ -172,7 +170,7 @@ const DashboardBannerPanel = () => {
   };
 
 
-  
+
   // ------ Active/ Deactive Promotions -----
   const verifyActionsPromo = (row) => {
     const payload = {
@@ -238,16 +236,14 @@ const DashboardBannerPanel = () => {
               <h5 className="text-2xl font-semibold">Banners</h5>
               <BannerForm title="Add New Banner" getAllBannerList={getAllBannerList} />
             </div>
-            {bannerList?.length > 0 && (
-              <Table data={bannerList} columns={bannercolumns} />
-            )}
+            <Table data={bannerList} columns={bannercolumns} />
           </div>
           <div>
             <div className="flex items-center justify-between mx-5 mb-4 text-center">
               <h5 className="text-2xl font-semibold">Promotions</h5>
               <AddPromo title='Add New Promotion' getAllPromotionList={getAllPromotionList} />
             </div>
-            {promotionList?.length > 0 && <Table data={promotionList} columns={promotioncolumns} />}
+            <Table data={promotionList} columns={promotioncolumns} />
           </div>
         </div>
       </div>

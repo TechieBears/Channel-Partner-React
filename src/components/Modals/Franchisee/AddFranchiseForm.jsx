@@ -316,6 +316,7 @@ export default function AddFranchiseForm(props) {
                               type="number"
                               maxLength={6}
                               placeholder="PINCODE"
+                              readOnly={props?.button == 'edit' ? true : false}
                               className={inputClass}
                               {...register("pincode", { required: true, validate: validatePIN })}
                             />

@@ -6,12 +6,14 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Select from "react-select";
 import { toast } from 'react-toastify';
-import { GetFranchisee, GetFranchiseeVendors, VerifyProductAdmin, editAdminFinalFood, getCategory, getGalleryImages, getProductsByAdmin, getRestaurantCategory, getRestaurantFoodAdmin, getRestaurantSubCategory, getSubCategory, makeFeatureProduct } from '../../../../api';
+import { GetFranchisee, GetFranchiseeVendors, VerifyProductAdmin, editAdminFinalFood, getCategory, getGalleryImages, getProductsByAdmin, getRestarant, getRestaurantCategory, getRestaurantFoodAdmin, getRestaurantSubCategory, getSubCategory, makeFeatureProduct } from '../../../../api';
 import userImg from '../../../../assets/user.jpg';
 import AddProduct from '../../../../components/Modals/Vendors/AddProduct';
 import AddRestItem from '../../../../components/Modals/Vendors/AddRestItem';
 import Table from '../../../../components/Table/Table';
 import { formBtn1, formBtn2, inputClass } from '../../../../utils/CustomClass';
+import axios from 'axios';
+import { environment } from '../../../../env';
 
 
 
@@ -21,7 +23,7 @@ const AdminProduct = (props) => {
     const [franchiseOptions, setFranchiseOptions] = useState()
     const [vendorOptions, setVendorOptions] = useState()
     const [categoryOptions, setCategoryOptions] = useState()
-    const [imageDetails, setImageDetails] = useState([]);
+    const [subcategoryOptions, setSubCategoryOptions] = useState()
     const [category, setCategory] = useState([]);
     const [subCategory, setsubCategory] = useState([]);
     const GetFranchiseeData = () => {
@@ -45,8 +47,8 @@ const AdminProduct = (props) => {
             GetFranchiseeVendors().then((res) => {
                 if (res?.length > 0) {
                     const newData = res.map((data) => ({
-                        label: data?.shop_name + `(${data?.msb_code})`,
-                        value: data?.user?.id,
+                        label: data?.shop_name + `(${data?.user?.pincode})`,
+                        value: data?.vendor_id,
                     }))
                     setVendorOptions(newData)
                 }
@@ -56,37 +58,44 @@ const AdminProduct = (props) => {
         }
     }
 
-    const GetCategory = () => {
+    const GetVendorDataByRestaurant = () => {
         try {
-            getCategory().then((res) => {
+            getRestarant().then((res) => {
                 if (res?.length > 0) {
                     const newData = res.map((data) => ({
-                        label: data?.category_name,
-                        value: data?.id,
+                        label: data?.vendor?.shop_name + `(${data?.vendor?.msb_code})`,
+                        value: data?.vendor?.vendor_id,
                     }))
-                    setCategoryOptions(newData)
+                    setVendorOptions(newData)
                 }
+
             })
         } catch (error) {
-            console.log("🚀 ~ file: AdminProducts.jsx:66 ~ GetCategory ~ error:", error)
+            console.log("🚀 ~ file: AdminProducts.jsx:69 ~ GetVendorDataByRestaurant ~ catch:", error)
         }
     }
 
     // =================== Fetch Media Gallery Images =================
     const fetchData = () => {
         try {
-            getGalleryImages().then((res) => {
-                setImageDetails(res);
-            });
-        } catch (err) {
-            console.log("error", err);
+            getCategory().then((res) => {
+                // if (res?.length > 0) {
+                //     const newData = res.map((data) => ({
+                //         label: data?.category_name,
+                //         value: data?.id,
+                //     }))
+                //     setCategoryOptions(newData)
+                // }
+            })
+        } catch (error) {
+            console.log("🚀 ~ file: AdminProducts.jsx:66 ~ GetCategory ~ error:", error)
         }
-    };
+    }
 
     const getProducts = () => {
         try {
             getProductsByAdmin().then(res => {
-                setShopProducts(res?.results)
+                setShopProducts(res)
             });
         } catch (error) {
             console.log(error);
@@ -109,6 +118,13 @@ const AdminProduct = (props) => {
         try {
             getCategory().then(res => {
                 setCategory(res)
+                if (res?.length > 0) {
+                    const newData = res.map((data) => ({
+                        label: data?.category_name,
+                        value: data?.category_name,
+                    }))
+                    setCategoryOptions(newData)
+                }
             })
         } catch (error) {
             console.log('error fetch', error)
@@ -119,6 +135,13 @@ const AdminProduct = (props) => {
         try {
             getSubCategory().then(res => {
                 setsubCategory(res)
+                // if (res?.length > 0) {
+                //     const newData = res.map((data) => ({
+                //         label: data?.subcat_name,
+                //         value: data?.subcat_name,
+                //     }))
+                //     setSubCategoryOptions(newData)
+                // }
             })
         } catch (error) {
             console.log('error fetch', error)
@@ -129,6 +152,13 @@ const AdminProduct = (props) => {
         try {
             getRestaurantCategory().then(res => {
                 setCategory(res)
+                if (res?.length > 0) {
+                    const newData = res.map((data) => ({
+                        label: data?.category_name,
+                        value: data?.category_name,
+                    }))
+                    setCategoryOptions(newData)
+                }
             })
         } catch (error) {
             console.log('error: ', error)
@@ -139,6 +169,13 @@ const AdminProduct = (props) => {
         try {
             getRestaurantSubCategory().then(res => {
                 setsubCategory(res)
+                // if (res?.length > 0) {
+                //     const newData = res.map((data) => ({
+                //         label: data?.subcat_name,
+                //         value: data?.subcat_name,
+                //     }))
+                //     setSubCategoryOptions(newData)
+                // }
             })
         } catch (error) {
             console.log('error', error)
@@ -146,23 +183,33 @@ const AdminProduct = (props) => {
     }
 
     useEffect(() => {
+        reset({
+            product_name: '',
+            product_msbcode: '',
+            franchise_msbcode: '',
+            vendor_msbcode: '',
+            product_category: '',
+            product_subcategory: ''
+        })
         if (!props?.isrestaurant) {
             getProducts()
             shopCat();
             shopSubCat();
+            GetVendorData()
+
         }
         if (props?.isrestaurant) {
             getRestaurantFoodItems();
             restCat();
             restSubCat();
+            GetVendorDataByRestaurant()
         }
     }, [props.isrestaurant]);
 
     useEffect(() => {
         GetFranchiseeData()
-        GetVendorData()
-        GetCategory()
         fetchData();
+
     }, [])
 
     const {
@@ -175,12 +222,45 @@ const AdminProduct = (props) => {
 
 
     const onSubmit = async (data) => {
-        console.log("🚀 ~ file: AdminProducts.jsx:107 ~ onSubmit ~ data:", data)
+        const { product_name, product_msbcode, franchise_msbcode, vendor_msbcode, product_category, product_subcategory } = data
+        if (product_name != '' || product_msbcode != '' || franchise_msbcode != '' || franchise_msbcode != undefined || vendor_msbcode != '' || vendor_msbcode != undefined || product_category != '' || product_category != undefined || product_subcategory != '' || product_subcategory != undefined) {
+            try {
+
+                let restauranturl = `${environment.baseUrl}app/all_fooditems?product_name=${product_name}&product_msbcode=${product_msbcode}&franchise_msbcode=${franchise_msbcode?.value ? franchise_msbcode?.value : ''}&vendor_msbcode=${vendor_msbcode?.value ? vendor_msbcode?.value : ''}&product_category=${product_category?.value ? product_category?.value : ''}&product_subcategory=${product_subcategory?.value ? product_subcategory?.value : ''}`
+
+                let url = `${environment.baseUrl}app/all_products?product_name=${product_name}&product_msbcode=${product_msbcode}&franchise_msbcode=${franchise_msbcode?.value ? franchise_msbcode?.value : ''}&vendor_msbcode=${vendor_msbcode?.value ? vendor_msbcode?.value : ''}&product_category=${product_category?.value ? product_category?.value : ''}&product_subcategory=${product_subcategory?.value ? product_subcategory?.value : ''}`
+                await axios.get((props?.isrestaurant === false || props?.isrestaurant === undefined) ? url : restauranturl).then((res) => {
+                    setShopProducts(res?.data?.results)
+                    toast.success("Filters applied successfully")
+                }).catch((err) => {
+                    console.log("🚀 ~ file: Resturant.jsx:75 ~ awaitaxios.get ~ err:", err)
+                })
+            } catch (err) {
+                console.log("🚀 ~ file: Resturant.jsx:76 ~ onSubmit ~ err:", err)
+            }
+        } else {
+            toast.warn("No Selected Value !")
+        }
     }
 
 
     const handleClear = () => {
-
+        reset({
+            product_name: '',
+            product_msbcode: '',
+            franchise_msbcode: '',
+            vendor_msbcode: '',
+            product_category: '',
+            product_subcategory: ''
+        })
+        toast.success("Filters clear successfully")
+        setShopProducts()
+        if (!props?.isrestaurant) {
+            getProducts()
+        }
+        if (props?.isrestaurant) {
+            getRestaurantFoodItems();
+        }
     }
 
 
@@ -190,10 +270,10 @@ const AdminProduct = (props) => {
             <Eye size={24} className='text-sky-400' />
         </Link>
         {/* <ViewProduct /> */}
-        <AddProduct title='Edit Product' imageDetails={imageDetails} row={row} getProducts={getProducts} category={category} subCategory={subCategory} />
-        <button className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
+        <AddProduct title='Edit Product' row={row} getProducts={getProducts} category={category} subCategory={subCategory} />
+        {/* <button className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
             <Trash size={24} className='text-red-400' />
-        </button>
+        </button> */}
     </div>
 
 
@@ -204,9 +284,9 @@ const AdminProduct = (props) => {
         </Link>
         {/* <ViewProduct /> */}
         <AddRestItem title='edit' button='edit' data={row} category={category} subCategory={subCategory} getRestaurantFoodItems={getRestaurantFoodItems} />
-        <button className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
+        {/* <button className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
             <Trash size={24} className='text-red-400' />
-        </button>
+        </button> */}
     </div>
 
     const verifyActions = (row) => {
@@ -298,14 +378,15 @@ const AdminProduct = (props) => {
     // =============================== PRODUCTS SWITCHES  =============================
     const switchVerify = (row) => {
         return (
-            <div className="flex items-center justify-center gap-2 ">
+            <div className="">
                 <Switch
                     value={row?.product_isverified_byadmin}
                     onChange={() => verifyActions(row)}
-                    disabled={row?.markup_percentage == 0 || row?.markup_percentage == undefined ? true : false}
+                    disabled={LoggedUserDetails?.role == 'franchise' || row?.markup_percentage == 0 || row?.markup_percentage == undefined || row?.final_price == 0 ? true : false}
                     size={50}
                     backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
                     borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
+                {row?.markup_percentage == 0 || row?.markup_percentage == undefined || row?.final_price == 0 ? <h6 className='text-xs text-gray-500'>Please Add Markup</h6> : null}
             </div>
         )
     }
@@ -317,7 +398,7 @@ const AdminProduct = (props) => {
                 <Switch
                     value={row?.featured}
                     onChange={() => verifyFeatured(row)}
-                    disabled={row?.markup_percentage == 0 || row?.markup_percentage == undefined ? true : false}
+                    disabled={LoggedUserDetails?.role == 'franchise' || row?.markup_percentage == 0 || row?.markup_percentage == undefined ? true : false}
                     size={50}
                     backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
                     borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
@@ -328,14 +409,15 @@ const AdminProduct = (props) => {
     // =============================== FOOD ITEMS Admin Verify SWITCHES =============================
     const switchVerifyRes = (row) => {
         return (
-            <div className="flex items-center justify-center gap-2 ">
+            <div className="">
                 <Switch
                     value={row?.food_isverified_byadmin}
                     onChange={() => itemVerifyAdmin(row)}
-                    disabled={row?.markup_percentage == 0 || row?.markup_percentage == undefined ? true : false}
+                    disabled={LoggedUserDetails?.role == 'franchise' || row?.markup_percentage == 0 || row?.markup_percentage == undefined || row?.final_price == 0 ? true : false}
                     size={50}
                     backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
                     borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
+                {row?.markup_percentage == 0 || row?.markup_percentage == undefined || row?.final_price == 0 ? <h6 className='text-xs text-gray-500'>Please Add Markup</h6> : null}
             </div>
         )
     }
@@ -348,7 +430,7 @@ const AdminProduct = (props) => {
                 <Switch
                     value={row?.featured}
                     onChange={() => featureItem(row)}
-                    disabled={row?.markup_percentage == 0 || row?.markup_percentage == undefined ? true : false}
+                    disabled={LoggedUserDetails?.role == 'franchise' || row?.markup_percentage == 0 || row?.markup_percentage == undefined ? true : false}
                     size={50}
                     backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
                     borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
@@ -393,8 +475,8 @@ const AdminProduct = (props) => {
         { field: 'product_Manufacturer_Name', header: 'Manufacturer Name', sortable: true },
         { field: 'product_country_of_origin', header: 'Country Of Origin', sortable: true },
         { filed: 'action', header: 'Action', body: productaction, sortable: true },
-        { field: 'isverify', header: 'Admin Verify', body: switchVerify, sortable: true },
-        { field: 'featured', header: 'Featured Products', body: switchFeatured, sortable: true },
+        { field: 'isverify', header: 'Admin Verify', body: switchVerify, sortable: true, style: true },
+        { field: 'featured', header: 'Featured Products', body: switchFeatured, sortable: true, style: true },
     ]
 
     const FoodItemColumns = [
@@ -440,10 +522,10 @@ const AdminProduct = (props) => {
                         <div className="">
                             <input
                                 type="text"
-                                placeholder='Name'
+                                placeholder={`${props?.isrestaurant === true ? 'Search By Restaurant Name' : 'Search By Product Name'}`}
                                 autoComplete='off'
                                 className={`${inputClass} !bg-slate-100`}
-                                {...register('name')}
+                                {...register('product_name')}
                             />
                         </div>
                         <div className="">
@@ -452,39 +534,13 @@ const AdminProduct = (props) => {
                                 placeholder='MSB Code'
                                 autoComplete='off'
                                 className={`${inputClass} !bg-slate-100`}
-                                {...register('msbcode')}
+                                {...register('product_msbcode')}
                             />
                         </div>
                         <div className="">
                             <Controller
                                 control={control}
-                                name="franchise"
-                                render={({
-                                    field: { onChange, value, ref },
-                                }) => (
-
-                                    <Select
-                                        value={value}
-                                        options={franchiseOptions}
-                                        className="w-100 text-gray-900"
-                                        placeholder="Franchise"
-                                        onChange={onChange}
-                                        inputRef={ref}
-                                        maxMenuHeight={200}
-                                        styles={{
-                                            placeholder: (provided) => ({
-                                                ...provided,
-                                                color: '#9CA3AF', // Light gray color
-                                            }),
-                                        }}
-                                    />
-                                )}
-                            />
-                        </div>
-                        <div className="">
-                            <Controller
-                                control={control}
-                                name="vendor"
+                                name="vendor_msbcode"
                                 render={({
                                     field: { onChange, value, ref },
                                 }) => (
@@ -510,7 +566,7 @@ const AdminProduct = (props) => {
                         <div className="">
                             <Controller
                                 control={control}
-                                name="category"
+                                name="product_category"
                                 render={({
                                     field: { onChange, value, ref },
                                 }) => (
@@ -519,6 +575,31 @@ const AdminProduct = (props) => {
                                         options={categoryOptions}
                                         className="w-100 text-gray-900"
                                         placeholder="Category"
+                                        onChange={onChange}
+                                        inputRef={ref}
+                                        maxMenuHeight={200}
+                                        styles={{
+                                            placeholder: (provided) => ({
+                                                ...provided,
+                                                color: '#9CA3AF', // Light gray color
+                                            }),
+                                        }}
+                                    />
+                                )}
+                            />
+                        </div>
+                        <div className="">
+                            <Controller
+                                control={control}
+                                name="product_subcategory"
+                                render={({
+                                    field: { onChange, value, ref },
+                                }) => (
+                                    <Select
+                                        value={value}
+                                        options={subcategoryOptions}
+                                        className="w-100 text-gray-900"
+                                        placeholder="SubCategory"
                                         onChange={onChange}
                                         inputRef={ref}
                                         maxMenuHeight={200}
@@ -555,7 +636,7 @@ const AdminProduct = (props) => {
                     <h2 className='col-span-5 text-xl font-semibold'>{props?.isrestaurant ? "Food Items" : "Product List"}</h2>
                 </div>
                 <div className='mt-4'>
-                    {props?.isrestaurant ? <Table data={shopProducts} columns={LoggedUserDetails?.role == 'franchise' ? restaurantColumns : FoodItemColumns} /> :
+                    {props?.isrestaurant ? <Table data={shopProducts} columns={FoodItemColumns} /> :
                         <Table data={shopProducts} columns={LoggedUserDetails?.role == 'franchise' ? restaurantColumns : ProductColumns} />}
                 </div>
             </div>

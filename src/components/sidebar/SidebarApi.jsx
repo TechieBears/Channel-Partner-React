@@ -13,7 +13,7 @@ export const Admin = [
         link: '/menu',
         subMenu: [
             {
-                title: 'Menu',
+                title: 'Vendor Menu',
                 icon: <Menu size="24" />,
                 link: '/menu',
             },
@@ -104,10 +104,23 @@ export const Franchise = [
         link: '/admin',
     },
     {
-        title: 'menu',
-        icon: <Menu size="24" />,
+        title: 'Menus',
+        icon: <Trade size="24" />,
         link: '/menu',
-    }, {
+        subMenu: [
+            {
+                title: 'Menu',
+                icon: <Menu size="24" />,
+                link: '/menu',
+            },
+            {
+                title: 'Restaurant Menu',
+                icon: <Menu size="24" />,
+                link: '/restaurantmenu',
+            },
+        ]
+    },
+    {
         title: 'Resturants',
         icon: <ChefHat />,
         link: '/resturants',

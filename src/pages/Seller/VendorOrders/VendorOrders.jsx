@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState,useRef, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form';
 import AsyncSelect from "react-select/async";
 import { toast } from 'react-toastify';
@@ -6,15 +6,20 @@ import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 import { useSelector } from 'react-redux';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import Table from '../../../components/Table/Table';
-import { NavLink } from 'react-router-dom';
+import { NavLink ,useLocation } from 'react-router-dom';
 import { ClipboardTick, Eye, Trash } from 'iconsax-react';
 import moment from 'moment';
 import { environment } from '../../../env';
+import useWebSocket, { ReadyState } from "react-use-websocket";
+
 
 const VendorOrders = () => {
-    const ws = useRef(new WebSocket(environment.WEB_SOCKET_API_URL)).current;
+    const user = useSelector((state) => state.user.loggedUserDetails);
+    const webSocketUrl = `ws://192.168.0.103:8005/ws/socket/user_to_seller/${user?.msb_code}`
+    const ws = useRef(new WebSocket(webSocketUrl)).current
     const [selectedTab, setSelectedTab] = useState(0);
     const storages = useSelector((state) => state?.storage?.list);
+    const route = useLocation()
     const {
         register,
         handleSubmit,
@@ -30,6 +35,7 @@ const VendorOrders = () => {
         toast.success("Filters clear");
     };
 
+
     const loadOptions = (_, callback) => {
         const uniqueNames = new Set();
         const uniqueProducts = storages
@@ -44,6 +50,29 @@ const VendorOrders = () => {
     const onSubmit = (data) => {
         console.log('data', data)
     }
+
+    useMemo(() => {
+        if(route?.pathname == '/vendor-orders'){
+            ws.open = () => {
+                console.log('WebSocket Client Connected');
+            };
+        
+            ws.onerror = (e) => {
+                console.log(e.message);
+            };
+        
+            ws.onmessage = (e) => {
+                const data = JSON.parse(e.data);
+                console.log("🚀 ~ file: VendorOrders.jsx:63 ~ useEffect ~ data:", data?.orderId)
+                window.alert(data?.orderId)
+            
+            };
+        }
+        else{
+            ws.close();
+        }
+    },[route])
+        
 
     // ====================== table columns ======================
     // ====================== Accepted Order =====================

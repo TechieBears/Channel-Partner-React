@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { getSingleRestaurant } from '../../../api'
 import SimpleGallery from '../../../components/Gallary/SimpleGallery'
 import DashboardForm from '../../../components/Modals/DashboardModals/DashboardForm'
+import moment from 'moment'
 
 export default function RestaurantRegister() {
     const [data, setData] = useState();
@@ -31,9 +32,13 @@ export default function RestaurantRegister() {
     ].filter(image => image.URL !== '' || image.URL !== null);
 
     const getDetails = () => {
-        getSingleRestaurant(User?.sellerId).then(res => {
-            setData(res)
-        })
+        try {
+            getSingleRestaurant(User?.sellerId).then(res => {
+                setData(res)
+            })
+        } catch (error) {
+            console.log('error', error)
+        }
     }
 
     useEffect(() => {
@@ -61,11 +66,11 @@ export default function RestaurantRegister() {
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Restaurant Opening Time</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.vendor?.shop_start_time == null ? 'Registration Pending' : data?.vendor?.shop_start_time}</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.vendor?.shop_start_time == null ? 'Registration Pending' : moment(data?.vendor?.shop_start_time, 'HH:mm').local().format('hh:mm A')}</h5>
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Restaurant Closing Time</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.vendor?.shop_end_time == null ? 'Registration Pending' : data?.vendor?.shop_end_time}</h5>
+                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.vendor?.shop_end_time == null ? 'Registration Pending' : moment(data?.vendor?.shop_end_time, 'HH:mm').local().format('hh:mm A')}</h5>
                             </div>
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Restaurant Pincode</h5>
@@ -92,18 +97,18 @@ export default function RestaurantRegister() {
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>IFSC Code</h5>
                                 <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.vendor?.ifsc_code == null || data?.vendor?.ifsc_code == '' ? 'Registration Pending' : data?.vendor?.ifsc_code}</h5>
                             </div>
-                            <div>
+                            {/* <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Adhar Card Number</h5>
                                 <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.adhar_card?.adhar_card == null ? 'Registration Pending' : data?.adhar_card?.adhar_card}</h5>
-                            </div>
+                            </div> */}
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>PAN Card Number</h5>
                                 <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.pan_card?.pan_card == null ? 'Registration Pending' : data?.pan_card?.pan_card}</h5>
                             </div>
-                            <div>
+                            {/* <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>GST Number</h5>
                                 <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.gst_number?.gst_number == null ? 'Registration PEnding' : data?.gst_number?.gst_number}</h5>
-                            </div>
+                            </div> */}
                             <div>
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Commision (%)</h5>
                                 <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.vendor?.insta_commison_percentage == null ? "Registration Pending" : data?.vendor?.insta_commison_percentage}</h5>

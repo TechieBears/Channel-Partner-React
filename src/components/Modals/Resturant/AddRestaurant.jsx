@@ -23,14 +23,20 @@ export default function AddRestaurant(props) {
         toggle();
         reset()
     }
-    const categories = ['Asian', 'Mexican', 'Italian', 'Russian cussion', 'Spanish', 'Comfort', 'American', 'North Indian', 'South Indian']
-
     const onSubmit = async (data) => {
-        let additionalData;
-        if (LoggedUserDetails?.role == "franchise") {
-            additionalData = { 'created_by': LoggedUserDetails?.userid }
+        let updateData
+        if (LoggedUserDetails?.role == 'franchise') {
+            updateData = {
+                ...data,
+                "vendor_type": 'restaurant',
+                'created_by': LoggedUserDetails?.userid
+            }
+        } else {
+            updateData = {
+                ...data,
+                "vendor_type": 'restaurant',
+            }
         }
-        let updateData = { ...data, "vendor_type": 'restaurant', ...additionalData }
         if (props?.button == 'edit') {
             try {
                 editRestaurant(props?.data?.user?.id, updateData).then(res => {
@@ -75,6 +81,15 @@ export default function AddRestaurant(props) {
             });
         }
     }, []);
+    useEffect(() => {
+        if(LoggedUserDetails?.role === 'franchise'){
+            reset({
+                pincode: LoggedUserDetails?.pincode,
+                city: LoggedUserDetails?.city,
+                state: LoggedUserDetails?.state,
+            })
+        }
+    },[LoggedUserDetails])
     return (
         <>
             {
@@ -189,9 +204,9 @@ export default function AddRestaurant(props) {
                                                                 type="text"
                                                                 placeholder='Password'
                                                                 className={inputClass}
-                                                                {...register('password', { required: true })}
+                                                                {...register('password', { required: true, pattern: /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).{8,}$/ })}
                                                             />
-                                                            {errors.password && <Error title='Password is Required*' />}
+                                                            {errors.password && <Error title={errors?.password ? 'Password should contain one special character and 8 digit long and must be combination of number and alphabets' : 'Password is required'} />}
                                                         </div>
                                                     }
                                                     <div className="">
@@ -215,6 +230,7 @@ export default function AddRestaurant(props) {
                                                             type="text"
                                                             placeholder='City'
                                                             className={inputClass}
+                                                            readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
                                                             {...register('city', { required: true })}
                                                         />
                                                         {errors.city && <Error title='Restaurant City is Required*' />}
@@ -227,6 +243,7 @@ export default function AddRestaurant(props) {
                                                             type="text"
                                                             placeholder='State'
                                                             className={inputClass}
+                                                            readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
                                                             {...register('state', { required: true })}
                                                         />
                                                         {errors.state && <Error title='Restaurant State is Required*' />}
@@ -252,6 +269,7 @@ export default function AddRestaurant(props) {
                                                             maxLength={6}
                                                             placeholder='PIN Code'
                                                             className={inputClass}
+                                                            readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
                                                             {...register('pincode', { required: "Pincode is required*", validate: validatePIN })}
                                                         />
                                                         {errors.pincode && <Error title={errors?.pincode?.message} />}

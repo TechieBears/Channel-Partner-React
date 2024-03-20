@@ -23,6 +23,11 @@ const AddProduct = (props) => {
     const [openGallery, setopenGallery] = useState(false);
     const [openGalleryModal, setopenGalleryModal] = useState(false);
     const [childData, setChildData] = useState([]);
+    let CatField = watch('product_category');
+    let subCatField
+    if (props?.category && props?.subCategory) {
+        subCatField = props?.subCategory.filter(item => item?.category == CatField);
+    }
     const closeBtn = () => {
         toggle();
         reset()
@@ -38,6 +43,7 @@ const AddProduct = (props) => {
             setopenGallery(false);
         }
     };
+
 
     const openMediaModal = () => {
         setopenGalleryModal(!openGalleryModal);
@@ -132,41 +138,60 @@ const AddProduct = (props) => {
                 await ImageUpload(data?.product_image_1[0], "shopProduct", "MainImage", data?.product_name)
                 data.product_image_1 = `${productLink}${data?.product_name}_MainImage_${data?.product_image_1[0]?.name}`
             } else {
-                console.log('Product image1 else')
-                data.product_image_1 = props?.row?.product_image_1
+                if (childData[0]?.media_url) {
+                    data.product_image_1 = childData[0]?.media_url
+                } else {
+                    data.product_image_1 = props?.row?.product_image_1
+                }
             }
             if (data?.product_image_2?.length > 0) {
                 await ImageUpload(data?.product_image_2[0], "shopProduct", "Image2", data?.product_name)
                 data.product_image_2 = `${productLink}${data?.product_name}_Image2_${data?.product_image_2[0]?.name}`
             } else {
-                data.product_image_2 = props?.row?.product_image_2
+                if (childData[1]?.media_url) {
+                    data.product_image_2 = childData[1]?.media_url
+                } else {
+                    data.product_image_2 = props?.row?.product_image_2
+                }
             }
             if (data?.product_image_3?.length > 0) {
                 await ImageUpload(data?.product_image_3[0], "shopProduct", "Image3", data?.product_name)
                 data.product_image_3 = `${productLink}${data?.product_name}_Image3_${data?.product_image_3[0]?.name}`
             } else {
-                data.product_image_3 = props?.row?.product_image_3
+                if (childData[2]?.media_url) {
+                    data.product_image_3 = childData[2]?.media_url
+                } else {
+                    data.product_image_3 = props?.row?.product_image_3
+                }
             }
             if (data?.product_image_4?.length > 0) {
                 await ImageUpload(data?.product_image_4[0], "shopProduct", "Image4", data?.product_name)
                 data.product_image_4 = `${productLink}${data?.product_name}_Image4_${data?.product_image_4[0]?.name}`
             } else {
-                data.product_image_4 = props?.row?.product_image_4
+                if (childData[3]?.media_url) {
+                    data.product_image_4 = childData[3]?.media_url
+                } else {
+                    data.product_image_4 = props?.row?.product_image_4
+                }
             }
             if (data?.product_image_5?.length > 0) {
                 await ImageUpload(data?.product_image_5[0], "shopProduct", "Image5", data?.product_name)
                 data.product_image_5 = `${productLink}${data?.product_name}_Image5_${data?.product_image_5[0]?.name}`
             } else {
-                data.product_image_5 = props?.row?.product_image_5
+                if (childData[4]?.media_url) {
+                    data.product_image_5 = childData[4]?.media_url
+                } else {
+                    data.product_image_5 = props?.row?.product_image_5
+                }
             }
-            if (data?.product_video_url?.length > 0 && props?.row?.product_video_url) {
+            if (data?.product_video_url?.length > 0) {
                 await ImageUpload(data?.product_video_url[0], "shopProduct", "Image5", data?.product_name)
                 data.product_video_url = `${productLink}${data?.product_name}_Image5_${data?.product_video_url[0]?.name}`
             } else {
                 data.product_video_url = props?.row?.product_video_url
             }
         } else {
-            if (data?.product_image_1?.length > 0 && childData[0]?.media_url != '') {
+            if (data?.product_image_1?.length > 0 && childData[0]?.media_url == '') {
                 await ImageUpload(data?.product_image_1[0], "shopProduct", "MainImage", data?.product_name)
                 data.product_image_1 = `${productLink}${data?.product_name}_MainImage_${data?.product_image_1[0]?.name}`
             } else {
@@ -176,7 +201,7 @@ const AddProduct = (props) => {
                     data.product_image_1 = ''
                 }
             }
-            if (data?.product_image_2?.length > 0 && childData[1]?.media_url != '') {
+            if (data?.product_image_2?.length > 0 && childData[1]?.media_url == '') {
                 await ImageUpload(data?.product_image_2[0], "shopProduct", "Image2", data?.product_name)
                 data.product_image_2 = `${productLink}${data?.product_name}_Image2_${data?.product_image_2[0]?.name}`
             } else {
@@ -186,7 +211,7 @@ const AddProduct = (props) => {
                     data.product_image_2 = ''
                 }
             }
-            if (data?.product_image_3?.length > 0 && childData[2]?.media_url != '') {
+            if (data?.product_image_3?.length > 0 && childData[2]?.media_url == '') {
                 await ImageUpload(data?.product_image_3[0], "shopProduct", "Image3", data?.product_name)
                 data.product_image_3 = `${productLink}${data?.product_name}_Image3_${data?.product_image_3[0]?.name}`
             } else {
@@ -196,7 +221,7 @@ const AddProduct = (props) => {
                     data.product_image_3 = ''
                 }
             }
-            if (data?.product_image_4?.length > 0 && childData[3]?.media_url != '') {
+            if (data?.product_image_4?.length > 0 && childData[3]?.media_url == '') {
                 await ImageUpload(data?.product_image_4[0], "shopProduct", "Image4", data?.product_name)
                 data.product_image_4 = `${productLink}${data?.product_name}_Image4_${data?.product_image_4[0]?.name}`
             } else {
@@ -206,7 +231,7 @@ const AddProduct = (props) => {
                     data.product_image_4 = ''
                 }
             }
-            if (data?.product_image_5?.length > 0 && childData[4]?.media_url != '') {
+            if (data?.product_image_5?.length > 0 && childData[4]?.media_url == '') {
                 await ImageUpload(data?.product_image_5[0], "shopProduct", "Image5", data?.product_name)
                 data.product_image_5 = `${productLink}${data?.product_name}_Image5_${data?.product_image_5[0]?.name}`
             } else {
@@ -268,7 +293,7 @@ const AddProduct = (props) => {
     }
 
     useEffect(() => {
-        if (LoggedUserDetails?.role == 'seller') {
+        if (LoggedUserDetails?.vendor_type == 'shop') {
             reset({
                 'product_name': props?.row?.product_name,
                 'product_category': props?.row?.product_category?.id,
@@ -336,8 +361,7 @@ const AddProduct = (props) => {
                 <button className='items-center p-1 bg-yellow-100 rounded-xl hover:bg-yellow-200' onClick={() => setOpen(true)}>
                     <Edit size={24} className='text-yellow-400' />
                 </button> :
-                <button className={`${formBtn1} flex`} onClick={() => setOpen(true)}>
-                    <Add className='text-white' />
+                <button className={`${formBtn1}`} onClick={() => setOpen(true)}>
                     {props?.title}
                 </button>}
             <Transition appear show={isOpen} as={Fragment}>
@@ -422,7 +446,7 @@ const AddProduct = (props) => {
                                                         >
                                                             <option value=''>Select</option>
                                                             {
-                                                                props?.subCategory?.map(item => (
+                                                                subCatField?.map(item => (
                                                                     <option key={item?.subcat_id} value={item?.subcat_id} >{item?.subcat_name}</option>
                                                                 ))
                                                             }
@@ -811,7 +835,7 @@ const AddProduct = (props) => {
                                                 id="mediaGalleryModal"
                                                 className="hidden"
                                                 title="Upload Image"
-                                                imageDetails={props?.imageDetails}
+                                                imageDetails={props?.ImageDetails}
                                                 setopenGalleryModal={openMediaModal}
                                                 sendDataToParent={receiveDataFromChild}
                                             />

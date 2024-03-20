@@ -123,7 +123,8 @@ const ProjectRoutes = () => {
                                             <Route path='/admin' element={<FranchiseeDashboard />} />
                                             <Route path="/profile" element={<UserProfile />} />
                                             <Route path='/analytics' element={<FranchiseeDashboard />} />
-                                            <Route path='/menu' element={<Menu />} />
+                                            <Route path="/menu" element={<Menu isrestaurant={false} />} />
+                                            <Route path="/restaurantmenu" element={<Menu isrestaurant={true} />} />
                                             <Route path='/orders' element={<Order />} />
                                             <Route path='/vendors' element={<FranchiseeVendors />} />
                                             <Route path="/vendors/vendors-detail/:id" element={<VendorDetails />} />
