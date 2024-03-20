@@ -84,7 +84,7 @@ function ViewAdminProduct() {
                    {product?.product_video_url != '' && <div className='p-4 space-y-2 '>
                         <p className='text-2xl font-semibold'>Product Video</p>
                         <div className='grid grid-cols-1 gap-5'>
-                            <video width="500" height="500" controls>
+                            <video width={500} height={300} controls>
                                 <source src={product?.product_video_url} type="video/mp4" />
                                 <source src={product?.product_video_url} type="video/x-m4v" />
                                 <source src={product?.product_video_url} type="video/*" />

@@ -149,7 +149,8 @@ function DriverDetail() {
                                 </div>
                                 <div>
                                     <h5 className='text-base capitalize font-tbPop text-slate-900'>Vehicle RC</h5>
-                                    <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.vehicle_rc == '' || data?.vehicle_rc == null || data?.vehicle_rc == undefined ? 'No rating' : data?.vehicle_rc}</h5>
+                                    <img src={data?.vehicle_rc == '' || data?.vehicle_rc == null || data?.vehicle_rc == undefined ? 'No rating' : data?.vehicle_rc} alt="" srcset="" />
+                                    {/* <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.vehicle_rc == '' || data?.vehicle_rc == null || data?.vehicle_rc == undefined ? 'No rating' : data?.vehicle_rc}</h5> */}
                                 </div>
                             </div>
                             <h6 className='pt-3 text-lg font-bold text-black font-tbMon'>Kyc Details</h6>
@@ -200,7 +201,7 @@ function DriverDetail() {
                             </div>
                             <h6 className='pt-3 text-lg font-bold text-black font-tbMon'>Driver Video</h6>
                             <div className='mt-3'>
-                                <video width="500" height="500" controls>
+                                <video width={500} height={300} controls>
                                     <source src={data?.video_url} type="video/mp4" />
                                     <source src={data?.video_url} type="video/x-m4v" />
                                     <source src={data?.video_url} type="video/*" />

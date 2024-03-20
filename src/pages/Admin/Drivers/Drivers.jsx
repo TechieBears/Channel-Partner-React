@@ -223,7 +223,7 @@ function Drivers() {
         { field: 'gender', header: 'Gender', body: (row) => <h6>{row?.user?.gender}</h6>, sortable: false },
         { field: 'phone_no', header: 'Phone No', body: (row) => <h6>{row?.user?.phone_no}</h6>, sortable: false },
         { field: 'pincode', header: 'Pincode', body: (row) => <h6>{row?.user?.pincode}</h6>, sortable: false },
-        { field: 'address', header: 'Address', body: (row) => <h6>{row?.user?.address}</h6>, sortable: false },
+        // { field: 'address', header: 'Address', body: (row) => <h6>{row?.user?.address}</h6>, sortable: false },
         { field: 'state', header: 'state', body: (row) => <h6>{row?.user?.state}</h6>, sortable: false },
         { field: 'city', header: 'city', body: (row) => <h6>{row?.user?.city}</h6>, sortable: false },
         { field: 'week_off', header: 'Week Off', body: (row) => <h6>{row?.week_off}</h6>, sortable: false },
