@@ -340,14 +340,14 @@ export default function BannerForm(props) {
                           {props?.button == "edit" &&
                             props?.data?.slide_url != "" &&
                             props?.data?.slide_url != undefined && (
-                              <label className="block mb-1 font-medium text-blue-800 text-md font-tb">
+                              <label className="block mb-1 font-medium text-blue-800 truncate text-md font-tb">
                                 {props?.data?.slide_url?.split("/").pop()}
                               </label>
                             )}
                           {errors.slide_url && (
                             <Error title={errors.slide_url?.message} />
                           )}
-                             <label className="block mb-1 font-medium text-blue-800 text-md font-tb">
+                             <label className="block mb-1 font-medium text-blue-800 truncate text-md font-tb">
                                 {/* {childData?.split("/").pop()} */}
                                 {childData}
                               </label>

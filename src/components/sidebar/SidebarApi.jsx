@@ -35,9 +35,9 @@ export const Admin = [
         link: '/vendors',
     },
     {
-        title: 'Resturants',
+        title: 'Restaurants',
         icon: <ChefHat />,
-        link: '/resturants',
+        link: '/restaurants',
     },
     {
         title: 'Drivers',

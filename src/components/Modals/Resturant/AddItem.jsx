@@ -307,7 +307,7 @@ function AddItem(props) {
                                                             onChange={handleFileChange}
                                                         />
                                                         {props?.button === 'edit' && props?.data.product_video_url && (
-                                                            <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
+                                                            <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate truncate'>
                                                                 {props?.data?.product_video_url?.name}
                                                             </label>
                                                         )}
@@ -350,7 +350,7 @@ function AddItem(props) {
                                                             placeholder='Upload Images...'
                                                             {...register("product_image_1",
                                                                 { required: props.title == 'Edit Product' ? false : true })} />
-                                                        {props?.title == 'Edit Product' && props?.row?.product_image_1 != '' && props?.row?.product_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
+                                                        {props?.title == 'Edit Product' && props?.row?.product_image_1 != '' && props?.row?.product_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate truncate'>
                                                             {props?.row?.product_image_1?.split('/').pop()}
                                                         </label>}
                                                         {errors.product_image_1 && <Error title='Main Image is required*' />}
@@ -366,7 +366,7 @@ function AddItem(props) {
                                                             {...register("product_image_2",
                                                             )}
                                                         />
-                                                        {props?.title == 'Edit Product' && props?.row?.product_image_2 != '' && props?.row?.product_image_2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
+                                                        {props?.title == 'Edit Product' && props?.row?.product_image_2 != '' && props?.row?.product_image_2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate truncate'>
                                                             {props?.row?.product_image_2?.split('/').pop()}
                                                         </label>}
                                                     </div>
@@ -379,7 +379,7 @@ function AddItem(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("product_image_3")} />
-                                                        {props?.title == 'edit' && props?.row?.product_image_3 != '' && props?.row?.product_image_3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
+                                                        {props?.title == 'edit' && props?.row?.product_image_3 != '' && props?.row?.product_image_3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate truncate'>
                                                             {props?.row?.product_image_3?.split('/').pop()}
                                                         </label>}
                                                     </div>
@@ -392,7 +392,7 @@ function AddItem(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("product_image_4")} />
-                                                        {props?.title == 'Edit Product' && props?.row?.product_image_4 != '' && props?.row?.product_image_4 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
+                                                        {props?.title == 'Edit Product' && props?.row?.product_image_4 != '' && props?.row?.product_image_4 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate truncate'>
                                                             {props?.row?.product_image_4?.split('/').pop()}
                                                         </label>}
                                                     </div>
@@ -405,7 +405,7 @@ function AddItem(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("product_image_5")} />
-                                                        {props?.title == 'Edit Product' && props?.row?.product_image_5 != '' && props?.row?.product_image_5 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
+                                                        {props?.title == 'Edit Product' && props?.row?.product_image_5 != '' && props?.row?.product_image_5 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate truncate'>
                                                             {props?.row?.product_image_5?.split('/').pop()}
                                                         </label>}
                                                     </div>

@@ -84,8 +84,8 @@ const ProjectRoutes = () => {
                                         <Route path="/restaurantmenu" element={<Menu isrestaurant={true} />} />
                                         <Route path='/product-list/product-details/:id' element={<ViewAdminProduct />} />
                                         <Route path='/food-list/food-details/:id' element={<FoodDetails />} />
-                                        <Route path="/resturants" element={<Restaurant />} />
-                                        <Route path="/resturants/restaurant-detail/:id" element={<RestaurantDetail />} />
+                                        <Route path="/restaurants" element={<Restaurant />} />
+                                        <Route path="/restaurants/restaurant-detail/:id" element={<RestaurantDetail />} />
                                         <Route path="/franchisee" element={<Franchisee />} />
                                         <Route path="/franchise/franchise-detail/:id" element={<FranchiseDetail />} />
                                         <Route path="/vendors" element={<Vendors />} />

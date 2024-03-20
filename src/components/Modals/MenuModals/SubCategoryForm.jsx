@@ -232,7 +232,7 @@ export default function SubCategoryForm(props) {
                           {props?.button == "edit" &&
                             props?.data.subcat_image != "" &&
                             props?.data.subcat_image != undefined && (
-                              <label className="block mb-1 font-medium text-blue-800 text-md font-tb truncate">
+                              <label className="block mb-1 font-medium text-blue-800 text-md font-tb truncate truncate">
                                 {props?.data?.subcat_image?.split("/").pop()}
                               </label>
                             )}

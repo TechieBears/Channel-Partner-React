@@ -647,8 +647,8 @@ export default function AddRestItem(props) {
                                                             onChange={handleSelectChange}
                                                             className={`${inputClass} !bg-slate-100`}
                                                         >
-                                                            <option value="false">I have a own Images</option>
-                                                            <option value="true">I Don't have a Images</option>
+                                                            <option value="false" defaultValue={childData} >I have a own Images</option>
+                                                            <option value="true"  >I Don't have a Images</option>
                                                         </select>
                                                     </div>}
                                                     {openGallery && (
@@ -681,10 +681,10 @@ export default function AddRestItem(props) {
                                                                     {...register("food_image_1", {
                                                                         required: props.button == 'edit' && (!childData[0]?.media_url || childData[0]?.media_url == '') && !props?.data?.food_image_1
                                                                     })} />
-                                                                {props?.button == 'edit' && props?.data?.food_image_1 != '' && props?.data?.food_image_1 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
+                                                                {props?.button == 'edit' && props?.data?.food_image_1 != '' && props?.data?.food_image_1 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 truncate font-tb'>
                                                                     {!childData[0] && props?.data?.food_image_1?.split('/').pop()}
                                                                 </label>}
-                                                                <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
+                                                                <label className='block mb-1 text-sm font-medium text-blue-800 truncate font-tb'>
                                                                     {childData[0]?.media_url?.split('/').pop()}
                                                                 </label>
                                                                 {errors.food_image_1 && <Error title='Main Image is required*' />}
@@ -699,10 +699,10 @@ export default function AddRestItem(props) {
                                                                     accept='image/jpeg,image/jpg,image/png'
                                                                     placeholder='Upload Images...'
                                                                     {...register("food_image_2")} />
-                                                                {props?.button == 'edit' && props?.data?.food_image_2 != '' && props?.data?.food_image_2 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
+                                                                {props?.button == 'edit' && props?.data?.food_image_2 != '' && props?.data?.food_image_2 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 truncate font-tb'>
                                                                     {!childData[1] && props?.data?.food_image_2?.split('/').pop()}
                                                                 </label>}
-                                                                <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
+                                                                <label className='block mb-1 text-sm font-medium text-blue-800 truncate font-tb'>
                                                                     {childData[1]?.media_url?.split('/').pop()}
                                                                 </label>
                                                             </div>
@@ -716,10 +716,10 @@ export default function AddRestItem(props) {
                                                                     accept='image/jpeg,image/jpg,image/png'
                                                                     placeholder='Upload Images...'
                                                                     {...register("food_image_3")} />
-                                                                {props?.button == 'edit' && props?.data?.food_image_3 != '' && props?.data?.food_image_3 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
+                                                                {props?.button == 'edit' && props?.data?.food_image_3 != '' && props?.data?.food_image_3 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 truncate font-tb'>
                                                                     {!childData[2] && props?.data?.food_image_3?.split('/').pop()}
                                                                 </label>}
-                                                                <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
+                                                                <label className='block mb-1 text-sm font-medium text-blue-800 truncate font-tb'>
                                                                     {childData[2]?.media_url?.split('/').pop()}
                                                                 </label>
                                                             </div>
@@ -733,10 +733,10 @@ export default function AddRestItem(props) {
                                                                     accept='image/jpeg,image/jpg,image/png'
                                                                     placeholder='Upload Images...'
                                                                     {...register("food_image_4")} />
-                                                                {props?.button == 'edit' && props?.data?.food_image_4 != '' && props?.data?.food_image_4 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
+                                                                {props?.button == 'edit' && props?.data?.food_image_4 != '' && props?.data?.food_image_4 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 truncate font-tb'>
                                                                     {!childData[3] && props?.data?.food_image_4?.split('/').pop()}
                                                                 </label>}
-                                                                <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
+                                                                <label className='block mb-1 text-sm font-medium text-blue-800 truncate font-tb'>
                                                                     {childData[3]?.media_url?.split('/').pop()}
                                                                 </label>
                                                             </div>
@@ -750,10 +750,10 @@ export default function AddRestItem(props) {
                                                                     accept='image/jpeg,image/jpg,image/png'
                                                                     placeholder='Upload Images...'
                                                                     {...register("food_image_5")} />
-                                                                {props?.button == 'edit' && props?.data?.food_image_5 != '' && props?.data?.food_image_5 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
+                                                                {props?.button == 'edit' && props?.data?.food_image_5 != '' && props?.data?.food_image_5 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 truncate font-tb'>
                                                                     {!childData[4] && props?.data?.food_image_5?.split('/').pop()}
                                                                 </label>}
-                                                                <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
+                                                                <label className='block mb-1 text-sm font-medium text-blue-800 truncate font-tb'>
                                                                     {childData[4]?.media_url?.split('/').pop()}
                                                                 </label>
                                                             </div>

@@ -164,7 +164,7 @@ const CustomFileUpload = () => {
                 {...register("media_url")}
               />
               {EditingData && EditingData?.media_url != '' && EditingData?.media_url != undefined &&
-                <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
+                <label className='block mb-1 text-sm font-medium text-blue-800 font-tb truncate'>
                   {EditingData?.media_url?.split('/').pop()}
                 </label>}
             </div>
