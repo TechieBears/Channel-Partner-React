@@ -324,8 +324,9 @@ export default function AddRestItem(props) {
                     'food_image_2': props?.row?.food_image_2,
                     'food_image_3': props?.row?.food_image_3,
                     'food_image_4': props?.row?.food_image_4,
-                    'food_image_5': props?.row?.food_image_5
+                    'food_image_5': props?.row?.food_image_5,
                 })
+                setValue('final_price', props?.final_price)
             }
         }
     }, [isOpen])
@@ -363,7 +364,7 @@ export default function AddRestItem(props) {
                 setValue('final_price', adminfinalprice?.toFixed(0));
             }
         }
-    }, [calculateRevenueAdmin])
+    }, [calculateRevenueAdmin, isOpen])
 
     return (
         <>

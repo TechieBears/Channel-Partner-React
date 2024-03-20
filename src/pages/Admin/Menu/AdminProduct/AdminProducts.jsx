@@ -225,7 +225,7 @@ const AdminProduct = (props) => {
 
                 let url = `${environment.baseUrl}app/all_products?product_name=${product_name}&product_msbcode=${product_msbcode}&franchise_msbcode=${franchise_msbcode?.value ? franchise_msbcode?.value : ''}&vendor_msbcode=${vendor_msbcode?.value ? vendor_msbcode?.value : ''}&product_category=${product_category?.value ? product_category?.value : ''}&product_subcategory=${product_subcategory?.value ? product_subcategory?.value : ''}`
                 await axios.get((props?.isrestaurant === false || props?.isrestaurant === undefined) ? url : restauranturl).then((res) => {
-                        setShopProducts(res?.data)
+                    setShopProducts(res?.data)
                     toast.success("Filters applied successfully")
                 }).catch((err) => {
                     console.log("🚀 ~ file: Resturant.jsx:75 ~ awaitaxios.get ~ err:", err)
@@ -314,7 +314,7 @@ const AdminProduct = (props) => {
             try {
                 editAdminFinalFood(row?.food_id, payload).then(res => {
                     if (res?.status == 'success') {
-                        toast?.success(res?.message)
+                        toast?.success('Verification Status Changed')
                         getRestaurantFoodItems();
                     } else {
                         console.log('error', res?.message)

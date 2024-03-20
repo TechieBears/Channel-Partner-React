@@ -194,7 +194,7 @@ const Step1 = (props) => {
                     step="any"
                     placeholder='Latitude'
                     className={inputClass}
-                    {...register('latitude', { required: manually })}
+                    {...register('latitude', { required: true })}
                 />
                 {errors.latitude && <Error title='Latitude Is required' />}
             </div>
@@ -207,9 +207,9 @@ const Step1 = (props) => {
                     step="any"
                     placeholder='Longitutde'
                     className={inputClass}
-                    {...register('longitude', { required: manually })}
+                    {...register('longitude', { required: true })}
                 />
-                {errors.longitude && <Error title='Longitude' />}
+                {errors.longitude && <Error title='Longitude is required' />}
             </div>
             <div className='md:col-span-2 lg:col-span-3 xl:grid-cols-3'>
                 {/* ============================= Maps start ============================= */}

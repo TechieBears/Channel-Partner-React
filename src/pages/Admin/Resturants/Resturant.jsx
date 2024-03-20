@@ -197,7 +197,7 @@ export default function Restaurant() {
   };
 
   // =============================== verify user switch =============================
-  const switchVerify = (row) => {
+  const adminVerify = (row) => {
     return (
       <div className="flex items-center justify-center gap-2 ">
         <Switch
@@ -246,19 +246,20 @@ export default function Restaurant() {
 
   const columns = [
     { field: "msb_code", header: "MSB", sortable: false },
-    { field: "shop_name", header: "Restaurant Name", body: (row) => (<h6>  {row?.shop_name == null ? "Registration Pending" : row?.shop_name}</h6>) },
-    { field: "shop_contact_number", header: "Restaurant Contact", body: (row) => (<h6>{row?.shop_contact_number == null ? "Registration Pending" : row?.shop_contact_number}</h6>) },
-    { field: "first_name", header: "Owner Name", body: (row) => (<div className="capitalize">{row?.user?.first_name + " " + row?.user?.last_name}</div>) },
-    { field: "phone_no", header: "Owner Phone No", body: (row) => <h6>{row?.user?.phone_no}</h6>, sortable: false },
-    { field: "email", header: "Email", body: (row) => <h6>{row?.user?.email}</h6>, sortable: false },
+    { field: "shop_name", header: "Restaurant Name", body: (row) => (<h6>  {row?.shop_name == null ? "Registration Pending" : row?.shop_name}</h6>), sortable: true },
+    { field: "shop_contact_number", header: "Restaurant Contact", body: (row) => (<h6>{row?.shop_contact_number == null ? "Registration Pending" : row?.shop_contact_number}</h6>), sortable: true },
+    { field: "first_name", header: "Owner Name", body: (row) => (<div className="capitalize">{row?.user?.first_name + " " + row?.user?.last_name}</div>), sortable: true },
+    { field: "phone_no", header: "Owner Phone No", body: (row) => <h6>{row?.user?.phone_no}</h6>, sortable: true },
+    { field: "email", header: "Email", body: (row) => <h6>{row?.user?.email}</h6>, sortable: true },
+    { field: "franchise", header: "Franchise", body: (row) => <h6>{row?.created_by?.first_name} {row?.created_by?.last_name}</h6>, sortable: true },
     { field: "insta_commison_percentage", header: "Comission(%)", body: (row) => <h6>{row?.insta_commison_percentage}%</h6>, sortable: false },
     { field: "pincode", header: "Pincode", body: (row) => <h6>{row?.user?.pincode}</h6>, sortable: false },
-    { field: "state", header: "state", body: (row) => <h6>{row?.user?.state}</h6>, sortable: false },
-    { field: "city", header: "city", body: (row) => <h6>{row?.user?.city}</h6>, sortable: false },
+    { field: "state", header: "state", body: (row) => <h6>{row?.user?.state}</h6>, sortable: true },
+    { field: "city", header: "city", body: (row) => <h6>{row?.user?.city}</h6>, sortable: true },
     { field: "registration_date", header: "Registration Date", body: (row) => <h6>{row?.user?.registration_date}</h6>, sortable: false },
-    { field: "status", header: "Status", body: activeActionsRole, sortable: false },
+    { field: "status", header: "Status", body: activeActionsRole, sortable: true },
     { field: "id", header: "Action", body: actionBodyTemplate, sortable: true },
-    { field: "isverify", header: "Admin Verify", body: switchVerify, sortable: true },
+    { field: "isverify", header: "Admin Verify", body: adminVerify, sortable: true },
     { field: "isactive", header: "Franchise Verify", body: switchActive, sortable: true },
   ];
 

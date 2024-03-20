@@ -227,7 +227,6 @@ const VendorProduct = () => {
                 console.log('error', error)
             }
         } else if (user?.vendor_type == 'shop' || user?.vendor_type == "seller") {
-            console.log('called')
             getProducts();
             shopCat();
             shopSubCat();
