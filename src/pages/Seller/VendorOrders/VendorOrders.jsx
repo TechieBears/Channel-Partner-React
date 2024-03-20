@@ -262,11 +262,9 @@ const VendorOrders = () => {
                                 <p className="font-semibold text-lg">Current Orders11</p>
                             </div>
                             {
-                                orders
-                                    ?.sort((a, b) => b.orderId - a.orderId)
-                                    ?.map(data => (
-                                        <Orders data={data} />
-                                    ))
+                                orders?.map(data => (
+                                    <Orders data={data} />
+                                ))
                             }
                         </div>
                     </TabPanel>

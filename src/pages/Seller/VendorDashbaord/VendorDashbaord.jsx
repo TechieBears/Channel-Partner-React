@@ -210,7 +210,6 @@ const Dashboard = () => {
                     <p className="font-semibold text-lg">Current Orders</p>
                     {
                         orders
-                            ?.sort((a, b) => b.orderId - a.orderId)
                             ?.map(data => (
                                 <Orders data={data} />
                             ))

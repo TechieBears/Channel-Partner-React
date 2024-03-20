@@ -12,11 +12,13 @@ function Orders({ data }) {
     const [status, setstatus] = useState('pending')
     const [details, setDetails] = useState(false)
     const user = useSelector(state => state?.user?.loggedUserDetails)
-    const WebSocketUrl = `${environment.webSocketUrl}seller_to_user/${user?.msb_code}${data?.orderId != null ? data?.orderId : ''}`;
-    const ws = useRef(new WebSocket(WebSocketUrl)).current
+    // console.log('user', user)
+    // =============== Orders Web Socket =============================
+    const WebSocketUrl = `${environment.webSocketUrl}user_to_seller/${user?.msb_code}${data?.orderId != null ? data?.orderId : ''}`;
+    const ws = new WebSocket(WebSocketUrl)
     const wsFunction = () => {
         if (ws && ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({ orderdetails: data?.orderId, ordeStatus: status, }))
+            ws.send(JSON.stringify({ orderdetails: data?.orderId, ordestatus: status, orderfor: user?.vendor_type == 'restaurant' ? 'restaurant' : 'vendor', messagefor: 'user' }))
         } else {
             console.log("WebSocket connection not open.");
         }
