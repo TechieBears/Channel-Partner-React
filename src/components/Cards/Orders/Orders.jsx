@@ -51,8 +51,8 @@ function Orders({ data }) {
                         <p className="font-semibold">{data?.orderedItems?.user?.first_name} {data?.orderedItems?.user?.last_name}</p>
                     </div>
                     <div className="flex items-center justify-start gap-2">
-                        <div className={`${status === 'pending' ? 'bg-red-500' : 'bg-green-500'} p-2 font-sans rounded-full w-1 h-1/4`} />
-                        <p className={`font-semibold font-sans capitalize ${status === 'pending' ? 'text-red-500' : 'text-green-500'}`}>{status}</p>
+                        <div className={`${status === 'pending' ? 'bg-red-500' : status === 'accepted' ? 'bg-red-500' : status === 'prepared' ? 'bg-red-500' : 'bg-green-500'} p-2 font-sans rounded-full w-1 h-1/4`} />
+                        <p className={`font-semibold font-sans capitalize ${status === 'pending' ? 'text-red-500' : status === 'accepted' ? 'text-yelow-500' : status === 'prepared' ? 'text-yelow-500' : 'text-green-500'}`}>{status}</p>
                     </div>
                     <div className="flex items-center gap-2 justify-center">
                         {status == 'pending' ?
@@ -65,6 +65,12 @@ function Orders({ data }) {
                         }
                         {
                             status === 'accepted' && <button className="bg-gray-400 py-2 px-4 rounded-lg font-medium text-black" onClick={() => changeStatus({ status: 'prepared' })}>Mark as Prepared</button>
+                        }
+                        {
+                            status === 'prepared' && <button className="bg-gray-400 py-2 px-4 rounded-lg font-medium text-black" onClick={() => changeStatus({ status: 'picked' })}>Mark as Picked</button>
+                        }
+                        {
+                            status === 'picked' && <button className="bg-gray-400 py-2 px-4 rounded-lg font-medium text-black" onClick={() => changeStatus({ status: 'pending' })}>Done</button>
                         }
                     </div>
                     <div className="flex items-center justify-center">
