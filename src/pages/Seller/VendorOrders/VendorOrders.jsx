@@ -1,6 +1,6 @@
 import { ClipboardTick, Eye, Trash } from 'iconsax-react';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
@@ -9,9 +9,13 @@ import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { toast } from 'react-toastify';
 import Orders from '../../../components/Cards/Orders/Orders';
 import Table from '../../../components/Table/Table';
+import { environment } from '../../../env';
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 
 const VendorOrders = () => {
+    const user = useSelector((state) => state.user.loggedUserDetails);
+    const webSocketUrl = `${environment.webSocketUrl}user_to_seller/${user?.msb_code}`
+    const ws = new WebSocket(webSocketUrl)
     const [selectedTab, setSelectedTab] = useState(0);
     const storages = useSelector((state) => state?.storage?.list);
     const orders = useSelector(state => state?.orders?.newOrders);
@@ -34,6 +38,7 @@ const VendorOrders = () => {
         toast.success("Filters clear");
     };
 
+
     const loadOptions = (_, callback) => {
         const uniqueNames = new Set();
         const uniqueProducts = storages
@@ -48,6 +53,26 @@ const VendorOrders = () => {
     const onSubmit = (data) => {
         // console.log('data', data)
     }
+
+    useEffect(() => {
+        ws.open = () => {
+            console.log('WebSocket Client Connected');
+        };
+        ws.onerror = (e) => {
+            console.log(e.message);
+        };
+
+        ws.onmessage = (e) => {
+            const data = JSON.parse(e.data);
+            console.log("🚀 ~ file: VendorOrders.jsx:63 ~ useEffect ~ data:", data?.orderId)
+            window.alert(data?.orderId)
+
+        };
+        return () => {
+            // ws.close()
+        }
+    }, [ws])
+
 
     // ====================== table columns ======================
     // ====================== Accepted Order =====================
@@ -159,6 +184,8 @@ const VendorOrders = () => {
         { field: "action", header: "Action", body: action, sortable: true },
     ];
 
+
+
     return (
         <>
             <div className="p-4 m-4 bg-white sm:m-5 rounded-xl">
@@ -262,11 +289,9 @@ const VendorOrders = () => {
                                 <p className="font-semibold text-lg">Current Orders11</p>
                             </div>
                             {
-                                orders
-                                    ?.sort((a, b) => b.orderId - a.orderId)
-                                    ?.map(data => (
-                                        <Orders data={data} />
-                                    ))
+                                orders?.map(data => (
+                                    <Orders data={data} />
+                                ))
                             }
                         </div>
                     </TabPanel>

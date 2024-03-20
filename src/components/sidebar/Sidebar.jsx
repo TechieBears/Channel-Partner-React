@@ -15,7 +15,7 @@ import SidebarLink from './SidebarLink';
 const Sidebar = ({ children }) => {
     const user = useSelector(state => state?.user?.loggedUserDetails)
     const WebSocketUrl = `${environment.webSocketUrl}user_to_seller/${user?.msb_code}`;
-    const ws = useRef(new WebSocket(WebSocketUrl)).current
+    const ws = new WebSocket(WebSocketUrl)
     const [isActiveLink, setIsActiveLink] = useState(false);
     const [mobileSidebar, setMobileSidebar] = useState(false);
     const dispatch = useDispatch()
@@ -23,23 +23,25 @@ const Sidebar = ({ children }) => {
     const timeoutId = useRef(null);
     const logoutTimeoutId = useRef(null);
     useEffect(() => {
+        console.log('effect ran')
         if (user?.role == 'seller') {
-            ws.open = () => {
-                console.log('WebSocket Client Connected');
-            };
-
-            ws.onerror = (e) => {
-                console.log(e.message);
-            };
+            // ws.open = () => {
+            //     console.log('WebSocket Client Connected');
+            // };
+            // ws.onerror = (e) => {
+            //     console.log(e.message);
+            // };
             ws.onmessage = (e) => {
                 const data = JSON.parse(e.data);
+                console.log('data=====================', data)
                 window.alert(data?.orderId)
                 dispatch(setOrders(data))
             };
         }
-        // } else {
-        //     ws.close();
-        // }
+        else {
+            ws.close();
+        }
+
     }, [ws])
 
     useEffect(() => {

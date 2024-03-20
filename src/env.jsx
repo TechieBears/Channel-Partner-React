@@ -1,20 +1,21 @@
 export const environment = {
     // --------------------Local Server Api URL--------------------
-    // baseUrl: 'http://192.168.0.152:8005/',
+    // baseUrl: 'http://192.168.0.151:8006/',
+    // webSocketUrl: "ws://192.168.0.151:8006/ws/socket/",
+
     // baseUrl: 'http://127.0.0.1:8000/',
-    // baseUrl: 'https://fa63-58-146-123-202.ngrok-free.app/',
 
     // ---------------- Staging Server --------------------------------
-    // baseUrl: 'https://5932-43-252-33-152.ngrok-free.app/',
+
 
     //================== DO NOT REMOVE ================
-    // baseUrl: 'https://fa63-58-146-123-202.ngrok-free.app/',
-    webSocketUrl: `wss://fa63-58-146-123-202.ngrok-free.app/ws/socket/`,
+    baseUrl: 'https://b993-58-146-123-202.ngrok-free.app/',
+    webSocketUrl: `wss://b993-58-146-123-202.ngrok-free.app/ws/socket/`
 
 
 
     // --------------------Live Server Api URL--------------------
-    baseUrl: 'https://cpapi.techiebears.com/',
+    // baseUrl: 'https://cpapi.techiebears.com/',
     // webSocketUrl: `wss://cpapi.techiebears.com/ws/socket/`
 
 

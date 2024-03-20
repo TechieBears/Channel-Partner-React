@@ -1,32 +1,38 @@
 import { ArrowDown2, ArrowUp2, User } from 'iconsax-react'
-import { IndianRupeeIcon } from 'lucide-react'
 import moment from 'moment'
-import React, { useMemo, useRef, useState } from 'react'
-import { toast } from 'react-toastify'
-import { formBtn2 } from '../../../utils/CustomClass'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 import { environment } from '../../../env'
+import { formBtn2 } from '../../../utils/CustomClass'
 
 function Orders({ data }) {
-    // console.log('data?.orderID', data?.orderId)
     const [status, setstatus] = useState('pending')
     const [details, setDetails] = useState(false)
     const user = useSelector(state => state?.user?.loggedUserDetails)
-    const WebSocketUrl = `${environment.webSocketUrl}seller_to_user/${user?.msb_code}${data?.orderId != null ? data?.orderId : ''}`;
-    const ws = useRef(new WebSocket(WebSocketUrl)).current
-    const wsFunction = () => {
-        if (ws && ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({ orderdetails: data?.orderId, ordeStatus: status, }))
-        } else {
-            console.log("WebSocket connection not open.");
-        }
+    // =============== Orders Web Socket =============================
+    const wsFunction = (status) => {
+        const WebSocketUrl = `${environment.webSocketUrl}user_to_seller/${user?.msb_code}${data?.orderId != null ? data?.orderId : ''}`;
+        const ws = new WebSocket(WebSocketUrl);
+
+        ws.onopen = () => {
+            ws.send(JSON.stringify({ orderdetails: data?.orderId, orderstatus: status, orderfor: user?.vendor_type == 'restaurant' ? 'restaurant' : 'vendor', messagefor: 'user' }));
+        };
+
+        ws.onclose = (event) => {
+            console.log("WebSocket connection closed:", event);
+        };
+
+        ws.onerror = (error) => {
+            console.error("WebSocket encountered error:", error);
+        };
     }
 
     //===================== accept order api web socker =================
     const changeStatus = ({ status }) => {
-        console.log()
+        console.log("🚀 ~ file: Orders.jsx:29 ~ changeStatus ~ status:", status)
         setstatus(status)
-        wsFunction();
+        wsFunction(status);
         toast.success(`Order Statsus changes to ${status}`)
     }
     return (
@@ -45,8 +51,8 @@ function Orders({ data }) {
                         <p className="font-semibold">{data?.orderedItems?.user?.first_name} {data?.orderedItems?.user?.last_name}</p>
                     </div>
                     <div className="flex items-center justify-start gap-2">
-                        <div className={`${status === 'pending' ? 'bg-red-500' : status === 'accepted' ? 'bg-yellow-500' : 'bg-green-500'} p-2 font-sans rounded-full w-1 h-1/4`} />
-                        <p className={`font-semibold font-sans capitalize ${status === 'pending' ? 'text-red-500' : status === 'accepted' ? 'text-yellow-500' : 'text-green-500'}`}>{status}</p>
+                        <div className={`${status === 'pending' ? 'bg-red-500' : status === 'accepted' ? 'bg-red-500' : status === 'prepared' ? 'bg-red-500' : 'bg-green-500'} p-2 font-sans rounded-full w-1 h-1/4`} />
+                        <p className={`font-semibold font-sans capitalize ${status === 'pending' ? 'text-red-500' : status === 'accepted' ? 'text-yelow-500' : status === 'prepared' ? 'text-yelow-500' : 'text-green-500'}`}>{status}</p>
                     </div>
                     <div className="flex items-center justify-center gap-2">
                         {status == 'pending' ?
@@ -58,10 +64,13 @@ function Orders({ data }) {
                             </> : null
                         }
                         {
-                            status === 'accepted' && <button className="px-4 py-2 font-medium bg-gray-200 rounded-lg hover:bg-gray-300" onClick={() => changeStatus({ status: 'prepared' })}>Mark as prepared</button>
+                            status === 'accepted' && <button className="bg-gray-400 py-2 px-4 rounded-lg font-medium text-black" onClick={() => changeStatus({ status: 'prepared' })}>Mark as Prepared</button>
                         }
                         {
-                            status === 'prepared' && <button className="px-4 py-2 font-medium text-white bg-black rounded-lg" onClick={() => changeStatus({ status: 'pending' })}>Mark as Picked-up</button>
+                            status === 'prepared' && <button className="bg-gray-400 py-2 px-4 rounded-lg font-medium text-black" onClick={() => changeStatus({ status: 'picked' })}>Mark as Picked</button>
+                        }
+                        {
+                            status === 'picked' && <button className="bg-gray-400 py-2 px-4 rounded-lg font-medium text-black" onClick={() => changeStatus({ status: 'pending' })}>Done</button>
                         }
                     </div>
                     <div className="flex items-center justify-center">
