@@ -1,12 +1,14 @@
 import { Edit } from 'iconsax-react';
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../utils/CustomClass';
 import { Dialog, Transition } from '@headlessui/react';
 import Error from '../../../components/Errors/Error';
 import LoadBox from '../../../components/Loader/LoadBox';
-import { addPolicy } from '../../../api';
+import { addPolicy, editPrivacyPolicy } from '../../../api';
+import { toast } from 'react-toastify';
+
 
 export default function AddPolicyForm(props) {
     const [isOpen, setIsOpen] = useState(false)
@@ -19,19 +21,64 @@ export default function AddPolicyForm(props) {
         reset,
         formState: { errors },
     } = useForm();
-    const onSubmit = (data) => {
-        console.log('data', data);
-        addPolicy([data]).then((res) => {
-            console.log('res', res);
-        })
+
+
+
+    const onSubmit = async (data) => {
+        setLoader(true)
+        if (props.title != "Edit Privacy Policy") {      
+            try{
+                const response = await addPolicy(data);
+                if (response?.status == 'success') {
+                    props?.getAllPrivacyPolicy()
+                    toast.success('Privacy Policy added successfully');
+                    toggle();
+                    reset();
+                    setLoader(false)
+                } else{
+                    setLoader(false)
+                    toast.error('Error while adding privacy policy');
+                }
+            }catch(err){
+                setLoader(false)
+                console.log('err', err);
+            }
+        }else{
+            try{
+                const response = await editPrivacyPolicy(props?.id, data);
+                if (response?.status == 'success') {
+                    props?.getAllPrivacyPolicy()
+                    toast.success('Privacy Policy Edited successfully');
+                    toggle();
+                    reset();
+                    setLoader(false)
+                } else{
+                    setLoader(false)
+                    toast.error('Error while adding privacy policy');
+                }
+            }catch(err){
+                setLoader(false)
+                console.log('err', err);
+            }
+        }
     }
+
+
     const closeBtn = () => {
         toggle();
         setLoader(false);
     }
+
+    useEffect(() => {
+        reset({
+            "title": props?.policytitle,
+            "description": props?.policydesc
+        })
+    }, [])
+
     return (
         <>
-            {props.button !== "edit" ? (
+            {props.title != "Edit Privacy Policy" ? (
                 <button onClick={toggle} className={tableBtn}>
                     {props?.title}
                 </button>
@@ -77,7 +124,7 @@ export default function AddPolicyForm(props) {
                                         {/* React Hook Form */}
                                         <form onSubmit={handleSubmit(onSubmit)} >
                                             <div className="py-4 mx-4 customBox">
-                                                <div className="">
+                                                <div className="pb-3">
                                                     <label className={labelClass}>Policy Title*</label>
                                                     <input className={inputClass}
                                                         type='text'
@@ -85,7 +132,7 @@ export default function AddPolicyForm(props) {
                                                         {...register("title", { required: true })} />
                                                     {errors.title && <Error title='Policy Title is required*' />}
                                                 </div>
-                                                <div className="">
+                                                <div className="pb-3">
                                                     <label className={labelClass} >Policy Description*</label>
                                                     <textarea className={`${inputClass} h-36`}
                                                         type='text'

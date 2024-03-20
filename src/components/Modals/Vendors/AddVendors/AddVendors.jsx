@@ -14,8 +14,9 @@ import { setLoggedUser, setLoggedUserDetails, setRoleIs, setFranchiseeDetails } 
 import { useDispatch, useSelector } from "react-redux";
 import { ImageUpload, vendorlink } from "../../../../env";
 import { toast } from 'react-toastify';
-import { validateEmail, validateGST, validatePIN, validatePhoneNumber } from '../../../Validations.jsx/Validations';
+import { handleMobileNoNumericInput, validateEmail, validateGST, validatePANCard, validatePIN, validatePhoneNumber } from '../../../Validations.jsx/Validations';
 import moment from 'moment';
+import { validateAadharCard } from './../../../Validations.jsx/Validations';
 
 
 
@@ -26,10 +27,26 @@ export default function AddVendors(props) {
     const [loader, setLoader] = useState(false)
     const dispatch = useDispatch();
     const { register, handleSubmit, control, watch, reset, formState: { errors }, setValue } = useForm();
+    const SelectedFranchise = watch('created_by')
+    const gstNumber = watch('gst_number');
+
+
+
     const toggle = () => setOpen(!isOpen)
+
+    const pan_watch = watch('pan_url')
+    const adhar_watch = watch('adhar_url')
+    const gst_watch = watch('gst_url')
+
+
     const closeBtn = () => {
         toggle();
-        reset()
+        reset();
+        if (LoggedUserDetails?.role === 'franchise') {
+            setValue('pincode', LoggedUserDetails?.pincode)
+            setValue('state', LoggedUserDetails?.state)
+            setValue('city', LoggedUserDetails?.city)
+        }
     }
     const FranchiseeVendors = () => {
         try {
@@ -72,6 +89,24 @@ export default function AddVendors(props) {
             } else {
                 data.hawker_shop_photo = ''
             }
+            if (data?.gst_url.length != 0) {
+                await ImageUpload(data?.gst_url[0], "vendor", "GstImage", data?.first_name)
+                data.gst_url = `${vendorlink}${data?.first_name}_GstImage_${data?.gst_url[0].name}`
+              } else {
+                data.gst_url = ''
+              }
+              if (data?.adhar_url.length != 0) {
+                await ImageUpload(data?.adhar_url[0], "vendor", "adharImage", data?.first_name)
+                data.adhar_url = `${vendorlink}${data?.first_name}_adharImage_${data?.adhar_url[0].name}`
+              } else {
+                data.adhar_url = ''
+              }
+              if (data?.pan_url.length != 0) {
+                await ImageUpload(data?.pan_url[0], "vendor", "panImage", data?.first_name)
+                data.pan_url = `${vendorlink}${data?.first_name}_panImage_${data?.pan_url[0].name}`
+              } else {
+                data.pan_url = ''
+              }
         }
         else {          // for edit
             if (data?.bank_passbook != props?.data?.bank_passbook) {
@@ -98,6 +133,24 @@ export default function AddVendors(props) {
             } else {
                 data.hawker_shop_photo = props?.data?.hawker_shop_photo
             }
+            if (props?.data?.gst_url != data?.gst_url) {
+                await ImageUpload(data?.gst_url[0], "vendor", "GstImage", data?.first_name)
+                data.gst_url = `${vendorlink}${data?.first_name}_GstImage_${data?.gst_url[0].name}`
+              } else {
+                data.gst_url = props?.data?.gst_url
+              }
+              if (props?.data?.adhar_url != data?.adhar_url) {
+                await ImageUpload(data?.adhar_url[0], "vendor", "adharImage", data?.first_name)
+                data.adhar_url = `${vendorlink}${data?.first_name}_adharImage_${data?.adhar_url[0].name}`
+              } else {
+                data.adhar_url = props?.data?.adhar_url
+              }
+              if (props?.data?.pan_url != data?.pan_url) {
+                await ImageUpload(data?.pan_url[0], "vendor", "panImage", data?.first_name)
+                data.pan_url = `${vendorlink}${data?.first_name}_panImage_${data?.pan_url[0].name}`
+              } else {
+                data.pan_url = props?.data?.pan_url
+              }
         }
         if (props.button != 'edit') {   // for create
             try {
@@ -201,14 +254,25 @@ export default function AddVendors(props) {
     }, [props.data]);
 
     useEffect(() => {
+        if (SelectedFranchise?.length > 0 && isOpen && LoggedUserDetails?.role === 'admin') {
+            Franchisee.map((data) => {
+                if (data?.user?.id == SelectedFranchise) {
+                    setValue('pincode', data?.user?.pincode)
+                    setValue('state', data?.user?.state)
+                    setValue('city', data?.user?.city)
+                }
+            });
+        }
+    }, [SelectedFranchise]);
+
+    useEffect(() => {
         if (LoggedUserDetails?.role === 'franchise') {
-            reset({
-                pincode: LoggedUserDetails?.pincode,
-                state: LoggedUserDetails?.state,
-                city: LoggedUserDetails?.city,
-            })
+            setValue('pincode', LoggedUserDetails?.pincode)
+            setValue('state', LoggedUserDetails?.state)
+            setValue('city', LoggedUserDetails?.city)
         }
     }, [LoggedUserDetails])
+
     return (
         <>
             {props.button !== "edit" ? (
@@ -221,12 +285,6 @@ export default function AddVendors(props) {
                     className="bg-yellow-100 px-1.5 py-2 rounded-sm"><Edit size="20" className='text-yellow-500' />
                 </button>
             )}
-
-
-            {/* <button className={`${formBtn1} flex`} onClick={() => setOpen(true)}>
-                <Add className='text-white' />
-                {props?.title}
-            </button> */}
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-[100]" onClose={() => toggle}>
                     <Transition.Child
@@ -257,7 +315,7 @@ export default function AddVendors(props) {
                                         as="h2"
                                         className="w-full px-3 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
                                     >
-                                        Add Vendor
+                                        {props?.title}
                                     </Dialog.Title>
                                     <div className=" bg-gray-200/70">
                                         {/* React Hook Form */}
@@ -298,7 +356,7 @@ export default function AddVendors(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("profile_pic", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data?.user?.profile_pic != '' && props?.data?.user?.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                        {props?.button == 'edit' && props?.data?.user?.profile_pic != '' && props?.data?.user?.profile_pic != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                                                             {props?.data?.user?.profile_pic?.split('/').pop()}
                                                         </label>}
                                                         {errors.profile_pic && <Error title='Profile Image is required*' />}
@@ -339,14 +397,16 @@ export default function AddVendors(props) {
                                                     <div className="">
                                                         <label className={labelClass}>Mobile Number*</label>
                                                         <input
-                                                            type="tel"
+                                                            type='tel'
                                                             placeholder="Phone"
+                                                            maxLength={10}
                                                             className={inputClass}
+                                                            onKeyDown={handleMobileNoNumericInput}
                                                             {...register("phone_no", { required: true, validate: validatePhoneNumber })}
                                                         />
-                                                        {errors.phone_no && (
-                                                            <Error title={errors?.phone_no?.message} />
-                                                        )}
+                                                          {errors.phone_no && (
+                                                            <Error title={errors?.phone_no?.message ? errors?.phone_no?.message : 'Phone Number is Required'} />
+                                                            )}
                                                     </div>
                                                     {props.button != 'edit' &&
                                                         <div className="">
@@ -411,7 +471,7 @@ export default function AddVendors(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("hawker_shop_photo", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data.hawker_shop_photo != '' && props?.data.hawker_shop_photo != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                        {props?.button == 'edit' && props?.data.hawker_shop_photo != '' && props?.data.hawker_shop_photo != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                                                             {props?.data?.hawker_shop_photo?.split('/').pop()}
                                                         </label>}
                                                         {errors.hawker_shop_photo && <Error title='Shop Image is required*' />}
@@ -450,11 +510,11 @@ export default function AddVendors(props) {
                                                             maxLength={6}
                                                             placeholder="PINCODE"
                                                             className={inputClass}
-                                                            readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
+                                                            readOnly={true}
                                                             {...register("pincode", { required: true, validate: validatePIN })}
                                                         />
-                                                        {errors.pincode && (
-                                                            <Error title={errors?.pincode?.message} />
+                                                         {errors.pincode && (
+                                                            <Error title={errors?.pincode?.message ? errors?.pincode?.message : 'PinCode is Required'} />
                                                         )}
                                                     </div>
                                                     <div className="">
@@ -470,16 +530,16 @@ export default function AddVendors(props) {
                                                         )}
                                                     </div>
                                                     <div className="">
-                                                        <label className={labelClass}>State</label>
+                                                        <label className={labelClass}>State*</label>
                                                         <input
                                                             type="text"
                                                             placeholder="Enter State"
                                                             className={inputClass}
-                                                            readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
-                                                            {...register("state", { pattern: /^[A-Za-z]+$/i })}
+                                                            readOnly={true}
+                                                            {...register("state", { required: true, pattern: /^[A-Za-z]+$/i })}
                                                         />
-                                                        {errors.address && (
-                                                            <Error title={errors.address && 'State should contain All Alphabets'} />
+                                                        {errors.state && (
+                                                            <Error title={errors.state && 'State should contain All Alphabets'} />
                                                         )}
                                                     </div>
                                                     <div className="">
@@ -488,21 +548,22 @@ export default function AddVendors(props) {
                                                             type="text"
                                                             placeholder="City"
                                                             className={inputClass}
-                                                            readOnly={LoggedUserDetails?.role === 'franchise' ? true : false}
+                                                            readOnly={true}
                                                             {...register("city", { required: true, pattern: /^[A-Za-z]+$/i })}
                                                         />
-                                                        {errors.address && (
-                                                            <Error title={errors?.address ? 'State should contain All Alphabets' : 'City is Required'} />
+                                                        {errors.city && (
+                                                            <Error title={errors?.city ? 'City should contain All Alphabets' : 'City is Required'} />
                                                         )}
                                                     </div>
 
-                                                    {LoggedUserDetails?.role == 'admin' &&
+                                                    {LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise' &&
                                                         <div className="">
                                                             <label className={labelClass}>Insta Commission (%)*</label>
                                                             <input
                                                                 type="number"
                                                                 placeholder="10"
                                                                 className={inputClass}
+                                                                min={0}
                                                                 {...register("insta_commison_percentage", { required: true })}
                                                             />
                                                             {errors.address && (
@@ -518,54 +579,137 @@ export default function AddVendors(props) {
                                                         <label className={labelClass}>
                                                             Pan Card*
                                                         </label>
+                                                        <div className="flex items-center space-x-2">
+                                                            <input
+                                                                type="text"
+                                                                placeholder='PAN'
+                                                                className={inputClass}
+                                                                maxLength={10}
+                                                                {...register('pan_card', { required: true, validate: validatePANCard })}
+                                                            />
+                                                            <div className="">
+                                                                <label htmlFor='pan' className={`${pan_watch?.length || props?.data?.pan_url ? "bg-sky-400 text-white" : " bg-gray-300/80"}  transition-colors hover:bg-sky-400 font-tb font-semibold hover:text-white py-3 mt-10 px-5 rounded-md cursor-pointer`}>
+                                                                    Upload
+                                                                </label>
+                                                                <input className="hidden"
+                                                                    id="pan"
+                                                                    type='file'
+                                                                    multiple
+                                                                    accept='image/jpeg,image/jpg,image/png,application/pdf'
+                                                                    placeholder='Upload Images...'
+                                                                    {...register("pan_url", { required: true })} />
+                                                            </div>
+                                                        </div>
+                                                            {errors.pan_card && <Error title='PAN Card Number & Image is required' />}
+                                                    </div>
+                                                    {/* <div className="">
+                                                        <label className={labelClass}>
+                                                            Pan Card*
+                                                        </label>
                                                         <input
                                                             type="text"
                                                             placeholder='PAN  No'
                                                             className={inputClass}
-                                                            {...register('pan_card', { required: true })}
+                                                            maxLength={10}
+                                                            {...register('pan_card', { required: true, validate: validatePANCard })}
                                                         />
                                                         {errors?.pan_card && <Error title='Pan Card Number is required' />}
+                                                    </div> */}
+                                                     <div className="">
+                                                        <label className={labelClass}>
+                                                            Aadhar Card Number*
+                                                        </label>
+                                                        <div className="flex items-center space-x-2">
+                                                            <input
+                                                                type="number"
+                                                                maxLength={14}
+                                                                placeholder='Aadhar Card Number'
+                                                                className={inputClass}
+                                                                {...register('adhar_card', { required: true , validate: validateAadharCard })}
+                                                            />
+                                                            <div className="">
+                                                                <label htmlFor='adhar' className={`${adhar_watch?.length || props?.data?.adhar_url ? "bg-sky-400 text-white" : " bg-gray-300/80"}  transition-colors hover:bg-sky-400 font-tb font-semibold hover:text-white py-3 mt-10 px-5 rounded-md cursor-pointer`}>
+                                                                    Upload
+                                                                </label>
+                                                                <input className="hidden"
+                                                                    id="adhar"
+                                                                    type='file'
+                                                                    multiple
+                                                                    accept='image/jpeg,image/jpg,image/png,application/pdf'
+                                                                    placeholder='Upload Images...'
+                                                                    {...register("adhar_url", { required: true })} />
+                                                            </div>
+                                                        </div>
+                                                        {errors?.adhar_card && <Error title={errors?.adhar_card?.message ? errors?.adhar_card?.message : 'Aadhar Card Number & Image is required'} />}
                                                     </div>
-                                                    <div className="">
+                                                    {/* <div className="">
                                                         <label className={labelClass}>
                                                             Aadhar Card*
                                                         </label>
                                                         <input
                                                             type="text"
                                                             placeholder='Aadhar No'
+                                                            maxLength={14}
                                                             className={inputClass}
-                                                            {...register('adhar_card', { required: true })}
+                                                            {...register('adhar_card', { required: true, validate: validateAadharCard })}
                                                         />
                                                         {errors?.adhar_card && <Error title='Aadhar Card Number is required' />}
-                                                    </div>
-                                                    <div className="">
+                                                    </div> */}
+                                                       <div className="">
                                                         <label className={labelClass}>
                                                             GST Number*
+                                                        </label>
+                                                        <div className="flex items-center space-x-2">
+                                                            <input
+                                                                type="text"
+                                                                placeholder='GST Number*'
+                                                                className={inputClass}
+                                                                {...register('gst_number', {
+                                                                    required: 'GST Number is required*',
+                                                                    validate: validateGST
+                                                                })}
+                                                            />
+                                                            <div className="">
+                                                                <label htmlFor='gst' className={`${gst_watch?.length || props?.data?.gst_url ? "bg-sky-400 text-white" : " bg-gray-300/80"}  transition-colors hover:bg-sky-400 font-tb font-semibold hover:text-white py-3 mt-10 px-5 rounded-md cursor-pointer`}>
+                                                                    Upload
+                                                                </label>
+                                                                <input className="hidden"
+                                                                    id="gst"
+                                                                    type='file'
+                                                                    multiple
+                                                                    accept='image/jpeg,image/jpg,image/png,application/pdf'
+                                                                    placeholder='Upload Images...'
+                                                                    {...register("gst_url")} />
+                                                            </div>
+                                                        </div>
+                                                        {errors?.gst_number && <Error title={errors?.gst_number?.message ? errors?.gst_number?.message : 'GST Number is Requried'} />}
+                                                    </div>
+                                                    {/* <div className="">
+                                                        <label className={labelClass}>
+                                                            GST Number
                                                         </label>
                                                         <input
                                                             type="text"
                                                             placeholder='GST Number'
                                                             className={inputClass}
-                                                            {...register('gst_number', {
-                                                                required: 'GST is required*',
-                                                                validate: validateGST
-                                                            })}
+                                                            {...register('gst_number', { validate: (gstNumber != "" && gstNumber != null) ? validateGST : '' })}
+
                                                         />
                                                         {errors?.gst && <Error title={errors?.gst?.message} />}
-                                                    </div>
+                                                    </div> */}
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             Bank Name*
                                                         </label>
-                                                        <div className="flex items-center space-x-2">
+                                                        <div className="">
                                                             <input
                                                                 type="text"
                                                                 placeholder='Bank Name'
                                                                 className={inputClass}
                                                                 {...register('bank_name', { required: true })}
                                                             />
-                                                            {errors?.bank_name && <Error title='Bank name is Required' />}
                                                         </div>
+                                                        {errors?.bank_name && <Error title='Bank name is Required' />}
                                                     </div>
 
                                                     <div className="">
@@ -589,7 +733,7 @@ export default function AddVendors(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("bank_passbook", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data.bank_passbook != '' && props?.data.bank_passbook != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                        {props?.button == 'edit' && props?.data.bank_passbook != '' && props?.data.bank_passbook != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                                                             {props?.data?.bank_passbook?.split('/').pop()}
                                                         </label>}
                                                         {errors.bank_passbook && <Error title='Bank PassBook Image is required*' />}
@@ -615,10 +759,10 @@ export default function AddVendors(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("address_proof", { required: props.button == 'edit' ? false : true })} />
-                                                        {props?.button == 'edit' && props?.data.address_proof != '' && props?.data.address_proof != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                        {props?.button == 'edit' && props?.data.address_proof != '' && props?.data.address_proof != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                                                             {props?.data?.address_proof?.split('/').pop()}
                                                         </label>}
-                                                        {errors.address_proof && <Error title='Main Image is required*' />}
+                                                        {errors.address_proof && <Error title='Address Proof Image is required*' />}
                                                     </div>
                                                 </div>
                                             </div>

@@ -14,7 +14,7 @@ import AddDriverFrom from '../../../components/Modals/DriverModals/AddDriverForm
 import Table from '../../../components/Table/Table';
 import { environment } from '../../../env';
 import { setDeliveryList } from '../../../redux/Slices/deliverySlice';
-import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
+import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 
 function Drivers() {
     const dispatch = useDispatch()
@@ -127,7 +127,7 @@ function Drivers() {
             <Link to={`/drivers/driver-detail/${row.driver_id}`} state={row} className="bg-green-100 px-1.5 py-2 rounded-sm">
                 <Eye size="20" className='text-green-500' />
             </Link>
-            <AddDriverFrom button='edit' title='Edit User' data={row} DeliveryBoyDetails={DeliveryBoyDetails} />
+            <AddDriverFrom button='edit' title='Edit Driver' data={row} DeliveryBoyDetails={DeliveryBoyDetails} />
         </div>
     );
 
@@ -144,31 +144,10 @@ function Drivers() {
 
     // =================== table user verify column  ========================
     const activeActionsRole = (rowData) => (
-        <h6 className={`${rowData?.user?.isactive !== "false" ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"} py-2 px-5 text-center capitalize rounded-full`}>
-            {rowData?.user?.isactive !== "false" ? "Active" : "Inactive"}
+        <h6 className={`${rowData?.user?.isverified_byadmin !== false ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"} py-2 px-5 text-center capitalize rounded-full`}>
+            {rowData?.user?.isverified_byadmin !== false ? "Active" : "Inactive"}
         </h6>
     );
-
-
-    // ======================= Table Column Definitions =========================
-    // const columns = [
-    //     { field: 'id', header: 'ID', body: representativeBodyTemplate, sortable: true, style: true },
-    //     { field: 'image', header: 'IMAGE', body: (row) => <img src={row.image} alt={row.name} className="rounded-full w-11 h-11" />,  sortable: true},
-    //     { field: 'name', header: 'NAME', body: (row) => <div className="uppercase">{row.name}</div> },
-    //     { field: 'email', header: 'EMAIL', sortable: true },
-    //     { field: 'phone', header: 'PHONE', body: (row) => row.phone , sortable: true},
-    //     { field: 'occupation', header: 'OCCUPATION', body: (row) => row.occupation , sortable: true },
-    //     { field: 'restaurant', header: 'RESTAURANT', body: (row) => row.restaurant , sortable: true },
-    //     { field: 'Commission', header: 'COMMISSION', body: (row) => row.restaurantCommission },
-    //     { field: 'revenue', header: 'REVENUE', body: (row) => row.revenue },
-    //     { field: 'status', header: 'STATUS', sortable: true},
-    //     { field: 'action', header: 'ACTION', body: actionBodyTemplate, sortable: true },
-    // ];
-
-    const action = (row) => <button className={`${tableBtn}`} >
-        View Analysis
-    </button>
-
 
     // =============================== active user switch =============================
     const switchActive = (row) => {
@@ -220,17 +199,36 @@ function Drivers() {
     }
 
 
+    function parseShift(shiftString) {
+        const shift = {};
+        const lines = shiftString.split('\n');
+        lines.forEach(line => {
+          const [key, value] = line.split(':');
+          shift[key.trim()] = value?.trim();
+        });
+        console.log(shift)
+        return shift;
+      }
+
+
     const columns = [
         // { field: 'id', header: 'ID', sortable: false },
+        
+        { field: 'msb_code', header: 'MSBD Code', body: (row) => <h6>{row?.msb_code}</h6>, sortable: false },
         { field: 'profile_pic', header: 'Profile', body: representativeBodyTemplate, sortable: false, style: true },
         { field: 'first_name', body: (row) => <div className="capitalize">{row?.user?.first_name + " " + row?.user?.last_name}</div>, header: 'Name' },
         { field: 'email', header: 'Email', body: (row) => <h6>{row?.user?.email}</h6>, sortable: false },
+        { field: 'shift',  header: 'Shift Timing', body: (row) => <h6>{JSON.parse(row?.shift)?.title}</h6>, sortable: false },
+        { field: 'job_type',  header: 'Job Type', body: (row) => <h6>{JSON.parse(row?.job_type)?.title}</h6>, sortable: false },
         { field: 'gender', header: 'Gender', body: (row) => <h6>{row?.user?.gender}</h6>, sortable: false },
         { field: 'phone_no', header: 'Phone No', body: (row) => <h6>{row?.user?.phone_no}</h6>, sortable: false },
         { field: 'pincode', header: 'Pincode', body: (row) => <h6>{row?.user?.pincode}</h6>, sortable: false },
         { field: 'address', header: 'Address', body: (row) => <h6>{row?.user?.address}</h6>, sortable: false },
         { field: 'state', header: 'state', body: (row) => <h6>{row?.user?.state}</h6>, sortable: false },
         { field: 'city', header: 'city', body: (row) => <h6>{row?.user?.city}</h6>, sortable: false },
+        { field: 'week_off', header: 'Week Off', body: (row) => <h6>{row?.week_off}</h6>, sortable: false },
+        { field: 'vehicle_type', header: 'Vehicle Type', body: (row) => <h6>{row?.vehicle_type}</h6>, sortable: false },
+
         { field: 'registration_date', header: 'Registration Date', body: (row) => <h6>{row?.user?.registration_date}</h6>, sortable: false },
         { field: 'status', header: 'Status', body: activeActionsRole, sortable: false },
         { field: 'id', header: 'Action', body: actionBodyTemplate, sortable: true },
@@ -275,7 +273,7 @@ function Drivers() {
                                     <Select
                                         value={value}
                                         options={franchiseOptions}
-                                        className="w-100 text-gray-900"
+                                        className="text-gray-900 w-100"
                                         placeholder="Search By Franchise"
                                         onChange={onChange}
                                         inputRef={ref}
@@ -300,7 +298,7 @@ function Drivers() {
                                     <Select
                                         value={value}
                                         options={pincodeOptions}
-                                        className="w-100 text-gray-900"
+                                        className="text-gray-900 w-100"
                                         placeholder="Search By Pincode"
                                         onChange={onChange}
                                         inputRef={ref}

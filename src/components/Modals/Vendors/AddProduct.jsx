@@ -131,10 +131,9 @@ const AddProduct = (props) => {
     };
 
     const onSellerSubmit = async (data) => {
-        console.log('seller payload = ', data);
+        setLoader(true);
         if (props?.title == 'Edit Product') {
             if (data?.product_image_1?.length > 0) {
-                console.log('Product image1 if')
                 await ImageUpload(data?.product_image_1[0], "shopProduct", "MainImage", data?.product_name)
                 data.product_image_1 = `${productLink}${data?.product_name}_MainImage_${data?.product_image_1[0]?.name}`
             } else {
@@ -191,7 +190,7 @@ const AddProduct = (props) => {
                 data.product_video_url = props?.row?.product_video_url
             }
         } else {
-            if (data?.product_image_1?.length > 0 && childData[0]?.media_url == '') {
+            if (data?.product_image_1?.length > 0 && (childData[0]?.media_url == undefined || childData[0]?.media_url == '')) {
                 await ImageUpload(data?.product_image_1[0], "shopProduct", "MainImage", data?.product_name)
                 data.product_image_1 = `${productLink}${data?.product_name}_MainImage_${data?.product_image_1[0]?.name}`
             } else {
@@ -201,7 +200,7 @@ const AddProduct = (props) => {
                     data.product_image_1 = ''
                 }
             }
-            if (data?.product_image_2?.length > 0 && childData[1]?.media_url == '') {
+            if (data?.product_image_2?.length > 0 && (childData[1]?.media_url == undefined || childData[1]?.media_url == '')) {
                 await ImageUpload(data?.product_image_2[0], "shopProduct", "Image2", data?.product_name)
                 data.product_image_2 = `${productLink}${data?.product_name}_Image2_${data?.product_image_2[0]?.name}`
             } else {
@@ -211,7 +210,7 @@ const AddProduct = (props) => {
                     data.product_image_2 = ''
                 }
             }
-            if (data?.product_image_3?.length > 0 && childData[2]?.media_url == '') {
+            if (data?.product_image_3?.length > 0 && (childData[2]?.media_url == undefined || childData[2]?.media_url == '')) {
                 await ImageUpload(data?.product_image_3[0], "shopProduct", "Image3", data?.product_name)
                 data.product_image_3 = `${productLink}${data?.product_name}_Image3_${data?.product_image_3[0]?.name}`
             } else {
@@ -221,7 +220,7 @@ const AddProduct = (props) => {
                     data.product_image_3 = ''
                 }
             }
-            if (data?.product_image_4?.length > 0 && childData[3]?.media_url == '') {
+            if (data?.product_image_4?.length > 0 && (childData[3]?.media_url == undefined || childData[3]?.media_url == '')) {
                 await ImageUpload(data?.product_image_4[0], "shopProduct", "Image4", data?.product_name)
                 data.product_image_4 = `${productLink}${data?.product_name}_Image4_${data?.product_image_4[0]?.name}`
             } else {
@@ -231,7 +230,7 @@ const AddProduct = (props) => {
                     data.product_image_4 = ''
                 }
             }
-            if (data?.product_image_5?.length > 0 && childData[4]?.media_url == '') {
+            if (data?.product_image_5?.length > 0 && (childData[4]?.media_url == undefined || childData[4]?.media_url == '')) {
                 await ImageUpload(data?.product_image_5[0], "shopProduct", "Image5", data?.product_name)
                 data.product_image_5 = `${productLink}${data?.product_name}_Image5_${data?.product_image_5[0]?.name}`
             } else {
@@ -250,50 +249,68 @@ const AddProduct = (props) => {
         }
         if (props?.title == 'Edit Product') {
             var updatedData = { ...data, vendor: props?.row?.vendor?.vendor_id }
-            editVendorProduct(props?.row?.product_id, updatedData).then(res => {
-                if (res?.status == 'success') {
-                    props?.getProducts()
-                    toast.success('Product updated successfully')
-                    toggle();
-                    reset();
-                    setopenGallery(false);
-                    setopenGalleryModal(false);
-                    setChildData([])
-                }
-            })
+            try {
+                editVendorProduct(props?.row?.product_id, updatedData).then(res => {
+                    if (res?.status == 'success') {
+                        setLoader(false);
+                        props?.getProducts()
+                        toast.success('Product updated successfully')
+                        toggle();
+                        reset();
+                        setopenGallery(false);
+                        setopenGalleryModal(false);
+                        setChildData([])
+                    }
+                })
+            } catch (error) {
+                console.log('error', error)
+            }
         } else {
             var updatedData = { ...data, vendor: LoggedUserDetails?.sellerId, final_price: FinalPriceSeller }
-            console.log(updatedData)
-            addProduct(updatedData).then((res) => {
-                if (res?.status == 'success') {
-                    props?.getProducts()
-                    toast.success('Product Added Successfully')
-                    toggle();
-                    props?.getProducts();
-                    reset();
-                    setopenGallery(false);
-                    setopenGalleryModal(false);
-                    setChildData([])
-                } else {
-                    toast.error('Error while creating product')
-                }
-            })
+            try {
+                addProduct(updatedData).then((res) => {
+                    if (res?.status == 'success') {
+                        props?.getProducts()
+                        toast.success('Product Added Successfully')
+                        toggle();
+                        props?.getProducts();
+                        reset();
+                        setopenGallery(false);
+                        setopenGalleryModal(false);
+                        setChildData([])
+                        setLoader(false);
+                    } else {
+                        toast.error('Error while creating product')
+                        setLoader(false);
+                    }
+                })
+            } catch (error) {
+                console.log('error', error);
+            }
         }
     }
 
     const onAdminSubmit = async (data) => {
         var updatedData = { ...data, vendor: props?.row?.vendor?.vendor_id }
-        editAdminFinalProduct(props?.row?.product_id, updatedData).then(res => {
-            if (res?.status == 'success') {
-                props?.getProducts()
-                toast.success('Product updated successfully')
-                toggle();
+        if (updatedData?.final_price != '0' && updatedData?.markup_percentage != '0') {
+            try {
+                editAdminFinalProduct(props?.row?.product_id, updatedData).then(res => {
+                    if (res?.status == 'success') {
+                        props?.getProducts()
+                        toast.success('Product updated successfully')
+                        toggle();
+                    }
+                })
+            } catch (error) {
+                console.log('error', error)
             }
-        })
+        } else {
+            toast.error('Please add markup')
+        }
     }
 
     useEffect(() => {
-        if (LoggedUserDetails?.vendor_type == 'shop') {
+        if (LoggedUserDetails?.vendor_type == 'seller' || LoggedUserDetails?.vendor_type == 'shop') {
             reset({
                 'product_name': props?.row?.product_name,
                 'product_category': props?.row?.product_category?.id,
@@ -573,6 +590,7 @@ const AddProduct = (props) => {
                                                                 </label>
                                                                 <input
                                                                     type="number"
+                                                                    min={0}
                                                                     placeholder='0.00'
                                                                     className={inputClass}
                                                                     {...register('markup_percentage', { required: true })} />
@@ -632,7 +650,7 @@ const AddProduct = (props) => {
                                                             onChange={handleFileChange}
                                                         />
                                                         {props?.button === 'edit' && props?.data.product_video_url && (
-                                                            <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                                                                 {props?.data?.product_video_url?.name}
                                                             </label>
                                                         )}
@@ -736,10 +754,10 @@ const AddProduct = (props) => {
                                                                     {...register("product_image_1", {
                                                                         required: props.title == 'Edit Product' && (!childData[0]?.media_url || childData[0]?.media_url == '') && !props?.row?.product_image_1
                                                                     })} />
-                                                                {props?.title == 'Edit Product' && props?.row?.product_image_1 != '' && props?.row?.product_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                {props?.title == 'Edit Product' && props?.row?.product_image_1 != '' && props?.row?.product_image_1 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {!childData[0] && props?.row?.product_image_1?.split('/').pop()}
                                                                 </label>}
-                                                                <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {childData[0]?.media_url?.split('/').pop()}
                                                                 </label>
 
@@ -759,10 +777,10 @@ const AddProduct = (props) => {
                                                                     {...register("product_image_2",
                                                                     )}
                                                                 />
-                                                                {props?.title == 'Edit Product' && props?.row?.product_image_2 != '' && props?.row?.product_image_2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                {props?.title == 'Edit Product' && props?.row?.product_image_2 != '' && props?.row?.product_image_2 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {!childData[1] && props?.row?.product_image_2?.split('/').pop()}
                                                                 </label>}
-                                                                <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {childData[1]?.media_url?.split('/').pop()}
                                                                 </label>
                                                                 {/* {errors.product_image_2 && <Error title='Profile Image is required*' />} */}
@@ -777,10 +795,10 @@ const AddProduct = (props) => {
                                                                     accept='image/jpeg,image/jpg,image/png'
                                                                     placeholder='Upload Images...'
                                                                     {...register("product_image_3")} />
-                                                                {props?.title == 'Edit Product' && props?.row?.product_image_3 != '' && props?.row?.product_image_3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                {props?.title == 'Edit Product' && props?.row?.product_image_3 != '' && props?.row?.product_image_3 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {!childData[2] && props?.row?.product_image_3?.split('/').pop()}
                                                                 </label>}
-                                                                <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {childData[2]?.media_url?.split('/').pop()}
                                                                 </label>
                                                                 {/* {errors.product_image_3 && <Error title='Profile Image is required*' />} */}
@@ -795,10 +813,10 @@ const AddProduct = (props) => {
                                                                     accept='image/jpeg,image/jpg,image/png'
                                                                     placeholder='Upload Images...'
                                                                     {...register("product_image_4")} />
-                                                                {props?.title == 'Edit Product' && props?.row?.product_image_4 != '' && props?.row?.product_image_4 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                {props?.title == 'Edit Product' && props?.row?.product_image_4 != '' && props?.row?.product_image_4 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {!childData[3] && props?.row?.product_image_4?.split('/').pop()}
                                                                 </label>}
-                                                                <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {childData[3]?.media_url?.split('/').pop()}
                                                                 </label>
                                                                 {/* {errors.product_image_4 && <Error title='Profile Image is required*' />} */}
@@ -813,10 +831,10 @@ const AddProduct = (props) => {
                                                                     accept='image/jpeg,image/jpg,image/png'
                                                                     placeholder='Upload Images...'
                                                                     {...register("product_image_5")} />
-                                                                {props?.title == 'Edit Product' && props?.row?.product_image_5 != '' && props?.row?.product_image_5 != undefined && <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                {props?.title == 'Edit Product' && props?.row?.product_image_5 != '' && props?.row?.product_image_5 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {!childData[4] && props?.row?.product_image_5?.split('/').pop()}
                                                                 </label>}
-                                                                <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {childData[4]?.media_url?.split('/').pop()}
                                                                 </label>
                                                                 {/* {errors.product_image_5 && <Error title='Profile Image is required*' />} */}

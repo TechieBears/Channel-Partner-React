@@ -147,7 +147,6 @@ export const createCategory = async (data) => {
 
 /* ================== Restaurant Category Post API =========== */
 export const createRestaurantCategory = async (data) => {
-    // const url = `${environment.baseUrl}movable-category`;
     const url = `${environment.baseUrl}app/rescategory-list`;
     try {
         const response = await axios.post(url, data)
@@ -170,7 +169,6 @@ export const createSubCategory = async (data) => {
     }
 };
 export const createRestaurantSubCategory = async (data) => {
-    // const url = `${environment.baseUrl}movable-category`;
     const url = `${environment.baseUrl}app/get-ressubcategory`;
     try {
         const response = await axios.post(url, data)
@@ -273,6 +271,18 @@ export const EditFranchiseeVendors = async (id, data) => {
     }
 };
 
+//================= get single vendor =======================
+export const getSingleShop = async (id,) => {
+    const url = `${environment.baseUrl}vendor/edit_vendor/${id}`;
+    try {
+        const response = await axios.get(url)
+        return response.data
+    }
+    catch (err) {
+        console.log(err);
+    }
+};
+
 /* ================== Get Vendors For Admin Api =========== */
 export const GetFranchiseeVendors = async (data) => {
     const url = `${environment.baseUrl}vendor/create_vendor`;
@@ -335,7 +345,7 @@ export const addRestaurant = async (data) => {
     }
 }
 
-/* ========================== get all Restaurant =========================== */
+/* ========================== get all Restaurant for Admin =========================== */
 export const getRestarant = async () => {
     const url = `${environment.baseUrl}vendor/create_restaurant`;
     try {
@@ -732,6 +742,15 @@ export const addPolicy = async (data) => {
         console.log(error)
     }
 }
+export const editPrivacyPolicy = async (id, data) => {
+    const url = `${environment.baseUrl}app/edit_privacy_policy/${id}`
+    try {
+        const response = await axios.put(url, data);
+        return response.data;
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 export const getPolicy = async () => {
     const url = `${environment.baseUrl}app/privacy-policy`
@@ -741,6 +760,56 @@ export const getPolicy = async () => {
     }
     catch (error) {
         console.log(error)
+    }
+}
+export const editHelpCenter = async (id, data) => {
+    const url = `${environment.baseUrl}app/edit_customer_support/${id}`
+    try {
+        const response = await axios.put(url, data);
+        return response.data;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const addHelpCenter = async (data) => {
+    const url = `${environment.baseUrl}app/customer-support`
+    try {
+        const response = await axios.post(url, data);
+        return response.data
+    }
+    catch (error) {
+        console.log(error)
+    }
+}
+
+export const getHelpCenter = async () => {
+    const url = `${environment.baseUrl}app/customer-support`
+    try {
+        const response = await axios.get(url);
+        return response.data
+    }
+    catch (error) {
+        console.log(error)
+    }
+}
+
+export const deletePrivacyPolicy = async (id) => {
+    const url = `${environment.baseUrl}app/edit_privacy_policy/${id}`;
+    try {
+        const response = await axios.delete(url);
+        return response.data;
+    } catch (err) {
+        console.log('error while posting data', err)
+    }
+}
+export const deleteHelpSupportbyId = async (id) => {
+    const url = `${environment.baseUrl}app/edit_customer_support/${id}`;
+    try {
+        const response = await axios.delete(url);
+        return response.data;
+    } catch (err) {
+        console.log('error while posting data', err)
     }
 }
 
@@ -887,7 +956,6 @@ export const getProductById = async (id) => {
     const url = `${environment.baseUrl}vendor/edit_product/${id}`;
     try {
         const response = await axios.get(url, id);
-        // console.log('response', response)
         return response.data
     } catch (err) {
         console.log('error while getting vendor by id', err)
@@ -976,7 +1044,6 @@ export const deleteCoupon = async (id) => {
     const url = `${environment.baseUrl}app/edit_coupon/${id}`;
     try {
         const response = await axios.delete(url);
-        // console.log('response', response)
         return response.data;
     } catch (err) {
         console.log('error while posting data', err)
@@ -989,7 +1056,6 @@ export const registerRestaurant = async (data) => {
     const url = `${environment.baseUrl}vendor/onboard_restaurant`;
     try {
         const response = await axios.post(url, data);
-        // console.log('response', response)
         return response.data;
     } catch (err) {
         console.log('error while posting data', err)
@@ -1000,7 +1066,6 @@ export const editOnBoarding = async (id, data) => {
     const url = `${environment.baseUrl}vendor/editonboard_restaurant/${id}`;
     try {
         const response = await axios.put(url, data);
-        // console.log('response', response)
         return response.data;
     } catch (err) {
         console.log('error while posting data', err)
@@ -1011,7 +1076,6 @@ export const addFoodItem = async (data) => {
     const url = `${environment.baseUrl}vendor/add_restaurant_food`;
     try {
         const response = await axios.post(url, data);
-        // console.log('response', response)
         return response.data;
     } catch (err) {
         console.log('error while posting data', err)
@@ -1022,7 +1086,6 @@ export const editFoodItem = async (id, data) => {
     const url = `${environment.baseUrl}vendor/edit_restaurant_food/${id}`;
     try {
         const response = await axios.put(url, data);
-        // console.log('response', response)
         return response.data;
     } catch (err) {
         console.log('error while posting data', err)
@@ -1033,19 +1096,31 @@ export const deleteFoodItem = async (id) => {
     const url = `${environment.baseUrl}vendor/edit_restaurant_food/${id}`;
     try {
         const response = await axios.delete(url);
-        // console.log('response', response)
         return response.data;
     } catch (err) {
         console.log('error while posting data', err)
     }
 }
 
-export const getSingleRestaurant = async (id) => {
+export const getSingleRestaurant = async ({ id }) => {
     const url = `${environment.baseUrl}vendor/editonboard_restaurant/${id}`
     try {
         const response = await axios.get(url, id)
         return response.data
     } catch (error) {
         console.log('error while getting data', error)
+    }
+}
+
+//====================== session start api =================
+
+export const startSession = async (data) => {
+    const url = `${environment.baseUrl}vendor/seller_isopen`
+    try {
+        const response = await axios.post(url, data);
+        console.log('response', response)
+        return response.data
+    } catch (error) {
+        console.log('error', error)
     }
 }

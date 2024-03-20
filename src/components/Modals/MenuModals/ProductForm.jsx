@@ -199,7 +199,7 @@ export default function ProductForm(props) {
                           {props?.button == "edit" &&
                             props?.data.main_image != "" &&
                             props?.data.main_image != undefined && (
-                              <label className="block mb-1 font-medium text-blue-800 text-md font-tb">
+                              <label className="block mb-1 font-medium text-blue-800 text-md font-tb truncate">
                                 {props?.data?.main_image?.split("/").pop()}
                               </label>
                             )}

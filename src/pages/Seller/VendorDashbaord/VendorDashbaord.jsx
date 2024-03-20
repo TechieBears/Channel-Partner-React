@@ -1,15 +1,16 @@
 import {
     ArrowSwapVertical,
     ClipboardTick,
-    ShoppingCart, UserRemove
+    ShoppingCart,
+    UserRemove
 } from "iconsax-react";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 // import { deleteStorage, getPartnerStorage, getStorages } from "../../../api";
 import { Controller, useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 import AsyncSelect from "react-select/async";
 import { toast } from "react-toastify";
+import Orders from "../../../components/Cards/Orders/Orders";
 import DashboardForm from "../../../components/Modals/DashboardModals/DashboardForm";
 import DeleteModal from "../../../components/Modals/DeleteModal/DeleteModal";
 import { formBtn1, formBtn2, inputClass } from "../../../utils/CustomClass";
@@ -22,10 +23,9 @@ const Dashboard = () => {
     const user = useSelector((state) => state.user.loggedUserDetails);
     const storages = useSelector((state) => state?.storage?.list);
     const cityNames = useSelector((state) => state?.master?.city);
-    const dispatch = useDispatch();
     const [open, setOpen] = React.useState(false);
     const [delId, setDelId] = React.useState(0);
-
+    const orders = useSelector(state => state?.orders?.newOrders);
     const {
         register,
         handleSubmit,
@@ -82,65 +82,6 @@ const Dashboard = () => {
             }
         });
     };
-
-    // ====================== table columns ======================
-
-    const data = [
-        {
-            "orderId": 753,
-            "orderDate": "Jan 1, 2024 , 05:56 PM",
-            "items": [
-                {
-                    "name": "Butter Milk",
-                    "quantity": 7,
-                    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU",
-                    "description": "Lorem ipsum dolor, sit amet"
-                }
-            ],
-            "paymentMethod": "Cash",
-            "orderPrice": 1000
-        },
-        {
-            "orderId": 754,
-            "orderDate": "Jan 2, 2024 , 10:12 AM",
-            "items": [
-                {
-                    "name": "Chocolate Cake",
-                    "quantity": 2,
-                    "image": "https://example.com/cake.jpg",
-                    "description": "Delicious chocolate cake"
-                },
-                {
-                    "name": "Vanilla Ice Cream",
-                    "quantity": 3,
-                    "image": "https://example.com/icecream.jpg",
-                    "description": "Creamy vanilla goodness"
-                }
-            ],
-            "paymentMethod": "Credit Card",
-            "orderPrice": 350
-        },
-        {
-            "orderId": 755,
-            "orderDate": "Jan 3, 2024 , 03:45 PM",
-            "items": [
-                {
-                    "name": "Cheese Pizza",
-                    "quantity": 1,
-                    "image": "https://example.com/pizza.jpg",
-                    "description": "Delicious cheesy pizza"
-                },
-                {
-                    "name": "Garlic Bread",
-                    "quantity": 2,
-                    "image": "https://example.com/garlicbread.jpg",
-                    "description": "Garlicky goodness"
-                }
-            ],
-            "paymentMethod": "PayPal",
-            "orderPrice": 25
-        }
-    ]
 
     return (
         <>
@@ -265,70 +206,14 @@ const Dashboard = () => {
                     </form>
                 </div>
                 {/* ===================== New Order Section ===================== */}
-                <div className="grid gap-6 p-4 m-4 bg-white rounded-xl md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
-                    {data.map(product => (
-                        <NavLink
-                            to={`/vendor-orders/order-detail/:${product?.id}`}
-                            className="transition-colors duration-200 bg-white border border-gray-200 rounded-lg hover:shadow-xl"
-                            previewlistener="true" key={product?.id}
-                        >
-                            <div className="items-center gap-x-3">
-                                <div className="flex flex-wrap justify-between p-4">
-                                    <p className="text-sm">
-                                        Order Id - <span className="text-sky-400">{product?.orderId}</span>
-                                    </p>
-                                    <p className="text-sm">
-                                        Order Date -{" "}
-                                        <span className="text-base font-semibold text-center text-gray-800">
-                                            {product?.orderDate}
-                                        </span>{" "}
-                                    </p>
-                                </div>
-                                <div className="flex-1 p-4 my-2">
-                                    <div className="grid items-center grid-cols-2">
-                                        <div className="grid grid-cols-2">
-                                            {product?.items?.map(item => (
-                                                <div key={item?.name} className="">
-                                                    <img
-                                                        className="w-16 p-1 border-2 rounded-xl"
-                                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU"
-                                                        alt=""
-                                                    />
-                                                    <div>
-                                                        <h2 className="text-sm font-semibold tracking-wide text-gray-800 ">
-                                                            Butter Milk x {item?.quantity} more
-                                                        </h2>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-
-                                        <p className="col-span-1 mt-1 text-sm font-semibold tracking-wide text-center text-gray-800 ">
-                                            Payment - {product?.paymentMethod}
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="flex flex-wrap items-center justify-between p-4 py-3 border-t border-gray-400">
-                                    <p className="text-base font-medium">Order Price - $ {product?.orderPrice}</p>
-                                    <div className="flex items-center gap-x-2">
-                                        <button
-                                            type="button"
-                                            className={formBtn2}
-                                        >
-                                            Reject
-                                        </button>
-                                        <button
-                                            type="submit"
-                                            className={formBtn1}
-                                        >
-                                            Confirm
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </NavLink>
-                    ))}
-
+                <div className="space-y-2 p-4">
+                    <p className="font-semibold text-lg">Current Orders</p>
+                    {
+                        orders
+                            ?.map(data => (
+                                <Orders data={data} />
+                            ))
+                    }
                 </div>
             </section>
         </>

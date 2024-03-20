@@ -1,14 +1,16 @@
 import { Edit } from 'iconsax-react';
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../utils/CustomClass';
 import { Dialog, Transition } from '@headlessui/react';
 import Error from '../../../components/Errors/Error';
 import LoadBox from '../../../components/Loader/LoadBox';
-import { addPolicy } from '../../../api';
+import { addHelpCenter, editHelpCenter } from '../../../api';
+import { toast } from 'react-toastify';
 
-function AddTerm(props) {
+
+export default function AddTerm(props) {
     const [isOpen, setIsOpen] = useState(false)
     const [loader, setLoader] = useState(false)
     const dispatch = useDispatch()
@@ -19,21 +21,75 @@ function AddTerm(props) {
         reset,
         formState: { errors },
     } = useForm();
-    const onSubmit = (data) => {
-        console.log('data', data);
-        addPolicy([data]).then((res) => {
-            console.log('res', res);
-        })
+
+
+
+    const onSubmit = async (data) => {
+        setLoader(true)
+        if (props.title != "Edit Help Center") {     
+            try{
+                const response = await addHelpCenter(data);
+                if (response?.status == 'success') {
+                    props?.getAllHelpCenter();
+                    toast.success('Privacy Policy added successfully');
+                    toggle();
+                    reset();
+                    setLoader(false)
+                } else{
+                    setLoader(false)
+                    toast.error('Error while adding privacy policy');
+                }
+            }catch(err){
+                setLoader(false)
+                console.log('err', err);
+            }
+        }else{
+            try {
+                editHelpCenter(props?.id ,data).then((res) => {
+                    if (res?.status == 'success') {
+                        props?.getAllHelpCenter();
+                        toast.success('Privacy Policy edited successfully')
+                        toggle();
+                        reset();
+                        setLoader(false);
+                    } else {
+                        toast.error('Error while editing privacy policy')
+                        setLoader(false);
+                    }
+                })
+            } catch (error) {
+                console.log('error', error);
+            }
+        }
     }
+
+
     const closeBtn = () => {
         toggle();
         setLoader(false);
     }
+
+    useEffect(() => {
+        reset({
+            "support_name": props?.termname,
+            "support_contact": props?.termdesc
+        })
+    }, [])
+
+
     return (
         <>
-            <button onClick={toggle} className={tableBtn}>
-                Add Term & Condition
-            </button>
+            {props.title != "Edit Help Center" ? (
+                <button onClick={toggle} className={tableBtn}>
+                    Add Help center
+                </button>
+            ) : (
+                <button
+                    onClick={toggle}
+                    className="bg-yellow-100 px-1.5 py-2 rounded-sm">
+                    <Edit size="20" className='text-yellow-500' />
+                </button>
+            )}
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-[100]" onClose={() => toggle}>
                     <Transition.Child
@@ -48,7 +104,7 @@ function AddTerm(props) {
                         <div className="fixed inset-0 bg-black bg-opacity-25" />
                     </Transition.Child>
                     <div className="fixed inset-0 overflow-y-auto scrollbars">
-                        <div className="flex min-h-full items-center justify-center p-4 text-center">
+                        <div className="flex items-center justify-center min-h-full p-4 text-center">
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-out duration-300"
@@ -58,11 +114,11 @@ function AddTerm(props) {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-xl transform overflow-hidden rounded-lg bg-white  text-left align-middle shadow-xl transition-all">
+                                <Dialog.Panel className="w-full max-w-xl overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl">
 
                                     <Dialog.Title
                                         as="h2"
-                                        className="text-lg text-white w-full bg-sky-400 font-tb leading-6 font-semibold py-4 px-3"
+                                        className="w-full px-3 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
                                     >
                                         {props?.title}
                                     </Dialog.Title>
@@ -70,38 +126,25 @@ function AddTerm(props) {
                                         {/* React Hook Form */}
                                         <form onSubmit={handleSubmit(onSubmit)} >
                                             <div className="py-4 mx-4 customBox">
-                                                <div className="">
-                                                    <label className={labelClass}>Type*</label>
-                                                    <select
-                                                        className={inputClass}
-                                                        {...register("type", { required: true })}
-                                                    >
-                                                        <option value='Term'>Term</option>
-                                                        <option value='Condition'>Condition</option>
-                                                    </select>
-                                                    {errors.type && <Error title='Type is required*' />}
-                                                </div>
-                                                <div className="">
+                                                <div className="pb-3">
                                                     <label className={labelClass}>Title*</label>
                                                     <input className={inputClass}
                                                         type='text'
                                                         placeholder='Title'
-                                                        {...register("title", { required: true })} />
-                                                    {errors.title && <Error title='Title is required*' />}
+                                                        {...register("support_name", { required: true })} />
+                                                    {errors.support_name && <Error title='Title is required*' />}
                                                 </div>
-                                                <div className="">
+                                                <div className="pb-3">
                                                     <label className={labelClass} >Description*</label>
-                                                    <textarea className={`${inputClass} h-10`}
+                                                    <textarea className={`${inputClass} h-36`}
                                                         type='text'
-                                                        cols={4}
-                                                        rows={10}
                                                         placeholder='Description'
-                                                        {...register("description", { required: true })} />
-                                                    {errors.description && <Error title='Description is required*' />}
+                                                        {...register("support_contact", { required: true })} />
+                                                    {errors.support_contact && <Error title='Description is required*' />}
                                                 </div>
                                             </div>
 
-                                            <footer className="py-2 flex bg-white justify-end px-4 space-x-3">
+                                            <footer className="flex justify-end px-4 py-2 space-x-3 bg-white">
                                                 {loader ? <LoadBox className="relative block w-auto px-5 transition-colors font-tb tracking-wide duration-200 py-2.5 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize" /> : <button type='submit' className={formBtn1}>submit</button>}
                                                 <button type='button' className={formBtn2} onClick={closeBtn}>close</button>
                                             </footer>
@@ -116,5 +159,3 @@ function AddTerm(props) {
         </>
     )
 }
-
-export default AddTerm

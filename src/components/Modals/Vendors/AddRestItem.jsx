@@ -152,7 +152,8 @@ export default function AddRestItem(props) {
             }
         } else {               // for create
             // console.log('image create')
-            if (data?.food_image_1?.length > 0 && childData[0]?.media_url == '') {
+            console.log('childData[0]?.media_url', childData[0]?.media_url)
+            if (data?.food_image_1?.length != 0 && (childData[0]?.media_url == undefined || childData[0]?.media_url == '')) {
                 await ImageUpload(data?.food_image_1[0], "restaurant", "mainImage", data?.food_name)
                 data.food_image_1 = `${restaurantLink}${data?.food_name}_mainImage_${data.food_image_1[0]?.name}`
             } else {
@@ -162,7 +163,7 @@ export default function AddRestItem(props) {
                     data.food_image_1 = ''
                 }
             }
-            if (data?.food_image_2?.length != 0 && childData[1]?.media_url == '') {
+            if (data?.food_image_2?.length != 0 && (childData[1]?.media_url == undefined || childData[1]?.media_url == '')) {
                 await ImageUpload(data?.food_image_2[0], "restaurant", "img2", data?.food_name)
                 data.food_image_2 = `${restaurantLink}${data?.food_name}_img2_${data.food_image_2[0]?.name}`
             } else {
@@ -172,7 +173,7 @@ export default function AddRestItem(props) {
                     data.food_image_2 = ''
                 }
             }
-            if (data?.food_image_3?.length != 0 && childData[2]?.media_url == '') {
+            if (data?.food_image_3?.length != 0 && (childData[2]?.media_url == undefined || childData[2]?.media_url == '')) {
                 await ImageUpload(data?.food_image_3[0], "restaurant", "img3", data?.food_name)
                 data.food_image_3 = `${restaurantLink}${data?.food_name}_img3_${data.food_image_3[0]?.name}`
             } else {
@@ -182,7 +183,7 @@ export default function AddRestItem(props) {
                     data.food_image_3 = ''
                 }
             }
-            if (data?.food_image_4?.length != 0 && childData[3]?.media_url == '') {
+            if (data?.food_image_4?.length != 0 && (childData[3]?.media_url == undefined || childData[3]?.media_url == '')) {
                 await ImageUpload(data?.food_image_4[0], "restaurant", "img4", data?.food_name)
                 data.food_image_4 = `${restaurantLink}${data?.food_name}_img4_${data.food_image_4[0]?.name}`
             } else {
@@ -192,7 +193,7 @@ export default function AddRestItem(props) {
                     data.food_image_4 = ''
                 }
             }
-            if (data?.food_image_5?.length != 0 && childData[4]?.media_url == '') {
+            if (data?.food_image_5?.length != 0 && (childData[4]?.media_url == undefined || childData[4]?.media_url == '')) {
                 await ImageUpload(data?.food_image_5[0], "restaurant", "img5", data?.food_name)
                 data.food_image_5 = `${restaurantLink}${data?.food_name}_img5_${data.food_image_5[0]?.name}`
             } else {
@@ -212,45 +213,60 @@ export default function AddRestItem(props) {
         let updatedData = { ...data, vendor: user?.sellerId }
         if (props?.title != 'Add Item') {
             setLoader(true)
-            console.log('in function edit')
-            editFoodItem(props?.data?.food_id, updatedData).then(res => {
-                if (res?.status == 'success') {
-                    toast?.success('Food item updated successfully')
-                    props?.getRestFood();
-                    toggle();
-                    setLoader(false);
-                    reset();
-                    setopenGallery(false);
-                    setopenGalleryModal(false);
-                    setChildData([])
-                }
-            })
+            try {
+                editFoodItem(props?.data?.food_id, updatedData).then(res => {
+                    if (res?.status == 'success') {
+                        toast?.success('Food item updated successfully')
+                        props?.getRestFood();
+                        toggle();
+                        setLoader(false);
+                        reset();
+                        setopenGallery(false);
+                        setopenGalleryModal(false);
+                        setChildData([])
+                    }
+                })
+            } catch (error) {
+                console.log('error', error);
+            }
         } else {
             setLoader(true)
-            addFoodItem(updatedData).then(res => {
-                if (res?.status == 'success') {
-                    toast.success('Food Item Added Successfully')
-                    props?.getRestFood();
-                    toggle();
-                    setLoader(false);
-                    reset();
-                    setopenGallery(false);
-                    setopenGalleryModal(false);
-                    setChildData([])
-                }
-            })
+            try {
+                addFoodItem(updatedData).then(res => {
+                    if (res?.status == 'success') {
+                        toast.success('Food Item Added Successfully')
+                        props?.getRestFood();
+                        toggle();
+                        setLoader(false);
+                        reset();
+                        setopenGallery(false);
+                        setopenGalleryModal(false);
+                        setChildData([])
+                    }
+                })
+            } catch (error) {
+                console.log('error', error);
+            }
         }
     }
 
     const onAdminSubmit = async (data) => {
         var updatedData = { ...data, vendor: props?.data?.vendor?.vendor_id }
-        editAdminFinalFood(props?.data?.food_id, updatedData).then(res => {
-            if (res?.status == 'success') {
-                props?.getRestaurantFoodItems();
-                toast.success('Food item updated successfully')
-                toggle();
+        if (updatedData?.final_price != 0 && updatedData?.insta_commison_percentage != '0') {
+            try {
+                editAdminFinalFood(props?.data?.food_id, updatedData).then(res => {
+                    if (res?.status == 'success') {
+                        props?.getRestaurantFoodItems();
+                        toast.success('Food item updated successfully')
+                        toggle();
+                    }
+                })
+            } catch (error) {
+                console.log('error', error);
             }
-        })
+        } else {
+            toast.error('Please add markup')
+        }
     }
 
     useEffect(() => {
@@ -292,8 +308,9 @@ export default function AddRestItem(props) {
                     'food_image_2': props?.row?.food_image_2,
                     'food_image_3': props?.row?.food_image_3,
                     'food_image_4': props?.row?.food_image_4,
-                    'food_image_5': props?.row?.food_image_5
+                    'food_image_5': props?.row?.food_image_5,
                 })
+                setValue('final_price', props?.final_price)
             }
         }
     }, [isOpen])
@@ -330,7 +347,7 @@ export default function AddRestItem(props) {
                 setValue('final_price', adminfinalprice?.toFixed(0));
             }
         }
-    }, [calculateRevenueAdmin])
+    }, [calculateRevenueAdmin, isOpen])
 
     return (
         <>
@@ -407,7 +424,7 @@ export default function AddRestItem(props) {
                                                                 <option key={item?.id} value={item?.id}>{item?.category_name}</option>
                                                             )}
                                                         </select>
-                                                        {errors.good_category && <Error title='Category is Required*' />}
+                                                        {errors.food_category && <Error title='Category is Required*' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -491,6 +508,7 @@ export default function AddRestItem(props) {
                                                                 </label>
                                                                 <input
                                                                     type="number"
+                                                                    min={0}
                                                                     placeholder='0.00'
                                                                     className={inputClass}
                                                                     {...register('markup_percentage', { required: true })} />
@@ -553,7 +571,7 @@ export default function AddRestItem(props) {
                                                             onChange={handleFileChange}
                                                         />
                                                         {props?.button === 'edit' && props?.data.food_video_url && (
-                                                            <label className='block mb-1 font-medium text-blue-800 text-md font-tb'>
+                                                            <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                                                                 {props?.data.food_video_url?.name}
                                                             </label>
                                                         )}
@@ -649,7 +667,7 @@ export default function AddRestItem(props) {
                                                                 {props?.button == 'edit' && props?.data?.food_image_1 != '' && props?.data?.food_image_1 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {!childData[0] && props?.data?.food_image_1?.split('/').pop()}
                                                                 </label>}
-                                                                <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {childData[0]?.media_url?.split('/').pop()}
                                                                 </label>
                                                                 {errors.food_image_1 && <Error title='Main Image is required*' />}
@@ -667,7 +685,7 @@ export default function AddRestItem(props) {
                                                                 {props?.button == 'edit' && props?.data?.food_image_2 != '' && props?.data?.food_image_2 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {!childData[1] && props?.data?.food_image_2?.split('/').pop()}
                                                                 </label>}
-                                                                <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {childData[1]?.media_url?.split('/').pop()}
                                                                 </label>
                                                             </div>
@@ -684,7 +702,7 @@ export default function AddRestItem(props) {
                                                                 {props?.button == 'edit' && props?.data?.food_image_3 != '' && props?.data?.food_image_3 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {!childData[2] && props?.data?.food_image_3?.split('/').pop()}
                                                                 </label>}
-                                                                <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {childData[2]?.media_url?.split('/').pop()}
                                                                 </label>
                                                             </div>
@@ -701,7 +719,7 @@ export default function AddRestItem(props) {
                                                                 {props?.button == 'edit' && props?.data?.food_image_4 != '' && props?.data?.food_image_4 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {!childData[3] && props?.data?.food_image_4?.split('/').pop()}
                                                                 </label>}
-                                                                <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {childData[3]?.media_url?.split('/').pop()}
                                                                 </label>
                                                             </div>
@@ -718,7 +736,7 @@ export default function AddRestItem(props) {
                                                                 {props?.button == 'edit' && props?.data?.food_image_5 != '' && props?.data?.food_image_5 != undefined && <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {!childData[4] && props?.data?.food_image_5?.split('/').pop()}
                                                                 </label>}
-                                                                <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                                                                <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                                                                     {childData[4]?.media_url?.split('/').pop()}
                                                                 </label>
                                                             </div>

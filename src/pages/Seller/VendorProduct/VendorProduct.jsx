@@ -60,7 +60,6 @@ const VendorProduct = () => {
     const shopCat = () => {
         try {
             getCategory().then(res => {
-                console.log('res', res)
                 setCategory(res)
                 // if (res?.length > 0) {
                 //     const newData = res.map((data) => ({
@@ -113,7 +112,7 @@ const VendorProduct = () => {
 
     const representativeBodyTemplate = (row) => {
         return (
-            <div className="rounded-full w-11 h-11">
+            <div className="rounded-full w-14 h-14">
                 {user?.vendor_type == 'shop' && <img src={row?.product_image_1 == null || row?.product_image_1 == '' || row?.product_image_1 == undefined ? userImg : row?.product_image_1} className="object-cover w-full h-full rounded-full" alt={row.first_name} />}
                 {user?.vendor_type == 'restaurant' && <img src={row?.food_image_1 == null || row?.food_image_1 == '' || row?.food_image_1 == undefined ? userImg : row?.food_image_1} className="object-cover w-full h-full rounded-full" alt={row.food_name} />}
             </div>
@@ -233,7 +232,6 @@ const VendorProduct = () => {
                 console.log('error', error)
             }
         } else if (user?.vendor_type == 'shop') {
-            console.log('caleed')
             getProducts();
             shopCat();
             shopSubCat();
@@ -299,7 +297,7 @@ const VendorProduct = () => {
                 </form>
             </div>
             <div className='p-4 m-4 bg-white sm:m-5 rounded-xl'>
-                <div className='grid items-center sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-6'>
+                <div className='flex flex-col items-start justify-between mb-6 sm:flex-row sm:items-center sm:space-y-0'>
                     <h2 className='lg:col-span-5 text-xl font-semibold'>{user?.vendor_type == 'restaurant' ? 'Item List' : 'Product List'}</h2>
                     <div>
                         {user?.vendor_type == 'restaurant' && user?.isverified_byadmin ? (

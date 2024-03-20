@@ -251,7 +251,7 @@ export default function CategoryForm(props) {
                           {props?.button == "edit" &&
                             props?.data.category_image != "" &&
                             props?.data.category_image != undefined && (
-                              <label className="block mb-1 font-medium text-blue-800 text-md font-tb">
+                              <label className="block mb-1 font-medium text-blue-800 text-md font-tb truncate">
                                 {props?.data?.category_image?.split("/").pop()}
                               </label>
                             )}

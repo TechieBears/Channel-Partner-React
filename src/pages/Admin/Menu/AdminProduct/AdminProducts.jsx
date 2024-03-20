@@ -2,7 +2,7 @@ import { Eye, Trash } from 'iconsax-react';
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import Switch from 'react-js-switch';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Select from "react-select";
 import { toast } from 'react-toastify';
@@ -14,6 +14,7 @@ import Table from '../../../../components/Table/Table';
 import { formBtn1, formBtn2, inputClass } from '../../../../utils/CustomClass';
 import axios from 'axios';
 import { environment } from '../../../../env';
+import { setCategoryCount, setProductCount, setSubCategoryCount } from '../../../../redux/Slices/masterSlice';
 
 
 
@@ -26,6 +27,7 @@ const AdminProduct = (props) => {
     const [subcategoryOptions, setSubCategoryOptions] = useState()
     const [category, setCategory] = useState([]);
     const [subCategory, setsubCategory] = useState([]);
+    const dispatch = useDispatch()
     const GetFranchiseeData = () => {
         try {
             GetFranchisee().then((res) => {
@@ -79,13 +81,6 @@ const AdminProduct = (props) => {
     const fetchData = () => {
         try {
             getCategory().then((res) => {
-                // if (res?.length > 0) {
-                //     const newData = res.map((data) => ({
-                //         label: data?.category_name,
-                //         value: data?.id,
-                //     }))
-                //     setCategoryOptions(newData)
-                // }
             })
         } catch (error) {
             console.log("🚀 ~ file: AdminProducts.jsx:66 ~ GetCategory ~ error:", error)
@@ -135,13 +130,13 @@ const AdminProduct = (props) => {
         try {
             getSubCategory().then(res => {
                 setsubCategory(res)
-                // if (res?.length > 0) {
-                //     const newData = res.map((data) => ({
-                //         label: data?.subcat_name,
-                //         value: data?.subcat_name,
-                //     }))
-                //     setSubCategoryOptions(newData)
-                // }
+                if (res?.length > 0) {
+                    const newData = res.map((data) => ({
+                        label: data?.subcat_name,
+                        value: data?.subcat_name,
+                    }))
+                    setSubCategoryOptions(newData)
+                }
             })
         } catch (error) {
             console.log('error fetch', error)
@@ -169,13 +164,13 @@ const AdminProduct = (props) => {
         try {
             getRestaurantSubCategory().then(res => {
                 setsubCategory(res)
-                // if (res?.length > 0) {
-                //     const newData = res.map((data) => ({
-                //         label: data?.subcat_name,
-                //         value: data?.subcat_name,
-                //     }))
-                //     setSubCategoryOptions(newData)
-                // }
+                if (res?.length > 0) {
+                    const newData = res.map((data) => ({
+                        label: data?.subcat_name,
+                        value: data?.subcat_name,
+                    }))
+                    setSubCategoryOptions(newData)
+                }
             })
         } catch (error) {
             console.log('error', error)
@@ -230,7 +225,7 @@ const AdminProduct = (props) => {
 
                 let url = `${environment.baseUrl}app/all_products?product_name=${product_name}&product_msbcode=${product_msbcode}&franchise_msbcode=${franchise_msbcode?.value ? franchise_msbcode?.value : ''}&vendor_msbcode=${vendor_msbcode?.value ? vendor_msbcode?.value : ''}&product_category=${product_category?.value ? product_category?.value : ''}&product_subcategory=${product_subcategory?.value ? product_subcategory?.value : ''}`
                 await axios.get((props?.isrestaurant === false || props?.isrestaurant === undefined) ? url : restauranturl).then((res) => {
-                    setShopProducts(res?.data?.results)
+                    setShopProducts(res?.data)
                     toast.success("Filters applied successfully")
                 }).catch((err) => {
                     console.log("🚀 ~ file: Resturant.jsx:75 ~ awaitaxios.get ~ err:", err)
@@ -319,7 +314,7 @@ const AdminProduct = (props) => {
             try {
                 editAdminFinalFood(row?.food_id, payload).then(res => {
                     if (res?.status == 'success') {
-                        toast?.success(res?.message)
+                        toast?.success('Verification Status Changed')
                         getRestaurantFoodItems();
                     } else {
                         console.log('error', res?.message)
@@ -378,7 +373,7 @@ const AdminProduct = (props) => {
     // =============================== PRODUCTS SWITCHES  =============================
     const switchVerify = (row) => {
         return (
-            <div className="">
+            <div className="text-transparent hover:text-red-500">
                 <Switch
                     value={row?.product_isverified_byadmin}
                     onChange={() => verifyActions(row)}
@@ -386,7 +381,7 @@ const AdminProduct = (props) => {
                     size={50}
                     backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
                     borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
-                {row?.markup_percentage == 0 || row?.markup_percentage == undefined || row?.final_price == 0 ? <h6 className='text-xs text-gray-500'>Please Add Markup</h6> : null}
+                {row?.markup_percentage == 0 || row?.markup_percentage == undefined || row?.final_price == 0 ? <h6 className='text-xs '>Please Add Markup</h6> : null}
             </div>
         )
     }
@@ -409,7 +404,7 @@ const AdminProduct = (props) => {
     // =============================== FOOD ITEMS Admin Verify SWITCHES =============================
     const switchVerifyRes = (row) => {
         return (
-            <div className="">
+            <div className="text-transparent hover:text-red-500">
                 <Switch
                     value={row?.food_isverified_byadmin}
                     onChange={() => itemVerifyAdmin(row)}
@@ -417,7 +412,7 @@ const AdminProduct = (props) => {
                     size={50}
                     backgroundColor={{ on: '#86d993', off: '#c6c6c6' }}
                     borderColor={{ on: '#86d993', off: '#c6c6c6' }} />
-                {row?.markup_percentage == 0 || row?.markup_percentage == undefined || row?.final_price == 0 ? <h6 className='text-xs text-gray-500'>Please Add Markup</h6> : null}
+                {row?.markup_percentage == 0 || row?.markup_percentage == undefined || row?.final_price == 0 ? <h6 className='text-xs '>Please Add Markup</h6> : null}
             </div>
         )
     }

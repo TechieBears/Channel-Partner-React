@@ -4,6 +4,7 @@ import App from './App.jsx'
 import './index.css'
 import "aos/dist/aos.css";
 import { BrowserRouter } from 'react-router-dom'
+import ReactCrop from 'react-image-crop'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter>

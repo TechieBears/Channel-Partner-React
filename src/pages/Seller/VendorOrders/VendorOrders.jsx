@@ -1,25 +1,25 @@
-import React, { useEffect, useState,useRef, useMemo } from 'react'
-import { Controller, useForm } from 'react-hook-form';
-import AsyncSelect from "react-select/async";
-import { toast } from 'react-toastify';
-import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
-import { useSelector } from 'react-redux';
-import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import Table from '../../../components/Table/Table';
-import { NavLink ,useLocation } from 'react-router-dom';
 import { ClipboardTick, Eye, Trash } from 'iconsax-react';
 import moment from 'moment';
-import { environment } from '../../../env';
-import useWebSocket, { ReadyState } from "react-use-websocket";
-
+import React, { useState ,useMemo, useEffect} from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+import { NavLink } from 'react-router-dom';
+import AsyncSelect from "react-select/async";
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import { toast } from 'react-toastify';
+import Orders from '../../../components/Cards/Orders/Orders';
+import Table from '../../../components/Table/Table';
+import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 
 const VendorOrders = () => {
     const user = useSelector((state) => state.user.loggedUserDetails);
     const webSocketUrl = `ws://192.168.0.103:8005/ws/socket/user_to_seller/${user?.msb_code}`
-    const ws = useRef(new WebSocket(webSocketUrl)).current
+    const ws = new WebSocket(webSocketUrl)
     const [selectedTab, setSelectedTab] = useState(0);
     const storages = useSelector((state) => state?.storage?.list);
-    const route = useLocation()
+    const orders = useSelector(state => state?.orders?.newOrders);
+    const [status, setstatus] = useState('pending')
+    const [details, setDetails] = useState(false)
     const {
         register,
         handleSubmit,
@@ -27,6 +27,8 @@ const VendorOrders = () => {
         formState: { errors },
         reset,
     } = useForm();
+
+
     const filterReset = () => {
         reset({
             name: null,
@@ -48,30 +50,31 @@ const VendorOrders = () => {
     };
 
     const onSubmit = (data) => {
-        console.log('data', data)
+        // console.log('data', data)
     }
 
-    useMemo(() => {
-        if(route?.pathname == '/vendor-orders'){
-            ws.open = () => {
-                console.log('WebSocket Client Connected');
-            };
+    useEffect(() => {
         
-            ws.onerror = (e) => {
-                console.log(e.message);
-            };
+        ws.open = () => {
+            console.log('WebSocket Client Connected');
+        };
+    
+        ws.onerror = (e) => {
+            console.log(e.message);
+        };
+    
+        ws.onmessage = (e) => {
+            const data = JSON.parse(e.data);
+            console.log("🚀 ~ file: VendorOrders.jsx:63 ~ useEffect ~ data:", data?.orderId)
+            window.alert(data?.orderId)
         
-            ws.onmessage = (e) => {
-                const data = JSON.parse(e.data);
-                console.log("🚀 ~ file: VendorOrders.jsx:63 ~ useEffect ~ data:", data?.orderId)
-                window.alert(data?.orderId)
-            
-            };
+        };
+
+        return () => {
+            // ws.close()
         }
-        else{
-            ws.close();
-        }
-    },[route])
+
+    },[ws])
         
 
     // ====================== table columns ======================
@@ -151,54 +154,6 @@ const VendorOrders = () => {
         { field: "status", header: "Status", sortable: true },
     ];
 
-
-    // ===================== New Order ======================
-
-    const NewOrderData = [
-        {
-            "orderId": 753,
-            "orderDate": "Jan 1, 2024 , 05:56 PM",
-            "items": [
-                {
-                    "itemName": "Butter Milk",
-                    "itemDescription": "Lorem ipsum dolor, sit amet",
-                    "imageSrc": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU",
-                    "quantity": 2,
-                    'price': 50,
-                    'category': 'dairy'
-                }
-            ],
-            "orderPrice": "$1,000",
-            "paymentMethod": "Cash",
-            "location": 'Parel',
-
-        },
-        {
-            "orderId": 754,
-            "orderDate": "Jan 2, 2024 , 10:30 AM",
-            "items": [
-                {
-                    "itemName": "Coffee",
-                    "itemDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-                    "imageSrc": "https://example.com/coffee.jpg",
-                    "quantity": 2,
-                    'price': 20,
-                    'category': 'grocery'
-                },
-                {
-                    "itemName": "Croissant",
-                    "itemDescription": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
-                    "imageSrc": "https://example.com/croissant.jpg",
-                    "quantity": 2,
-                    'price': 200,
-                    'category': 'food'
-                }
-            ],
-            "orderPrice": "$25",
-            "paymentMethod": "UPI",
-            "location": 'Thane',
-        }
-    ]
 
     const name = (row) => row?.items?.map(item => <h6 key={item?.itemName}>{item?.itemName}</h6>);
     const quantity = (row) => row?.items?.map(item => <h6 key={item?.itemQuantity}>{item?.quantity}</h6>)
@@ -331,16 +286,26 @@ const VendorOrders = () => {
                     </TabList>
                     {/* ================= NewPending Orders component ============== */}
                     <TabPanel className='mt-5 bg-white'>
-                        <Table data={NewOrderData} columns={NewOrdercolumns} />
+                        {/* ===================== New Order Section ===================== */}
+                        <div className="space-y-2 p-4">
+                            <div>
+                                <p className="font-semibold text-lg">Current Orders11</p>
+                            </div>
+                            {
+                                orders?.map(data => (
+                                    <Orders data={data} />
+                                ))
+                            }
+                        </div>
                     </TabPanel>
                     <TabPanel className='mt-5 bg-white'>
                         <Table data={AcceptedOrderData} columns={AcceptedOrderColumn} />
                     </TabPanel>
                     <TabPanel className='mt-5 bg-white'>
-                        {/* <Table data={AcceptedOrderData} columns={AcceptedOrderColumn} /> */}
+                        <Table data={AcceptedOrderData} columns={AcceptedOrderColumn} />
                     </TabPanel>
                     <TabPanel className='mt-5 bg-white'>
-                        {/* <Table data={AcceptedOrderData} columns={AcceptedOrderColumn} /> */}
+                        <Table data={AcceptedOrderData} columns={AcceptedOrderColumn} />
                     </TabPanel>
                 </Tabs>
             </div>
