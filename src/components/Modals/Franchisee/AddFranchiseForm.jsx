@@ -17,7 +17,6 @@ import moment from "moment";
 
 
 export default function AddFranchiseForm(props) {
-  console.log('props', props)
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const [emailError, setEmailError] = useState('');
@@ -48,7 +47,6 @@ export default function AddFranchiseForm(props) {
 
   // ============================= form submiting ======================================
   const onSubmit = async (data) => {
-    console.log(data)
     if (props.button != 'edit') {    // for create
       if (data?.bank_passbook.length != 0) {
         await ImageUpload(data?.bank_passbook[0], "franchisee", "BankPassbook", data?.first_name)
@@ -136,7 +134,6 @@ export default function AddFranchiseForm(props) {
       try {
         setLoader(true)
         const response = await CreateFranchisee(data);
-        console.log('response', response)
         if (response?.status == "success") {
           setTimeout(() => {
             reset();
@@ -150,7 +147,6 @@ export default function AddFranchiseForm(props) {
         } else {
           setLoader(false)
           toast.error(response?.Message);
-          console.log('failed to create user')
         }
       } catch (error) {
         setLoader(false)

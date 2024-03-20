@@ -13,13 +13,15 @@ import MediaGallaryModal from '../../../pages/Settings/MediaGallery/MediaGallery
 
 
 export default function AddRestItem(props) {
-    // console.log('props = ', props?.data);
+    console.log('props = ', props);
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false);
     const [FinalPriceSeller, setFinalPriceSeller] = useState([]);
     const [FinalPriceAdmin, setFinalPriceAdmin] = useState([]);
     const { register, handleSubmit, control, watch, reset, setValue, formState: { errors } } = useForm();
     const user = useSelector((state) => state?.user?.loggedUserDetails);
+    console.log('user = ', user);
+
     const mediaGalleryModalRef = useRef(null);
     const [openGallery, setopenGallery] = useState(false);
     const [openGalleryModal, setopenGalleryModal] = useState(false);
@@ -270,6 +272,20 @@ export default function AddRestItem(props) {
     }
 
     useEffect(() => {
+        if (props?.button == 'edit'){
+            setTimeout(() => {
+                console.log('gg')
+                var mainUserPrice = calculateRevenueRestaurant * (user?.insta_commission == null ? 0 : user?.insta_commission / 100);
+                const final_price = (calculateRevenueRestaurant - mainUserPrice);
+    
+                if (isNaN(final_price)) {
+                    setValue('food_revenue', 0);
+                } else {
+                    setFinalPriceSeller(parseFloat(final_price));
+                    setValue('food_revenue', final_price);
+                }
+            }, 500);
+        }
         if (user?.role == 'admin') {
             reset({
                 'food_name': props?.data?.food_name,
@@ -330,6 +346,7 @@ export default function AddRestItem(props) {
                     setValue('food_revenue', final_price);
                 }
             }
+            
         }
     }, [calculateRevenueRestaurant])
 

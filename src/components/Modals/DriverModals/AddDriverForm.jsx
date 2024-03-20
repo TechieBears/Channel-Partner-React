@@ -14,7 +14,6 @@ import LoadBox from '../../Loader/LoadBox';
 import { handleMobileNoNumericInput, handlePancardUpperCase, validateAadharCard, validateEmail, validatePANCard, validatePIN, validatePhoneNumber } from '../../Validations.jsx/Validations';
 
 function AddDriverFrom(props) {
-    console.log('props ', props)
     const [isOpen, setIsOpen] = useState(false);
     const [loader, setLoader] = useState(false);
     const Franchisee = useSelector((state) => state?.master?.Franchise);
@@ -75,8 +74,8 @@ function AddDriverFrom(props) {
                 data.bank_passbook = ''
             }
             if (data?.video_url.length != 0) {
-                await ImageUpload(data?.video_url[0], "deliveryboy", "AddressProof", data?.first_name)
-                data.video_url = `${deliveryBoylink}${data?.first_name}_AddressProof_${data?.video_url[0].name}`
+                await ImageUpload(data?.video_url[0], "deliveryboy", "videoUrl", data?.first_name)
+                data.video_url = `${deliveryBoylink}${data?.first_name}_videoUrl_${data?.video_url[0].name}`
             } else {
                 data.video_url = ''
             }
@@ -107,8 +106,8 @@ function AddDriverFrom(props) {
                 data.bank_passbook = props?.data.bank_passbook
             }
             if (data?.video_url?.length > 0) {
-                await ImageUpload(data?.video_url[0], "deliveryboy", "AddressProof", data?.first_name)
-                data.video_url = `${deliveryBoylink}${data?.first_name}_AddressProof_${data?.video_url[0]?.name}`
+                await ImageUpload(data?.video_url[0], "deliveryboy", "videoUrl", data?.first_name)
+                data.video_url = `${deliveryBoylink}${data?.first_name}_videoUrl_${data?.video_url[0]?.name}`
             } else {
                 data.video_url = props?.data?.video_url
             }
@@ -123,13 +122,13 @@ function AddDriverFrom(props) {
                 data.adhar_url = `${deliveryBoylink}${data?.first_name}_adharImage_${data?.adhar_url[0].name}`
               } else {
                 data.adhar_url = props?.data?.adhar_url
-              }
-              if (data?.pan_url?.length > 0) {
+            }
+            if (data?.pan_url?.length > 0) {
                 await ImageUpload(data?.pan_url[0], "deliveryboy", "panImage", data?.first_name)
                 data.pan_url = `${deliveryBoylink}${data?.first_name}_panImage_${data?.pan_url[0].name}`
-              } else {
+            } else {
                 data.pan_url = props?.data?.pan_url
-              }
+            }
         }
         if (props.button != 'edit') {   // for create
             try {

@@ -52,12 +52,12 @@ export const ImageUpload = async (data, folder, imgname, name) => {
 export const ImageUpload2 = async (data, folder, imgname, name) => {
     const command = new PutObjectCommand({
         Bucket: "channel-partner-media",
-        Key: `${folder}/${imgname}_${folder}_${name}`,
+        Key: `${folder}/${name}_${folder}_${imgname}`,
         Body: data,
     });
     try {
         const response = await client.send(command);
-        console.log(response);
+        console.log('res image = ', response);
     } catch (err) {
         console.error(err);
     }

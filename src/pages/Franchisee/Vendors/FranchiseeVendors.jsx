@@ -19,7 +19,6 @@ function FranchiseeVendors() {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const dispatch = useDispatch()
     const [Vendors, setVendors] = useState();
-    console.log('vendors', Vendors)
     const LoggedDetails = useSelector((state) => state?.user?.loggedUserDetails)
 
 
@@ -54,7 +53,6 @@ function FranchiseeVendors() {
         const payload = { userId: row?.user?.id, isverifiedbyadmin: row?.user?.isverified_byadmin, isverifiedbyfranchise: !row?.isverifiedbyfranchise }
         try {
             verifyVendors(payload).then((form) => {
-                console.log(payload)
                 if (form.message == "seller verified Successfully") {
                     toast.success('Vendor Verification Changed !');
                     FranchiseeVendors()

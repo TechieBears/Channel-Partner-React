@@ -466,6 +466,7 @@ const AdminProduct = (props) => {
         { field: 'shop_name', header: 'Vendor Name', body: (row) => <h6>{row?.vendor?.shop_name}</h6>, sortable: true },
         { field: 'pincode', header: 'PINCODE', body: (row) => <h6>{row?.vendor?.user?.pincode}</h6>, sortable: true },
         { field: 'product_brand', header: 'Brand', sortable: true },
+        { field: 'email', header: 'Vendor Email',  body: (row) => <h6>{row?.vendor?.user?.email}</h6>, sortable: true },
         { field: 'product_shelflife', header: 'Self Life', sortable: true },
         { field: 'product_Manufacturer_Name', header: 'Manufacturer Name', sortable: true },
         { field: 'product_country_of_origin', header: 'Country Of Origin', sortable: true },
@@ -543,7 +544,7 @@ const AdminProduct = (props) => {
                                     <Select
                                         value={value}
                                         options={vendorOptions}
-                                        className="w-100 text-gray-900"
+                                        className="text-gray-900 w-100"
                                         placeholder="Vendor"
                                         onChange={onChange}
                                         inputRef={ref}
@@ -568,7 +569,7 @@ const AdminProduct = (props) => {
                                     <Select
                                         value={value}
                                         options={categoryOptions}
-                                        className="w-100 text-gray-900"
+                                        className="text-gray-900 w-100"
                                         placeholder="Category"
                                         onChange={onChange}
                                         inputRef={ref}
@@ -593,7 +594,7 @@ const AdminProduct = (props) => {
                                     <Select
                                         value={value}
                                         options={subcategoryOptions}
-                                        className="w-100 text-gray-900"
+                                        className="text-gray-900 w-100"
                                         placeholder="SubCategory"
                                         onChange={onChange}
                                         inputRef={ref}
@@ -609,7 +610,7 @@ const AdminProduct = (props) => {
                             />
                         </div>
                     </div>
-                    <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2">
+                    <div className="grid gap-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
                         <button
                             type="submit"
                             className={`${formBtn1}`}

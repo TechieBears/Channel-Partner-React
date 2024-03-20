@@ -21,7 +21,6 @@ export default function BannerForm(props) {
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const [childData, setChildData] = useState('');
-  console.log('childData', childData)
 
 
   const [selectedOption, setSelectedOption] = useState('dropdown');
@@ -43,7 +42,6 @@ export default function BannerForm(props) {
   
   const onSelectFile = (e) => {
     const file = e.target.files?.[0];
-    console.log('e', e.target.files?.[0])
     setUrlName(e.target.files?.[0]?.name)
     if (!file) return;
 
@@ -99,12 +97,10 @@ export default function BannerForm(props) {
         reject(err);
       };
       img.src = imageUrl;
-      console.log('img', imageUrl, img.src)
     });
   };
   
   const receiveDataFromChild = (data) => {
-    console.log('-- child data --', data);
     setChildData(data);
     // getImageInfo(data)
 
@@ -135,6 +131,21 @@ export default function BannerForm(props) {
   }, []);
 
 
+  function base64ToBlob(base64String) {
+    try {
+        const byteCharacters = atob(base64String);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        return new Blob([byteArray], { type: 'image/jpeg' });
+    } catch (error) {
+        console.error('Error decoding base64 string:', error);
+        return null;
+    }
+}
+
   // ============================ submit data  =====================================
   const onSubmit = async (data) => {
     if (imageError) {
@@ -145,7 +156,6 @@ export default function BannerForm(props) {
       });
       return;
     }
-    console.log("🚀 ~ file: BannerForm.jsx:82 ~ data:", data)
 
     if (props?.button != "edit") {
       try {
@@ -153,12 +163,13 @@ export default function BannerForm(props) {
           // data.slide_url[0].name = urlName
         }
         if (childData) {
+          const imageBlob = base64ToBlob(childData) 
           await ImageUpload2(
             // data.slide_url[0],
-            childData,
+            imageBlob,
             "banner",
-            data.screen_name,
             urlName,
+            data.screen_name,
           );
           data.slide_url = `${bannerLink}${data.screen_name}_banner_${urlName}`;
         } else {
@@ -232,7 +243,6 @@ export default function BannerForm(props) {
 
         img.onload = () => {
           if (img.width > 3556 && img.height > 2000) {
-            console.log('File uploaded successfully');
             setimageError('');
           } else {
             alert('Image dimensions should be less than 3556 x 2000')
@@ -341,7 +351,7 @@ export default function BannerForm(props) {
                                 {/* {childData?.split("/").pop()} */}
                                 {childData}
                               </label>
-                              <img src={childData} alt="" />
+                             {childData && <img className="w-28 h-28" src={childData} alt="" />} 
                           
                         </div>
                         <div className="flex items-center gap-3">

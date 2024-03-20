@@ -37,7 +37,6 @@ const VendorProduct = () => {
     };
 
     const onSubmit = (data) => {
-        console.log('data', data)
     }
     const filterReset = () => {
         reset({
@@ -67,7 +66,6 @@ const VendorProduct = () => {
                 //         value: data?.id,
                 //     }))
                 //     setCategory(newData)
-                //     console.log('newData', newData)
                 // }
             })
         } catch (error) {
@@ -190,7 +188,6 @@ const VendorProduct = () => {
     const getProducts = () => {
         getAllShopProduct(user?.sellerId).then(res => {
             setData(res)
-            // console.log(res)
         })
     }
 
@@ -231,7 +228,7 @@ const VendorProduct = () => {
             } catch (error) {
                 console.log('error', error)
             }
-        } else if (user?.vendor_type == 'shop') {
+        } else if (user?.vendor_type == 'shop' || user?.vendor_type == "seller") {
             getProducts();
             shopCat();
             shopSubCat();
@@ -298,7 +295,7 @@ const VendorProduct = () => {
             </div>
             <div className='p-4 m-4 bg-white sm:m-5 rounded-xl'>
                 <div className='flex flex-col items-start justify-between mb-6 sm:flex-row sm:items-center sm:space-y-0'>
-                    <h2 className='lg:col-span-5 text-xl font-semibold'>{user?.vendor_type == 'restaurant' ? 'Item List' : 'Product List'}</h2>
+                    <h2 className='text-xl font-semibold lg:col-span-5'>{user?.vendor_type == 'restaurant' ? 'Item List' : 'Product List'}</h2>
                     <div>
                         {user?.vendor_type == 'restaurant' && user?.isverified_byadmin ? (
                             <AddRestItem

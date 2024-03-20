@@ -12,6 +12,7 @@ import { ImageUpload, productLink } from '../../../env';
 import MediaGallaryModal from '../../../pages/Settings/MediaGallery/MediaGallery';
 
 const AddProduct = (props) => {
+    console.log('props =', props)
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
     const [FinalPriceSeller, setFinalPriceSeller] = useState([]);
@@ -649,9 +650,9 @@ const AddProduct = (props) => {
                                                             {...register("product_video_url")}
                                                             onChange={handleFileChange}
                                                         />
-                                                        {props?.button === 'edit' && props?.data.product_video_url && (
+                                                        {props?.title == 'Edit Product' && props?.row?.product_video_url && (
                                                             <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
-                                                                {props?.data?.product_video_url?.name}
+                                                                {props?.row?.product_video_url}
                                                             </label>
                                                         )}
                                                     </div>

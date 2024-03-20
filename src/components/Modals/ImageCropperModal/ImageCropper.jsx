@@ -2,7 +2,10 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState, useRef, useEffect } from "react";
 import { tableBtn, formBtn1 } from "../../../utils/CustomClass";
 import ReactCrop, { centerCrop, convertToPixelCrop, makeAspectCrop } from "react-image-crop";
+import { inputClass, labelClass } from '../../../utils/CustomClass';
 import setCanvasPreview from "./SetCanvasPreview";
+import { useDebounceEffect } from './useDebounceEffect'
+
 
 const ASPECT_RATIO = 1;
 const MIN_DIMENSION = 150;
@@ -17,6 +20,9 @@ export const ImageCropDialog = ({updateAvatar, sendDataToParent,  ...props}) => 
   const [error, setError] = useState("");
   const [imageUrl, setImageUrl] = useState('');
   const [base64Url, setBase64Url] = useState('');
+  const [scale, setScale] = useState(1)
+  const [rotate, setRotate] = useState(0)
+  // const [completedCrop, setCompletedCrop] = useState<PixelCrop | undefined>();
   
 
   const closeModal = (data) => {
@@ -26,6 +32,27 @@ export const ImageCropDialog = ({updateAvatar, sendDataToParent,  ...props}) => 
   
   // console.log('== imageUrl == ', imageUrl)
 
+  // useDebounceEffect(
+  //   async () => {
+  //     if (
+  //       completedCrop?.width &&
+  //       completedCrop?.height &&
+  //       imgRef.current &&
+  //       previewCanvasRef.current
+  //     ) {
+  //       // We use canvasPreview as it's much faster than imgPreview.
+  //       canvasPreview(
+  //         imgRef.current,
+  //         previewCanvasRef.current,
+  //         completedCrop,
+  //         scale,
+  //         rotate,
+  //       )
+  //     }
+  //   },
+  //   100,
+  //   [completedCrop, scale, rotate],
+  // )
   
   // console.log('props?.imgSrc = ', props?.imgSrc);
   const toggle = () => setOpen(!isOpen);
@@ -154,71 +181,108 @@ const dataURLtoBlob = (dataURL) => {
                     Image Crop
                   </Dialog.Title>
 
-                  <div className="flex flex-col items-center h-96">
-                    <ReactCrop
-                      crop={crop}
-                      onChange={(pixelCrop, percentCrop) =>
-                        setCrop(percentCrop)
-                      }
-                      circularCrop
-                      keepSelection
-                      aspect={ASPECT_RATIO}
-                      minWidth={MIN_DIMENSION}
-                    >
-                      <img
-                        ref={imgRef}
-                        src={props?.imgSrc}
-                        alt="Upload"
-                        style={{ maxHeight: "70vh" }}
-                        onLoad={onImageLoad}
-                      />
-                    </ReactCrop>
+                  <div className="flex h-56 my-5 gap-x-3 gap-y-3 customBox">
+                    <div className="w-1/4 mx-5">
+                      <div className="">
+                        <label className={labelClass} htmlFor="scale-input">Scale</label>
+                        <input
+                          id="scale-input"
+                          type="number"
+                          placeholder=''
+                          step="0.1"
+                          value={scale}
+                          className={inputClass}
+                          disabled={!props?.imgSrc}
+                          onChange={(e) => setScale(Number(e.target.value))}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="rotate-input">Rotate: </label>
+                        <input
+                          id="rotate-input"
+                          type="number"
+                          value={rotate}
+                          className={inputClass}
+                          disabled={!props?.imgSrc}
+                          onChange={(e) =>
+                            setRotate(Math.min(180, Math.max(-180, Number(e.target.value))))
+                          }
+                        />
+                      </div>
+                    </div>
+                    <div className="w-2/3 col-span-1 ">
+                      <ReactCrop
+                        crop={crop}
+                        onChange={(pixelCrop, percentCrop) =>
+                          setCrop(percentCrop)
+                        }
+                        // circularCrop
+                        keepSelection
+                        aspect={ASPECT_RATIO}
+                        minWidth={MIN_DIMENSION}
+                      >
+                        <img
+                          ref={imgRef}
+                          src={props?.imgSrc}
+                          alt="Upload"
+                          style={{ maxHeight: "30vh", width: "100%", transform: `scale(${scale}) rotate(${rotate}deg)`}}
+                          onLoad={onImageLoad}
+                        />
+                      </ReactCrop>
                     <button
-                      className="px-4 py-2 mt-4 font-mono text-xs text-white rounded-2xl bg-sky-500 hover:bg-sky-600"
-                      onClick={() => {
-                       
-                        setCanvasPreview(
-                          imgRef.current,
-                          previewCanvasRef.current,
-                          convertToPixelCrop(
-                            crop,
-                            imgRef.current.width,
-                            imgRef.current.height
-                          )
-                        );
-                        const dataUrl = previewCanvasRef.current.toDataURL();
-                        setBase64Url(dataUrl)
-                        // updateAvatar(dataUrl);
-                        // convertBase64ToUrl(base64Url)
-                        // closeModal();
-                        // convertBase64ToUrl(props?.imgSrc)
-                        // sendDataToParent(props?.imgSrc)
-                        // setOpen(!isOpen);
-                        // reset();
-                      }}
-                    >
-                      Crop Image Set
+                        className="px-4 py-2 mx-2 mt-4 font-mono text-xs text-white rounded-2xl bg-sky-500 hover:bg-sky-600"
+                        onClick={() => {
+                        
+                          setCanvasPreview(
+                            imgRef.current,
+                            previewCanvasRef.current,
+                            convertToPixelCrop(
+                              crop,
+                              imgRef.current.width,
+                              imgRef.current.height
+                            )
+                          );
+                          const dataUrl = previewCanvasRef.current.toDataURL();
+                          setBase64Url(dataUrl)
+                          // updateAvatar(dataUrl);
+                          // convertBase64ToUrl(base64Url)
+                          // closeModal();
+                          // convertBase64ToUrl(props?.imgSrc)
+                          // sendDataToParent(props?.imgSrc)
+                          // setOpen(!isOpen);
+                          // reset();
+                        }}
+                      >
+                        Crop Image Set
                     </button>
+                    </div>
                   </div>
 
                 {crop && crop != '' && (
-                    <div className="flex items-center justify-center">
+                    <div className="flex flex-wrap items-center justify-center">
+                      <div>
+                        <span className="text-lg font-medium">
+                          Preview
+                        </span>
                         <canvas
                             ref={previewCanvasRef}
                             className="mx-2 my-10"
                             style={{
-                            border: "1px solid black",
-                            objectFit: "contain",
-                            width: 150,
-                            height: 150,
-                        }}
-                    />
+                              border: "1px solid black",
+                              objectFit: "contain",
+                              width: 100,
+                              height: 100,
+                              maxHeight: "30vh",
+                              transform: `scale(${scale}) rotate(${rotate}deg)`
+                          }}
+                        />
                         <div>
                             <button 
                               // onClick={() => convertBase64ToUrl(previewCanvasRef)}
                               onClick={() => closeModal(base64Url)}
                               className={formBtn1}>Submit</button>
                         </div>
+                      </div>
                         {/* <div>
                             <img src={imageUrl} alt="Converted Image" />
                         </div> */}
