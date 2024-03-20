@@ -218,8 +218,8 @@ function Drivers() {
         { field: 'profile_pic', header: 'Profile', body: representativeBodyTemplate, sortable: false, style: true },
         { field: 'first_name', body: (row) => <div className="capitalize">{row?.user?.first_name + " " + row?.user?.last_name}</div>, header: 'Name' },
         { field: 'email', header: 'Email', body: (row) => <h6>{row?.user?.email}</h6>, sortable: false },
-        { field: 'shift',  header: 'Shift Timing', body: (row) => <h6>{row?.shift ? JSON.parse(row?.shift)?.title : ''}</h6>, sortable: false },
-        { field: 'job_type',  header: 'Job Type', body: (row) => <h6>{row?.job_type ? JSON.parse(row?.job_type)?.title : ''}</h6>, sortable: false },
+        // { field: 'shift',  header: 'Shift Timing', body: (row) => <h6>{row?.shift ? JSON.parse(row?.shift)?.title : ''}</h6>, sortable: false },
+        // { field: 'job_type',  header: 'Job Type', body: (row) => <h6>{row?.job_type ? JSON.parse(row?.job_type)?.title : ''}</h6>, sortable: false },
         { field: 'gender', header: 'Gender', body: (row) => <h6>{row?.user?.gender}</h6>, sortable: false },
         { field: 'phone_no', header: 'Phone No', body: (row) => <h6>{row?.user?.phone_no}</h6>, sortable: false },
         { field: 'pincode', header: 'Pincode', body: (row) => <h6>{row?.user?.pincode}</h6>, sortable: false },
@@ -228,7 +228,6 @@ function Drivers() {
         { field: 'city', header: 'city', body: (row) => <h6>{row?.user?.city}</h6>, sortable: false },
         { field: 'week_off', header: 'Week Off', body: (row) => <h6>{row?.week_off}</h6>, sortable: false },
         { field: 'vehicle_type', header: 'Vehicle Type', body: (row) => <h6>{row?.vehicle_type}</h6>, sortable: false },
-
         { field: 'registration_date', header: 'Registration Date', body: (row) => <h6>{row?.user?.registration_date}</h6>, sortable: false },
         { field: 'status', header: 'Status', body: activeActionsRole, sortable: false },
         { field: 'id', header: 'Action', body: actionBodyTemplate, sortable: true },

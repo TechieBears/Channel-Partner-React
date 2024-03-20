@@ -10,6 +10,7 @@ function ViewAdminProduct() {
     const location = useLocation();
     const product = location.state;
     const navigate = useNavigate();
+    console.log('product', product)
 
     const images = [
         {
@@ -80,8 +81,19 @@ function ViewAdminProduct() {
                             </div>
                         </div>
                     </div>
+                   {product?.product_video_url != '' && <div className='p-4 space-y-2 '>
+                        <p className='text-2xl font-semibold'>Product Video</p>
+                        <div className='grid grid-cols-1 gap-5'>
+                            <video width="500" height="500" controls>
+                                <source src={product?.product_video_url} type="video/mp4" />
+                                <source src={product?.product_video_url} type="video/x-m4v" />
+                                <source src={product?.product_video_url} type="video/*" />
+                            </video>
+                        </div>
+                    </div>}
                 </div>
-                <div className='w-96 bg-white rounded-xl'>
+
+                <div className='bg-white w-96 rounded-xl'>
                     <SimpleGallery
                         galleryID="my-test-gallery"
                         images={images}

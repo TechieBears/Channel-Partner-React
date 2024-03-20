@@ -55,7 +55,6 @@ function DeliveryBoy() {
         const payload = { userId: row?.user?.id, isverifiedbyadmin: row?.user?.isverified_byadmin, isverifiedbyfranchise: !row?.isverifiedbyfranchise }
         try {
             verifyDeliveryBoy(payload).then((form) => {
-                console.log(payload)
                 if (form.message == "delivery boy verified successfully") {
                     toast.success('Driver Verification Changed !');
                     DeliveryBoyDetails()

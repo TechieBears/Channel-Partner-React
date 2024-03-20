@@ -37,16 +37,18 @@ const Step1 = (props) => {
         lng: 0
     });
 
-    const getCurrentPostion = () => {
+    const getCurrentPosition = () => {
         navigator.geolocation.getCurrentPosition(async ({ coords }) => {
             const { latitude, longitude } = coords;
             setPosition({
                 lat: latitude,
                 lng: longitude
             })
-            await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyDGaE5jGDxrxwRCloXLOgDgcH-1Q64IlpI`)
+            // await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${import.meta.env.VITE_GOOGLE_API_KEY}`)
+            await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${import.meta.env.VITE_GOOGLE_API_KEY}`)
                 .then(response => response.json())
                 .then(data => {
+
                     const address = data?.results[0]?.formatted_address;
                     const components = data?.results[0]?.address_components;
 
@@ -66,6 +68,7 @@ const Step1 = (props) => {
                             latitude: latitude,
                             longitude: longitude
                         };
+                        reset(mergedData);
                     }
                 })
                 .catch(error => console.error('Error fetching address:', error));
@@ -77,7 +80,7 @@ const Step1 = (props) => {
     }
 
     useEffect(() => {
-        getCurrentPostion()
+        getCurrentPosition()
     }, [])
 
 
@@ -180,7 +183,7 @@ const Step1 = (props) => {
                 <label className={`text-transparent ${labelClass}`}>
                     Restaurant Phone Number*
                 </label>
-                <button type='button' className={`flex w-full justify-center ${formBtn1}`} onClick={getCurrentPostion}><LocateFixed className='me-3' />Get Current Location</button>
+                <button type='button' className={`flex w-full justify-center ${formBtn1}`} onClick={getCurrentPosition}><LocateFixed className='me-3' />Get Current Location</button>
             </div>
             <div className="">
                 <label className={labelClass}>
@@ -352,7 +355,7 @@ const Step3 = (props) => {
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
                     {...register("ambience_image", { required: !props?.data?.ambience_image })} />
-                {props?.button == 'edit' && props?.data.ambience_image != '' && props?.data?.ambience_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
+                {props?.button == 'edit' && props?.data.ambience_image != '' && props?.data?.ambience_image != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                     {props?.data?.ambience_image?.split('/').pop()}
                 </label>}
                 {errors.ambience_image && <Error title='Image is required*' />}
@@ -366,7 +369,7 @@ const Step3 = (props) => {
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
                     {...register("shop_image", { required: !props?.data?.vendor?.shop_image })} />
-                {props?.button == 'edit' && props?.data?.vendor?.shop_image != '' && props?.data?.vendor?.shop_image != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
+                {props?.button == 'edit' && props?.data?.vendor?.shop_image != '' && props?.data?.vendor?.shop_image != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                     {props?.data?.vendor?.shop_image?.split('/').pop()}
                 </label>}
                 {errors.shop_image && <Error title='Image is required*' />}
@@ -381,7 +384,7 @@ const Step3 = (props) => {
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
                     {...register("food_image1", { required: !props?.data?.food_image1 })} />
-                {props?.button == 'edit' && props?.data.food_image1 != '' && props?.data.food_image1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
+                {props?.button == 'edit' && props?.data.food_image1 != '' && props?.data.food_image1 != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                     {props?.data?.food_image1?.split('/').pop()}
                 </label>}
                 {errors.food_image1 && <Error title='Dish Image is required*' />}
@@ -395,7 +398,7 @@ const Step3 = (props) => {
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
                     {...register("food_image2", {})} />
-                {props?.button == 'edit' && props?.data.food_image2 != '' && props?.data.food_image2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
+                {props?.button == 'edit' && props?.data.food_image2 != '' && props?.data.food_image2 != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                     {props?.data?.food_image2?.split('/').pop()}
                 </label>}
             </div>
@@ -408,7 +411,7 @@ const Step3 = (props) => {
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
                     {...register("food_image3", {})} />
-                {props?.button == 'edit' && props?.data.food_image3 != '' && props?.data.food_image3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
+                {props?.button == 'edit' && props?.data.food_image3 != '' && props?.data.food_image3 != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                     {props?.data?.food_image3?.split('/').pop()}
                 </label>}
             </div>
@@ -432,7 +435,7 @@ const Step4 = (props) => {
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
                     {...register("order_img1", {})} />
-                {props?.button == 'edit' && props?.data.order_img1 != '' && props?.data.order_img1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
+                {props?.button == 'edit' && props?.data.order_img1 != '' && props?.data.order_img1 != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                     {props?.data?.order_img1?.split('/').pop()}
                 </label>}
             </div>
@@ -445,7 +448,7 @@ const Step4 = (props) => {
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
                     {...register("order_img2", {})} />
-                {props?.button == 'edit' && props?.data?.order_img2 != '' && props?.data?.order_img2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
+                {props?.button == 'edit' && props?.data?.order_img2 != '' && props?.data?.order_img2 != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                     {props?.data?.order_img2?.split('/').pop()}
                 </label>}
             </div>
@@ -458,7 +461,7 @@ const Step4 = (props) => {
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
                     {...register("order_img3", {})} />
-                {props?.button == 'edit' && props?.data?.order_img3 != '' && props?.data?.order_img3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
+                {props?.button == 'edit' && props?.data?.order_img3 != '' && props?.data?.order_img3 != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                     {props?.data?.order_img3?.split('/').pop()}
                 </label>}
             </div>
@@ -479,7 +482,7 @@ const Step5 = (props) => {
                     accept='image/jpeg,image/jpg,image/png'
                     placeholder='Upload Images...'
                     {...register("pan_card", { required: (props?.data?.vendor?.pan_card ? false : true) })} />
-                {props?.button == 'edit' && props?.data?.vendor?.pan_card != '' && props?.data?.vendor?.pan_card != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate'>
+                {props?.button == 'edit' && props?.data?.vendor?.pan_card != '' && props?.data?.vendor?.pan_card != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                     {props?.data?.vendor?.pan_card?.split('/').pop()}
                 </label>
                 }
@@ -640,7 +643,6 @@ export default function DashboardForm(props) {
 
     useEffect(() => {
         if (isOpen && props?.data && props.button == 'edit') {
-            console.log("🚀 ~ file: DashboardForm.jsx:733 ~ useEffect ~ props?.data:", props?.data)
             // const formattedStartTime = moment(props?.data?.vendor?.shop_start_time, 'h:mm A').format('HH:mm');
             // const formattedEndTime = moment(props?.data?.vendor?.shop_end_time, 'h:mm A').format('HH:mm');
             methods.reset({
@@ -654,7 +656,7 @@ export default function DashboardForm(props) {
                 "restaurant_type": props?.data?.restaurant_type,
                 "shop_start_time": props?.data?.vendor?.shop_start_time,
                 "shop_end_time": props?.data?.vendor?.shop_end_time,
-                "type_of_cuisine": JSON.parse(props?.data?.type_of_cuisine?.replace(/'/g, '"')),
+                // "type_of_cuisine": JSON.parse(props?.data?.type_of_cuisine?.replace(/'/g, '"')),
                 "ambience_image": props?.data?.ambience_image,
                 "shop_image": props?.data?.vendor?.shop_image,
                 "pan_card": props?.data?.vendor?.pan_card,
@@ -700,7 +702,6 @@ export default function DashboardForm(props) {
 
     // ================= submit data  ===============================
     const onSubmit = async (data) => {
-        console.log("🚀 ~ file: DashboardForm.jsx:773 ~ onSubmit ~ data:", data)
         isStepFalied()
         const shopStartTime = new Date(data?.shop_start_time);
         const shopEndTime = new Date(data?.shop_end_time);
@@ -836,11 +837,9 @@ export default function DashboardForm(props) {
                     data.order_img3 = props?.data?.order_img3
                 }
                 if (data?.pan_card?.length != 0 && (data?.pan_card != props?.data?.vendor?.pan_card)) {
-                    console.log('pan card if ', data?.pan_card)
                     await ImageUpload(data?.pan_card[0], "restaurant", "pan_card", data?.shop_name)
                     data.pan_card = `${restaurantLink}${data?.shop_name}_pan_card_${data?.pan_card[0]?.name}`
                 } else {
-                    console.log('pan card else ')
                     data.pan_card = props?.data?.vendor?.pan_card
                 }
             }
@@ -869,7 +868,6 @@ export default function DashboardForm(props) {
                         "shop_start_time": shopStartTime,
                         "shop_end_time": shopEndTime,
                     }
-                    console.log("🚀 ~ file: DashboardForm.jsx:896 ~ onSubmit ~ updatedData:", updatedData)
                     editOnBoarding(LoggedUserDetails?.sellerId, updatedData).then((res) => {
                         if (res?.message === "Restaurant edited successfully") {
                             setTimeout(() => {
@@ -901,7 +899,6 @@ export default function DashboardForm(props) {
 
     useEffect(() => {
         if (isOpen && props?.data && props.button == 'edit') {
-            console.log("🚀 ~ file: DashboardForm.jsx:733 ~ useEffect ~ props?.data:", props?.data)
             const formattedStartTime = moment(props?.data?.vendor?.shop_start_time, 'h:mm A').format('HH:mm');
             const formattedEndTime = moment(props?.data?.vendor?.shop_end_time, 'h:mm A').format('HH:mm');
             methods.reset({
@@ -915,7 +912,7 @@ export default function DashboardForm(props) {
                 "restaurant_type": props?.data?.restaurant_type,
                 "shop_start_time": formattedStartTime,
                 "shop_end_time": formattedEndTime,
-                "type_of_cuisine": JSON.parse(props?.data?.type_of_cuisine?.replace(/'/g, '"')),
+                // "type_of_cuisine": JSON.parse(props?.data?.type_of_cuisine?.replace(/'/g, '"')),
                 "ambience_image": props?.data?.ambience_image,
                 "shop_image": props?.data?.vendor?.shop_image,
                 "pan_card": props?.data?.vendor?.pan_card,

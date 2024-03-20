@@ -36,7 +36,6 @@ const Login = () => {
         try {
             setLoader(true)
             await login(data).then((res) => {
-                console.log("🚀 ~ awaitlogin ~ res:", res)
                 if (res.message == "Successfully logged in") {
                     document.title = `Insta Smart Bazzar Admin Dashbaord | ${res?.role?.charAt(0)?.toUpperCase() + res?.role?.slice(1)}`
                     dispatch(setLoggedUserDetails(res))
@@ -63,9 +62,7 @@ const Login = () => {
         try {
             setLoader(true)
             await getFranchiseDetails(id).then((res) => {
-                console.log(" Franchisee Additional data ", res)
                 if (res) {
-                    console.log(" ..", res[0])
                     dispatch(setFranchiseeDetails(res[0]))
                     setLoader(false)
                 } else {

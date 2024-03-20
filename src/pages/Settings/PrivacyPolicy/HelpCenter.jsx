@@ -10,7 +10,6 @@ const HelpCenter = () => {
         try {
             getHelpCenter().then((res) => {
                 setData(res.data)
-                console.log(res.data)
             })
         } catch (error) {
             console.log(error)
@@ -25,11 +24,11 @@ const HelpCenter = () => {
 
     return (
         <div
-            className='p-4 bg-white m-4 rounded-lg'
+            className='p-4 m-4 bg-white rounded-lg'
         >
-            <div className="flex justify-between flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 mb-6">
+            <div className="flex flex-col items-start justify-between mb-6 space-y-4 sm:flex-row sm:items-center sm:space-y-0">
                 <div className="">
-                    <h1 className='font-tbPop text-xl font-semibold text-gray-900 '>Help Center</h1>
+                    <h1 className='text-xl font-semibold text-gray-900 font-tbPop '>Help Center</h1>
                 </div>
           
                 <AddTerm title="Add Help Center" getAllHelpCenter={getAllHelpCenter}/>
@@ -41,7 +40,7 @@ const HelpCenter = () => {
                             <div key={support_id} className='p-4 space-y-2'>
                                 <div className='space-y-1' onClick={() => setSelectedTab(id)}>
                                     <p className={` font-semibold text-lg underline cursor-pointer`}>{support_name}</p>
-                                    <div className='p-4 rounded-lg border-2 border-gray-200' key={support_id}>
+                                    <div className='p-4 border-2 border-gray-200 rounded-lg' key={support_id}>
                                         <p>{support_contact}</p>
                                     </div>
                                 </div>

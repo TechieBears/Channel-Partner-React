@@ -21,7 +21,6 @@ export default function BannerForm(props) {
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const [childData, setChildData] = useState('');
-  console.log('childData', childData)
 
 
   const [selectedOption, setSelectedOption] = useState('dropdown');
@@ -43,7 +42,6 @@ export default function BannerForm(props) {
   
   const onSelectFile = (e) => {
     const file = e.target.files?.[0];
-    console.log('e', e.target.files?.[0])
     setUrlName(e.target.files?.[0]?.name)
     if (!file) return;
 
@@ -99,12 +97,10 @@ export default function BannerForm(props) {
         reject(err);
       };
       img.src = imageUrl;
-      console.log('img', imageUrl, img.src)
     });
   };
   
   const receiveDataFromChild = (data) => {
-    console.log('-- child data --', data);
     setChildData(data);
     // getImageInfo(data)
 
@@ -160,7 +156,6 @@ export default function BannerForm(props) {
       });
       return;
     }
-    console.log("🚀 ~ file: BannerForm.jsx:82 ~ data:", data)
 
     if (props?.button != "edit") {
       try {
@@ -248,7 +243,6 @@ export default function BannerForm(props) {
 
         img.onload = () => {
           if (img.width > 3556 && img.height > 2000) {
-            console.log('File uploaded successfully');
             setimageError('');
           } else {
             alert('Image dimensions should be less than 3556 x 2000')

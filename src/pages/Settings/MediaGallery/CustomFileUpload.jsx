@@ -74,7 +74,6 @@ const CustomFileUpload = () => {
   const onSubmit = async (data) => {
     setLoader(true);
     if (EditingData) {
-      console.log('edit called', data?.media_url)
       if (data?.media_url?.length > 0 && (data?.media_url != EditingData?.media_url)) {
         await ImageUpload(
           data?.media_url[0],
@@ -165,7 +164,7 @@ const CustomFileUpload = () => {
                 {...register("media_url")}
               />
               {EditingData && EditingData?.media_url != '' && EditingData?.media_url != undefined &&
-                <label className='block mb-1 font-medium text-blue-800 text-sm font-tb'>
+                <label className='block mb-1 text-sm font-medium text-blue-800 font-tb'>
                   {EditingData?.media_url?.split('/').pop()}
                 </label>}
             </div>
@@ -216,7 +215,7 @@ const CustomFileUpload = () => {
                     alt={data?.media_name}
                     className="object-cover h-40 min-w-full bg-slate-100"
                   />
-                  <div className="flex justify-evenly py-3 items-center">
+                  <div className="flex items-center py-3 justify-evenly">
                     <div className="py-2 text-xs font-semibold">
                       {data?.media_name}
                     </div>
@@ -229,7 +228,7 @@ const CustomFileUpload = () => {
                 </li>
               ))
             ) : (
-              <li className="text-center bg-gray-100 rounded-sm shadow-lg p-4">
+              <li className="p-4 text-center bg-gray-100 rounded-sm shadow-lg">
                 No data found
               </li>
             )}

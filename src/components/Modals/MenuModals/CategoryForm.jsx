@@ -29,7 +29,6 @@ export default function CategoryForm(props) {
 
   // ============================ submit data  =====================================
   const onSubmit = async (data) => {
-    console.log('data = ', data)
     if (props?.button !== "edit") {
       try {
         if (data.category_image.length != 0) {
@@ -99,7 +98,6 @@ export default function CategoryForm(props) {
 
   // ============================ submit data  =====================================
   const onRestaurantSubmit = async (data) => {
-    console.log('data = ', data)
     if (props?.button != "edit") {
       try {
         if (data.category_image.length != 0) {
@@ -111,7 +109,6 @@ export default function CategoryForm(props) {
         setLoader(true);
         createRestaurantCategory(data)
           .then((res) => {
-            console.log('category data = ', res)
             if (res?.message == "Category Created Successfully") {
               setTimeout(() => {
                 dispatch(setCategory(res));
@@ -251,7 +248,7 @@ export default function CategoryForm(props) {
                           {props?.button == "edit" &&
                             props?.data.category_image != "" &&
                             props?.data.category_image != undefined && (
-                              <label className="block mb-1 font-medium text-blue-800 text-md font-tb truncate">
+                              <label className="block mb-1 font-medium text-blue-800 truncate text-md font-tb">
                                 {props?.data?.category_image?.split("/").pop()}
                               </label>
                             )}

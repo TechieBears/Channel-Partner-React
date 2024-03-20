@@ -431,8 +431,8 @@ const Dashboard = () => {
                     </form>
                 </div>
                 {/* ===================== New Order Section ===================== */}
-                <div className="space-y-2 p-4">
-                    <p className="font-semibold text-lg">Current Orders</p>
+                <div className="p-4 space-y-2">
+                    <p className="text-lg font-semibold">Current Orders</p>
                     <Orders data={data} />
                 </div>
             </section>
