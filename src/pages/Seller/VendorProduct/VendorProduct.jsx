@@ -58,7 +58,6 @@ const VendorProduct = () => {
     const shopCat = () => {
         try {
             getCategory().then(res => {
-                console.log('res', res)
                 setCategory(res)
                 // if (res?.length > 0) {
                 //     const newData = res.map((data) => ({
@@ -231,7 +230,6 @@ const VendorProduct = () => {
                 console.log('error', error)
             }
         } else if (user?.vendor_type == 'shop') {
-            console.log('caleed')
             getProducts();
             shopCat();
             shopSubCat();

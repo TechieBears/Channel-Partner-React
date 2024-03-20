@@ -6,7 +6,10 @@ export const environment = {
 
     // ---------------- Staging Server --------------------------------
     // baseUrl: 'https://5932-43-252-33-152.ngrok-free.app/',
+
+    //================== DO NOT REMOVE ================
     baseUrl: 'https://fa63-58-146-123-202.ngrok-free.app/',
+    webSocketUrl: `wss://fa63-58-146-123-202.ngrok-free.app/ws/socket/`
 
 
 

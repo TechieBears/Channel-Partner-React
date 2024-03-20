@@ -25,8 +25,7 @@ const Dashboard = () => {
     const cityNames = useSelector((state) => state?.master?.city);
     const [open, setOpen] = React.useState(false);
     const [delId, setDelId] = React.useState(0);
-    const orders = useSelector((state) => { state?.orders?.orders })
-
+    const orders = useSelector(state => state?.orders?.newOrders);
     const {
         register,
         handleSubmit,
@@ -84,230 +83,6 @@ const Dashboard = () => {
         });
     };
 
-    // ====================== table columns ======================
-
-    const data = [
-        {
-            "type": "order_message_echo",
-            "orderId": 142,
-            "orderfor": "vendor",
-            "order_details": {
-                "order_delivery_status": "placed",
-                "order_created_at": "2024-03-14T15:18:39.976467+05:30",
-                "order_instruction": null
-            },
-            "orderedItems": [
-                {
-                    "orderitem_id": 173,
-                    "user": {
-                        "first_name": "shubham",
-                        "last_name": "Shubbb",
-                        "phone_no": "7796500494",
-                        "email": "shubham786@gmail.com",
-                        "profile_pic": "https://s3-ap-south-1.amazonaws.com/channel-partner-media/profile%2Fshubham1708667013030.jpg",
-                        "city": "",
-                        "state": "",
-                        "pincode": "",
-                        "date_of_birth": "2024-02-23",
-                        "gender": "Female"
-                    },
-                    "product_qty": 2,
-                    "product_price": 120,
-                    "product": {
-                        "product_id": 7,
-                        "product_name": "Faith Cole",
-                        "product_description": "jhdsjadhajkd",
-                        "product_brand": "Non eos sequi aut re",
-                        "product_country_of_origin": "Facilis tenetur null",
-                        "product_shelflife": "Ex sint quae aliquid",
-                        "product_Manufacturer_Name": "Ursa Michael",
-                        "product_Manufacturer_Address": null,
-                        "product_nutritional_info": "Consequatur Ullam b",
-                        "product_additional_details": null,
-                        "product_available_qty": 762,
-                        "product_msbcode": null,
-                        "product_image_1": "https://channel-partner-media.s3.ap-south-1.amazonaws.com/shopProduct/Faith Cole_MainImage_egg.png",
-                        "product_image_2": "",
-                        "product_image_3": "",
-                        "product_image_4": "",
-                        "product_image_5": "",
-                        "product_video_url": "",
-                        "product_isactive": true,
-                        "product_actual_price": 100,
-                        "product_unit_type": null,
-                        "product_unit": null,
-                        "product_rating": 3,
-                        "product_isverified_byadmin": true,
-                        "product_isverified_byfranchise": false,
-                        "insta_commison_percentage": 10,
-                        "markup_percentage": 10,
-                        "offers": 10,
-                        "featured": true,
-                        "final_price": 120,
-                        "vendor": 14,
-                        "product_category": 15,
-                        "product_subcategory": 3
-                    }
-                },
-                {
-                    "orderitem_id": 173,
-                    "user": {
-                        "first_name": "shubham",
-                        "last_name": "Shubbb",
-                        "phone_no": "7796500494",
-                        "email": "shubham786@gmail.com",
-                        "profile_pic": "https://s3-ap-south-1.amazonaws.com/channel-partner-media/profile%2Fshubham1708667013030.jpg",
-                        "city": "",
-                        "state": "",
-                        "pincode": "",
-                        "date_of_birth": "2024-02-23",
-                        "gender": "Female"
-                    },
-                    "product_qty": 1,
-                    "product_price": 120,
-                    "product": {
-                        "product_id": 7,
-                        "product_name": "Faith Cole",
-                        "product_description": "jhdsjadhajkd",
-                        "product_brand": "Non eos sequi aut re",
-                        "product_country_of_origin": "Facilis tenetur null",
-                        "product_shelflife": "Ex sint quae aliquid",
-                        "product_Manufacturer_Name": "Ursa Michael",
-                        "product_Manufacturer_Address": null,
-                        "product_nutritional_info": "Consequatur Ullam b",
-                        "product_additional_details": null,
-                        "product_available_qty": 762,
-                        "product_msbcode": null,
-                        "product_image_1": "https://channel-partner-media.s3.ap-south-1.amazonaws.com/shopProduct/Faith Cole_MainImage_egg.png",
-                        "product_image_2": "",
-                        "product_image_3": "",
-                        "product_image_4": "",
-                        "product_image_5": "",
-                        "product_video_url": "",
-                        "product_isactive": true,
-                        "product_actual_price": 100,
-                        "product_unit_type": null,
-                        "product_unit": null,
-                        "product_rating": 3,
-                        "product_isverified_byadmin": true,
-                        "product_isverified_byfranchise": false,
-                        "insta_commison_percentage": 10,
-                        "markup_percentage": 10,
-                        "offers": 10,
-                        "featured": true,
-                        "final_price": 120,
-                        "vendor": 14,
-                        "product_category": 15,
-                        "product_subcategory": 3
-                    }
-                },
-                {
-                    "orderitem_id": 173,
-                    "user": {
-                        "first_name": "shubham",
-                        "last_name": "Shubbb",
-                        "phone_no": "7796500494",
-                        "email": "shubham786@gmail.com",
-                        "profile_pic": "https://s3-ap-south-1.amazonaws.com/channel-partner-media/profile%2Fshubham1708667013030.jpg",
-                        "city": "",
-                        "state": "",
-                        "pincode": "",
-                        "date_of_birth": "2024-02-23",
-                        "gender": "Female"
-                    },
-                    "product_qty": 1,
-                    "product_price": 120,
-                    "product": {
-                        "product_id": 7,
-                        "product_name": "Faith Cole",
-                        "product_description": "jhdsjadhajkd",
-                        "product_brand": "Non eos sequi aut re",
-                        "product_country_of_origin": "Facilis tenetur null",
-                        "product_shelflife": "Ex sint quae aliquid",
-                        "product_Manufacturer_Name": "Ursa Michael",
-                        "product_Manufacturer_Address": null,
-                        "product_nutritional_info": "Consequatur Ullam b",
-                        "product_additional_details": null,
-                        "product_available_qty": 762,
-                        "product_msbcode": null,
-                        "product_image_1": "https://channel-partner-media.s3.ap-south-1.amazonaws.com/shopProduct/Faith Cole_MainImage_egg.png",
-                        "product_image_2": "",
-                        "product_image_3": "",
-                        "product_image_4": "",
-                        "product_image_5": "",
-                        "product_video_url": "",
-                        "product_isactive": true,
-                        "product_actual_price": 100,
-                        "product_unit_type": null,
-                        "product_unit": null,
-                        "product_rating": 3,
-                        "product_isverified_byadmin": true,
-                        "product_isverified_byfranchise": false,
-                        "insta_commison_percentage": 10,
-                        "markup_percentage": 10,
-                        "offers": 10,
-                        "featured": true,
-                        "final_price": 120,
-                        "vendor": 14,
-                        "product_category": 15,
-                        "product_subcategory": 3
-                    }
-                },
-                {
-                    "orderitem_id": 173,
-                    "user": {
-                        "first_name": "shubham",
-                        "last_name": "Shubbb",
-                        "phone_no": "7796500494",
-                        "email": "shubham786@gmail.com",
-                        "profile_pic": "https://s3-ap-south-1.amazonaws.com/channel-partner-media/profile%2Fshubham1708667013030.jpg",
-                        "city": "",
-                        "state": "",
-                        "pincode": "",
-                        "date_of_birth": "2024-02-23",
-                        "gender": "Female"
-                    },
-                    "product_qty": 1,
-                    "product_price": 120,
-                    "product": {
-                        "product_id": 7,
-                        "product_name": "Faith Cole",
-                        "product_description": "jhdsjadhajkd",
-                        "product_brand": "Non eos sequi aut re",
-                        "product_country_of_origin": "Facilis tenetur null",
-                        "product_shelflife": "Ex sint quae aliquid",
-                        "product_Manufacturer_Name": "Ursa Michael",
-                        "product_Manufacturer_Address": null,
-                        "product_nutritional_info": "Consequatur Ullam b",
-                        "product_additional_details": null,
-                        "product_available_qty": 762,
-                        "product_msbcode": null,
-                        "product_image_1": "https://channel-partner-media.s3.ap-south-1.amazonaws.com/shopProduct/Faith Cole_MainImage_egg.png",
-                        "product_image_2": "",
-                        "product_image_3": "",
-                        "product_image_4": "",
-                        "product_image_5": "",
-                        "product_video_url": "",
-                        "product_isactive": true,
-                        "product_actual_price": 100,
-                        "product_unit_type": null,
-                        "product_unit": null,
-                        "product_rating": 3,
-                        "product_isverified_byadmin": true,
-                        "product_isverified_byfranchise": false,
-                        "insta_commison_percentage": 10,
-                        "markup_percentage": 10,
-                        "offers": 10,
-                        "featured": true,
-                        "final_price": 120,
-                        "vendor": 14,
-                        "product_category": 15,
-                        "product_subcategory": 3
-                    }
-                },
-            ]
-        }
-    ]
     return (
         <>
             {user?.is_registered == false && user?.vendor_type == 'restaurant' ? <DashboardForm dashBoard={false} isOpen={modelOpen} /> : ''}
@@ -433,7 +208,13 @@ const Dashboard = () => {
                 {/* ===================== New Order Section ===================== */}
                 <div className="space-y-2 p-4">
                     <p className="font-semibold text-lg">Current Orders</p>
-                    <Orders data={data} />
+                    {
+                        orders
+                            ?.sort((a, b) => b.orderId - a.orderId)
+                            ?.map(data => (
+                                <Orders data={data} />
+                            ))
+                    }
                 </div>
             </section>
         </>

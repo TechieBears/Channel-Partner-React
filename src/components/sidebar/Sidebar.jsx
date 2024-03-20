@@ -1,51 +1,46 @@
 import { DirectLeft } from 'iconsax-react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import { getFranchRestaurant, getRestarant, startSession } from '../../api';
 import logoImg from '../../assets/logo_white.png';
 import { environment } from '../../env';
+import { setSessionStarted } from '../../redux/Slices/SessionSlice';
+import { setOrders } from '../../redux/Slices/orderSlice';
+import { setAllRestaurant } from '../../redux/Slices/restauantSlice';
 import Navbar from './Navbar';
 import { Admin, Franchise, Seller } from './SidebarApi';
 import SidebarLink from './SidebarLink';
-import { setSessionStarted } from '../../redux/Slices/SessionSlice';
-import { getFranchRestaurant, getRestarant, startSession } from '../../api';
-import { setOrders } from '../../redux/Slices/orderSlice';
-import { setAllRestaurant } from '../../redux/Slices/restauantSlice';
 
 const Sidebar = ({ children }) => {
-    const route = useLocation();
     const user = useSelector(state => state?.user?.loggedUserDetails)
     const WebSocketUrl = `${environment.webSocketUrl}user_to_seller/${user?.msb_code}`;
-    // const ws = useRef(new WebSocket(WebSocketUrl)).current
-    let orders = [];
-
+    const ws = useRef(new WebSocket(WebSocketUrl)).current
     const [isActiveLink, setIsActiveLink] = useState(false);
     const [mobileSidebar, setMobileSidebar] = useState(false);
     const dispatch = useDispatch()
     const sessionStatus = useSelector(state => state.session.isSessionStarted)
     const timeoutId = useRef(null);
     const logoutTimeoutId = useRef(null);
-    // useMemo(() => {
-    //     if (user?.role == 'seller' && (route?.pathname == '/vendor-orders' || route?.pathname == '/')) {
-    //         ws.open = () => {
-    //             console.log('WebSocket Client Connected');
-    //         };
+    useEffect(() => {
+        if (user?.role == 'seller') {
+            ws.open = () => {
+                console.log('WebSocket Client Connected');
+            };
 
-    //         ws.onerror = (e) => {
-    //             console.log(e.message);
-    //         };
-
-    //         ws.onmessage = (e) => {
-    //             const data = JSON.parse(e.data);
-    //             console.log("🚀 ~ file: VendorOrders.jsx:63 ~ useEffect ~ data:", data)
-    //             window.alert(data?.orderId)
-    //             orders.push(data);
-    //             dispatch(setOrders(orders))
-    //         };
-    //     } else {
-    //         // ws.close();
-    //     }
-    // }, [route])
+            ws.onerror = (e) => {
+                console.log(e.message);
+            };
+            ws.onmessage = (e) => {
+                const data = JSON.parse(e.data);
+                window.alert(data?.orderId)
+                dispatch(setOrders(data))
+            };
+        }
+        // } else {
+        //     ws.close();
+        // }
+    }, [ws])
 
     useEffect(() => {
         if (user?.role == 'seller') {

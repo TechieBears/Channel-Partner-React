@@ -1100,7 +1100,7 @@ export const deleteFoodItem = async (id) => {
     }
 }
 
-export const getSingleRestaurant = async (id) => {
+export const getSingleRestaurant = async ({ id }) => {
     const url = `${environment.baseUrl}vendor/editonboard_restaurant/${id}`
     try {
         const response = await axios.get(url, id)
