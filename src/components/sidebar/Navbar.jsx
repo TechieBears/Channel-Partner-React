@@ -20,7 +20,6 @@ import "../../css/Navbar.css";
 import LoginModal from "../Modals/NavbarModals/LoginModal";
 import LogoutModal from "../Modals/NavbarModals/LogoutModal";
 import SessionModal from "../Modals/NavbarModals/SessionModal";
-// import DashboardForm from '../modals/DashboardModals/DashboardForm';
 
 const Navbar = ({ mobileSidebar, setMobileSidebar }) => {
   const user = useSelector((state) => state?.user?.loggedUserDetails);
@@ -136,7 +135,6 @@ const Navbar = ({ mobileSidebar, setMobileSidebar }) => {
                     : user?.last_name)}
               </h4>
               <h4 className="text-[12px] font-medium leading-none capitalize text-gray-500 pt-0.5 ">
-                {/* <span className='lowercase'>{user?.loggedUserDetails?.role !== "admin" && (`(${user?.loggedUserDetails?.service})`)}</span>  */}
                 {user?.role == "admin"
                   ? "Admin"
                   : user?.role == "seller"

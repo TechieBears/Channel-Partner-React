@@ -10,7 +10,8 @@ import { Controller, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import AsyncSelect from "react-select/async";
 import { toast } from "react-toastify";
-import Orders from "../../../components/Cards/Orders/Orders";
+// import Orders from "../../../components/Cards/Orders/Orders";
+import OrdersCard from "../../../components/Cards/Orders/OrdersCard";
 import DashboardForm from "../../../components/Modals/DashboardModals/DashboardForm";
 import DeleteModal from "../../../components/Modals/DeleteModal/DeleteModal";
 import { formBtn1, formBtn2, inputClass } from "../../../utils/CustomClass";
@@ -211,7 +212,7 @@ const Dashboard = () => {
                     {
                         orders
                             ?.map(data => (
-                                <Orders data={data} />
+                                <OrdersCard data={data} />
                             ))
                     }
                 </div>
