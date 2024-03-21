@@ -16,6 +16,7 @@ const SellerLogin = () => {
     const [eyeIcon, setEyeIcon] = useState(false)
     const [loader, setLoader] = useState(false)
     const dispatch = useDispatch()
+    const fcmToken = localStorage.getItem("FCMToken");
 
     const {
         register,
@@ -33,6 +34,7 @@ const SellerLogin = () => {
     };
     // ================ Data submit form ==================
     const onSubmit = async (data) => {
+        data.fcmtoken = fcmToken;
         try {
             setLoader(true)
             await vendorlogin(data).then((res) => {

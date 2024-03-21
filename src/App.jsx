@@ -1,7 +1,7 @@
 import { getToken } from "firebase/messaging";
 import { PrimeReactProvider } from 'primereact/api';
 import { useEffect } from "react";
-import { Provider } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import persistStore from "redux-persist/es/persistStore";
 import { PersistGate } from "redux-persist/integration/react";
 import ProjectRoutes from "../routes/ProjectRoutes";
@@ -21,6 +21,7 @@ const App = () => {
           "BCNE5irFD6vNPpidF6AKkRjZ5KVq_g4M8HSAPGtRd9j9JGHgTVwQ085FCpW73Xp1rO_Dj0fUVhCpUtjC3mk0fT4",
       });
       console.log("Token Gen", token);
+      localStorage.setItem('FCMToken', token);
       // Send this token  to server ( db)
     } else if (permission === "denied") {
       alert("You denied for the notification");
