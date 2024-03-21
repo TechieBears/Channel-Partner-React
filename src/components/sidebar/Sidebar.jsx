@@ -23,8 +23,9 @@ const Sidebar = ({ children }) => {
     const timeoutId = useRef(null);
     const logoutTimeoutId = useRef(null);
     useEffect(() => {
-        console.log('effect ran')
+        console.log('use Effect ran for web socket')
         if (user?.role == 'seller') {
+            console.log('inside iffffffffff')
             // ws.open = () => {
             //     console.log('WebSocket Client Connected');
             // };
@@ -100,7 +101,7 @@ const Sidebar = ({ children }) => {
     const getAllRestaurant = () => {
         try {
             getRestarant().then((res) => {
-                if (Array.isArray(res)){
+                if (Array.isArray(res)) {
                     const restaurantVendors = res.filter(
                         (item) => item?.vendor_type == "restaurant"
                     );

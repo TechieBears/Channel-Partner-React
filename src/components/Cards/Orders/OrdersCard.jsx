@@ -1,12 +1,13 @@
 import { ArrowDown2, ArrowUp2, User } from 'iconsax-react'
 import moment from 'moment'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { environment } from '../../../env'
 import { formBtn2 } from '../../../utils/CustomClass'
 
-function Orders({ data }) {
+function OrdersCard({ data }) {
+    console.log('data', data)
     const [status, setstatus] = useState('pending')
     const [details, setDetails] = useState(false)
     const user = useSelector(state => state?.user?.loggedUserDetails)
@@ -35,24 +36,38 @@ function Orders({ data }) {
         wsFunction(status);
         toast.success(`Order Statsus changes to ${status}`)
     }
+
+    useEffect(() => {
+        if (data?.orderDetails?.order_created_at[0] == moment.now()) {
+            setTimeout(() => {
+                console.log('auto order placed ')
+            }, 30000)
+        }
+    }, [])
+
     return (
         <>
             <div className="p-2 bg-white border-2 rounded-lg border-slate-200" >
                 <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-5 xl:grid-cols-5">
-                    <div className="flex flex-col items-center justify-start space-y-1">
+                    <div className="flex flex-col sm:items-center lg:items-start md:justify-start xl:justify-start md:ml-8 space-y-1">
                         <div className="flex gap-2">
                             <p className="font-semibold">Order ID</p>
                             <p className="text-sky-400">#{data?.orderId}</p>
                         </div>
                         <p className="text-xs font-light">{moment(data?.orderDetails?.order_created_at).format('LLL')}</p>
                     </div>
-                    <div className="flex items-center gap-2">
-                        <User variant="Bold" size={18} />
-                        <p className="font-semibold">{data?.orderedItems?.user?.first_name} {data?.orderedItems?.user?.last_name}</p>
+                    <div className="flex items-center justify-center">
+                        <div className='flex items-center gap-2'>
+                            <User variant="Bold" size={18} />
+                            {/* <p className="font-semibold">{data?.orderedItems?.user?.first_name} {data?.orderedItems?.user?.last_name}</p> */}
+                            <p className="font-semibold">Mayur Mane</p>
+                        </div>
                     </div>
-                    <div className="flex items-center justify-start gap-2">
-                        <div className={`${status === 'pending' ? 'bg-red-500' : status === 'accepted' ? 'bg-red-500' : status === 'prepared' ? 'bg-red-500' : 'bg-green-500'} p-2 font-sans rounded-full w-1 h-1/4`} />
-                        <p className={`font-semibold font-sans capitalize ${status === 'pending' ? 'text-red-500' : status === 'accepted' ? 'text-yelow-500' : status === 'prepared' ? 'text-yelow-500' : 'text-green-500'}`}>{status}</p>
+                    <div className="flex items-center justify-center">
+                        <div className='flex items-center justify-center gap-2'>
+                            <div className={`${status === 'pending' ? 'bg-red-500' : status === 'accepted' ? 'bg-red-500' : status === 'prepared' ? 'bg-red-500' : 'bg-green-500'} p-2 font-sans rounded-full w-1 h-1/4`} />
+                            <p className={`font-semibold font-sans capitalize ${status === 'pending' ? 'text-red-500' : status === 'accepted' ? 'text-yelow-500' : status === 'prepared' ? 'text-yelow-500' : 'text-green-500'}`}>{status}</p>
+                        </div>
                     </div>
                     <div className="flex items-center justify-center gap-2">
                         {status == 'pending' ?
@@ -116,4 +131,4 @@ function Orders({ data }) {
     )
 }
 
-export default Orders
+export default OrdersCard

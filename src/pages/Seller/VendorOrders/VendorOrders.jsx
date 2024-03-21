@@ -7,7 +7,7 @@ import { NavLink } from 'react-router-dom';
 import AsyncSelect from "react-select/async";
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { toast } from 'react-toastify';
-import Orders from '../../../components/Cards/Orders/Orders';
+import OrdersCard from '../../../components/Cards/Orders/OrdersCard';
 import Table from '../../../components/Table/Table';
 import { environment } from '../../../env';
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
@@ -19,8 +19,6 @@ const VendorOrders = () => {
     const [selectedTab, setSelectedTab] = useState(0);
     const storages = useSelector((state) => state?.storage?.list);
     const orders = useSelector(state => state?.orders?.newOrders);
-    const [status, setstatus] = useState('pending')
-    const [details, setDetails] = useState(false)
     const {
         register,
         handleSubmit,
@@ -29,6 +27,34 @@ const VendorOrders = () => {
         reset,
     } = useForm();
 
+
+    // =============== Orders Web Socket =============================
+    const wsFunction = ({ status, data }) => {
+        const WebSocketUrl = `${environment.webSocketUrl}user_to_seller/${user?.msb_code}${data?.orderId != null ? data?.orderId : ''}`;
+        const ws = new WebSocket(WebSocketUrl);
+
+        ws.onopen = () => {
+            ws.send(JSON.stringify({ orderdetails: data?.orderId, orderstatus: status, orderfor: user?.vendor_type == 'restaurant' ? 'restaurant' : 'vendor', messagefor: 'user' }));
+        };
+
+        ws.onclose = (event) => {
+            console.log("WebSocket connection closed:", event);
+        };
+
+        ws.onerror = (error) => {
+            console.error("WebSocket encountered error:", error);
+        };
+    }
+
+    // ============================= seller to driver web socket =============================
+    const wsFunction2 = () => {
+        const WebSocketUrl = `${environment.webSocketUrl}seller_to_deliveryboy/${user?.msb_code}${user?.pincode}`;
+        const ws = new WebSocket(WebSocketUrl);
+
+        ws.onopen = () => {
+            ws.send(data)
+        }
+    }
 
     const filterReset = () => {
         reset({
@@ -169,23 +195,6 @@ const VendorOrders = () => {
         </div>
     </div>
 
-
-    const NewOrdercolumns = [
-        { field: "orderId", header: "Order ID" },
-        { field: "OrderDate", header: "Order Date", body: (row) => <h6>{moment(row?.orderDate).format('MMM Do YY')}</h6>, sortable: true },
-        { field: "name", header: "Name", body: name, sortable: true },
-        { field: "quantity", header: "Quantity", body: quantity, sortable: true },
-        { field: "description", header: "Description", body: description, sortable: true },
-        { field: "paymentMethod", header: "Payment Method", sortable: true },
-        { field: "price", header: "Price", body: itemPrice, sortable: true },
-        { field: "category", header: "Category", body: category, sortable: true },
-        { field: "location", header: "Location", sortable: true },
-        { field: "orderPrice", header: "Total Price", sortable: true },
-        { field: "action", header: "Action", body: action, sortable: true },
-    ];
-
-
-
     return (
         <>
             <div className="p-4 m-4 bg-white sm:m-5 rounded-xl">
@@ -254,7 +263,7 @@ const VendorOrders = () => {
                                 : "text-gray-500 border-b"
                                 }`}
                         >
-                            All Order's
+                            New Order's
                         </Tab>
                         <Tab
                             className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 1
@@ -262,7 +271,7 @@ const VendorOrders = () => {
                                 : "text-gray-500 border-b"
                                 }`}
                         >
-                            Accepted
+                            Accepted Order's
                         </Tab>
                         <Tab
                             className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 2
@@ -270,33 +279,23 @@ const VendorOrders = () => {
                                 : "text-gray-500 border-b"
                                 }`}
                         >
-                            Rejected
-                        </Tab>
-                        <Tab
-                            className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 3
-                                ? "text-sky-500  border-b-2 border-sky-400 outline-0"
-                                : "text-gray-500 border-b"
-                                }`}
-                        >
-                            Pending
+                            Rejected Order's
                         </Tab>
                     </TabList>
                     {/* ================= NewPending Orders component ============== */}
                     <TabPanel className='mt-5 bg-white'>
                         {/* ===================== New Order Section ===================== */}
                         <div className="space-y-2 p-4">
-                            <div>
-                                <p className="font-semibold text-lg">Current Orders11</p>
+                            <div className='flex gap-2 items-center'>
+                                <p className="font-semibold text-lg">Current Orders</p>
+                                <p className="font-semibold text-sm text-red-500">({orders?.length})</p>
                             </div>
                             {
                                 orders?.map(data => (
-                                    <Orders data={data} />
+                                    <OrdersCard data={data} />
                                 ))
                             }
                         </div>
-                    </TabPanel>
-                    <TabPanel className='mt-5 bg-white'>
-                        <Table data={AcceptedOrderData} columns={AcceptedOrderColumn} />
                     </TabPanel>
                     <TabPanel className='mt-5 bg-white'>
                         <Table data={AcceptedOrderData} columns={AcceptedOrderColumn} />

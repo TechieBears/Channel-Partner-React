@@ -12,7 +12,6 @@ import { ImageUpload, productLink } from '../../../env';
 import MediaGallaryModal from '../../../pages/Settings/MediaGallery/MediaGallery';
 
 const AddProduct = (props) => {
-    console.log('props =', props)
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
     const [FinalPriceSeller, setFinalPriceSeller] = useState([]);
