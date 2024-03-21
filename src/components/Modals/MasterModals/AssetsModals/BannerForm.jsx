@@ -302,8 +302,7 @@ export default function BannerForm(props) {
                           />
                           <label htmlFor="radio-input">External Redirection</label>
                         </div>
-
-                        <div className="my-2">
+                        {/* <div className="my-2">
                           <label className={labelClass} htmlFor="main_input">
                             Screen *
                           </label>
@@ -317,8 +316,7 @@ export default function BannerForm(props) {
                             <option value="Detail Screen">Detail Screen</option>
                           </select>
                           {errors.screen_name && <Error title='Screen Name is Required*' />}
-                        </div>
-
+                        </div> */}
                         {selectedOption == 'dropdown' && (
                           <div className="">
                             <label className={labelClass} htmlFor="main_input">
