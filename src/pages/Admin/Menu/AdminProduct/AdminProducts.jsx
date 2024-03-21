@@ -632,8 +632,8 @@ const AdminProduct = (props) => {
                     <h2 className='col-span-5 text-xl font-semibold'>{props?.isrestaurant ? "Food Items" : "Product List"}</h2>
                 </div>
                 <div className='mt-4'>
-                    {props?.isrestaurant ? <Table data={shopProducts} columns={FoodItemColumns} /> :
-                        <Table data={shopProducts} columns={LoggedUserDetails?.role == 'franchise' ? restaurantColumns : ProductColumns} />}
+                    {props?.isrestaurant ? <Table data={shopProducts} columns={FoodItemColumns} isValid={true} /> :
+                        <Table data={shopProducts} columns={LoggedUserDetails?.role == 'franchise' ? restaurantColumns : ProductColumns} isValid={true} />}
                 </div>
             </div>
         </>
