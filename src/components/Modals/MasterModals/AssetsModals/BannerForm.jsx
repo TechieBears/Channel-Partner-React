@@ -1,37 +1,25 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState, useEffect, useRef } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from "../../../../utils/CustomClass";
 import { Edit } from "iconsax-react";
-import { addHomeBanners, editHomeBanners } from "../../../../api";
+import { Fragment, useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { setBanner } from "../../../../redux/Slices/masterSlice";
 import { toast } from "react-toastify";
-import LoadBox from "../../../Loader/LoadBox";
+import { addHomeBanners, editHomeBanners } from "../../../../api";
+import { ImageUpload, bannerLink } from "../../../../env";
+import { setBanner } from "../../../../redux/Slices/masterSlice";
+import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from "../../../../utils/CustomClass";
 import Error from "../../../Errors/Error";
-import { ImageUpload, ImageUpload2, bannerLink } from "../../../../env";
+import LoadBox from "../../../Loader/LoadBox";
 import { ImageCropDialog } from "../../ImageCropperModal/ImageCropper";
-
-
 const ASPECT_RATIO = 1;
 const MIN_DIMENSION = 100;
-
-
 export default function BannerForm(props) {
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const [childData, setChildData] = useState('');
-
-
   const [selectedOption, setSelectedOption] = useState('dropdown');
-  const [inputValue, setInputValue] = useState('');
-  const [showDropdown, setShowDropdown] = useState(false);
-
-  // const imgRef = useRef(null);
-  // const previewCanvasRef = useRef(null);
   const [imgSrc, setImgSrc] = useState("");
-  const [crop, setCrop] = useState();
-  const [imageError, setimageError] = useState("");
+  const [imageError, setImageError] = useState('');
   const [urlName, setUrlName] = useState("");
 
   const avatarUrl = useRef(imgSrc);
@@ -39,35 +27,6 @@ export default function BannerForm(props) {
   const updateAvatar = (imgSrc) => {
     avatarUrl.current = imgSrc;
   };
-  
-  const onSelectFile = (e) => {
-    const file = e.target.files?.[0];
-    setUrlName(e.target.files?.[0]?.name)
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.addEventListener("load", () => {
-      const imageElement = new Image();
-      const imageUrl = reader.result?.toString() || "";
-      imageElement.src = imageUrl;
-
-      imageElement.addEventListener("load", (e) => {
-        if (imageError) setimageError("");
-        const { naturalWidth, naturalHeight } = e.currentTarget;
-        if (naturalWidth < MIN_DIMENSION || naturalHeight < MIN_DIMENSION) {
-          setimageError("Image must be at least 150 x 150 pixels.");
-          return setImgSrc("");
-        }
-      });
-      setImgSrc(imageUrl);
-      // console.log('== imageUrl ==', imageUrl);
-      // console.log('== imgSrc ==', imgSrc);
-
-    });
-    reader.readAsDataURL(file);
-  };
-
-
 
   const handleRadioChange = (option) => {
     setSelectedOption(option);
@@ -99,15 +58,14 @@ export default function BannerForm(props) {
       img.src = imageUrl;
     });
   };
-  
+
   const receiveDataFromChild = (data) => {
     setChildData(data);
-    // getImageInfo(data)
 
     if (data) {
       setValue('slide_url', data)
     }
-};
+  };
 
   // ===================== close modals ===============================
   const closeBtn = () => {
@@ -125,53 +83,32 @@ export default function BannerForm(props) {
     })
     if (props?.data?.redirect_link) {
       setSelectedOption('input')
-    }else{
+    } else {
       setSelectedOption('dropdown')
     }
   }, []);
-
-
-  function base64ToBlob(base64String) {
-    try {
-        const byteCharacters = atob(base64String);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-        const byteArray = new Uint8Array(byteNumbers);
-        return new Blob([byteArray], { type: 'image/jpeg' });
-    } catch (error) {
-        console.error('Error decoding base64 string:', error);
-        return null;
-    }
-}
 
   // ============================ submit data  =====================================
   const onSubmit = async (data) => {
     if (imageError) {
       // Set error message using setError if image dimensions are not valid
-      setimageError("slide_url", {
+      setError("slide_url", {
         type: "manual",
         message: imageError
       });
       return;
     }
-
+    console.log("🚀 ~ file: BannerForm.jsx:82 ~ data:", data)
     if (props?.button != "edit") {
       try {
-        if (urlName) {
-          // data.slide_url[0].name = urlName
-        }
-        if (childData) {
-          const imageBlob = base64ToBlob(childData) 
-          await ImageUpload2(
-            // data.slide_url[0],
-            imageBlob,
+        if (data?.slide_url?.length !== 0) {
+          await ImageUpload(
+            data.slide_url[0],
             "banner",
-            urlName,
-            data.screen_name,
+            "banner",
+            data.slide_url[0].name
           );
-          data.slide_url = `${bannerLink}${data.screen_name}_banner_${urlName}`;
+          data.slide_url = `${bannerLink}${data.slide_url[0].name}_banner_${data.slide_url[0].name}`;
         } else {
           data.slide_url = "";
         }
@@ -182,11 +119,9 @@ export default function BannerForm(props) {
               dispatch(setBanner(res));
               reset();
               toggle(),
-              setLoader(false),
-              props?.getAllBannerList();
-              setChildData('')
+                setLoader(false),
+                props?.getAllBannerList();
               toast.success(res?.message);
-              setImgSrc('')
             }, 1000);
           }
         });
@@ -208,7 +143,6 @@ export default function BannerForm(props) {
           } else {
             data.slide_url = props?.data?.slide_url;
           }
-          // }
           setLoader(true);
           editHomeBanners(props?.data?.slide_id, data).then((res) => {
             if (res?.message === "slide edited successfully") {
@@ -216,11 +150,9 @@ export default function BannerForm(props) {
                 dispatch(setBanner(res));
                 reset();
                 toggle(),
-                setLoader(false),
-                props?.getAllBannerList();
+                  setLoader(false),
+                  props?.getAllBannerList();
                 toast.success(res?.message);
-                setChildData('')
-                setImgSrc('')
               }, 1000);
             }
           });
@@ -231,7 +163,8 @@ export default function BannerForm(props) {
       }
     }
   };
-  
+
+
   const handleImageChange = (event,) => {
     const file = event.target.files[0];
     if (file) {
@@ -242,18 +175,19 @@ export default function BannerForm(props) {
         img.src = event.target.result;
 
         img.onload = () => {
-          if (img.width > 3556 && img.height > 2000) {
-            setimageError('');
+          if (img.width === 3556 && img.height === 2000) {
+            console.log('File uploaded successfully');
+            setImageError('');
           } else {
-            alert('Image dimensions should be less than 3556 x 2000')
-            console.log('error')
-            setimageError('Image dimensions should be 3556 x 2000');
+            console.log('errorr')
+            setImageError('Image dimensions should be 3556 x 2000');
           }
         };
       };
       reader.readAsDataURL(file);
     }
   }
+
 
   return (
     <>
@@ -302,7 +236,7 @@ export default function BannerForm(props) {
                   </Dialog.Title>
                   <div className=" bg-gray-200/70">
                     <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-2 gap-x-3 gap-y-3 customBox">
+                      <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-2 gap-x-3 gap-y-3 customBox">
                         <div className="">
                           <label className={labelClass} htmlFor="main_input">
                             Vendor Type*
@@ -318,7 +252,7 @@ export default function BannerForm(props) {
                           </select>
                           {errors.vendor_type && <Error title='Vendor type is Required*' />}
                         </div>
-
+                        {/* {!openGallery && <div className=""> */}
                         <div className="">
                           <label className={labelClass} htmlFor="main_input">
                             Image*
@@ -330,29 +264,21 @@ export default function BannerForm(props) {
                             multiple
                             accept="image/jpeg,image/jpg,image/png"
                             placeholder="Upload Images..."
-                            // onChange={onSelectFile}
-                            // onChange={(e) => onSelectFile(e)}
                             {...register("slide_url", {
-                              required: props.button == "edit" ? false : childData ? false : "Image is Required*",
-                              onChange: (e) => {onSelectFile(e)},
+                              required: props.button === "edit" ? false : "Image is Required*",
+                              onChange: (e) => { handleImageChange(e) },
                             })}
                           />
                           {props?.button == "edit" &&
                             props?.data?.slide_url != "" &&
                             props?.data?.slide_url != undefined && (
-                              <label className="block mb-1 font-medium text-blue-800 truncate text-md font-tb">
+                              <label className="block mb-1 font-medium text-blue-800 text-md font-tb">
                                 {props?.data?.slide_url?.split("/").pop()}
                               </label>
                             )}
                           {errors.slide_url && (
                             <Error title={errors.slide_url?.message} />
                           )}
-                             <label className="block mb-1 font-medium text-blue-800 truncate text-md font-tb">
-                                {/* {childData?.split("/").pop()} */}
-                                {childData}
-                              </label>
-                             {childData && <img className="w-28 h-28" src={childData} alt="" />} 
-                          
                         </div>
                         <div className="flex items-center gap-3">
                           <input
@@ -392,8 +318,8 @@ export default function BannerForm(props) {
                           </select>
                           {errors.screen_name && <Error title='Screen Name is Required*' />}
                         </div>
-                     
-                        {selectedOption == 'dropdown'  && (
+
+                        {selectedOption == 'dropdown' && (
                           <div className="">
                             <label className={labelClass} htmlFor="main_input">
                               Internal Redirection *
@@ -404,9 +330,9 @@ export default function BannerForm(props) {
                               {...register('redirection_type', { required: true })}
                               className={`${inputClass} !bg-white`}
                             >
-                             <option value="">select</option>
-                            <option value="Home Screen">Home Screen</option>
-                            <option value="Detail Screen">Detail Screen</option>
+                              <option value="">select</option>
+                              <option value="Home Screen">Home Screen</option>
+                              <option value="Detail Screen">Detail Screen</option>
                             </select>
                             {errors.redirection_type && <Error title='Redirection type is Required*' />}
                           </div>
@@ -414,16 +340,16 @@ export default function BannerForm(props) {
                         {selectedOption == 'input' && (
                           <div className="">
                             <label className={labelClass}>
-                                External Redirection Link*
+                              External Redirection Link*
                             </label>
                             <input
-                                type="text"
-                                placeholder='External link'
-                                className={inputClass}
-                                {...register('redirect_link', { required: true })}
+                              type="text"
+                              placeholder='External link'
+                              className={inputClass}
+                              {...register('redirect_link', { required: true })}
                             />
                             {errors.redirect_link && <Error title='Redirection link is Required*' />}
-                        </div>
+                          </div>
                         )}
                       </div>
 
@@ -447,12 +373,12 @@ export default function BannerForm(props) {
                       </footer>
                     </form>
 
-                    {imgSrc != '' &&  
-                      <ImageCropDialog 
+                    {imgSrc != '' &&
+                      <ImageCropDialog
                         updateAvatar={updateAvatar}
                         sendDataToParent={receiveDataFromChild}
-                      // className="hidden"
-                        imgSrc={imgSrc}/> }
+                        // className="hidden"
+                        imgSrc={imgSrc} />}
                   </div>
 
                 </Dialog.Panel>
