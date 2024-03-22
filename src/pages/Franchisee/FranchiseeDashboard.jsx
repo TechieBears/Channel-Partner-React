@@ -20,12 +20,13 @@ import { environment } from "../../env";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import AsyncSelect from "react-select/async";
-import DashboardForm from "../../components/modals/DashboardModals/DashboardForm";
 import DeleteModal from "../../components/Modals/DeleteModal/DeleteModal";
 import ActiveOrders from "../Admin/Dashboard/OrderList/ActiveOrders";
 import PendingOrders from "../Admin/Dashboard/OrderList/PendingOrders";
 import moment from "moment";
 import ViewProduct from "../../components/Modals/Vendors/ViewProduct";
+import DashboardForm from "../../../components/Modals/DashboardModals/DashboardForm"
+
 
 
 

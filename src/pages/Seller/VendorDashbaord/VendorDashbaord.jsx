@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 import OrdersCard from "../../../components/Cards/Orders/OrdersCard";
 import DeleteModal from "../../../components/Modals/DeleteModal/DeleteModal";
 import { formBtn1, formBtn2, inputClass } from "../../../utils/CustomClass";
-import DashboardForm from "../../../components/modals/DashboardModals/DashboardForm";
+import DashboardForm from "../../../components/Modals/DashboardModals/DashboardForm"
 
 
 

@@ -8,8 +8,8 @@ import { NavLink } from "react-router-dom";
 import { environment } from "../../../env";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import DashboardForm from "../../../components/modals/DashboardModals/DashboardForm";
 import DeleteModal from "../../../components/Modals/DeleteModal/DeleteModal";
+import DashboardForm from "../../../components/Modals/DashboardModals/DashboardForm"
 
 
 const Dashboard = () => {
