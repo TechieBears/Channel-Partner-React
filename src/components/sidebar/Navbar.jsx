@@ -111,13 +111,13 @@ const Navbar = ({ mobileSidebar, setMobileSidebar }) => {
           )}
         </button>
         <div className="flex item-center">
-          <button className="relative px-7">
+          {user?.role !== 'admin' && (<button className="relative px-7">
             <span className="absolute flex top-0 right-6 h-3.5 w-3.5">
               <span className="absolute inline-flex w-full h-full bg-red-400 rounded-full opacity-75 animate-ping"></span>
               <span className="relative inline-flex w-3 h-3 bg-red-500 rounded-full"></span>
             </span>
             <NotificationBing size="30" />
-          </button>
+          </button>)}
           <div className="flex items-center" onClick={() => setCard(!card)}>
             <div className="flex-shrink-0">
               <img
