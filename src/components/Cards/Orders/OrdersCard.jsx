@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 import { environment } from '../../../env'
 import { formBtn2 } from '../../../utils/CustomClass'
 
-function OrdersCard({ data }) {
+function OrdersCard(data ) {
     console.log('data', data)
     const [status, setstatus] = useState('pending')
     const [details, setDetails] = useState(false)
