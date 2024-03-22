@@ -23,13 +23,20 @@ export default function AddPromo(props) {
   const [showDropdown, setShowDropdown] = useState(false);
   const { register, handleSubmit, setValue, watch, reset, formState: { errors }, setError } = useForm({ criteriaMode: 'all' });
   const promoDurationField = watch('promo_duration');
+  // setValue('promo_duration', 'single_day');
+  // setpromoDurationField(watch('promo_duration'));
   const { RangePicker } = DatePicker
+  console.log('State Value:', promoDurationField);
+  console.log('promoDuration Value:', promoDuration);
+
 
   const handleRadioChange = (option) => {
     setSelectedOption(option);
     setShowDropdown(option === 'dropdown');
     setInputValue('');
   };
+  
+ 
 
   const dispatch = useDispatch()
   const toggle = () => setIsOpen(!isOpen);
@@ -38,22 +45,27 @@ export default function AddPromo(props) {
 
   // ========== Date picker =================================
   const disabledDate = current => {
-    return current && current < moment(today);
+    return current && current < moment().startOf('day');
   };
+  
   const rangeHandler = (e) => {
     console.log('e', e)
-    if (e[0] == undefined) {
-      setPromoDuration({
-        ...promoDuration,
-        "start_date": e.format("YYYY-MM-DD"),
-        "end_date": e.format("YYYY-MM-DD")
-      });
-    } else {
-      setPromoDuration({
-        ...promoDuration,
-        "start_date": e[0].format("YYYY-MM-DD"),
-        "end_date": e[1].format("YYYY-MM-DD")
-      });
+    if (e) {    
+      if (e[0] == undefined) {
+        setPromoDuration({
+          ...promoDuration,
+          "start_date": e.format("YYYY-MM-DD"),
+          "end_date": e.format("YYYY-MM-DD")
+        });
+      } else {
+        setPromoDuration({
+          ...promoDuration,
+          "start_date": e[0].format("YYYY-MM-DD"),
+          "end_date": e[1].format("YYYY-MM-DD")
+        });
+      }
+    }else{
+      setPromoDuration({})
     }
   }
   // ===================== close modals ===============================
@@ -66,7 +78,7 @@ export default function AddPromo(props) {
   useEffect(() => {
     reset({
       'vendor_type': props?.data?.vendor_type,
-      'screen_name': props?.data?.screen_name,
+      // 'screen_name': props?.data?.screen_name,
       'redirection_type': props?.data?.redirection_type,
       'redirect_link': props?.data?.redirect_link
     })
@@ -167,10 +179,15 @@ export default function AddPromo(props) {
         img.src = event.target.result;
 
         img.onload = () => {
-          if (img.width === 3556 && img.height === 2000) {
+          // if ((img.width > 3556 && img.width < 4000 ) && (img.height > 2000 && img.height < 2500)) {
+          if (img.width > 3556  && img.height > 2000) {
             console.log('File uploaded successfully');
             setImageError('');
           } else {
+            setError("slide_url", {
+              type: "manual",
+              message: "Image dimensions should be 3556 x 2000"
+            });
             console.log('errorr')
             setImageError('Image dimensions should be 3556 x 2000');
           }
@@ -256,7 +273,7 @@ export default function AddPromo(props) {
                           {errors.vendor_type && <Error title='Vendor type is Required*' />}
                         </div>
                         <div>
-                          <label className={labelClass}>Select Duration</label>
+                          <label className={labelClass}>Select Duration*</label>
                           <select
                             className={inputClass}
                             {...register('promo_duration', { required: true })}
@@ -268,21 +285,21 @@ export default function AddPromo(props) {
                           {errors?.promo_duration && <Error message='Promo Duration is Required' />}
                         </div>
                         <div className='mt-2'>
-                          {promoDurationField === 'single_day' ? (
+                          {promoDurationField == 'single_day' ? (
                             <Space>
                               <DatePicker disabledDate={disabledDate} onChange={rangeHandler} />
                             </Space>
-                          ) : promoDurationField === 'aboveDay' ? (
+                          ) : promoDurationField == 'aboveDay' ? (
                             <Space>
                               <RangePicker disabledDate={disabledDate} onChange={rangeHandler} />
                             </Space>
                           ) : null}
-                          {(Object.keys(promoDuration).length == 0 && promoDurationField != '') && <Error title='Date or Duration is required' />}
+                          { (promoDurationField != undefined && promoDurationField != '') && <Error title={Object.keys(promoDuration).length === 0 ? 'Date or Duration is required' : ''} />}
                         </div>
                         {/* {!openGallery && <div className=""> */}
                         <div className="mt-1">
                           <label className={labelClass} htmlFor="main_input">
-                            Image*
+                            Image*   <span className='px-2 text-xs text-red-500'>(Image dimensions should be 3556 x 2000)</span>
                           </label>
                           <input
                             className={fileinput}
@@ -331,7 +348,7 @@ export default function AddPromo(props) {
                           <label htmlFor="radio-input">External Redirection</label>
                         </div>
 
-                        <div className="my-2">
+                        {/* <div className="my-2">
                           <label className={labelClass} htmlFor="main_input">
                             Screen *
                           </label>
@@ -345,7 +362,7 @@ export default function AddPromo(props) {
                             <option value="Detail Screen">Detail Screen</option>
                           </select>
                           {errors.screen_name && <Error title='Screen Name is Required*' />}
-                        </div>
+                        </div> */}
                      
                         {selectedOption == 'dropdown' && (
                           <div className="">

@@ -9,14 +9,14 @@ export const environment = {
 
 
     //================== DO NOT REMOVE ================
-    baseUrl: 'https://b993-58-146-123-202.ngrok-free.app/',
-    webSocketUrl: `wss://b993-58-146-123-202.ngrok-free.app/ws/socket/`
+    // baseUrl: 'https://b993-58-146-123-202.ngrok-free.app/',
+    // webSocketUrl: `wss://b993-58-146-123-202.ngrok-free.app/ws/socket/`,
 
 
 
     // --------------------Live Server Api URL--------------------
-    // baseUrl: 'https://cpapi.techiebears.com/',
-    // webSocketUrl: `wss://cpapi.techiebears.com/ws/socket/`
+    baseUrl: 'https://cpapi.techiebears.com/',
+    webSocketUrl: `wss://cpapi.techiebears.com/ws/socket/`
 
 
 }

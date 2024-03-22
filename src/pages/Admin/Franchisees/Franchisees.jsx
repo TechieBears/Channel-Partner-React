@@ -204,7 +204,7 @@ function Franchisees() {
                                     <Select
                                         value={value}
                                         options={pincodeOptions}
-                                        className="w-100 text-gray-900"
+                                        className="text-gray-900 w-100"
                                         placeholder="Search by Pincode"
                                         onChange={onChange}
                                         inputRef={ref}
@@ -234,9 +234,9 @@ function Franchisees() {
                     <div className="">
                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>  Franchisee Details</h1>
                     </div>
-                    <AddFranchisee title='Add Franchisee' FranchiseeDetails={FranchiseeDetails} emails={emails} />
+                    <AddFranchisee title='Add Franchisee' FranchiseeDetails={FranchiseeDetails} emails={emails}/>
                 </div>
-                <Table data={franchiseData} columns={columns} />
+                <Table data={franchiseData} columns={columns}  isValid={true}/>
             </div>
         </>
     )

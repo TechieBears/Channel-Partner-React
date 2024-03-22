@@ -175,12 +175,17 @@ export default function BannerForm(props) {
         img.src = event.target.result;
 
         img.onload = () => {
-          if (img.width === 3556 && img.height === 2000) {
+          // if ((img.width > 3556 && img.width < 4000 ) && (img.height > 2000 && img.height < 2500)) {
+          if (img.width > 3556  && img.height > 2000) {
             console.log('File uploaded successfully');
             setImageError('');
           } else {
+            setError("slide_url", {
+              type: "manual",
+              message: "Image dimensions should be 3556 x 2000"
+            });
             console.log('errorr')
-            setImageError('Image dimensions should be 3556 x 2000');
+            setImageError("Image dimensions should be 3556 x 2000");
           }
         };
       };
@@ -255,7 +260,7 @@ export default function BannerForm(props) {
                         {/* {!openGallery && <div className=""> */}
                         <div className="">
                           <label className={labelClass} htmlFor="main_input">
-                            Image*
+                            Image*   <span className='px-2 text-xs text-red-500'>(Image dimensions should be 3556 x 2000)</span>
                           </label>
                           <input
                             className={fileinput}

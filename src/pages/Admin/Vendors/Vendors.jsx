@@ -234,7 +234,7 @@ function Vendors() {
                                     <Select
                                         value={value}
                                         options={franchiseOptions}
-                                        className="w-100 text-gray-900"
+                                        className="text-gray-900 w-100"
                                         placeholder="Search By Franchise"
                                         onChange={onChange}
                                         inputRef={ref}
@@ -259,7 +259,7 @@ function Vendors() {
                                     <Select
                                         value={value}
                                         options={pincodeOptions}
-                                        className="w-100 text-gray-900"
+                                        className="text-gray-900 w-100"
                                         placeholder="Search By Pincode"
                                         onChange={onChange}
                                         inputRef={ref}
@@ -293,9 +293,9 @@ function Vendors() {
                     <AddVendors title='Add Vendors' FranchiseeVendors={FranchiseeVendors} />
                 </div>
                 {
-                    <Table data={Vendors} columns={columns} />
+                    <Table data={Vendors} columns={columns} isValid={true}/>
                 }
-
+a
             </div>
             {/*====================== User Table ================================*/}
         </>
