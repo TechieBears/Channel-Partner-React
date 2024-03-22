@@ -58,7 +58,7 @@ export default function AddVendors(props) {
         }
     };
     // ============================= form submiting ======================================
-    const onSubmit = async (data) => {
+    const onSubmit = async (data) => {        
         const shopStartTime = moment(data?.shop_start_time, 'HH:mm').format('hh:mm A');
         const shopEndTime = moment(data?.shop_end_time, 'HH:mm').format('hh:mm A');
         data.shop_start_time = shopStartTime;
@@ -92,23 +92,23 @@ export default function AddVendors(props) {
             if (data?.gst_url.length != 0) {
                 await ImageUpload(data?.gst_url[0], "vendor", "GstImage", data?.first_name)
                 data.gst_url = `${vendorlink}${data?.first_name}_GstImage_${data?.gst_url[0].name}`
-              } else {
+            } else {
                 data.gst_url = ''
-              }
-              if (data?.adhar_url.length != 0) {
+            }
+            if (data?.adhar_url.length != 0) {
                 await ImageUpload(data?.adhar_url[0], "vendor", "adharImage", data?.first_name)
                 data.adhar_url = `${vendorlink}${data?.first_name}_adharImage_${data?.adhar_url[0].name}`
-              } else {
+            } else {
                 data.adhar_url = ''
-              }
-              if (data?.pan_url.length != 0) {
+            }
+            if (data?.pan_url.length != 0) {
                 await ImageUpload(data?.pan_url[0], "vendor", "panImage", data?.first_name)
                 data.pan_url = `${vendorlink}${data?.first_name}_panImage_${data?.pan_url[0].name}`
-              } else {
+            } else {
                 data.pan_url = ''
-              }
+            }
         }
-        else {          // for edit
+        else {  
             if (data?.bank_passbook != props?.data?.bank_passbook) {
                 await ImageUpload(data?.bank_passbook[0], "vendor", "BankPassbook", data?.first_name)
                 data.bank_passbook = `${vendorlink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
@@ -133,24 +133,24 @@ export default function AddVendors(props) {
             } else {
                 data.hawker_shop_photo = props?.data?.hawker_shop_photo
             }
-            if (props?.data?.gst_url != data?.gst_url) {
+            if (data?.gst_url?.length > 0) {
                 await ImageUpload(data?.gst_url[0], "vendor", "GstImage", data?.first_name)
                 data.gst_url = `${vendorlink}${data?.first_name}_GstImage_${data?.gst_url[0].name}`
-              } else {
+            } else {
                 data.gst_url = props?.data?.gst_url
-              }
-              if (props?.data?.adhar_url != data?.adhar_url) {
+            }
+            if (data?.adhar_url?.length > 0) {
                 await ImageUpload(data?.adhar_url[0], "vendor", "adharImage", data?.first_name)
                 data.adhar_url = `${vendorlink}${data?.first_name}_adharImage_${data?.adhar_url[0].name}`
-              } else {
+            } else {
                 data.adhar_url = props?.data?.adhar_url
-              }
-              if (props?.data?.pan_url != data?.pan_url) {
+            }
+            if (data?.pan_url?.length > 0) {
                 await ImageUpload(data?.pan_url[0], "vendor", "panImage", data?.first_name)
                 data.pan_url = `${vendorlink}${data?.first_name}_panImage_${data?.pan_url[0].name}`
-              } else {
+            } else {
                 data.pan_url = props?.data?.pan_url
-              }
+            }
         }
         if (props.button != 'edit') {   // for create
             try {
@@ -163,7 +163,6 @@ export default function AddVendors(props) {
                 if (LoggedUserDetails?.role == 'admin') {
                     vendorType = { vendor_type: "shop" };
                 }
-
                 const requestData = { ...data, ...additionalPayload, ...vendorType };
 
                 const response = await CreateFranchiseeVendors(requestData)
@@ -404,9 +403,9 @@ export default function AddVendors(props) {
                                                             onKeyDown={handleMobileNoNumericInput}
                                                             {...register("phone_no", { required: true, validate: validatePhoneNumber })}
                                                         />
-                                                          {errors.phone_no && (
+                                                        {errors.phone_no && (
                                                             <Error title={errors?.phone_no?.message ? errors?.phone_no?.message : 'Phone Number is Required'} />
-                                                            )}
+                                                        )}
                                                     </div>
                                                     {props.button != 'edit' &&
                                                         <div className="">
@@ -513,7 +512,7 @@ export default function AddVendors(props) {
                                                             readOnly={true}
                                                             {...register("pincode", { required: true, validate: validatePIN })}
                                                         />
-                                                         {errors.pincode && (
+                                                        {errors.pincode && (
                                                             <Error title={errors?.pincode?.message ? errors?.pincode?.message : 'PinCode is Required'} />
                                                         )}
                                                     </div>
@@ -597,25 +596,17 @@ export default function AddVendors(props) {
                                                                     multiple
                                                                     accept='image/jpeg,image/jpg,image/png,application/pdf'
                                                                     placeholder='Upload Images...'
-                                                                    {...register("pan_url", { required: true })} />
+                                                                    {...register("pan_url", {required: props.button == 'edit' ? false : true  })} />
                                                             </div>
                                                         </div>
-                                                            {errors.pan_card && <Error title='PAN Card Number & Image is required' />}
+                                                        {props?.button == 'edit' && props?.data.pan_url != '' && props?.data.pan_url != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
+                                                            {props?.data?.pan_url?.split('/').pop()}
+                                                        </label>}
+                                                        {/* {(errors.pan_card || errors.pan_url) && <Error title='PAN Card Number & Image is required' />} */}
+                                                        {(errors.pan_card) && <Error title='PAN Card Number & Image is required' />}
+                                                        {(errors.pan_url && !errors.pan_card ) && <Error title='PAN Card Image is required' />}                                                        
                                                     </div>
-                                                    {/* <div className="">
-                                                        <label className={labelClass}>
-                                                            Pan Card*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='PAN  No'
-                                                            className={inputClass}
-                                                            maxLength={10}
-                                                            {...register('pan_card', { required: true, validate: validatePANCard })}
-                                                        />
-                                                        {errors?.pan_card && <Error title='Pan Card Number is required' />}
-                                                    </div> */}
-                                                     <div className="">
+                                                    <div className="">
                                                         <label className={labelClass}>
                                                             Aadhar Card Number*
                                                         </label>
@@ -625,7 +616,7 @@ export default function AddVendors(props) {
                                                                 maxLength={14}
                                                                 placeholder='Aadhar Card Number'
                                                                 className={inputClass}
-                                                                {...register('adhar_card', { required: true , validate: validateAadharCard })}
+                                                                {...register('adhar_card', { required: true, validate: validateAadharCard })}
                                                             />
                                                             <div className="">
                                                                 <label htmlFor='adhar' className={`${adhar_watch?.length || props?.data?.adhar_url ? "bg-sky-400 text-white" : " bg-gray-300/80"}  transition-colors hover:bg-sky-400 font-tb font-semibold hover:text-white py-3 mt-10 px-5 rounded-md cursor-pointer`}>
@@ -637,37 +628,26 @@ export default function AddVendors(props) {
                                                                     multiple
                                                                     accept='image/jpeg,image/jpg,image/png,application/pdf'
                                                                     placeholder='Upload Images...'
-                                                                    {...register("adhar_url", { required: true })} />
+                                                                    {...register("adhar_url", { required: props.button == 'edit' ? false : true })} />
                                                             </div>
                                                         </div>
-                                                        {errors?.adhar_card && <Error title={errors?.adhar_card?.message ? errors?.adhar_card?.message : 'Aadhar Card Number & Image is required'} />}
+                                                        {props?.button == 'edit' && props?.data.adhar_url != '' && props?.data.adhar_url != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
+                                                            {props?.data?.adhar_url?.split('/').pop()}
+                                                        </label>}
+                                                        {/* {(errors?.adhar_card || errors?.adhar_url) && <Error title={errors?.adhar_card?.message ? errors?.adhar_card?.message : 'Aadhar Card Number & Image is required'} />} */}
+                                                        {(errors.adhar_card) && <Error title='Aadhar Card Number & Image is required' />}
+                                                        {(errors.adhar_url && !errors.adhar_card ) && <Error title='Aadhar Card Image is required' />}    
                                                     </div>
-                                                    {/* <div className="">
+                                                    <div className="">
                                                         <label className={labelClass}>
-                                                            Aadhar Card*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Aadhar No'
-                                                            maxLength={14}
-                                                            className={inputClass}
-                                                            {...register('adhar_card', { required: true, validate: validateAadharCard })}
-                                                        />
-                                                        {errors?.adhar_card && <Error title='Aadhar Card Number is required' />}
-                                                    </div> */}
-                                                       <div className="">
-                                                        <label className={labelClass}>
-                                                            GST Number*
+                                                            GST Number
                                                         </label>
                                                         <div className="flex items-center space-x-2">
                                                             <input
                                                                 type="text"
-                                                                placeholder='GST Number*'
+                                                                placeholder='GST Number'
                                                                 className={inputClass}
-                                                                {...register('gst_number', {
-                                                                    required: 'GST Number is required*',
-                                                                    validate: validateGST
-                                                                })}
+                                                                {...register('gst_number', { validate: (gstNumber != "" && gstNumber != null) ? validateGST : '' })}
                                                             />
                                                             <div className="">
                                                                 <label htmlFor='gst' className={`${gst_watch?.length || props?.data?.gst_url ? "bg-sky-400 text-white" : " bg-gray-300/80"}  transition-colors hover:bg-sky-400 font-tb font-semibold hover:text-white py-3 mt-10 px-5 rounded-md cursor-pointer`}>
@@ -676,27 +656,18 @@ export default function AddVendors(props) {
                                                                 <input className="hidden"
                                                                     id="gst"
                                                                     type='file'
-                                                                    multiple
+                                                                    // multiple
                                                                     accept='image/jpeg,image/jpg,image/png,application/pdf'
                                                                     placeholder='Upload Images...'
                                                                     {...register("gst_url")} />
                                                             </div>
+
                                                         </div>
+                                                        {props?.button == 'edit' && props?.data.gst_url != '' && props?.data.gst_url != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
+                                                            {props?.data?.gst_url?.split('/').pop()}
+                                                        </label>}
                                                         {errors?.gst_number && <Error title={errors?.gst_number?.message ? errors?.gst_number?.message : 'GST Number is Requried'} />}
                                                     </div>
-                                                    {/* <div className="">
-                                                        <label className={labelClass}>
-                                                            GST Number
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='GST Number'
-                                                            className={inputClass}
-                                                            {...register('gst_number', { validate: (gstNumber != "" && gstNumber != null) ? validateGST : '' })}
-
-                                                        />
-                                                        {errors?.gst && <Error title={errors?.gst?.message} />}
-                                                    </div> */}
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             Bank Name*
