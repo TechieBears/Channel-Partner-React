@@ -1,17 +1,10 @@
 // ===================== Custom validation function for a 6-digit PIN code ================
-import Pincode from './PincodeVal'
 export const validatePIN = (value) => {
     const pattern = /^(?!0)(?!([0-9])\1{5})\d{6}$/;
     if (pattern.test(value)) {
         return true;
     }
     return 'InValid Pincode';
-
-    // if (Pincode.validate(value)) {
-    //     console.log(Pincode.validate(value))
-    //     return true;
-    // }
-    // return 'Invalid Pincode';
 };
 
 
@@ -90,7 +83,7 @@ export const handleMobileNoNumericInput = (e) => {
 };
 
 export const handlePancardUpperCase = (e) => {
-    if(e.target.value){
+    if (e.target.value) {
         return e.target.value.toUpperCase()
     }
 }

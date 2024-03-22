@@ -2,21 +2,27 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     newOrders: [],
+    orderStatus: []
 }
 const orderSlice = createSlice({
     name: 'orders',
     initialState,
     reducers: {
         setOrders: (state, action) => {
-            console.log('action.payload', action.payload)
             return {
                 ...state,
                 newOrders: [...state.newOrders, action.payload]
+            }
+        },
+        setOrderStatus: (state, action) => {
+            return {
+                ...state,
+                orderStatus: [...state.orderStatus, action.payload]
             }
         }
     }
 })
 
-export const { setOrders } = orderSlice.actions;
+export const { setOrders, orderStatus } = orderSlice.actions;
 
 export default orderSlice.reducer
