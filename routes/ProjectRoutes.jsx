@@ -2,7 +2,6 @@ import { useEffect, useLayoutEffect, useState } from 'react';
 import Aos from "aos";
 import { Route, Routes } from "react-router-dom";
 import Sidebar from '../src/components/sidebar/Sidebar';
-import Preloader from '../src/components/Loader/PreLoader';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DashboardAssets from '../src/pages/Admin/Master/DashboardAssets/DashboardAssets';
@@ -48,6 +47,7 @@ import DashboardPromotions from '../src/pages/Admin/Master/DashboardPromotions';
 import Coupon from '../src/pages/Admin/Coupon/Coupon';
 import RestaurantRegister from '../src/pages/Restaurants/ViewRestaurant/RestaurantRegister';
 import FoodDetails from '../src/pages/Admin/Menu/AdminProduct/FoodDetails';
+import { PreLoaders } from '../src/components/Loader/PreLoaders';
 
 
 
@@ -73,7 +73,7 @@ const ProjectRoutes = () => {
             {login ?
                 <>
                     {loading ?
-                        <Preloader /> :
+                        <PreLoaders />:
                         <Sidebar>
                             <Routes>
                                 {/* ============ Admin Routes ============ */}
