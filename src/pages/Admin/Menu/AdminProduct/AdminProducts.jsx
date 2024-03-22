@@ -91,6 +91,7 @@ const AdminProduct = (props) => {
         try {
             getProductsByAdmin().then(res => {
                 setShopProducts(res)
+                dispatch(setProductCount(res?.length))
             });
         } catch (error) {
             console.log(error);
@@ -101,6 +102,7 @@ const AdminProduct = (props) => {
         try {
             getRestaurantFoodAdmin().then(res => {
                 setShopProducts(res)
+                dispatch(setProductCount(res?.length))
             });
         } catch (error) {
             console.log(error);
@@ -120,6 +122,7 @@ const AdminProduct = (props) => {
                     }))
                     setCategoryOptions(newData)
                 }
+                dispatch(setCategoryCount(res?.length))
             })
         } catch (error) {
             console.log('error fetch', error)
@@ -137,6 +140,7 @@ const AdminProduct = (props) => {
                     }))
                     setSubCategoryOptions(newData)
                 }
+                dispatch(setSubCategoryCount(res?.length))
             })
         } catch (error) {
             console.log('error fetch', error)
@@ -154,6 +158,7 @@ const AdminProduct = (props) => {
                     }))
                     setCategoryOptions(newData)
                 }
+                dispatch(setCategoryCount(res?.length))
             })
         } catch (error) {
             console.log('error: ', error)
@@ -171,6 +176,7 @@ const AdminProduct = (props) => {
                     }))
                     setSubCategoryOptions(newData)
                 }
+                dispatch(setSubCategoryCount(res?.length))
             })
         } catch (error) {
             console.log('error', error)
@@ -466,7 +472,7 @@ const AdminProduct = (props) => {
         { field: 'shop_name', header: 'Vendor Name', body: (row) => <h6>{row?.vendor?.shop_name}</h6>, sortable: true },
         { field: 'pincode', header: 'PINCODE', body: (row) => <h6>{row?.vendor?.user?.pincode}</h6>, sortable: true },
         { field: 'product_brand', header: 'Brand', sortable: true },
-        { field: 'email', header: 'Vendor Email',  body: (row) => <h6>{row?.vendor?.user?.email}</h6>, sortable: true },
+        { field: 'email', header: 'Vendor Email', body: (row) => <h6>{row?.vendor?.user?.email}</h6>, sortable: true },
         { field: 'product_shelflife', header: 'Shelf Life', sortable: true },
         { field: 'product_Manufacturer_Name', header: 'Manufacturer Name', sortable: true },
         { field: 'product_country_of_origin', header: 'Country Of Origin', sortable: true },
@@ -518,7 +524,7 @@ const AdminProduct = (props) => {
                         <div className="">
                             <input
                                 type="text"
-                                placeholder={`${props?.isrestaurant === true ? 'Search By Restaurant Name' : 'Search By Product Name'}`}
+                                placeholder={`${props?.isrestaurant === true ? 'Search By Food Name' : 'Search By Product Name'}`}
                                 autoComplete='off'
                                 className={`${inputClass} !bg-slate-100`}
                                 {...register('product_name')}
