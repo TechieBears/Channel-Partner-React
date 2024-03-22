@@ -17,11 +17,13 @@ import moment from "moment";
 
 
 export default function AddFranchiseForm(props) {
+  console.log("🚀 ~ file: AddFranchiseForm.jsx:20 ~ AddFranchiseForm ~ props:", props)
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const [emailError, setEmailError] = useState('');
   const dispatch = useDispatch()
   const { register, handleSubmit, reset, watch, control, setValue, formState: { errors }, } = useForm();
+  console.log("🚀 ~ file: AddFranchiseForm.jsx:25 ~ AddFranchiseForm ~ errors:", errors)
   const gstNumber = watch('gst_number');
   const emailField = watch('email');
 
@@ -91,7 +93,8 @@ export default function AddFranchiseForm(props) {
         data.pan_url = ''
       }
     }
-    else {          // for edit
+    else {
+      console.log("data===>", data)      // for edit
       if (props?.data?.bank_passbook != data?.bank_passbook) {
         await ImageUpload(data?.bank_passbook[0], "franchisee", "BankPassbook", data?.first_name)
         data.bank_passbook = `${franchiselink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
@@ -110,19 +113,19 @@ export default function AddFranchiseForm(props) {
       } else {
         data.profile_pic = props?.data?.user?.profile_pic
       }
-      if (props?.data?.gst_url != data?.gst_url) {
+      if (data?.gst_url?.length > 0) {
         await ImageUpload(data?.gst_url[0], "franchisee", "GstImage", data?.first_name)
         data.gst_url = `${franchiselink}${data?.first_name}_GstImage_${data?.gst_url[0].name}`
       } else {
         data.gst_url = props?.data?.gst_url
       }
-      if (props?.data?.adhar_url != data?.adhar_url) {
+      if (data?.adhar_url?.length > 0) {
         await ImageUpload(data?.adhar_url[0], "franchisee", "adharImage", data?.first_name)
         data.adhar_url = `${franchiselink}${data?.first_name}_adharImage_${data?.adhar_url[0].name}`
       } else {
         data.adhar_url = props?.data?.adhar_url
       }
-      if (props?.data?.pan_url != data?.pan_url) {
+      if (data?.pan_url?.length > 0) {
         await ImageUpload(data?.pan_url[0], "franchisee", "panImage", data?.first_name)
         data.pan_url = `${franchiselink}${data?.first_name}_panImage_${data?.pan_url[0].name}`
       } else {
@@ -433,118 +436,70 @@ export default function AddFranchiseForm(props) {
 
                         <h1 className='pt-4 mx-4 text-xl font-semibold text-gray-900 font-tbPop '>Additional Details:</h1>
                         <div className="grid grid-cols-1 py-4 mx-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-x-3 gap-y-3">
-                        <div className="">
-                          <label className={labelClass}>
-                              Pan Card*
-                          </label>
-                          <div className="flex items-center space-x-2">
-                              <input
-                                  type="text"
-                                  placeholder='PAN'
-                                  maxLength={10}
-                                  className={inputClass}
-                                  {...register('pan_card', { required: true,  validate: validatePANCard })}
-                              />
-                              <div className="">
-                                  <label htmlFor='pan' className={`${pan_watch?.length || props?.data?.pan_url ? "bg-sky-400 text-white" : " bg-gray-300/80"}  transition-colors hover:bg-sky-400 font-tb font-semibold hover:text-white py-3 mt-10 px-5 rounded-md cursor-pointer`}>
-                                      Upload
-                                  </label>
-                                  <input className="hidden"
-                                      id="pan"
-                                      type='file'
-                                      multiple
-                                      accept='image/jpeg,image/jpg,image/png,application/pdf'
-                                      placeholder='Upload Images...'
-                                      {...register("pan_url", { required: true })} />
-                              </div>
-                          </div>
-                              {errors.pan_card && <Error title={errors?.pan_card?.message ? errors?.pan_card?.message : 'PAN Card Number & Image is required'} />}
-                      </div>
-                          {/* <div className="">
+                          <div className="">
                             <label className={labelClass}>
                               Pan Card*
                             </label>
                             <div className="flex items-center space-x-2">
                               <input
                                 type="text"
-                                placeholder='PAN  No'
+                                placeholder='PAN'
                                 maxLength={10}
                                 className={inputClass}
                                 {...register('pan_card', { required: true, validate: validatePANCard })}
                               />
+                              <div className="">
+                                <label htmlFor='pan' className={`${pan_watch?.length || props?.data?.pan_url ? "bg-sky-400 text-white" : " bg-gray-300/80"}  transition-colors hover:bg-sky-400 font-tb font-semibold hover:text-white py-3 mt-10 px-5 rounded-md cursor-pointer`}>
+                                  Upload
+                                </label>
+                                <input className="hidden"
+                                  id="pan"
+                                  type='file'
+                                  multiple
+                                  accept='image/jpeg,image/jpg,image/png,application/pdf'
+                                  placeholder='Upload Images...'
+                                  {...register("pan_url", { required: props.button == 'edit' ? false : true })} />
+                              </div>
                             </div>
-                          </div> */}
-                           <div className="">
+                            {props?.button == 'edit' && props?.data.pan_url != '' && props?.data.pan_url != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
+                              {props?.data?.pan_url?.split('/').pop()}
+                            </label>}
+                            {(errors.pan_card) && <Error title='PAN Card Number & Image is required' />}
+                            {(errors.pan_url && !errors.pan_card) && <Error title='PAN Card Image is required' />}
+
+                          </div>
+                          <div className="">
                             <label className={labelClass}>
-                                Aadhar Card Number*
-                            </label>
-                            <div className="flex items-center space-x-2">
-                                <input
-                                    type="number"
-                                    maxLength={14}
-                                    placeholder='Aadhar Card Number'
-                                    className={inputClass}
-                                    {...register('adhar_card', { required: true, validate: validateAadharCard })}
-                                />
-                                <div className="">
-                                    <label htmlFor='adhar' className={`${adhar_watch?.length || props?.data?.adhar_url ? "bg-sky-400 text-white" : " bg-gray-300/80"}  transition-colors hover:bg-sky-400 font-tb font-semibold hover:text-white py-3 mt-10 px-5 rounded-md cursor-pointer`}>
-                                        Upload
-                                    </label>
-                                    <input className="hidden"
-                                        id="adhar"
-                                        type='file'
-                                        multiple
-                                        accept='image/jpeg,image/jpg,image/png,application/pdf'
-                                        placeholder='Upload Images...'
-                                        {...register("adhar_url", { required: true })} />
-                                </div>
-                            </div>
-                                {errors?.adhar_card && <Error title={errors?.adhar_card?.message ? errors?.adhar_card?.message : 'Aadhar Card Number & Image is required'} />}
-                        </div>
-                          {/* <div className="">
-                            <label className={labelClass}>
-                              Aadhar Card*
+                              Aadhar Card Number*
                             </label>
                             <div className="flex items-center space-x-2">
                               <input
-                                type="text"
+                                type="number"
                                 maxLength={14}
-                                placeholder='Aadhar No'
+                                placeholder='Aadhar Card Number'
                                 className={inputClass}
                                 {...register('adhar_card', { required: true, validate: validateAadharCard })}
                               />
-                            </div>
-                          </div> */}
                               <div className="">
-                                <label className={labelClass}>
-                                    GST Number*
+                                <label htmlFor='adhar' className={`${adhar_watch?.length || props?.data?.adhar_url ? "bg-sky-400 text-white" : " bg-gray-300/80"}  transition-colors hover:bg-sky-400 font-tb font-semibold hover:text-white py-3 mt-10 px-5 rounded-md cursor-pointer`}>
+                                  Upload
                                 </label>
-                                <div className="flex items-center space-x-2">
-                                    <input
-                                        type="text"
-                                        placeholder='GST Number*'
-                                        className={inputClass}
-                                        {...register('gst_number', {
-                                            required: 'GST Number is required*',
-                                            validate: validateGST
-                                        })}
-                                    />
-                                    <div className="">
-                                        <label htmlFor='gst' className={`${gst_watch?.length || props?.data?.gst_url ? "bg-sky-400 text-white" : " bg-gray-300/80"}  transition-colors hover:bg-sky-400 font-tb font-semibold hover:text-white py-3 mt-10 px-5 rounded-md cursor-pointer`}>
-                                            Upload
-                                        </label>
-                                        <input className="hidden"
-                                            id="gst"
-                                            type='file'
-                                            multiple
-                                            accept='image/jpeg,image/jpg,image/png,application/pdf'
-                                            placeholder='Upload Images...'
-                                            {...register("gst_url")} />
-                                    </div>
-                                </div>
-                                {errors?.gst_number && <Error title={errors?.gst_number?.message} />}
+                                <input className="hidden"
+                                  id="adhar"
+                                  type='file'
+                                  multiple
+                                  accept='image/jpeg,image/jpg,image/png,application/pdf'
+                                  placeholder='Upload Images...'
+                                  {...register("adhar_url", { required: props.button == 'edit' ? false : true })} />
+                              </div>
                             </div>
-                          {/* <div className="">
+                            {props?.button == 'edit' && props?.data.adhar_url != '' && props?.data.adhar_url != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
+                              {props?.data?.adhar_url?.split('/').pop()}
+                            </label>}
+                            {(errors.adhar_card) && <Error title='Aadhar Card Number & Image is required' />}
+                            {(errors.adhar_url && !errors.adhar_card) && <Error title='Aadhar Card Image is required' />}
+                          </div>
+                          <div className="">
                             <label className={labelClass}>
                               GST Number
                             </label>
@@ -555,9 +510,24 @@ export default function AddFranchiseForm(props) {
                                 className={inputClass}
                                 {...register('gst_number', { validate: (gstNumber != "" && gstNumber != null) ? validateGST : '' })}
                               />
+                              <div className="">
+                                <label htmlFor='gst' className={`${gst_watch?.length || props?.data?.gst_url ? "bg-sky-400 text-white" : " bg-gray-300/80"}  transition-colors hover:bg-sky-400 font-tb font-semibold hover:text-white py-3 mt-10 px-5 rounded-md cursor-pointer`}>
+                                  Upload
+                                </label>
+                                <input className="hidden"
+                                  id="gst"
+                                  type='file'
+                                  multiple
+                                  accept='image/jpeg,image/jpg,image/png,application/pdf'
+                                  placeholder='Upload Images...'
+                                  {...register("gst_url")} />
+                              </div>
                             </div>
-                            {errors?.gst_number && <Error title={errors?.gst_number?.message ? errors?.gst_number?.message : 'GST Number is Requried'} />}
-                          </div> */}
+                            {props?.button == 'edit' && props?.data.gst_url != '' && props?.data.gst_url != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
+                              {props?.data?.gst_url?.split('/').pop()}
+                            </label>}
+                            {errors?.gst_number && <Error title={errors?.gst_number?.message} />}
+                          </div>
                           <div className="">
                             <label className={labelClass}>
                               Bank Name*
