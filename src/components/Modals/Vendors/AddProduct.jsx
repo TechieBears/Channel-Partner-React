@@ -628,6 +628,7 @@ const AddProduct = (props) => {
                                                         <label className={labelClass}>
                                                             Shelf Life*
                                                         </label>
+                                                        
                                                         <input
                                                             type="text"
                                                             readOnly={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}

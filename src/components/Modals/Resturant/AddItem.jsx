@@ -111,14 +111,33 @@ function AddItem(props) {
         console.log('data: ', data)
     }
 
-    useEffect(() => {
-        getCategory().then(res => {
-            setCategory(res)
-        })
-        getSubCategory().then(res => {
+    const getCategoryData = () => {
+       try {
+         getCategory().then(res => {
+             setCategory(res)
+         })
+       } catch (error) {
+            console.log(error)
+       }
+    }
+
+    const getSubCategoryData = () => {
+       try {
+          getSubCategory().then(res => {
             setsubCategory(res)
         })
+       } catch (error) {
+            console.log(error)
+       }
+    }
+
+    useEffect(() => {
+        getCategoryData()
+        getSubCategoryData()
     }, [])
+
+
+    
     return (
         <>
             {
@@ -143,7 +162,7 @@ function AddItem(props) {
                         <div className="fixed inset-0 bg-black bg-opacity-25" />
                     </Transition.Child>
                     <div className="fixed inset-0 overflow-y-scroll ">
-                        <div className="flex min-h-full items-center justify-center p-4 text-center">
+                        <div className="flex items-center justify-center min-h-full p-4 text-center">
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-out duration-300"
@@ -153,20 +172,20 @@ function AddItem(props) {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-6xl transform overflow-hidden rounded-lg bg-white  text-left align-middle shadow-xl transition-all">
+                                <Dialog.Panel className="w-full max-w-6xl overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl">
 
                                     <Dialog.Title
                                         as="h2"
-                                        className="text-lg text-white w-full bg-sky-400 font-tb leading-6 font-semibold py-4 px-3"
+                                        className="w-full px-3 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
                                     >
                                         {props?.title}
                                     </Dialog.Title>
-                                    <div className=" bg-gray-200/70 ">
+                                    <div className=" bg-gray-200/70">
                                         {/* React Hook Form */}
                                         <form onSubmit={handleSubmit(onSubmit)} >
                                             <div className="p-4 overflow-y-scroll scrollbars " >
-                                                <div className="py-4 mx-4 grid md:grid-cols-1 lg:grid-cols-4 gap-x-3 gap-y-3 customBox">
-                                                    <h3 className='col-span-4 font-semibold text-xl'>Basic Details</h3>
+                                                <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-4 gap-x-3 gap-y-3 customBox">
+                                                    <h3 className='col-span-4 text-xl font-semibold'>Basic Details</h3>
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             Product Name*
@@ -307,7 +326,7 @@ function AddItem(props) {
                                                             onChange={handleFileChange}
                                                         />
                                                         {props?.button === 'edit' && props?.data.product_video_url && (
-                                                            <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate truncate'>
+                                                            <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                                                                 {props?.data?.product_video_url?.name}
                                                             </label>
                                                         )}
@@ -350,7 +369,7 @@ function AddItem(props) {
                                                             placeholder='Upload Images...'
                                                             {...register("product_image_1",
                                                                 { required: props.title == 'Edit Product' ? false : true })} />
-                                                        {props?.title == 'Edit Product' && props?.row?.product_image_1 != '' && props?.row?.product_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate truncate'>
+                                                        {props?.title == 'Edit Product' && props?.row?.product_image_1 != '' && props?.row?.product_image_1 != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                                                             {props?.row?.product_image_1?.split('/').pop()}
                                                         </label>}
                                                         {errors.product_image_1 && <Error title='Main Image is required*' />}
@@ -366,7 +385,7 @@ function AddItem(props) {
                                                             {...register("product_image_2",
                                                             )}
                                                         />
-                                                        {props?.title == 'Edit Product' && props?.row?.product_image_2 != '' && props?.row?.product_image_2 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate truncate'>
+                                                        {props?.title == 'Edit Product' && props?.row?.product_image_2 != '' && props?.row?.product_image_2 != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                                                             {props?.row?.product_image_2?.split('/').pop()}
                                                         </label>}
                                                     </div>
@@ -379,7 +398,7 @@ function AddItem(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("product_image_3")} />
-                                                        {props?.title == 'edit' && props?.row?.product_image_3 != '' && props?.row?.product_image_3 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate truncate'>
+                                                        {props?.title == 'edit' && props?.row?.product_image_3 != '' && props?.row?.product_image_3 != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                                                             {props?.row?.product_image_3?.split('/').pop()}
                                                         </label>}
                                                     </div>
@@ -392,7 +411,7 @@ function AddItem(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("product_image_4")} />
-                                                        {props?.title == 'Edit Product' && props?.row?.product_image_4 != '' && props?.row?.product_image_4 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate truncate'>
+                                                        {props?.title == 'Edit Product' && props?.row?.product_image_4 != '' && props?.row?.product_image_4 != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                                                             {props?.row?.product_image_4?.split('/').pop()}
                                                         </label>}
                                                     </div>
@@ -405,13 +424,13 @@ function AddItem(props) {
                                                             accept='image/jpeg,image/jpg,image/png'
                                                             placeholder='Upload Images...'
                                                             {...register("product_image_5")} />
-                                                        {props?.title == 'Edit Product' && props?.row?.product_image_5 != '' && props?.row?.product_image_5 != undefined && <label className='block mb-1 font-medium text-blue-800 text-md font-tb truncate truncate'>
+                                                        {props?.title == 'Edit Product' && props?.row?.product_image_5 != '' && props?.row?.product_image_5 != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                                                             {props?.row?.product_image_5?.split('/').pop()}
                                                         </label>}
                                                     </div>
                                                 </div>
                                             </div>
-                                            <footer className="py-2 flex bg-white justify-end px-4 space-x-3">
+                                            <footer className="flex justify-end px-4 py-2 space-x-3 bg-white">
                                                 {loader ? <LoadBox className="relative block w-auto px-5 transition-colors font-tb tracking-wide duration-200 py-2.5 overflow-hidden text-base font-semibold text-center text-white rounded-lg bg-sky-400 hover:bg-sky-400 capitalize" /> : <button type='submit' className={formBtn1}>Submit</button>}
                                                 <button type='button' className={formBtn2} onClick={closeBtn}>close</button>
                                             </footer>
