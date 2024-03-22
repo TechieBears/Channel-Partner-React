@@ -6,8 +6,7 @@ import { toast } from 'react-toastify'
 import { environment } from '../../../env'
 import { formBtn2 } from '../../../utils/CustomClass'
 
-function OrdersCard(data ) {
-    console.log('data', data)
+function OrdersCard({ data }) {
     const [status, setstatus] = useState('pending')
     const [details, setDetails] = useState(false)
     const user = useSelector(state => state?.user?.loggedUserDetails)
@@ -66,10 +65,15 @@ function OrdersCard(data ) {
                         <p className="text-xs font-light">{moment(data?.orderDetails?.order_created_at).format('LLL')}</p>
                     </div>
                     <div className="flex items-center justify-center">
-                        <div className='flex items-center gap-2'>
-                            <User variant="Bold" size={18} />
-                            {/* <p className="font-semibold">{data?.orderedItems?.user?.first_name} {data?.orderedItems?.user?.last_name}</p> */}
-                            <p className="font-semibold">Mayur Mane</p>
+                        <div className='items-center'>
+                            <div className='flex items-center gap-2'>
+                                <User variant="Bold" size={18} />
+                                <p className="font-semibold">Mayur Mane</p>
+                            </div>
+                            <div className='flex gap-2'>
+                                <p className='text-xs '>Total Items</p>
+                                <p className="text-xs ">{data?.orderedItems?.length}</p>
+                            </div>
                         </div>
                     </div>
                     <div className="flex items-center justify-center">
@@ -115,7 +119,7 @@ function OrdersCard(data ) {
                         <p className="text-lg font-semibold text-sky-400">Order Details</p>
                     </div>
                     <div className="grid items-center gap-4 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
-                        {data?.orderedItems.map(item => (
+                        {data?.orderedItems?.map(item => (
                             <div className="flex justify-around" key={item?.orderitem_id}>
                                 <img src={item?.product?.product_image_1} alt="img" className="w-20 h-20" />
                                 <div className="flex items-center gap-4">
