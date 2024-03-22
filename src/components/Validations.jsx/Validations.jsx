@@ -1,5 +1,4 @@
 // ===================== Custom validation function for a 6-digit PIN code ================
-import Pincode from './PincodeVal'
 export const validatePIN = (value) => {
     const pattern = /^(?!0)(?!([0-9])\1{5})\d{6}$/;
     if (pattern.test(value)) {
