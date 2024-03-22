@@ -210,10 +210,9 @@ const Dashboard = () => {
                 <div className="p-4 space-y-2">
                     <p className="text-lg font-semibold">Current Orders</p>
                     {
-                        orders
-                            ?.map(data => (
-                                <OrdersCard data={data} />
-                            ))
+                        orders?.length != 0 ? orders?.map(data => (
+                            <OrdersCard data={data} />
+                        )) : 'No Orders For Today'
                     }
                 </div>
             </section>

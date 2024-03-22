@@ -291,9 +291,9 @@ const VendorOrders = () => {
                                 <p className="font-semibold text-sm text-red-500">({orders?.length})</p>
                             </div>
                             {
-                                orders?.map(data => (
+                                orders?.length != 0 ? orders?.map(data => (
                                     <OrdersCard data={data} />
-                                ))
+                                )) : 'No Orders For Today'
                             }
                         </div>
                     </TabPanel>

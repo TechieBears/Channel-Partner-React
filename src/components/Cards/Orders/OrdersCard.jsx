@@ -82,7 +82,7 @@ function OrdersCard({ data }) {
                         {status == 'pending' ?
                             <>
                                 <button className="px-4 py-2 font-medium bg-green-500 rounded-lg hover:bg-green-700" onClick={() => changeStatus({ status: 'accepted' })}>
-                                    <p className="text-white">{status == 'pending' ? 'Accept' : 'Euuu'}</p>
+                                    <p className="text-white">{status == 'pending' ? 'Accept' : 'Accept'}</p>
                                 </button>
                                 <button className={formBtn2}>Decline</button>
                             </> : null
