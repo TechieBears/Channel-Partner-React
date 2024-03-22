@@ -9,7 +9,7 @@ import { messaging } from "./firebase";
 import store from "./redux/store";
 let persistor = persistStore(store);
 import "react-image-crop/dist/ReactCrop.css";
-import ProjectRoutes from "./routes/ProjectRoutes";
+import ProjectRoutes from "../routes/ProjectRoutes";
 
 const App = () => {
   async function requestPermission() {
