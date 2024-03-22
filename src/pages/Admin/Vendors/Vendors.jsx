@@ -74,8 +74,10 @@ function Vendors() {
     // =================== filter data ========================
     const onSubmit = async (data) => {
         if (data?.name != '' || data?.msbcode != '' || data?.franchise != '' || data?.franchise != undefined || data?.pincode != '' || data?.pincode != undefined) {
+            const name = data?.name?.split(" ")[0] ? data?.name?.split(" ")[0] : ''
+            const lastname = data?.name?.split(" ")[1] ? data?.name?.split(" ")[1] : ''
             try {
-                let url = `${environment.baseUrl}vendor/vendor_list?name=${data?.name}&msbcode=${data?.msbcode}&franchise=${data?.franchise?.value ? data?.franchise?.value : ''}&pincode=${data?.pincode?.value ? data?.pincode?.value : ''}`
+                let url = `${environment.baseUrl}vendor/vendor_list?name=${name}&lastname=${lastname}&msbcode=${data?.msbcode}&franchise=${data?.franchise?.value ? data?.franchise?.value : ''}&pincode=${data?.pincode?.value ? data?.pincode?.value : ''}`
                 await axios.get(url).then((res) => {
                     SetVendors(res?.data?.results)
                     toast.success("Filters applied successfully")
@@ -187,6 +189,7 @@ function Vendors() {
         { field: 'first_name', body: (row) => <div className="capitalize">{row?.user?.first_name + " " + row?.user?.last_name}</div>, header: 'Name' },
         { field: 'email', header: 'Email', body: (row) => <h6>{row?.user?.email}</h6>, sortable: false },
         { field: 'insta_commison_percentage', header: 'Comission(%)', body: (row) => <h6>{row?.insta_commison_percentage}%</h6>, sortable: false },
+        { field: "franchise", header: "Franchise", body: (row) => <h6>{row?.created_by?.first_name} {row?.created_by?.last_name}</h6>, sortable: false },
         { field: 'phone_no', header: 'Phone No', body: (row) => <h6>{row?.user?.phone_no}</h6>, sortable: false },
         { field: 'pincode', header: 'Pincode', body: (row) => <h6>{row?.user?.pincode}</h6>, sortable: false },
         { field: 'city', header: 'city', body: (row) => <h6>{row?.user?.city}</h6>, sortable: false },
@@ -293,9 +296,9 @@ function Vendors() {
                     <AddVendors title='Add Vendors' FranchiseeVendors={FranchiseeVendors} />
                 </div>
                 {
-                    <Table data={Vendors} columns={columns} isValid={true}/>
+                    <Table data={Vendors} columns={columns} isValid={true} />
                 }
-a
+                a
             </div>
             {/*====================== User Table ================================*/}
         </>

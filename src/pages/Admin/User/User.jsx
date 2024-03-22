@@ -38,8 +38,10 @@ function User() {
     // =================== filter data ========================
     const onSubmit = async (data) => {
         if (data?.name != '' || data?.email != '' || data?.pincode != '' || data?.pincode != undefined) {
+            const name = data?.name?.split(" ")[0] ? data?.name?.split(" ")[0] : ''
+            const lastname = data?.name?.split(" ")[1] ? data?.name?.split(" ")[1] : ''
             try {
-                let url = `${environment.baseUrl}app/all_customers?name=${data?.name}&email=${data?.email}&pincode=${data?.pincode?.value ? data?.pincode?.value : ''}`
+                let url = `${environment.baseUrl}app/all_customers?name=${name}&lastname=${lastname}&email=${data?.email}&pincode=${data?.pincode?.value ? data?.pincode?.value : ''}`
                 await axios.get(url).then((res) => {
                     setCustomerData(res?.data?.results)
                     toast.success("Filters applied successfully")

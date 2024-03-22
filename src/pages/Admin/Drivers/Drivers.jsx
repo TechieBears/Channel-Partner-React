@@ -56,8 +56,10 @@ function Drivers() {
     // =================== filter data ========================
     const onSubmit = async (data) => {
         if (data?.name != '' || data?.msbcode != '' || data?.franchise != '' || data?.franchise != undefined || data?.pincode != '' || data?.pincode != undefined) {
+            const name = data?.name?.split(" ")[0] ? data?.name?.split(" ")[0] : ''
+            const lastname = data?.name?.split(" ")[1] ? data?.name?.split(" ")[1] : ''
             try {
-                let url = `${environment.baseUrl}delivery/deliveryboy_list?name=${data?.name}&msbcode=${data?.msbcode}&franchise=${data?.franchise?.value ? data?.franchise?.value : ''}&pincode=${data?.pincode?.value ? data?.pincode?.value : ''}`
+                let url = `${environment.baseUrl}delivery/deliveryboy_list?name=${name}&lastname=${lastname}&msbcode=${data?.msbcode}&franchise=${data?.franchise?.value ? data?.franchise?.value : ''}&pincode=${data?.pincode?.value ? data?.pincode?.value : ''}`
                 await axios.get(url).then((res) => {
                     setDeliveryBoyData(res?.data?.results)
                     toast.success("Filters applied successfully")

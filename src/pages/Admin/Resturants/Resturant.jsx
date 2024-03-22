@@ -80,8 +80,10 @@ export default function Restaurant() {
   // =================== filter data ========================
   const onSubmit = async (data) => {
     if (data?.name != '' || data?.msbcode != '' || data?.franchise != '' || data?.franchise != undefined || data?.pincode != '' || data?.pincode != undefined) {
+      const name = data?.name?.split(" ")[0] ? data?.name?.split(" ")[0] : ''
+      const lastname = data?.name?.split(" ")[1] ? data?.name?.split(" ")[1] : ''
       try {
-        let url = `${environment.baseUrl}vendor/vendor_list?name=${data?.name}&msbcode=${data?.msbcode}&franchise=${data?.franchise?.value ? data?.franchise?.value : ''}&pincode=${data?.pincode?.value ? data?.pincode?.value : ''}&vendor_type=restaurant`
+        let url = `${environment.baseUrl}vendor/vendor_list?name=${name}&lastname=${lastname}&msbcode=${data?.msbcode}&franchise=${data?.franchise?.value ? data?.franchise?.value : ''}&pincode=${data?.pincode?.value ? data?.pincode?.value : ''}&vendor_type=restaurant`
         await axios.get(url).then((res) => {
           // setData(res?.data?.results)
           dispatch(setAllRestaurant(res?.data?.results))
@@ -277,7 +279,7 @@ export default function Restaurant() {
             <div className="">
               <input
                 type="text"
-                placeholder='Owner Name'
+                placeholder='Search by Owner Name'
                 autoComplete='off'
                 className={`${inputClass} !bg-slate-100`}
                 {...register('name')}
