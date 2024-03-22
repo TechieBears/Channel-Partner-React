@@ -12,9 +12,9 @@ import AsyncSelect from "react-select/async";
 import { toast } from "react-toastify";
 // import Orders from "../../../components/Cards/Orders/Orders";
 import OrdersCard from "../../../components/Cards/Orders/OrdersCard";
-import DashboardForm from "../../../components/Modals/DashboardModals/DashboardForm";
 import DeleteModal from "../../../components/Modals/DeleteModal/DeleteModal";
 import { formBtn1, formBtn2, inputClass } from "../../../utils/CustomClass";
+import DashboardForm from "../../../components/modals/DashboardModals/DashboardForm";
 
 
 
