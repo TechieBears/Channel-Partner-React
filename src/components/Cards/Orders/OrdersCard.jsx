@@ -37,11 +37,20 @@ function OrdersCard({ data }) {
         toast.success(`Order Statsus changes to ${status}`)
     }
 
+    const autoOrder = () => {
+        setTimeout(() => {
+            console.log('Auto order placed');
+            toast.success('Order auto Accepted')
+        }, 30000); // 30 sec 
+    }
+
     useEffect(() => {
-        if (data?.orderDetails?.order_created_at[0] == moment.now()) {
-            setTimeout(() => {
-                console.log('auto order placed ')
-            }, 30000)
+        if (data && data.orderDetails && data.orderDetails[0] && data.orderDetails[0].order_created_at) {
+            const orderCreatedAt = moment(data.orderDetails[0].order_created_at);
+            const currentDateTime = moment();
+            if (orderCreatedAt.format('DD-MM-YYYY hh:mm a') === currentDateTime.format('DD-MM-YYYY hh:mm a')) {
+                autoOrder();
+            }
         }
     }, [])
 
