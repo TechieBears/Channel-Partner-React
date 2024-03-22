@@ -16,7 +16,7 @@ const Category = (props) => {
     try {
       getCategory().then((res) => {
         setCategory(res)
-        dispatch(setCategoryCount(res.length))
+        dispatch(setCategoryCount(res?.length))
       });
     } catch (error) {
       console.log(error);
@@ -26,7 +26,7 @@ const Category = (props) => {
   const productSubCategory = () => {
     try {
       getSubCategory().then((res) => {
-        dispatch(setSubCategoryCount(res.length))
+        dispatch(setSubCategoryCount(res?.length))
       })
     } catch (error) {
       console.log("🚀 ~ file: Category.jsx:32 ~ productSubCategory ~ error:", error)
@@ -36,7 +36,7 @@ const Category = (props) => {
   const getProducts = () => {
     try {
       getProductsByAdmin().then(res => {
-        dispatch(setProductCount(res.length))
+        dispatch(setProductCount(res?.length))
       });
     } catch (error) {
       console.log(error);
@@ -48,7 +48,7 @@ const Category = (props) => {
     try {
       getRestaurantCategory().then((res) => {
         setCategory(res)
-        dispatch(setCategoryCount(res.length))
+        dispatch(setCategoryCount(res?.length))
       });
     } catch (error) {
       console.log(error);
@@ -58,7 +58,7 @@ const Category = (props) => {
   const restaurantSubCategory = () => {
     try {
       getRestaurantSubCategory().then((res) => {
-        dispatch(setSubCategoryCount(res.length))
+        dispatch(setSubCategoryCount(res?.length))
       })
     } catch (error) {
       console.log("🚀 ~ file: Category.jsx:54 ~ restaurantSubCategory ~ error:", error)
@@ -68,7 +68,7 @@ const Category = (props) => {
   const getRestaurantFoodItems = () => {
     try {
       getRestaurantFoodAdmin().then(res => {
-        dispatch(setProductCount(res.length))
+        dispatch(setProductCount(res?.length))
       });
     } catch (error) {
       console.log(error);
