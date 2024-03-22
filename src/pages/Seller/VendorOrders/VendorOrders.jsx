@@ -17,7 +17,7 @@ const VendorOrders = () => {
     const webSocketUrl = `${environment.webSocketUrl}user_to_seller/${user?.msb_code}`
     const ws = new WebSocket(webSocketUrl)
     const [selectedTab, setSelectedTab] = useState(0);
-    const storages = useSelector((state) => state?.storage?.list);
+    // const storages = useSelector((state) => state?.storage?.list);
     const orders = useSelector(state => state?.orders?.newOrders);
     const {
         register,
@@ -66,14 +66,14 @@ const VendorOrders = () => {
 
 
     const loadOptions = (_, callback) => {
-        const uniqueNames = new Set();
-        const uniqueProducts = storages
-            ?.filter(
-                (res) =>
-                    res.name && !uniqueNames.has(res.name) && uniqueNames.add(res.name)
-            )
-            .map((res) => ({ label: res.name, value: res.name }));
-        callback(uniqueProducts || []);
+        // const uniqueNames = new Set();
+        // const uniqueProducts = storages
+        //     ?.filter(
+        //         (res) =>
+        //             res.name && !uniqueNames.has(res.name) && uniqueNames.add(res.name)
+        //     )
+        //     .map((res) => ({ label: res.name, value: res.name }));
+        // callback(uniqueProducts || []);
     };
 
     const onSubmit = (data) => {

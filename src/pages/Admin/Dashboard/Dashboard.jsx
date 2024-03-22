@@ -7,7 +7,6 @@ import axios from "axios";
 import { NavLink } from "react-router-dom";
 import { environment } from "../../../env";
 import { useDispatch, useSelector } from "react-redux";
-import { setStorageList } from "../../../redux/slices/storageSlice";
 import { toast } from "react-toastify";
 import DashboardForm from "../../../components/modals/DashboardModals/DashboardForm";
 import DeleteModal from "../../../components/Modals/DeleteModal/DeleteModal";
@@ -23,7 +22,6 @@ const Dashboard = () => {
   console.log(categoryCount, subCategoryCount, productCount) 
 
   const user = useSelector((state) => state.user.loggedUserDetails);
-  const storages = useSelector((state) => state?.storage?.list);
   const cityNames = useSelector((state) => state?.master?.city);
   const tempretureRangeList = useSelector(
     (state) => state?.master?.temperatureRange
@@ -47,7 +45,6 @@ const Dashboard = () => {
         }&location=${data.location == undefined ? "" : data.location}&user=${user?.role != "admin" ? user?.userid : ""
         }`;
       await axios.get(url).then((res) => {
-        dispatch(setStorageList(res.data));
         toast.success("Filters applied successfully");
       });
     } else {
@@ -62,7 +59,6 @@ const Dashboard = () => {
   //     getStorages()
   //       .then((res) => {
   //         console.log(res);
-  //         dispatch(setStorageList(res));
   //       })
   //       .catch((err) => {
   //         console.error("Error", err);
@@ -70,7 +66,6 @@ const Dashboard = () => {
   //   } else {
   //     getPartnerStorage(user?.userid)
   //       .then((res) => {
-  //         dispatch(setStorageList(res));
   //       })
   //       .catch((err) => {
   //         console.error("Error", err);
@@ -86,16 +81,16 @@ const Dashboard = () => {
     );
   };
 
-  const loadOptions = (_, callback) => {
-    const uniqueNames = new Set();
-    const uniqueProducts = storages
-      ?.filter(
-        (res) =>
-          res.name && !uniqueNames.has(res.name) && uniqueNames.add(res.name)
-      )
-      .map((res) => ({ label: res.name, value: res.name }));
-    callback(uniqueProducts || []);
-  };
+  // const loadOptions = (_, callback) => {
+  //   const uniqueNames = new Set();
+  //   const uniqueProducts = storages
+  //     ?.filter(
+  //       (res) =>
+  //         res.name && !uniqueNames.has(res.name) && uniqueNames.add(res.name)
+  //     )
+  //     .map((res) => ({ label: res.name, value: res.name }));
+  //   callback(uniqueProducts || []);
+  // };
 
   // ================================ filter reset ============================
   const filterReset = () => {

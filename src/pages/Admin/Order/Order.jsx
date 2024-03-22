@@ -8,7 +8,6 @@ import { toast } from 'react-toastify';
 import DeleteModal from '../../../components/Modals/DeleteModal/DeleteModal';
 import Table from '../../../components/Table/Table';
 import { environment } from '../../../env';
-import { setStorageList } from '../../../redux/slices/storageSlice';
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 import { Link } from 'react-router-dom';
 
@@ -64,7 +63,6 @@ const Order = () => {
         if (data?.name?.value !== undefined || data?.location != '') {
             let url = `${environment.baseUrl}storage-filter/?name=${data?.name?.value == undefined ? '' : data?.name?.value}&location=${data.location == undefined ? '' : data.location}&user=${user?.role != 'admin' ? user?.userid : ''}`
             await axios.get(url).then((res) => {
-                dispatch(setStorageList(res.data))
                 toast.success("Filters applied successfully")
             })
         } else {

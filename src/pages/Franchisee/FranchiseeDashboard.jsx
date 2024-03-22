@@ -18,7 +18,6 @@ import axios from "axios";
 import { NavLink } from "react-router-dom";
 import { environment } from "../../env";
 import { useDispatch, useSelector } from "react-redux";
-import { setStorageList } from "../../redux/slices/storageSlice";
 import { toast } from "react-toastify";
 import AsyncSelect from "react-select/async";
 import DashboardForm from "../../components/modals/DashboardModals/DashboardForm";
@@ -35,7 +34,6 @@ const FranchiseeDashboard = () => {
     const [selectedTab, setSelectedTab] = useState(0);
 
     const user = useSelector((state) => state.user.loggedUserDetails);
-    const storages = useSelector((state) => state?.storage?.list);
     const cityNames = useSelector((state) => state?.master?.city);
     const dispatch = useDispatch();
     const [open, setOpen] = React.useState(false);
@@ -61,7 +59,6 @@ const FranchiseeDashboard = () => {
     //         getStorages()
     //             .then((res) => {
     //                 console.log(res);
-    //                 dispatch(setStorageList(res));
     //             })
     //             .catch((err) => {
     //                 console.error("Error", err);
@@ -69,7 +66,6 @@ const FranchiseeDashboard = () => {
     //     } else {
     //         getPartnerStorage(user?.userid)
     //             .then((res) => {
-    //                 dispatch(setStorageList(res));
     //             })
     //             .catch((err) => {
     //                 console.error("Error", err);
@@ -85,16 +81,16 @@ const FranchiseeDashboard = () => {
         );
     };
 
-    const loadOptions = (_, callback) => {
-        const uniqueNames = new Set();
-        const uniqueProducts = storages
-            ?.filter(
-                (res) =>
-                    res.name && !uniqueNames.has(res.name) && uniqueNames.add(res.name)
-            )
-            .map((res) => ({ label: res.name, value: res.name }));
-        callback(uniqueProducts || []);
-    };
+    // const loadOptions = (_, callback) => {
+    //     const uniqueNames = new Set();
+    //     const uniqueProducts = storages
+    //         ?.filter(
+    //             (res) =>
+    //                 res.name && !uniqueNames.has(res.name) && uniqueNames.add(res.name)
+    //         )
+    //         .map((res) => ({ label: res.name, value: res.name }));
+    //     callback(uniqueProducts || []);
+    // };
 
     // ================================ filter reset ============================
     const filterReset = () => {
