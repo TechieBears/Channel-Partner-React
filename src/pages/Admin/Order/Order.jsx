@@ -1,16 +1,13 @@
-import axios from 'axios';
 import { Eye } from 'iconsax-react';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { toast } from 'react-toastify';
 import DeleteModal from '../../../components/Modals/DeleteModal/DeleteModal';
 import Table from '../../../components/Table/Table';
-import { environment } from '../../../env';
-import { setStorageList } from '../../../redux/slices/storageSlice';
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
-import { Link } from 'react-router-dom';
 
 const Order = () => {
     const user = useSelector((state) => state.user.loggedUserDetails)
@@ -61,16 +58,7 @@ const Order = () => {
 
     // ======================== Data submit ===================================
     const onSubmit = async (data) => {
-        if (data?.name?.value !== undefined || data?.location != '') {
-            let url = `${environment.baseUrl}storage-filter/?name=${data?.name?.value == undefined ? '' : data?.name?.value}&location=${data.location == undefined ? '' : data.location}&user=${user?.role != 'admin' ? user?.userid : ''}`
-            await axios.get(url).then((res) => {
-                dispatch(setStorageList(res.data))
-                toast.success("Filters applied successfully")
-            })
-        } else {
-            toast.warn("No Selected Value !")
-        }
-
+        console.log('data', data);
     }
 
     // ================= delete storage data ===============

@@ -18,7 +18,6 @@ import axios from "axios";
 import { NavLink } from "react-router-dom";
 import { environment } from "../../env";
 import { useDispatch, useSelector } from "react-redux";
-import { setStorageList } from "../../redux/slices/storageSlice";
 import { toast } from "react-toastify";
 import AsyncSelect from "react-select/async";
 import DashboardForm from "../../components/modals/DashboardModals/DashboardForm";
@@ -48,34 +47,6 @@ const FranchiseeDashboard = () => {
         formState: { errors },
         reset,
     } = useForm();
-
-    // ======================== Data submit ===================================
-    const onSubmit = async (data) => {
-        console.log('data', data);
-    };
-
-    // ====================== fetch data api ==================================
-
-    // const StorageList = () => {
-    //     if (user.role == "admin") {
-    //         getStorages()
-    //             .then((res) => {
-    //                 console.log(res);
-    //                 dispatch(setStorageList(res));
-    //             })
-    //             .catch((err) => {
-    //                 console.error("Error", err);
-    //             });
-    //     } else {
-    //         getPartnerStorage(user?.userid)
-    //             .then((res) => {
-    //                 dispatch(setStorageList(res));
-    //             })
-    //             .catch((err) => {
-    //                 console.error("Error", err);
-    //             });
-    //     }
-    // };
 
     // ================================ Dropdown List =========================
 
