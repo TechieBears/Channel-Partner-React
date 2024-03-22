@@ -467,7 +467,7 @@ const AdminProduct = (props) => {
         { field: 'pincode', header: 'PINCODE', body: (row) => <h6>{row?.vendor?.user?.pincode}</h6>, sortable: true },
         { field: 'product_brand', header: 'Brand', sortable: true },
         { field: 'email', header: 'Vendor Email',  body: (row) => <h6>{row?.vendor?.user?.email}</h6>, sortable: true },
-        { field: 'product_shelflife', header: 'Self Life', sortable: true },
+        { field: 'product_shelflife', header: 'Shelf Life', sortable: true },
         { field: 'product_Manufacturer_Name', header: 'Manufacturer Name', sortable: true },
         { field: 'product_country_of_origin', header: 'Country Of Origin', sortable: true },
         { filed: 'action', header: 'Action', body: productaction, sortable: true },
