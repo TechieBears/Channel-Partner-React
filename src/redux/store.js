@@ -8,7 +8,11 @@ import storageSlice from "./slices/storageSlice";
 import masterSlice from "./Slices/masterSlice";
 import loginSlice from "./Slices/loginSlice";
 import userSlice from "./Slices/userSlice";
+import deliverySlice from "./Slices/deliverySlice";
 import VendorSlices from "./VendorSlices";
+import SessionSlice from "./Slices/SessionSlice";
+import orderSlice from "./Slices/orderSlice";
+import restauantSlice from "./Slices/restauantSlice";
 
 const reducers = combineReducers({
   user: loginSlice,
@@ -16,6 +20,10 @@ const reducers = combineReducers({
   master: masterSlice,
   users: userSlice,
   vendor: VendorSlices,
+  delivery: deliverySlice,
+  session: SessionSlice,
+  orders: orderSlice,
+  restaurants: restauantSlice,
 });
 
 const persistConfig = {

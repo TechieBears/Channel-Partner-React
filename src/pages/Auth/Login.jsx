@@ -1,19 +1,22 @@
-import { useForm } from 'react-hook-form';
-import { inputClass } from '../../utils/CustomClass'
-import leftImage from '../../assets/leftImage.png'
-import { useState } from 'react';
 import { Eye, EyeSlash } from 'iconsax-react';
-import { useDispatch } from 'react-redux';
-import { setLoggedUser, setLoggedUserDetails, setRoleIs } from '../../redux/Slices/loginSlice';
-import LoadBox from '../../components/Loader/LoadBox';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useDispatch } from "react-redux";
 import { toast } from 'react-toastify';
+import { getFranchiseDetails, login } from '../../api/index';
+import leftImage from '../../assets/leftImage.png';
 import Error from '../../components/Errors/Error';
-import { login } from '../../api/index';
+import LoadBox from '../../components/Loader/LoadBox';
+import { setFranchiseeDetails, setLoggedUser, setLoggedUserDetails, setRoleIs } from '../../redux/Slices/loginSlice';
+import { inputClass } from '../../utils/CustomClass';
+
 
 const Login = () => {
+
     const [eyeIcon, setEyeIcon] = useState(false)
     const [loader, setLoader] = useState(false)
     const dispatch = useDispatch()
+
     const {
         register,
         handleSubmit,
@@ -33,18 +36,19 @@ const Login = () => {
         try {
             setLoader(true)
             await login(data).then((res) => {
-                console.log("🚀 ~ awaitlogin ~ res:", res)
                 if (res.message == "Successfully logged in") {
                     document.title = `Insta Smart Bazzar Admin Dashbaord | ${res?.role?.charAt(0)?.toUpperCase() + res?.role?.slice(1)}`
                     dispatch(setLoggedUserDetails(res))
-                    dispatch(setRoleIs(res.role))
+                    dispatch(setRoleIs(res?.is_subadmin))
                     setLoader(false)
                     dispatch(setLoggedUser(true))
+                    if (res?.userid && res?.role == 'franchise') {
+                        getFranchiseDetailsById(res?.userid);
+                    }
                 } else {
                     setLoader(false)
-                    toast.error(res?.message)
+                    toast.error('Please Enter Valid Credentails')
                 }
-
             })
         } catch (error) {
             setLoader(false)
@@ -54,26 +58,44 @@ const Login = () => {
     }
 
 
+    const getFranchiseDetailsById = async (id) => {
+        try {
+            setLoader(true)
+            await getFranchiseDetails(id).then((res) => {
+                if (res) {
+                    dispatch(setFranchiseeDetails(res[0]))
+                    setLoader(false)
+                } else {
+                    setLoader(false)
+                    toast.error(res?.message)
+                }
+            })
+        } catch (error) {
+            setLoader(false)
+            toast.error(error?.message)
+            console.log(error)
+        }
+    }
     return (
-        <div className="w-full h-screen bgbackground flex justify-center items-center">
+        <div className="flex items-center justify-center w-full h-screen bgbackground">
             <div className="p-5 md:p-3 flex items-center justify-center glass border-4 border-gray-50 shrink-0  w-[30%] rounded-3xl px-7 min-w-max" data-aos="fade-up" data-aos-duration="1000" delay="100">
                 <div className="w-[27rem] md:w-[22rem] lg:w-[27rem] xl:w-[27rem] h-[30rem] xl:h-[30rem] lg:h-[30rem] md:h-[22rem] rounded-lg hidden sm:block p-5">
-                    <img src={leftImage} className='w-full h-full object-cover rounded-lg' loading='lazy' />
+                    <img src={leftImage} className='object-cover w-full h-full rounded-lg' loading='lazy' />
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)} >
                     <div className="w-[20rem] md:w-[22rem] lg:w-[27rem] xl:w-[27rem] md:p-3 py-5 space-y-3">
                         <div className="">
-                            <h2 className=" lg:mx-3 text-xl sm:text-3xl font-tbPop font-bold tracking-tight text-black">
-                                Hello, <span className='text-sky-400'>Again!</span>
+                            <h2 className="text-xl font-bold tracking-tight text-black lg:mx-3 sm:text-3xl font-tbPop ">
+                                Welcome, <span className='text-sky-400'>Admin!</span>
                             </h2>
-                            <h5 className="lg:mx-3 text-sm sm:text-base font-tbPop font-medium text-gray-400">
-                                Please SignIn to Dashboard!
+                            <h5 className="text-sm font-medium text-gray-400 lg:mx-3 sm:text-base font-tbPop">
+                                Please SignIn to Admin Dashboard!
                             </h5>
                         </div>
 
-                        <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-sm space-y-5">
+                        <div className="mt-2 space-y-5 sm:mx-auto sm:w-full sm:max-w-sm">
                             <div>
-                                <label htmlFor="email" className="block text-base font-tbPop font-medium leading-6 text-gray-500">
+                                <label htmlFor="email" className="block text-base font-medium leading-6 text-gray-500 font-tbPop">
                                     Email
                                 </label>
                                 <div className="mt-1">
@@ -93,11 +115,11 @@ const Login = () => {
                             </div>
                             <div>
                                 <div className="">
-                                    <label htmlFor="password" className="block font-tbPop text-base font-medium leading-6 text-gray-500">
+                                    <label htmlFor="password" className="block text-base font-medium leading-6 text-gray-500 font-tbPop">
                                         Password
                                     </label>
                                 </div>
-                                <div className="mt-1 relative flex items-center">
+                                <div className="relative flex items-center mt-1">
                                     <input
                                         id="password"
                                         name="password"
@@ -108,14 +130,14 @@ const Login = () => {
                                         className={`${inputClass} bg-neutral-100 border border-gray-200/50`}
                                         {...register('password', { required: true })}
                                     />
-                                    <span className="absolute right-2 z-10 " onClick={() => setEyeIcon(!eyeIcon)}>
+                                    <span className="absolute z-10 right-2 " onClick={() => setEyeIcon(!eyeIcon)}>
                                         {
                                             eyeIcon ?
                                                 <Eye size={24} className='text-gray-400 cursor-pointer' /> :
                                                 <EyeSlash size={24} className='text-gray-400 cursor-pointer' />
                                         }
                                     </span>
-                                    {errors.password && <p className='text-red-500 text-xs'>Password is required*</p>}
+                                    {errors.password && <p className='text-xs text-red-500'>Password is required*</p>}
                                 </div>
                             </div>
                             <div className='pt-3'>

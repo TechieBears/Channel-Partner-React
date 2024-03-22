@@ -1,0 +1,358 @@
+import { Eye } from "iconsax-react";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import Table from "../../../components/Table/Table";
+import { formBtn1, formBtn2, inputClass } from "../../../utils/CustomClass";
+// import CreateUserForm from '../../../components/Modals/UserModals/CreateUserForm';
+import { editUser, getUser } from "../../../api";
+// import userImg from '../../../assets/user.webp';
+import axios from "axios";
+import Switch from "react-js-switch";
+import { useDispatch, useSelector } from "react-redux";
+import { Tab, TabList, Tabs } from 'react-tabs';
+import { toast } from "react-toastify";
+import { environment } from "../../../env";
+import { setUserList } from "../../../redux/Slices/userSlice";
+
+
+function Reports() {
+  const dispatch = useDispatch();
+  const userList = useSelector((state) => state.users.list);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
+  const [open, setOpen] = React.useState(false);
+  const [delId, setDelId] = React.useState(0);
+  const [selectedTab, setSelectedTab] = useState(0);
+
+
+  // =================== filter data ========================
+  const onSubmit = async (data) => {
+    if (
+      data?.name != "" ||
+      data?.email != "" ||
+      data?.city != "" ||
+      data?.role != ""
+    ) {
+      let url = `${environment.baseUrl}user-filter/?first_name=${data?.name}&email=${data?.email}&city=${data?.city}&role=${data?.role}`;
+      await axios.get(url).then((res) => {
+        dispatch(setUserList(res.data));
+        toast.success("Filters applied successfully");
+      });
+    } else {
+      toast.warn("No Selected Value !");
+    }
+  };
+  // =================== fetching data ========================
+  const fetchData = () => {
+    try {
+      getUser().then((res) => {
+        dispatch(setUserList(res));
+      });
+    } catch (err) {
+      console.log("error", err);
+    }
+  };
+
+  // =================== delete the user data ========================
+  const toggleModalBtn = (id) => {
+    setOpen(!open);
+    setDelId(id);
+  };
+
+  // =================== table action ========================
+  const actionBodyTemplate = (row) => (
+    <div className="flex items-center gap-2">
+      <Link
+        to={`/user/${row.id}`}
+        state={row}
+        className="bg-green-100 px-1.5 py-2 rounded-sm"
+      >
+        <Eye size="20" className="text-green-500" />
+      </Link>
+      <CreateUserForm button="edit" title="Edit User" data={row} />
+      {/* <button onClick={() => toggleModalBtn(row.id)} id={row.id} className="bg-red-100 px-1.5 py-2 rounded-sm">
+                <Trash size="20" className='text-red-500' />
+            </button> */}
+    </div>
+  );
+  // =================== table user profile column ========================
+  const representativeBodyTemplate = (row) => {
+    return (
+      <div className="rounded-full w-11 h-11">
+        <img
+          src={
+            row?.profile == null ||
+              row?.profile == "" ||
+              row?.profile == undefined
+              ? userImg
+              : row?.profile
+          }
+          className="object-cover w-full h-full rounded-full"
+          alt={row.first_name}
+        />
+      </div>
+    );
+  };
+
+  // =================== table user verify column  ========================
+  const activeActionsRole = (rowData) => (
+    <h6
+      className={`${rowData?.role == "admin"
+          ? "bg-orange-100 text-sky-400"
+          : rowData?.role !== "user"
+            ? "bg-red-100 text-red-500"
+            : "bg-green-100 text-green-500"
+        } py-2 px-5 text-center capitalize rounded-full`}
+    >
+      {rowData?.role}
+    </h6>
+  );
+  const verifyActions = (row) => {
+    const payload = { isverify: !row.isverify, email: row?.email };
+    try {
+      editUser(row?.id, payload).then((form) => {
+        if (form.code == 2002) {
+          toast.success("User Verify Changed !");
+          fetchData();
+        } else {
+          console.log("err");
+        }
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // =================== table user active column ========================
+
+  const activeActions = (row) => {
+    const payload = { isactive: !row.isactive, email: row?.email };
+    try {
+      editUser(row?.id, payload).then((form) => {
+        if (form.code == 2002) {
+          toast.success("User Active Changed !");
+          fetchData();
+        } else {
+          console.log("err");
+        }
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // =============================== verify user switch =============================
+  const switchVerify = (row) => {
+    return (
+      <div className="flex items-center justify-center gap-2 ">
+        <Switch
+          value={row?.isverify}
+          onChange={() => verifyActions(row)}
+          size={50}
+          backgroundColor={{ on: "#86d993", off: "#c6c6c6" }}
+          borderColor={{ on: "#86d993", off: "#c6c6c6" }}
+        />
+      </div>
+    );
+  };
+  // =============================== active user switch =============================
+  const switchActive = (row) => {
+    return (
+      <div className="flex items-center justify-center gap-2 ">
+        <Switch
+          value={row?.isactive}
+          onChange={() => activeActions(row)}
+          size={50}
+          backgroundColor={{ on: "#86d993", off: "#c6c6c6" }}
+          borderColor={{ on: "#86d993", off: "#c6c6c6" }}
+        />
+      </div>
+    );
+  };
+  // ======================= Table Column Definitions =========================
+  const columns = [
+    {
+      field: "id",
+      header: "ID",
+      body: representativeBodyTemplate,
+      sortable: true,
+      style: true,
+    },
+    {
+      field: "image",
+      header: "IMAGE",
+      body: (row) => (
+        <img
+          src={row.image}
+          alt={row.name}
+          className="rounded-full w-11 h-11"
+        />
+      ),
+      sortable: true,
+    },
+    {
+      field: "name",
+      header: "NAME",
+      body: (row) => <div className="uppercase">{row.name}</div>,
+    },
+    { field: "email", header: "EMAIL", sortable: true },
+    {
+      field: "phone",
+      header: "PHONE",
+      body: (row) => row.phone,
+      sortable: true,
+    },
+    {
+      field: "occupation",
+      header: "OCCUPATION",
+      body: (row) => row.occupation,
+      sortable: true,
+    },
+    {
+      field: "restaurant",
+      header: "RESTAURANT",
+      body: (row) => row.restaurant,
+      sortable: true,
+    },
+    {
+      field: "Commission",
+      header: "COMMISSION",
+      body: (row) => row.restaurantCommission,
+    },
+    { field: "revenue", header: "REVENUE", body: (row) => row.revenue },
+    { field: "status", header: "STATUS", sortable: true },
+    {
+      field: "action",
+      header: "ACTION",
+      body: actionBodyTemplate,
+      sortable: true,
+    },
+  ];
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  return (
+    <>
+      <div className="mx-5 mt-2">
+        <Tabs
+          selectedIndex={selectedTab}
+          onSelect={(index) => setSelectedTab(index)}
+        >
+          <TabList className="flex mx-6 space-x-4 border-b">
+            <Tab
+              className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 0
+                  ? "text-sky-500  border-b-2 border-sky-400 outline-0"
+                  : "text-gray-500 border-b"
+                }`}
+            >
+              User report
+            </Tab>
+            <Tab
+              className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 1
+                  ? "text-sky-500  border-b-2 border-sky-400 outline-0"
+                  : "text-gray-500 border-b"
+                }`}
+            >
+              Order Report
+            </Tab>
+            <Tab
+              className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 2
+                  ? "text-sky-500  border-b-2 border-sky-400 outline-0"
+                  : "text-gray-500 border-b"
+                }`}
+            >
+              Restaurent Report
+            </Tab>
+            <Tab
+              className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 3
+                  ? "text-sky-500  border-b-2 border-sky-400 outline-0"
+                  : "text-gray-500 border-b"
+                }`}
+            >
+              Driver Report
+            </Tab>
+          </TabList>
+          {/* ================= Category component ============== */}
+          {/* <TabPanel>
+            <Category />
+          </TabPanel> */}
+          {/* ================= SubCategory component ============== */}
+          {/* <TabPanel>
+            <SubCategory />
+          </TabPanel> */}
+          {/* ================= Product component ============== */}
+          {/* <TabPanel>
+            <Product />
+          </TabPanel> */}
+        </Tabs>
+      </div>
+      {/* ========================= user fileter ======================= */}
+      <div className="p-4 bg-white sm:m-5 rounded-xl">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col justify-between w-full gap-2 md:items-center lg:flex-row"
+        >
+          <div className="grid w-8/12 grid-cols-1 sm:grid-cols-3 gap-y-3 gap-x-2">
+            <div className="">
+              <input
+                type="text"
+                placeholder="Search by Id / Email / Name / Phone Number"
+                autoComplete="off"
+                className={`${inputClass} !bg-slate-100`}
+                {...register("name")}
+              />
+            </div>
+            <div className="">
+              <input
+                type="date"
+                placeholder="Select date (YYYY-MM-DD)"
+                autoComplete="off"
+                className={`${inputClass} !bg-slate-100 !text-gray-400`}
+                {...register("date")}
+              />
+            </div>
+          </div>
+          <div className="flex items-center w-4/12 gap-x-2">
+            <button type="submit" className={`${formBtn1} w-full text-center`}>
+              Download CSV
+            </button>
+            <button type="submit" className={`${formBtn1} w-full text-center`}>
+              Filter
+            </button>
+            <button
+              type="button"
+              className={`${formBtn2} w-full text-center`}
+              onClick={() => {
+                reset(),
+                  toast.success("Filters clear successfully"),
+                  fetchData();
+              }}
+            >
+              Clear
+            </button>
+          </div>
+        </form>
+      </div>
+      {/*====================== User Table ================================*/}
+      <div className="p-4 bg-white sm:m-5 rounded-xl">
+        <div className="flex flex-col items-start justify-between mb-6 sm:flex-row sm:items-center sm:space-y-0">
+          <div className="">
+            <h1 className="text-xl font-semibold text-gray-900 font-tbPop">
+              Reports
+            </h1>
+          </div>
+        </div>
+        <Table data={userList} columns={columns} />
+      </div>
+    </>
+  );
+}
+
+export default Reports;

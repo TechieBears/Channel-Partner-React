@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
-import userImg from '../../../assets/user.webp';
+import userImg from '../../../assets/user.jpg';
 import { ArrowLeft, Building3, CallCalling, Edit, Profile2User, SmsNotification } from 'iconsax-react';
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 import { useState } from 'react'
@@ -9,16 +9,16 @@ import Error from '../../../components/Errors/Error';
 import { editUser } from '../../../api';
 import { toast } from 'react-toastify';
 import { setLoggedUserDetails } from '../../../redux/Slices/loginSlice';
-import { profileUpload, profileLink } from '../../../env';
+import { ImageUpload, categoryLink, bannerLink } from "../../../env";
 import PathName from '../../../components/PathName/PathName';
 
 const UserProfile = () => {
     const user = useSelector(state => state?.user?.loggedUserDetails)
-
     const {
         register,
         handleSubmit,
         reset,
+        setValue,
         formState: { errors },
     } = useForm();
     const [open, setOpen] = useState(true)
@@ -31,16 +31,22 @@ const UserProfile = () => {
         setUpload(e.target.files[0]);
         setFile(URL.createObjectURL(e.target.files[0]));
     }
+
+
     // ================================ Submit form data ===========================
-    const onSubmit = (data) => {
-        if (upload) {
-            profileUpload(upload, data?.first_name)
-            data.profile = `${profileLink}${data?.first_name}_${upload?.name}`
-        } else {
-            data.profile = user?.profile
-        }
+    const onSubmit = async (data) => {
         data.email = user?.email
         try {
+            if (upload) {
+                data.profile_pic = upload
+                await ImageUpload(
+                    data.profile_pic,
+                    "profileimg",
+                    "profileimg",
+                    data.first_name
+                );
+                data.profile_pic = `${bannerLink}${data.first_name}_profileimg_${data.profile_pic.name}`;
+            }
             editUser(user?.userid, data).then(res => {
                 if (res) {
 
@@ -70,9 +76,12 @@ const UserProfile = () => {
             address: user?.address,
             city: user?.city,
             state: user?.state,
+            profile_pic: user?.profile_pic,
         })
-        setFile(user?.profile)
+        setFile(user?.profile_pic)
     }, [])
+
+
     return (
         <>
             <div className="flex items-center justify-between px-6">
@@ -83,39 +92,39 @@ const UserProfile = () => {
                     <PathName />
                 </div>
             </div>
-            <div className="lg:flex lg:items-center lg:justify-between bg-white p-8 m-4 sm:m-5 rounded-xl">
+            <div className="p-8 m-4 bg-white lg:flex lg:items-center lg:justify-between sm:m-5 rounded-xl">
                 {
                     open ?
                         <>
-                            <div className="min-w-0 flex-1">
+                            <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-x-6 ">
-                                    <img className="h-[120px] w-[120px] rounded-full border object-contain" src={user?.profile ? user?.profile : userImg} alt="User_Profile" />
+                                    <img className="h-[120px] w-[120px] rounded-full border object-contain" src={user?.profile_pic ? user?.profile_pic : userImg} alt="User_Profile" />
                                     <div>
-                                        <h2 className="text-xl font-bold font-tb leading-7 text-gray-700 sm:truncate sm:text-2xl sm:tracking-tight capitalize">
+                                        <h2 className="text-xl font-bold leading-7 text-gray-700 capitalize font-tb sm:truncate sm:text-2xl sm:tracking-tight">
                                             {user?.first_name} {user?.last_name}
                                         </h2>
                                         <div className="flex items-center space-x-5">
-                                            <div className="mt-2 flex items-center  text-base text-gray-500">
+                                            <div className="flex items-center mt-2 text-base text-gray-500">
                                                 <SmsNotification size="22" className='text-gray-400 mr-1.5' />
                                                 {user?.email ? user?.email : "-------------"}
                                             </div>
-                                            <div className="mt-2 flex items-center  text-base text-gray-500">
+                                            <div className="flex items-center mt-2 text-base text-gray-500">
                                                 <CallCalling size="22" className='text-gray-400 mr-1.5' />
                                                 {user?.phone_no ? user?.phone_no : "-------------"}
                                             </div>
-                                            <div className="mt-2 flex items-center  text-base text-gray-500 capitalize">
+                                            <div className="flex items-center mt-2 text-base text-gray-500 capitalize">
                                                 <Profile2User size="22" className='text-gray-400 mr-1.5' />
                                                 {user?.role ? user?.role : "-------------"}
                                             </div>
                                         </div>
-                                        <div className="mt-2 flex items-center text-base text-gray-500">
+                                        <div className="flex items-center mt-2 text-base text-gray-500">
                                             <Building3 size="22" className='text-gray-400 mr-1.5' />
                                             <span className='pt-1'>{user?.address ? user?.address : "-------------"} {user?.city ? user?.city : "-------------"} {user?.state ? user?.state : "-------------"}</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="mt-5 flex lg:ml-4 lg:mt-0 space-x-5">
+                            <div className="flex mt-5 space-x-5 lg:ml-4 lg:mt-0">
                                 <span className="">
                                     <button
                                         onClick={() => setOpen(!open)}
@@ -130,7 +139,7 @@ const UserProfile = () => {
                         </>
                         :
                         <form onSubmit={handleSubmit(onSubmit)} className='flex items-center justify-between w-full '>
-                            <div className="min-w-0 flex-1">
+                            <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-x-6 ">
                                     <div className="relative">
                                         <label htmlFor="file-input">
@@ -141,14 +150,15 @@ const UserProfile = () => {
                                         </label>
                                         <div className="absolute right-0 bottom-1">
                                             <label htmlFor="file-input">
-                                                <Edit size="26" className='bg-white shadow rounded-full border-2 p-2 border-slate-300 w-10 h-10' />
+                                                <Edit size="26" className='w-10 h-10 p-2 bg-white border-2 rounded-full shadow border-slate-300' />
                                             </label>
                                             <div className=''>
                                                 <input
                                                     id='file-input'
                                                     type="file"
                                                     className='hidden'
-                                                    {...register("profile")}
+                                                    accept="image/jpeg,image/jpg,image/png"
+                                                    {...register("profile_pic")}
                                                     onChange={(e) => handleChange(e)}
                                                 />
                                             </div>
@@ -176,11 +186,11 @@ const UserProfile = () => {
                                             </div>
                                         </h2>
                                         <div className="flex items-center space-x-5">
-                                            <div className="mt-2 flex items-center  text-base text-gray-500">
+                                            <div className="flex items-center mt-2 text-base text-gray-500">
                                                 <SmsNotification size="22" className='text-gray-400 mr-1.5' />
                                                 {user?.email ? user?.email : "-------------"}
                                             </div>
-                                            <div className="mt-2 flex items-center  text-base text-gray-500">
+                                            <div className="flex items-center mt-2 text-base text-gray-500">
                                                 <CallCalling size="22" className='text-gray-400 mr-1.5' />
                                                 <div className="">
                                                     <input
@@ -192,12 +202,12 @@ const UserProfile = () => {
                                                     {errors.phone_no && <Error title="Phone Number is required*" />}
                                                 </div>
                                             </div>
-                                            <div className="mt-2 flex items-center  text-base text-gray-500 capitalize">
+                                            <div className="flex items-center mt-2 text-base text-gray-500 capitalize">
                                                 <Profile2User size="22" className='text-gray-400 mr-1.5' />
                                                 {user?.role ? user?.role : "-------------"}
                                             </div>
                                         </div>
-                                        <div className="mt-2 flex items-center">
+                                        <div className="flex items-center mt-2">
                                             <Building3 size="22" className='text-gray-400 mr-1.5' />
                                             <div className="flex items-center space-x-2">
                                                 <div className="">
@@ -232,7 +242,7 @@ const UserProfile = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="mt-5 flex lg:ml-4 lg:mt-0 space-x-5">
+                            <div className="flex mt-5 space-x-5 lg:ml-4 lg:mt-0">
                                 <span className="">
                                     <button
                                         type="submit"

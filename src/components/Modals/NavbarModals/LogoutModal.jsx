@@ -1,20 +1,29 @@
 import { Fragment, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setLoggedUser, setLoggedUserDetails, setRoleIs } from '../../../redux/Slices/loginSlice';
+import { useDispatch, useSelector } from "react-redux";
+import { setSessionStarted } from '../../../redux/Slices/SessionSlice';
+
 
 export default function LogoutModal({ open, setOpen }) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const user = useSelector(state => state?.user?.loggedUserDetails);
+
     // ============================= logout user dashbaord ================================
     const logOut = () => {
         dispatch(setLoggedUserDetails(undefined))
         dispatch(setRoleIs(undefined))
         dispatch(setLoggedUser(false))
+        dispatch(setSessionStarted(false))
         setOpen(!open)
-        navigate('/')
+        if (user?.role != 'admin' && user?.role != 'franchise') {
+            navigate('/')
+        } else {
+            navigate('/admin')
+        }
     }
     const cancelButtonRef = useRef(null)
 

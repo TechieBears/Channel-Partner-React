@@ -426,3 +426,10 @@ body::-webkit-scrollbar-thumb {
     font-size: 1.4rem !important;
     color: #000 !important;
 }
+
+/* ============ Toggles ================= */
+
+input:checked~.dot {
+    transform: translateX(100%);
+    background-color: #48bb78;
+}

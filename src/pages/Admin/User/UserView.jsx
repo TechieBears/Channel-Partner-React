@@ -3,7 +3,7 @@ import { useState } from 'react';
 import PathName from '../../../components/PathName/PathName'
 import { useLocation } from 'react-router-dom'
 import { Tab, TabList, Tabs, TabPanel } from 'react-tabs'
-import userImg from '../../../assets/user.webp';
+import userImg from '../../../assets/user.jpg';
 import ImageGallery from '../../../components/Modals/LightBox/ImageGallery'
 
 
@@ -44,26 +44,26 @@ function UserView() {
                 </div>
             </div>
             <div className='grid xl:grid-cols-1 '>
-                <div className="bg-white px-10 py-4 mx-5 my-2 mt-5 rounded-xl space-y-3 ">
-                    <div className='flex flex-row gap-14 w-full'>
+                <div className="px-10 py-4 mx-5 my-2 mt-5 space-y-3 bg-white rounded-xl ">
+                    <div className='flex flex-row w-full gap-14'>
                         <div className='w-36 h-36'>
-                            <img src={data?.profile == null || data?.profile == '' || data?.profile == undefined ? userImg : data?.profile} alt='img' className='w-full h-full rounded-full object-cover' />
+                            <img src={data?.profile == null || data?.profile == '' || data?.profile == undefined ? userImg : data?.profile} alt='img' className='object-cover w-full h-full rounded-full' />
                         </div>
-                        <div className='flex justify-evenly flex-col'>
+                        <div className='flex flex-col justify-evenly'>
                             <div>
-                                <h5 className='text-lg font-semibold font-tbMon capitalize'>{data?.first_name} {data?.last_name}</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.first_name} {data?.email}</h5>
+                                <h5 className='text-lg font-semibold capitalize font-tbMon'>{data?.first_name} {data?.last_name}</h5>
+                                <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.first_name} {data?.email}</h5>
                             </div>
                             <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>{data?.phone_no}</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.first_name} {data?.address1}</h5>
+                                <h5 className='text-base capitalize font-tbPop text-slate-900'>{data?.phone_no}</h5>
+                                <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.first_name} {data?.address1}</h5>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className='bg-white  py-4 mx-5 my-2 rounded-xl space-y-3'>
+                <div className='py-4 mx-5 my-2 space-y-3 bg-white rounded-xl'>
                     <Tabs selectedIndex={selectedTab} onSelect={index => setSelectedTab(index)}>
-                        <TabList className="flex space-x-4 border-b mx-6">
+                        <TabList className="flex mx-6 space-x-4 border-b">
                             <Tab
                                 className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 0 ? 'text-sky-400  border-b-2 border-sky-400 outline-0' : 'text-gray-500 border-b'
                                     }`}
@@ -74,84 +74,49 @@ function UserView() {
                                 className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 1 ? 'text-sky-400  border-b-2 border-sky-400 outline-0' : 'text-gray-500 border-b'
                                     }`}
                             >
-                                Documents <span className="inline-flex items-center justify-center w-6 h-6 font-tbPop text-sm font-semibold text-white bg-red-500  rounded-full  ">{images?.length}</span>
+                                Documents <span className="inline-flex items-center justify-center w-6 h-6 text-sm font-semibold text-white bg-red-500 rounded-full font-tbPop ">{images?.length}</span>
                             </Tab>
                         </TabList>
 
                         {/* ================= All Details component ============== */}
-                        <TabPanel className="mx-8 my-2 py-4 ">
-                            <h6 className='text-black font-tbMon text-lg font-bold pb-3'>All Details</h6>
-                            <div className="grid grid-cols-5 gap-y-8 border-b border-slate-300 pb-5">
+                        <TabPanel className="py-4 mx-8 my-2 ">
+                            <h6 className='pb-3 text-lg font-bold text-black font-tbMon'>All Details</h6>
+                            <div className="grid grid-cols-5 pb-5 border-b gap-y-8 border-slate-300">
                                 <div>
-                                    <h5 className='font-tbPop text-slate-900 capitalize text-base'>Company Name</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.comp_name == "" ? '--------' : data?.comp_name}</h5>
+                                    <h5 className='text-base capitalize font-tbPop text-slate-900'>gender</h5>
+                                    <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.gender == "" || data?.gender == null || data?.gender == undefined ? '--------' : data?.gender}</h5>
                                 </div>
                                 <div>
-                                    <h5 className='font-tbPop text-slate-900 capitalize text-base'>Company Type</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.comp_type == "" ? '--------' : data?.comp_type}</h5>
+                                    <h5 className='text-base capitalize font-tbPop text-slate-900'>address</h5>
+                                    <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.address == "" ? '--------' : data?.address}</h5>
                                 </div>
                                 <div>
-                                    <h5 className='font-tbPop text-slate-900 capitalize text-base'>designation</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.designation == "" ? '--------' : data?.designation}</h5>
+                                    <h5 className='text-base capitalize font-tbPop text-slate-900'>city</h5>
+                                    <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.city == "" ? '--------' : data?.city}</h5>
                                 </div>
                                 <div>
-                                    <h5 className='font-tbPop text-slate-900 capitalize text-base'>address</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.address == "" ? '--------' : data?.address}</h5>
+                                    <h5 className='text-base capitalize font-tbPop text-slate-900'>state</h5>
+                                    <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.state == "" ? '--------' : data?.state}</h5>
                                 </div>
                                 <div>
-                                    <h5 className='font-tbPop text-slate-900 capitalize text-base'>address 2</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.address2 == "" ? '--------' : data?.address2}</h5>
+                                    <h5 className='text-base capitalize font-tbPop text-slate-900'>pincode</h5>
+                                    <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.pincode == 0 ? '--------' : data?.pincode}</h5>
                                 </div>
                                 <div>
-                                    <h5 className='font-tbPop text-slate-900 capitalize text-base'>alternative phone no</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.alt_phone == "" ? '--------' : data?.alt_phone}</h5>
+                                    <h5 className='text-base capitalize font-tbPop text-slate-900'>active</h5>
+                                    <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.isactive ? 'Active' : 'Deactive'}</h5>
                                 </div>
                                 <div>
-                                    <h5 className='font-tbPop text-slate-900 capitalize text-base'>city</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.city == "" ? '--------' : data?.city}</h5>
+                                    <h5 className='text-base capitalize font-tbPop text-slate-900'>verify</h5>
+                                    <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.isverify ? 'Verified' : 'Not Verified'}</h5>
                                 </div>
                                 <div>
-                                    <h5 className='font-tbPop text-slate-900 capitalize text-base'>state</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.state == "" ? '--------' : data?.state}</h5>
+                                    <h5 className='text-base capitalize font-tbPop text-slate-900'>role</h5>
+                                    <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.role == '' ? '--------' : data?.role}</h5>
                                 </div>
                                 <div>
-                                    <h5 className='font-tbPop text-slate-900 capitalize text-base'>pincode</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.pincode == 0 ? '--------' : data?.pincode}</h5>
-                                </div>
-                                <div>
-                                    <h5 className='font-tbPop text-slate-900 capitalize text-base'>landmark</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.landmark == 0 ? '--------' : data?.landmark}</h5>
-                                </div>
-                                <div>
-                                    <h5 className='font-tbPop text-slate-900 capitalize text-base'>active</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.isactive ? 'Active' : 'Deactive'}</h5>
-                                </div>
-                                <div>
-                                    <h5 className='font-tbPop text-slate-900 capitalize text-base'>verify</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.isverify ? 'Verified' : 'Not Verified'}</h5>
-                                </div>
-                                <div>
-                                    <h5 className='font-tbPop text-slate-900 capitalize text-base'>role</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.role == '' ? '--------' : data?.role}</h5>
-                                </div>
-                            </div>
-                            <h6 className='text-black font-tbMon text-lg font-bold pt-3'>Kyc Details</h6>
-                            <div className="grid grid-cols-5 gap-y-5 my-4">
-                                <div>
-                                    <h5 className='font-tbPop text-slate-900 capitalize text-base'>pan</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.pan == '' ? '--------' : data?.pan}</h5>
-                                </div>
-                                <div>
-                                    <h5 className='font-tbPop text-slate-900 capitalize text-base'>gst</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.gst == '' ? '--------' : data?.gst}</h5>
-                                </div>
-                                <div>
-                                    <h5 className='font-tbPop text-slate-900 capitalize text-base'>fssai</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.fssai == '' ? '--------' : data?.fssai}</h5>
-                                </div>
-                                <div>
-                                    <h5 className='font-tbPop text-slate-900 capitalize text-base'>odoc</h5>
-                                    <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.odoc == '' ? '--------' : data?.odoc}</h5>
+                                    <h5 className='text-base capitalize font-tbPop text-slate-900'>Resgistration Date</h5>
+                                    <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.registration_date == '' || data?.registration_date == undefined || data?.registration_date == null ? '--------' : data?.registration_date}</h5>
                                 </div>
                             </div>
                         </TabPanel>
