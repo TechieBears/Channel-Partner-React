@@ -665,7 +665,7 @@ export default function AddVendors(props) {
                                                                 placeholder='GST Number*'
                                                                 className={inputClass}
                                                                 {...register('gst_number', {
-                                                                    required: 'GST Number is required*',
+                                                                    // required: 'GST Number is required*',
                                                                     validate: validateGST
                                                                 })}
                                                             />
