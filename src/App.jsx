@@ -4,12 +4,12 @@ import { useEffect } from "react";
 import { Provider, useDispatch } from 'react-redux';
 import persistStore from "redux-persist/es/persistStore";
 import { PersistGate } from "redux-persist/integration/react";
-import ProjectRoutes from "../routes/ProjectRoutes";
 import "./App.css";
 import { messaging } from "./firebase";
 import store from "./redux/store";
 let persistor = persistStore(store);
 import "react-image-crop/dist/ReactCrop.css";
+import ProjectRoutes from "./routes/ProjectRoutes";
 
 const App = () => {
   async function requestPermission() {
