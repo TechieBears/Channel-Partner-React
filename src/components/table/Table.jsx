@@ -10,40 +10,17 @@ import { Button } from "primereact/button";
 
 function Table({ data, columns, isValid }) {
     const exportExcel = () => {
-        import('xlsx').then((xlsx) => {
-            const workSheet = xlsx.utils.json_to_sheet(data);
-    
-            // Set the fill color (background color) and font color of the headers
-            const headerStyle = {
-                fill: { bgColor: { rgb: 'FFFF00' }, patternType: 'solid' }, // Yellow color
-                font: { color: { rgb: '000000' }, bold: true } // Black color for font
-            };
-            Object.keys(data[0]).forEach((header, index) => {
-                const cellAddress = xlsx.utils.encode_cell({ r: 0, c: index }); // First row, current column
-                workSheet[cellAddress].s = headerStyle;
-            });
-    
-            // Set the fill color (background color) of the columns
-            const columnStyle = {
-                fill: { bgColor: { rgb: 'FFFF00' }, patternType: 'solid' } // Yellow color
-            };
-            data.forEach((row, rowIndex) => {
-                Object.keys(row).forEach((col, colIndex) => {
-                    const cellAddress = xlsx.utils.encode_cell({ r: rowIndex + 1, c: colIndex }); // Add 1 to rowIndex to skip the header row
-                    workSheet[cellAddress].s = columnStyle;
-                });
-            });
-    
-            const workBook = { Sheets: { data: workSheet }, SheetNames: ['data'] };
-            const excelBuffer = xlsx.write(workBook, {
-                bookType: 'xlsx',
-                type: 'array',
-            });
-            saveAsExcelFile(excelBuffer, 'data');
+        import("xlsx").then((xlsx) => {
+          const workSheet = xlsx.utils.json_to_sheet(data);
+          const workBook = { Sheets: { data: workSheet }, SheetNames: ["data"] };
+          const excelBuffer = xlsx.write(workBook, {
+            bookType: "xlsx",
+            type: "array",
+          });
+          saveAsExcelFile(excelBuffer, "data");
         });
-    };
+      };
     
-      
       const saveAsExcelFile = (buffer, fileName) => {
         import("file-saver").then((FileSaver) => {
           let EXCEL_TYPE =
@@ -61,14 +38,14 @@ function Table({ data, columns, isValid }) {
 
       
     const header = (
-       isValid && 
+        isValid && 
         <div className="flex justify-end bg-transparent !border-0 items-center export-button">
             <h5>Export</h5>
             <button
                 type="button"
                 icon="pi pi-file-excel"
                 onClick={exportExcel}
-                className="mx-3 my-2 p-button-success"
+                className="mx-2 my-2 p-button-success"
                 data-pr-tooltip="XLS"
            > 
             <img src={Excel} alt="" />
@@ -91,7 +68,6 @@ function Table({ data, columns, isValid }) {
             header={header}
             rowsPerPageOptions={[25, 50, 100]}
             sortMode="multiple"
-            headerClassName="yellow-header"
         >
             {columns.map((col) => (
                 <Column key={col.field} field={col.field} header={col.header} body={col.body} style={col.style ? "" : { width: '100%' }} sortable={!col.sortable} />
