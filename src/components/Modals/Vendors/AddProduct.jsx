@@ -10,6 +10,10 @@ import { addProduct, editVendorProduct, editAdminFinalProduct, getCategory, getS
 import { toast } from 'react-toastify';
 import { ImageUpload, productLink } from '../../../env';
 import MediaGallaryModal from '../../../pages/Settings/MediaGallery/MediaGallery';
+import { DatePicker, Space } from "antd";
+import moment from "moment";
+
+
 
 const AddProduct = (props) => {
     const [isOpen, setOpen] = useState(false);
@@ -23,6 +27,9 @@ const AddProduct = (props) => {
     const [openGallery, setopenGallery] = useState(false);
     const [openGalleryModal, setopenGalleryModal] = useState(false);
     const [childData, setChildData] = useState([]);
+    const [checkExpiry, setCheckExpiry] = useState('');
+    const [expireValue, setexpireValue] = useState('');
+
     let CatField = watch('product_category');
     let subCatField
     if (props?.category && props?.subCategory) {
@@ -44,6 +51,19 @@ const AddProduct = (props) => {
         }
     };
 
+
+    // ========== Date picker =================================
+    const disabledDate = current => {
+        return current && current < moment().startOf('day');
+    };
+    
+    const rangeHandler = (e) => {
+        setexpireValue(e.format("YYYY-MM-DD"))
+    }
+
+    const checkexpiryinput = (e) => {
+        setexpireValue(e.target.value)
+    }
 
     const openMediaModal = () => {
         setopenGalleryModal(!openGalleryModal);
@@ -75,6 +95,14 @@ const AddProduct = (props) => {
             alert('Please upload an image with dimensions 200x200.');
         }
     };
+
+    const selectExpiryOption = (e) => {
+        if (e.target.value == 'selectdate') {
+            setCheckExpiry('selectdate');
+        } else {
+            setCheckExpiry('other');
+        }
+    }
 
     const calculateRevenueSeller = watch('product_actual_price')
 
@@ -131,6 +159,9 @@ const AddProduct = (props) => {
     };
 
     const onSellerSubmit = async (data) => {
+        if(expireValue != '' && expireValue){
+            data.product_shelflife =  expireValue;
+        }
         setLoader(true);
         if (props?.title == 'Edit Product') {
             if (data?.product_image_1?.length > 0) {
@@ -248,7 +279,7 @@ const AddProduct = (props) => {
             }
         }
         if (props?.title == 'Edit Product') {
-            var updatedData = { ...data, vendor: props?.row?.vendor?.vendor_id }
+            const updatedData = { ...data, vendor: props?.row?.vendor?.vendor_id }
             try {
                 editVendorProduct(props?.row?.product_id, updatedData).then(res => {
                     if (res?.status == 'success') {
@@ -626,18 +657,40 @@ const AddProduct = (props) => {
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Shelf Life*
+                                                            Expiry Date*
                                                         </label>
-                                                        
-                                                        <input
-                                                            type="text"
-                                                            readOnly={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
-                                                            placeholder='Shelf Life'
+                                                        <select
                                                             className={inputClass}
+                                                            disabled={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
                                                             {...register('product_shelflife', { required: true })}
-                                                        />
+                                                            onChange={selectExpiryOption}
+                                                        >
+                                                            <option value=''>Select</option>
+                                                            <option value="selectdate">Select Expiry Date</option>
+                                                            <option value="other">Mention In days</option>
+                                                        </select>
                                                         {errors.product_shelflife && <Error title='Shelf Life is Required*' />}
                                                     </div>
+                                                    {checkExpiry == 'other' && <div>
+                                                        <label className={labelClass}>
+                                                            Mention In days*
+                                                        </label>
+                                                         <input
+                                                            type="number"
+                                                            readOnly={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
+                                                            placeholder='10'
+                                                            className={inputClass}
+                                                            onChange={checkexpiryinput}
+                                                        />
+                                                    </div>}
+                                                   {checkExpiry == 'selectdate' && <div className="">
+                                                    <   label className={labelClass}>
+                                                            Select Expiry Date*
+                                                        </label>
+                                                        <Space>
+                                                            <DatePicker disabledDate={disabledDate} onChange={rangeHandler} />
+                                                        </Space>
+                                                    </div>}
                                                     <div className="">
                                                         <label className={labelClass} htmlFor="video_input">Product Video</label>
                                                         <input

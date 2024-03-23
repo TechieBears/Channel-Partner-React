@@ -314,7 +314,7 @@ const VendorProduct = () => {
                                 subCategory={subCategory}
                                 ImageDetails={ImageDetails}
                             />
-                        ) : user?.vendor_type == 'shop' && user?.isverified_byadmin ? (
+                        ) : (user?.vendor_type == 'shop' || user?.vendor_type == 'seller') && user?.isverified_byadmin ? (
                             <AddProduct
                                 title='Add Product'
                                 getProducts={getProducts}
