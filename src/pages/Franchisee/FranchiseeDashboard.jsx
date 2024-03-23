@@ -1,31 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { Tab, TabList, Tabs, TabPanel } from "react-tabs";
-import Table from "../../components/Table/Table";
 import {
     ArrowSwapVertical,
-    Eye,
-    ShoppingCart,
-    Trash,
-    UserRemove,
     ClipboardTick,
-    Edit,
+    ShoppingCart,
+    UserRemove
 } from "iconsax-react";
+import React, { useState } from "react";
 // import { deleteStorage, getPartnerStorage, getStorages } from "../../../api";
-import { formBtn2, inputClass } from "../../utils/CustomClass";
-import { formBtn1 } from "../../utils/CustomClass";
-import { Controller, useForm } from "react-hook-form";
-import axios from "axios";
-import { NavLink } from "react-router-dom";
-import { environment } from "../../env";
+import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import AsyncSelect from "react-select/async";
-import DashboardForm from "../../components/modals/DashboardModals/DashboardForm";
 import DeleteModal from "../../components/Modals/DeleteModal/DeleteModal";
-import ActiveOrders from "../Admin/Dashboard/OrderList/ActiveOrders";
-import PendingOrders from "../Admin/Dashboard/OrderList/PendingOrders";
-import moment from "moment";
-import ViewProduct from "../../components/Modals/Vendors/ViewProduct";
+
 
 
 
@@ -34,7 +19,6 @@ const FranchiseeDashboard = () => {
     const [selectedTab, setSelectedTab] = useState(0);
 
     const user = useSelector((state) => state.user.loggedUserDetails);
-    const storages = useSelector((state) => state?.storage?.list);
     const cityNames = useSelector((state) => state?.master?.city);
     const dispatch = useDispatch();
     const [open, setOpen] = React.useState(false);
@@ -56,16 +40,16 @@ const FranchiseeDashboard = () => {
         );
     };
 
-    const loadOptions = (_, callback) => {
-        const uniqueNames = new Set();
-        const uniqueProducts = storages
-            ?.filter(
-                (res) =>
-                    res.name && !uniqueNames.has(res.name) && uniqueNames.add(res.name)
-            )
-            .map((res) => ({ label: res.name, value: res.name }));
-        callback(uniqueProducts || []);
-    };
+    // const loadOptions = (_, callback) => {
+    //     const uniqueNames = new Set();
+    //     const uniqueProducts = storages
+    //         ?.filter(
+    //             (res) =>
+    //                 res.name && !uniqueNames.has(res.name) && uniqueNames.add(res.name)
+    //         )
+    //         .map((res) => ({ label: res.name, value: res.name }));
+    //     callback(uniqueProducts || []);
+    // };
 
     // ================================ filter reset ============================
     const filterReset = () => {

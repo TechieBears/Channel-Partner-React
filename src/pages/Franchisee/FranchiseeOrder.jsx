@@ -5,14 +5,14 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { formBtn1, formBtn2, inputClass } from '../../utils/CustomClass';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import Table from '../../components/Table/Table';
+import Table from '../../components/table/Table';
 import { NavLink } from 'react-router-dom';
 import { ClipboardTick, Eye, Trash } from 'iconsax-react';
 import moment from 'moment';
 
 function FranchiseeOrder() {
     const [selectedTab, setSelectedTab] = useState(0);
-    const storages = useSelector((state) => state?.storage?.list);
+    // const storages = useSelector((state) => state?.storage?.list);
     const {
         register,
         handleSubmit,
@@ -21,14 +21,14 @@ function FranchiseeOrder() {
         reset,
     } = useForm();
     const loadOptions = (_, callback) => {
-        const uniqueNames = new Set();
-        const uniqueProducts = storages
-            ?.filter(
-                (res) =>
-                    res.name && !uniqueNames.has(res.name) && uniqueNames.add(res.name)
-            )
-            .map((res) => ({ label: res.name, value: res.name }));
-        callback(uniqueProducts || []);
+        // const uniqueNames = new Set();
+        // const uniqueProducts = storages
+        //     ?.filter(
+        //         (res) =>
+        //             res.name && !uniqueNames.has(res.name) && uniqueNames.add(res.name)
+        //     )
+        //     .map((res) => ({ label: res.name, value: res.name }));
+        // callback(uniqueProducts || []);
     };
 
     const onSubmit = (data) => {

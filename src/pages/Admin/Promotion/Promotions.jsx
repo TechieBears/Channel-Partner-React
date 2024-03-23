@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Trash } from 'iconsax-react';
-import Table from '../../../components/Table/Table';
+import Table from '../../../components/table/Table';
 import { addHomePromotion, delHomePromotion, editHomePromotion } from '../../../api';
 import { setPromotions } from '../../../redux/Slices/masterSlice';
 import { toast } from 'react-toastify';

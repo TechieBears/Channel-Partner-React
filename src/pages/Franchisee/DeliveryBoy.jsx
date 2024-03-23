@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Eye } from 'iconsax-react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import Table from '../../components/Table/Table'
+import Table from '../../components/table/Table'
 import AddDriverFrom from '../../components/Modals/DriverModals/AddDriverForm'
 import { getDeliveryBoysByID, verifyDeliveryBoy } from '../../api';
 import { setDeliveryList } from '../../redux/Slices/deliverySlice';

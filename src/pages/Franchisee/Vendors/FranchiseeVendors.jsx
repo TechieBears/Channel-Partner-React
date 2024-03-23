@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form';
 import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
-import Table from '../../../components/Table/Table';
+import Table from '../../../components/table/Table';
 import Switch from 'react-js-switch'
 import AddVendors from '../../../components/Modals/Vendors/AddVendors/AddVendors';
 import { GetFranchiseeVendorsByID, verifyVendors } from "../../../api";

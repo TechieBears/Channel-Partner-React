@@ -1,7 +1,7 @@
 import moment from 'moment';
 import React, { useState } from 'react'
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
-import Table from '../../Table/Table';
+import Table from '../../table/Table';
 import { inputClass } from '../../../utils/CustomClass';
 
 export default function Complaints() {

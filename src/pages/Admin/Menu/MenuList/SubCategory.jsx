@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Trash } from "iconsax-react";
 import SubCategoryForm from "../../../../components/Modals/MenuModals/SubCategoryForm";
-import Table from "../../../../components/Table/Table";
+import Table from "../../../../components/table/Table";
 import { useDispatch, useSelector } from "react-redux";
 import { setSubCategory, setCategory, setSubCategoryCount, setCategoryCount, setProductCount } from "../../../../redux/Slices/masterSlice";
 import { deleteSubCategory, getSubCategory, getCategory, getRestaurantCategory, getRestaurantSubCategory, getProductsByAdmin, getRestaurantFoodAdmin } from "../../../../api";

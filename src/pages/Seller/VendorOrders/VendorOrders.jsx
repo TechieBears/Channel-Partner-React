@@ -8,7 +8,7 @@ import AsyncSelect from "react-select/async";
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { toast } from 'react-toastify';
 import OrdersCard from '../../../components/Cards/Orders/OrdersCard';
-import Table from '../../../components/Table/Table';
+import Table from '../../../components/table/Table';
 import { environment } from '../../../env';
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 
@@ -17,7 +17,7 @@ const VendorOrders = () => {
     const webSocketUrl = `${environment.webSocketUrl}user_to_seller/${user?.msb_code}`
     const ws = new WebSocket(webSocketUrl)
     const [selectedTab, setSelectedTab] = useState(0);
-    const storages = useSelector((state) => state?.storage?.list);
+    // const storages = useSelector((state) => state?.storage?.list);
     const orders = useSelector(state => state?.orders?.newOrders);
     const {
         register,
@@ -66,14 +66,14 @@ const VendorOrders = () => {
 
 
     const loadOptions = (_, callback) => {
-        const uniqueNames = new Set();
-        const uniqueProducts = storages
-            ?.filter(
-                (res) =>
-                    res.name && !uniqueNames.has(res.name) && uniqueNames.add(res.name)
-            )
-            .map((res) => ({ label: res.name, value: res.name }));
-        callback(uniqueProducts || []);
+        // const uniqueNames = new Set();
+        // const uniqueProducts = storages
+        //     ?.filter(
+        //         (res) =>
+        //             res.name && !uniqueNames.has(res.name) && uniqueNames.add(res.name)
+        //     )
+        //     .map((res) => ({ label: res.name, value: res.name }));
+        // callback(uniqueProducts || []);
     };
 
     const onSubmit = (data) => {

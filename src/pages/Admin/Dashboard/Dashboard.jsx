@@ -4,10 +4,9 @@ import React, { useState } from "react";
 // import { Bike, Handshake } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import DeleteModal from "../../../components/Modals/DeleteModal/DeleteModal";
-import DashboardForm from "../../../components/modals/DashboardModals/DashboardForm";
+import DashboardForm from "../../../components/Modals/DashboardModals/DashboardForm"
 
 
 const Dashboard = () => {
@@ -15,7 +14,10 @@ const Dashboard = () => {
   const subCategoryCount = useSelector((state) => state?.master?.SubCategoryCount);
   const productCount = useSelector((state) => state?.master?.ProductCount);
   const user = useSelector((state) => state.user.loggedUserDetails);
-  const storages = useSelector((state) => state?.storage?.list);
+  const cityNames = useSelector((state) => state?.master?.city);
+  const tempretureRangeList = useSelector(
+    (state) => state?.master?.temperatureRange
+  );
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const [delId, setDelId] = React.useState(0);
@@ -36,16 +38,16 @@ const Dashboard = () => {
     );
   };
 
-  const loadOptions = (_, callback) => {
-    const uniqueNames = new Set();
-    const uniqueProducts = storages
-      ?.filter(
-        (res) =>
-          res.name && !uniqueNames.has(res.name) && uniqueNames.add(res.name)
-      )
-      .map((res) => ({ label: res.name, value: res.name }));
-    callback(uniqueProducts || []);
-  };
+  // const loadOptions = (_, callback) => {
+  //   const uniqueNames = new Set();
+  //   const uniqueProducts = storages
+  //     ?.filter(
+  //       (res) =>
+  //         res.name && !uniqueNames.has(res.name) && uniqueNames.add(res.name)
+  //     )
+  //     .map((res) => ({ label: res.name, value: res.name }));
+  //   callback(uniqueProducts || []);
+  // };
 
   // ================================ filter reset ============================
   const filterReset = () => {

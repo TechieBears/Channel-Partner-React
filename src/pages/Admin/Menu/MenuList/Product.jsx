@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react'
 import { Trash } from 'iconsax-react';
 import ProductForm from '../../../../components/Modals/MenuModals/ProductForm';
-import Table from '../../../../components/Table/Table';
+import Table from '../../../../components/table/Table';
 import { useDispatch, useSelector } from 'react-redux';
 import { setProduct } from '../../../../redux/Slices/masterSlice';
 import { getProducts, deleteProduct, getProductsAdmin } from "../../../../api";

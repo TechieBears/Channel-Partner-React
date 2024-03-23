@@ -12,9 +12,9 @@ import AsyncSelect from "react-select/async";
 import { toast } from "react-toastify";
 // import Orders from "../../../components/Cards/Orders/Orders";
 import OrdersCard from "../../../components/Cards/Orders/OrdersCard";
-import DashboardForm from "../../../components/Modals/DashboardModals/DashboardForm";
 import DeleteModal from "../../../components/Modals/DeleteModal/DeleteModal";
 import { formBtn1, formBtn2, inputClass } from "../../../utils/CustomClass";
+import DashboardForm from "../../../components/Modals/DashboardModals/DashboardForm"
 
 
 
@@ -22,7 +22,7 @@ import { formBtn1, formBtn2, inputClass } from "../../../utils/CustomClass";
 const Dashboard = () => {
     const [modelOpen, setAddCouponOpen] = useState(true);
     const user = useSelector((state) => state.user.loggedUserDetails);
-    const storages = useSelector((state) => state?.storage?.list);
+    // const storages = useSelector((state) => state?.storage?.list);
     const cityNames = useSelector((state) => state?.master?.city);
     const [open, setOpen] = React.useState(false);
     const [delId, setDelId] = React.useState(0);
@@ -50,14 +50,14 @@ const Dashboard = () => {
     };
 
     const loadOptions = (_, callback) => {
-        const uniqueNames = new Set();
-        const uniqueProducts = storages
-            ?.filter(
-                (res) =>
-                    res.name && !uniqueNames.has(res.name) && uniqueNames.add(res.name)
-            )
-            .map((res) => ({ label: res.name, value: res.name }));
-        callback(uniqueProducts || []);
+        // const uniqueNames = new Set();
+        // const uniqueProducts = storages
+        //     ?.filter(
+        //         (res) =>
+        //             res.name && !uniqueNames.has(res.name) && uniqueNames.add(res.name)
+        //     )
+        //     .map((res) => ({ label: res.name, value: res.name }));
+        // callback(uniqueProducts || []);
     };
 
     // ================================ filter reset ============================

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Eye } from 'iconsax-react';
-import Table from '../../../components/Table/Table';
+import Table from '../../../components/table/Table';
 import { Link } from 'react-router-dom';
 import Switch from 'react-js-switch'
 import AddFranchisee from '../../../components/Modals/Franchisee/AddFranchiseForm';
@@ -24,7 +24,6 @@ function Franchisees() {
     const { control, register, handleSubmit, formState: { errors }, reset, setValue } = useForm();
     const [rstatus, setStatus] = useState();
     const [franchiseData, setFranchiseData] = useState()
-    console.log('franchsie', franchiseData)
     const emails = franchiseData?.map(item => item?.user?.email)
     const [pincodeOptions, setPincodeOptions] = useState()
 
@@ -59,8 +58,10 @@ function Franchisees() {
     // =================== filter data ========================
     const onSubmit = async (data) => {
         if (data?.name != '' || data?.msbcode != '' || data?.pincode != '' || data?.pincode != undefined) {
+            const name = data?.name?.split(" ")[0] ? data?.name?.split(" ")[0] : ''
+            const lastname = data?.name?.split(" ")[1] ? data?.name?.split(" ")[1] : ''
             try {
-                let url = `${environment.baseUrl}franchise/franchise_list?name=${data?.name}&msbcode=${data?.msbcode}&pincode=${data?.pincode?.value ? data?.pincode?.value : ''}`
+                let url = `${environment.baseUrl}franchise/franchise_list?name=${name}&lastname=${lastname}&msbcode=${data?.msbcode}&pincode=${data?.pincode?.value ? data?.pincode?.value : ''}`
                 await axios.get(url).then((res) => {
                     console.log("🚀 ~ file: Franchisees.jsx:74 ~ awaitaxios.get ~ res:", res)
                     setFranchiseData(res?.data?.results)

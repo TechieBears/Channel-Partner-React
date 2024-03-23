@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import { getAllShopProduct, getRestaurantCategory, getRestaurantFood, getRestaurantSubCategory, getSingleRestaurant, getGalleryImages, getSubCategory, getCategory } from '../../../api';
 import AddProduct from '../../../components/Modals/Vendors/AddProduct';
 import AddRestItem from '../../../components/Modals/Vendors/AddRestItem';
-import Table from '../../../components/Table/Table';
+import Table from '../../../components/table/Table';
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 
 
@@ -21,19 +21,19 @@ const VendorProduct = () => {
     const [category, setCategory] = useState([]);
     const [subCategory, setsubCategory] = useState([])
     const user = useSelector((state) => state?.user?.loggedUserDetails);
-    const storages = useSelector((state) => state?.storage?.list);
+    // const storages = useSelector((state) => state?.storage?.list);
     const { register, handleSubmit, control, formState: { errors }, reset } = useForm();
     const [ImageDetails, setImageDetails] = useState([]);
 
     const loadOptions = (_, callback) => {
-        const uniqueNames = new Set();
-        const uniqueProducts = storages
-            ?.filter(
-                (res) =>
-                    res.name && !uniqueNames.has(res.name) && uniqueNames.add(res.name)
-            )
-            .map((res) => ({ label: res.name, value: res.name }));
-        callback(uniqueProducts || []);
+        // const uniqueNames = new Set();
+        // const uniqueProducts = storages
+        //     ?.filter(
+        //         (res) =>
+        //             res.name && !uniqueNames.has(res.name) && uniqueNames.add(res.name)
+        //     )
+        //     .map((res) => ({ label: res.name, value: res.name }));
+        // callback(uniqueProducts || []);
     };
 
     const onSubmit = (data) => {

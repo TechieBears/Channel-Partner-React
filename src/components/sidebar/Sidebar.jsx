@@ -106,6 +106,7 @@ const Sidebar = ({ children }) => {
                         (item) => item?.vendor_type == "restaurant"
                     );
                     dispatch(setAllRestaurant(restaurantVendors))
+                    // setData(restaurantVendors);
                 }
             });
         } catch (error) {

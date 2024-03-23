@@ -2,11 +2,10 @@ import Aos from "aos";
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Route, Routes } from "react-router-dom";
+import Sidebar from '../src/components/sidebar/Sidebar';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Preloader from '../src/components/Loader/PreLoader';
 import VendorDetails from '../src/components/Modals/Vendors/VendorDetails';
-import Sidebar from '../src/components/sidebar/Sidebar';
 import Dashboard from '../src/pages/Admin/Dashboard/Dashboard';
 import DashboardView from '../src/pages/Admin/Dashboard/DashboardView';
 import Drivers from '../src/pages/Admin/Drivers/Drivers';
@@ -44,7 +43,8 @@ import FranchiseeVendors from '../src/pages/Franchisee/Vendors/FranchiseeVendors
 // import DashboardForm from '../src/components/modals/DashboardModals/DashboardForm';
 import Coupon from '../src/pages/Admin/Coupon/Coupon';
 import FoodDetails from '../src/pages/Admin/Menu/AdminProduct/FoodDetails';
-import RestaurantRegister from '../src/pages/Restaurants/ViewRestaurant/RestaurantRegister';
+import { PreLoaders } from '../src/components/Loader/PreLoaders';
+import RestaurantRegister from './../src/pages/Restaurants/ViewRestaurant/RestaurantRegister';
 
 
 
@@ -70,7 +70,7 @@ const ProjectRoutes = () => {
             {login ?
                 <>
                     {loading ?
-                        <Preloader /> :
+                        <PreLoaders />:
                         <Sidebar>
                             <Routes>
                                 {/* ============ Admin Routes ============ */}
