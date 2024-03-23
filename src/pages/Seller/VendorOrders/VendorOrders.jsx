@@ -204,34 +204,16 @@ const VendorOrders = () => {
                 >
                     <div className="grid w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-y-3 gap-x-2 ">
                         <div className="">
-                            <Controller
-                                control={control}
-                                name="name"
-                                render={({ field }) => (
-                                    <AsyncSelect
-                                        placeholder="Search By Name"
-                                        cacheOptions
-                                        defaultOptions
-                                        value={field.value}
-                                        defaultValue={
-                                            field.value
-                                                ? { label: field.value, value: field.value }
-                                                : null
-                                        }
-                                        loadOptions={loadOptions}
-                                        onChange={field.onChange}
-                                    />
-                                )}
+                            <input className={`${inputClass} !bg-slate-100`}
+                                {...register('order_id')}
+                                placeholder="Search By Status"
                             />
                         </div>
                         <div className="">
-                            <select
-                                name="City"
-                                className={`${inputClass} !bg-slate-100`}
-                                {...register("location")}
-                            >
-                                <option value="">City</option>
-                            </select>
+                            <input className={`${inputClass} !bg-slate-100`}
+                                {...register('order_id')}
+                                placeholder="Search By Order ID"
+                            />
                         </div>
                     </div>
                     <div className="flex items-center gap-x-2">
@@ -244,7 +226,7 @@ const VendorOrders = () => {
                         <button
                             type="button"
                             className={`${formBtn2} w-full text-center`}
-                            onClick={filterReset}
+                        // onClick={filterReset}
                         >
                             Clear
                         </button>
@@ -263,7 +245,7 @@ const VendorOrders = () => {
                                 : "text-gray-500 border-b"
                                 }`}
                         >
-                            New Order's
+                            {`New Order's (${orders?.length})`}
                         </Tab>
                         <Tab
                             className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 1
@@ -286,9 +268,22 @@ const VendorOrders = () => {
                     <TabPanel className='mt-5 bg-white'>
                         {/* ===================== New Order Section ===================== */}
                         <div className="space-y-2 p-4">
-                            <div className='flex gap-2 items-center'>
-                                <p className="font-semibold text-lg">Current Orders</p>
-                                <p className="font-semibold text-sm text-red-500">({orders?.length})</p>
+                            <div className="flex items-center justify-between">
+                                <p className="text-lg font-semibold">Current Orders</p>
+                                <form className="grid grid-cols-3 gap-4 ">
+                                    <input
+                                        className={`${inputClass} !bg-slate-100`}
+                                        placeholder="Enter OTP"
+                                    />
+                                    <button
+                                        type='button'
+                                        className={formBtn1}
+                                    >Submit</button>
+                                    <button
+                                        className={formBtn2}
+                                        type='button'
+                                    >Clear</button>
+                                </form>
                             </div>
                             {
                                 orders?.length != 0 ? orders?.map(data => (

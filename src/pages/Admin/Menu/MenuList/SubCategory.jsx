@@ -3,8 +3,8 @@ import { Trash } from "iconsax-react";
 import SubCategoryForm from "../../../../components/Modals/MenuModals/SubCategoryForm";
 import Table from "../../../../components/Table/Table";
 import { useDispatch, useSelector } from "react-redux";
-import { setSubCategory, setCategory, setSubCategoryCount } from "../../../../redux/Slices/masterSlice";
-import { deleteSubCategory, getSubCategory, getCategory, getRestaurantCategory, getRestaurantSubCategory } from "../../../../api";
+import { setSubCategory, setCategory, setSubCategoryCount, setCategoryCount, setProductCount } from "../../../../redux/Slices/masterSlice";
+import { deleteSubCategory, getSubCategory, getCategory, getRestaurantCategory, getRestaurantSubCategory, getProductsByAdmin, getRestaurantFoodAdmin } from "../../../../api";
 import Switch from 'react-js-switch';
 
 
@@ -17,8 +17,9 @@ const SubCategory = (props) => {
     try {
       getSubCategory().then((res) => {
         setSubcategory(res)
-        dispatch(setSubCategoryCount(res.length))
+        dispatch(setSubCategoryCount(res?.length))
         fetchData2();
+        getProducts();
       });
     } catch (error) {
       console.log(error);
@@ -29,11 +30,22 @@ const SubCategory = (props) => {
     try {
       getCategory().then((res) => {
         setCategory(res)
+        dispatch(setCategoryCount(res?.length))
       });
     } catch (error) {
       console.log(error);
     }
   };
+
+  const getProducts = () => {
+    try {
+      getProductsByAdmin().then(res => {
+        dispatch(setProductCount(res?.length))
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   // ============== Products API starts================
   const restaurantSubCategories = () => {
@@ -42,6 +54,7 @@ const SubCategory = (props) => {
         setSubcategory(res)
         dispatch(setSubCategoryCount(res.length))
         restaurantCategories();
+        getRestaurantFoodItems();
       });
     } catch (error) {
       console.log(error);
@@ -52,11 +65,23 @@ const SubCategory = (props) => {
     try {
       getRestaurantCategory().then((res) => {
         setCategory(res)
+        dispatch(setCategoryCount(res?.length))
       });
     } catch (error) {
       console.log(error);
     }
   };
+
+  const getRestaurantFoodItems = () => {
+    try {
+      getRestaurantFoodAdmin().then(res => {
+        dispatch(setProductCount(res?.length))
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   // ============== delete data from api ================
   const deleteData = (data) => {
     deleteSubCategory(data).then((res) => {
