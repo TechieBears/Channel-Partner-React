@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import AddSubadminForm from '../../../components/Modals/SubAdmin/AddSubadminForm'
-import Table from '../../../components/Table/Table'
+import Table from '../../../components/table/Table'
 import Switch from 'react-switch'
 import { NavLink } from 'react-router-dom'
 import { getSubAdmin } from '../../../api'

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
-import Table from '../../../components/Table/Table';
+import Table from '../../../components/table/Table';
 import { Link } from 'react-router-dom';
 import { Eye, Trash } from 'iconsax-react';
 import CreateUserForm from '../../../components/Modals/UserModals/CreateUserForm';

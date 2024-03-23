@@ -1,6 +1,6 @@
 import { Add, Eye, Refresh, SearchNormal } from "iconsax-react";
 import React, { useEffect, useState } from "react";
-import Table from "../../../components/Table/Table";
+import Table from "../../../components/table/Table";
 import AddRestaurant from "../../../components/Modals/Resturant/AddRestaurant";
 import { NavLink } from "react-router-dom";
 import Switch from "react-js-switch";

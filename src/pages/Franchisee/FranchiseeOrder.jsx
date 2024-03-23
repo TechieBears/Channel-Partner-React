@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { formBtn1, formBtn2, inputClass } from '../../utils/CustomClass';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import Table from '../../components/Table/Table';
+import Table from '../../components/table/Table';
 import { NavLink } from 'react-router-dom';
 import { ClipboardTick, Eye, Trash } from 'iconsax-react';
 import moment from 'moment';

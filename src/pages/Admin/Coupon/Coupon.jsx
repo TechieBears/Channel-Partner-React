@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import AddCoupon from './Assest/AddCoupon'
 import moment from 'moment';
-import Table from '../../../components/Table/Table'
+import Table from '../../../components/table/Table'
 import { Trash } from 'iconsax-react'
 import { deleteCoupon, getCoupon } from '../../../api';
 import { toast } from 'react-toastify';

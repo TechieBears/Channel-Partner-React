@@ -2,7 +2,7 @@ import { Eye } from "iconsax-react";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import Table from "../../../components/Table/Table";
+import Table from "../../../components/table/Table";
 import { formBtn1, formBtn2, inputClass } from "../../../utils/CustomClass";
 // import CreateUserForm from '../../../components/Modals/UserModals/CreateUserForm';
 import { editUser, getUser } from "../../../api";

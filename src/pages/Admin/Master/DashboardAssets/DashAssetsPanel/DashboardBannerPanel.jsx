@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Trash } from "iconsax-react";
-import Table from "../../../../../components/Table/Table";
+import Table from "../../../../../components/table/Table";
 import { getHomeBanners, delHomeBanners, editHomeBanners, addHomePromotion} from "../../../../../api";
 import { useDispatch } from "react-redux";
 import { setPromotions } from "../../../../../redux/Slices/masterSlice";

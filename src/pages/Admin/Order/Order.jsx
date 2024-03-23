@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { toast } from 'react-toastify';
 import DeleteModal from '../../../components/Modals/DeleteModal/DeleteModal';
-import Table from '../../../components/Table/Table';
+import Table from '../../../components/table/Table';
 import { environment } from '../../../env';
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 import { Link } from 'react-router-dom';

@@ -10,7 +10,7 @@ import { GetFranchisee, GetFranchiseeVendors, VerifyProductAdmin, editAdminFinal
 import userImg from '../../../../assets/user.jpg';
 import AddProduct from '../../../../components/Modals/Vendors/AddProduct';
 import AddRestItem from '../../../../components/Modals/Vendors/AddRestItem';
-import Table from '../../../../components/Table/Table';
+import Table from '../../../../components/table/Table';
 import { formBtn1, formBtn2, inputClass } from '../../../../utils/CustomClass';
 import axios from 'axios';
 import { environment } from '../../../../env';

@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 import { GetFranchisee, getDeliveryBoy, verifyDeliveryBoy } from '../../../api';
 import userImg from '../../../assets/user.jpg';
 import AddDriverFrom from '../../../components/Modals/DriverModals/AddDriverForm';
-import Table from '../../../components/Table/Table';
+import Table from '../../../components/table/Table';
 import { environment } from '../../../env';
 import { setDeliveryList } from '../../../redux/Slices/deliverySlice';
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';

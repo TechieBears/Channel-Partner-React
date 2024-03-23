@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import { getAllShopProduct, getRestaurantCategory, getRestaurantFood, getRestaurantSubCategory, getSingleRestaurant, getGalleryImages, getSubCategory, getCategory } from '../../../api';
 import AddProduct from '../../../components/Modals/Vendors/AddProduct';
 import AddRestItem from '../../../components/Modals/Vendors/AddRestItem';
-import Table from '../../../components/Table/Table';
+import Table from '../../../components/table/Table';
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 
 

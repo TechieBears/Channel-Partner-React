@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { delCategory, getCategory, getProductsByAdmin, getRestaurantCategory, getRestaurantFoodAdmin, getRestaurantSubCategory, getSubCategory } from "../../../../api";
 import CategoryForm from "../../../../components/Modals/MenuModals/CategoryForm";
-import Table from "../../../../components/Table/Table";
+import Table from "../../../../components/table/Table";
 import { useDispatch } from "react-redux";
 import { setCategoryCount, setProductCount, setSubCategoryCount } from "../../../../redux/Slices/masterSlice";
 

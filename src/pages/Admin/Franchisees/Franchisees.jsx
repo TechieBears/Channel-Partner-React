@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Eye } from 'iconsax-react';
-import Table from '../../../components/Table/Table';
+import Table from '../../../components/table/Table';
 import { Link } from 'react-router-dom';
 import Switch from 'react-js-switch'
 import AddFranchisee from '../../../components/Modals/Franchisee/AddFranchiseForm';

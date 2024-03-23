@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 import { GetFranchisee, GetFranchiseeVendors, verifyVendors } from "../../../api";
 import userImg from '../../../assets/user.jpg';
 import AddVendors from '../../../components/Modals/Vendors/AddVendors/AddVendors';
-import Table from '../../../components/Table/Table';
+import Table from '../../../components/table/Table';
 import { environment } from '../../../env';
 import { setFranchiseVendors } from "../../../redux/Slices/masterSlice";
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';

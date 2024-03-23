@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Tab, TabList, Tabs, TabPanel } from "react-tabs";
-import Table from "../../components/Table/Table";
+import Table from "../../components/table/Table";
 import {
     ArrowSwapVertical,
     Eye,

@@ -8,7 +8,7 @@ import AsyncSelect from "react-select/async";
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { toast } from 'react-toastify';
 import OrdersCard from '../../../components/Cards/Orders/OrdersCard';
-import Table from '../../../components/Table/Table';
+import Table from '../../../components/table/Table';
 import { environment } from '../../../env';
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 
