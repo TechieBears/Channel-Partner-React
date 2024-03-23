@@ -3,8 +3,20 @@ import { Fragment, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Edit } from "iconsax-react";
 import { toast } from "react-toastify";
-import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn} from "../../../utils/CustomClass";
-import { getCategory, createProduct, editProduct, getProducts} from "../../../api";
+import {
+  fileinput,
+  formBtn1,
+  formBtn2,
+  inputClass,
+  labelClass,
+  tableBtn,
+} from "../../../utils/CustomClass";
+import {
+  getCategory,
+  createProduct,
+  editProduct,
+  getProducts,
+} from "../../../api";
 import { setProduct } from "../../../redux/Slices/masterSlice";
 import { useDispatch, useSelector } from "react-redux";
 import LoadBox from "../../Loader/LoadBox";
@@ -19,80 +31,95 @@ export default function ProductForm(props) {
 
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
-  const { register, handleSubmit, control, watch, reset, formState: { errors },} = useForm();
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm();
   const dispatch = useDispatch();
   const toggle = () => setIsOpen(!isOpen);
 
-
   // ========================= fetch data from api ==============================
   const productList = () => {
-    getProducts()
-      .then((res) => {
-        dispatch(setProduct(res));
-      })
-      .catch((err) => {
-        console.error("Error", err);
-      });
+    try {
+      getProducts()
+        .then((res) => {
+          dispatch(setProduct(res));
+        })
+        .catch((err) => {
+          console.error("Error", err);
+        });
+    } catch (error) {}
   };
 
   // ============================ submit data  =====================================
   const onSubmit = async (data) => {
     // console.log("data", data);
-    if (props?.button !== 'edit') {
-        try {
-            if (data.main_image.length != 0) {
-                await ImageUpload(data.main_image[0], "products", "products", data.name)
-                data.main_image = `${productLink}${data.name}_product_${data.main_image[0].name}`
-            } else {
-                data.main_image = ''
-            }
-            setLoader(true)
-            createProduct(data).then((res) => {
-                if (res?.message === "Data added successfully") {
-                    setTimeout(() => {
-                      setProduct(res)
-                        dispatch(setProduct(res));
-                        reset();
-                        productList();
-                        toggle(),
-                        setLoader(false),
-                        toast.success(res.message);
-                    }, 1000)
-                }
-            }).catch(err => {
-                setLoader(false)
-                console.error('Error', err);
-            })
-        } catch (error) {
-            setLoader(false);
-            console.log('error', error);
+    if (props?.button !== "edit") {
+      try {
+        if (data.main_image.length != 0) {
+          await ImageUpload(
+            data.main_image[0],
+            "products",
+            "products",
+            data.name
+          );
+          data.main_image = `${productLink}${data.name}_product_${data.main_image[0].name}`;
+        } else {
+          data.main_image = "";
         }
+        setLoader(true);
+        createProduct(data)
+          .then((res) => {
+            if (res?.message === "Data added successfully") {
+              setTimeout(() => {
+                setProduct(res);
+                dispatch(setProduct(res));
+                reset();
+                productList();
+                toggle(), setLoader(false), toast.success(res.message);
+              }, 1000);
+            }
+          })
+          .catch((err) => {
+            setLoader(false);
+            console.error("Error", err);
+          });
+      } catch (error) {
+        setLoader(false);
+        console.log("error", error);
+      }
     } else {
-        try {
-            if (data.main_image.length != 0) {
-                await ImageUpload(data.main_image[0], "product", "product", data.name)
-                data.main_image = `${productLink}${data.name}_product_${data.main_image[0].name}`
-            } else {
-                data.main_image = props.data.main_image
-            }
-            setLoader(true);
-            editProduct(props?.data?.id, data).then((res) => {
-                if (res?.message === "product edited successfully") {
-                    setTimeout(() => {
-                        dispatch(setProduct(res));
-                        reset();
-                        productList();
-                        toggle(),
-                            setLoader(false),
-                        toast.success(res.message);
-                    }, 1000)
-
-                }
-            })
-        } catch (error) {
-            setLoader(false);
-            console.log('error', error);
+      try {
+        if (data.main_image.length != 0) {
+          await ImageUpload(
+            data.main_image[0],
+            "product",
+            "product",
+            data.name
+          );
+          data.main_image = `${productLink}${data.name}_product_${data.main_image[0].name}`;
+        } else {
+          data.main_image = props.data.main_image;
         }
+        setLoader(true);
+        editProduct(props?.data?.id, data).then((res) => {
+          if (res?.message === "product edited successfully") {
+            setTimeout(() => {
+              dispatch(setProduct(res));
+              reset();
+              productList();
+              toggle(), setLoader(false), toast.success(res.message);
+            }, 1000);
+          }
+        });
+      } catch (error) {
+        setLoader(false);
+        console.log("error", error);
+      }
     }
   };
 
@@ -161,7 +188,7 @@ export default function ProductForm(props) {
                     as="h2"
                     className="w-full px-3 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
                   >
-                  {props?.title}
+                    {props?.title}
                   </Dialog.Title>
                   <div className=" bg-gray-200/70">
                     {/* React Hook Form */}
@@ -199,7 +226,7 @@ export default function ProductForm(props) {
                           {props?.button == "edit" &&
                             props?.data.main_image != "" &&
                             props?.data.main_image != undefined && (
-                              <label className="block mb-1 font-medium text-blue-800 text-md font-tb truncate truncate">
+                              <label className="block mb-1 font-medium text-blue-800 truncate text-md font-tb">
                                 {props?.data?.main_image?.split("/").pop()}
                               </label>
                             )}
@@ -214,9 +241,15 @@ export default function ProductForm(props) {
                             className={inputClass}
                             {...register("category", { required: true })}
                           >
-                            <option value="" disabled>Select Type</option>
+                            <option value="" disabled>
+                              Select Type
+                            </option>
                             {Category.map((category) => (
-                              <option key={category.id} value={category.id}  selected={props?.data?.category === category.id}>
+                              <option
+                                key={category.id}
+                                value={category.id}
+                                selected={props?.data?.category === category.id}
+                              >
                                 {category.category_name}
                               </option>
                             ))}
@@ -226,15 +259,23 @@ export default function ProductForm(props) {
                           )}
                         </div>
                         <div className="">
-                          <label className={labelClass}>SubCategory Type*</label>
+                          <label className={labelClass}>
+                            SubCategory Type*
+                          </label>
                           <select
                             name="Subcategory Type"
                             className={inputClass}
                             {...register("subcategory", { required: true })}
                           >
-                            <option value="" disabled>Select Type</option>
+                            <option value="" disabled>
+                              Select Type
+                            </option>
                             {Category.map((category) => (
-                              <option key={category.id} value={category.id}  selected={props?.data?.category === category.id}>
+                              <option
+                                key={category.id}
+                                value={category.id}
+                                selected={props?.data?.category === category.id}
+                              >
                                 {category.category_name}
                               </option>
                             ))}
@@ -249,7 +290,7 @@ export default function ProductForm(props) {
                             type="number"
                             placeholder="229"
                             className={inputClass}
-                            {...register('actual_price', { required: true})}
+                            {...register("actual_price", { required: true })}
                           />
                           {errors.actual_price && (
                             <Error title="Actual Price is required*" />
@@ -266,7 +307,9 @@ export default function ProductForm(props) {
                             placeholder="200"
                             className={inputClass}
                             // {...register('phone_no', { required: true, validate: validatePhoneNumber })}
-                            {...register('discounted_price', { required: true })}
+                            {...register("discounted_price", {
+                              required: true,
+                            })}
                           />
                           {errors.discounted_price && (
                             <Error title="Discounted Price is required*" />
@@ -281,7 +324,7 @@ export default function ProductForm(props) {
                             type="number"
                             placeholder="Enter offer"
                             className={inputClass}
-                            {...register('offers', { required: true })}
+                            {...register("offers", { required: true })}
                           />
                           {errors.offers && (
                             <Error title="Offer is required*" />
@@ -293,7 +336,7 @@ export default function ProductForm(props) {
                             type="number"
                             placeholder="Enter Margin"
                             className={inputClass}
-                            {...register('margin', { required: true})}
+                            {...register("margin", { required: true })}
                           />
                           {errors.margin && (
                             <Error title="Margin is required*" />
@@ -307,7 +350,7 @@ export default function ProductForm(props) {
                             type="number"
                             placeholder="10"
                             className={inputClass}
-                            {...register('avilable_qty', { required: true })}
+                            {...register("avilable_qty", { required: true })}
                           />
                           {errors.avilable_qty && (
                             <Error title="Available Quantity is required*" />
@@ -321,21 +364,21 @@ export default function ProductForm(props) {
                             type="text"
                             placeholder="100 Grams"
                             className={inputClass}
-                            {...register('unit_of_measurement', { required: true })}
+                            {...register("unit_of_measurement", {
+                              required: true,
+                            })}
                           />
                           {errors.unit_of_measurement && (
                             <Error title="Unit of Measurement is required*" />
                           )}
                         </div>
                         <div className="">
-                          <label className={labelClass}>
-                            Brand*
-                          </label>
+                          <label className={labelClass}>Brand*</label>
                           <input
                             type="text"
                             placeholder="Aditya Sun Pharma"
                             className={inputClass}
-                            {...register('brand', { required: true })}
+                            {...register("brand", { required: true })}
                           />
                           {errors.unit_of_measurement && (
                             <Error title="Unit of Measurement is required*" />
@@ -350,7 +393,7 @@ export default function ProductForm(props) {
                             cols="30"
                             rows="4"
                             placeholder="Enter Description"
-                             {...register('description', { required: true})}
+                            {...register("description", { required: true })}
                           ></textarea>
                           {errors.description && (
                             <Error title="Description is required*" />

@@ -186,15 +186,23 @@ const VendorProduct = () => {
     ]
 
     const getProducts = () => {
-        getAllShopProduct(user?.sellerId).then(res => {
-            setData(res)
-        })
+        try {
+            getAllShopProduct(user?.sellerId).then(res => {
+                setData(res)
+            })
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     const getDetails = () => {
-        getSingleRestaurant(user?.sellerId).then(res => {
-            setDetails(res)
-        })
+        try {
+            getSingleRestaurant(user?.sellerId).then(res => {
+                setDetails(res)
+            })
+        } catch (error) {
+            console.log(error);
+        }
     }
 
 

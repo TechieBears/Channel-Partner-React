@@ -1,11 +1,8 @@
+import { Handshake, PersonSimpleBike } from "@phosphor-icons/react";
+import { ArrowSwapVertical, Box, Category, Eye, NotificationBing, ShoppingCart, Timer, Trash, UserRemove, UserTick } from "iconsax-react";
 import React, { useState } from "react";
-import { ArrowSwapVertical, Box, Eye, NotificationBing, ShoppingCart, Trash, Category, UserTick, UserRemove, Timer } from "iconsax-react";
-import { Handshake, PersonSimpleBike   } from "@phosphor-icons/react";
 // import { Bike, Handshake } from "lucide-react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
-import { NavLink } from "react-router-dom";
-import { environment } from "../../../env";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import DeleteModal from "../../../components/Modals/DeleteModal/DeleteModal";
@@ -13,14 +10,9 @@ import DashboardForm from "../../../components/Modals/DashboardModals/DashboardF
 
 
 const Dashboard = () => {
-  const [selectedTab, setSelectedTab] = useState(0);
-
   const categoryCount = useSelector((state) => state?.master?.CategoryCount);
   const subCategoryCount = useSelector((state) => state?.master?.SubCategoryCount);
   const productCount = useSelector((state) => state?.master?.ProductCount);
-  // const deliveryBoysCount = useSelector((state) => state?.vendor?.deliveryList);
-  console.log(categoryCount, subCategoryCount, productCount) 
-
   const user = useSelector((state) => state.user.loggedUserDetails);
   const cityNames = useSelector((state) => state?.master?.city);
   const tempretureRangeList = useSelector(
@@ -37,41 +29,6 @@ const Dashboard = () => {
     formState: { errors },
     reset,
   } = useForm();
-
-  // ======================== Data submit ===================================
-  const onSubmit = async (data) => {
-    if (data?.name?.value !== undefined || data?.location != "") {
-      let url = `${environment.baseUrl}storage-filter/?name=${data?.name?.value == undefined ? "" : data?.name?.value
-        }&location=${data.location == undefined ? "" : data.location}&user=${user?.role != "admin" ? user?.userid : ""
-        }`;
-      await axios.get(url).then((res) => {
-        toast.success("Filters applied successfully");
-      });
-    } else {
-      toast.warn("No Selected Value !");
-    }
-  };
-
-  // ====================== fetch data api ==================================
-
-  // const StorageList = () => {
-  //   if (user.role == "admin") {
-  //     getStorages()
-  //       .then((res) => {
-  //         console.log(res);
-  //       })
-  //       .catch((err) => {
-  //         console.error("Error", err);
-  //       });
-  //   } else {
-  //     getPartnerStorage(user?.userid)
-  //       .then((res) => {
-  //       })
-  //       .catch((err) => {
-  //         console.error("Error", err);
-  //       });
-  //   }
-  // };
 
   // ================================ Dropdown List =========================
 
@@ -221,7 +178,7 @@ const Dashboard = () => {
           </div>
           <div className="flex items-center p-4 mr-4 space-x-3 bg-white border-r-0 rounded-xl sm:border-r border-gray-200/70 ">
             <div className="p-3.5 rounded-xl bg-purple-50">
-              <PersonSimpleBike  size={26} className="text-purple-600" />
+              <PersonSimpleBike size={26} className="text-purple-600" />
             </div>
             <div className="space-y-1">
               <h6 className="text-sm text-purple-600 font-tb">
@@ -279,7 +236,7 @@ const Dashboard = () => {
               </h6>
             </div>
           </div>
-       
+
           <div className="flex items-center p-4 mr-4 space-x-3 bg-white border-r-0 rounded-xl sm:border-r border-gray-200/70">
             <div className="p-3.5 rounded-xl bg-sky-50">
               <UserTick size={26} className="text-sky-600" />

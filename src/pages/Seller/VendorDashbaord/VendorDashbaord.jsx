@@ -154,39 +154,16 @@ const Dashboard = () => {
                     >
                         <div className="grid w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-y-3 gap-x-2 ">
                             <div className="">
-                                <Controller
-                                    control={control}
-                                    name="name"
-                                    render={({ field }) => (
-                                        <AsyncSelect
-                                            placeholder="Search By Name"
-                                            cacheOptions
-                                            defaultOptions
-                                            value={field.value}
-                                            defaultValue={
-                                                field.value
-                                                    ? { label: field.value, value: field.value }
-                                                    : null
-                                            }
-                                            loadOptions={loadOptions}
-                                            onChange={field.onChange}
-                                        />
-                                    )}
+                                <input className={`${inputClass} !bg-slate-100`}
+                                    {...register('order_id')}
+                                    placeholder="Search By Status"
                                 />
                             </div>
                             <div className="">
-                                <select
-                                    name="City"
-                                    className={`${inputClass} !bg-slate-100`}
-                                    {...register("location")}
-                                >
-                                    <option value="">City</option>
-                                    {cityNames?.map((city) => (
-                                        <option value={city?.name} key={city?.name}>
-                                            {city?.name}
-                                        </option>
-                                    ))}
-                                </select>
+                                <input className={`${inputClass} !bg-slate-100`}
+                                    {...register('order_id')}
+                                    placeholder="Search By Order ID"
+                                />
                             </div>
                         </div>
                         <div className="flex items-center gap-x-2">
@@ -207,8 +184,24 @@ const Dashboard = () => {
                     </form>
                 </div>
                 {/* ===================== New Order Section ===================== */}
-                <div className="p-4 space-y-2">
-                    <p className="text-lg font-semibold">Current Orders</p>
+                <div className="p-4 space-y-2 bg-white m-4">
+                    <div className="flex items-center justify-between">
+                        <p className="text-lg font-semibold">Current Orders</p>
+                        <form className="grid grid-cols-3 gap-4 ">
+                            <input
+                                className={`${inputClass} !bg-slate-100`}
+                                placeholder="Enter OTP"
+                            />
+                            <button
+                                type="button"
+                                className={formBtn1}
+                            >Submit</button>
+                            <button
+                                className={formBtn2}
+                                type="button"
+                            >Clear</button>
+                        </form>
+                    </div>
                     {
                         orders?.length != 0 ? orders?.map(data => (
                             <OrdersCard data={data} />

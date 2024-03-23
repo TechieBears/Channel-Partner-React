@@ -26,7 +26,9 @@ function Vendors() {
     const FranchiseeVendors = () => {
         try {
             GetFranchiseeVendors().then((res) => {
-                SetVendors(res);
+                SetVendors(res.filter(
+                    (item) => (item?.vendor_type == "shop" || item?.vendor_type == "seller")
+                ));
                 dispatch(setFranchiseVendors(res));
             });
         } catch (error) {
@@ -298,7 +300,6 @@ function Vendors() {
                 {
                     <Table data={Vendors} columns={columns} isValid={true} />
                 }
-                a
             </div>
             {/*====================== User Table ================================*/}
         </>

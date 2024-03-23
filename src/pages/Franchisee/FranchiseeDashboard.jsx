@@ -1,30 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { Tab, TabList, Tabs, TabPanel } from "react-tabs";
-import Table from "../../components/table/Table";
 import {
     ArrowSwapVertical,
-    Eye,
-    ShoppingCart,
-    Trash,
-    UserRemove,
     ClipboardTick,
-    Edit,
+    ShoppingCart,
+    UserRemove
 } from "iconsax-react";
+import React, { useState } from "react";
 // import { deleteStorage, getPartnerStorage, getStorages } from "../../../api";
-import { formBtn2, inputClass } from "../../utils/CustomClass";
-import { formBtn1 } from "../../utils/CustomClass";
-import { Controller, useForm } from "react-hook-form";
-import axios from "axios";
-import { NavLink } from "react-router-dom";
-import { environment } from "../../env";
+import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import AsyncSelect from "react-select/async";
 import DeleteModal from "../../components/Modals/DeleteModal/DeleteModal";
-import ActiveOrders from "../Admin/Dashboard/OrderList/ActiveOrders";
-import PendingOrders from "../Admin/Dashboard/OrderList/PendingOrders";
-import moment from "moment";
-import ViewProduct from "../../components/Modals/Vendors/ViewProduct";
 
 
 
@@ -46,32 +31,6 @@ const FranchiseeDashboard = () => {
         formState: { errors },
         reset,
     } = useForm();
-
-    // ======================== Data submit ===================================
-    const onSubmit = async (data) => {
-        console.log('data', data);
-    };
-
-    // ====================== fetch data api ==================================
-
-    // const StorageList = () => {
-    //     if (user.role == "admin") {
-    //         getStorages()
-    //             .then((res) => {
-    //                 console.log(res);
-    //             })
-    //             .catch((err) => {
-    //                 console.error("Error", err);
-    //             });
-    //     } else {
-    //         getPartnerStorage(user?.userid)
-    //             .then((res) => {
-    //             })
-    //             .catch((err) => {
-    //                 console.error("Error", err);
-    //             });
-    //     }
-    // };
 
     // ================================ Dropdown List =========================
 
