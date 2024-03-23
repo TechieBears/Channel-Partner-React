@@ -25,7 +25,6 @@ import ActiveOrders from "../Admin/Dashboard/OrderList/ActiveOrders";
 import PendingOrders from "../Admin/Dashboard/OrderList/PendingOrders";
 import moment from "moment";
 import ViewProduct from "../../components/Modals/Vendors/ViewProduct";
-import DashboardForm from "../../../components/Modals/DashboardModals/DashboardForm"
 
 
 
