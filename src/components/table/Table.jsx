@@ -4,9 +4,6 @@ import { Column } from 'primereact/column';
 import "primereact/resources/themes/lara-light-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import Excel from '../../../src/assets/ms-excel.svg';
-import { Button } from "primereact/button";
-
-
 
 function Table({ data, columns, isValid }) {
     const exportExcel = () => {
