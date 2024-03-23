@@ -1,5 +1,5 @@
 import { Notebook } from "@phosphor-icons/react";
-import { Element4, ElementPlus, Trade, Truck, User, Settings, Menu, Shop, SecurityUser, Book, TicketExpired, TicketDiscount, Profile2User, ClipboardTick, Bank, Setting2, Wallet, ShoppingCart, Headphone, Ticket, UserAdd } from "iconsax-react";
+import { Element4, ElementPlus, Trade, Truck, User, Settings, Menu, Shop, SecurityUser, Book, TicketExpired, TicketDiscount, Profile2User, ClipboardTick, Bank, Setting2, Wallet, ShoppingCart, Headphone, Ticket, UserAdd ,EmptyWallet} from "iconsax-react";
 import { AlertTriangle, Bike, ChefHat, LayoutList, Megaphone, Settings2, Soup, User2 } from "lucide-react";
 export const Admin = [
     {
@@ -63,6 +63,11 @@ export const Admin = [
         title: `Banners/Promo's`,
         icon: < TicketDiscount size="24" />,
         link: '/DashboardAssets',
+    },
+    {
+        title: 'Wallet',
+        icon: <EmptyWallet size="24" />,
+        link: '/wallet',
     },
     {
         title: 'Settings',

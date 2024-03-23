@@ -45,6 +45,7 @@ import Coupon from '../src/pages/Admin/Coupon/Coupon';
 import FoodDetails from '../src/pages/Admin/Menu/AdminProduct/FoodDetails';
 import { PreLoaders } from '../src/components/Loader/PreLoaders';
 import RestaurantRegister from './../src/pages/Restaurants/ViewRestaurant/RestaurantRegister';
+import { Wallet } from "../src/pages/Wallet/Wallet";
 
 
 
@@ -102,6 +103,7 @@ const ProjectRoutes = () => {
                                         <Route path="/reports" element={<Reports />} />
                                         <Route path="/subadmin" element={<SubAdmin />} />
                                         <Route path="/subadmin/subadmin-detail/:id" element={<SubAdminDetail />} />
+                                        <Route path='wallet' element={<Wallet />} />
                                         <Route path="/settings" element={<Settings />} />
                                     </> :
                                     user?.role == 'seller' ?

@@ -223,6 +223,12 @@ const AdminProduct = (props) => {
 
 
     const onSubmit = async (data) => {
+        console.log("🚀 ~ file: AdminProducts.jsx:226 ~ onSubmit ~ data:", data)
+        const newCategory = data?.product_category?.map((data)=>  data.value)
+        console.log("🚀 ~ file: AdminProducts.jsx:228 ~ onSubmit ~ newcategory:", newCategory.toString())
+        const newSubcategory = data?.product_subcategory?.map((data)=>  data.value)
+        console.log("🚀 ~ file: AdminProducts.jsx:230 ~ onSubmit ~ newSubcategory:", newSubcategory.toString())
+
         const { product_name, product_msbcode, franchise_msbcode, vendor_msbcode, product_category, product_subcategory } = data
         if (product_name != '' || product_msbcode != '' || franchise_msbcode != '' || franchise_msbcode != undefined || vendor_msbcode != '' || vendor_msbcode != undefined || product_category != '' || product_category != undefined || product_subcategory != '' || product_subcategory != undefined) {
             try {
@@ -577,6 +583,7 @@ const AdminProduct = (props) => {
                                         options={categoryOptions}
                                         className="text-gray-900 w-100"
                                         placeholder="Category"
+                                        isMulti
                                         onChange={onChange}
                                         inputRef={ref}
                                         maxMenuHeight={200}
@@ -602,6 +609,7 @@ const AdminProduct = (props) => {
                                         options={subcategoryOptions}
                                         className="text-gray-900 w-100"
                                         placeholder="SubCategory"
+                                        isMulti
                                         onChange={onChange}
                                         inputRef={ref}
                                         maxMenuHeight={200}
