@@ -4,17 +4,16 @@ import {
     ShoppingCart,
     UserRemove
 } from "iconsax-react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 // import { deleteStorage, getPartnerStorage, getStorages } from "../../../api";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-import AsyncSelect from "react-select/async";
 import { toast } from "react-toastify";
 // import Orders from "../../../components/Cards/Orders/Orders";
 import OrdersCard from "../../../components/Cards/Orders/OrdersCard";
+import DashboardForm from "../../../components/Modals/DashboardModals/DashboardForm";
 import DeleteModal from "../../../components/Modals/DeleteModal/DeleteModal";
 import { formBtn1, formBtn2, inputClass } from "../../../utils/CustomClass";
-import DashboardForm from "../../../components/Modals/DashboardModals/DashboardForm"
 
 
 
@@ -38,26 +37,6 @@ const Dashboard = () => {
     // ======================== Data submit ===================================
     const onSubmit = async (data) => {
         console.log('data', data);
-    };
-
-
-    // ================================ Dropdown List =========================
-
-    const filterOptions = (options, inputValue) => {
-        return options.filter((i) =>
-            i.label.toLowerCase().includes(inputValue.toLowerCase())
-        );
-    };
-
-    const loadOptions = (_, callback) => {
-        // const uniqueNames = new Set();
-        // const uniqueProducts = storages
-        //     ?.filter(
-        //         (res) =>
-        //             res.name && !uniqueNames.has(res.name) && uniqueNames.add(res.name)
-        //     )
-        //     .map((res) => ({ label: res.name, value: res.name }));
-        // callback(uniqueProducts || []);
     };
 
     // ================================ filter reset ============================
