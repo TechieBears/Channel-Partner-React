@@ -44,6 +44,7 @@ import FranchiseeVendors from '../src/pages/Franchisee/Vendors/FranchiseeVendors
 import Coupon from '../src/pages/Admin/Coupon/Coupon';
 import FoodDetails from '../src/pages/Admin/Menu/AdminProduct/FoodDetails';
 import { PreLoaders } from '../src/components/Loader/PreLoaders';
+import RestaurantRegister from './../src/pages/Restaurants/ViewRestaurant/RestaurantRegister';
 
 
 
