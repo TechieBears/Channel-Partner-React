@@ -12,7 +12,7 @@ import { CalendarDays } from "lucide-react";
 import moment from "moment/moment";
 import { useEffect, useState } from "react";
 import Switch from "react-js-switch";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { getSingleRestaurant, getSingleShop } from "../../api";
 import userImg from "../../assets/user.jpg";
@@ -20,9 +20,11 @@ import "../../css/Navbar.css";
 import LoginModal from "../Modals/NavbarModals/LoginModal";
 import LogoutModal from "../Modals/NavbarModals/LogoutModal";
 import SessionModal from "../Modals/NavbarModals/SessionModal";
+import { setVendorDetails } from "../../redux/Slices/loginSlice";
 
 const Navbar = ({ mobileSidebar, setMobileSidebar }) => {
   const user = useSelector((state) => state?.user?.loggedUserDetails);
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [data, setData] = useState();
   const [card, setCard] = useState(true);
@@ -53,6 +55,7 @@ const Navbar = ({ mobileSidebar, setMobileSidebar }) => {
     try {
       getSingleShop(user?.userid).then(res => {
         setData(res[0]);
+        dispatch(setVendorDetails(res[0]))
       })
     } catch (error) {
       console.log('error', error);

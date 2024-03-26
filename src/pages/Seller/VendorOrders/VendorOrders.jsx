@@ -1,10 +1,9 @@
 import { ClipboardTick, Eye, Trash } from 'iconsax-react';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import AsyncSelect from "react-select/async";
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { toast } from 'react-toastify';
 import OrdersCard from '../../../components/Cards/Orders/OrdersCard';
@@ -17,7 +16,6 @@ const VendorOrders = () => {
     const webSocketUrl = `${environment.webSocketUrl}user_to_seller/${user?.msb_code}`
     const ws = new WebSocket(webSocketUrl)
     const [selectedTab, setSelectedTab] = useState(0);
-    // const storages = useSelector((state) => state?.storage?.list);
     const orders = useSelector(state => state?.orders?.newOrders);
     const {
         register,
@@ -194,7 +192,7 @@ const VendorOrders = () => {
             <Trash size={20} color="red" />
         </div>
     </div>
-
+    useEffect(() => { }, [orders])
     return (
         <>
             <div className="p-4 m-4 bg-white sm:m-5 rounded-xl">

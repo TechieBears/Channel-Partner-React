@@ -2,7 +2,7 @@ import { DirectLeft } from 'iconsax-react';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { getFranchRestaurant, getRestarant, startSession } from '../../api';
+import { getFranchRestaurant, getRestarant, getSingleShop, startSession } from '../../api';
 import logoImg from '../../assets/logo_white.png';
 import { environment } from '../../env';
 import { setSessionStarted } from '../../redux/Slices/SessionSlice';
@@ -23,9 +23,7 @@ const Sidebar = ({ children }) => {
     const timeoutId = useRef(null);
     const logoutTimeoutId = useRef(null);
     useEffect(() => {
-        console.log('use Effect ran for web socket')
-        if (user?.role == 'seller') {
-            console.log('inside iffffffffff')
+        if (user?.role == 'seller' || user?.role == 'shop') {
             // ws.open = () => {
             //     console.log('WebSocket Client Connected');
             // };
@@ -34,7 +32,6 @@ const Sidebar = ({ children }) => {
             // };
             ws.onmessage = (e) => {
                 const data = JSON.parse(e.data);
-                console.log('data=====================', data)
                 window.alert(data?.orderId)
                 dispatch(setOrders(data))
             };
