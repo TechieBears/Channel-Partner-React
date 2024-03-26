@@ -18,7 +18,7 @@ function UserView() {
     const location = useLocation();
     const data = location.state;
     const [selectedTab, setSelectedTab] = useState(0);
-    const [walletData, setWalletData] = useState(1);
+    const [walletData, setWalletData] = useState();
 
     // ==================== images array =======================
     const images = [
@@ -40,28 +40,6 @@ function UserView() {
         },
     ].filter(image => image?.url !== undefined && image?.url !== '' && image?.url !== 'No Document Uploaded');
 
-    const WalletData = [{
-        "trans_id": "1987",
-        "trans_time": "26-03-2024,  19.54 PM",
-        "user": "Alex",
-        "transaction_log": "Deducted",
-        "amount": 33.94,
-        "transaction_status": "Completed",
-    },
-    ]
-
-    const UserAction = (row) => (
-        <div className='w-full'>
-            <Link className=''>
-                <Eye className='text-sky-400' />
-            </Link>
-        </div>
-    )
-    // const amountData = (rowData) => (
-    //     <h6 className={`${rowData?.amount.toString().includes('-') ? "text-red-500" : "text-green-500"}`}>
-    //         {rowData?.amount}
-    //     </h6>
-    // )
     const amountData = (rowData) => {
         return (
             <h6 className={`${Math.sign(rowData?.amount) === 1 ? "text-green-500" : "text-red-500"}`}>

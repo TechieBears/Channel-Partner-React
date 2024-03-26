@@ -65,11 +65,6 @@ export const Admin = [
         link: '/DashboardAssets',
     },
     {
-        title: 'Wallet',
-        icon: <EmptyWallet size="24" />,
-        link: '/wallet',
-    },
-    {
         title: 'Settings',
         icon: <Setting2 size="24" />,
         link: '/settings',
@@ -97,6 +92,11 @@ export const Seller = [
         title: 'Register',
         icon: <UserAdd size="24" />,
         link: '/register',
+    },
+    {
+        title: 'Wallet',
+        icon: <EmptyWallet size="24" />,
+        link: '/wallet',
     },
 ]
 
@@ -141,6 +141,11 @@ export const Franchise = [
         icon: <Wallet size="24" />,
         link: '/delivery',
     },
+    {
+        title: 'Wallet',
+        icon: <EmptyWallet size="24" />,
+        link: '/wallet',
+    },
 
 ]
 
@@ -149,5 +154,10 @@ export const Restaurant = [
         title: 'Dashboard',
         icon: <Element4 size="24" />,
         link: '/',
+    },
+    {
+        title: 'Wallet',
+        icon: <EmptyWallet size="24" />,
+        link: '/wallet',
     },
 ]
