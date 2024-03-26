@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from 'react'
-import { useForm } from 'react-hook-form';
-import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
-import Table from '../../../components/table/Table';
-import Switch from 'react-js-switch'
-import AddVendors from '../../../components/Modals/Vendors/AddVendors/AddVendors';
-import { GetFranchiseeVendorsByID, verifyVendors } from "../../../api";
-import { setFranchiseVendors } from "../../../redux/Slices/masterSlice";
-import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios';
-import { setUserList } from '../../../redux/Slices/userSlice';
-import { toast } from 'react-toastify';
 import { Eye } from 'iconsax-react';
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import Switch from 'react-js-switch';
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { GetFranchiseeVendorsByID, verifyVendors } from "../../../api";
 import userImg from '../../../assets/user.jpg';
+import AddVendors from '../../../components/Modals/Vendors/AddVendors/AddVendors';
+import Table from '../../../components/table/Table';
+import { setFranchiseVendors } from "../../../redux/Slices/masterSlice";
+import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 
 
 function FranchiseeVendors() {
@@ -37,12 +36,21 @@ function FranchiseeVendors() {
 
     // =================== filter data ========================
     const onSubmit = async (data) => {
-        if (data?.name != '' || data?.email != '' || data?.city != '' || data?.role != '') {
-            let url = `${environment.baseUrl}user-filter/?first_name=${data?.name}&email=${data?.email}&city=${data?.city}&role=${data?.role}`
-            await axios.get(url).then((res) => {
-                dispatch(setUserList(res.data))
-                toast.success("Filters applied successfully")
-            })
+        if (data?.name != '' || data?.msbcode != '') {
+            const name = data?.name?.split(" ")[0] ? data?.name?.split(" ")[0] : ''
+            const lastname = data?.name?.split(" ")[1] ? data?.name?.split(" ")[1] : ''
+            try {
+                let url = `${environment.baseUrl}vendor/vendor_list?name=${name}&lastname=${lastname}&msbcode=${data?.msbcode}`
+                await axios.get(url).then((res) => {
+                    console.log("🚀 ~ file: FranchiseeVendors.jsx:45 ~ awaitaxios.get ~ res:", res)
+                    // SetVendors(res?.data?.results)
+                    toast.success("Filters applied successfully")
+                }).catch((err) => {
+                    console.log("🚀 ~ file: FranchiseeVendors.jsx:49 ~ awaitaxios.get ~ err:", err)
+                })
+            } catch (err) {
+                console.log("🚀 ~ file: FranchiseeVendors.jsx:52 ~ onSubmit ~ err:", err)
+            }
         } else {
             toast.warn("No Selected Value !")
         }
@@ -154,7 +162,7 @@ function FranchiseeVendors() {
                         <div className="">
                             <input
                                 type="text"
-                                placeholder='Search by name'
+                                placeholder='Search By Name'
                                 autoComplete='off'
                                 className={`${inputClass} !bg-slate-100`}
                                 {...register('name')}
@@ -163,40 +171,13 @@ function FranchiseeVendors() {
                         <div className="">
                             <input
                                 type="text"
-                                placeholder='Search by email'
+                                placeholder='Search By MSB Code'
                                 autoComplete='off'
                                 className={`${inputClass} !bg-slate-100`}
-                                {...register('email')}
+                                {...register('msbcode')}
                             />
                         </div>
-                        <div className="">
-                            <select
-                                name="City"
-                                className={`${inputClass} !bg-slate-100`}
-                                {...register("role")}
-                            >
-                                <option value="" >
-                                    Select by Role
-                                </option>
-                                <option value="user">User</option>
-                                <option value="admin">Admin</option>
-                                <option value="provider">Provider</option>
-                            </select>
-                        </div>
-                        <div className="">
-                            <select
-                                name="City"
-                                className={`${inputClass} !bg-slate-100`}
-                                {...register("city")}
-                            >
-                                <option value="" >
-                                    Select by city name
-                                </option>
-                                <option value="Mumbai">Mumbai</option>
-                                <option value="Bangalore">Bangalore</option>
-                                <option value="Delhi">Delhi</option>
-                            </select>
-                        </div>
+
                     </div>
                     <div className="flex items-center gap-x-2">
                         <button type='submit' className={`${formBtn1} w-full text-center`}>Filter</button>

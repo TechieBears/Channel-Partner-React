@@ -45,6 +45,7 @@ import Coupon from '../src/pages/Admin/Coupon/Coupon';
 import FoodDetails from '../src/pages/Admin/Menu/AdminProduct/FoodDetails';
 import { PreLoaders } from '../src/components/Loader/PreLoaders';
 import RestaurantRegister from './../src/pages/Restaurants/ViewRestaurant/RestaurantRegister';
+import { Wallet } from "../src/pages/Wallet/Wallet";
 
 
 
@@ -70,7 +71,7 @@ const ProjectRoutes = () => {
             {login ?
                 <>
                     {loading ?
-                        <PreLoaders />:
+                        <PreLoaders /> :
                         <Sidebar>
                             <Routes>
                                 {/* ============ Admin Routes ============ */}
@@ -102,6 +103,7 @@ const ProjectRoutes = () => {
                                         <Route path="/reports" element={<Reports />} />
                                         <Route path="/subadmin" element={<SubAdmin />} />
                                         <Route path="/subadmin/subadmin-detail/:id" element={<SubAdminDetail />} />
+                                        <Route path='/wallet' element={<Wallet />} />
                                         <Route path="/settings" element={<Settings />} />
                                     </> :
                                     user?.role == 'seller' ?
@@ -115,6 +117,8 @@ const ProjectRoutes = () => {
                                             <Route path='/product-list' element={<VendorProduct />} />
                                             <Route path='/food-list/food-details/:id' element={<FoodDetails />} />
                                             <Route path='/complaints' element={<Complaints />} />
+                                            <Route path='/wallet' element={<Wallet />} />
+
                                         </> :
                                         user?.role == 'franchise' ? <>
                                             <Route path='/admin' element={<FranchiseeDashboard />} />
@@ -129,10 +133,14 @@ const ProjectRoutes = () => {
                                             <Route path='/resturants/restaurant-detail/:id' element={<RestaurantDetail />} />
                                             <Route path='/delivery' element={<DeliveryBoy />} />
                                             <Route path="/drivers/driver-detail/:id" element={<DriverDetail />} />
+                                            <Route path='/wallet' element={<Wallet />} />
+
                                         </> :
                                             user?.role == 'restaurant' ?
                                                 <>
                                                     <Route path='/' element={<VendorDashbaord />} />
+                                                    <Route path='/wallet' element={<Wallet />} />
+
                                                 </> : ''}
                             </Routes>
                         </Sidebar>
