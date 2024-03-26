@@ -6,12 +6,12 @@ export const environment = {
     // ---------------- Staging Server --------------------------------
 
     //================== DO NOT REMOVE ================
-    baseUrl: 'https://c1ec-202-177-251-218.ngrok-free.app/',
-    webSocketUrl: `wss://c1ec-202-177-251-218.ngrok-free.app/ws/socket/`
+    // baseUrl: 'https://c1ec-202-177-251-218.ngrok-free.app/',
+    // webSocketUrl: `wss://c1ec-202-177-251-218.ngrok-free.app/ws/socket/`
 
     // --------------------Live Server Api URL--------------------
-    // baseUrl: 'https://cpapi.techiebears.com/',
-    // webSocketUrl: `wss://cpapi.techiebears.com/ws/socket/`
+    baseUrl: 'https://cpapi.techiebears.com/',
+    webSocketUrl: `wss://cpapi.techiebears.com/ws/socket/`
 }
 
 // ====================== AWS S3 Image/File Upload =========================
