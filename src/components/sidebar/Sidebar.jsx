@@ -2,7 +2,7 @@ import { DirectLeft } from 'iconsax-react';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { getFranchRestaurant, getRestarant, startSession } from '../../api';
+import { getFranchRestaurant, getRestarant, getSingleShop, startSession } from '../../api';
 import logoImg from '../../assets/logo_white.png';
 import { environment } from '../../env';
 import { setSessionStarted } from '../../redux/Slices/SessionSlice';

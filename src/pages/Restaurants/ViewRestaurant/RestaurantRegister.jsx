@@ -1,9 +1,8 @@
+import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { getSingleRestaurant } from '../../../api'
-import SimpleGallery from '../../../components/Gallary/SimpleGallery'
 import DashboardForm from '../../../components/Modals/DashboardModals/DashboardForm'
-import moment from 'moment'
 
 export default function RestaurantRegister() {
     const [data, setData] = useState();

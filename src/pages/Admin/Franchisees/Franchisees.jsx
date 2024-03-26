@@ -1,22 +1,20 @@
-import React, { useState, useEffect } from 'react'
-import { Eye } from 'iconsax-react';
-import Table from '../../../components/table/Table';
-import { Link } from 'react-router-dom';
-import Switch from 'react-js-switch'
-import AddFranchisee from '../../../components/Modals/Franchisee/AddFranchiseForm';
-import AddFranchiseForm from '../../../components/Modals/Franchisee/AddFranchiseForm';
-import { useDispatch, useSelector } from "react-redux";
-import { GetFranchisee, verifyFranchise } from "../../../api";
-import { setFranchise } from "../../../redux/Slices/masterSlice";
 import axios from 'axios';
-import { useForm, Controller } from 'react-hook-form';
-import userImg from '../../../assets/user.jpg';
-import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
-import { toast } from 'react-toastify';
-import { environment } from '../../../env';
-import Select from "react-select";
+import { Eye } from 'iconsax-react';
 import _ from 'lodash';
-import AsyncSelect from 'react-select/async';
+import React, { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import Switch from 'react-js-switch';
+import { useDispatch } from "react-redux";
+import { Link } from 'react-router-dom';
+import Select from "react-select";
+import { toast } from 'react-toastify';
+import { GetFranchisee, verifyFranchise } from "../../../api";
+import userImg from '../../../assets/user.jpg';
+import { default as AddFranchiseForm, default as AddFranchisee } from '../../../components/Modals/Franchisee/AddFranchiseForm';
+import Table from '../../../components/table/Table';
+import { environment } from '../../../env';
+import { setFranchise } from "../../../redux/Slices/masterSlice";
+import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
 
 
 function Franchisees() {
@@ -235,9 +233,9 @@ function Franchisees() {
                     <div className="">
                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>  Franchisee Details</h1>
                     </div>
-                    <AddFranchisee title='Add Franchisee' FranchiseeDetails={FranchiseeDetails} emails={emails}/>
+                    <AddFranchisee title='Add Franchisee' FranchiseeDetails={FranchiseeDetails} emails={emails} />
                 </div>
-                <Table data={franchiseData} columns={columns}  isValid={true}/>
+                <Table data={franchiseData} columns={columns} isValid={true} />
             </div>
         </>
     )

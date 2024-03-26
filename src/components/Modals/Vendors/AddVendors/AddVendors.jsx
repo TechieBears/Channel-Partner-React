@@ -58,7 +58,7 @@ export default function AddVendors(props) {
         }
     };
     // ============================= form submiting ======================================
-    const onSubmit = async (data) => {        
+    const onSubmit = async (data) => {
         const shopStartTime = moment(data?.shop_start_time, 'HH:mm').format('hh:mm A');
         const shopEndTime = moment(data?.shop_end_time, 'HH:mm').format('hh:mm A');
         data.shop_start_time = shopStartTime;
@@ -108,7 +108,7 @@ export default function AddVendors(props) {
                 data.pan_url = ''
             }
         }
-        else {  
+        else {
             if (data?.bank_passbook != props?.data?.bank_passbook) {
                 await ImageUpload(data?.bank_passbook[0], "vendor", "BankPassbook", data?.first_name)
                 data.bank_passbook = `${vendorlink}${data?.first_name}_BankPassbook_${data?.bank_passbook[0].name}`
@@ -555,7 +555,7 @@ export default function AddVendors(props) {
                                                         )}
                                                     </div>
 
-                                                    {LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise' &&
+                                                    {(LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise') &&
                                                         <div className="">
                                                             <label className={labelClass}>Insta Commission (%)*</label>
                                                             <input
@@ -596,7 +596,7 @@ export default function AddVendors(props) {
                                                                     multiple
                                                                     accept='image/jpeg,image/jpg,image/png,application/pdf'
                                                                     placeholder='Upload Images...'
-                                                                    {...register("pan_url", {required: props.button == 'edit' ? false : true  })} />
+                                                                    {...register("pan_url", { required: props.button == 'edit' ? false : true })} />
                                                             </div>
                                                         </div>
                                                         {props?.button == 'edit' && props?.data.pan_url != '' && props?.data.pan_url != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
@@ -604,7 +604,7 @@ export default function AddVendors(props) {
                                                         </label>}
                                                         {/* {(errors.pan_card || errors.pan_url) && <Error title='PAN Card Number & Image is required' />} */}
                                                         {(errors.pan_card) && <Error title='PAN Card Number & Image is required' />}
-                                                        {(errors.pan_url && !errors.pan_card ) && <Error title='PAN Card Image is required' />}                                                        
+                                                        {(errors.pan_url && !errors.pan_card) && <Error title='PAN Card Image is required' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
@@ -636,7 +636,7 @@ export default function AddVendors(props) {
                                                         </label>}
                                                         {/* {(errors?.adhar_card || errors?.adhar_url) && <Error title={errors?.adhar_card?.message ? errors?.adhar_card?.message : 'Aadhar Card Number & Image is required'} />} */}
                                                         {(errors.adhar_card) && <Error title='Aadhar Card Number & Image is required' />}
-                                                        {(errors.adhar_url && !errors.adhar_card ) && <Error title='Aadhar Card Image is required' />}    
+                                                        {(errors.adhar_url && !errors.adhar_card) && <Error title='Aadhar Card Image is required' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>

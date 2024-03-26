@@ -1,39 +1,101 @@
 import { ArrowDown2, ArrowUp2, User } from 'iconsax-react'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
+import { updateOrder } from '../../../api'
 import { environment } from '../../../env'
+import { removeOrder } from '../../../redux/Slices/orderSlice'
 import { formBtn2 } from '../../../utils/CustomClass'
 
 function OrdersCard({ data }) {
     const [status, setstatus] = useState('pending')
     const [details, setDetails] = useState(false)
+    const dispatch = useDispatch();
     const user = useSelector(state => state?.user?.loggedUserDetails)
+    const vendorDetails = useSelector(state => state?.user?.vendorDetails);
     // =============== Orders Web Socket =============================
-    const wsFunction = (status) => {
-        const WebSocketUrl = `${environment.webSocketUrl}user_to_seller/${user?.msb_code}${data?.orderId != null ? data?.orderId : ''}`;
+    const userTosellerws = (status) => {
+        if (data?.orderId != null || data?.orderId != '') {
+            const WebSocketUrl = `${environment.webSocketUrl}user_to_seller/${user?.msb_code}${data?.orderId}`;
+            const ws = new WebSocket(WebSocketUrl);
+
+            ws.onopen = () => {
+                ws.send(JSON.stringify({ orderdetails: data?.orderId, orderstatus: status, orderfor: user?.vendor_type == 'restaurant' ? 'restaurant' : 'vendor', messagefor: 'user' }));
+            };
+
+            ws.onclose = (event) => {
+                console.log("WebSocket connection closed:", event);
+            };
+
+            ws.onerror = (error) => {
+                console.error("WebSocket encountered error:", error);
+            };
+        }
+    }
+
+    const restaurantToDriverws = () => {
+        const WebSocketUrl = `${environment.webSocketUrl}seller_to_deliveryboy/${user?.franchise_msbcode}${user?.pincode}`;
         const ws = new WebSocket(WebSocketUrl);
 
         ws.onopen = () => {
-            ws.send(JSON.stringify({ orderdetails: data?.orderId, orderstatus: status, orderfor: user?.vendor_type == 'restaurant' ? 'restaurant' : 'vendor', messagefor: 'user' }));
+            ws.send(JSON.stringify({
+                pickup_location: {
+                    latitude: vendorDetails?.latitude,
+                    longitude: vendorDetails?.longitude,
+                    shop_address: vendorDetails?.shop_address,
+                    shop_name: vendorDetails?.shop_name,
+                },
+                orderId: data?.orderId,
+                order_created_at: data?.orderDetails?.order_created_at,
+                order_from: user?.vendor_type == 'restaurant' ? user?.vendor_type : 'vendor',
+            }))
         };
 
         ws.onclose = (event) => {
-            console.log("WebSocket connection closed:", event);
-        };
+            console.log("WebSocket connection closed: seller to deliveryboy", event);
+        }
 
         ws.onerror = (error) => {
             console.error("WebSocket encountered error:", error);
         };
     }
 
+    // ================== update order API =================
+    const orderUpdate = (status) => {
+        const orderData = {
+            orderstatus: status,
+            order_id: data?.orderId,
+            vendor_id: user?.sellerId,
+            order_for: user?.vendor_type == 'restaurant' ? 'restaurant' : 'vendor'
+        }
+        try {
+            updateOrder(orderData)
+        } catch (error) {
+            console.log('error', error)
+        }
+    }
+
     //===================== accept order api web socker =================
     const changeStatus = ({ status }) => {
         console.log("🚀 ~ file: Orders.jsx:29 ~ changeStatus ~ status:", status)
         setstatus(status)
-        wsFunction(status);
+        userTosellerws(status);
+        if (status == 'accepted') {
+            restaurantToDriverws();
+        }
+        orderUpdate(status);
         toast.success(`Order Statsus changes to ${status}`)
+
+        // ============== remove from redux ===============
+        if (status == 'done') {
+            const updatedData = {
+                orderId: data?.orderId,
+                orderstatus: status,
+            }
+            dispatch(removeOrder(updatedData))
+        }
+
     }
 
     const autoOrder = () => {
@@ -78,8 +140,8 @@ function OrdersCard({ data }) {
                     </div>
                     <div className="flex items-center justify-center">
                         <div className='flex items-center justify-center gap-2'>
-                            <div className={`${status === 'pending' ? 'bg-red-500' : status === 'accepted' ? 'bg-red-500' : status === 'prepared' ? 'bg-red-500' : 'bg-green-500'} p-2 font-sans rounded-full w-1 h-1/4`} />
-                            <p className={`font-semibold font-sans capitalize ${status === 'pending' ? 'text-red-500' : status === 'accepted' ? 'text-yelow-500' : status === 'prepared' ? 'text-yelow-500' : 'text-green-500'}`}>{status}</p>
+                            <div className={`${status === 'pending' ? 'bg-red-500' : status === 'accepted' ? 'bg-green-500' : status === 'prepared' ? 'bg-yellow-500' : 'bg-green-500'} p-2 font-sans rounded-full w-1 h-1/4`} />
+                            <p className={`font-semibold font-sans capitalize ${status === 'pending' ? 'text-red-500' : status === 'accepted' ? 'text-green-500' : status === 'prepared' ? 'text-yellow-500' : 'text-green-500'}`}>{status}</p>
                         </div>
                     </div>
                     <div className="flex items-center justify-center gap-2">
@@ -92,13 +154,10 @@ function OrdersCard({ data }) {
                             </> : null
                         }
                         {
-                            status === 'accepted' && <button className="bg-gray-400 py-2 px-4 rounded-lg font-medium text-black" onClick={() => changeStatus({ status: 'prepared' })}>Mark as Prepared</button>
+                            status === 'accepted' && <button className="bg-green-500 py-2 px-4 rounded-lg font-medium text-white hover:bg-green-700" onClick={() => changeStatus({ status: 'prepared' })}>Mark as Prepared</button>
                         }
                         {
-                            status === 'prepared' && <button className="bg-gray-400 py-2 px-4 rounded-lg font-medium text-black" onClick={() => changeStatus({ status: 'picked' })}>Mark as Picked</button>
-                        }
-                        {
-                            status === 'picked' && <button className="bg-gray-400 py-2 px-4 rounded-lg font-medium text-black" onClick={() => changeStatus({ status: 'pending' })}>Done</button>
+                            status === 'prepared' && <button className="bg-yellow-400 py-2 px-4 rounded-lg font-medium text-white hover:bg-yellow-700" onClick={() => changeStatus({ status: 'done' })}>Mark as Picked</button>
                         }
                     </div>
                     <div className="flex items-center justify-center">

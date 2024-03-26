@@ -4,7 +4,8 @@ const initialState = {
     isLogged: false,
     roleIs: undefined,
     loggedUserDetails: undefined,
-    FranchiseeDetails: []
+    FranchiseeDetails: [],
+    vendorDetails: undefined
 }
 const loginSlice = createSlice({
     name: 'login',
@@ -22,12 +23,12 @@ const loginSlice = createSlice({
         setFranchiseeDetails: (state, action) => {
             state.FranchiseeDetails = action.payload
         },
-        setConfigurations: (state, action) => {
-            state.configureDetails = action.payload
+        setVendorDetails: (state, action) => {
+            state.vendorDetails = action.payload
         }
     }
 })
 
-export const { setLoggedUser, setRoleIs, setLoggedUserDetails, setFranchiseeDetails, setConfigurations } = loginSlice.actions
+export const { setLoggedUser, setRoleIs, setLoggedUserDetails, setFranchiseeDetails, setConfigurations, setVendorDetails } = loginSlice.actions
 
 export default loginSlice.reducer

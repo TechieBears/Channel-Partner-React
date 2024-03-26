@@ -4,17 +4,16 @@ import {
     ShoppingCart,
     UserRemove
 } from "iconsax-react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 // import { deleteStorage, getPartnerStorage, getStorages } from "../../../api";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-import AsyncSelect from "react-select/async";
 import { toast } from "react-toastify";
 // import Orders from "../../../components/Cards/Orders/Orders";
 import OrdersCard from "../../../components/Cards/Orders/OrdersCard";
+import DashboardForm from "../../../components/Modals/DashboardModals/DashboardForm";
 import DeleteModal from "../../../components/Modals/DeleteModal/DeleteModal";
 import { formBtn1, formBtn2, inputClass } from "../../../utils/CustomClass";
-import DashboardForm from "../../../components/Modals/DashboardModals/DashboardForm"
 
 
 
@@ -22,8 +21,6 @@ import DashboardForm from "../../../components/Modals/DashboardModals/DashboardF
 const Dashboard = () => {
     const [modelOpen, setAddCouponOpen] = useState(true);
     const user = useSelector((state) => state.user.loggedUserDetails);
-    // const storages = useSelector((state) => state?.storage?.list);
-    const cityNames = useSelector((state) => state?.master?.city);
     const [open, setOpen] = React.useState(false);
     const [delId, setDelId] = React.useState(0);
     const orders = useSelector(state => state?.orders?.newOrders);
@@ -38,26 +35,6 @@ const Dashboard = () => {
     // ======================== Data submit ===================================
     const onSubmit = async (data) => {
         console.log('data', data);
-    };
-
-
-    // ================================ Dropdown List =========================
-
-    const filterOptions = (options, inputValue) => {
-        return options.filter((i) =>
-            i.label.toLowerCase().includes(inputValue.toLowerCase())
-        );
-    };
-
-    const loadOptions = (_, callback) => {
-        // const uniqueNames = new Set();
-        // const uniqueProducts = storages
-        //     ?.filter(
-        //         (res) =>
-        //             res.name && !uniqueNames.has(res.name) && uniqueNames.add(res.name)
-        //     )
-        //     .map((res) => ({ label: res.name, value: res.name }));
-        // callback(uniqueProducts || []);
     };
 
     // ================================ filter reset ============================
@@ -83,7 +60,7 @@ const Dashboard = () => {
             }
         });
     };
-
+    useEffect(() => { }, [orders])
     return (
         <>
             {user?.is_registered == false && user?.vendor_type == 'restaurant' ? <DashboardForm dashBoard={false} isOpen={modelOpen} /> : ''}
@@ -154,10 +131,16 @@ const Dashboard = () => {
                     >
                         <div className="grid w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-y-3 gap-x-2 ">
                             <div className="">
-                                <input className={`${inputClass} !bg-slate-100`}
+                                <select
+                                    className={`${inputClass} !bg-slate-100`}
                                     {...register('order_id')}
-                                    placeholder="Search By Status"
-                                />
+                                >
+                                    <option value=''>Select Status</option>
+                                    <option value='pending'>Pending</option>
+                                    <option value='accepted'>Accepted</option>
+                                    <option value='rejected'>Rejected</option>
+                                    <option value='prepering'>Prepering</option>
+                                </select>
                             </div>
                             <div className="">
                                 <input className={`${inputClass} !bg-slate-100`}
@@ -189,15 +172,15 @@ const Dashboard = () => {
                         <p className="text-lg font-semibold">Current Orders</p>
                         <form className="grid grid-cols-3 gap-4 ">
                             <input
-                                className={`${inputClass} !bg-slate-100`}
+                                className={`${inputClass} !bg-slate-100 w-full`}
                                 placeholder="Enter OTP"
                             />
                             <button
                                 type="button"
-                                className={formBtn1}
+                                className={`${formBtn1} ml-10 w-fit`}
                             >Submit</button>
                             <button
-                                className={formBtn2}
+                                className={`${formBtn2} w-fit`}
                                 type="button"
                             >Clear</button>
                         </form>
