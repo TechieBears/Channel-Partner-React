@@ -10,6 +10,7 @@ import ImageGallery from '../../../components/Modals/LightBox/ImageGallery'
 function UserView() {
     const location = useLocation();
     const data = location.state;
+    console.log("🚀 ~ file: UserView.jsx:13 ~ UserView ~ data:", data)
     const [selectedTab, setSelectedTab] = useState(0);
 
     // ==================== images array =======================
@@ -125,6 +126,9 @@ function UserView() {
                             <ImageGallery images={images} />
                         </TabPanel>
                     </Tabs>
+                </div>
+                <div className='py-4 mx-5 my-2 space-y-3 bg-white rounded-xl'>
+
                 </div>
             </div>
         </>

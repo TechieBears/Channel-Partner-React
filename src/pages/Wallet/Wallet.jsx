@@ -4,6 +4,8 @@ import { formBtn1, formBtn2, inputClass } from '../../utils/CustomClass';
 import Table from '../../components/table/Table';
 import { Link } from 'react-router-dom';
 import { Eye } from 'iconsax-react';
+import { environment } from '../../env';
+import axios from 'axios';
 
 
 export const Wallet = () => {
@@ -44,6 +46,23 @@ export const Wallet = () => {
         { field: "transaction_status", header: "Status", style: true, sortable: true },
         { field: "action", header: "Action", body: UserAction, style: true, sortable: true },
     ]
+
+    const getWalletDetails = async() => {
+        const url = `${environment.baseUrl}app/list_wallet_transaction`;
+        await axios.get(url).then((res) => {
+            console.log("🚀 ~ file: Wallet.jsx:53 ~ awaitaxios.get ~ res:", res)
+            
+        }).catch((err) => {
+            console.log("🚀 ~ file: Wallet.jsx:56 ~ awaitaxios.get ~ err:", err)
+            
+        }) 
+
+    }
+
+    useEffect(()=>{
+        getWalletDetails()
+
+    },[])
 
     return (
 

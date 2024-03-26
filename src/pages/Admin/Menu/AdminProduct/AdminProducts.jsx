@@ -224,19 +224,21 @@ const AdminProduct = (props) => {
 
     const onSubmit = async (data) => {
         console.log("🚀 ~ file: AdminProducts.jsx:226 ~ onSubmit ~ data:", data)
-        const newCategory = data?.product_category?.map((data)=>  data.value)
-        console.log("🚀 ~ file: AdminProducts.jsx:228 ~ onSubmit ~ newcategory:", newCategory.toString())
-        const newSubcategory = data?.product_subcategory?.map((data)=>  data.value)
-        console.log("🚀 ~ file: AdminProducts.jsx:230 ~ onSubmit ~ newSubcategory:", newSubcategory.toString())
-
+        if (data?.product_category?.length > 0) {
+            const newCategory = data?.product_category?.map((data) => data.value)
+            console.log("🚀 ~ file: AdminProducts.jsx:228 ~ onSubmit ~ newcategory:", newCategory.toString())
+        }
+        if (data?.product_subcategory?.length > 0) {
+            const newSubcategory = data?.product_subcategory?.map((data) => data.value)
+            console.log("🚀 ~ file: AdminProducts.jsx:230 ~ onSubmit ~ newSubcategory:", newSubcategory.toString())
+        }
         const { product_name, product_msbcode, franchise_msbcode, vendor_msbcode, product_category, product_subcategory } = data
         if (product_name != '' || product_msbcode != '' || franchise_msbcode != '' || franchise_msbcode != undefined || vendor_msbcode != '' || vendor_msbcode != undefined || product_category != '' || product_category != undefined || product_subcategory != '' || product_subcategory != undefined) {
             try {
-
                 let restauranturl = `${environment.baseUrl}app/all_fooditems?product_name=${product_name}&product_msbcode=${product_msbcode}&franchise_msbcode=${franchise_msbcode?.value ? franchise_msbcode?.value : ''}&vendor_msbcode=${vendor_msbcode?.value ? vendor_msbcode?.value : ''}&product_category=${product_category?.value ? product_category?.value : ''}&product_subcategory=${product_subcategory?.value ? product_subcategory?.value : ''}`
-
                 let url = `${environment.baseUrl}app/all_products?product_name=${product_name}&product_msbcode=${product_msbcode}&franchise_msbcode=${franchise_msbcode?.value ? franchise_msbcode?.value : ''}&vendor_msbcode=${vendor_msbcode?.value ? vendor_msbcode?.value : ''}&product_category=${product_category?.value ? product_category?.value : ''}&product_subcategory=${product_subcategory?.value ? product_subcategory?.value : ''}`
                 await axios.get((props?.isrestaurant === false || props?.isrestaurant === undefined) ? url : restauranturl).then((res) => {
+                    console.log("🚀 ~ file: AdminProducts.jsx:241 ~ awaitaxios.get ~ res:", res)
                     setShopProducts(res?.data)
                     toast.success("Filters applied successfully")
                 }).catch((err) => {
@@ -583,7 +585,7 @@ const AdminProduct = (props) => {
                                         options={categoryOptions}
                                         className="text-gray-900 w-100"
                                         placeholder="Category"
-                                        isMulti
+                                        // isMulti
                                         onChange={onChange}
                                         inputRef={ref}
                                         maxMenuHeight={200}
@@ -609,7 +611,7 @@ const AdminProduct = (props) => {
                                         options={subcategoryOptions}
                                         className="text-gray-900 w-100"
                                         placeholder="SubCategory"
-                                        isMulti
+                                        // isMulti
                                         onChange={onChange}
                                         inputRef={ref}
                                         maxMenuHeight={200}
