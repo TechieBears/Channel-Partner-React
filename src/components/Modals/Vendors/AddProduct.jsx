@@ -16,6 +16,7 @@ import moment from "moment";
 
 
 const AddProduct = (props) => {
+    console.log('props = ', props)
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false)
     const [FinalPriceSeller, setFinalPriceSeller] = useState([]);
@@ -36,8 +37,8 @@ const AddProduct = (props) => {
         subCatField = props?.subCategory.filter(item => item?.category == CatField);
     }
     const closeBtn = () => {
+        reset();
         toggle();
-        reset()
         setChildData([])
         setopenGallery(false);
         setopenGalleryModal(false);
@@ -51,6 +52,28 @@ const AddProduct = (props) => {
         }
     };
 
+    // const [expiryOption, setExpiryOption] = useState('');
+
+    useEffect(() => {
+        if (props?.isTrue == true){
+            console.log('nnnnn')
+            if (props?.row?.product_shelflife.includes('-')) {
+                setCheckExpiry('selectdate');
+            } else {
+                setCheckExpiry('day');
+            }
+        }
+    }, [props?.isTrue]);
+
+
+    const selectExpiryOption = (e) => {
+        setCheckExpiry(e.target.value);
+        // if (e.target.value == 'selectdate') {
+        //     setCheckExpiry('selectdate');
+        // } else {
+        //     setCheckExpiry('day');
+        // } 
+    }
 
     // ========== Date picker =================================
     const disabledDate = current => {
@@ -58,11 +81,12 @@ const AddProduct = (props) => {
     };
     
     const rangeHandler = (e) => {
-        setexpireValue(e.format("YYYY-MM-DD"))
+        setexpireValue(e?.format("YYYY-MM-DD"))
     }
 
     const checkexpiryinput = (e) => {
         setexpireValue(e.target.value)
+        console.log('expireValue = ', expireValue)
     }
 
     const openMediaModal = () => {
@@ -95,14 +119,6 @@ const AddProduct = (props) => {
             alert('Please upload an image with dimensions 200x200.');
         }
     };
-
-    const selectExpiryOption = (e) => {
-        if (e.target.value == 'selectdate') {
-            setCheckExpiry('selectdate');
-        } else {
-            setCheckExpiry('other');
-        }
-    }
 
     const calculateRevenueSeller = watch('product_actual_price')
 
@@ -365,9 +381,17 @@ const AddProduct = (props) => {
                 'product_image_2': props?.row?.product_image_2,
                 'product_image_3': props?.row?.product_image_3,
                 'product_image_4': props?.row?.product_image_4,
-                'product_image_5': props?.row?.product_image_5
-
+                'product_image_5': props?.row?.product_image_5,
+                'indays': props?.row?.product_shelflife.includes('-') ? '' : props?.row?.product_shelflife
             })
+            if (props?.row?.product_shelflife?.includes('-')) {
+                console.log('select date is called')
+                setValue('product_shelflife', 'selectdate');
+                setCheckExpiry('selectdate');
+            } else {
+                setValue('product_shelflife', 'day');
+                setCheckExpiry('day'); 
+            }
         }
         if (LoggedUserDetails?.role == 'admin') {
             reset({
@@ -657,28 +681,30 @@ const AddProduct = (props) => {
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
-                                                            Expiry Date*
+                                                            Expiry Option*
                                                         </label>
                                                         <select
                                                             className={inputClass}
                                                             disabled={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
                                                             {...register('product_shelflife', { required: true })}
                                                             onChange={selectExpiryOption}
+                                                            value={checkExpiry}
                                                         >
                                                             <option value=''>Select</option>
                                                             <option value="selectdate">Select Expiry Date</option>
-                                                            <option value="other">Mention In days</option>
+                                                            <option value="day">Mention In days</option>
                                                         </select>
                                                         {errors.product_shelflife && <Error title='Shelf Life is Required*' />}
                                                     </div>
-                                                    {checkExpiry == 'other' && <div>
+                                                    {checkExpiry == 'day' && <div>
                                                         <label className={labelClass}>
                                                             Mention In days*
                                                         </label>
                                                          <input
                                                             type="number"
+                                                            {...register("indays")}
                                                             readOnly={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
-                                                            placeholder='10'
+                                                            placeholder='25'
                                                             className={inputClass}
                                                             onChange={checkexpiryinput}
                                                         />
@@ -688,7 +714,7 @@ const AddProduct = (props) => {
                                                             Select Expiry Date*
                                                         </label>
                                                         <Space>
-                                                            <DatePicker disabledDate={disabledDate} onChange={rangeHandler} />
+                                                            <DatePicker value={props?.row?.product_shelflife.includes('-') ? moment(props?.row?.product_shelflife, 'YYYY-MM-DD') : expireValue ? moment(expireValue, 'YYYY-MM-DD') : null} disabledDate={disabledDate} onChange={rangeHandler} />
                                                         </Space>
                                                     </div>}
                                                     <div className="">
