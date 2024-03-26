@@ -14,36 +14,36 @@ import SidebarLink from './SidebarLink';
 
 const Sidebar = ({ children }) => {
     const user = useSelector(state => state?.user?.loggedUserDetails)
-    const WebSocketUrl = `${environment.webSocketUrl}user_to_seller/${user?.msb_code}`;
-    const ws = new WebSocket(WebSocketUrl)
+    // const WebSocketUrl = `${environment.webSocketUrl}user_to_seller/${user?.msb_code}`;
+    // const ws = new WebSocket(WebSocketUrl)
     const [isActiveLink, setIsActiveLink] = useState(false);
     const [mobileSidebar, setMobileSidebar] = useState(false);
     const dispatch = useDispatch()
     const sessionStatus = useSelector(state => state.session.isSessionStarted)
     const timeoutId = useRef(null);
     const logoutTimeoutId = useRef(null);
-    useEffect(() => {
-        console.log('use Effect ran for web socket')
-        if (user?.role == 'seller') {
-            console.log('inside iffffffffff')
-            // ws.open = () => {
-            //     console.log('WebSocket Client Connected');
-            // };
-            // ws.onerror = (e) => {
-            //     console.log(e.message);
-            // };
-            ws.onmessage = (e) => {
-                const data = JSON.parse(e.data);
-                console.log('data=====================', data)
-                window.alert(data?.orderId)
-                dispatch(setOrders(data))
-            };
-        }
-        else {
-            ws.close();
-        }
+    // useEffect(() => {
+    //     console.log('use Effect ran for web socket')
+    //     if (user?.role == 'seller') {
+    //         console.log('inside iffffffffff')
+    //         // ws.open = () => {
+    //         //     console.log('WebSocket Client Connected');
+    //         // };
+    //         // ws.onerror = (e) => {
+    //         //     console.log(e.message);
+    //         // };
+    //         ws.onmessage = (e) => {
+    //             const data = JSON.parse(e.data);
+    //             console.log('data=====================', data)
+    //             window.alert(data?.orderId)
+    //             dispatch(setOrders(data))
+    //         };
+    //     }
+    //     else {
+    //         ws.close();
+    //     }
 
-    }, [ws])
+    // }, [ws])
 
     useEffect(() => {
         if (user?.role == 'seller') {
