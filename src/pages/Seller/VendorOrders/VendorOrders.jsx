@@ -202,10 +202,16 @@ const VendorOrders = () => {
                 >
                     <div className="grid w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-y-3 gap-x-2 ">
                         <div className="">
-                            <input className={`${inputClass} !bg-slate-100`}
+                            <select
+                                className={`${inputClass} !bg-slate-100`}
                                 {...register('order_id')}
-                                placeholder="Search By Status"
-                            />
+                            >
+                                <option value='' className="text-slate-100">Select Status</option>
+                                <option value='pending'>Pending</option>
+                                <option value='accepted'>Accepted</option>
+                                <option value='rejected'>Rejected</option>
+                                <option value='prepering'>Prepering</option>
+                            </select>
                         </div>
                         <div className="">
                             <input className={`${inputClass} !bg-slate-100`}
