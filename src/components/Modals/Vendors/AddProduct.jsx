@@ -691,7 +691,7 @@ const AddProduct = (props) => {
                                                             // value={checkExpiry}
                                                         >
                                                             <option value=''>Select</option>
-                                                            <option value="selectdate">Select Expiry Date</option>
+                                                            <option value="selectdate">Expiry Date</option>
                                                             <option value="day">Mention In days</option>
                                                         </select>
                                                         {errors.product_shelflife && <Error title='Shelf Life is Required*' />}
