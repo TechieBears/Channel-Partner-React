@@ -272,19 +272,19 @@ const VendorOrders = () => {
                     <TabPanel className='mt-5 bg-white'>
                         {/* ===================== New Order Section ===================== */}
                         <div className="space-y-2 p-4">
-                            <div className="flex items-center justify-between">
+                            <div className="flex items-center justify-between pb-1">
                                 <p className="text-lg font-semibold">Current Orders</p>
-                                <form className="grid grid-cols-3 gap-4 ">
+                                <form className="flex gap-4">
                                     <input
-                                        className={`${inputClass} !bg-slate-100`}
+                                        className={`${inputClass} !bg-slate-100 w-fit`}
                                         placeholder="Enter OTP"
                                     />
                                     <button
                                         type='button'
-                                        className={formBtn1}
+                                        className={`${formBtn1} w-fit text-center`}
                                     >Submit</button>
                                     <button
-                                        className={formBtn2}
+                                        className={`${formBtn2} w-fit text-center`}
                                         type='button'
                                     >Clear</button>
                                 </form>

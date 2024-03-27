@@ -168,19 +168,19 @@ const Dashboard = () => {
                 </div>
                 {/* ===================== New Order Section ===================== */}
                 <div className="p-4 space-y-2 bg-white m-4">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between pb-1">
                         <p className="text-lg font-semibold">Current Orders</p>
-                        <form className="grid grid-cols-3 gap-4 ">
+                        <form className="flex gap-4">
                             <input
-                                className={`${inputClass} !bg-slate-100 w-full`}
+                                className={`${inputClass} !bg-slate-100 w-fit`}
                                 placeholder="Enter OTP"
                             />
                             <button
                                 type="button"
-                                className={`${formBtn1} ml-10 w-fit`}
+                                className={`${formBtn1} w-fit text-center`}
                             >Submit</button>
                             <button
-                                className={`${formBtn2} w-fit`}
+                                className={`${formBtn2} w-fit text-center`}
                                 type="button"
                             >Clear</button>
                         </form>
