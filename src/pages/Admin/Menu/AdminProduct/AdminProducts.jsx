@@ -15,11 +15,12 @@ import { formBtn1, formBtn2, inputClass } from '../../../../utils/CustomClass';
 import axios from 'axios';
 import { environment } from '../../../../env';
 import { setCategoryCount, setProductCount, setSubCategoryCount } from '../../../../redux/Slices/masterSlice';
-
+import Excel from '../../../../../src/assets/ms-excel.svg';
 
 
 const AdminProduct = (props) => {
     const [shopProducts, setShopProducts] = useState([])
+    const [exceltrue, setExcelTrue] = useState(false)
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     const [franchiseOptions, setFranchiseOptions] = useState()
     const [vendorOptions, setVendorOptions] = useState()
@@ -42,6 +43,15 @@ const AdminProduct = (props) => {
         } catch (error) {
             console.log("🚀 ~ file: AdminProducts.jsx:39 ~ GetFranchiseeData ~ error:", error)
         }
+    }
+
+    const handleExportComplete = () => {
+        setExcelTrue(false); // Set exceltrue to false after export is complete
+    };
+
+    const excelbtnTrue = () => {
+        setExcelTrue(true);
+       console.log('exceltrue = ', exceltrue) 
     }
 
     const GetVendorData = () => {
@@ -644,12 +654,24 @@ const AdminProduct = (props) => {
                 </form>
             </div>
             <div className='p-4 m-4 bg-white sm:m-5 rounded-xl'>
-                <div className='grid items-center grid-cols-6'>
+                <div className='flex items-center justify-between '>
                     <h2 className='col-span-5 text-xl font-semibold'>{props?.isrestaurant ? "Food Items" : "Product List"}</h2>
+                    <div className='flex items-center'>
+                        <h5>Export</h5>
+                        <button
+                            type="button"
+                            icon="pi pi-file-excel"
+                            onClick={excelbtnTrue}
+                            className="mx-1 my-2 p-button-success"
+                            data-pr-tooltip="XLS"
+                        >
+                            <img src={Excel} alt="" />
+                        </button>
+                    </div>
                 </div>
                 <div className='mt-4'>
-                    {props?.isrestaurant ? <Table data={shopProducts} columns={FoodItemColumns} isValid={true} /> :
-                        <Table data={shopProducts} columns={LoggedUserDetails?.role == 'franchise' ? restaurantColumns : ProductColumns} isValid={true} />}
+                    {props?.isrestaurant ? <Table data={shopProducts} columns={FoodItemColumns} isValid={true} exceltrue={exceltrue} onExportComplete={handleExportComplete}/> :
+                        <Table data={shopProducts} columns={LoggedUserDetails?.role == 'franchise' ? restaurantColumns : ProductColumns} isValid={true} exceltrue={exceltrue} onExportComplete={handleExportComplete}/>}
                 </div>
             </div>
         </>

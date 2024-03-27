@@ -16,6 +16,8 @@ import { setCustomersData } from '../../../redux/Slices/userSlice';
 import DeleteModal from '../../../components/Modals/DeleteModal/DeleteModal';
 import _ from 'lodash';
 import Select from "react-select";
+import Excel from '../../../../src/assets/ms-excel.svg';
+
 
 function User() {
     const dispatch = useDispatch()
@@ -29,10 +31,20 @@ function User() {
     } = useForm();
     const [open, setOpen] = React.useState(false);
     const [delId, setDelId] = React.useState(0);
+    const [exceltrue, setExcelTrue] = useState(false)
+
 
     const [customerData, setCustomerData] = useState()
     const [pincodeOptions, setPincodeOptions] = useState()
 
+    const handleExportComplete = () => {
+        setExcelTrue(false); // Set exceltrue to false after export is complete
+    };
+
+    const excelbtnTrue = () => {
+        setExcelTrue(true);
+       console.log('exceltrue = ', exceltrue) 
+    }
 
 
     // =================== filter data ========================
@@ -254,7 +266,7 @@ function User() {
                                     <Select
                                         value={value}
                                         options={pincodeOptions}
-                                        className="w-100 text-gray-900"
+                                        className="text-gray-900 w-100"
                                         placeholder="Search By Pincode"
                                         onChange={onChange}
                                         inputRef={ref}
@@ -283,9 +295,21 @@ function User() {
                     <div className="">
                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>Registered Users</h1>
                     </div>
+                    <div className='flex items-center'>
+                        <h5>Export</h5>
+                        <button
+                            type="button"
+                            icon="pi pi-file-excel"
+                            onClick={excelbtnTrue}
+                            className="mx-1 my-2 p-button-success"
+                            data-pr-tooltip="XLS"
+                        >
+                            <img src={Excel} alt="" />
+                        </button>
+                    </div>
                     {/* <CreateUserForm title='Add User' /> */}
                 </div>
-                <Table data={customerData} columns={columns} />
+                <Table data={customerData} columns={columns} exceltrue={exceltrue} onExportComplete={handleExportComplete}/>
             </div>
         </>
     )

@@ -15,6 +15,8 @@ import Table from '../../../components/table/Table';
 import { environment } from '../../../env';
 import { setDeliveryList } from '../../../redux/Slices/deliverySlice';
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
+import Excel from '../../../../src/assets/ms-excel.svg';
+
 
 function Drivers() {
     const dispatch = useDispatch()
@@ -26,11 +28,22 @@ function Drivers() {
         reset
     } = useForm();
     const [open, setOpen] = React.useState(false);
+    const [exceltrue, setExcelTrue] = useState(false)
+
     const [delId, setDelId] = React.useState(0);
     const DeliveryList = useSelector((state) => state?.delivery?.deliveryList);
     const [deliveryBoyData, setDeliveryBoyData] = useState()
     const [pincodeOptions, setPincodeOptions] = useState()
     const [franchiseOptions, setFranchiseOptions] = useState()
+
+    const handleExportComplete = () => {
+        setExcelTrue(false); // Set exceltrue to false after export is complete
+    };
+
+    const excelbtnTrue = () => {
+        setExcelTrue(true);
+       console.log('exceltrue = ', exceltrue) 
+    }
 
 
     // =================== fetch all franchise data ========================
@@ -328,11 +341,23 @@ function Drivers() {
                     <div className="">
                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>Drivers</h1>
                     </div>
-                    <div className='flex gap-4'>
+                        <div className='flex items-center'>
                         <AddDriverFrom title='Add Driver' DeliveryBoyDetails={DeliveryBoyDetails} />
+                        <div className='flex items-center ms-3'>
+                            <h5>Export</h5>
+                            <button
+                                type="button"
+                                icon="pi pi-file-excel"
+                                onClick={excelbtnTrue}
+                                className="mx-1 my-2 p-button-success"
+                                data-pr-tooltip="XLS"
+                            >
+                                <img src={Excel} alt="" />
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <Table data={deliveryBoyData} columns={columns} />
+                <Table data={deliveryBoyData} columns={columns} exceltrue={exceltrue} onExportComplete={handleExportComplete}/>
             </div>
         </>
     )

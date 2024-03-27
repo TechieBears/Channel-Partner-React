@@ -15,10 +15,13 @@ import Table from '../../../components/table/Table';
 import { environment } from '../../../env';
 import { setFranchiseVendors } from "../../../redux/Slices/masterSlice";
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
+import Excel from '../../../../src/assets/ms-excel.svg';
+
 
 function Vendors() {
     const [Vendors, SetVendors] = useState();
     const [pincodeOptions, setPincodeOptions] = useState()
+    const [exceltrue, setExcelTrue] = useState(false)
     const [franchiseOptions, setFranchiseOptions] = useState()
     const { control, register, handleSubmit, formState: { errors }, reset } = useForm();
     const dispatch = useDispatch()
@@ -35,6 +38,15 @@ function Vendors() {
             console.log(error);
         }
     };
+
+    const handleExportComplete = () => {
+        setExcelTrue(false); // Set exceltrue to false after export is complete
+    };
+
+    const excelbtnTrue = () => {
+        setExcelTrue(true);
+       console.log('exceltrue = ', exceltrue) 
+    }
 
     const GetFranchiseeData = () => {
         try {
@@ -295,10 +307,24 @@ function Vendors() {
                     <div className="">
                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>Vendor Details</h1>
                     </div>
-                    <AddVendors title='Add Vendors' FranchiseeVendors={FranchiseeVendors} />
+                    <div className="flex items-center justify-end p-0 m-0 bg-white border-white export-button">
+                        <AddVendors title='Add Vendors' FranchiseeVendors={FranchiseeVendors} />
+                        <div className='flex items-center ms-4'>
+                            <h5>Export</h5>
+                            <button
+                                type="button"
+                                icon="pi pi-file-excel"
+                                onClick={excelbtnTrue}
+                                className="mx-1 my-2 p-button-success"
+                                data-pr-tooltip="XLS"
+                            >
+                                <img src={Excel} alt="" />
+                            </button>
+                        </div>
+                    </div>               
                 </div>
                 {
-                    <Table data={Vendors} columns={columns} isValid={true} />
+                    <Table data={Vendors} columns={columns} isValid={true} exceltrue={exceltrue} onExportComplete={handleExportComplete}/>
                 }
             </div>
             {/*====================== User Table ================================*/}

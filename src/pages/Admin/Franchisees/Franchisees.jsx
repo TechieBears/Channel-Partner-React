@@ -15,6 +15,8 @@ import Table from '../../../components/table/Table';
 import { environment } from '../../../env';
 import { setFranchise } from "../../../redux/Slices/masterSlice";
 import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
+import Excel from '../../../../src/assets/ms-excel.svg';
+
 
 
 function Franchisees() {
@@ -24,6 +26,8 @@ function Franchisees() {
     const [franchiseData, setFranchiseData] = useState()
     const emails = franchiseData?.map(item => item?.user?.email)
     const [pincodeOptions, setPincodeOptions] = useState()
+    const [exceltrue, setExcelTrue] = useState(false)
+
 
     // // ========================= fetch data from api ==============================
     const FranchiseeDetails = () => {
@@ -51,6 +55,16 @@ function Franchisees() {
             setPincodeOptions(uniquePincodeData);
         }
     }, [franchiseData])
+
+    
+    const handleExportComplete = () => {
+        setExcelTrue(false); // Set exceltrue to false after export is complete
+    };
+
+    const excelbtnTrue = () => {
+        setExcelTrue(true);
+       console.log('exceltrue = ', exceltrue) 
+    }
 
 
     // =================== filter data ========================
@@ -233,9 +247,23 @@ function Franchisees() {
                     <div className="">
                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>  Franchisee Details</h1>
                     </div>
-                    <AddFranchisee title='Add Franchisee' FranchiseeDetails={FranchiseeDetails} emails={emails} />
+                    <div className='flex items-center'>
+                        <AddFranchisee title='Add Franchisee' FranchiseeDetails={FranchiseeDetails} emails={emails} />
+                        <div className='flex items-center ms-4'>
+                            <h5>Export</h5>
+                            <button
+                                type="button"
+                                icon="pi pi-file-excel"
+                                onClick={excelbtnTrue}
+                                className="mx-1 my-2 p-button-success"
+                                data-pr-tooltip="XLS"
+                            >
+                                <img src={Excel} alt="" />
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <Table data={franchiseData} columns={columns} isValid={true} />
+                <Table data={franchiseData} columns={columns} isValid={true} exceltrue={exceltrue} onExportComplete={handleExportComplete}/>
             </div>
         </>
     )
