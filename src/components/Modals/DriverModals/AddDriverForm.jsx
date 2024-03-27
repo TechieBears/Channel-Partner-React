@@ -695,21 +695,9 @@ function AddDriverFrom(props) {
                                                         {props?.button == 'edit' && props?.data?.pan_url != '' && props?.data?.pan_url != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                                                             {props?.data?.pan_url?.split('/').pop()}
                                                         </label>}
-                                                            {errors.pan_card && <Error title='PAN Card Number & Image is required' />}
+                                                        {(errors.pan_card) && <Error title='PAN Card Number & Image is required' />}
+                                                        {(errors.pan_url && !errors.pan_card ) && <Error title='PAN Card Image is required' />}                                                        
                                                     </div>
-                                                    {/* <div className="">
-                                                        <label className={labelClass}>
-                                                            PAN Card Number*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='PAN Card Number'
-                                                            className={inputClass}
-                                                            maxLength={10}
-                                                            {...register('pan_card', { required: true, validate: validatePANCard })}
-                                                        />
-                                                        {errors.pan_card && <Error title='PAN Card Number is required' />}
-                                                    </div> */}
                                                      <div className="">
                                                         <label className={labelClass}>
                                                             Aadhar Card Number*
@@ -738,21 +726,9 @@ function AddDriverFrom(props) {
                                                         {props?.button == 'edit' && props?.data?.adhar_url != '' && props?.data?.adhar_url != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                                                             {props?.data?.adhar_url?.split('/').pop()}
                                                         </label>}
-                                                            {errors?.adhar_card && <Error title={errors?.adhar_card?.message ? errors?.adhar_card?.message : 'AadharCard Number is Requried'} />}
+                                                        {(errors.adhar_card) && <Error title='Aadhar Card Number & Image is required' />}
+                                                        {(errors.adhar_url && !errors.adhar_card ) && <Error title='Aadhar Card Image is required' />}    
                                                     </div>
-                                                    {/* <div className="">
-                                                        <label className={labelClass}>
-                                                            Aadhar Card Number*
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder='Aadhar Card Number'
-                                                            className={inputClass}
-                                                            maxLength={14}
-                                                            {...register('adhar_card', { required: true, validate: validateAadharCard })}
-                                                        />
-                                                        {errors?.adhar_card && <Error title='Aadhar Card Number is required' />}
-                                                    </div> */}
                                                     <div className="">
                                                         <label className={labelClass}>
                                                             Bank Name*

@@ -1,5 +1,5 @@
 import { Notebook } from "@phosphor-icons/react";
-import { Element4, ElementPlus, Trade, Truck, User, Settings, Menu, Shop, SecurityUser, Book, TicketExpired, TicketDiscount, Profile2User, ClipboardTick, Bank, Setting2, Wallet, ShoppingCart, Headphone, Ticket, UserAdd } from "iconsax-react";
+import { Element4, ElementPlus, Trade, Truck, User, Settings, Menu, Shop, SecurityUser, Book, TicketExpired, TicketDiscount, Profile2User, ClipboardTick, Bank, Setting2, Wallet, ShoppingCart, Headphone, Ticket, UserAdd ,EmptyWallet} from "iconsax-react";
 import { AlertTriangle, Bike, ChefHat, LayoutList, Megaphone, Settings2, Soup, User2 } from "lucide-react";
 export const Admin = [
     {
@@ -93,6 +93,11 @@ export const Seller = [
         icon: <UserAdd size="24" />,
         link: '/register',
     },
+    {
+        title: 'Wallet',
+        icon: <EmptyWallet size="24" />,
+        link: '/wallet',
+    },
 ]
 
 
@@ -136,6 +141,11 @@ export const Franchise = [
         icon: <Wallet size="24" />,
         link: '/delivery',
     },
+    {
+        title: 'Wallet',
+        icon: <EmptyWallet size="24" />,
+        link: '/wallet',
+    },
 
 ]
 
@@ -144,5 +154,10 @@ export const Restaurant = [
         title: 'Dashboard',
         icon: <Element4 size="24" />,
         link: '/',
+    },
+    {
+        title: 'Wallet',
+        icon: <EmptyWallet size="24" />,
+        link: '/wallet',
     },
 ]
