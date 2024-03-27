@@ -5,18 +5,19 @@ import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import { toast } from 'react-toastify';
-import OrdersCard from '../../../components/Cards/Orders/OrdersCard';
 import Table from '../../../components/table/Table';
 import { environment } from '../../../env';
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
+import { vendorOrders } from '../../../api';
 
 const VendorOrders = () => {
+    const [orderData, setOrderData] = useState([]);
+    const acceptedOrder = orderData?.filter(order => order?.order_status == "accepted")
+    const rejectedOrder = orderData?.filter(order => order?.order_status == "rejected")
     const user = useSelector((state) => state.user.loggedUserDetails);
     const webSocketUrl = `${environment.webSocketUrl}user_to_seller/${user?.msb_code}`
     const ws = new WebSocket(webSocketUrl)
     const [selectedTab, setSelectedTab] = useState(0);
-    const orders = useSelector(state => state?.orders?.newOrders);
     const {
         register,
         handleSubmit,
@@ -25,6 +26,15 @@ const VendorOrders = () => {
         reset,
     } = useForm();
 
+    const getOrders = () => {
+        try {
+            vendorOrders(user?.sellerId).then(res => {
+                setOrderData(res);
+            })
+        } catch (error) {
+            console.log('error: ', error)
+        }
+    }
 
     // =============== Orders Web Socket =============================
     const wsFunction = ({ status, data }) => {
@@ -54,26 +64,6 @@ const VendorOrders = () => {
         }
     }
 
-    const filterReset = () => {
-        reset({
-            name: null,
-            location: "",
-        });
-        toast.success("Filters clear");
-    };
-
-
-    const loadOptions = (_, callback) => {
-        // const uniqueNames = new Set();
-        // const uniqueProducts = storages
-        //     ?.filter(
-        //         (res) =>
-        //             res.name && !uniqueNames.has(res.name) && uniqueNames.add(res.name)
-        //     )
-        //     .map((res) => ({ label: res.name, value: res.name }));
-        // callback(uniqueProducts || []);
-    };
-
     const onSubmit = (data) => {
         // console.log('data', data)
     }
@@ -99,55 +89,7 @@ const VendorOrders = () => {
 
 
     // ====================== table columns ======================
-    // ====================== Accepted Order =====================
-    const AcceptedOrderData = [
-        {
-            "orderId": 753,
-            "orderDate": "Jan 1, 2024 , 05:56 PM",
-            "items": [
-                {
-                    "itemName": "Butter Milk",
-                    "itemDescription": "Lorem ipsum dolor, sit amet",
-                    "imageSrc": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP19bmDT6AGEOIWdxk1uilG1SHoeuh8m-sIQ&usqp=CAU",
-                    "quantity": 2,
-                    'price': 50,
-                    'category': 'dairy'
-                }
-            ],
-            "orderPrice": "$1,000",
-            "paymentMethod": "Cash",
-            "location": 'Parel',
-            "status": "Accepted"
-
-        },
-        {
-            "orderId": 754,
-            "orderDate": "Jan 2, 2024 , 10:30 AM",
-            "items": [
-                {
-                    "itemName": "Coffee",
-                    "itemDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-                    "imageSrc": "https://example.com/coffee.jpg",
-                    "quantity": 2,
-                    'price': 20,
-                    'category': 'grocery'
-                },
-                {
-                    "itemName": "Croissant",
-                    "itemDescription": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
-                    "imageSrc": "https://example.com/croissant.jpg",
-                    "quantity": 2,
-                    'price': 200,
-                    'category': 'food'
-                }
-            ],
-            "orderPrice": "$25",
-            "paymentMethod": "UPI",
-            "location": 'Thane',
-            "status": "Accepted"
-        }
-    ]
-
+    // ========================= Accepted Order =================
 
     const AcceptedName = (row) => row?.items?.map(item => <h6 key={item?.itemName}>{item?.itemName}</h6>);
     const AcceptedQuantity = (row) => row?.items?.map(item => <h6 key={item?.itemQuantity}>{item?.quantity}</h6>)
@@ -161,7 +103,9 @@ const VendorOrders = () => {
     </div>
 
     const AcceptedOrderColumn = [
-        { field: "orderId", header: "Order ID" },
+        { field: "order_id", header: "Order ID" },
+        { field: "order_revenue", header: "Order Revenue(₹)" },
+        { field: "order_status", header: "Order Status", body: (row) => <h6 className='capitalize'>{row?.order_status}</h6>, sortable: true },
         { field: "OrderDate", header: "Order Date", body: (row) => <h6>{moment(row?.orderDate).format('MMM Do YY')}</h6>, sortable: true },
         { field: "name", header: "Name", body: AcceptedName, sortable: true },
         { field: "quantity", header: "Quantity", body: AcceptedQuantity, sortable: true },
@@ -172,27 +116,9 @@ const VendorOrders = () => {
         { field: "location", header: "Location", sortable: true },
         { field: "orderPrice", header: "Total Price", sortable: true },
         { field: "action", header: "Action", body: AcceptedAction, sortable: true },
-        { field: "status", header: "Status", sortable: true },
     ];
 
-
-    const name = (row) => row?.items?.map(item => <h6 key={item?.itemName}>{item?.itemName}</h6>);
-    const quantity = (row) => row?.items?.map(item => <h6 key={item?.itemQuantity}>{item?.quantity}</h6>)
-    const description = (row) => row?.items?.map(item => <h6 className="w-52" key={item?.itemDescription}>{item?.itemDescription}</h6>)
-    const itemPrice = (row) => row?.items?.map(item => <h6 key={item?.price}>{item?.price}</h6>)
-    const category = (row) => row?.items?.map(item => <h6 key={item?.category}>{item?.category}</h6>)
-    const action = (row) => <div className="flex space-x-1 items-center">
-        <NavLink to={`/vendor-orders/order-detail/:${row?.id}`} className='bg-sky-100 p-1 rounded-xl'>
-            <Eye size={20} className="text-sky-400" />
-        </NavLink>
-        <div className="bg-green-50 p-1 rounded-xl cursor-pointer">
-            <ClipboardTick size={20} color="green" />
-        </div>
-        <div className="bg-red-50 p-1 rounded-xl cursor-pointer">
-            <Trash size={20} color="red" />
-        </div>
-    </div>
-    useEffect(() => { }, [orders])
+    useEffect(() => { getOrders() }, [])
     return (
         <>
             <div className="p-4 m-4 bg-white sm:m-5 rounded-xl">
@@ -244,14 +170,6 @@ const VendorOrders = () => {
                 >
                     <TabList className="flex mx-6 space-x-4 border-b">
                         <Tab
-                            className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 0
-                                ? "text-sky-500  border-b-2 border-sky-400 outline-0"
-                                : "text-gray-500 border-b"
-                                }`}
-                        >
-                            {`New Order's (${orders?.length})`}
-                        </Tab>
-                        <Tab
                             className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 1
                                 ? "text-sky-500  border-b-2 border-sky-400 outline-0"
                                 : "text-gray-500 border-b"
@@ -270,39 +188,10 @@ const VendorOrders = () => {
                     </TabList>
                     {/* ================= NewPending Orders component ============== */}
                     <TabPanel className='mt-5 bg-white'>
-                        {/* ===================== New Order Section ===================== */}
-                        <div className="space-y-2 p-4">
-                            <div className="flex flex-col sm:flex-row items-center justify-between pb-1">
-                                <p className="text-lg font-semibold">Current Orders</p>
-                                <form className="flex flex-col sm:flex-row gap-4">
-                                    <input
-                                        className={`${inputClass} !bg-slate-100 md:w-fit lg:w-fit`}
-                                        placeholder="Enter OTP"
-                                    />
-                                    <div className="flex items-center gap-x-2">
-                                        <button
-                                            type='button'
-                                            className={`${formBtn1} w-fit text-center`}
-                                        >Submit</button>
-                                        <button
-                                            className={`${formBtn2} w-fit text-center`}
-                                            type='button'
-                                        >Clear</button>
-                                    </div>
-                                </form>
-                            </div>
-                            {
-                                orders?.length != 0 ? orders?.map(data => (
-                                    <OrdersCard data={data} />
-                                )) : 'No Orders For Today'
-                            }
-                        </div>
+                        <Table data={acceptedOrder} columns={AcceptedOrderColumn} />
                     </TabPanel>
                     <TabPanel className='mt-5 bg-white'>
-                        <Table data={AcceptedOrderData} columns={AcceptedOrderColumn} />
-                    </TabPanel>
-                    <TabPanel className='mt-5 bg-white'>
-                        <Table data={AcceptedOrderData} columns={AcceptedOrderColumn} />
+                        <Table data={rejectedOrder} columns={AcceptedOrderColumn} />
                     </TabPanel>
                 </Tabs>
             </div>

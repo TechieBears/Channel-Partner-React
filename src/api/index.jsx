@@ -1145,3 +1145,13 @@ export const allOrderTracking = async (data) => {
         console.log('error occured', error)
     }
 }
+
+export const vendorOrders = async (id) => {
+    const url = `${environment.baseUrl}vendor/orderdetailstracking/${id}`
+    try {
+        const res = await axios.get(url);
+        return res.data
+    } catch (error) {
+        console.log('error occured', error)
+    }
+}

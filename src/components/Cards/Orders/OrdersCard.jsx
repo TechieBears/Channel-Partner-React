@@ -37,7 +37,6 @@ function OrdersCard({ data }) {
     const restaurantToDriverws = () => {
         const WebSocketUrl = `${environment.webSocketUrl}seller_to_deliveryboy/${user?.franchise_msbcode}${user?.pincode}`;
         const ws = new WebSocket(WebSocketUrl);
-
         ws.onopen = () => {
             ws.send(JSON.stringify({
                 pickup_location: {
@@ -47,7 +46,9 @@ function OrdersCard({ data }) {
                     shop_name: vendorDetails?.shop_name,
                 },
                 orderId: data?.orderId,
-                order_created_at: data?.orderDetails?.order_created_at,
+                order_created_at: data?.orderDetails[0]?.order_created_at,
+                vendor_id: user?.sellerId,
+                msb_code: user?.msb_code,
                 message_from: user?.vendor_type == 'restaurant' ? user?.vendor_type : 'vendor',
             }))
         };
@@ -83,14 +84,23 @@ function OrdersCard({ data }) {
     }
 
     const updateOrderDetails = () => {
-        console.log('status from update function', status)
+        // ========================== Revenue Calculations =========================
+        let totalRevenue = 0;
+        data?.orderedItems?.forEach(item => {
+            const productPrice = item?.product?.product_actual_price;
+            const instaCommissionPercentage = item?.product?.insta_commison_percentage;
+            const productQty = item?.product_qty;
+
+            const revenuePerProduct = (productPrice * (100 - instaCommissionPercentage) / 100) * productQty;
+            totalRevenue += revenuePerProduct
+        });
         const tempData = {
             vendor: user?.sellerId,
             order_id: data?.orderId,
             ordered_items: JSON.stringify(data?.orderedItems),
             order_status: status,
             order_for: user?.vendor_type == 'restaurant' ? 'restaurant' : 'vendor',
-            order_revenue: 0,
+            order_revenue: totalRevenue,
         }
         try {
             if (status == 'accepted' || status == 'rejected') {
@@ -99,7 +109,7 @@ function OrdersCard({ data }) {
                 })
             }
         } catch (error) {
-
+            console.log('error:', error)
         }
     }
 
