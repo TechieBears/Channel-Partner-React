@@ -19,7 +19,24 @@ export const SendNotification = (props) => {
     const { register, handleSubmit, setValue, watch, reset, formState: { errors }, setError } = useForm({ criteriaMode: 'all' });
 
     const onSubmit = async (data) => {
-
+        setLoader(true)
+        data.notification_for = props?.notification_for
+        try {
+            const url = `${environment.baseUrl}app/send_notification_many`
+            await axios.post(url, data).then((res) => {
+                console.log("🚀 ~ file: SendNotification.jsx:27 ~ awaitaxios.post ~ res:", res)
+                if(res?.data?.status === "success"){
+                    reset()
+                    setLoader(false)
+                    toast.success(res?.data?.message)
+                    toggle()
+                }
+            }).catch((err) => {
+                console.log("🚀 ~ file: SendNotification.jsx:31 ~ awaitaxios.post ~ err:", err)
+            })
+        } catch (err) {
+            console.log("🚀 ~ file: SendNotification.jsx:36 ~ onSubmit ~ err:", err)
+        }
     }
     const closeBtn = () => {
         toggle();
@@ -80,7 +97,7 @@ export const SendNotification = (props) => {
                                                         type="text"
                                                         placeholder="Enter Title"
                                                         className={inputClass}
-                                                        {...register("notification_title",{required:'Title is required'})}
+                                                        {...register("notification_title", { required: 'Title is required' })}
                                                     />
                                                     {errors.notification_title && (
                                                         <Error title={errors?.notification_title?.message} />
@@ -93,10 +110,10 @@ export const SendNotification = (props) => {
                                                         type="text"
                                                         placeholder="Enter Message"
                                                         className={inputClass}
-                                                        {...register("notification_msg",{required:'Message is required'})}
+                                                        {...register("notification_message", { required: 'Message is required' })}
                                                     />
-                                                    {errors.notification_msg && (
-                                                        <Error title={errors?.notification_msg?.message} />
+                                                    {errors.notification_message && (
+                                                        <Error title={errors?.notification_message?.message} />
                                                     )}
                                                 </div>
                                             </div>

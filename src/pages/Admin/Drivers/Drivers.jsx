@@ -15,6 +15,7 @@ import Table from '../../../components/table/Table';
 import { environment } from '../../../env';
 import { setDeliveryList } from '../../../redux/Slices/deliverySlice';
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
+import { SendNotification } from '../../../components/Modals/NotificationModal/SendNotification';
 
 function Drivers() {
     const dispatch = useDispatch()
@@ -329,6 +330,7 @@ function Drivers() {
                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>Drivers</h1>
                     </div>
                     <div className='flex gap-4'>
+                        <SendNotification title={"Send Notifications"} notification_for={"deliveryboy"}/>
                         <AddDriverFrom title='Add Driver' DeliveryBoyDetails={DeliveryBoyDetails} />
                     </div>
                 </div>

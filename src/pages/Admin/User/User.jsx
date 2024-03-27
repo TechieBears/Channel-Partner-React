@@ -285,7 +285,7 @@ function User() {
                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>Registered Users</h1>
                     </div>
                     {/* <CreateUserForm title='Add User' /> */}
-                    <SendNotification title={"Send Notification"}/>
+                    <SendNotification title={"Send Notifications"} notification_for={"customer"}/>
                 </div>
                 <Table data={customerData} columns={columns} />
             </div>
