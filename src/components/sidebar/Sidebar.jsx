@@ -14,8 +14,8 @@ import SidebarLink from './SidebarLink';
 
 const Sidebar = ({ children }) => {
     const user = useSelector(state => state?.user?.loggedUserDetails)
-    // const WebSocketUrl = `${environment.webSocketUrl}user_to_seller/${user?.msb_code}`;
-    // const ws = new WebSocket(WebSocketUrl)
+    const WebSocketUrl = `${environment.webSocketUrl}user_to_seller/${user?.msb_code}`;
+    const ws = new WebSocket(WebSocketUrl)
     const [isActiveLink, setIsActiveLink] = useState(false);
     const [mobileSidebar, setMobileSidebar] = useState(false);
     const dispatch = useDispatch()
