@@ -46,7 +46,7 @@ function OrdersCard({ data }) {
                     shop_name: vendorDetails?.shop_name,
                 },
                 orderId: data?.orderId,
-                order_created_at: data?.orderDetails[0]?.order_created_at,
+                order_created_at: data?.orderDetails?.order_created_at,
                 vendor_id: user?.sellerId,
                 msb_code: user?.msb_code,
                 message_from: user?.vendor_type == 'restaurant' ? user?.vendor_type : 'vendor',
@@ -134,9 +134,9 @@ function OrdersCard({ data }) {
 
     }
 
-    const autoOrder = () => {
+    const autoAcceptOrder = () => {
         setTimeout(() => {
-            console.log('Auto order placed');
+            changeStatus('accepted')
             toast.success('Order auto Accepted')
         }, 30000); // 30 sec 
     }
@@ -146,7 +146,7 @@ function OrdersCard({ data }) {
             const orderCreatedAt = moment(data.orderDetails[0].order_created_at);
             const currentDateTime = moment();
             if (orderCreatedAt.format('DD-MM-YYYY hh:mm a') === currentDateTime.format('DD-MM-YYYY hh:mm a')) {
-                autoOrder();
+                autoAcceptOrder();
             }
         }
     }, [])
