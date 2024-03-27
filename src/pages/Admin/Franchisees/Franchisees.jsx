@@ -15,6 +15,7 @@ import Table from '../../../components/table/Table';
 import { environment } from '../../../env';
 import { setFranchise } from "../../../redux/Slices/masterSlice";
 import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
+import { SendNotification } from '../../../components/Modals/NotificationModal/SendNotification';
 
 
 function Franchisees() {
@@ -233,7 +234,10 @@ function Franchisees() {
                     <div className="">
                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>  Franchisee Details</h1>
                     </div>
-                    <AddFranchisee title='Add Franchisee' FranchiseeDetails={FranchiseeDetails} emails={emails} />
+                    <div className='flex gap-4'>
+                        <SendNotification title={"Send Notifications"} notification_for={"franchise"} />
+                        <AddFranchisee title='Add Franchisee' FranchiseeDetails={FranchiseeDetails} emails={emails} />
+                    </div>
                 </div>
                 <Table data={franchiseData} columns={columns} isValid={true} />
             </div>

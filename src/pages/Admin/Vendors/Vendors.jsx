@@ -15,6 +15,7 @@ import Table from '../../../components/table/Table';
 import { environment } from '../../../env';
 import { setFranchiseVendors } from "../../../redux/Slices/masterSlice";
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
+import { SendNotification } from '../../../components/Modals/NotificationModal/SendNotification';
 
 function Vendors() {
     const [Vendors, SetVendors] = useState();
@@ -295,7 +296,11 @@ function Vendors() {
                     <div className="">
                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>Vendor Details</h1>
                     </div>
-                    <AddVendors title='Add Vendors' FranchiseeVendors={FranchiseeVendors} />
+                    <div className='flex gap-4'>
+                        <SendNotification title={"Send Notifications"} notification_for={"vendor"} />
+                        <AddVendors title='Add Vendors' FranchiseeVendors={FranchiseeVendors} />
+                    </div>
+
                 </div>
                 {
                     <Table data={Vendors} columns={columns} isValid={true} />

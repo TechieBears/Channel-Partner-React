@@ -22,6 +22,7 @@ import _ from 'lodash';
 import Select from "react-select";
 import { environment } from "../../../env";
 import { setAllRestaurant } from "../../../redux/Slices/restauantSlice";
+import { SendNotification } from "../../../components/Modals/NotificationModal/SendNotification";
 
 export default function Restaurant() {
   // const [data, setData] = useState([]);
@@ -374,12 +375,15 @@ export default function Restaurant() {
               Restaurant Details
             </h1>
           </div>
-          <AddRestaurant
-            title="Add Restaurant"
-            getAllRestaurant={user?.role == 'admin' ? getAllRestaurant : getFranchiseRestaurants}
-            id={user?.userid}
-            emails={emails}
-          />
+          <div className='flex gap-4'>
+            <SendNotification title={"Send Notifications"} notification_for={"restaurant"} />
+            <AddRestaurant
+              title="Add Restaurant"
+              getAllRestaurant={user?.role == 'admin' ? getAllRestaurant : getFranchiseRestaurants}
+              id={user?.userid}
+              emails={emails}
+            />
+          </div>
         </div>
         {<Table columns={columns} data={data} />}
       </div>
