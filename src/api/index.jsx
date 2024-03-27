@@ -1118,9 +1118,30 @@ export const startSession = async (data) => {
     const url = `${environment.baseUrl}vendor/seller_isopen`
     try {
         const response = await axios.post(url, data);
-        console.log('response', response)
         return response.data
     } catch (error) {
         console.log('error', error)
+    }
+}
+
+// ==================== orders api =================
+
+export const updateOrder = async (data) => {
+    const url = `${environment.baseUrl}vendor/update_orders`
+    try {
+        const response = await axios.post(url, data);
+        return response?.data
+    } catch (error) {
+        console.log('error i updateorder', error)
+    }
+}
+
+export const allOrderTracking = async (data) => {
+    const url = `${environment.baseUrl}vendor/order_details_tracking`
+    try {
+        const res = await axios.post(url, data)
+        return res
+    } catch (error) {
+        console.log('error occured', error)
     }
 }

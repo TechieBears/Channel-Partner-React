@@ -14,15 +14,21 @@ const orderSlice = createSlice({
                 newOrders: [...state.newOrders, action.payload]
             }
         },
-        setOrderStatus: (state, action) => {
-            return {
-                ...state,
-                orderStatus: [...state.orderStatus, action.payload]
-            }
-        }
+        removeOrder: (state, action) => {
+            console.log('action=========================', action.payload)
+            const index = state.newOrders.findIndex(order => order?.orderId === action.payload.orderId)
+            let newBasket = [...state.newOrders]
+
+            if (index >= 0) {
+                newBasket.splice(index, 1)
+            } else {
+                console.log(`cant remove the order ${action.payload.orderId} as it is not in the basket`)
+            };
+            state.newOrders = newBasket
+        },
     }
 })
 
-export const { setOrders, orderStatus } = orderSlice.actions;
+export const { setOrders, removeOrder } = orderSlice.actions;
 
 export default orderSlice.reducer

@@ -9,12 +9,13 @@ import userImg from '../../../assets/user.jpg'
 function DriverDetail() {
     const location = useLocation();
     const data = location.state;
+    console.log("🚀 ~ file: DriverDetail.jsx:12 ~ DriverDetail ~ data:", data)
     let jobTypeString = data?.job_type;
     jobTypeString = jobTypeString.replace(/'/g, '"');
-    // const JobTypeObject = JSON.parse(jobTypeString);
+    const JobTypeObject = JSON.parse(jobTypeString);
     let shiftString = data?.shift;
     shiftString = shiftString.replace(/'/g, '"');
-    // const shiftObject = JSON.parse(shiftString);
+    const shiftObject = JSON.parse(shiftString);
     console.log('data = ', data)
     
     const [selectedTab, setSelectedTab] = useState(0);
@@ -36,6 +37,14 @@ function DriverDetail() {
         {
             url: data?.pan_url,
             title: data?.pan
+        },
+        {
+            url: data?.adhar_url,
+            title: data?.adhar_url
+        },
+        {
+            url: data?.bank_passbook,
+            title: data?.bank_passbook
         },
     ].filter(image => image?.url !== undefined && image?.url !== '' && image?.url !== 'No Document Uploaded');
     return (
@@ -159,10 +168,10 @@ function DriverDetail() {
                                     <h5 className='text-base capitalize font-tbPop text-slate-900'>pan</h5>
                                     <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.pan_card == '' ? '--------' : data?.pan_card}</h5>
                                 </div>
-                                <div>
+                                {/* <div>
                                     <h5 className='text-base capitalize font-tbPop text-slate-900'>gst</h5>
                                     <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.gst_number == '' || data?.gst_number == null ? '--------' : data?.gst_number}</h5>
-                                </div>
+                                </div> */}
                                 <div>
                                     <h5 className='text-base capitalize font-tbPop text-slate-900'>Bank</h5>
                                     <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.bank_name == '' ? '--------' : data?.bank_name}</h5>
@@ -184,15 +193,15 @@ function DriverDetail() {
                             <div className="grid grid-cols-5 pb-5 my-4 border-b gap-y-5 border-slate-300">
                                 <div>
                                     <h5 className='text-base capitalize font-tbPop text-slate-900'>Job type</h5>
-                                    {/* <h5 className='text-sm capitalize font-tbPop text-slate-500'>{JobTypeObject?.title == '' || JobTypeObject?.title == null || JobTypeObject?.title == undefined ? '--------' : JobTypeObject?.title}</h5> */}
+                                    <h5 className='text-sm capitalize font-tbPop text-slate-500'>{JobTypeObject?.title == '' || JobTypeObject?.title == null || JobTypeObject?.title == undefined ? '--------' : JobTypeObject?.title}</h5>
                                 </div>
                                 <div>
                                     <h5 className='text-base capitalize font-tbPop text-slate-900'>Working Hours</h5>
-                                    {/* <h5 className='text-sm capitalize font-tbPop text-slate-500'>{JobTypeObject?.subTitle == '' || JobTypeObject?.subTitle == null || JobTypeObject?.subTitle == undefined ? '--------' : JobTypeObject?.subTitle}</h5> */}
+                                    <h5 className='text-sm capitalize font-tbPop text-slate-500'>{JobTypeObject?.subTitle == '' || JobTypeObject?.subTitle == null || JobTypeObject?.subTitle == undefined ? '--------' : JobTypeObject?.subTitle}</h5>
                                 </div>
                                 <div>
                                     <h5 className='text-base capitalize font-tbPop text-slate-900'>Shift</h5>
-                                    {/* <h5 className='text-sm capitalize font-tbPop text-slate-500'>{shiftObject?.title == '' || shiftObject?.title == null || shiftObject?.title == undefined ? '--------' : shiftObject?.title}</h5> */}
+                                    <h5 className='text-sm capitalize font-tbPop text-slate-500'>{shiftObject?.title == '' || shiftObject?.title == null || shiftObject?.title == undefined ? '--------' : shiftObject?.title}</h5>
                                 </div>
                                 <div>
                                     <h5 className='text-base capitalize font-tbPop text-slate-900'>Week-Off</h5>

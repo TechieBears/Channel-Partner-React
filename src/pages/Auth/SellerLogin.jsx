@@ -7,7 +7,7 @@ import { setLoggedUser, setLoggedUserDetails, setRoleIs, setFranchiseeDetails } 
 import LoadBox from '../../components/Loader/LoadBox';
 import { toast } from 'react-toastify';
 import Error from '../../components/Errors/Error';
-import { vendorlogin, getFranchiseDetails } from '../../api/index';
+import { vendorlogin, getFranchiseDetails, getSingleShop } from '../../api/index';
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from 'react-router-dom';
 
@@ -32,6 +32,7 @@ const SellerLogin = () => {
         }
         return 'Invalid email address';
     };
+
     // ================ Data submit form ==================
     const onSubmit = async (data) => {
         data.fcmtoken = fcmToken;
@@ -44,6 +45,7 @@ const SellerLogin = () => {
                     dispatch(setRoleIs(res?.is_subadmin))
                     setLoader(false)
                     dispatch(setLoggedUser(true))
+
                     if (res?.userid && res?.role == 'franchise') {
                         getFranchiseDetailsById(res?.userid);
                     }
