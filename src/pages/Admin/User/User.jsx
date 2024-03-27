@@ -16,6 +16,7 @@ import { setCustomersData } from '../../../redux/Slices/userSlice';
 import DeleteModal from '../../../components/Modals/DeleteModal/DeleteModal';
 import _ from 'lodash';
 import Select from "react-select";
+import { SendNotification } from '../../../components/Modals/NotificationModal/SendNotification';
 
 function User() {
     const dispatch = useDispatch()
@@ -284,6 +285,7 @@ function User() {
                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>Registered Users</h1>
                     </div>
                     {/* <CreateUserForm title='Add User' /> */}
+                    <SendNotification title={"Send Notification"}/>
                 </div>
                 <Table data={customerData} columns={columns} />
             </div>
