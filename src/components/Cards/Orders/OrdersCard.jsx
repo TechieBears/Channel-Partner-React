@@ -35,9 +35,8 @@ function OrdersCard({ data }) {
     }
 
     const restaurantToDriverws = () => {
-        const WebSocketUrl = `${environment.webSocketUrl}seller_to_deliveryboy/${user?.franchise_msbcode}${user?.pincode}`;
+        const WebSocketUrl = `${environment.webSocketUrl}seller_to_deliveryboy/${user?.franchise_msbcode}${user?.pincode}${user?.sellerId}${user?.msb_code}`;
         const ws = new WebSocket(WebSocketUrl);
-
         ws.onopen = () => {
             ws.send(JSON.stringify({
                 pickup_location: {
@@ -47,7 +46,7 @@ function OrdersCard({ data }) {
                     shop_name: vendorDetails?.shop_name,
                 },
                 orderId: data?.orderId,
-                order_created_at: data?.orderDetails?.order_created_at,
+                order_created_at: data?.orderDetails[0]?.order_created_at,
                 message_from: user?.vendor_type == 'restaurant' ? user?.vendor_type : 'vendor',
             }))
         };
