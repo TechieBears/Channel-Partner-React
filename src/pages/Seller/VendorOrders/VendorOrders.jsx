@@ -272,21 +272,23 @@ const VendorOrders = () => {
                     <TabPanel className='mt-5 bg-white'>
                         {/* ===================== New Order Section ===================== */}
                         <div className="space-y-2 p-4">
-                            <div className="flex items-center justify-between pb-1">
+                            <div className="flex flex-col sm:flex-row items-center justify-between pb-1">
                                 <p className="text-lg font-semibold">Current Orders</p>
-                                <form className="flex gap-4">
+                                <form className="flex flex-col sm:flex-row gap-4">
                                     <input
-                                        className={`${inputClass} !bg-slate-100 w-fit`}
+                                        className={`${inputClass} !bg-slate-100 md:w-fit lg:w-fit`}
                                         placeholder="Enter OTP"
                                     />
-                                    <button
-                                        type='button'
-                                        className={`${formBtn1} w-fit text-center`}
-                                    >Submit</button>
-                                    <button
-                                        className={`${formBtn2} w-fit text-center`}
-                                        type='button'
-                                    >Clear</button>
+                                    <div className="flex items-center gap-x-2">
+                                        <button
+                                            type='button'
+                                            className={`${formBtn1} w-fit text-center`}
+                                        >Submit</button>
+                                        <button
+                                            className={`${formBtn2} w-fit text-center`}
+                                            type='button'
+                                        >Clear</button>
+                                    </div>
                                 </form>
                             </div>
                             {
