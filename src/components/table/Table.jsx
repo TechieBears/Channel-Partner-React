@@ -36,7 +36,7 @@ function Table({ data, columns, isValid }) {
       
     const header = (
         isValid && 
-        <div className="flex items-center justify-end p-0 m-0 bg-white border-white export-button">
+        <div className="absolute flex items-center justify-end p-0 m-0 bg-white border-white -top-16 right-52 export-button">
             <h5>Export</h5>
             <button
                 type="button"

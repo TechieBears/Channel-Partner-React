@@ -37,6 +37,23 @@ const Step1 = (props) => {
         lng: 0
     });
 
+
+    useEffect(() => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                },
+                (error) => {
+                    if (error.code === error.PERMISSION_DENIED) {
+                        alert('Please allow access to your location to use this feature.');
+                    }
+                }
+            );
+        } else {
+            alert('Geolocation is not supported by your browser.');
+        }
+    }, []);
+
     const getCurrentPosition = () => {
         navigator.geolocation.getCurrentPosition(async ({ coords }) => {
             const { latitude, longitude } = coords;
@@ -48,7 +65,6 @@ const Step1 = (props) => {
             await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${import.meta.env.VITE_GOOGLE_API_KEY}`)
                 .then(response => response.json())
                 .then(data => {
-
                     const address = data?.results[0]?.formatted_address;
                     const components = data?.results[0]?.address_components;
 

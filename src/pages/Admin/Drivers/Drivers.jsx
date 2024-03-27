@@ -137,7 +137,7 @@ function Drivers() {
     // =================== table user profile column ========================
     const representativeBodyTemplate = (row) => {
         return (
-            <div className="rounded-full w-11 h-11">
+            <div className="rounded-full w-11 h-11 bg-slate-100">
                 <img src={row?.user?.profile_pic == null || row?.user?.profile_pic == '' || row?.user?.profile_pic == undefined || row?.user?.profile_pic.includes('undefined') ? userImg : row?.user?.profile_pic} className="object-cover w-full h-full rounded-full" alt={row.user?.first_name} />
             </div>
         );

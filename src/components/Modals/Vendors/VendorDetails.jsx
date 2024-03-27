@@ -10,7 +10,7 @@ export default function VendorDetails() {
     console.log('dataaaaaaaaaaaaaa', data)
     const images = [
         {
-            URL: data?.profile_pic,
+            URL: data?.user?.profile_pic,
             width: 15,
             height: 9,
         },
@@ -37,109 +37,109 @@ export default function VendorDetails() {
     ].filter(image => image.URL !== '' || image.URL !== null);
     const navigate = useNavigate()
     return (
-        <div className='px-5 gap-5'>
+        <div className='gap-5 px-5'>
             <button className='flex' onClick={() => navigate(-1)}>
                 <ArrowLeft /> Back
             </button>
             <div className='grid grid-cols-8 gap-x-4'>
                 <div className='col-span-6'>
-                    <div className='bg-white rounded-xl mt-4 p-2'>
-                        <p className='font-semibold text-sky-400 text-xl p-2 '>Shop Details</p>
-                        <div className='mx-4 grid grid-cols-4 gap-y-4 mt-4'>
+                    <div className='p-2 mt-4 bg-white rounded-xl'>
+                        <p className='p-2 text-xl font-semibold text-sky-400 '>Shop Details</p>
+                        <div className='grid grid-cols-4 mx-4 mt-4 gap-y-4'>
                             <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Shop Name</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_name}</h5>
+                                <h5 className='text-base capitalize font-tbPop text-slate-900'>Shop Name</h5>
+                                <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.shop_name}</h5>
                             </div>
                             <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Shop Address</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_address == null || data?.shop_address == '' ? '-----' : data?.shop_address}</h5>
+                                <h5 className='text-base capitalize font-tbPop text-slate-900'>Shop Address</h5>
+                                <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.shop_address == null || data?.shop_address == '' ? '-----' : data?.shop_address}</h5>
                             </div>
                             <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Shop Contact</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_contact_number == null || data?.shop_contact_number == '' ? '-----' : data?.shop_contact_number}</h5>
+                                <h5 className='text-base capitalize font-tbPop text-slate-900'>Shop Contact</h5>
+                                <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.shop_contact_number == null || data?.shop_contact_number == '' ? '-----' : data?.shop_contact_number}</h5>
                             </div>
                             <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Shop Opening Time</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_start_time}</h5>
+                                <h5 className='text-base capitalize font-tbPop text-slate-900'>Shop Opening Time</h5>
+                                <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.shop_start_time}</h5>
                             </div>
                             <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Shop Closing Time</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_end_time}</h5>
+                                <h5 className='text-base capitalize font-tbPop text-slate-900'>Shop Closing Time</h5>
+                                <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.shop_end_time}</h5>
                             </div>
                             <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Shop Pincode</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.user?.pincode}</h5>
+                                <h5 className='text-base capitalize font-tbPop text-slate-900'>Shop Pincode</h5>
+                                <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.user?.pincode}</h5>
                             </div>
                             <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>State</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.user?.state}</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div className='bg-white rounded-xl mt-4 p-2'>
-                        <p className='font-semibold text-sky-400 text-xl p-2 '>Owner Details</p>
-                        <div className='mx-4 grid grid-cols-4 gap-y-4 mt-4'>
-                            <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Owner Name</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.user?.first_name} {data?.user?.last_name}</h5>
-                            </div>
-                            <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Owner Email</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.user?.email == null || data?.user?.email == '' ? '-----' : data?.user?.email}</h5>
-                            </div>
-                            <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Owner Contact</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.user?.phone_no == null || data?.user?.phone_no == '' ? '-----' : data?.user?.phone_no}</h5>
-                            </div>
-                            <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Registration Date</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.user?.registration_date}</h5>
-                            </div>
-                            <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Shop Closing Time</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_end_time}</h5>
+                                <h5 className='text-base capitalize font-tbPop text-slate-900'>State</h5>
+                                <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.user?.state}</h5>
                             </div>
                         </div>
                     </div>
-                    <div className='bg-white rounded-xl mt-4 p-2'>
-                        <p className='font-semibold text-sky-400 text-xl p-2 '>Legal Details</p>
-                        <div className='mx-4 grid grid-cols-4 gap-y-4 mt-4'>
+                    <div className='p-2 mt-4 bg-white rounded-xl'>
+                        <p className='p-2 text-xl font-semibold text-sky-400 '>Owner Details</p>
+                        <div className='grid grid-cols-4 mx-4 mt-4 gap-y-4'>
                             <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Bank Name</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.bank_name}</h5>
+                                <h5 className='text-base capitalize font-tbPop text-slate-900'>Owner Name</h5>
+                                <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.user?.first_name} {data?.user?.last_name}</h5>
                             </div>
                             <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Bank Account Number</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.account_number == null || data?.account_number == '' ? '-----' : data?.account_number}</h5>
+                                <h5 className='text-base capitalize font-tbPop text-slate-900'>Owner Email</h5>
+                                <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.user?.email == null || data?.user?.email == '' ? '-----' : data?.user?.email}</h5>
                             </div>
                             <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>IFSC Code</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.ifsc_code == null || data?.ifsc_code == '' ? '-----' : data?.ifsc_code}</h5>
+                                <h5 className='text-base capitalize font-tbPop text-slate-900'>Owner Contact</h5>
+                                <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.user?.phone_no == null || data?.user?.phone_no == '' ? '-----' : data?.user?.phone_no}</h5>
                             </div>
                             <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Adhar Card Number</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.adhar_card}</h5>
+                                <h5 className='text-base capitalize font-tbPop text-slate-900'>Registration Date</h5>
+                                <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.user?.registration_date}</h5>
                             </div>
                             <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>PAN Card Number</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.pan_card}</h5>
+                                <h5 className='text-base capitalize font-tbPop text-slate-900'>Shop Closing Time</h5>
+                                <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.shop_end_time}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='p-2 mt-4 bg-white rounded-xl'>
+                        <p className='p-2 text-xl font-semibold text-sky-400 '>Legal Details</p>
+                        <div className='grid grid-cols-4 mx-4 mt-4 gap-y-4'>
+                            <div>
+                                <h5 className='text-base capitalize font-tbPop text-slate-900'>Bank Name</h5>
+                                <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.bank_name}</h5>
                             </div>
                             <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>GST Number</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.gst_number}</h5>
+                                <h5 className='text-base capitalize font-tbPop text-slate-900'>Bank Account Number</h5>
+                                <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.account_number == null || data?.account_number == '' ? '-----' : data?.account_number}</h5>
                             </div>
                             <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Commision (%)</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.insta_commison_percentage}</h5>
+                                <h5 className='text-base capitalize font-tbPop text-slate-900'>IFSC Code</h5>
+                                <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.ifsc_code == null || data?.ifsc_code == '' ? '-----' : data?.ifsc_code}</h5>
                             </div>
                             <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Verifcation by Franchise</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.isverifiedbyfranchise == true ? 'Verfied' : 'Verifcation Pending'}</h5>
+                                <h5 className='text-base capitalize font-tbPop text-slate-900'>Adhar Card Number</h5>
+                                <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.adhar_card}</h5>
+                            </div>
+                            <div>
+                                <h5 className='text-base capitalize font-tbPop text-slate-900'>PAN Card Number</h5>
+                                <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.pan_card}</h5>
+                            </div>
+                            <div>
+                                <h5 className='text-base capitalize font-tbPop text-slate-900'>GST Number</h5>
+                                <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.gst_number ? data?.gst_number : '-----'}</h5>
+                            </div>
+                            <div>
+                                <h5 className='text-base capitalize font-tbPop text-slate-900'>Commision (%)</h5>
+                                <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.insta_commison_percentage}</h5>
+                            </div>
+                            <div>
+                                <h5 className='text-base capitalize font-tbPop text-slate-900'>Verifcation by Franchise</h5>
+                                <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.isverifiedbyfranchise == true ? 'Verified' : 'Verification Pending'}</h5>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className=' col-span-2 bg-white rounded-xl mt-4 p-2'>
+                <div className='col-span-2 p-2 mt-4 bg-white rounded-xl'>
                     <SimpleGallery
                         galleryID="my-test-gallery"
                         images={images}
