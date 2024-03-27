@@ -12,7 +12,6 @@ import { vendorOrders } from '../../../api';
 
 const VendorOrders = () => {
     const [orderData, setOrderData] = useState([]);
-    console.log('orderData', orderData)
     const acceptedOrder = orderData?.filter(order => order?.order_status == "accepted")
     const rejectedOrder = orderData?.filter(order => order?.order_status == "rejected")
     const user = useSelector((state) => state.user.loggedUserDetails);
