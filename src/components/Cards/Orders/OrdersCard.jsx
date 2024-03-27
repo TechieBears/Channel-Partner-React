@@ -3,7 +3,7 @@ import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
-import { updateOrder } from '../../../api'
+import { allOrderTracking, updateOrder } from '../../../api'
 import { environment } from '../../../env'
 import { removeOrder } from '../../../redux/Slices/orderSlice'
 import { formBtn2 } from '../../../utils/CustomClass'
@@ -12,7 +12,7 @@ function OrdersCard({ data }) {
     const [status, setstatus] = useState('pending')
     const [details, setDetails] = useState(false)
     const dispatch = useDispatch();
-    const user = useSelector(state => state?.user?.loggedUserDetails)
+    const user = useSelector(state => state?.user?.loggedUserDetails);
     const vendorDetails = useSelector(state => state?.user?.vendorDetails);
     // =============== Orders Web Socket =============================
     const userTosellerws = (status) => {
@@ -48,7 +48,7 @@ function OrdersCard({ data }) {
                 },
                 orderId: data?.orderId,
                 order_created_at: data?.orderDetails?.order_created_at,
-                order_from: user?.vendor_type == 'restaurant' ? user?.vendor_type : 'vendor',
+                message_from: user?.vendor_type == 'restaurant' ? user?.vendor_type : 'vendor',
             }))
         };
 
@@ -70,9 +70,36 @@ function OrdersCard({ data }) {
             order_for: user?.vendor_type == 'restaurant' ? 'restaurant' : 'vendor'
         }
         try {
-            updateOrder(orderData)
+            updateOrder(orderData).then(res => {
+                if (res?.status == "success") {
+                    toast.success('Order Status updated successfully')
+                } else {
+                    toast.error('Error updating order')
+                }
+            })
         } catch (error) {
             console.log('error', error)
+        }
+    }
+
+    const updateOrderDetails = () => {
+        console.log('status from update function', status)
+        const tempData = {
+            vendor: user?.sellerId,
+            order_id: data?.orderId,
+            ordered_items: JSON.stringify(data?.orderedItems),
+            order_status: status,
+            order_for: user?.vendor_type == 'restaurant' ? 'restaurant' : 'vendor',
+            order_revenue: 0,
+        }
+        try {
+            if (status == 'accepted' || status == 'rejected') {
+                allOrderTracking(tempData).then(res => {
+                    console.log('res all orders ====================', res)
+                })
+            }
+        } catch (error) {
+
         }
     }
 
@@ -85,8 +112,7 @@ function OrdersCard({ data }) {
             restaurantToDriverws();
         }
         orderUpdate(status);
-        toast.success(`Order Statsus changes to ${status}`)
-
+        updateOrderDetails();
         // ============== remove from redux ===============
         if (status == 'done') {
             const updatedData = {
