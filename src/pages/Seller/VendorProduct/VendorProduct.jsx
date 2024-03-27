@@ -94,7 +94,7 @@ const VendorProduct = () => {
         <Link to={`/product-list/product-details/${row?.product_id}`} state={row} className='items-center p-1 bg-sky-100 rounded-xl hover:bg-sky-200'>
             <Eye size={24} className='text-sky-400' />
         </Link>
-        <AddProduct title='Edit Product' row={row} getProducts={getProducts} ImageDetails={ImageDetails} category={category} subCategory={subCategory} />
+        <AddProduct isTrue={true} title='Edit Product' row={row} getProducts={getProducts} ImageDetails={ImageDetails} category={category} subCategory={subCategory} />
         <button className='items-center p-1 bg-red-100 rounded-xl hover:bg-red-200'>
             <Trash size={24} className='text-red-400' />
         </button>

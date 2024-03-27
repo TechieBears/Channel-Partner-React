@@ -179,8 +179,8 @@ export default function AddPromo(props) {
         img.src = event.target.result;
 
         img.onload = () => {
-          // if ((img.width > 3556 && img.width < 4000 ) && (img.height > 2000 && img.height < 2500)) {
-          if (img.width > 3556  && img.height > 2000) {
+          if ((img.width >= 3556 && img.width <= 4000 ) && (img.height >= 2000 && img.height <= 2500)) {
+          // if (img.width > 3556  && img.height > 2000) {
             console.log('File uploaded successfully');
             setImageError('');
           } else {

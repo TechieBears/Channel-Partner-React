@@ -676,7 +676,7 @@ function AddDriverFrom(props) {
                                                                 type="text"
                                                                 placeholder='PAN'
                                                                 maxLength={10}
-                                                                className={inputClass}
+                                                                className={`${inputClass} uppercase`}
                                                                 {...register('pan_card', { required: true, validate: validatePANCard  })}
                                                             />
                                                             <div className="">

@@ -445,7 +445,7 @@ export default function AddFranchiseForm(props) {
                                 type="text"
                                 placeholder='PAN'
                                 maxLength={10}
-                                className={inputClass}
+                                className={`${inputClass} uppercase`}
                                 {...register('pan_card', { required: true, validate: validatePANCard })}
                               />
                               <div className="">
@@ -464,7 +464,7 @@ export default function AddFranchiseForm(props) {
                             {props?.button == 'edit' && props?.data.pan_url != '' && props?.data.pan_url != undefined && <label className='block mb-1 font-medium text-blue-800 truncate text-md font-tb'>
                               {props?.data?.pan_url?.split('/').pop()}
                             </label>}
-                            {(errors.pan_card) && <Error title='PAN Card Number & Image is required' />}
+                            {errors.pan_card && <Error title='PAN Card Number & Image is required' />}
                             {(errors.pan_url && !errors.pan_card) && <Error title='PAN Card Image is required' />}
 
                           </div>

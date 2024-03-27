@@ -10,7 +10,9 @@ export default function ImageGallery({ images }) {
         className='container grid grid-cols-4 gap-2 mx-auto'
         showThumbnails={true}>
         {images?.map((curElem, i) => {
-            return (<img className='w-full rounded-lg h-52 object-contain bg-slate-50 p-2' src={curElem?.url} alt={curElem.url} key={i} title={curElem.url} />)
+            return (
+                <img className='object-contain w-full p-2 rounded-lg h-52 bg-slate-50' src={curElem?.url} alt={curElem.url} key={i} title={curElem.url} />
+            )
         })}
     </SlideshowLightbox>
 }
