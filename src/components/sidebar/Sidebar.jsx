@@ -24,12 +24,12 @@ const Sidebar = ({ children }) => {
     const logoutTimeoutId = useRef(null);
     useEffect(() => {
         if (user?.role == 'seller' || user?.role == 'shop') {
-            // ws.open = () => {
-            //     console.log('WebSocket Client Connected');
-            // };
-            // ws.onerror = (e) => {
-            //     console.log(e.message);
-            // };
+            ws.open = () => {
+                console.log('WebSocket Client Connected');
+            };
+            ws.onerror = (e) => {
+                console.log(e.message);
+            };
             ws.onmessage = (e) => {
                 const data = JSON.parse(e.data);
                 window.alert(data?.orderId)

@@ -1,13 +1,13 @@
 import { Eye, Trash } from 'iconsax-react';
-import React, { useEffect, useState,useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import Switch from 'react-js-switch';
-import userImg from '../../../assets/user.jpg';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import AsyncSelect from "react-select/async";
 import { toast } from 'react-toastify';
-import { getAllShopProduct, getRestaurantCategory, getRestaurantFood, getRestaurantSubCategory, getSingleRestaurant, getGalleryImages, getSubCategory, getCategory } from '../../../api';
+import { getAllShopProduct, getCategory, getGalleryImages, getRestaurantCategory, getRestaurantFood, getRestaurantSubCategory, getSingleRestaurant, getSubCategory } from '../../../api';
+import userImg from '../../../assets/user.jpg';
 import AddProduct from '../../../components/Modals/Vendors/AddProduct';
 import AddRestItem from '../../../components/Modals/Vendors/AddRestItem';
 import Table from '../../../components/table/Table';
@@ -21,7 +21,6 @@ const VendorProduct = () => {
     const [category, setCategory] = useState([]);
     const [subCategory, setsubCategory] = useState([])
     const user = useSelector((state) => state?.user?.loggedUserDetails);
-    // const storages = useSelector((state) => state?.storage?.list);
     const { register, handleSubmit, control, formState: { errors }, reset } = useForm();
     const [ImageDetails, setImageDetails] = useState([]);
 
