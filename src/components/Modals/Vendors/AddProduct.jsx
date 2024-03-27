@@ -57,7 +57,7 @@ const AddProduct = (props) => {
     useEffect(() => {
         if (props?.isTrue == true){
             console.log('nnnnn')
-            if (props?.row?.product_shelflife.includes('-')) {
+            if (props?.row?.product_shelflife?.includes('-')) {
                 setCheckExpiry('selectdate');
             } else {
                 setCheckExpiry('day');
@@ -688,7 +688,7 @@ const AddProduct = (props) => {
                                                             disabled={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
                                                             {...register('product_shelflife', { required: true })}
                                                             onChange={selectExpiryOption}
-                                                            value={checkExpiry}
+                                                            // value={checkExpiry}
                                                         >
                                                             <option value=''>Select</option>
                                                             <option value="selectdate">Select Expiry Date</option>
