@@ -36,9 +36,9 @@ const Sidebar = ({ children }) => {
                 dispatch(setOrders(data))
             };
         }
-        else {
-            ws.close();
-        }
+        // else {
+        //     ws.close();
+        // }
 
     }, [ws])
 
