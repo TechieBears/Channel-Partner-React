@@ -11,11 +11,10 @@ const orderSlice = createSlice({
         setOrders: (state, action) => {
             return {
                 ...state,
-                newOrders: [...state.newOrders, action.payload]
+                newOrders: [action.payload, ...state.newOrders]
             }
         },
         removeOrder: (state, action) => {
-            console.log('action=========================', action.payload)
             const index = state.newOrders.findIndex(order => order?.orderId === action.payload.orderId)
             let newBasket = [...state.newOrders]
 
