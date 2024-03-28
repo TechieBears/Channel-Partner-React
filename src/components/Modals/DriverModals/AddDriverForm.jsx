@@ -11,7 +11,7 @@ import { setFranchise } from "../../../redux/Slices/masterSlice";
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from '../../../utils/CustomClass';
 import Error from '../../Errors/Error';
 import LoadBox from '../../Loader/LoadBox';
-import { handleMobileNoNumericInput, handlePancardUpperCase, validateAadharCard, validateEmail, validatePANCard, validatePIN, validatePhoneNumber } from '../../Validations.jsx/Validations';
+import { handleMobileNoNumericInput, validateAadharCard, validateEmail, validatePANCard, validatePIN, validatePhoneNumber } from '../../Validations.jsx/Validations';
 
 function AddDriverFrom(props) {
     const [isOpen, setIsOpen] = useState(false);
@@ -31,6 +31,7 @@ function AddDriverFrom(props) {
     const LoggedUserDetails = useSelector((state) => state?.user?.loggedUserDetails);
     const SelectedFranchise = watch('created_by')
     const vehicleType = watch('vehicle_type');
+    const jobType = watch('job_type');
     // // ========================= fetch data from api ==============================
     const FranchiseeDetails = () => {
         try {
@@ -64,7 +65,6 @@ function AddDriverFrom(props) {
 
     // ============================= form submiting ======================================
     const onSubmit = async (data) => {
-        console.log(data)
         setLoader(true)
         if (props.button != 'edit') {    // for create
             if (data?.bank_passbook.length != 0) {
@@ -88,15 +88,15 @@ function AddDriverFrom(props) {
             if (data?.adhar_url.length != 0) {
                 await ImageUpload(data?.adhar_url[0], "deliveryboy", "adharImage", data?.first_name)
                 data.adhar_url = `${deliveryBoylink}${data?.first_name}_adharImage_${data?.adhar_url[0].name}`
-              } else {
+            } else {
                 data.adhar_url = ''
-              }
-              if (data?.pan_url.length != 0) {
+            }
+            if (data?.pan_url.length != 0) {
                 await ImageUpload(data?.pan_url[0], "deliveryboy", "panImage", data?.first_name)
                 data.pan_url = `${deliveryBoylink}${data?.first_name}_panImage_${data?.pan_url[0].name}`
-              } else {
+            } else {
                 data.pan_url = ''
-              }
+            }
         }
         else {          // for edit
             if (data?.bank_passbook?.length > 0) {
@@ -120,7 +120,7 @@ function AddDriverFrom(props) {
             if (data?.adhar_url?.length > 0) {
                 await ImageUpload(data?.adhar_url[0], "deliveryboy", "adharImage", data?.first_name)
                 data.adhar_url = `${deliveryBoylink}${data?.first_name}_adharImage_${data?.adhar_url[0].name}`
-              } else {
+            } else {
                 data.adhar_url = props?.data?.adhar_url
             }
             if (data?.pan_url?.length > 0) {
@@ -159,7 +159,7 @@ function AddDriverFrom(props) {
                 let requestData;
                 if (LoggedUserDetails?.role == 'franchise') {
                     const additionalPayload = { created_by: user?.user?.id };
-                    requestData = { ...data, ...additionalPayload, shift: JSON.stringify(data.shift), job_type: JSON.stringify(data.job_type)};
+                    requestData = { ...data, ...additionalPayload, shift: JSON.stringify(data.shift), job_type: JSON.stringify(data.job_type) };
                 } else if (LoggedUserDetails?.role == 'admin') {
                     requestData = { ...data, created_by: user?.user?.id, shift: JSON.stringify(data.shift), job_type: JSON.stringify(data.job_type) };
                 }
@@ -206,8 +206,8 @@ function AddDriverFrom(props) {
                 };
             }
 
-            let requestData ;
-            requestData =  {...data, shift: JSON.stringify(data.shift), job_type: JSON.stringify(data.job_type)}
+            let requestData;
+            requestData = { ...data, shift: JSON.stringify(data.shift), job_type: JSON.stringify(data.job_type) }
             const response = await editDriverBoy(props?.data?.user?.id, requestData)
             if (response?.message == "delivery boy edited successfully") {
                 setTimeout(() => {
@@ -277,7 +277,7 @@ function AddDriverFrom(props) {
         if (props.button == "edit") {
             fillData()
         }
-        FranchiseeDetails()
+        // FranchiseeDetails()
     }, [])
 
     useEffect(() => {
@@ -614,20 +614,23 @@ function AddDriverFrom(props) {
                                                             <Error title="Job Type is Required*" />
                                                         )}
                                                     </div>
-                                                    <div className="">
-                                                        <label className={labelClass}>Select Shift*</label>
-                                                        <select
-                                                            className={inputClass}
-                                                            {...register("shift", { required: true })}
-                                                        >
-                                                            <option value="">--Select Type--</option>
-                                                            <option value="Morning 9AM to Afternoon 1PM 4 Hours">Morning 9AM to Afternoon 1PM (4 Hours)</option>
-                                                            <option value="Afternoon 4PM to Evening 8PM 4 Hours">Afternoon 4PM to Evening 8PM (4 Hours)</option>
-                                                        </select>
-                                                        {errors.shift && (
-                                                            <Error title="Shift Type is Required*" />
-                                                        )}
-                                                    </div>
+                                                    {(jobType != 'Full Time (9 Hours/Day)' && jobType != '') &&
+                                                        <>
+                                                            <div className="">
+                                                                <label className={labelClass}>Select Shift*</label>
+                                                                <select
+                                                                    className={inputClass}
+                                                                    {...register("shift", { required: true })}
+                                                                >
+                                                                    <option value="">--Select Type--</option>
+                                                                    <option value="Morning 9AM to Afternoon 1PM 4 Hours">Morning 9AM to Afternoon 1PM (4 Hours)</option>
+                                                                    <option value="Afternoon 4PM to Evening 8PM 4 Hours">Afternoon 4PM to Evening 8PM (4 Hours)</option>
+                                                                </select>
+                                                                {errors.shift && (
+                                                                    <Error title="Shift Type is Required*" />
+                                                                )}
+                                                            </div>
+                                                        </>}
                                                     <div className="">
                                                         <label className={labelClass}>Select WeekOff*</label>
                                                         <select
@@ -677,7 +680,7 @@ function AddDriverFrom(props) {
                                                                 placeholder='PAN'
                                                                 maxLength={10}
                                                                 className={inputClass}
-                                                                {...register('pan_card', { required: true, validate: validatePANCard  })}
+                                                                {...register('pan_card', { required: true, validate: validatePANCard })}
                                                             />
                                                             <div className="">
                                                                 <label htmlFor='pan' className={`${pan_watch?.length || props?.data?.pan_url ? "bg-sky-400 text-white" : " bg-gray-300/80"}  transition-colors hover:bg-sky-400 font-tb font-semibold hover:text-white py-3 mt-10 px-5 rounded-md cursor-pointer`}>
@@ -696,9 +699,9 @@ function AddDriverFrom(props) {
                                                             {props?.data?.pan_url?.split('/').pop()}
                                                         </label>}
                                                         {(errors.pan_card) && <Error title='PAN Card Number & Image is required' />}
-                                                        {(errors.pan_url && !errors.pan_card ) && <Error title='PAN Card Image is required' />}                                                        
+                                                        {(errors.pan_url && !errors.pan_card) && <Error title='PAN Card Image is required' />}
                                                     </div>
-                                                     <div className="">
+                                                    <div className="">
                                                         <label className={labelClass}>
                                                             Aadhar Card Number*
                                                         </label>
@@ -727,7 +730,7 @@ function AddDriverFrom(props) {
                                                             {props?.data?.adhar_url?.split('/').pop()}
                                                         </label>}
                                                         {(errors.adhar_card) && <Error title='Aadhar Card Number & Image is required' />}
-                                                        {(errors.adhar_url && !errors.adhar_card ) && <Error title='Aadhar Card Image is required' />}    
+                                                        {(errors.adhar_url && !errors.adhar_card) && <Error title='Aadhar Card Image is required' />}
                                                     </div>
                                                     <div className="">
                                                         <label className={labelClass}>
