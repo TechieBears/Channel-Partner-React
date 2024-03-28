@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { allOrderTracking, updateOrder } from '../../../api'
 import { environment } from '../../../env'
-import { removeOrder } from '../../../redux/Slices/orderSlice'
+import { removeOrder, setAcceptedOrders } from '../../../redux/Slices/orderSlice'
 import { formBtn2 } from '../../../utils/CustomClass'
 
 function OrdersCard({ data }) {
@@ -120,33 +120,31 @@ function OrdersCard({ data }) {
         userTosellerws(status);
         if (status == 'accepted') {
             restaurantToDriverws();
-        }
-        orderUpdate(status);
-        updateOrderDetails();
-        // ============== remove from redux ===============
-        if (status == 'done') {
             const updatedData = {
                 orderId: data?.orderId,
                 orderstatus: status,
             }
             dispatch(removeOrder(updatedData))
+            dispatch(setAcceptedOrders(data))
         }
-
+        orderUpdate(status);
+        updateOrderDetails();
     }
 
     const autoAcceptOrder = () => {
         setTimeout(() => {
-            changeStatus('accepted')
+            changeStatus({ status: 'accepted' })
             toast.success('Order auto Accepted')
         }, 30000); // 30 sec 
     }
 
     useEffect(() => {
-        if (data && data.orderDetails && data.orderDetails[0] && data.orderDetails[0].order_created_at) {
-            const orderCreatedAt = moment(data.orderDetails[0].order_created_at);
+        if (data && data.orderDetails && data.orderDetails && data.orderDetails?.order_created_at) {
+            const orderCreatedAt = moment(data.orderDetails?.order_created_at);
             const currentDateTime = moment();
             if (orderCreatedAt.format('DD-MM-YYYY hh:mm a') === currentDateTime.format('DD-MM-YYYY hh:mm a')) {
                 autoAcceptOrder();
+                console.log('inside if ')
             }
         }
     }, [])

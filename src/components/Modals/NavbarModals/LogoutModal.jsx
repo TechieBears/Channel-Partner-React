@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { setLoggedUser, setLoggedUserDetails, setRoleIs } from '../../../redux/Slices/loginSlice';
 import { useDispatch, useSelector } from "react-redux";
 import { setSessionStarted } from '../../../redux/Slices/SessionSlice';
-import { setOrders } from '../../../redux/Slices/orderSlice';
+import { clearAcceptedOrders, clearOrders } from '../../../redux/Slices/orderSlice';
 
 
 export default function LogoutModal({ open, setOpen }) {
@@ -19,7 +19,8 @@ export default function LogoutModal({ open, setOpen }) {
         dispatch(setRoleIs(undefined))
         dispatch(setLoggedUser(false))
         dispatch(setSessionStarted(false))
-        dispatch(setOrders([]));
+        dispatch(clearOrders())
+        dispatch(clearAcceptedOrders())
         setOpen(!open)
         if (user?.role != 'admin' && user?.role != 'franchise') {
             navigate('/')

@@ -12,8 +12,12 @@ import { vendorOrders } from '../../../api';
 
 const VendorOrders = () => {
     const [orderData, setOrderData] = useState([]);
-    const acceptedOrder = orderData?.filter(order => order?.order_status == "accepted")
-    const rejectedOrder = orderData?.filter(order => order?.order_status == "rejected")
+    let acceptedOrder;
+    let rejectedOrder;
+    if (orderData?.length > 0) {
+        acceptedOrder = orderData?.filter(order => order?.order_status == "accepted")
+        rejectedOrder = orderData?.filter(order => order?.order_status == "rejected")
+    }
     const user = useSelector((state) => state.user.loggedUserDetails);
     const webSocketUrl = `${environment.webSocketUrl}user_to_seller/${user?.msb_code}`
     const ws = new WebSocket(webSocketUrl)
@@ -89,33 +93,22 @@ const VendorOrders = () => {
 
 
     // ====================== table columns ======================
-    // ========================= Accepted Order =================
 
-    const AcceptedName = (row) => row?.items?.map(item => <h6 key={item?.itemName}>{item?.itemName}</h6>);
-    const AcceptedQuantity = (row) => row?.items?.map(item => <h6 key={item?.itemQuantity}>{item?.quantity}</h6>)
-    const AcceptedDescription = (row) => row?.items?.map(item => <h6 className="w-52" key={item?.itemDescription}>{item?.itemDescription}</h6>)
-    const AcceptedItemPrice = (row) => row?.items?.map(item => <h6 key={item?.price}>{item?.price}</h6>)
-    const AcceptedCategory = (row) => row?.items?.map(item => <h6 key={item?.category}>{item?.category}</h6>)
-    const AcceptedAction = (row) => <div className="flex space-x-1 items-center">
-        <NavLink className='bg-sky-100 p-1 rounded-xl'>
-            <Eye size={20} className="text-sky-400" />
-        </NavLink>
-    </div>
+    const orderedItems = (row) => {
+        const data = JSON.parse(row?.ordered_items);
+        return (
+            <h6>
+                {data?.length}
+            </h6>
+        )
+    }
 
-    const AcceptedOrderColumn = [
-        { field: "order_id", header: "Order ID" },
-        { field: "order_revenue", header: "Order Revenue(₹)" },
-        { field: "order_status", header: "Order Status", body: (row) => <h6 className='capitalize'>{row?.order_status}</h6>, sortable: true },
-        { field: "OrderDate", header: "Order Date", body: (row) => <h6>{moment(row?.orderDate).format('MMM Do YY')}</h6>, sortable: true },
-        { field: "name", header: "Name", body: AcceptedName, sortable: true },
-        { field: "quantity", header: "Quantity", body: AcceptedQuantity, sortable: true },
-        { field: "description", header: "Description", body: AcceptedDescription, sortable: true },
-        { field: "paymentMethod", header: "Payment Method", sortable: true },
-        { field: "price", header: "Price", body: AcceptedItemPrice, sortable: true },
-        { field: "category", header: "Category", body: AcceptedCategory, sortable: true },
-        { field: "location", header: "Location", sortable: true },
-        { field: "orderPrice", header: "Total Price", sortable: true },
-        { field: "action", header: "Action", body: AcceptedAction, sortable: true },
+    const OrderColumn = [
+        { field: "order_id", header: "Order ID", style: true },
+        { field: "order_revenue", header: "Order Revenue(₹)", style: true },
+        { field: "order_status", header: "Order Status", body: (row) => <h6 className='capitalize'>{row?.order_status}</h6>, sortable: true, style: true },
+        { field: "order_date", header: "Order Date", body: (row) => <h6>{moment(row?.orderDate).format('MMM Do YY')}</h6>, sortable: true, style: true },
+        { field: "ordered_items", header: "Ordered Quantity", body: orderedItems, sortable: true, style: true },
     ];
 
     useEffect(() => { getOrders() }, [])
@@ -170,7 +163,7 @@ const VendorOrders = () => {
                 >
                     <TabList className="flex mx-6 space-x-4 border-b">
                         <Tab
-                            className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 1
+                            className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 0
                                 ? "text-sky-500  border-b-2 border-sky-400 outline-0"
                                 : "text-gray-500 border-b"
                                 }`}
@@ -178,7 +171,7 @@ const VendorOrders = () => {
                             Accepted Order's
                         </Tab>
                         <Tab
-                            className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 2
+                            className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 1
                                 ? "text-sky-500  border-b-2 border-sky-400 outline-0"
                                 : "text-gray-500 border-b"
                                 }`}
@@ -188,10 +181,10 @@ const VendorOrders = () => {
                     </TabList>
                     {/* ================= NewPending Orders component ============== */}
                     <TabPanel className='mt-5 bg-white'>
-                        <Table data={acceptedOrder} columns={AcceptedOrderColumn} />
+                        <Table data={acceptedOrder} columns={OrderColumn} />
                     </TabPanel>
                     <TabPanel className='mt-5 bg-white'>
-                        <Table data={rejectedOrder} columns={AcceptedOrderColumn} />
+                        <Table data={rejectedOrder} columns={OrderColumn} />
                     </TabPanel>
                 </Tabs>
             </div>
