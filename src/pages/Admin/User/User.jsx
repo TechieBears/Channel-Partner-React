@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
+import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
 import Table from '../../../components/table/Table';
 import { Link } from 'react-router-dom';
 import { Eye, Trash } from 'iconsax-react';
@@ -30,10 +30,20 @@ function User() {
     } = useForm();
     const [open, setOpen] = React.useState(false);
     const [delId, setDelId] = React.useState(0);
+    const [exceltrue, setExcelTrue] = useState(false)
+
 
     const [customerData, setCustomerData] = useState()
     const [pincodeOptions, setPincodeOptions] = useState()
 
+    const handleExportComplete = () => {
+        setExcelTrue(false); // Set exceltrue to false after export is complete
+    };
+
+    const excelbtnTrue = () => {
+        setExcelTrue(true);
+        console.log('exceltrue = ', exceltrue)
+    }
 
 
     // =================== filter data ========================
@@ -255,7 +265,7 @@ function User() {
                                     <Select
                                         value={value}
                                         options={pincodeOptions}
-                                        className="w-100 text-gray-900"
+                                        className="text-gray-900 w-100"
                                         placeholder="Search By Pincode"
                                         onChange={onChange}
                                         inputRef={ref}
@@ -284,10 +294,22 @@ function User() {
                     <div className="">
                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>Registered Users</h1>
                     </div>
+                    <div className='flex items-center justify-between ms-4'>
+                        <button
+                            type="button"
+                            icon="pi pi-file-excel"
+                            onClick={excelbtnTrue}
+                            className={`mx-1 my-2 p-button-success flex items-center justify-between ${tableBtn}`}
+                            data-pr-tooltip="XLS"
+                        >
+                            <h5 className='pe-3'>Export</h5>
+                            <img src={Excel} alt="" width={28} height={28} />
+                        </button>
+                    </div>
                     {/* <CreateUserForm title='Add User' /> */}
-                    <SendNotification title={"Send Notifications"} notification_for={"customer"}/>
+                    <SendNotification title={"Send Notifications"} notification_for={"customer"} />
                 </div>
-                <Table data={customerData} columns={columns} />
+                <Table data={customerData} columns={columns} exceltrue={exceltrue} onExportComplete={handleExportComplete} />
             </div>
         </>
     )

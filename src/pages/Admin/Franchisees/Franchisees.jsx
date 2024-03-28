@@ -25,6 +25,8 @@ function Franchisees() {
     const [franchiseData, setFranchiseData] = useState()
     const emails = franchiseData?.map(item => item?.user?.email)
     const [pincodeOptions, setPincodeOptions] = useState()
+    const [exceltrue, setExcelTrue] = useState(false)
+
 
     // // ========================= fetch data from api ==============================
     const FranchiseeDetails = () => {
@@ -52,6 +54,16 @@ function Franchisees() {
             setPincodeOptions(uniquePincodeData);
         }
     }, [franchiseData])
+
+
+    const handleExportComplete = () => {
+        setExcelTrue(false); // Set exceltrue to false after export is complete
+    };
+
+    const excelbtnTrue = () => {
+        setExcelTrue(true);
+        console.log('exceltrue = ', exceltrue)
+    }
 
 
     // =================== filter data ========================
@@ -239,7 +251,7 @@ function Franchisees() {
                         <AddFranchisee title='Add Franchisee' FranchiseeDetails={FranchiseeDetails} emails={emails} />
                     </div>
                 </div>
-                <Table data={franchiseData} columns={columns} isValid={true} />
+                <Table data={franchiseData} columns={columns} isValid={true} exceltrue={exceltrue} onExportComplete={handleExportComplete} />
             </div>
         </>
     )

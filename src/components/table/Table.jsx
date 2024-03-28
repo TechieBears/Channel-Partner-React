@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import "primereact/resources/themes/lara-light-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import Excel from '../../../src/assets/ms-excel.svg';
 
-function Table({ data, columns, isValid }) {
+function Table({ data, columns, isValid, exceltrue, onExportComplete }) {
     const exportExcel = () => {
         import("xlsx").then((xlsx) => {
           const workSheet = xlsx.utils.json_to_sheet(data);
@@ -15,6 +15,7 @@ function Table({ data, columns, isValid }) {
             type: "array",
           });
           saveAsExcelFile(excelBuffer, "data");
+          onExportComplete();
         });
       };
     
@@ -33,25 +34,12 @@ function Table({ data, columns, isValid }) {
         });
       };
 
-      
-    const header = (
-        isValid && 
-        <div className="flex items-center justify-end p-0 m-0 bg-white border-white export-button">
-            <h5>Export</h5>
-            <button
-                type="button"
-                icon="pi pi-file-excel"
-                onClick={exportExcel}
-                className="mx-2 my-2 p-button-success"
-                data-pr-tooltip="XLS"
-           > 
-            <img src={Excel} alt="" />
-           </button>
-        </div>
-    );
-
-
-
+    useEffect(() => {
+      if (exceltrue) {
+        console.log(exceltrue)
+        exportExcel();
+      }
+    }, [exceltrue])
 
     return (
         <DataTable
@@ -62,7 +50,7 @@ function Table({ data, columns, isValid }) {
             resizableColumns="expand"
             paginator
             rows={25}
-            header={header}
+            header={columns.header}
             rowsPerPageOptions={[25, 50, 100]}
             sortMode="multiple"
         >

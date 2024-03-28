@@ -10,7 +10,6 @@ import Error from '../../../../components/Errors/Error';
 import { ImageUpload, promotionLink } from '../../../../env';
 import LoadBox from '../../../../components/Loader/LoadBox';
 import { setPromotions } from '../../../../redux/Slices/masterSlice';
-import { validateEmail, validatePhoneNumber } from '../../../../components/Validations.jsx/Validations';
 import { DatePicker, Space } from "antd";
 import moment from "moment";
 
@@ -26,8 +25,8 @@ export default function AddPromo(props) {
   // setValue('promo_duration', 'single_day');
   // setpromoDurationField(watch('promo_duration'));
   const { RangePicker } = DatePicker
-  console.log('State Value:', promoDurationField);
-  console.log('promoDuration Value:', promoDuration);
+  // console.log('State Value:', promoDurationField);
+  // console.log('promoDuration Value:', promoDuration);
 
 
   const handleRadioChange = (option) => {

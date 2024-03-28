@@ -20,6 +20,7 @@ import { SendNotification } from '../../../components/Modals/NotificationModal/S
 function Vendors() {
     const [Vendors, SetVendors] = useState();
     const [pincodeOptions, setPincodeOptions] = useState()
+    const [exceltrue, setExcelTrue] = useState(false)
     const [franchiseOptions, setFranchiseOptions] = useState()
     const { control, register, handleSubmit, formState: { errors }, reset } = useForm();
     const dispatch = useDispatch()
@@ -36,6 +37,15 @@ function Vendors() {
             console.log(error);
         }
     };
+
+    const handleExportComplete = () => {
+        setExcelTrue(false); // Set exceltrue to false after export is complete
+    };
+
+    const excelbtnTrue = () => {
+        setExcelTrue(true);
+        console.log('exceltrue = ', exceltrue)
+    }
 
     const GetFranchiseeData = () => {
         try {
@@ -303,7 +313,7 @@ function Vendors() {
 
                 </div>
                 {
-                    <Table data={Vendors} columns={columns} isValid={true} />
+                    <Table data={Vendors} columns={columns} isValid={true} exceltrue={exceltrue} onExportComplete={handleExportComplete} />
                 }
             </div>
             {/*====================== User Table ================================*/}

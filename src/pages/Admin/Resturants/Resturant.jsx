@@ -1,24 +1,21 @@
-import { Add, Eye, Refresh, SearchNormal } from "iconsax-react";
+import { Eye } from "iconsax-react";
 import React, { useEffect, useState } from "react";
 import Table from "../../../components/table/Table";
 import AddRestaurant from "../../../components/Modals/Resturant/AddRestaurant";
 import { NavLink } from "react-router-dom";
 import Switch from "react-js-switch";
-import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import { useDispatch, useSelector } from "react-redux";
-import { getRestarant, verifyVendors, getFranchRestaurant, GetFranchisee, getRestaurantCategory, getRestaurantSubCategory } from "../../../api";
-import { useForm, Controller } from "react-hook-form";
-import userImg from "../../../assets/user.jpg";
 import {
-  formBtn1,
-  formBtn2,
-  inputClass,
-  tableBtn,
-} from "../../../utils/CustomClass";
+  getRestarant,
+  verifyVendors,
+  getFranchRestaurant,
+  GetFranchisee,
+} from "../../../api";
+import { useForm, Controller } from "react-hook-form";
+import { formBtn1, formBtn2, inputClass, tableBtn } from "../../../utils/CustomClass";
 import axios from "axios";
-import AddItem from "../../../components/Modals/Resturant/AddItem";
 import { toast } from "react-toastify";
-import _ from 'lodash';
+import _ from "lodash";
 import Select from "react-select";
 import { environment } from "../../../env";
 import { setAllRestaurant } from "../../../redux/Slices/restauantSlice";
@@ -26,8 +23,8 @@ import { SendNotification } from "../../../components/Modals/NotificationModal/S
 
 export default function Restaurant() {
   // const [data, setData] = useState([]);
-  const data = useSelector(state => state.restaurants.allRestaurants)
-  const emails = data?.map(item => item?.user?.email)
+  const data = useSelector((state) => state.restaurants.allRestaurants);
+  const emails = data?.map((item) => item?.user?.email);
   const dispatch = useDispatch();
   const user = useSelector((state) => state?.user?.loggedUserDetails);
   const {
@@ -37,33 +34,51 @@ export default function Restaurant() {
     formState: { errors },
     reset,
   } = useForm();
-  const [pincodeOptions, setPincodeOptions] = useState()
-  const [franchiseOptions, setFranchiseOptions] = useState()
+  const [pincodeOptions, setPincodeOptions] = useState();
+  const [exceltrue, setExcelTrue] = useState(false);
+
+  const [franchiseOptions, setFranchiseOptions] = useState();
 
   const GetFranchiseeData = () => {
     try {
       GetFranchisee().then((res) => {
         if (res?.length > 0) {
           const newData = res.map((data) => ({
-            label: data?.user?.first_name + " " + data?.user?.last_name + `(${data?.msb_code})`,
+            label:
+              data?.user?.first_name +
+              " " +
+              data?.user?.last_name +
+              `(${data?.msb_code})`,
             value: data?.user?.id,
-          }))
-          setFranchiseOptions(newData)
+          }));
+          setFranchiseOptions(newData);
         }
-      })
+      });
     } catch (error) {
-      console.log("🚀 ~ file: Vendors.jsx:57 ~ GetFranchiseeData ~ error:", error)
+      console.log(
+        "🚀 ~ file: Vendors.jsx:57 ~ GetFranchiseeData ~ error:",
+        error
+      );
     }
-  }
+  };
+
+  const handleExportComplete = () => {
+    setExcelTrue(false); // Set exceltrue to false after export is complete
+  };
+
+  const excelbtnTrue = () => {
+    setExcelTrue(true);
+    console.log("exceltrue = ", exceltrue);
+  };
 
   useEffect(() => {
     if (user?.role == "admin") {
       // getAllRestaurant();
-      GetFranchiseeData()
+      GetFranchiseeData();
     }
     if (user?.role == "franchise") {
       // getFranchiseRestaurants();
-      GetFranchiseeData()
+      GetFranchiseeData();
     }
   }, []);
 
@@ -72,50 +87,68 @@ export default function Restaurant() {
       const newData = data?.map((data) => ({
         label: data?.user?.pincode,
         value: data?.user?.pincode,
-      }))
-      const uniquePincodeData = _.uniqBy(newData, 'value')
+      }));
+      const uniquePincodeData = _.uniqBy(newData, "value");
       setPincodeOptions(uniquePincodeData);
     }
-  }, [data])
+  }, [data]);
 
   // =================== filter data ========================
   const onSubmit = async (data) => {
-    if (data?.name != '' || data?.msbcode != '' || data?.franchise != '' || data?.franchise != undefined || data?.pincode != '' || data?.pincode != undefined) {
-      const name = data?.name?.split(" ")[0] ? data?.name?.split(" ")[0] : ''
-      const lastname = data?.name?.split(" ")[1] ? data?.name?.split(" ")[1] : ''
+    if (
+      data?.name != "" ||
+      data?.msbcode != "" ||
+      data?.franchise != "" ||
+      data?.franchise != undefined ||
+      data?.pincode != "" ||
+      data?.pincode != undefined
+    ) {
+      const name = data?.name?.split(" ")[0] ? data?.name?.split(" ")[0] : "";
+      const lastname = data?.name?.split(" ")[1]
+        ? data?.name?.split(" ")[1]
+        : "";
       try {
-        let url = `${environment.baseUrl}vendor/vendor_list?name=${name}&lastname=${lastname}&msbcode=${data?.msbcode}&franchise=${data?.franchise?.value ? data?.franchise?.value : ''}&pincode=${data?.pincode?.value ? data?.pincode?.value : ''}&vendor_type=restaurant`
-        await axios.get(url).then((res) => {
-          // setData(res?.data?.results)
-          dispatch(setAllRestaurant(res?.data?.results))
-          toast.success("Filters applied successfully")
-        }).catch((err) => {
-          console.log("🚀 ~ file: Resturant.jsx:75 ~ awaitaxios.get ~ err:", err)
-        })
+        let url = `${environment.baseUrl
+          }vendor/vendor_list?name=${name}&lastname=${lastname}&msbcode=${data?.msbcode
+          }&franchise=${data?.franchise?.value ? data?.franchise?.value : ""
+          }&pincode=${data?.pincode?.value ? data?.pincode?.value : ""
+          }&vendor_type=restaurant`;
+        await axios
+          .get(url)
+          .then((res) => {
+            // setData(res?.data?.results)
+            dispatch(setAllRestaurant(res?.data?.results));
+            toast.success("Filters applied successfully");
+          })
+          .catch((err) => {
+            console.log(
+              "🚀 ~ file: Resturant.jsx:75 ~ awaitaxios.get ~ err:",
+              err
+            );
+          });
       } catch (err) {
-        console.log("🚀 ~ file: Resturant.jsx:76 ~ onSubmit ~ err:", err)
+        console.log("🚀 ~ file: Resturant.jsx:76 ~ onSubmit ~ err:", err);
       }
     } else {
-      toast.warn("No Selected Value !")
+      toast.warn("No Selected Value !");
     }
-  }
-
+  };
 
   const handleClear = () => {
     reset({
-      name: '',
-      msbcode: '',
-      franchise: '',
-      pincode: ''
-    })
-    toast.success("Filters clear successfully")
+      name: "",
+      msbcode: "",
+      franchise: "",
+      pincode: "",
+    });
+    toast.success("Filters clear successfully");
     // setData()
-    if (user?.role == 'admin') {
-      getAllRestaurant()
-    } else if (user?.role == 'franchise') {
-      getFranchiseRestaurants()
+    if (user?.role == "admin") {
+      getAllRestaurant();
+    } else if (user?.role == "franchise") {
+      getFranchiseRestaurants();
     }
-  }
+  };
 
   const verifyActions = (row) => {
     const payload = {
@@ -166,7 +199,7 @@ export default function Restaurant() {
         (item) => item?.vendor_type == "restaurant"
       );
       // setData(restaurantVendors);
-      dispatch(setAllRestaurant(restaurantVendors))
+      dispatch(setAllRestaurant(restaurantVendors));
     });
   };
 
@@ -175,7 +208,7 @@ export default function Restaurant() {
     try {
       getFranchRestaurant(user?.userid).then((res) => {
         // setData(res);
-        dispatch(setAllRestaurant(res?.data?.results))
+        dispatch(setAllRestaurant(res?.data?.results));
       });
     } catch (error) {
       console.log(error);
@@ -230,7 +263,9 @@ export default function Restaurant() {
         title="Edit Restaurant"
         id={row?.user?.id}
         data={row}
-        getAllRestaurant={user?.role == 'admin' ? getAllRestaurant : getFranchRestaurant}
+        getAllRestaurant={
+          user?.role == "admin" ? getAllRestaurant : getFranchRestaurant
+        }
       />
     </div>
   );
@@ -239,8 +274,8 @@ export default function Restaurant() {
   const activeActionsRole = (rowData) => (
     <h6
       className={`${rowData?.user?.isverified_byadmin !== false
-        ? "bg-green-100 text-green-500"
-        : "bg-red-100 text-red-500"
+          ? "bg-green-100 text-green-500"
+          : "bg-red-100 text-red-500"
         } py-2 px-5 text-center capitalize rounded-full`}
     >
       {rowData?.user?.isverified_byadmin !== false ? "Active" : "Inactive"}
@@ -249,24 +284,111 @@ export default function Restaurant() {
 
   const columns = [
     { field: "msb_code", header: "MSB", sortable: false },
-    { field: "shop_name", header: "Restaurant Name", body: (row) => (<h6>  {row?.shop_name == null ? "Registration Pending" : row?.shop_name}</h6>), sortable: true },
-    { field: "shop_contact_number", header: "Restaurant Contact", body: (row) => (<h6>{row?.shop_contact_number == null ? "Registration Pending" : row?.shop_contact_number}</h6>), sortable: true },
-    { field: "first_name", header: "Owner Name", body: (row) => (<div className="capitalize">{row?.user?.first_name + " " + row?.user?.last_name}</div>), sortable: true },
-    { field: "phone_no", header: "Owner Phone No", body: (row) => <h6>{row?.user?.phone_no}</h6>, sortable: true },
-    { field: "email", header: "Email", body: (row) => <h6>{row?.user?.email}</h6>, sortable: true },
-    { field: "franchise", header: "Franchise", body: (row) => <h6>{row?.created_by?.first_name} {row?.created_by?.last_name}</h6>, sortable: true },
-    { field: "insta_commison_percentage", header: "Comission(%)", body: (row) => <h6>{row?.insta_commison_percentage}%</h6>, sortable: false },
-    { field: "pincode", header: "Pincode", body: (row) => <h6>{row?.user?.pincode}</h6>, sortable: false },
-    { field: "state", header: "state", body: (row) => <h6>{row?.user?.state}</h6>, sortable: true },
-    { field: "city", header: "city", body: (row) => <h6>{row?.user?.city}</h6>, sortable: true },
-    { field: "registration_date", header: "Registration Date", body: (row) => <h6>{row?.user?.registration_date}</h6>, sortable: false },
-    { field: "status", header: "Status", body: activeActionsRole, sortable: true },
+    {
+      field: "shop_name",
+      header: "Restaurant Name",
+      body: (row) => (
+        <h6>
+          {" "}
+          {row?.shop_name == null ? "Registration Pending" : row?.shop_name}
+        </h6>
+      ),
+      sortable: true,
+    },
+    {
+      field: "shop_contact_number",
+      header: "Restaurant Contact",
+      body: (row) => (
+        <h6>
+          {row?.shop_contact_number == null
+            ? "Registration Pending"
+            : row?.shop_contact_number}
+        </h6>
+      ),
+      sortable: true,
+    },
+    {
+      field: "first_name",
+      header: "Owner Name",
+      body: (row) => (
+        <div className="capitalize">
+          {row?.user?.first_name + " " + row?.user?.last_name}
+        </div>
+      ),
+      sortable: true,
+    },
+    {
+      field: "phone_no",
+      header: "Owner Phone No",
+      body: (row) => <h6>{row?.user?.phone_no}</h6>,
+      sortable: true,
+    },
+    {
+      field: "email",
+      header: "Email",
+      body: (row) => <h6>{row?.user?.email}</h6>,
+      sortable: true,
+    },
+    {
+      field: "franchise",
+      header: "Franchise",
+      body: (row) => (
+        <h6>
+          {row?.created_by?.first_name} {row?.created_by?.last_name}
+        </h6>
+      ),
+      sortable: true,
+    },
+    {
+      field: "insta_commison_percentage",
+      header: "Comission(%)",
+      body: (row) => <h6>{row?.insta_commison_percentage}%</h6>,
+      sortable: false,
+    },
+    {
+      field: "pincode",
+      header: "Pincode",
+      body: (row) => <h6>{row?.user?.pincode}</h6>,
+      sortable: false,
+    },
+    {
+      field: "state",
+      header: "state",
+      body: (row) => <h6>{row?.user?.state}</h6>,
+      sortable: true,
+    },
+    {
+      field: "city",
+      header: "city",
+      body: (row) => <h6>{row?.user?.city}</h6>,
+      sortable: true,
+    },
+    {
+      field: "registration_date",
+      header: "Registration Date",
+      body: (row) => <h6>{row?.user?.registration_date}</h6>,
+      sortable: false,
+    },
+    {
+      field: "status",
+      header: "Status",
+      body: activeActionsRole,
+      sortable: true,
+    },
     { field: "id", header: "Action", body: actionBodyTemplate, sortable: true },
-    { field: "isverify", header: "Admin Verify", body: adminVerify, sortable: true },
-    { field: "isactive", header: "Franchise Verify", body: switchActive, sortable: true },
+    {
+      field: "isverify",
+      header: "Admin Verify",
+      body: adminVerify,
+      sortable: true,
+    },
+    {
+      field: "isactive",
+      header: "Franchise Verify",
+      body: switchActive,
+      sortable: true,
+    },
   ];
-
-
 
   return (
     <>
@@ -280,33 +402,31 @@ export default function Restaurant() {
             <div className="">
               <input
                 type="text"
-                placeholder='Search by Owner Name'
-                autoComplete='off'
+                placeholder="Search by Owner Name"
+                autoComplete="off"
                 className={`${inputClass} !bg-slate-100`}
-                {...register('name')}
+                {...register("name")}
               />
             </div>
             <div className="">
               <input
                 type="text"
-                placeholder='MSB Code'
-                autoComplete='off'
+                placeholder="MSB Code"
+                autoComplete="off"
                 className={`${inputClass} !bg-slate-100`}
-                {...register('msbcode')}
+                {...register("msbcode")}
               />
             </div>
-            {user?.role == 'admin' && (
+            {user?.role == "admin" && (
               <div className="">
                 <Controller
                   control={control}
                   name="franchise"
-                  render={({
-                    field: { onChange, value, ref },
-                  }) => (
+                  render={({ field: { onChange, value, ref } }) => (
                     <Select
                       value={value}
                       options={franchiseOptions}
-                      className="w-100 text-gray-900"
+                      className="text-gray-900 w-100"
                       placeholder="Franchise"
                       onChange={onChange}
                       inputRef={ref}
@@ -314,7 +434,7 @@ export default function Restaurant() {
                       styles={{
                         placeholder: (provided) => ({
                           ...provided,
-                          color: '#9CA3AF', // Light gray color
+                          color: "#9CA3AF", // Light gray color
                         }),
                       }}
                     />
@@ -326,13 +446,11 @@ export default function Restaurant() {
               <Controller
                 control={control}
                 name="pincode"
-                render={({
-                  field: { onChange, value, ref },
-                }) => (
+                render={({ field: { onChange, value, ref } }) => (
                   <Select
                     value={value}
                     options={pincodeOptions}
-                    className="w-100 text-gray-900"
+                    className="text-gray-900 w-100"
                     placeholder="Pincode"
                     onChange={onChange}
                     inputRef={ref}
@@ -340,7 +458,7 @@ export default function Restaurant() {
                     styles={{
                       placeholder: (provided) => ({
                         ...provided,
-                        color: '#9CA3AF', // Light gray color
+                        color: "#9CA3AF", // Light gray color
                       }),
                     }}
                   />
@@ -355,9 +473,7 @@ export default function Restaurant() {
             <button
               type="button"
               className={`${formBtn2} w-full text-center`}
-              onClick={() =>
-                handleClear()
-              }
+              onClick={() => handleClear()}
             >
               Clear
             </button>
@@ -385,7 +501,14 @@ export default function Restaurant() {
             />
           </div>
         </div>
-        {<Table columns={columns} data={data} />}
+        {
+          <Table
+            columns={columns}
+            data={data}
+            exceltrue={exceltrue}
+            onExportComplete={handleExportComplete}
+          />
+        }
       </div>
       {/*====================== User Table ================================*/}
     </>

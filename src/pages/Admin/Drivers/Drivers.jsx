@@ -14,9 +14,9 @@ import AddDriverFrom from '../../../components/Modals/DriverModals/AddDriverForm
 import Table from '../../../components/table/Table';
 import { environment } from '../../../env';
 import { setDeliveryList } from '../../../redux/Slices/deliverySlice';
-import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
-import { SendNotification } from '../../../components/Modals/NotificationModal/SendNotification';
-import { setFranchise } from '../../../redux/Slices/masterSlice';
+import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
+import Excel from '../../../../src/assets/ms-excel.svg';
+
 
 function Drivers() {
     const dispatch = useDispatch()
@@ -28,11 +28,22 @@ function Drivers() {
         reset
     } = useForm();
     const [open, setOpen] = React.useState(false);
+    const [exceltrue, setExcelTrue] = useState(false)
+
     const [delId, setDelId] = React.useState(0);
     const DeliveryList = useSelector((state) => state?.delivery?.deliveryList);
     const [deliveryBoyData, setDeliveryBoyData] = useState()
     const [pincodeOptions, setPincodeOptions] = useState()
     const [franchiseOptions, setFranchiseOptions] = useState()
+
+    const handleExportComplete = () => {
+        setExcelTrue(false); // Set exceltrue to false after export is complete
+    };
+
+    const excelbtnTrue = () => {
+        setExcelTrue(true);
+        console.log('exceltrue = ', exceltrue)
+    }
 
 
     // =================== fetch all franchise data ========================
@@ -208,17 +219,17 @@ function Drivers() {
         const shift = {};
         const lines = shiftString.split('\n');
         lines.forEach(line => {
-          const [key, value] = line.split(':');
-          shift[key.trim()] = value?.trim();
+            const [key, value] = line.split(':');
+            shift[key.trim()] = value?.trim();
         });
         console.log(shift)
         return shift;
-      }
+    }
 
 
     const columns = [
         // { field: 'id', header: 'ID', sortable: false },
-        
+
         { field: 'msb_code', header: 'MSBD Code', body: (row) => <h6>{row?.msb_code}</h6>, sortable: false },
         { field: 'profile_pic', header: 'Profile', body: representativeBodyTemplate, sortable: false, style: true },
         { field: 'first_name', body: (row) => <div className="capitalize">{row?.user?.first_name + " " + row?.user?.last_name}</div>, header: 'Name' },
@@ -332,11 +343,23 @@ function Drivers() {
                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>Drivers</h1>
                     </div>
                     <div className='flex gap-4'>
-                        <SendNotification title={"Send Notifications"} notification_for={"deliveryboy"}/>
+                        <SendNotification title={"Send Notifications"} notification_for={"deliveryboy"} />
                         <AddDriverFrom title='Add Driver' DeliveryBoyDetails={DeliveryBoyDetails} />
+                        <div className='flex items-center justify-between ms-4'>
+                            <button
+                                type="button"
+                                icon="pi pi-file-excel"
+                                onClick={excelbtnTrue}
+                                className={`mx-1 my-2 p-button-success flex items-center justify-between ${tableBtn}`}
+                                data-pr-tooltip="XLS"
+                            >
+                                <h5 className='pe-3'>Export</h5>
+                                <img src={Excel} alt="" width={28} height={28} />
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <Table data={deliveryBoyData} columns={columns} />
+                <Table data={deliveryBoyData} columns={columns} exceltrue={exceltrue} onExportComplete={handleExportComplete} />
             </div>
         </>
     )
