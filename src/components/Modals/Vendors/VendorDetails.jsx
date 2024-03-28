@@ -2,47 +2,74 @@ import React, { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'iconsax-react';
 import SimpleGallery from '../../Gallary/SimpleGallery';
+import ImageGallery from '../LightBox/ImageGallery';
 
 export default function VendorDetails() {
     const [tab, setTab] = useState(0);
     const location = useLocation();
     const data = location.state;
     console.log('dataaaaaaaaaaaaaa', data)
+    // const images = [
+    //     {
+    //         URL: data?.profile_pic,
+    //         // width: 15,
+    //         // height: 9,
+    //     },
+    //     {
+    //         URL: data?.address_proof,
+    //         width: 1500,
+    //         height: 900,
+    //     },
+    //     {
+    //         URL: data?.bank_passbook,
+    //         width: 1500,
+    //         height: 900,
+    //     },
+    //     {
+    //         URL: data?.hawker_shop_photo,
+    //         width: 1500,
+    //         height: 900,
+    //     },
+    //     {
+    //         URL: data?.shop_image,
+    //         width: 1500,
+    //         height: 900,
+    //     },
+    // ].filter(image => image.URL !== '' || image.URL !== null);
     const images = [
         {
-            URL: data?.profile_pic,
-            width: 15,
-            height: 9,
+            url: data?.address_proof,
+            title: data?.address_proof
         },
         {
-            URL: data?.address_proof,
-            width: 1500,
-            height: 900,
+            url: data?.gst_url,
+            title: data?.gst
         },
         {
-            URL: data?.bank_passbook,
-            width: 1500,
-            height: 900,
+            url: data?.hawker_shop_photo,
+            title: data?.hawker_shop_photo
         },
         {
-            URL: data?.hawker_shop_photo,
-            width: 1500,
-            height: 900,
+            url: data?.pan_url,
+            title: data?.pan
         },
         {
-            URL: data?.shop_image,
-            width: 1500,
-            height: 900,
+            url: data?.adhar_url,
+            title: data?.adhar_url
         },
-    ].filter(image => image.URL !== '' || image.URL !== null);
+        {
+            url: data?.bank_passbook,
+            title: data?.bank_passbook
+        },
+    ].filter(image => image?.url !== undefined && image?.url !== '' && image?.url !== 'No Document Uploaded');
     const navigate = useNavigate()
     return (
         <div className='px-5 gap-5'>
             <button className='flex' onClick={() => navigate(-1)}>
                 <ArrowLeft /> Back
             </button>
-            <div className='grid grid-cols-8 gap-x-4'>
-                <div className='col-span-6'>
+            <div className='grid  gap-x-4'>
+                <div className=''>
                     <div className='bg-white rounded-xl mt-4 p-2'>
                         <p className='font-semibold text-sky-400 text-xl p-2 '>Shop Details</p>
                         <div className='mx-4 grid grid-cols-4 gap-y-4 mt-4'>
@@ -139,11 +166,16 @@ export default function VendorDetails() {
                         </div>
                     </div>
                 </div>
-                <div className=' col-span-2 bg-white rounded-xl mt-4 p-2'>
-                    <SimpleGallery
+                <div className='  bg-white rounded-xl mt-4 p-2'>
+                    {/* <SimpleGallery
                         galleryID="my-test-gallery"
                         images={images}
-                    />
+                    /> */}
+                    <p className='font-semibold text-sky-400 text-xl p-2 '>Document's Uploaded</p>
+
+                    <div className='mx-4'>
+                    <ImageGallery images={images} />
+                    </div>
                 </div>
             </div>
         </div>

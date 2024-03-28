@@ -219,7 +219,7 @@ export default function Restaurant() {
   const actionBodyTemplate = (row) => (
     <div className="flex items-center gap-2">
       <NavLink
-        to={`/resturants/restaurant-detail/${row?.vendor_id}`}
+        to={`/restaurants/restaurant-detail/${row?.vendor_id}`}
         state={row}
         className="bg-green-100 px-1.5 py-1 rounded-lg"
       >
