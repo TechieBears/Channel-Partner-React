@@ -5,10 +5,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { allOrderTracking, updateOrder } from '../../../api'
 import { environment } from '../../../env'
-import { removeOrder } from '../../../redux/Slices/orderSlice'
+import { removeOrder, setAcceptedOrders } from '../../../redux/Slices/orderSlice'
 import { formBtn2 } from '../../../utils/CustomClass'
 
-function OrdersCard({ data }) {
+function OrdersCard({ data, accepted }) {
     const [status, setstatus] = useState('pending')
     const [details, setDetails] = useState(false)
     const dispatch = useDispatch();
@@ -46,9 +46,11 @@ function OrdersCard({ data }) {
                     shop_name: vendorDetails?.shop_name,
                 },
                 orderId: data?.orderId,
-                order_created_at: data?.orderDetails[0]?.order_created_at,
+                order_created_at: data?.orderDetails?.order_created_at,
                 vendor_id: user?.sellerId,
                 msb_code: user?.msb_code,
+                pincode: user?.pincode,
+                franchise_msbcode: user?.franchise_msbcode,
                 message_from: user?.vendor_type == 'restaurant' ? user?.vendor_type : 'vendor',
             }))
         };
@@ -68,6 +70,8 @@ function OrdersCard({ data }) {
             orderstatus: status,
             order_id: data?.orderId,
             vendor_id: user?.sellerId,
+            pincode: user?.pincode,
+            user_id: user.userid,
             order_for: user?.vendor_type == 'restaurant' ? 'restaurant' : 'vendor'
         }
         try {
@@ -120,33 +124,34 @@ function OrdersCard({ data }) {
         userTosellerws(status);
         if (status == 'accepted') {
             restaurantToDriverws();
-        }
-        orderUpdate(status);
-        updateOrderDetails();
-        // ============== remove from redux ===============
-        if (status == 'done') {
             const updatedData = {
                 orderId: data?.orderId,
                 orderstatus: status,
             }
             dispatch(removeOrder(updatedData))
+            dispatch(setAcceptedOrders(data))
         }
-
+        orderUpdate(status);
+        updateOrderDetails();
     }
 
-    const autoOrder = () => {
+    const autoAcceptOrder = () => {
         setTimeout(() => {
-            console.log('Auto order placed');
+            changeStatus({ status: 'accepted' })
             toast.success('Order auto Accepted')
         }, 30000); // 30 sec 
     }
 
     useEffect(() => {
-        if (data && data.orderDetails && data.orderDetails[0] && data.orderDetails[0].order_created_at) {
-            const orderCreatedAt = moment(data.orderDetails[0].order_created_at);
+        if (accepted) {
+            setstatus('accepted')
+        }
+        if (data && data.orderDetails && data.orderDetails && data.orderDetails?.order_created_at) {
+            const orderCreatedAt = moment(data.orderDetails?.order_created_at);
             const currentDateTime = moment();
             if (orderCreatedAt.format('DD-MM-YYYY hh:mm a') === currentDateTime.format('DD-MM-YYYY hh:mm a')) {
-                autoOrder();
+                autoAcceptOrder();
+                console.log('inside if ')
             }
         }
     }, [])

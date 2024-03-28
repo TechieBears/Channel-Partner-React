@@ -3,38 +3,60 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'iconsax-react';
 import SimpleGallery from '../../../components/Gallary/SimpleGallery';
 import moment from 'moment';
+import ImageGallery from '../../../components/Modals/LightBox/ImageGallery';
 
 export default function RestaurantDetail() {
     const location = useLocation();
     const data = location.state;
+    console.log("🚀 ~ file: RestaurantDetail.jsx:10 ~ RestaurantDetail ~ data:", data)
     const navigate = useNavigate()
+    // const images = [
+    //     // {
+    //     //     URL: data?.created_by?.profile_pic,
+    //     //     width: 1500,
+    //     //     height: 900,
+    //     // },
+    //     // {
+    //     //     URL: data?.ambience_image,
+    //     //     width: 1500,
+    //     //     height: 900,
+    //     // },
+    //     {
+    //         URL: data?.shop_image,
+    //         width: 1500,
+    //         height: 900,
+    //     },
+    //     {
+    //         URL: data?.pan_card,
+    //         width: 1500,
+    //         height: 900,
+    //     },
+    //     {
+    //         URL: data?.adhar_card,
+    //         width: 1500,
+    //         height: 900,
+    //     },
+    // ].filter(image => image.URL !== '' || image.URL !== null || image.URL.includes('undefined'));
+
     const images = [
-        // {
-        //     URL: data?.created_by?.profile_pic,
-        //     width: 1500,
-        //     height: 900,
-        // },
-        // {
-        //     URL: data?.ambience_image,
-        //     width: 1500,
-        //     height: 900,
-        // },
         {
-            URL: data?.shop_image,
-            width: 1500,
-            height: 900,
+            url: data?.fssai_license,
+            title: data?.fssai_license
+        },
+       
+        {
+            url: data?.shop_image,
+            title: data?.shop_image
         },
         {
-            URL: data?.pan_card,
-            width: 1500,
-            height: 900,
+            url: data?.pan_card,
+            title: data?.pan_card
         },
         {
-            URL: data?.adhar_card,
-            width: 1500,
-            height: 900,
+            url: data?.adhar_card,
+            title: data?.adhar_card
         },
-    ].filter(image => image.URL !== '' || image.URL !== null || image.URL.includes('undefined'));
+    ].filter(image => image?.url !== undefined && image?.url !== '' && image?.url !== 'No Document Uploaded');
 
     console.log('data = ', data)
     return (
@@ -42,8 +64,8 @@ export default function RestaurantDetail() {
             <button className='flex' onClick={() => navigate(-1)}>
                 <ArrowLeft /> Back
             </button>
-            <div className='grid grid-cols-8 gap-x-4'>
-                <div className='col-span-6'>
+            <div className='grid gap-x-4'>
+                <div className=''>
                     <div className='p-2 mt-4 bg-white rounded-xl'>
                         <p className='p-2 text-xl font-semibold text-sky-400 '>Restaurant Details</p>
                         <div className='grid grid-cols-4 mx-4 mt-4 gap-y-4'>
@@ -128,11 +150,17 @@ export default function RestaurantDetail() {
                         </div>
                     </div>
                 </div>
-                <div className='col-span-2 p-2 mt-4 bg-white rounded-xl'>
+                {/* <div className='col-span-2 p-2 mt-4 bg-white rounded-xl'>
                     <SimpleGallery
                         galleryID="my-test-gallery"
                         images={images}
                     />
+                </div> */}
+                <div className='  bg-white rounded-xl mt-4 p-2'>
+                    <p className='font-semibold text-sky-400 text-xl p-2 '>Document's Uploaded</p>
+                    <div className='mx-4'>
+                        <ImageGallery images={images} />
+                    </div>
                 </div>
             </div>
         </div>

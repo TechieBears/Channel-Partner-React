@@ -1,8 +1,8 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Edit } from "iconsax-react";
 import { Fragment, useEffect, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { toast } from "react-toastify";
 import { fileinput, formBtn1, formBtn2, inputClass, labelClass, tableBtn } from "../../../utils/CustomClass";
 import Error from "../../Errors/Error";
@@ -10,30 +10,32 @@ import LoadBox from "../../Loader/LoadBox";
 import axios from "axios";
 import { environment } from "../../../env";
 
-export const AddWalletAmt = (props) => {
-    console.log("🚀 ~ file: AddWalletAmt.jsx:12 ~ AddWalletAmt ~ props:", props)
+export const SendNotification = (props) => {
+    console.log("🚀 ~ file: SendNotification.jsx:4 ~ SendNotification ~ props:", props)
     const dispatch = useDispatch();
     const [isOpen, setIsOpen] = useState(false);
     const [loader, setLoader] = useState(false);
-
-
     const toggle = () => setIsOpen(!isOpen);
     const { register, handleSubmit, setValue, watch, reset, formState: { errors }, setError } = useForm({ criteriaMode: 'all' });
 
     const onSubmit = async (data) => {
-        data.transaction_status = 'success'
-        data.transaction_log = 'Added by admin'
-        data.user = props?.userData?.id
+        setLoader(true)
+        data.notification_for = props?.notification_for
         try {
-            const url = `${environment.baseUrl}app/wallet_transaction`
+            const url = `${environment.baseUrl}app/send_notification_many`
             await axios.post(url, data).then((res) => {
-                console.log("🚀 ~ file: AddWalletAmt.jsx:29 ~ awaitaxios.post ~ res:", res)
+                console.log("🚀 ~ file: SendNotification.jsx:27 ~ awaitaxios.post ~ res:", res)
+                if(res?.data?.status === "success"){
+                    reset()
+                    setLoader(false)
+                    toast.success(res?.data?.message)
+                    toggle()
+                }
             }).catch((err) => {
-                console.log("🚀 ~ file: AddWalletAmt.jsx:32 ~ awaitaxios.post ~ err:", err)
+                console.log("🚀 ~ file: SendNotification.jsx:31 ~ awaitaxios.post ~ err:", err)
             })
-
         } catch (err) {
-            console.log("🚀 ~ file: AddWalletAmt.jsx:36 ~ onSubmit ~ err:", err)
+            console.log("🚀 ~ file: SendNotification.jsx:36 ~ onSubmit ~ err:", err)
         }
     }
     const closeBtn = () => {
@@ -79,7 +81,7 @@ export const AddWalletAmt = (props) => {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-sm overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl">
+                                <Dialog.Panel className="w-full max-w-md overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl">
                                     <Dialog.Title
                                         as="h2"
                                         className="w-full px-3 py-4 text-lg font-semibold leading-6 text-white bg-sky-400 font-tb"
@@ -90,15 +92,28 @@ export const AddWalletAmt = (props) => {
                                         <form onSubmit={handleSubmit(onSubmit)}>
                                             <div className="grid py-4 mx-4 md:grid-cols-1 lg:grid-cols-1 gap-x-3 gap-y-3 customBox">
                                                 <div className="">
-                                                    <label className={labelClass}>Amount</label>
+                                                    <label className={labelClass}>Title*</label>
                                                     <input
-                                                        type="number"
-                                                        placeholder="Enter Amount"
+                                                        type="text"
+                                                        placeholder="Enter Title"
                                                         className={inputClass}
-                                                        {...register("amount")}
+                                                        {...register("notification_title", { required: 'Title is required' })}
                                                     />
-                                                    {errors.amount && (
-                                                        <Error title={errors?.amount?.message} />
+                                                    {errors.notification_title && (
+                                                        <Error title={errors?.notification_title?.message} />
+                                                    )}
+                                                </div>
+
+                                                <div className="">
+                                                    <label className={labelClass}>Message*</label>
+                                                    <textarea
+                                                        type="text"
+                                                        placeholder="Enter Message"
+                                                        className={inputClass}
+                                                        {...register("notification_message", { required: 'Message is required' })}
+                                                    />
+                                                    {errors.notification_message && (
+                                                        <Error title={errors?.notification_message?.message} />
                                                     )}
                                                 </div>
                                             </div>

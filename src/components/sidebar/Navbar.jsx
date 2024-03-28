@@ -95,7 +95,7 @@ const Navbar = ({ mobileSidebar, setMobileSidebar }) => {
         </div>
       </div>
       <div className={`flex items-center justify-between md:justify-center lg:justify-start bg-white fixed top-0 right-0 py-4 px-4 sm:rounded-bl-[2rem] z-50 md:px-3 w-full md:w-[14rem] lg:w-[24rem]   ${user?.role == 'admin' ? "xl:w-[16rem]" : "xl:w-[22rem]"} `}>
-        {user?.role == 'seller' && user?.is_registered == true ? <Switch
+        {user?.role == 'seller' ? <Switch
           value={sessionStarted}
           // disabled={true}
           size={50}
