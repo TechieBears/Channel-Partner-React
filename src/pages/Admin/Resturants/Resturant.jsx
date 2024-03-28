@@ -12,7 +12,7 @@ import {
   GetFranchisee,
 } from "../../../api";
 import { useForm, Controller } from "react-hook-form";
-import { formBtn1, formBtn2, inputClass } from "../../../utils/CustomClass";
+import { formBtn1, formBtn2, inputClass, tableBtn } from "../../../utils/CustomClass";
 import axios from "axios";
 import { toast } from "react-toastify";
 import _ from "lodash";
@@ -507,17 +507,17 @@ export default function Restaurant() {
               id={user?.userid}
               emails={emails}
             />
-            <div className="flex items-center ms-3">
-              <h5>Export</h5>
-              <button
-                type="button"
-                icon="pi pi-file-excel"
-                onClick={excelbtnTrue}
-                className="mx-1 my-2 p-button-success"
-                data-pr-tooltip="XLS"
-              >
-                <img src={Excel} alt="" />
-              </button>
+             <div className='flex items-center justify-between ms-4'>
+                <button
+                    type="button"
+                    icon="pi pi-file-excel"
+                    onClick={excelbtnTrue}
+                    className={`mx-1 my-2 p-button-success flex items-center justify-between ${tableBtn}`}
+                    data-pr-tooltip="XLS"
+                    >
+                    <h5 className='pe-3'>Export</h5>
+                    <img src={Excel} alt="" width={28} height={28} />
+                </button>
             </div>
           </div>
         </div>

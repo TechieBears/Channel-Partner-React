@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
+import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
 import Table from '../../../components/table/Table';
 import { Link } from 'react-router-dom';
 import { Eye, Trash } from 'iconsax-react';
@@ -295,18 +295,18 @@ function User() {
                     <div className="">
                         <h1 className='text-xl font-semibold text-gray-900 font-tbPop'>Registered Users</h1>
                     </div>
-                    <div className='flex items-center'>
-                        <h5>Export</h5>
+                    <div className='flex items-center justify-between ms-4'>
                         <button
                             type="button"
                             icon="pi pi-file-excel"
                             onClick={excelbtnTrue}
-                            className="mx-1 my-2 p-button-success"
+                            className={`mx-1 my-2 p-button-success flex items-center justify-between ${tableBtn}`}
                             data-pr-tooltip="XLS"
-                        >
-                            <img src={Excel} alt="" />
+                            >
+                            <h5 className='pe-3'>Export</h5>
+                            <img src={Excel} alt="" width={28} height={28} />
                         </button>
-                    </div>
+                        </div>
                     {/* <CreateUserForm title='Add User' /> */}
                 </div>
                 <Table data={customerData} columns={columns} exceltrue={exceltrue} onExportComplete={handleExportComplete}/>

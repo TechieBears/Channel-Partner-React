@@ -249,16 +249,16 @@ function Franchisees() {
                     </div>
                     <div className='flex items-center'>
                         <AddFranchisee title='Add Franchisee' FranchiseeDetails={FranchiseeDetails} emails={emails} />
-                        <div className='flex items-center ms-4'>
-                            <h5>Export</h5>
+                        <div className='flex items-center justify-between ms-4'>
                             <button
                                 type="button"
                                 icon="pi pi-file-excel"
                                 onClick={excelbtnTrue}
-                                className="mx-1 my-2 p-button-success"
+                                className={`mx-1 my-2 p-button-success flex items-center justify-between ${tableBtn}`}
                                 data-pr-tooltip="XLS"
-                            >
-                                <img src={Excel} alt="" />
+                                >
+                                <h5 className='pe-3'>Export</h5>
+                                <img src={Excel} alt="" width={28} height={28} />
                             </button>
                         </div>
                     </div>

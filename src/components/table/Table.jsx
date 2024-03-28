@@ -50,7 +50,7 @@ function Table({ data, columns, isValid, exceltrue, onExportComplete }) {
             resizableColumns="expand"
             paginator
             rows={25}
-            // header={header}
+            header={columns.header}
             rowsPerPageOptions={[25, 50, 100]}
             sortMode="multiple"
         >

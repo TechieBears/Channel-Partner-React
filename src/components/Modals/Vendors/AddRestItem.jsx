@@ -13,14 +13,14 @@ import MediaGallaryModal from '../../../pages/Settings/MediaGallery/MediaGallery
 
 
 export default function AddRestItem(props) {
-    console.log('props = ', props);
+    // console.log('props = ', props);
     const [isOpen, setOpen] = useState(false);
     const [loader, setLoader] = useState(false);
     const [FinalPriceSeller, setFinalPriceSeller] = useState([]);
     const [FinalPriceAdmin, setFinalPriceAdmin] = useState([]);
     const { register, handleSubmit, control, watch, reset, setValue, formState: { errors } } = useForm();
     const user = useSelector((state) => state?.user?.loggedUserDetails);
-    console.log('user = ', user);
+    // console.log('user = ', user);
 
     const mediaGalleryModalRef = useRef(null);
     const [openGallery, setopenGallery] = useState(false);
@@ -92,11 +92,8 @@ export default function AddRestItem(props) {
         }
     };
     const onSellerSubmit = async (data) => {
-        console.log('data ==', data)
         if (props?.title != 'Add Item') {      // for edit
-            console.log('image edit')
             if (data?.food_image_1?.length > 0) {
-                console.log('food image if ')
                 await ImageUpload(data?.food_image_1[0], "restaurant", "mainImage", data?.food_name)
                 data.food_image_1 = `${restaurantLink}${data?.food_name}_mainImage_${data?.food_image_1[0]?.name}`
             } else {
@@ -274,7 +271,6 @@ export default function AddRestItem(props) {
     useEffect(() => {
         if (props?.button == 'edit'){
             setTimeout(() => {
-                console.log('gg')
                 var mainUserPrice = calculateRevenueRestaurant * (user?.insta_commission == null ? 0 : user?.insta_commission / 100);
                 const final_price = (calculateRevenueRestaurant - mainUserPrice);
     
@@ -304,7 +300,6 @@ export default function AddRestItem(props) {
                 'food_image_3': props?.row?.food_image_3,
                 'food_image_4': props?.row?.food_image_4,
                 'food_image_5': props?.row?.food_image_5
-
             })
         } else {
             if (props?.button == 'edit') {
@@ -346,7 +341,6 @@ export default function AddRestItem(props) {
                     setValue('food_revenue', final_price);
                 }
             }
-            
         }
     }, [calculateRevenueRestaurant])
 

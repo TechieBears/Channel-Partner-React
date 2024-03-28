@@ -14,16 +14,14 @@ import { handleMobileNoNumericInput, handlePincodeMaxLength, validateEmail, vali
 import moment from "moment";
 
 
-
-
 export default function AddFranchiseForm(props) {
-  console.log("🚀 ~ file: AddFranchiseForm.jsx:20 ~ AddFranchiseForm ~ props:", props)
+  // console.log("🚀 ~ file: AddFranchiseForm.jsx:20 ~ AddFranchiseForm ~ props:", props)
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const [emailError, setEmailError] = useState('');
   const dispatch = useDispatch()
   const { register, handleSubmit, reset, watch, control, setValue, formState: { errors }, } = useForm();
-  console.log("🚀 ~ file: AddFranchiseForm.jsx:25 ~ AddFranchiseForm ~ errors:", errors)
+  // console.log("🚀 ~ file: AddFranchiseForm.jsx:25 ~ AddFranchiseForm ~ errors:", errors)
   const gstNumber = watch('gst_number');
   const emailField = watch('email');
 

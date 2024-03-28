@@ -14,7 +14,7 @@ import AddVendors from '../../../components/Modals/Vendors/AddVendors/AddVendors
 import Table from '../../../components/table/Table';
 import { environment } from '../../../env';
 import { setFranchiseVendors } from "../../../redux/Slices/masterSlice";
-import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
+import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../utils/CustomClass';
 import Excel from '../../../../src/assets/ms-excel.svg';
 
 
@@ -309,16 +309,16 @@ function Vendors() {
                     </div>
                     <div className="flex items-center justify-end p-0 m-0 bg-white border-white export-button">
                         <AddVendors title='Add Vendors' FranchiseeVendors={FranchiseeVendors} />
-                        <div className='flex items-center ms-4'>
-                            <h5>Export</h5>
+                        <div className='flex items-center justify-between ms-4'>
                             <button
                                 type="button"
                                 icon="pi pi-file-excel"
                                 onClick={excelbtnTrue}
-                                className="mx-1 my-2 p-button-success"
+                                className={`mx-1 my-2 p-button-success flex items-center justify-between ${tableBtn}`}
                                 data-pr-tooltip="XLS"
-                            >
-                                <img src={Excel} alt="" />
+                                >
+                                <h5 className='pe-3'>Export</h5>
+                                <img src={Excel} alt="" width={28} height={28} />
                             </button>
                         </div>
                     </div>               

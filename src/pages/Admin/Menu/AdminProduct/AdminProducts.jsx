@@ -11,11 +11,12 @@ import userImg from '../../../../assets/user.jpg';
 import AddProduct from '../../../../components/Modals/Vendors/AddProduct';
 import AddRestItem from '../../../../components/Modals/Vendors/AddRestItem';
 import Table from '../../../../components/table/Table';
-import { formBtn1, formBtn2, inputClass } from '../../../../utils/CustomClass';
+import { formBtn1, formBtn2, inputClass, tableBtn } from '../../../../utils/CustomClass';
 import axios from 'axios';
 import { environment } from '../../../../env';
 import { setCategoryCount, setProductCount, setSubCategoryCount } from '../../../../redux/Slices/masterSlice';
 import Excel from '../../../../../src/assets/ms-excel.svg';
+
 
 
 const AdminProduct = (props) => {
@@ -656,16 +657,16 @@ const AdminProduct = (props) => {
             <div className='p-4 m-4 bg-white sm:m-5 rounded-xl'>
                 <div className='flex items-center justify-between '>
                     <h2 className='col-span-5 text-xl font-semibold'>{props?.isrestaurant ? "Food Items" : "Product List"}</h2>
-                    <div className='flex items-center'>
-                        <h5>Export</h5>
+                    <div className='flex items-center justify-between ms-4'>
                         <button
                             type="button"
                             icon="pi pi-file-excel"
                             onClick={excelbtnTrue}
-                            className="mx-1 my-2 p-button-success"
+                            className={`mx-1 my-2 p-button-success flex items-center justify-between ${tableBtn}`}
                             data-pr-tooltip="XLS"
-                        >
-                            <img src={Excel} alt="" />
+                            >
+                            <h5 className='pe-3'>Export</h5>
+                            <img src={Excel} alt="" width={28} height={28} />
                         </button>
                     </div>
                 </div>
