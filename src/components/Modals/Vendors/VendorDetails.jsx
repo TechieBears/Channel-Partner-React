@@ -122,10 +122,6 @@ export default function VendorDetails() {
                                 <h5 className='font-tbPop text-slate-900 capitalize text-base'>Registration Date</h5>
                                 <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.user?.registration_date}</h5>
                             </div>
-                            <div>
-                                <h5 className='font-tbPop text-slate-900 capitalize text-base'>Shop Closing Time</h5>
-                                <h5 className='font-tbPop text-slate-500 capitalize text-sm'>{data?.shop_end_time}</h5>
-                            </div>
                         </div>
                     </div>
                     <div className='bg-white rounded-xl mt-4 p-2'>
