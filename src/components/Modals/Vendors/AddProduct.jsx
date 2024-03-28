@@ -685,7 +685,7 @@ const AddProduct = (props) => {
                                                         </label>
                                                         <select
                                                             className={inputClass}
-                                                            disabled={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
+                                                            // disabled={LoggedUserDetails?.role == 'admin' || LoggedUserDetails?.role == 'franchise'}
                                                             {...register('product_shelflife', { required: true })}
                                                             onChange={selectExpiryOption}
                                                             // value={checkExpiry}
