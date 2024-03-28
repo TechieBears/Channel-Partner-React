@@ -8,7 +8,7 @@ import { environment } from '../../../env'
 import { removeOrder, setAcceptedOrders } from '../../../redux/Slices/orderSlice'
 import { formBtn2 } from '../../../utils/CustomClass'
 
-function OrdersCard({ data }) {
+function OrdersCard({ data, accepted }) {
     const [status, setstatus] = useState('pending')
     const [details, setDetails] = useState(false)
     const dispatch = useDispatch();
@@ -49,6 +49,8 @@ function OrdersCard({ data }) {
                 order_created_at: data?.orderDetails?.order_created_at,
                 vendor_id: user?.sellerId,
                 msb_code: user?.msb_code,
+                pincode: user?.pincode,
+                franchise_msbcode: user?.franchise_msbcode,
                 message_from: user?.vendor_type == 'restaurant' ? user?.vendor_type : 'vendor',
             }))
         };
@@ -68,6 +70,8 @@ function OrdersCard({ data }) {
             orderstatus: status,
             order_id: data?.orderId,
             vendor_id: user?.sellerId,
+            pincode: user?.pincode,
+            user_id: user.userid,
             order_for: user?.vendor_type == 'restaurant' ? 'restaurant' : 'vendor'
         }
         try {
@@ -139,6 +143,9 @@ function OrdersCard({ data }) {
     }
 
     useEffect(() => {
+        if (accepted) {
+            setstatus('accepted')
+        }
         if (data && data.orderDetails && data.orderDetails && data.orderDetails?.order_created_at) {
             const orderCreatedAt = moment(data.orderDetails?.order_created_at);
             const currentDateTime = moment();

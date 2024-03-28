@@ -217,7 +217,7 @@ const Dashboard = () => {
                             <TabPanel className='mt-5 bg-white space-y-4'>
                                 {
                                     newOrders?.length != 0 ? newOrders?.map(data => (
-                                        <OrdersCard data={data} />
+                                        <OrdersCard data={data} accepted={false} />
                                     )) :
                                         <div className="border-2 rounded-lg">
                                             <div className="flex flex-row justify-center">
@@ -233,7 +233,7 @@ const Dashboard = () => {
                             <TabPanel className='mt-5 bg-white space-y-4'>
                                 {
                                     acceptedOrders?.length != 0 ? acceptedOrders?.map(data => (
-                                        <OrdersCard data={data} />
+                                        <OrdersCard data={data} accepted={true} />
                                     )) :
                                         <div className="border-2 rounded-lg">
                                             <div className="flex flex-row justify-center">
