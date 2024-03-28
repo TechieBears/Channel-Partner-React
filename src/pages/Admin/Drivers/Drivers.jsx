@@ -16,6 +16,7 @@ import { environment } from '../../../env';
 import { setDeliveryList } from '../../../redux/Slices/deliverySlice';
 import { formBtn1, formBtn2, inputClass } from '../../../utils/CustomClass';
 import { SendNotification } from '../../../components/Modals/NotificationModal/SendNotification';
+import { setFranchise } from '../../../redux/Slices/masterSlice';
 
 function Drivers() {
     const dispatch = useDispatch()
@@ -38,6 +39,7 @@ function Drivers() {
     const GetFranchiseeData = () => {
         try {
             GetFranchisee().then((res) => {
+                dispatch(setFranchise(res));
                 if (res?.length > 0) {
                     const newData = res.map((data) => ({
                         label: data?.user?.first_name + " " + data?.user?.last_name + `(${data?.msb_code})`,
