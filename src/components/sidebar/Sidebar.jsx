@@ -1,5 +1,5 @@
 import { DirectLeft } from 'iconsax-react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { getFranchRestaurant, getRestarant, getSingleShop, startSession } from '../../api';
@@ -22,7 +22,7 @@ const Sidebar = ({ children }) => {
     const sessionStatus = useSelector(state => state.session.isSessionStarted)
     const timeoutId = useRef(null);
     const logoutTimeoutId = useRef(null);
-    useEffect(() => {
+    useMemo(() => {
         if (user?.role == 'seller' || user?.role == 'shop') {
             ws.open = () => {
                 console.log('WebSocket Client Connected');

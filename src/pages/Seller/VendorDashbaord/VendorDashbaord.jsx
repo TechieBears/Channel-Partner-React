@@ -5,15 +5,16 @@ import {
     UserRemove
 } from "iconsax-react";
 import React, { useEffect, useState } from "react";
-// import { deleteStorage, getPartnerStorage, getStorages } from "../../../api";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-// import Orders from "../../../components/Cards/Orders/Orders";
 import OrdersCard from "../../../components/Cards/Orders/OrdersCard";
 import DashboardForm from "../../../components/Modals/DashboardModals/DashboardForm";
 import DeleteModal from "../../../components/Modals/DeleteModal/DeleteModal";
 import { formBtn1, formBtn2, inputClass } from "../../../utils/CustomClass";
+import { PackageOpen } from "lucide-react";
+import NoOrder from '../../../assets/NoOrdersFound.png'
+import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 
 
 
@@ -23,7 +24,9 @@ const Dashboard = () => {
     const user = useSelector((state) => state.user.loggedUserDetails);
     const [open, setOpen] = React.useState(false);
     const [delId, setDelId] = React.useState(0);
-    const orders = useSelector(state => state?.orders?.newOrders);
+    const [selectedTab, setSelectedTab] = useState(0);
+    const newOrders = useSelector(state => state?.orders?.newOrders);
+    const acceptedOrders = useSelector(state => state?.orders?.acceptedOrder);
     const {
         register,
         handleSubmit,
@@ -60,7 +63,7 @@ const Dashboard = () => {
             }
         });
     };
-    useEffect(() => { }, [orders])
+    useEffect(() => { }, [newOrders, acceptedOrders])
     return (
         <>
             {user?.is_registered == false && user?.vendor_type == 'restaurant' ? <DashboardForm dashBoard={false} isOpen={modelOpen} /> : ''}
@@ -187,11 +190,64 @@ const Dashboard = () => {
                             </div>
                         </form>
                     </div>
-                    {
-                        orders?.length != 0 ? orders?.map(data => (
-                            <OrdersCard data={data} />
-                        )) : 'No Orders For Today'
-                    }
+                    <div className="">
+                        <Tabs
+                            selectedIndex={selectedTab}
+                            onSelect={(index) => setSelectedTab(index)}
+                        >
+                            <TabList className="flex mx-6 space-x-4 border-b">
+                                <Tab
+                                    className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 0
+                                        ? "text-sky-500  border-b-2 border-sky-400 outline-0"
+                                        : "text-gray-500 border-b"
+                                        }`}
+                                >
+                                    New Order's
+                                </Tab>
+                                <Tab
+                                    className={`p-3 cursor-pointer font-tbPop font-medium   ${selectedTab === 1
+                                        ? "text-sky-500  border-b-2 border-sky-400 outline-0"
+                                        : "text-gray-500 border-b"
+                                        }`}
+                                >
+                                    In-Progres Order's
+                                </Tab>
+                            </TabList>
+                            {/* ================= NewPending Orders component ============== */}
+                            <TabPanel className='mt-5 bg-white space-y-4'>
+                                {
+                                    newOrders?.length != 0 ? newOrders?.map(data => (
+                                        <OrdersCard data={data} />
+                                    )) :
+                                        <div className="border-2 rounded-lg">
+                                            <div className="flex flex-row justify-center">
+                                                <img src={NoOrder} className="w-1/4" />
+                                            </div>
+                                            <div className="flex items-center flex-row justify-center gap-2 mb-2">
+                                                <PackageOpen className="text-sky-400" size={20} />
+                                                <h6 className=" font-semibold text-lg text-sky-400 ">No Orders For Now</h6>
+                                            </div>
+                                        </div>
+                                }
+                            </TabPanel>
+                            <TabPanel className='mt-5 bg-white space-y-4'>
+                                {
+                                    acceptedOrders?.length != 0 ? acceptedOrders?.map(data => (
+                                        <OrdersCard data={data} />
+                                    )) :
+                                        <div className="border-2 rounded-lg">
+                                            <div className="flex flex-row justify-center">
+                                                <img src={NoOrder} className="w-1/4" />
+                                            </div>
+                                            <div className="flex items-center flex-row justify-center gap-2 mb-2">
+                                                <PackageOpen className="text-sky-400" size={20} />
+                                                <h6 className=" font-semibold text-lg text-sky-400 ">No Orders For Now</h6>
+                                            </div>
+                                        </div>
+                                }
+                            </TabPanel>
+                        </Tabs>
+                    </div>
                 </div>
             </section>
         </>
