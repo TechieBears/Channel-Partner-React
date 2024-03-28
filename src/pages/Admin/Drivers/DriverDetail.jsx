@@ -158,8 +158,8 @@ function DriverDetail() {
                                 </div>
                                 <div>
                                     <h5 className='text-base capitalize font-tbPop text-slate-900'>Vehicle RC</h5>
-                                    <img src={data?.vehicle_rc == '' || data?.vehicle_rc == null || data?.vehicle_rc == undefined ? 'No rating' : data?.vehicle_rc} alt="" srcset="" />
-                                    {/* <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.vehicle_rc == '' || data?.vehicle_rc == null || data?.vehicle_rc == undefined ? 'No rating' : data?.vehicle_rc}</h5> */}
+                                    {/* <img src={data?.vehicle_rc == '' || data?.vehicle_rc == null || data?.vehicle_rc == undefined ? 'No rating' : data?.vehicle_rc} alt="" srcset="" /> */}
+                                    <h5 className='text-sm capitalize font-tbPop text-slate-500'>{data?.vehicle_rc == '' || data?.vehicle_rc == null || data?.vehicle_rc == undefined ? 'No rating' : data?.vehicle_rc}</h5>
                                 </div>
                             </div>
                             <h6 className='pt-3 text-lg font-bold text-black font-tbMon'>Kyc Details</h6>
